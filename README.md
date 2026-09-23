@@ -29,6 +29,28 @@ npm run art        # regera a arte SVG em public/assets
 | ESC / P | pausar (também pausa sozinho se a janela perde o foco) |
 | E | comprar (arma, munição, porta, perk, Mystery Box, Weapon Lab) |
 | segurar E | reparar barricada (+$10 por tábua) |
+
+**Celular / tablet** (detectado automaticamente; jogue na horizontal — em pé aparece um aviso):
+
+| Controle | Ação |
+|---|---|
+| Analógico esquerdo (toque na metade esquerda) | mover (empurrar pouco = andar devagar) |
+| Analógico direito (metade direita) | mirar; empurrado além do anel vermelho, atira |
+| USAR | comprar/usar; segurar repara barricada |
+| RECARR. / TROCAR | recarregar / trocar de arma |
+| II | pausar |
+
+Ao começar uma partida no celular o jogo entra em tela cheia.
+
+## Mapas, save e ranking
+
+- Menu → JOGAR abre a escolha de mapa. O **Mapa 2** fica trancado até você derrotar o boss da
+  wave 10 no Terminal Central (o conteúdo dele ainda está em desenvolvimento).
+- Save local no navegador (`src/save/SaveStore.ts`, chave `ts-save-v1`): som/música, nome,
+  recordes por mapa, mapas liberados, ranking e totais (partidas, abates, bosses, tempo).
+  Dados antigos (recordes e som) são migrados automaticamente.
+- Ranking por mapa (top 10) em Menu → RANKING. Se a pontuação entrar no top, a tela de Game Over
+  pede o nome. O ranking é deste navegador/aparelho (não é online).
 | Q / 1 / 2 / roda do mouse | trocar de arma |
 
 ## Estrutura
@@ -36,12 +58,14 @@ npm run art        # regera a arte SVG em public/assets
 ```
 scripts/
   generate-art.mjs   gera toda a arte vetorial original (personagens, cenário, props, decals)
-  art/               desenho procedural dos sprites (SVG, escala 2x, vista de cima)
+  art/               desenho procedural dos sprites (SVG, escala 2x, vista de cima); undead.mjs
+                     desenha os zumbis (anatomia, roupas, rostos) e boss.mjs o The Conductor
 src/
   main.ts            ponto de entrada (cria o Phaser.Game)
   config/            valores de gameplay e visual (game, player, weapons, zombies, spawn, visual, assets)
   game/events.ts     eventos globais tipados (lógica → HUD)
-  scenes/            Boot → Preload (carrega SVGs, fatia frames, cria animações) → Menu → Game (+ UI)
+  scenes/            Boot → Preload (carrega SVGs, fatia frames, cria animações) → Menu → MapSelect /
+                     Ranking → Game (+ UI)
   map/               TerminalMap (grade, colisão, navegação, visual 3/4) e terminal/layout.ts
                      (áreas, portas, janelas, spawns, props, luzes do Terminal Central)
   entities/          Player (tronco + pernas), Zombie (Walker, Runner, Tank, Exploder), Projectile,
@@ -55,9 +79,12 @@ src/
                      cápsulas, faíscas), fxTextures (texturas de luz/partículas em canvas)
   events/            eventos dinâmicos (WorldEvent + um arquivo por evento: Blackout, Alarm, Train,
                      Horde, SupplyDrop, GasLeak)
-  ui/                componentes da HUD (EventHud, DamageOverlay, GameOverOverlay)
+  ui/                componentes da HUD (EventHud, DamageOverlay, GameOverOverlay, TouchControls,
+                     menuWidgets)
+  input/             toque no celular (touchInput: estado dos analógicos/botões; device)
+  save/              SaveStore (save local versionado)
   systems/           EventSystem (sorteio e ciclo dos eventos), StatsSystem (estatísticas e recordes),
-                     ScoreSystem (pontuação), WaveSystem, SpawnSystem, difficulty (fórmulas), EconomySystem, InteractionSystem,
+                     ScoreSystem (pontuação), ProgressSystem (libera mapas), WaveSystem, SpawnSystem, difficulty (fórmulas), EconomySystem, InteractionSystem,
                      CombatSystem (inclui headshot), CameraController, pathfinding/NavGrid (A*),
                      PerkSystem (modificadores de perks), PowerUpSystem (drops e efeitos),
                      BossSystem (ciclo do boss), pathfinding/PathFollower (navegação comum)
@@ -106,8 +133,17 @@ Todos os sons são **sintetizados em código** durante o carregamento (sem arqui
 - [x] Fase 9 — Eventos (blackout, trem, horda, supply drop, gás, alarme)
 - [x] Fase 10 — Visual (props do §52, animações de dano/morte, partículas, HUD de dano, Game Over)
 - [x] Fase 11 — Áudio (música adaptativa; armas, zumbis, ambiente, boss e eventos já sintetizados)
+- [x] Fase 12 — Balanceamento (testado com bots; ver abaixo)
 
 Observações:
+- Balanceamento (Fase 12): medido com bots que jogam de verdade no navegador (mira perfeita e
+  mira de jogador comum), compram armas/perks entre as waves e registram duração, dano sofrido e
+  dinheiro por wave. Resultado antes dos ajustes: waves 1–6 tranquilas (aprendizado), dano a
+  partir da 7, boss da wave 10 em ~1 min tirando 120–200 de vida — e waves 11+ triviais, porque
+  o jogador já tem perks e Mk II. Ajustes: +6% de vida extra por wave a partir da 10, até 30
+  zumbis vivos, spawn mais rápido no fim, mais Runners/Tanks nas waves 11+ e 16+; espingardas
+  mais fortes (Pump 20 × 8 chumbos, Combat 16 × 7) e com recarga menor. Wave 15 tem Horda
+  garantida (GDD §31).
 - Visual (Fase 10): props novos do GDD §52 (extintores, carrinhos de bagagem, paletes, placas de
   saída luminosas, mesas com computador, cadeiras, armários, barreiras, cabos, tubulação, vitrines);
   zumbis recuam ao levar tiro e os corpos tombam; o jogador tranca ao levar dano e cai ao morrer

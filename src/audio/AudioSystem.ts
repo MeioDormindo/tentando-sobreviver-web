@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { ambientEvents, audioConfig, type SoundCategory } from '../config/audio.config';
 import { GameEvents, onGameEvent, type PlayerHpPayload, type WaveStatePayload, type ZombieKilledPayload } from '../game/events';
 import { AMBIENCE_AREAS, soundVariants } from './SoundBank';
+import { save } from '../save/SaveStore';
 
 export interface PlayOptions {
   volume?: number;
@@ -40,7 +41,6 @@ interface Listener {
   readonly y: number;
 }
 
-const MUTE_KEY = 'ts-muted';
 
 /**
  * Serviço de áudio do jogo (único): tocar sons com variação, áudio posicional
@@ -56,17 +56,9 @@ export class AudioSystem {
   private nextAmbientEventAt = 0;
   private heartbeat: Phaser.Sound.BaseSound | null = null;
   private lastHp = -1;
-  private muted = false;
+  private muted = save.muted;
   private offs: Array<() => void> = [];
   private loops: ActiveLoop[] = [];
-
-  constructor() {
-    try {
-      this.muted = localStorage.getItem(MUTE_KEY) === '1';
-    } catch {
-      this.muted = false;
-    }
-  }
 
   get isMuted(): boolean {
     return this.muted;
@@ -116,11 +108,7 @@ export class AudioSystem {
   toggleMute(): boolean {
     this.muted = !this.muted;
     if (this.scene) this.scene.sound.mute = this.muted;
-    try {
-      localStorage.setItem(MUTE_KEY, this.muted ? '1' : '0');
-    } catch {
-      /* armazenamento indisponível: vale só nesta sessão */
-    }
+    save.muted = this.muted;
     return this.muted;
   }
 

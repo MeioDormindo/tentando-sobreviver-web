@@ -2,6 +2,8 @@ import Phaser from 'phaser';
 import { BootScene } from '../scenes/BootScene';
 import { PreloadScene } from '../scenes/PreloadScene';
 import { MenuScene } from '../scenes/MenuScene';
+import { MapSelectScene } from '../scenes/MapSelectScene';
+import { RankingScene } from '../scenes/RankingScene';
 import { GameScene } from '../scenes/GameScene';
 import { UIScene } from '../scenes/UIScene';
 
@@ -23,6 +25,8 @@ export const SCENE_KEYS = {
   boot: 'BootScene',
   preload: 'PreloadScene',
   menu: 'MenuScene',
+  mapSelect: 'MapSelectScene',
+  ranking: 'RankingScene',
   game: 'GameScene',
   ui: 'UIScene',
 } as const;
@@ -35,6 +39,8 @@ export const TEXTURE_KEYS = {
 export const gameConfig: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: 'game',
+  // Elementos HTML sobre o jogo (campo de nome do ranking).
+  dom: { createContainer: true },
   backgroundColor: COLORS.background,
   width: GAME_WIDTH,
   height: GAME_HEIGHT,
@@ -53,5 +59,5 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
     antialias: true,
     pixelArt: false,
   },
-  scene: [BootScene, PreloadScene, MenuScene, GameScene, UIScene],
+  scene: [BootScene, PreloadScene, MenuScene, MapSelectScene, RankingScene, GameScene, UIScene],
 };

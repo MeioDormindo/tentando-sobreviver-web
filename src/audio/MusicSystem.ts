@@ -2,21 +2,13 @@ import Phaser from 'phaser';
 import { audioConfig, musicConfig, type MusicLayer, type MusicState } from '../config/audio.config';
 import { GameEvents, onGameEvent, type WavePhase } from '../game/events';
 import { audio } from './AudioSystem';
+import { save } from '../save/SaveStore';
 
 type VolumeSound = Phaser.Sound.BaseSound & { setVolume(v: number): unknown };
 
 const LAYERS: MusicLayer[] = ['pad', 'pulse', 'drive', 'boss'];
-const MUSIC_OFF_KEY = 'ts-music-off';
 /** Intervalo mínimo entre vinhetas (fim de wave logo depois de derrotar o boss). */
 const STING_GAP_MS = 5000;
-
-function loadEnabled(): boolean {
-  try {
-    return localStorage.getItem(MUSIC_OFF_KEY) !== '1';
-  } catch {
-    return true;
-  }
-}
 
 /**
  * Música adaptativa (GDD §58): Exploration → Normal Wave → High Intensity → Boss,
@@ -33,7 +25,7 @@ export class MusicSystem {
   private eventId: string | null = null;
   private duckUntil = 0;
   private lastStingAt = -Infinity;
-  private enabled = loadEnabled();
+  private enabled = save.musicOn;
 
   constructor(private readonly scene: Phaser.Scene, private readonly aliveZombies: () => number) {
     for (const layer of LAYERS) {
@@ -73,11 +65,7 @@ export class MusicSystem {
   /** Liga/desliga só a música (os efeitos continuam). */
   toggle(): boolean {
     this.enabled = !this.enabled;
-    try {
-      localStorage.setItem(MUSIC_OFF_KEY, this.enabled ? '0' : '1');
-    } catch {
-      /* armazenamento indisponível */
-    }
+    save.musicOn = this.enabled;
     return this.enabled;
   }
 

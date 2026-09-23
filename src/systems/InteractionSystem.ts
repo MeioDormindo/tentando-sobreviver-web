@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { interactionConfig } from '../config/economy.config';
 import type { Player } from '../entities/Player';
 import { emitGameEvent, GameEvents, type InteractionPromptPayload } from '../game/events';
+import { touchInput } from '../input/touchInput';
 
 /** Algo com que o jogador interage pela tecla E (maletas, máquinas, portas...). */
 export interface Interactable {
@@ -34,7 +35,11 @@ export class InteractionSystem {
     const kb = scene.input.keyboard;
     this.key = kb?.addKey(Phaser.Input.Keyboard.KeyCodes.E) ?? null;
     kb?.on('keydown-E', this.onInteract, this);
-    scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => kb?.off('keydown-E', this.onInteract, this));
+    touchInput.events.on('interact', this.onInteract, this);
+    scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      kb?.off('keydown-E', this.onInteract, this);
+      touchInput.events.off('interact', this.onInteract, this);
+    });
   }
 
   add(item: Interactable): void {
@@ -50,7 +55,7 @@ export class InteractionSystem {
 
   update(time: number, delta: number): void {
     this.focused = this.player.isAlive ? this.findNearest() : null;
-    if (this.focused?.onHold && this.key?.isDown) this.focused.onHold(time, delta);
+    if (this.focused?.onHold && (this.key?.isDown || touchInput.interactHeld)) this.focused.onHold(time, delta);
     this.emitPrompt();
   }
 

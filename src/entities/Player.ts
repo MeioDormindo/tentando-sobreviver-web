@@ -8,6 +8,7 @@ import { emitGameEvent, GameEvents } from '../game/events';
 import type { Damageable } from './Damageable';
 import { audio } from '../audio/AudioSystem';
 import { audioConfig } from '../config/audio.config';
+import { touchInput } from '../input/touchInput';
 
 interface MoveKeys {
   up: Phaser.Input.Keyboard.Key;
@@ -128,6 +129,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
       Number(right.isDown) - Number(left.isDown),
       Number(down.isDown) - Number(up.isDown),
     );
+    // Toque: o analógico dá direção e intensidade (empurrar pouco = andar devagar).
+    let analog = 1;
+    if (touchInput.enabled && touchInput.moving) {
+      this.moveDir.set(touchInput.moveX, touchInput.moveY);
+      analog = Math.min(1, this.moveDir.length() / 0.7);
+    }
     // Andar de lado ou de costas (em relação à mira) é mais lento.
     let facing = 1;
     if (this.moveDir.lengthSq() > 0) {
@@ -135,7 +142,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
       if (diff > Phaser.Math.DegToRad(120)) facing = this.config.backpedalMultiplier;
       else if (diff > Phaser.Math.DegToRad(60)) facing = this.config.strafeMultiplier;
     }
-    this.moveDir.normalize().scale(this.config.speed * this.mods.speedMultiplier * this.speedBuff * facing);
+    this.moveDir.normalize().scale(this.config.speed * this.mods.speedMultiplier * this.speedBuff * facing * analog);
     this.setVelocity(this.moveDir.x, this.moveDir.y);
   }
 

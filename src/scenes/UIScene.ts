@@ -3,6 +3,9 @@ import { perkIconKey, powerUpKey } from '../config/assets.config';
 import { audio } from '../audio/AudioSystem';
 import { DamageOverlay } from '../ui/DamageOverlay';
 import { EventHud } from '../ui/EventHud';
+import { TouchControls } from '../ui/TouchControls';
+import { isTouchDevice } from '../input/device';
+import { touchInput } from '../input/touchInput';
 import { createGameOverOverlay } from '../ui/GameOverOverlay';
 import { COLORS, SCENE_KEYS } from '../config/game.config';
 import {
@@ -60,6 +63,7 @@ export class UIScene extends Phaser.Scene {
   private deathOverlay: Phaser.GameObjects.Container | null = null;
   private pauseOverlay: Phaser.GameObjects.Container | null = null;
   private eventHud!: EventHud;
+  private touch: TouchControls | null = null;
   private damageOverlay!: DamageOverlay;
   private gameOverStats: GameOverStats | null = null;
   private playerDead = false;
@@ -153,6 +157,8 @@ export class UIScene extends Phaser.Scene {
     this.damageOverlay = new DamageOverlay(this);
     this.crosshair = this.add.graphics().setDepth(100);
     this.drawCrosshair();
+    this.touch = isTouchDevice() ? new TouchControls(this) : null;
+    if (this.touch) this.crosshair.setVisible(false);
     this.updateKills();
 
     const unsubscribers = [
@@ -161,6 +167,7 @@ export class UIScene extends Phaser.Scene {
       onGameEvent(this.game.events, GameEvents.ZombieKilled, this.onZombieKilled, this),
       onGameEvent(this.game.events, GameEvents.PlayerDied, this.onPlayerDied, this),
       onGameEvent(this.game.events, GameEvents.GameOver, this.onGameOver, this),
+      onGameEvent(this.game.events, GameEvents.MapUnlocked, (m) => this.showBanner(`${m.name.toUpperCase()} DESBLOQUEADO!`, 'disponível na escolha de mapa', COLORS.accent), this),
       onGameEvent(this.game.events, GameEvents.ScoreChanged, (s) => {
         this.scoreText.setText(`SCORE ${s.score.toLocaleString('pt-BR')}`);
         if (s.delta > 0) this.tweens.add({ targets: this.scoreText, scale: { from: 1.08, to: 1 }, duration: 160 });
@@ -185,11 +192,13 @@ export class UIScene extends Phaser.Scene {
     const kb = this.input.keyboard;
     kb?.on('keydown-ESC', this.togglePause, this);
     kb?.on('keydown-P', this.togglePause, this);
+    touchInput.events.on('pause', this.togglePause, this);
     this.game.events.on(Phaser.Core.Events.BLUR, this.pauseOnBlur, this);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       unsubscribers.forEach((off) => off());
       this.scale.off(Phaser.Scale.Events.RESIZE, this.layout, this);
       this.game.events.off(Phaser.Core.Events.BLUR, this.pauseOnBlur, this);
+      touchInput.events.off('pause', this.togglePause, this);
     });
 
     this.layout();
@@ -219,6 +228,7 @@ export class UIScene extends Phaser.Scene {
     this.drawBossBar();
     this.warning.setPosition(width / 2, height * 0.3);
     this.eventHud.layout(width, height, MARGIN);
+    this.touch?.layout(width, height);
     this.damageOverlay.layout(width, height);
     this.statusText.setPosition(width / 2, height * 0.62);
     this.scoreText.setPosition(width - MARGIN, MARGIN + 54);
@@ -342,13 +352,15 @@ export class UIScene extends Phaser.Scene {
     this.sound.pauseAll();
     emitGameEvent(this.game.events, GameEvents.GamePaused, undefined);
     this.crosshair.setVisible(false);
+    this.touch?.setVisible(false);
     this.showPauseOverlay();
   }
 
   private resumeGame(): void {
     this.pauseOverlay?.destroy();
     this.pauseOverlay = null;
-    this.crosshair.setVisible(true);
+    this.crosshair.setVisible(!this.touch);
+    this.touch?.setVisible(true);
     this.sound.resumeAll();
     this.scene.resume(SCENE_KEYS.game);
     emitGameEvent(this.game.events, GameEvents.GameResumed, undefined);
@@ -504,8 +516,10 @@ export class UIScene extends Phaser.Scene {
       this.promptText.setVisible(false);
       return;
     }
+    // No celular não há tecla E: o botão USAR faz a ação.
+    const text = this.touch ? prompt.text.replace(/^\[E\]\s*/, 'USAR ▸ ') : prompt.text;
     this.promptText
-      .setText(prompt.text)
+      .setText(text)
       .setColor(prompt.affordable ? COLORS.text : '#9a8f86')
       .setVisible(true);
   }
@@ -552,6 +566,7 @@ export class UIScene extends Phaser.Scene {
     this.statusText.setText('');
     this.promptText.setVisible(false);
     this.crosshair.setVisible(false);
+    this.touch?.setVisible(false);
   }
 
   /** Resumo da partida: mostrado depois da animação de morte. */
@@ -565,7 +580,11 @@ export class UIScene extends Phaser.Scene {
     if (!stats) return;
     this.deathOverlay?.destroy();
     this.deathOverlay = createGameOverOverlay(this, stats, {
-      retry: () => this.scene.start(SCENE_KEYS.game),
+      retry: () => this.scene.start(SCENE_KEYS.game, { map: stats.mapId }),
+      ranking: () => {
+        this.scene.stop(SCENE_KEYS.game);
+        this.scene.start(SCENE_KEYS.ranking, { map: stats.mapId });
+      },
       menu: () => {
         this.scene.stop(SCENE_KEYS.game);
         this.scene.start(SCENE_KEYS.menu);

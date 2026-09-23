@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { cameraConfig } from '../config/visual.config';
+import { touchInput } from '../input/touchInput';
 
 /**
  * Câmera no estilo de survival top-down: zoom adaptado à altura da janela,
@@ -29,7 +30,10 @@ export class CameraController {
   update(): void {
     const pointer = this.scene.input.activePointer;
     const moved = pointer.x !== 0 || pointer.y !== 0;
-    if (moved) {
+    if (touchInput.enabled) {
+      const [dx, dy] = touchInput.aiming ? [touchInput.aimX, touchInput.aimY] : [touchInput.moveX, touchInput.moveY];
+      this.desired.set(dx, dy).scale(cameraConfig.maxLookAhead * 0.7);
+    } else if (moved) {
       const cam = this.cam;
       this.desired
         .set(pointer.x - cam.width / 2, pointer.y - cam.height / 2)

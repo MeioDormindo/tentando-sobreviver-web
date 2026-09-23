@@ -24,6 +24,8 @@ import { EconomySystem } from '../systems/EconomySystem';
 import { EventSystem } from '../systems/EventSystem';
 import { ScoreSystem } from '../systems/ScoreSystem';
 import { StatsSystem } from '../systems/StatsSystem';
+import { ProgressSystem } from '../systems/ProgressSystem';
+import { DEFAULT_MAP, MAPS, type MapId } from '../config/maps.config';
 import { InteractionSystem } from '../systems/InteractionSystem';
 import { PerkSystem } from '../systems/PerkSystem';
 import { PowerUpSystem } from '../systems/PowerUpSystem';
@@ -31,6 +33,7 @@ import { BossSystem } from '../systems/BossSystem';
 import { SpawnSystem } from '../systems/SpawnSystem';
 import { WaveSystem } from '../systems/WaveSystem';
 import { WeaponSystem } from '../weapons/WeaponSystem';
+import { touchInput } from '../input/touchInput';
 
 const MAX_PROJECTILES = 220;
 const MAX_ZOMBIES = 60;
@@ -56,8 +59,16 @@ export class GameScene extends Phaser.Scene {
   private currentArea = '';
   private readonly aimPoint = new Phaser.Math.Vector2();
 
+  /** Mapa desta partida (escolhido no menu). */
+  private mapId: MapId = DEFAULT_MAP;
+
   constructor() {
     super(SCENE_KEYS.game);
+  }
+
+  init(data: { map?: MapId }): void {
+    // Só o Terminal Central tem conteúdo por enquanto; mapas ainda sem conteúdo caem nele.
+    this.mapId = data.map && MAPS[data.map].playable ? data.map : DEFAULT_MAP;
   }
 
   create(): void {
@@ -72,7 +83,9 @@ export class GameScene extends Phaser.Scene {
     map.scatterDecals(effects.stampDecal);
     this.effects = effects;
     this.player.onHurt = (x, y) => effects.bloodHit(x, y, Math.random() * Math.PI * 2);
-    new StatsSystem(this);
+    // Estatísticas, recordes e desbloqueios (ficam no save).
+    new StatsSystem(this, this.mapId);
+    new ProgressSystem(this, this.mapId);
     this.score = new ScoreSystem(this, this.player, effects);
 
     const projectiles = this.physics.add.group({
@@ -267,8 +280,7 @@ export class GameScene extends Phaser.Scene {
     this.player.updateMovement();
     this.player.updateRegen(time, delta);
     this.waveSystem.update(delta);
-    this.input.activePointer.positionToCamera(this.cameras.main, this.aimPoint);
-    this.player.aimAt(this.aimPoint.x, this.aimPoint.y);
+    this.updateAim();
     this.weaponSystem.update(time);
     this.combat.update(time, delta);
     this.interaction.update(time, delta);
@@ -279,6 +291,18 @@ export class GameScene extends Phaser.Scene {
     this.music.update(time, delta);
     this.cameraController.update();
     this.trackArea();
+  }
+
+  /** Mira pelo mouse ou, no celular, pelo analógico direito (sem ele, olha para onde anda). */
+  private updateAim(): void {
+    const p = this.player;
+    if (touchInput.enabled) {
+      if (touchInput.aiming) p.aimAt(p.x + touchInput.aimX * 100, p.y + touchInput.aimY * 100);
+      else if (touchInput.moving) p.aimAt(p.x + touchInput.moveX * 100, p.y + touchInput.moveY * 100);
+      return;
+    }
+    this.input.activePointer.positionToCamera(this.cameras.main, this.aimPoint);
+    p.aimAt(this.aimPoint.x, this.aimPoint.y);
   }
 
   /** Avisa a HUD quando o jogador entra em outra área. */

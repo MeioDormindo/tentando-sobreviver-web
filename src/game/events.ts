@@ -1,4 +1,5 @@
 import type Phaser from 'phaser';
+import type { MapId } from '../config/maps.config';
 
 /** Eventos globais do jogo, emitidos em `game.events`. */
 export const GameEvents = {
@@ -42,6 +43,8 @@ export const GameEvents = {
   ShotsFired: 'shots-fired',
   ShotHit: 'shot-hit',
   DamageDealt: 'damage-dealt',
+  /** Um mapa novo foi liberado (anúncio na HUD). */
+  MapUnlocked: 'map-unlocked',
   /** Pontuação total e o quanto mudou. */
   ScoreChanged: 'score-changed',
   /** Fim de partida com o resumo (GDD §63–64). */
@@ -127,6 +130,9 @@ export interface GameOverStats {
   bestKills: number;
   bestScore: number;
   newRecord: boolean;
+  mapId: MapId;
+  /** A pontuação entra no ranking do mapa (a tela pede o nome). */
+  rankEligible: boolean;
 }
 
 export interface MoneyPayload {
@@ -182,6 +188,7 @@ export interface GameEventMap {
   [GameEvents.ShotHit]: undefined;
   [GameEvents.DamageDealt]: { amount: number };
   [GameEvents.ScoreChanged]: { score: number; delta: number };
+  [GameEvents.MapUnlocked]: { id: MapId; name: string };
   [GameEvents.GameOver]: GameOverStats;
   [GameEvents.HudRequest]: undefined;
 }

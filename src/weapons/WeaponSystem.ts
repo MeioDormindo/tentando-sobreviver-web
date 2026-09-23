@@ -8,6 +8,7 @@ import { Projectile } from '../entities/Projectile';
 import { emitGameEvent, GameEvents } from '../game/events';
 import { Weapon } from './Weapon';
 import { audio } from '../audio/AudioSystem';
+import { touchInput } from '../input/touchInput';
 
 /** Ponto de ejeção das cápsulas, à frente do tronco. */
 const EJECT_DISTANCE = 16;
@@ -62,7 +63,11 @@ export class WeaponSystem {
     kb?.on('keydown-ONE', this.onSlotOne, this);
     kb?.on('keydown-TWO', this.onSlotTwo, this);
     scene.input.on(Phaser.Input.Events.POINTER_WHEEL, this.cycle, this);
+    touchInput.events.on('reload', this.onReloadKey, this);
+    touchInput.events.on('swap', this.cycle, this);
     scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      touchInput.events.off('reload', this.onReloadKey, this);
+      touchInput.events.off('swap', this.cycle, this);
       kb?.off('keydown-R', this.onReloadKey, this);
       kb?.off('keydown-Q', this.cycle, this);
       kb?.off('keydown-ONE', this.onSlotOne, this);
@@ -135,11 +140,13 @@ export class WeaponSystem {
     for (const weapon of this.slots) weapon.update(time);
 
     if (this.owner.isAlive && time >= this.busyUntil) {
-      const triggerDown = this.scene.input.activePointer.leftButtonDown();
+      // No celular atira-se empurrando o analógico direito (semiautomáticas repetem sozinhas).
+      const touch = touchInput.enabled;
+      const triggerDown = touch ? touchInput.firing : this.scene.input.activePointer.leftButtonDown();
       if (!triggerDown) {
         this.triggerConsumed = false;
         this.releaseRequired = false;
-      } else if (!this.releaseRequired && (this.current.config.automatic || !this.triggerConsumed)) {
+      } else if (!this.releaseRequired && (this.current.config.automatic || touch || !this.triggerConsumed)) {
         this.tryFire(time);
       }
     }

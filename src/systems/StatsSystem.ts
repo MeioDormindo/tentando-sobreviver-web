@@ -1,37 +1,12 @@
 import Phaser from 'phaser';
+import type { MapId } from '../config/maps.config';
 import { emitGameEvent, GameEvents, onGameEvent, type GameOverStats } from '../game/events';
-
-const RECORDS_KEY = 'ts-records';
-
-interface Records {
-  bestWave: number;
-  bestKills: number;
-  bestScore: number;
-}
-
-/** Recordes salvos no navegador (GDD §65). */
-export function loadRecords(): Records {
-  try {
-    const raw = localStorage.getItem(RECORDS_KEY);
-    const data = raw ? (JSON.parse(raw) as Partial<Records>) : {};
-    return { bestWave: Number(data.bestWave) || 0, bestKills: Number(data.bestKills) || 0, bestScore: Number(data.bestScore) || 0 };
-  } catch {
-    return { bestWave: 0, bestKills: 0, bestScore: 0 };
-  }
-}
-
-function saveRecords(r: Records): void {
-  try {
-    localStorage.setItem(RECORDS_KEY, JSON.stringify(r));
-  } catch {
-    /* armazenamento indisponível: o recorde vale só nesta sessão */
-  }
-}
+import { save } from '../save/SaveStore';
 
 /**
  * Estatísticas da partida (GDD §64), só a partir de eventos: abates, headshots,
  * disparos/acertos, dano, dinheiro, bosses, power-ups e tempo. Na morte do jogador,
- * atualiza os recordes e emite o resumo para a tela de Game Over.
+ * atualiza recordes e totais no save e emite o resumo para a tela de Game Over.
  */
 export class StatsSystem {
   private wave = 0;
@@ -46,7 +21,7 @@ export class StatsSystem {
   private score = 0;
   private readonly startedAt: number;
 
-  constructor(private readonly scene: Phaser.Scene) {
+  constructor(private readonly scene: Phaser.Scene, private readonly mapId: MapId) {
     this.startedAt = scene.time.now;
     const ev = scene.game.events;
     const offs = [
@@ -68,29 +43,28 @@ export class StatsSystem {
   }
 
   private finish(): void {
-    const prev = loadRecords();
-    // O recorde principal é a pontuação; melhor wave e abates ficam guardados à parte.
-    const newRecord = this.score > prev.bestScore;
-    const records = {
-      bestWave: Math.max(prev.bestWave, this.wave),
-      bestKills: Math.max(prev.bestKills, this.kills),
-      bestScore: Math.max(prev.bestScore, this.score),
-    };
-    saveRecords(records);
+    const timeMs = this.scene.time.now - this.startedAt;
+    const prev = save.finishRun(this.mapId, { wave: this.wave, kills: this.kills, score: this.score, bosses: this.bosses, timeMs });
+    const records = save.records(this.mapId);
     const stats: GameOverStats = {
       wave: this.wave,
       kills: this.kills,
       headshots: this.headshots,
       moneyEarned: this.moneyEarned,
-      timeMs: this.scene.time.now - this.startedAt,
+      timeMs,
       bosses: this.bosses,
       shotsFired: this.shotsFired,
       shotsHit: Math.min(this.shotsHit, this.shotsFired),
       damage: Math.round(this.damage),
       powerUps: this.powerUps,
       score: this.score,
-      ...records,
-      newRecord,
+      bestWave: records.bestWave,
+      bestKills: records.bestKills,
+      bestScore: records.bestScore,
+      // O recorde principal é a pontuação.
+      newRecord: this.score > prev.bestScore,
+      mapId: this.mapId,
+      rankEligible: save.qualifies(this.mapId, this.score),
     };
     emitGameEvent(this.scene.game.events, GameEvents.GameOver, stats);
   }
