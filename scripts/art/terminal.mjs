@@ -238,3 +238,18 @@ export function propGenerator() {
   s += line([102, 40], [110, 60], '#151515', 3);
   return svgDoc(112, 80, defs, s);
 }
+
+/** Mancha de explosão do Exploder: queimado + gosma esverdeada. 192x192. */
+export function decalBurst() {
+  const r = rng(909);
+  const defs = radial('burn', [[0, '#0b0a08', 0.85], [0.6, '#16140f', 0.6], [1, '#16140f', 0]], '50%', '50%', '50%');
+  let s = `<circle cx="96" cy="96" r="88" fill="url(#burn)"/>`;
+  s += `<path d="${blobPath(96, 96, 44, 0.55, 14, r)}" fill="#4d5a1f" opacity=".75"/>`;
+  s += `<path d="${blobPath(96, 96, 26, 0.6, 10, r)}" fill="#7d8f2a" opacity=".55"/>`;
+  for (let i = 0; i < 18; i++) {
+    const a = r.range(0, Math.PI * 2);
+    const d = r.range(40, 86);
+    s += `<circle cx="${f(96 + Math.cos(a) * d)}" cy="${f(96 + Math.sin(a) * d)}" r="${f(r.range(2, 6))}" fill="${r.pick(['#5c6b22', '#3f0a08', '#6d7d26'])}" opacity=".85"/>`;
+  }
+  return svgDoc(192, 192, defs, s);
+}

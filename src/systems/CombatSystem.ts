@@ -1,6 +1,8 @@
 import Phaser from 'phaser';
 import { headshotConfig } from '../config/economy.config';
 import type { PerkModifiers } from '../config/machines.config';
+import type { ExplosiveConfig } from '../config/zombies.config';
+import type { KillSource } from '../game/events';
 import type { EffectsSystem } from '../effects/EffectsSystem';
 import type { Player } from '../entities/Player';
 import { Projectile } from '../entities/Projectile';
@@ -32,12 +34,17 @@ export interface CombatBuffs {
 
 type ArcadeObject = Parameters<Phaser.Types.Physics.Arcade.ArcadePhysicsCallback>[0];
 
+/** Explosões ferem muito mais os zumbis que o jogador (o Exploder abre buracos na horda). */
+const EXPLOSION_ZOMBIE_MULTIPLIER = 4;
+/** Na borda da explosão sobra esta fração do dano. */
+const EXPLOSION_EDGE_FALLOFF = 0.3;
+
 /**
  * Registra colisões e sobreposições de combate.
  * O ataque corpo a corpo do zumbi é decidido pela própria IA (Zombie.update).
  */
 export class CombatSystem {
-  constructor(scene: Phaser.Scene, deps: CombatSystemDeps) {
+  constructor(private readonly scene: Phaser.Scene, private readonly deps: CombatSystemDeps) {
     const { player, zombies, projectiles, walls, obstacles, bulletBlockers, barricades, effects, modifiers, buffs } = deps;
     const physics = scene.physics;
 
@@ -78,7 +85,7 @@ export class CombatSystem {
         if (projectile.registerHit(zombie)) projectile.kill();
         effects.bloodHit(zombie.x, zombie.y, angle);
         if (zombie.takeDamage(damage, headshot)) {
-          effects.zombieDeath(zombie.x, zombie.y, angle, zombie.variant);
+          effects.zombieDeath(zombie.x, zombie.y, angle, zombie.skin);
         }
       },
       (a, b) => {
@@ -87,6 +94,34 @@ export class CombatSystem {
         return !!projectile?.active && !!zombie?.isAlive && !projectile.hasHit(zombie);
       },
     );
+  }
+
+  /**
+   * Explosão de um Exploder: fere o jogador (exceto quando causada pelo Nuke) e os
+   * zumbis no raio. Abates contam para quem matou o Exploder (arma → paga e pode dropar).
+   */
+  explode(x: number, y: number, explosive: ExplosiveConfig, source: KillSource, self: Zombie): void {
+    const { player, zombies, effects } = this.deps;
+    effects.explosion(x, y, explosive.radius);
+    const falloff = (d: number) => 1 - (1 - EXPLOSION_EDGE_FALLOFF) * (d / explosive.radius);
+
+    const dp = Phaser.Math.Distance.Between(player.x, player.y, x, y);
+    if (source !== 'nuke' && dp <= explosive.radius) {
+      player.takeDamage(Math.round(explosive.damage * falloff(dp)), this.scene.time.now);
+    }
+
+    const credit: KillSource = source === 'weapon' ? 'weapon' : source;
+    for (const child of zombies.getChildren()) {
+      const z = child as Zombie;
+      if (z === self || !z.active || !z.isAlive) continue;
+      const d = Phaser.Math.Distance.Between(z.x, z.y, x, y);
+      if (d > explosive.radius) continue;
+      const zx = z.x;
+      const zy = z.y;
+      if (z.takeDamage(explosive.damage * EXPLOSION_ZOMBIE_MULTIPLIER * falloff(d), false, credit)) {
+        effects.zombieDeath(zx, zy, Phaser.Math.Angle.Between(x, y, zx, zy), z.skin);
+      }
+    }
   }
 
   /**

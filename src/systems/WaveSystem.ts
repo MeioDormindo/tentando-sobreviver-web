@@ -59,7 +59,7 @@ export class WaveSystem {
     this.spawnTimerMs -= delta;
     const alive = this.spawned - this.killed;
     if (this.spawnTimerMs <= 0 && this.spawned < this.params.totalEnemies && alive < this.params.maxAlive) {
-      const config = scaleZombie(getZombieConfig(waveConfig.zombieType), this.params);
+      const config = scaleZombie(getZombieConfig(this.pickType()), this.params);
       if (this.spawner.spawn(config, this.wave)) {
         this.spawned++;
         this.spawnTimerMs = this.params.spawnInterval;
@@ -67,6 +67,22 @@ export class WaveSystem {
         this.spawnTimerMs = SPAWN_RETRY_MS;
       }
     }
+  }
+
+  /** Sorteia o tipo do próximo zumbi pela composição da wave, respeitando os limites por tipo. */
+  private pickType(): string {
+    const stage = [...waveConfig.composition].reverse().find((c) => this.wave >= c.fromWave) ?? waveConfig.composition[0];
+    const alive = this.spawner.aliveByType();
+    const entries = Object.entries(stage.weights).filter(([type]) => {
+      const cap = waveConfig.maxAlivePerType[type];
+      return cap === undefined || (alive.get(type) ?? 0) < cap;
+    });
+    let pick = Math.random() * entries.reduce((sum, [, w]) => sum + w, 0);
+    for (const [type, weight] of entries) {
+      pick -= weight;
+      if (pick < 0) return type;
+    }
+    return 'walker';
   }
 
   /** Reenvia o estado para a HUD. */

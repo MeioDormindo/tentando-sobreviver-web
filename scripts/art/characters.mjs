@@ -135,13 +135,21 @@ export const ZOMBIE_VARIANTS = {
   a: { shirt: '#5e5343', shirtShade: '#3a3228', pants: '#3c4048', pantsShade: '#272a30', shoes: '#231e19', skin: '#6c765f', skinShade: '#454d3d', hair: '#2a241e', seed: 11, bald: false },
   b: { shirt: '#3d4a58', shirtShade: '#242d37', pants: '#2e2e2c', pantsShade: '#1c1c1b', shoes: '#2c241c', skin: '#77806b', skinShade: '#4b5344', hair: '#6a5838', seed: 23, bald: false },
   c: { shirt: '#6b4a3a', shirtShade: '#43291e', pants: '#4a3f33', pantsShade: '#2f281f', shoes: '#1d1a17', skin: '#66705a', skinShade: '#3f4737', hair: '#1d1a17', seed: 37, bald: true },
+  // Runner: magro, roupa em farrapos ensanguentada, corre inclinado (GDD §55)
+  runner: { shirt: '#5a2e2a', shirtShade: '#35191a', pants: '#2c2e33', pantsShade: '#1b1c20', shoes: '#1a1614', skin: '#5f6953', skinShade: '#394032', hair: '#15120f', seed: 53, bald: false, rx: 13.5, ry: 23, gait: 'run', bloody: true },
+  // Tank: corpo maior com proteção improvisada e capacete (GDD §55)
+  tank: { shirt: '#3d4238', shirtShade: '#262a22', pants: '#33372f', pantsShade: '#20231d', shoes: '#191714', skin: '#6c7560', skinShade: '#444c3b', hair: '#1d1a17', seed: 67, bald: true, rx: 19, ry: 28, armor: true, helmet: true, scale: 1.375 },
+  // Exploder: inchado, com pústulas brilhantes — sinal claro de infecção (GDD §55)
+  exploder: { shirt: '#4f5a36', shirtShade: '#303822', pants: '#3a3a2c', pantsShade: '#23231a', shoes: '#1d1a17', skin: '#7f8c56', skinShade: '#4f5a32', hair: '#1d1a17', seed: 79, bald: true, rx: 19.5, ry: 27, pustules: true, noCorpse: true },
 };
 
 function zombieDefs(v, id) {
   return (
     radial(`zs${id}`, [[0, v.shirt], [0.7, v.shirt], [1, v.shirtShade]]) +
     radial(`zk${id}`, [[0, v.skin], [1, v.skinShade]], '65%', '40%') +
-    radial(`zb${id}`, [[0, '#5a0f0c', 0.9], [0.6, '#3d0907', 0.75], [1, '#3d0907', 0]], '50%', '50%', '50%')
+    radial(`zb${id}`, [[0, '#5a0f0c', 0.9], [0.6, '#3d0907', 0.75], [1, '#3d0907', 0]], '50%', '50%', '50%') +
+    radial(`zp${id}`, [[0, '#fff6a0'], [0.35, '#d7e04a'], [0.75, '#8fa82a', 0.9], [1, '#4f5a32', 0]], '45%', '40%', '55%') +
+    linear(`zm${id}`, [[0, '#7c8288'], [1, '#4a4f55']], 0, 0, 1, 1)
   );
 }
 
@@ -173,15 +181,39 @@ function zombieFrame(v, id, pose) {
   s += `<g transform="rotate(${f(pose.sway)} 62 64) translate(${f(pose.lean)} 0)">`;
 
   // Tronco com roupa rasgada
-  s += `<path d="${raggedEllipse(61, 64, 15.5, 25, 0.12, 36, r)}" fill="url(#zs${id})" stroke="#15130f" stroke-width="1.4"/>`;
+  const rx = v.rx ?? 15.5;
+  const ry = v.ry ?? 25;
+  s += `<path d="${raggedEllipse(61, 64, rx, ry, 0.12, 36, r)}" fill="url(#zs${id})" stroke="#15130f" stroke-width="1.4"/>`;
   // Buracos na roupa mostrando pele e manchas de sangue
   for (let i = 0; i < 3; i++) {
     const cx = r.range(52, 70);
     const cy = r.range(46, 82);
     s += `<path d="${blobPath(cx, cy, r.range(2.5, 4.5), 0.6, 7, r)}" fill="${v.skinShade}" opacity=".9"/>`;
   }
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < (v.bloody ? 7 : 4); i++) {
     s += `<ellipse cx="${f(r.range(50, 72))}" cy="${f(r.range(44, 84))}" rx="${f(r.range(4, 9))}" ry="${f(r.range(3, 7))}" fill="url(#zb${id})"/>`;
+  }
+  // Proteção improvisada: placas de metal nos ombros e peito, presas por tiras
+  if (v.armor) {
+    for (const [px, py, w, h, rot] of [[48, 38, 22, 14, -8], [48, 76, 22, 14, 8], [60, 55, 12, 18, 0]]) {
+      s += `<rect x="${px}" y="${py}" width="${w}" height="${h}" rx="2" fill="url(#zm${id})" stroke="#1b1d20" stroke-width="1.5" transform="rotate(${rot} ${px + w / 2} ${py + h / 2})"/>`;
+      s += `<circle cx="${px + 3}" cy="${py + 3}" r="1.2" fill="#2a2d31"/><circle cx="${px + w - 3}" cy="${py + h - 3}" r="1.2" fill="#2a2d31"/>`;
+    }
+    s += line([46, 50], [74, 78], '#2a2016', 3.5) + line([46, 78], [74, 50], '#2a2016', 3.5);
+  }
+  // Pústulas brilhantes
+  if (v.pustules) {
+    for (let i = 0; i < 7; i++) {
+      const cx = r.range(48, 74);
+      const cy = r.range(42, 86);
+      const rad = r.range(3, 6.5);
+      s += `<circle cx="${f(cx)}" cy="${f(cy)}" r="${f(rad + 1.5)}" fill="#3a4422" opacity=".6"/>`;
+      s += `<circle cx="${f(cx)}" cy="${f(cy)}" r="${f(rad)}" fill="url(#zp${id})"/>`;
+    }
+    for (let i = 0; i < 5; i++) {
+      const a = r.range(0, Math.PI * 2);
+      s += line([61 + Math.cos(a) * 6, 64 + Math.sin(a) * 10], [61 + Math.cos(a) * rx * 0.9, 64 + Math.sin(a) * ry * 0.9], '#3b4a1c', 1.1, 'opacity=".7"');
+    }
   }
 
   s += zombieArm(v, [60, 43.5], pose.handL, -1, r);
@@ -190,7 +222,11 @@ function zombieFrame(v, id, pose) {
   // Cabeça, um pouco caída para a frente
   const hx = 64 + pose.headFwd;
   s += `<circle cx="${f(hx)}" cy="64.5" r="11.2" fill="url(#zk${id})" stroke="#1a1d16" stroke-width="1.2"/>`;
-  if (!v.bald) {
+  if (v.helmet) {
+    s += `<circle cx="${f(hx - 1.5)}" cy="64.5" r="11.8" fill="#b8932a" stroke="#1c1608" stroke-width="1.5"/>`;
+    s += `<path d="M${f(hx - 12)} 64.5 A12 12 0 0 1 ${f(hx + 9)} 60" stroke="#d9b447" stroke-width="2" fill="none" opacity=".7"/>`;
+    s += line([hx - 12, 64.5], [hx + 10, 64.5], '#6e5716', 2);
+  } else if (!v.bald) {
     s += `<path d="${blobPath(hx - 3.5, 64, 9.2, 0.35, 9, r)}" fill="${v.hair}" opacity=".95"/>`;
     s += `<circle cx="${f(hx - 1)}" cy="58" r="2.4" fill="${v.skinShade}"/>`;
   } else {
@@ -202,21 +238,36 @@ function zombieFrame(v, id, pose) {
   return s;
 }
 
-/** Frames 0-7: andar arrastado · 8-12: ataque. */
+/** Tamanho do frame de uma variante (o Tank é maior). */
+export const zombieFrameSize = (id) => Math.round(CHAR_FRAME * (ZOMBIE_VARIANTS[id].scale ?? 1));
+
+/** Frames 0-7: andar (arrastado ou correndo) · 8-12: ataque. */
 export function zombieSheet(id) {
   const v = ZOMBIE_VARIANTS[id];
   const frames = [];
+  const run = v.gait === 'run';
   for (let i = 0; i < 8; i++) {
     const p = (i / 8) * Math.PI * 2;
-    frames.push(zombieFrame(v, id, {
-      phase: p,
-      legAmp: 11,
-      sway: Math.sin(p) * 6,
-      lean: 0,
-      headFwd: 1.5,
-      handL: [99 + Math.sin(p) * 4, 47 - Math.cos(p) * 2],
-      handR: [96 - Math.sin(p) * 4, 81 + Math.cos(p) * 2],
-    }));
+    frames.push(zombieFrame(v, id, run
+      ? {
+          // Corrida: passadas longas, corpo inclinado, braços balançando forte
+          phase: p,
+          legAmp: 18,
+          sway: Math.sin(p) * 9,
+          lean: 3,
+          headFwd: 4,
+          handL: [94 + Math.sin(p) * 12, 44 - Math.cos(p) * 3],
+          handR: [94 - Math.sin(p) * 12, 84 + Math.cos(p) * 3],
+        }
+      : {
+          phase: p,
+          legAmp: 11,
+          sway: Math.sin(p) * 6,
+          lean: 0,
+          headFwd: 1.5,
+          handL: [99 + Math.sin(p) * 4, 47 - Math.cos(p) * 2],
+          handR: [96 - Math.sin(p) * 4, 81 + Math.cos(p) * 2],
+        }));
   }
   const attack = [
     { handL: [90, 42], handR: [88, 86], lean: -3, headFwd: 0 },
@@ -228,8 +279,15 @@ export function zombieSheet(id) {
   for (const a of attack) {
     frames.push(zombieFrame(v, id, { phase: 0, legAmp: 11, sway: 0, ...a }));
   }
-  return sheet(CHAR_FRAME, CHAR_FRAME, zombieDefs(v, id), frames);
+  // Variantes maiores: desenha no espaço de 128 e escala para o frame maior.
+  const size = zombieFrameSize(id);
+  const scale = v.scale ?? 1;
+  const scaled = scale === 1 ? frames : frames.map((fr) => `<g transform="scale(${scale})">${fr}</g>`);
+  return sheet(size, size, zombieDefs(v, id), scaled);
 }
+
+/** Variantes que deixam cadáver (o Exploder explode). */
+export const CORPSE_IDS = Object.keys(ZOMBIE_VARIANTS).filter((id) => !ZOMBIE_VARIANTS[id].noCorpse);
 
 // ───────────────────────────── Cadáveres ─────────────────────────────
 
@@ -267,9 +325,13 @@ function corpseFrame(v, id, seed) {
 }
 
 export function corpseSheet() {
-  const ids = Object.keys(ZOMBIE_VARIANTS);
+  const ids = CORPSE_IDS;
   const defs = ids.map((id) => zombieDefs(ZOMBIE_VARIANTS[id], id)).join('');
-  const frames = ids.map((id, i) => corpseFrame(ZOMBIE_VARIANTS[id], id, 100 + i * 17));
+  const frames = ids.map((id, i) => {
+    const content = corpseFrame(ZOMBIE_VARIANTS[id], id, 100 + i * 17);
+    const scale = ZOMBIE_VARIANTS[id].scale ?? 1;
+    return scale === 1 ? content : `<g transform="translate(88 72) scale(${scale * 0.95}) translate(-88 -72)">${content}</g>`;
+  });
   return sheet(CORPSE_W, CORPSE_H, defs, frames);
 }
 

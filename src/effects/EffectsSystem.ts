@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { ASSET_KEYS, FX_KEYS, ZOMBIE_VARIANTS, type ZombieVariant } from '../config/assets.config';
+import { ASSET_KEYS, CORPSE_SKINS, FX_KEYS, ZOMBIE_SKINS, type ZombieSkin } from '../config/assets.config';
 import { ART_SCALE, DEPTH, effectsConfig, lightingConfig } from '../config/visual.config';
 import type { LightingSystem } from './LightingSystem';
 
@@ -149,9 +149,38 @@ export class EffectsSystem {
     this.lighting?.addFlash(x, y, 40, 0.5, 60);
   }
 
-  zombieDeath(x: number, y: number, fallAngle: number, variant: ZombieVariant): void {
+  /** Explosão (Exploder): clarão, fogo, fumaça, gosma e mancha queimada no chão. */
+  explosion(x: number, y: number, radius: number): void {
+    for (const angle of [0, 90, 180, 270]) {
+      this.emitAngle = angle;
+      this.sparks.explode(10, x, y);
+      this.blood.explode(8, x, y);
+      this.smoke.explode(3, x, y);
+    }
+    this.stamp(ASSET_KEYS.burst, undefined, x, y, { rotation: Math.random() * Math.PI * 2, scale: (radius / 96) * 1.1, alpha: 0.9 });
+    const fireball = this.scene.add
+      .image(x, y, FX_KEYS.lightRadial)
+      .setTint(0xffa040)
+      .setBlendMode(Phaser.BlendModes.ADD)
+      .setDepth(DEPTH.glow)
+      .setScale(0.2);
+    this.scene.tweens.add({
+      targets: fireball,
+      scale: (radius * 2.2) / 256,
+      alpha: { from: 1, to: 0 },
+      duration: 420,
+      ease: 'Cubic.easeOut',
+      onComplete: () => fireball.destroy(),
+    });
+    this.lighting?.addFlash(x, y, radius * 2.4, 1, 350);
+    this.scene.cameras.main.shake(260, 0.006);
+  }
+
+  zombieDeath(x: number, y: number, fallAngle: number, skin: ZombieSkin): void {
     this.emitAngle = Phaser.Math.RadToDeg(fallAngle);
     this.blood.explode(effectsConfig.bloodParticlesOnDeath, x, y);
+    // Quem explode não deixa corpo.
+    if (!ZOMBIE_SKINS[skin].corpse) return;
 
     const cx = x + Math.cos(fallAngle) * 10;
     const cy = y + Math.sin(fallAngle) * 10;
@@ -168,7 +197,7 @@ export class EffectsSystem {
     });
 
     const body = this.scene.add
-      .image(cx, cy, ASSET_KEYS.corpses, ZOMBIE_VARIANTS.indexOf(variant))
+      .image(cx, cy, ASSET_KEYS.corpses, CORPSE_SKINS.indexOf(skin))
       .setDepth(DEPTH.corpses)
       .setRotation(fallAngle + Phaser.Math.FloatBetween(-0.3, 0.3))
       .setScale(ART_SCALE * 0.95);

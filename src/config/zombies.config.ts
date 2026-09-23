@@ -1,3 +1,13 @@
+export interface ExplosiveConfig {
+  /** Dano no centro da explosão (cai até 30% na borda). */
+  damage: number;
+  radius: number;
+  /** Distância do alvo em que o zumbi "arma" a explosão (px). */
+  triggerRange: number;
+  /** Tempo piscando antes de explodir (ms). */
+  fuseMs: number;
+}
+
 export interface ZombieConfig {
   id: string;
   name: string;
@@ -12,10 +22,19 @@ export interface ZombieConfig {
   /** Intervalo entre ataques (ms). */
   attackCooldown: number;
   bodyRadius: number;
-  /** Recompensa em dinheiro (usada a partir da Fase 3). */
+  /** Recompensa em dinheiro por abate. */
   reward: number;
+  /** Aparências possíveis (spritesheets). */
+  skins: string[];
+  /** Tábuas arrancadas por golpe numa barricada. */
+  plankDamage: number;
+  /** Pode ser empurrado por outros zumbis. */
+  pushable: boolean;
+  /** Explode ao chegar perto do alvo e ao morrer (Exploder). */
+  explosive?: ExplosiveConfig;
 }
 
+/** Tipos de zumbi (GDD §28). Toda a lógica é a mesma classe Zombie; muda só a config. */
 export const zombies: Record<string, ZombieConfig> = {
   walker: {
     id: 'walker',
@@ -23,12 +42,62 @@ export const zombies: Record<string, ZombieConfig> = {
     health: 100,
     damage: 10,
     speed: 60,
-    // Modo horda: o Walker sempre sabe onde o jogador está (cobre o mapa inteiro).
-    detectRange: 4000,
+    // Modo horda: sempre sabe onde o jogador está (cobre o mapa inteiro).
+    detectRange: 6000,
     attackRange: 30,
     attackCooldown: 1000,
     bodyRadius: 12,
     reward: 100,
+    skins: ['a', 'b', 'c'],
+    plankDamage: 1,
+    pushable: true,
+  },
+  runner: {
+    id: 'runner',
+    name: 'Runner',
+    health: 80,
+    damage: 15,
+    speed: 125,
+    detectRange: 6000,
+    attackRange: 30,
+    attackCooldown: 750,
+    bodyRadius: 12,
+    reward: 125,
+    skins: ['runner'],
+    plankDamage: 1,
+    pushable: true,
+  },
+  tank: {
+    id: 'tank',
+    name: 'Tank',
+    health: 600,
+    damage: 30,
+    speed: 40,
+    detectRange: 6000,
+    attackRange: 38,
+    attackCooldown: 1500,
+    // Visualmente 40% maior, mas o corpo cabe em corredores de 1 tile.
+    bodyRadius: 15,
+    reward: 250,
+    skins: ['tank'],
+    plankDamage: 2,
+    pushable: false,
+  },
+  exploder: {
+    id: 'exploder',
+    name: 'Exploder',
+    health: 150,
+    damage: 0,
+    speed: 80,
+    detectRange: 6000,
+    attackRange: 30,
+    attackCooldown: 1000,
+    bodyRadius: 13,
+    reward: 175,
+    skins: ['exploder'],
+    plankDamage: 1,
+    pushable: true,
+    explosive: { damage: 45, radius: 95, triggerRange: 46, fuseMs: 650 },
   },
 };
 

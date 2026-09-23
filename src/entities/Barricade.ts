@@ -58,9 +58,12 @@ export class Barricade implements Interactable {
     return this.planks > 0 ? 'DAMAGED' : 'DESTROYED';
   }
 
-  /** Um zumbi arranca uma tábua. */
-  takeHit(): void {
-    if (this.planks <= 0) return;
+  /** Um zumbi arranca uma ou mais tábuas. */
+  takeHit(amount = 1): void {
+    for (let i = 0; i < amount && this.planks > 0; i++) this.removePlank();
+  }
+
+  private removePlank(): void {
     this.planks--;
     const plank = this.plankImages[this.planks];
     const dir = this.def.rect.x < 64 ? 1 : -1; // cai para dentro da área

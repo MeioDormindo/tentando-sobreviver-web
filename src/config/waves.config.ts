@@ -23,8 +23,18 @@ export const waveConfig = {
   firstWaveDelay: 3500,
   intermission: 10_000,
 
-  /** Tipo de zumbi das waves (Runner/Tank/Exploder entram na Fase 7). */
-  zombieType: 'walker',
+  /**
+   * Composição por wave (GDD §31): pesos de cada tipo a partir de uma wave.
+   * 1–2 só Walkers; poucos Runners a partir da 3; Tanks a partir da 6; Exploders a partir da 11.
+   */
+  composition: [
+    { fromWave: 1, weights: { walker: 100 } },
+    { fromWave: 3, weights: { walker: 85, runner: 15 } },
+    { fromWave: 6, weights: { walker: 62, runner: 26, tank: 12 } },
+    { fromWave: 11, weights: { walker: 50, runner: 25, tank: 10, exploder: 15 } },
+  ] as Array<{ fromWave: number; weights: Record<string, number> }>,
+  /** Máximo de vivos ao mesmo tempo por tipo (tipos fortes não podem dominar a tela). */
+  maxAlivePerType: { tank: 2, exploder: 4 } as Record<string, number>,
 };
 
 /** Regras de posicionamento de spawn (GDD §21). */

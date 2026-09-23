@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
-import { ASSET_KEYS, ZOMBIE_VARIANTS, zombieAnimKey, zombieSheetKey, type ZombieVariant } from '../config/assets.config';
+import { ASSET_KEYS, FX_KEYS, ZOMBIE_SKINS, zombieAnimKey, zombieSheetKey, type ZombieSkin } from '../config/assets.config';
 import { ART_SCALE, DEPTH } from '../config/visual.config';
-import type { ZombieConfig } from '../config/zombies.config';
+import type { ExplosiveConfig, ZombieConfig } from '../config/zombies.config';
 import { emitGameEvent, GameEvents, type KillSource } from '../game/events';
 import type { NavGrid, PathPoint } from '../systems/pathfinding/NavGrid';
 import type { Damageable } from './Damageable';
@@ -11,6 +11,8 @@ export const ZombieState = {
   Chase: 'CHASE',
   Attack: 'ATTACK',
   BreakBarricade: 'BREAK_BARRICADE',
+  /** Ataque especial (Exploder armando a explosão). */
+  SpecialAttack: 'SPECIAL_ATTACK',
   Dead: 'DEAD',
 } as const;
 export type ZombieState = (typeof ZombieState)[keyof typeof ZombieState];
@@ -20,13 +22,15 @@ export interface BarricadeTarget {
   readonly x: number;
   readonly y: number;
   readonly isIntact: boolean;
-  takeHit(): void;
+  takeHit(amount?: number): void;
 }
 
 /** Acesso do zumbi ao mundo: navegação e barricadas por tile. */
 export interface ZombieWorld {
   nav: NavGrid;
   barricadeAt(tx: number, ty: number): BarricadeTarget | null;
+  /** Explosão de um Exploder (dano em área ao jogador e a outros zumbis). */
+  explode(x: number, y: number, explosive: ExplosiveConfig, source: KillSource, self: Zombie): void;
 }
 
 /** Margem para sair do ATTACK e voltar a perseguir (evita alternar a cada frame). */
@@ -62,13 +66,17 @@ const DETOUR_ALIGN_TOLERANCE = 16;
 export class Zombie extends Phaser.Physics.Arcade.Sprite {
   aiState: ZombieState = ZombieState.Dead;
   hp = 0;
-  variant: ZombieVariant = 'a';
+  skin: ZombieSkin = 'a';
 
   private config: ZombieConfig | null = null;
   private target: Damageable | null = null;
   private world: ZombieWorld | null = null;
   private nextAttackAt = 0;
   private readonly shadow: Phaser.GameObjects.Image;
+  /** Brilho pulsante do Exploder (visível no escuro). */
+  private readonly aura: Phaser.GameObjects.Image;
+  private fuseEndsAt = 0;
+  private exploded = false;
   /** Incrementa a cada spawn: invalida golpes agendados de uma "vida" anterior do pool. */
   private life = 0;
 
@@ -99,12 +107,25 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
       .setScale(ART_SCALE * 0.9)
       .setDepth(DEPTH.shadows)
       .setVisible(false);
+    this.aura = scene.add
+      .image(x, y, FX_KEYS.lightRadial)
+      .setTint(0xb8e04a)
+      .setBlendMode(Phaser.BlendModes.ADD)
+      .setScale(0.32)
+      .setDepth(DEPTH.glow)
+      .setVisible(false);
 
     scene.events.on(Phaser.Scenes.Events.POST_UPDATE, this.syncParts, this);
     this.once(Phaser.GameObjects.Events.DESTROY, () => {
       scene.events.off(Phaser.Scenes.Events.POST_UPDATE, this.syncParts, this);
       this.shadow.destroy();
+      this.aura.destroy();
     });
+  }
+
+  /** Tipo do zumbi (walker, runner, tank, exploder). */
+  get typeId(): string {
+    return this.config?.id ?? '';
   }
 
   get isAlive(): boolean {
@@ -124,16 +145,22 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     this.nextAttackAt = 0;
     this.aiState = ZombieState.Idle;
     this.life++;
-    this.variant = Phaser.Utils.Array.GetRandom([...ZOMBIE_VARIANTS]);
+    this.skin = Phaser.Utils.Array.GetRandom(config.skins) as ZombieSkin;
+    this.exploded = false;
+    this.fuseEndsAt = 0;
 
     this.enableBody(true, x, y, true, true);
     this.resetNavigation();
-    this.setTexture(zombieSheetKey(this.variant), 0);
+    this.setTexture(zombieSheetKey(this.skin), 0);
     this.setAlpha(1).clearTint();
     const r = config.bodyRadius / ART_SCALE;
     this.setCircle(r, this.width / 2 - r, this.height / 2 - r);
+    this.setPushable(config.pushable);
+    // Sombra proporcional ao tamanho do sprite (o Tank é maior).
+    this.shadow.setScale(ART_SCALE * 0.9 * (ZOMBIE_SKINS[this.skin].frame / 128));
+    this.aura.setVisible(!!config.explosive).setAlpha(0.5);
     this.rotation = Phaser.Math.Angle.Between(x, y, target.x, target.y);
-    this.play({ key: zombieAnimKey(this.variant, 'walk'), startFrame: Phaser.Math.Between(0, 7) });
+    this.play({ key: zombieAnimKey(this.skin, 'walk'), startFrame: Phaser.Math.Between(0, 7) });
     this.shadow.setVisible(true);
   }
 
@@ -169,7 +196,11 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
         break;
 
       case ZombieState.Chase:
-        if (dist <= this.config.attackRange) {
+        if (this.config.explosive && dist <= this.config.explosive.triggerRange) {
+          this.aiState = ZombieState.SpecialAttack;
+          this.fuseEndsAt = time + this.config.explosive.fuseMs;
+          this.setVelocity(0, 0);
+        } else if (dist <= this.config.attackRange) {
           this.aiState = ZombieState.Attack;
           this.setVelocity(0, 0);
         } else {
@@ -198,6 +229,19 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
         }
         break;
 
+      case ZombieState.SpecialAttack: {
+        // Pisca cada vez mais rápido e explode no fim do pavio.
+        this.setVelocity(0, 0);
+        this.resetProgress();
+        const left = this.fuseEndsAt - time;
+        const blink = Math.floor(left / (left > 300 ? 110 : 55)) % 2 === 0;
+        if (blink) this.setTintFill(0xfff2a0);
+        else this.clearTint();
+        this.aura.setAlpha(blink ? 1 : 0.6).setScale(0.45);
+        if (time >= this.fuseEndsAt) this.detonate('explosion');
+        break;
+      }
+
       case ZombieState.BreakBarricade: {
         this.setVelocity(0, 0);
         this.resetProgress();
@@ -210,8 +254,9 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
         }
         this.faceTowards(barricade.x, barricade.y);
         if (time >= this.nextAttackAt) {
+          const planks = this.config.plankDamage;
           this.strike(() => {
-            if (barricade.isIntact) barricade.takeHit();
+            if (barricade.isIntact) barricade.takeHit(planks);
           });
           this.nextAttackAt = time + this.config.attackCooldown;
         } else if (!this.isAttacking) {
@@ -374,7 +419,7 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
   // ───────────────────────── Visual ─────────────────────────
 
   private get isAttacking(): boolean {
-    return this.anims.isPlaying && this.anims.currentAnim?.key === zombieAnimKey(this.variant, 'attack');
+    return this.anims.isPlaying && this.anims.currentAnim?.key === zombieAnimKey(this.skin, 'attack');
   }
 
   private faceTowards(x: number, y: number): void {
@@ -388,7 +433,7 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
 
   private playWalk(): void {
     if (this.isAttacking || !this.config) return;
-    const key = zombieAnimKey(this.variant, 'walk');
+    const key = zombieAnimKey(this.skin, 'walk');
     if (!this.anims.isPlaying || this.anims.currentAnim?.key !== key) this.play(key);
     this.anims.timeScale = this.config.speed / WALK_ANIM_SPEED;
   }
@@ -397,7 +442,7 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
   private strike(onHit: () => void): void {
     const life = this.life;
     this.anims.timeScale = 1;
-    this.play(zombieAnimKey(this.variant, 'attack'));
+    this.play(zombieAnimKey(this.skin, 'attack'));
     this.scene.time.delayedCall(ATTACK_HIT_DELAY, () => {
       if (life === this.life && this.isAlive) onHit();
     });
@@ -407,6 +452,18 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     if (!this.active) return;
     this.setDepth(this.y);
     this.shadow.setPosition(this.x + SHADOW_OFFSET.x, this.y + SHADOW_OFFSET.y);
+    if (this.aura.visible) {
+      this.aura.setPosition(this.x, this.y);
+      if (this.aiState !== ZombieState.SpecialAttack) this.aura.setAlpha(0.35 + 0.2 * Math.sin(this.scene.time.now / 180));
+    }
+  }
+
+  /** Exploder: explode (dano em área) e morre. */
+  private detonate(source: KillSource): void {
+    if (this.exploded || !this.config?.explosive || !this.world) return;
+    this.exploded = true;
+    this.world.explode(this.x, this.y, this.config.explosive, source, this);
+    if (this.isAlive) this.die(false, 'explosion');
   }
 
   /** O corpo caído é criado pelo EffectsSystem; aqui o zumbi só volta ao pool. */
@@ -415,8 +472,15 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     this.aiState = ZombieState.Dead;
     this.life++;
     this.anims.stop();
+    this.clearTint();
     this.shadow.setVisible(false);
+    this.aura.setVisible(false);
     this.disableBody(true, true);
+    // Exploder abatido também explode (e o crédito dos abates vai para quem o matou).
+    if (config?.explosive && !this.exploded) {
+      this.exploded = true;
+      this.world?.explode(this.x, this.y, config.explosive, source, this);
+    }
 
     if (config) {
       emitGameEvent(this.scene.game.events, GameEvents.ZombieKilled, {

@@ -25,8 +25,19 @@ export interface AnimAsset {
   repeat: number;
 }
 
-export const ZOMBIE_VARIANTS = ['a', 'b', 'c'] as const;
-export type ZombieVariant = (typeof ZOMBIE_VARIANTS)[number];
+/** Aparências de zumbi: tamanho do frame (o Tank é maior) e se deixam cadáver. */
+export const ZOMBIE_SKINS = {
+  a: { frame: 128, corpse: true },
+  b: { frame: 128, corpse: true },
+  c: { frame: 128, corpse: true },
+  runner: { frame: 128, corpse: true },
+  tank: { frame: 176, corpse: true },
+  exploder: { frame: 128, corpse: false },
+} as const;
+export type ZombieSkin = keyof typeof ZOMBIE_SKINS;
+export const ZOMBIE_SKIN_IDS = Object.keys(ZOMBIE_SKINS) as ZombieSkin[];
+/** Ordem dos frames em corpses.svg. */
+export const CORPSE_SKINS = ZOMBIE_SKIN_IDS.filter((s) => ZOMBIE_SKINS[s].corpse);
 
 export const ASSET_KEYS = {
   playerLegs: 'player_legs',
@@ -61,6 +72,7 @@ export const ASSET_KEYS = {
   debris: 'decal_debris',
   bloodSplats: 'decal_blood_splats',
   bloodPool: 'decal_blood_pool',
+  burst: 'decal_burst',
 } as const;
 
 export const WEAPON_KINDS: WeaponKind[] = ['pistol', 'smg', 'rifle', 'ak', 'shotgun'];
@@ -95,8 +107,8 @@ export const WEAPON_MUZZLE: Record<WeaponKind, { forward: number; side: number }
   shotgun: { forward: 29, side: 3 },
 };
 
-export const zombieSheetKey = (v: ZombieVariant): string => `walker_${v}`;
-export const zombieAnimKey = (v: ZombieVariant, anim: 'walk' | 'attack'): string => `walker_${v}_${anim}`;
+export const zombieSheetKey = (skin: string): string => `zombie_${skin}`;
+export const zombieAnimKey = (skin: string, anim: 'walk' | 'attack'): string => `zombie_${skin}_${anim}`;
 
 export const PLAYER_FRAMES = {
   aim: 0,
@@ -120,14 +132,14 @@ export const SHEETS: SheetAsset[] = [
     frames: 7,
   })),
   { key: ASSET_KEYS.playerLegs, url: 'assets/player/player_legs.svg', frameWidth: CHAR, frameHeight: CHAR, frames: 8 },
-  ...ZOMBIE_VARIANTS.map((v) => ({
-    key: zombieSheetKey(v),
-    url: `assets/zombies/walker_${v}.svg`,
-    frameWidth: CHAR,
-    frameHeight: CHAR,
+  ...ZOMBIE_SKIN_IDS.map((skin) => ({
+    key: zombieSheetKey(skin),
+    url: `assets/zombies/zombie_${skin}.svg`,
+    frameWidth: ZOMBIE_SKINS[skin].frame,
+    frameHeight: ZOMBIE_SKINS[skin].frame,
     frames: 13,
   })),
-  { key: ASSET_KEYS.corpses, url: 'assets/zombies/corpses.svg', frameWidth: 176, frameHeight: 144, frames: 3 },
+  { key: ASSET_KEYS.corpses, url: 'assets/zombies/corpses.svg', frameWidth: 176, frameHeight: 144, frames: CORPSE_SKINS.length },
   { key: ASSET_KEYS.bloodSplats, url: 'assets/particles/blood_splats.svg', frameWidth: 96, frameHeight: 96, frames: 3 },
 ];
 
@@ -168,6 +180,7 @@ export const IMAGES: ImageAsset[] = [
   { key: ASSET_KEYS.papers, url: 'assets/particles/papers.svg' },
   { key: ASSET_KEYS.debris, url: 'assets/particles/debris.svg' },
   { key: ASSET_KEYS.bloodPool, url: 'assets/particles/blood_pool.svg' },
+  { key: ASSET_KEYS.burst, url: 'assets/particles/burst.svg' },
 ];
 
 const range = (from: number, to: number): number[] =>
@@ -191,9 +204,9 @@ export const ANIMS: AnimAsset[] = [
       repeat: 0,
     },
   ]),
-  ...ZOMBIE_VARIANTS.flatMap((v) => [
-    { key: zombieAnimKey(v, 'walk'), sheet: zombieSheetKey(v), frames: range(0, 7), frameRate: 7, repeat: -1 },
-    { key: zombieAnimKey(v, 'attack'), sheet: zombieSheetKey(v), frames: range(8, 12), frameRate: 14, repeat: 0 },
+  ...ZOMBIE_SKIN_IDS.flatMap((skin) => [
+    { key: zombieAnimKey(skin, 'walk'), sheet: zombieSheetKey(skin), frames: range(0, 7), frameRate: 7, repeat: -1 },
+    { key: zombieAnimKey(skin, 'attack'), sheet: zombieSheetKey(skin), frames: range(8, 12), frameRate: 14, repeat: 0 },
   ]),
 ];
 

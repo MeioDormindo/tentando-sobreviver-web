@@ -43,8 +43,11 @@ export interface AmmoPayload {
   secondary: string | null;
 }
 
-/** O que matou o zumbi (o Nuke não paga por abate nem solta power-ups). */
-export type KillSource = 'weapon' | 'nuke';
+/**
+ * O que matou o zumbi: só abates por arma pagam e soltam power-ups. Explosões de um
+ * Exploder abatido a tiro contam como 'weapon'; as que ele mesmo detona, como 'explosion'.
+ */
+export type KillSource = 'weapon' | 'nuke' | 'explosion';
 
 export interface ZombieKilledPayload {
   type: string;

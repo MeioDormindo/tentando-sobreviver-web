@@ -94,7 +94,7 @@ export class GameScene extends Phaser.Scene {
     });
 
     const barricadeBodies = this.physics.add.staticGroup();
-    new CombatSystem(this, {
+    const combat = new CombatSystem(this, {
       player: this.player,
       zombies,
       projectiles,
@@ -136,6 +136,7 @@ export class GameScene extends Phaser.Scene {
     const world: ZombieWorld = {
       nav: map.nav,
       barricadeAt: (tx, ty) => barricadeByTile.get(ty * map.nav.width + tx) ?? null,
+      explode: (x, y, explosive, source, self) => combat.explode(x, y, explosive, source, self),
     };
 
     const spawner = new SpawnSystem(this, zombies, map.spawnPoints, this.player, world);

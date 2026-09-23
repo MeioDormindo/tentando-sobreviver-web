@@ -212,7 +212,7 @@ export class PowerUpSystem {
       if (!z.active || !z.isAlive) continue;
       const x = z.x;
       const y = z.y;
-      if (z.takeDamage(Number.MAX_SAFE_INTEGER, false, 'nuke')) effects.zombieDeath(x, y, Math.random() * Math.PI * 2, z.variant);
+      if (z.takeDamage(Number.MAX_SAFE_INTEGER, false, 'nuke')) effects.zombieDeath(x, y, Math.random() * Math.PI * 2, z.skin);
     }
     economy.earn(powerUpEffects.nukeReward);
     const cam = this.scene.cameras.main;

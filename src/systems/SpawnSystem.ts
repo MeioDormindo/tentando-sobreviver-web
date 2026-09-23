@@ -46,6 +46,16 @@ export class SpawnSystem {
     return this.zombies.countActive(true);
   }
 
+  /** Quantos zumbis vivos de cada tipo. */
+  aliveByType(): Map<string, number> {
+    const counts = new Map<string, number>();
+    for (const child of this.zombies.getChildren()) {
+      const z = child as Zombie;
+      if (z.active && z.isAlive) counts.set(z.typeId, (counts.get(z.typeId) ?? 0) + 1);
+    }
+    return counts;
+  }
+
   /** Tenta criar um zumbi; retorna null se nenhum ponto é válido agora ou o pool esgotou. */
   spawn(config: ZombieConfig, wave: number): Zombie | null {
     const point = this.pickPoint(wave);

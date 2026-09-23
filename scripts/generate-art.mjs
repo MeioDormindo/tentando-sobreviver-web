@@ -21,7 +21,7 @@ for (const kind of WEAPON_KINDS) {
 write(`${OUT}/weapons/ammo_crate.svg`, ammoCrate());
 write(`${OUT}/player/player_legs.svg`, playerLegsSheet());
 for (const id of Object.keys(ZOMBIE_VARIANTS)) {
-  write(`${OUT}/zombies/walker_${id}.svg`, zombieSheet(id));
+  write(`${OUT}/zombies/zombie_${id}.svg`, zombieSheet(id));
 }
 write(`${OUT}/zombies/corpses.svg`, corpseSheet());
 write(`${OUT}/sprites/shadow.svg`, softShadow());
@@ -56,6 +56,7 @@ write(`${OUT}/map/hazard_stripe.svg`, T.hazardStripe());
 write(`${OUT}/map/plank.svg`, T.plank());
 write(`${OUT}/map/window_sill.svg`, T.windowSill());
 write(`${OUT}/props/generator.svg`, T.propGenerator());
+write(`${OUT}/particles/burst.svg`, T.decalBurst());
 write(`${OUT}/machines/mystery_box.svg`, M.mysteryBox());
 write(`${OUT}/machines/weapon_lab.svg`, M.weaponLab());
 for (const id of Object.keys(M.PERKS)) {

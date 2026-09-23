@@ -41,7 +41,7 @@ src/
   scenes/            Boot → Preload (carrega SVGs, fatia frames, cria animações) → Menu → Game (+ UI)
   map/               TerminalMap (grade, colisão, navegação, visual 3/4) e terminal/layout.ts
                      (áreas, portas, janelas, spawns, props, luzes do Terminal Central)
-  entities/          Player (tronco + pernas), Zombie (3 variantes), Projectile (traçante),
+  entities/          Player (tronco + pernas), Zombie (Walker, Runner, Tank, Exploder), Projectile,
                      BuyStations (maletas de arma, caixa de munição), Door, Barricade,
                      Machines (Mystery Box, Weapon Lab, máquinas de perk), Damageable
   weapons/           Weapon (estado/munição/recarga) e WeaponSystem (inventário de 2 armas, disparo)
@@ -71,7 +71,8 @@ public/assets/       arte gerada (SVG) — pode ser trocada por PNGs com o mesmo
 - [x] Fase 4 — Mapa Terminal Central (7 áreas, portas, barricadas, spawn por área, A*)
 - [x] Fase 5 — Máquinas (Mystery Box, Weapon Lab, 6 perks)
 - [x] Fase 6 — Power-ups (7 comuns + Golden Drop, armadura)
-- [ ] Fase 7 — Inimigos (Runner, Tank, Exploder)
+- [x] Fase 7 — Inimigos (Runner, Tank, Exploder, composição por wave)
+- [ ] Fase 8 — Boss (The Conductor)
 
 Observações:
 - Waves seguem as fórmulas do GDD §32 (`src/config/waves.config.ts`).
@@ -93,4 +94,8 @@ Observações:
 - Power-ups (`src/config/powerups.config.ts`): 5% de drop por abate (máx. 4 por wave) — Max Ammo,
   Double Cash, Instant Kill, Nuke, Full Heal, Armor, Speed Boost — e 0,5% de Golden Drop
   (arma especial, $2000, perk grátis ou Fúria). Somem após 30s. Armadura absorve dano antes da vida.
+- Inimigos (`src/config/zombies.config.ts`): Walker; Runner (rápido); Tank (600 HP, maior, arranca
+  2 tábuas por golpe, não é empurrado); Exploder (arma a explosão perto do jogador e explode ao
+  morrer — abatido a tiro, as mortes na explosão contam para você). Composição por wave em
+  `waves.config.ts`: Runners a partir da wave 3, Tanks da 6, Exploders da 11.
 - Em modo dev, `window.__GAME__` expõe a instância do jogo para depuração.
