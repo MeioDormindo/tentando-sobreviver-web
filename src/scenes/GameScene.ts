@@ -15,6 +15,7 @@ import type { BarricadeTarget, ZombieWorld } from '../entities/Zombie';
 import { emitGameEvent, GameEvents, onGameEvent } from '../game/events';
 import { TerminalMap } from '../map/TerminalMap';
 import { audio } from '../audio/AudioSystem';
+import { MusicSystem } from '../audio/MusicSystem';
 import { START_AREA } from '../map/terminal/layout';
 import { CameraController } from '../systems/CameraController';
 import { CombatSystem } from '../systems/CombatSystem';
@@ -47,6 +48,7 @@ export class GameScene extends Phaser.Scene {
   private bossSystem!: BossSystem;
   private eventSystem!: EventSystem;
   private effects!: EffectsSystem;
+  private music!: MusicSystem;
   private map!: TerminalMap;
   private currentArea = '';
   private readonly aimPoint = new Phaser.Math.Vector2();
@@ -230,6 +232,11 @@ export class GameScene extends Phaser.Scene {
     });
 
     audio.bind(this, this.player, (x, y) => map.floorAt(x, y));
+    this.music = new MusicSystem(this, () => spawner.aliveCount);
+    this.input.keyboard?.on('keydown-N', () => {
+      const on = this.music.toggle();
+      emitGameEvent(this.game.events, GameEvents.Toast, { text: on ? 'MÚSICA LIGADA  [N]' : 'MÚSICA DESLIGADA  [N]' });
+    });
     this.input.keyboard?.on('keydown-M', () => {
       const muted = audio.toggleMute();
       if (!muted) audio.play('ui_beep', { category: 'ui' });
@@ -252,6 +259,7 @@ export class GameScene extends Phaser.Scene {
     this.bossSystem.update(time, delta);
     this.eventSystem.update(time, delta);
     audio.update(time);
+    this.music.update(time, delta);
     this.cameraController.update();
     this.trackArea();
   }

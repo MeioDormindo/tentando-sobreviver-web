@@ -3,6 +3,7 @@ import { rng, type Rng } from './dsp';
 import { ambience } from './recipes/ambience';
 import { bossSounds, exploderFuse, playerSounds, zombieSounds } from './recipes/creatures';
 import * as ev from './recipes/events';
+import * as music from './recipes/music';
 import * as ui from './recipes/ui';
 import { dryFire, mk2Layer, plasmaBurst, reload, shellCasing, shot, weaponSwitch } from './recipes/weapons';
 import * as world from './recipes/world';
@@ -91,6 +92,13 @@ export const SOUND_DEFS: SoundDef[] = [
   { key: 'evt_crate_land', variants: 1, sr: MID, make: ev.crateLand },
   { key: 'evt_gas', variants: 1, sr: MID, make: ev.gasHiss },
   { key: 'evt_horde', variants: 1, sr: LO, make: ev.hordeRoar },
+  // Música adaptativa
+  { key: 'mus_pad', variants: 1, sr: LO, make: music.musicPad },
+  { key: 'mus_pulse', variants: 1, sr: LO, make: music.musicPulse },
+  { key: 'mus_drive', variants: 1, sr: LO, make: music.musicDrive },
+  { key: 'mus_boss', variants: 1, sr: LO, make: music.musicBoss },
+  { key: 'mus_victory', variants: 1, sr: LO, make: music.musicVictory },
+  { key: 'mus_gameover', variants: 1, sr: LO, make: music.musicGameOver },
 ];
 
 /** Quantas variações existem de cada som (preenchido na geração). */
@@ -112,6 +120,7 @@ export async function generateSounds(scene: Phaser.Scene, onProgress: (p: number
   const ctx = manager.context;
   const jobs = SOUND_DEFS.flatMap((def) => Array.from({ length: def.variants }, (_, v) => ({ def, v })));
   let done = 0;
+  let lastYield = performance.now();
   for (const { def, v } of jobs) {
     const key = `${def.key}#${v}`;
     if (!scene.cache.audio.exists(key)) {
@@ -123,9 +132,11 @@ export async function generateSounds(scene: Phaser.Scene, onProgress: (p: number
     }
     soundVariants.set(def.key, def.variants);
     done++;
-    if (done % 6 === 0) {
+    // Cede o controle com frequência (a música leva mais tempo para gerar).
+    if (done % 6 === 0 || performance.now() - lastYield > 40) {
       onProgress(done / jobs.length);
       await new Promise((resolve) => setTimeout(resolve, 0));
+      lastYield = performance.now();
     }
   }
   onProgress(1);

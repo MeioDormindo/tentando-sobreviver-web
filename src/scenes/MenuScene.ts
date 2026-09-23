@@ -65,7 +65,7 @@ export class MenuScene extends Phaser.Scene {
       .setOrigin(0.5);
 
     const hint = this.add
-      .text(0, 0, 'WASD mover · Mouse mirar · Clique atirar · R recarregar · E comprar · Q/1/2 trocar arma · M som · ESC pausa', {
+      .text(0, 0, 'WASD mover · Mouse mirar · Clique atirar · R recarregar · E comprar · Q/1/2 trocar arma · M som · N música · ESC pausa', {
         fontFamily: 'monospace',
         fontSize: '14px',
         color: COLORS.textDim,

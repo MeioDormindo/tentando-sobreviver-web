@@ -25,6 +25,7 @@ npm run art        # regera a arte SVG em public/assets
 | Clique esquerdo | atirar (M1911 é semiautomática) |
 | R | recarregar |
 | M | ligar/desligar o som |
+| N | ligar/desligar só a música |
 | ESC / P | pausar (também pausa sozinho se a janela perde o foco) |
 | E | comprar (arma, munição, porta, perk, Mystery Box, Weapon Lab) |
 | segurar E | reparar barricada (+$10 por tábua) |
@@ -82,6 +83,11 @@ Todos os sons são **sintetizados em código** durante o carregamento (sem arqui
   início/fim de wave e sirene do boss.
 - Áudio posicional (volume por distância e pan) e limite de vozes por categoria
   (`src/config/audio.config.ts`). Qualquer som pode ser trocado por um arquivo real depois.
+- Música adaptativa (GDD §58), também sintetizada: quatro camadas de 8 compassos em ré menor
+  tocando juntas e sincronizadas — exploração (acordes e drone), wave normal (baixo pulsando),
+  alta intensidade (bateria e arpejo; com 12+ zumbis vivos, vida baixa, Horda ou Alarme) e boss
+  (riff pesado com trítono). As camadas entram e saem por volume (`MusicSystem`); vinhetas de
+  vitória (fim de wave, boss derrotado) e de Game Over. Tecla N liga/desliga só a música.
 
 ## Status
 
@@ -97,6 +103,7 @@ Todos os sons são **sintetizados em código** durante o carregamento (sem arqui
 - [x] Fase 8 — Boss (The Conductor, 4 fases, 5 ataques)
 - [x] Fase 9 — Eventos (blackout, trem, horda, supply drop, gás, alarme)
 - [x] Fase 10 — Visual (props do §52, animações de dano/morte, partículas, HUD de dano, Game Over)
+- [x] Fase 11 — Áudio (música adaptativa; armas, zumbis, ambiente, boss e eventos já sintetizados)
 
 Observações:
 - Visual (Fase 10): props novos do GDD §52 (extintores, carrinhos de bagagem, paletes, placas de
