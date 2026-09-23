@@ -10,6 +10,7 @@ import type { EconomySystem } from '../systems/EconomySystem';
 import type { Interactable } from '../systems/InteractionSystem';
 import type { PerkSystem } from '../systems/PerkSystem';
 import type { WeaponSystem } from '../weapons/WeaponSystem';
+import { audio } from '../audio/AudioSystem';
 
 /** Coloca um corpo sólido (colisão + bloqueio de navegação). */
 export interface SolidPlacer {
@@ -132,6 +133,7 @@ export class MysteryBox implements Interactable {
   private roll(): void {
     this.state = 'rolling';
     this.result = rollMysteryWeapon();
+    audio.playAt('box_music', this.x, this.y, { category: 'ui', volume: 0.9, pitchJitter: 0 });
     this.icon.setVisible(true).setAlpha(1).setY(this.y - 30);
     this.label.setText('').setAlpha(1);
     this.scene.tweens.add({ targets: this.glow, alpha: 0.45, duration: 250 });
@@ -154,6 +156,7 @@ export class MysteryBox implements Interactable {
     const result = this.result;
     if (!result) return;
     this.state = 'ready';
+    audio.playAt('box_reveal', this.x, this.y, { category: 'ui', volume: 0.9, pitchJitter: 0 });
     this.icon.setTexture(gunIconKey(result.kind)).setTintFill(result.tracerTint ?? ICON_GLOW);
     this.label.setText(result.name.toUpperCase()).setColor(RARITY_COLORS[result.rarity]);
     this.deps.effects.floatingText(this.x, this.y - 60, result.rarity.toUpperCase(), RARITY_COLORS[result.rarity], true);
@@ -198,6 +201,7 @@ export class WeaponLab implements Interactable {
     const { weapons, economy, effects, lighting } = this.deps;
     if (weapons.current.config.upgraded || !economy.spend(weaponLabConfig.price)) return;
     weapons.upgradeCurrent();
+    audio.playAt('lab_upgrade', this.x, this.y, { category: 'ui', volume: 1, pitchJitter: 0 });
     effects.surfaceImpact(this.x, this.y - 10, -Math.PI / 2);
     effects.floatingText(this.x, this.y - 40, weapons.current.config.name.toUpperCase(), '#c38bff', true);
     lighting.addFlash(this.x, this.y, 220, 1, 700);
@@ -228,6 +232,7 @@ export class PerkMachine implements Interactable {
     const { perks: perkSystem, economy, effects } = this.deps;
     if (perkSystem.isMaxed(this.perkId) || !economy.spend(perkSystem.priceOf(this.perkId))) return;
     perkSystem.grant(this.perkId);
+    audio.playAt('perk', this.x, this.y, { category: 'ui', volume: 1, pitchJitter: 0 });
     const def = perks[this.perkId];
     effects.floatingText(this.x, this.y - 30, def.name.toUpperCase(), `#${def.color.toString(16).padStart(6, '0')}`, true);
   }

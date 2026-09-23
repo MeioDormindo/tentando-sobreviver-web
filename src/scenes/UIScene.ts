@@ -147,6 +147,7 @@ export class UIScene extends Phaser.Scene {
       onGameEvent(this.game.events, GameEvents.InteractionPrompt, this.onPrompt, this),
       onGameEvent(this.game.events, GameEvents.PurchaseDenied, this.onPurchaseDenied, this),
       onGameEvent(this.game.events, GameEvents.PerksChanged, this.onPerksChanged, this),
+      onGameEvent(this.game.events, GameEvents.Toast, (t) => this.showAreaText(t.text, COLORS.textDim), this),
       onGameEvent(this.game.events, GameEvents.PowerUpCollected, this.onPowerUpCollected, this),
       onGameEvent(this.game.events, GameEvents.PowerUpTimers, this.onPowerUpTimers, this),
       onGameEvent(this.game.events, GameEvents.BossIncoming, this.onBossIncoming, this),

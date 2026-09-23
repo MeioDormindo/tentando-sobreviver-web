@@ -7,6 +7,7 @@ import type { Player } from '../entities/Player';
 import { Projectile } from '../entities/Projectile';
 import { emitGameEvent, GameEvents } from '../game/events';
 import { Weapon } from './Weapon';
+import { audio } from '../audio/AudioSystem';
 
 /** Ponto de ejeção das cápsulas, à frente do tronco. */
 const EJECT_DISTANCE = 16;
@@ -147,6 +148,7 @@ export class WeaponSystem {
     this.current.cancelReload();
     this.active = index;
     this.owner.setWeaponKind(this.current.config.kind);
+    audio.play('weapon_switch', { category: 'weapon', volume: 0.6 });
     this.busyUntil = this.scene.time.now + WEAPON_SWITCH_MS;
     this.triggerConsumed = true;
     this.emitIfChanged();
@@ -162,6 +164,7 @@ export class WeaponSystem {
 
     if (weapon.currentAmmo === 0) {
       // Pente vazio: recarrega automaticamente; sem reserva, "clique seco".
+      if (weapon.reserveAmmo === 0) audio.play('dry_fire', { category: 'weapon' });
       this.startReload(time);
       this.triggerConsumed = true;
       return;
@@ -178,7 +181,10 @@ export class WeaponSystem {
 
   private startReload(time: number): void {
     const duration = this.current.startReload(time, this.mods.reloadMultiplier);
-    if (duration > 0) this.owner.playReload(duration);
+    if (duration > 0) {
+      this.owner.playReload(duration);
+      audio.play(`reload_${this.current.config.kind}`, { category: 'weapon', volume: 0.7, pitchJitter: 0 });
+    }
   }
 
   private spawnProjectiles(): void {
@@ -200,6 +206,8 @@ export class WeaponSystem {
       );
     }
     this.effects.muzzleFlash(tipX, tipY, aim);
+    audio.play(`shot_${cfg.id}`, { category: 'weapon', volume: 0.85, pitchJitter: 0.05 });
+    if (cfg.upgraded) audio.play('mk2_layer', { category: 'weapon', volume: 0.5 });
     this.effects.ejectShell(this.owner.x + cos * EJECT_DISTANCE, this.owner.y + sin * EJECT_DISTANCE, aim);
   }
 

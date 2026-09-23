@@ -14,6 +14,7 @@ import type { WeaponSystem } from '../weapons/WeaponSystem';
 import type { CombatBuffs } from './CombatSystem';
 import type { EconomySystem } from './EconomySystem';
 import type { PerkSystem } from './PerkSystem';
+import { audio } from '../audio/AudioSystem';
 
 export interface PowerUpDeps {
   player: Player;
@@ -215,6 +216,7 @@ export class PowerUpSystem {
       if (z.takeDamage(Number.MAX_SAFE_INTEGER, false, 'nuke')) effects.zombieDeath(x, y, Math.random() * Math.PI * 2, z.skin);
     }
     economy.earn(powerUpEffects.nukeReward);
+    audio.play('explosion', { category: 'world', volume: 1, rate: 0.7 });
     const cam = this.scene.cameras.main;
     cam.flash(450, 255, 190, 110);
     cam.shake(500, 0.008);

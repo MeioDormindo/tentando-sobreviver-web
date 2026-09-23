@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { economyConfig } from '../config/economy.config';
 import type { EffectsSystem } from '../effects/EffectsSystem';
+import { audio } from '../audio/AudioSystem';
 import {
   emitGameEvent,
   GameEvents,
@@ -61,6 +62,7 @@ export class EconomySystem {
     }
     this.money -= cost;
     this.emit(-cost);
+    audio.play('purchase', { category: 'ui', volume: 0.7 });
     return true;
   }
 

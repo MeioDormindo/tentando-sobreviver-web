@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { ANIMS, IMAGES, SHEETS } from '../config/assets.config';
 import { COLORS, SCENE_KEYS, TEXTURE_KEYS, TILE_SIZE } from '../config/game.config';
 import { createFxTextures } from '../effects/fxTextures';
+import { generateSounds } from '../audio/SoundBank';
 
 /** Carrega a arte (SVG), fatia as spritesheets, cria animações e texturas de efeitos. */
 export class PreloadScene extends Phaser.Scene {
@@ -20,15 +21,23 @@ export class PreloadScene extends Phaser.Scene {
     this.createAnimations();
     createFxTextures(this);
     this.createCollisionTileset();
-    this.scene.start(SCENE_KEYS.menu);
+    // Todos os sons são sintetizados aqui (sem arquivos de áudio).
+    this.loadingLabel?.setText('GERANDO SONS');
+    void generateSounds(this, (p) => this.loadingBar?.setSize(this.loadingWidth * p, 6)).then(() => this.scene.start(SCENE_KEYS.menu));
   }
+
+  private loadingLabel?: Phaser.GameObjects.Text;
+  private loadingBar?: Phaser.GameObjects.Rectangle;
+  private loadingWidth = 0;
 
   private createLoadingBar(): void {
     const { width, height } = this.scale;
     const barW = Math.min(420, width * 0.6);
     const bg = this.add.rectangle(width / 2, height / 2, barW, 6, 0x222420).setOrigin(0.5);
     const bar = this.add.rectangle(bg.x - barW / 2, height / 2, 0, 6, 0xc9a45c).setOrigin(0, 0.5);
-    this.add
+    this.loadingBar = bar;
+    this.loadingWidth = barW;
+    this.loadingLabel = this.add
       .text(width / 2, height / 2 - 24, 'CARREGANDO', { fontFamily: 'monospace', fontSize: '14px', color: COLORS.textDim })
       .setOrigin(0.5);
     this.load.on(Phaser.Loader.Events.PROGRESS, (p: number) => {

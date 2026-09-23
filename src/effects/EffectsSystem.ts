@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { ASSET_KEYS, CORPSE_SKINS, FX_KEYS, ZOMBIE_SKINS, type ZombieSkin } from '../config/assets.config';
 import { ART_SCALE, DEPTH, effectsConfig, lightingConfig } from '../config/visual.config';
 import type { LightingSystem } from './LightingSystem';
+import { audio } from '../audio/AudioSystem';
 
 const DEPTH_PARTICLES = 50_000;
 const MUZZLE_FLASH_MS = 45;
@@ -124,11 +125,13 @@ export class EffectsSystem {
   ejectShell(x: number, y: number, aim: number): void {
     this.emitAngle = Phaser.Math.RadToDeg(aim) + 90;
     this.shells.explode(1, x, y);
+    if (Math.random() < 0.5) this.scene.time.delayedCall(320, () => audio.playAt('shell', x, y, { category: 'world', volume: 0.4 }));
   }
 
   bloodHit(x: number, y: number, bulletAngle: number): void {
     this.emitAngle = Phaser.Math.RadToDeg(bulletAngle);
     this.blood.explode(effectsConfig.bloodParticlesPerHit, x, y);
+    audio.playAt('impact_flesh', x, y, { category: 'world', volume: 0.7 });
     if (Math.random() < effectsConfig.decalSplatChance) {
       const dist = Phaser.Math.Between(8, 22);
       this.stamp(
@@ -145,12 +148,14 @@ export class EffectsSystem {
   surfaceImpact(x: number, y: number, bulletAngle: number): void {
     this.emitAngle = Phaser.Math.RadToDeg(bulletAngle) + 180;
     this.sparks.explode(6, x, y);
+    audio.playAt('impact_hard', x, y, { category: 'world', volume: 0.6 });
     this.smoke.explode(1, x, y);
     this.lighting?.addFlash(x, y, 40, 0.5, 60);
   }
 
   /** Explosão (Exploder): clarão, fogo, fumaça, gosma e mancha queimada no chão. */
   explosion(x: number, y: number, radius: number): void {
+    audio.playAt('explosion', x, y, { category: 'world', volume: Math.min(1, 0.5 + radius / 160), distance: 1500 });
     for (const angle of [0, 90, 180, 270]) {
       this.emitAngle = angle;
       this.sparks.explode(10, x, y);

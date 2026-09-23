@@ -4,6 +4,7 @@ import type { BossConfig } from '../config/bosses.config';
 import { ART_SCALE, DEPTH } from '../config/visual.config';
 import { PathFollower, type NavWorld } from '../systems/pathfinding/PathFollower';
 import type { Damageable } from './Damageable';
+import { audio } from '../audio/AudioSystem';
 
 /** O que o boss precisa do mundo (implementado pelo BossSystem). */
 export interface BossWorld extends NavWorld {
@@ -47,6 +48,7 @@ export class Boss extends Phaser.Physics.Arcade.Sprite {
   private pendingHitAt = 0;
   private readonly progressAnchor = new Phaser.Math.Vector2();
   private noProgressMs = 0;
+  private stepDistance = 0;
 
   constructor(scene: Phaser.Scene, x: number, y: number, config: BossConfig, appearance: number, private readonly world: BossWorld) {
     super(scene, x, y, bossSheetKey(config.id), 0);
@@ -148,6 +150,8 @@ export class Boss extends Phaser.Physics.Arcade.Sprite {
           this.setVelocity(0, 0);
           this.setTint(0x9a9a9a);
           this.anims.stop();
+          audio.playAt('impact_hard', this.x, this.y, { category: 'world', volume: 1 });
+          audio.playAt('boss_stun', this.x, this.y, { category: 'world', volume: 1, distance: 1300 });
           this.scene.cameras.main.shake(260, 0.01);
         } else if (traveled >= cfg.charge.maxDistance) {
           this.toChase();
@@ -175,6 +179,12 @@ export class Boss extends Phaser.Physics.Arcade.Sprite {
         this.face(this.follower.face.x, this.follower.face.y);
         this.playLoop('walk', speed / 60);
         this.trackProgress(delta);
+        // Passos pesados
+        this.stepDistance += speed * (delta / 1000);
+        if (this.stepDistance >= 70) {
+          this.stepDistance = 0;
+          audio.playAt('boss_step', this.x, this.y, { category: 'world', volume: 0.9, distance: 1100 });
+        }
         break;
       }
     }
@@ -258,6 +268,7 @@ export class Boss extends Phaser.Physics.Arcade.Sprite {
       this.rotation = this.chargeDir.angle();
       this.cooldown('charge', time, cfg.charge.cooldownMs);
       this.playLoop('charge', 0.6);
+      audio.playAt('boss_charge', this.x, this.y, { category: 'world', volume: 1, distance: 1300 });
       return true;
     }
     return false;
@@ -297,6 +308,7 @@ export class Boss extends Phaser.Physics.Arcade.Sprite {
     this.setVelocity(0, 0);
     this.playLoop('roar', 1);
     this.scene.cameras.main.shake(this.config.roarMs * 0.6, 0.006);
+    audio.playAt('boss_roar', this.x, this.y, { category: 'world', volume: 1, distance: 1800, pitchJitter: 0.03 });
   }
 
   private toChase(): void {

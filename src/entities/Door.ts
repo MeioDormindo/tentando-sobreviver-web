@@ -7,6 +7,7 @@ import type { TerminalMap } from '../map/TerminalMap';
 import type { AreaId, DoorDef } from '../map/terminal/layout';
 import type { EconomySystem } from '../systems/EconomySystem';
 import type { Interactable } from '../systems/InteractionSystem';
+import { audio } from '../audio/AudioSystem';
 
 export interface DoorDeps {
   economy: EconomySystem;
@@ -85,6 +86,7 @@ export class Door implements Interactable {
     this.open = true;
     this.deps.map.openDoorTiles(this.def.rect);
     this.deps.onOpened(this);
+    audio.playAt('door_open', this.x, this.y, { category: 'world', volume: 1 });
     // A porta "enrola" para cima e some.
     this.scene.tweens.add({
       targets: this.shutter,

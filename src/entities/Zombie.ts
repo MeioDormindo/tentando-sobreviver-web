@@ -5,6 +5,7 @@ import type { ExplosiveConfig, ZombieConfig } from '../config/zombies.config';
 import { emitGameEvent, GameEvents, type KillSource } from '../game/events';
 import { PathFollower, type BarricadeTarget, type NavWorld } from '../systems/pathfinding/PathFollower';
 import type { Damageable } from './Damageable';
+import { audio } from '../audio/AudioSystem';
 
 export const ZombieState = {
   Idle: 'IDLE',
@@ -66,6 +67,8 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
   // Detecção de "preso"
   private readonly progressAnchor = new Phaser.Math.Vector2();
   private noProgressMs = 0;
+  /** Próximo gemido (cada zumbi resmunga de tempos em tempos). */
+  private nextGroanAt = 0;
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, zombieSheetKey('a'), 0);
@@ -116,6 +119,7 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     this.skin = Phaser.Utils.Array.GetRandom(config.skins) as ZombieSkin;
     this.exploded = false;
     this.fuseEndsAt = 0;
+    this.nextGroanAt = this.scene.time.now + Phaser.Math.Between(500, 5000);
 
     this.enableBody(true, x, y, true, true);
     this.resetNavigation();
@@ -167,6 +171,7 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
         if (this.config.explosive && dist <= this.config.explosive.triggerRange) {
           this.aiState = ZombieState.SpecialAttack;
           this.fuseEndsAt = time + this.config.explosive.fuseMs;
+          audio.playAt('exploder_fuse', this.x, this.y, { category: 'zombie', volume: 1 });
           this.setVelocity(0, 0);
         } else if (dist <= this.config.attackRange) {
           this.aiState = ZombieState.Attack;
@@ -175,6 +180,10 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
           this.navigate(time, target);
           this.playWalk();
           this.trackProgress(delta);
+          if (time >= this.nextGroanAt) {
+            this.nextGroanAt = time + Phaser.Math.Between(3500, 9000);
+            audio.playAt(`zombie_${this.config.id}_groan`, this.x, this.y, { category: 'zombie', volume: 0.75 });
+          }
         }
         break;
 
@@ -313,6 +322,7 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
   /** Bote: a animação começa agora e o golpe se resolve no meio dela. */
   private strike(onHit: () => void): void {
     const life = this.life;
+    if (this.config) audio.playAt(`zombie_${this.config.id}_attack`, this.x, this.y, { category: 'zombie', volume: 0.85 });
     this.anims.timeScale = 1;
     this.play(zombieAnimKey(this.skin, 'attack'));
     this.scene.time.delayedCall(ATTACK_HIT_DELAY, () => {

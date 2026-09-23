@@ -13,6 +13,7 @@ import type { EconomySystem } from './EconomySystem';
 import type { PowerUpSystem } from './PowerUpSystem';
 import type { SpawnSystem } from './SpawnSystem';
 import { getWaveParams, scaleZombie } from './difficulty';
+import { audio } from '../audio/AudioSystem';
 
 export interface BossSystemDeps {
   player: Player;
@@ -145,6 +146,7 @@ export class BossSystem {
   private startShockwave(x: number, y: number): void {
     const ring = this.scene.add.graphics().setDepth(DEPTH.glow).setBlendMode(Phaser.BlendModes.ADD);
     this.shockwaves.push({ x, y, start: this.scene.time.now, hit: false, ring });
+    audio.playAt('boss_slam', x, y, { category: 'world', volume: 1, distance: 1500 });
     this.deps.effects.surfaceImpact(x, y, 0);
     this.deps.lighting.addFlash(x, y, 200, 0.8, 400);
     this.scene.cameras.main.shake(300, 0.009);
@@ -179,6 +181,7 @@ export class BossSystem {
   /** Círculos marcados no chão perto do jogador que explodem após o aviso. */
   private areaAttack(config: BossConfig, tx: number, ty: number): void {
     const cfg = config.area;
+    audio.play('boss_area', { category: 'world', volume: 0.8 });
     const targets = [{ x: tx, y: ty }];
     for (let i = 1; i < cfg.count; i++) {
       targets.push({ x: tx + Phaser.Math.Between(-cfg.spread, cfg.spread), y: ty + Phaser.Math.Between(-cfg.spread, cfg.spread) });
@@ -215,6 +218,7 @@ export class BossSystem {
   /** Invoca zumbis em volta do boss (entram na contagem da wave). */
   private summon(config: BossConfig, x: number, y: number): void {
     const params = getWaveParams(this.wave);
+    audio.playAt('boss_summon', x, y, { category: 'world', volume: 1, distance: 1400 });
     let spawned = 0;
     for (let i = 0; i < config.summon.count; i++) {
       const angle = (i / config.summon.count) * Math.PI * 2 + Math.random() * 0.5;

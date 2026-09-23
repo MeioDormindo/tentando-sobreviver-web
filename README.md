@@ -24,6 +24,7 @@ npm run art        # regera a arte SVG em public/assets
 | Mouse | mirar |
 | Clique esquerdo | atirar (M1911 é semiautomática) |
 | R | recarregar |
+| M | ligar/desligar o som |
 | E | comprar (arma, munição, porta, perk, Mystery Box, Weapon Lab) |
 | segurar E | reparar barricada (+$10 por tábua) |
 | Q / 1 / 2 / roda do mouse | trocar de arma |
@@ -45,6 +46,8 @@ src/
                      Boss (The Conductor), BuyStations (maletas, munição), Door, Barricade,
                      Machines (Mystery Box, Weapon Lab, máquinas de perk), Damageable
   weapons/           Weapon (estado/munição/recarga) e WeaponSystem (inventário de 2 armas, disparo)
+  audio/             som 100% sintetizado em código: dsp.ts (síntese), recipes/ (armas, criaturas,
+                     mundo, interface, ambientes), SoundBank (catálogo), AudioSystem (reprodução)
   effects/           LightingSystem (escuridão, lanterna, luzes), EffectsSystem (sangue, cadáveres,
                      cápsulas, faíscas), fxTextures (texturas de luz/partículas em canvas)
   systems/           WaveSystem, SpawnSystem, difficulty (fórmulas), EconomySystem, InteractionSystem,
@@ -61,6 +64,20 @@ public/assets/       arte gerada (SVG) — pode ser trocada por PNGs com o mesmo
 - Iluminação: ambiente escuro, lanterna em cone, luminárias defeituosas, clarão dos disparos.
 - Pós-processamento (WebGL): vinheta e cores dessaturadas.
 - Ajustes em `src/config/visual.config.ts`.
+
+## Áudio
+
+Todos os sons são **sintetizados em código** durante o carregamento (sem arquivos de áudio):
+- Tiro próprio para cada arma, recarga por tipo, tiro seco, troca de arma, cápsulas no chão.
+- Passos que mudam com o piso (pedra, concreto, brita, metal, chão molhado, borracha).
+- Vozes por formantes: gemido, ataque e morte de Walker, Runner, Tank e Exploder; rugido,
+  investida, pancada, invocação e morte do boss; dor, morte e batimento cardíaco do jogador.
+- Ambiente em loop por área (com transição suave) e sons pontuais aleatórios (estrondos,
+  gemidos distantes, gotas, buzina de trem, vapor).
+- Interface: compra, recusa, Mystery Box (caixinha de música), Weapon Lab, perks, power-ups,
+  início/fim de wave e sirene do boss.
+- Áudio posicional (volume por distância e pan) e limite de vozes por categoria
+  (`src/config/audio.config.ts`). Qualquer som pode ser trocado por um arquivo real depois.
 
 ## Status
 

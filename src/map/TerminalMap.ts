@@ -154,6 +154,17 @@ export class TerminalMap {
     return i >= 0 ? AREAS[i] : null;
   }
 
+  /** Tipo de piso num ponto (som dos passos). */
+  floorAt(x: number, y: number): FloorKind {
+    const tx = Math.floor(x / TILE_SIZE);
+    const ty = Math.floor(y / TILE_SIZE);
+    for (let i = FLOORS.length - 1; i >= 0; i--) {
+      const r = FLOORS[i].rect;
+      if (tx >= r.x && tx < r.x + r.w && ty >= r.y && ty < r.y + r.h) return FLOORS[i].kind;
+    }
+    return 'concrete';
+  }
+
   /** Escuridão ambiente no ponto (varia por área, GDD §50). */
   readonly darknessAt = (x: number, y: number): number => this.areaAt(x, y)?.darkness ?? OUTSIDE_DARKNESS;
 

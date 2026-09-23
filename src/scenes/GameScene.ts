@@ -14,6 +14,7 @@ import { MysteryBox, PerkMachine, WeaponLab, type MachineDeps } from '../entitie
 import type { BarricadeTarget, ZombieWorld } from '../entities/Zombie';
 import { emitGameEvent, GameEvents, onGameEvent } from '../game/events';
 import { TerminalMap } from '../map/TerminalMap';
+import { audio } from '../audio/AudioSystem';
 import { START_AREA } from '../map/terminal/layout';
 import { CameraController } from '../systems/CameraController';
 import { CombatSystem } from '../systems/CombatSystem';
@@ -198,6 +199,13 @@ export class GameScene extends Phaser.Scene {
       this.events.off(Phaser.Scenes.Events.POST_UPDATE, this.updateLighting, this);
     });
 
+    audio.bind(this, this.player, (x, y) => map.floorAt(x, y));
+    this.input.keyboard?.on('keydown-M', () => {
+      const muted = audio.toggleMute();
+      if (!muted) audio.play('ui_beep', { category: 'ui' });
+      emitGameEvent(this.game.events, GameEvents.Toast, { text: muted ? 'SOM DESLIGADO  [M]' : 'SOM LIGADO  [M]' });
+    });
+
     this.scene.launch(SCENE_KEYS.ui);
   }
 
@@ -211,6 +219,7 @@ export class GameScene extends Phaser.Scene {
     this.interaction.update(time, delta);
     this.powerUps.update(time);
     this.bossSystem.update(time, delta);
+    audio.update(time);
     this.cameraController.update();
     this.trackArea();
   }

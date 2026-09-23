@@ -19,6 +19,8 @@ export const GameEvents = {
   AreaUnlocked: 'area-unlocked',
   /** Perks adquiridos mudaram. */
   PerksChanged: 'perks-changed',
+  /** Aviso curto no topo da tela (ex.: som ligado/desligado). */
+  Toast: 'toast',
   /** Power-up coletado (anúncio na HUD). */
   PowerUpCollected: 'powerup-collected',
   /** Efeitos temporários ativos (contagem regressiva na HUD). */
@@ -120,6 +122,7 @@ export interface GameEventMap {
   [GameEvents.AreaEntered]: { id: string; name: string };
   [GameEvents.AreaUnlocked]: { id: string; name: string };
   [GameEvents.PerksChanged]: { perks: Array<{ id: string; level: number }> };
+  [GameEvents.Toast]: { text: string };
   [GameEvents.PowerUpCollected]: { id: string; name: string; color: number; detail?: string };
   [GameEvents.PowerUpTimers]: { timers: PowerUpTimer[] };
   [GameEvents.BossIncoming]: { name: string };

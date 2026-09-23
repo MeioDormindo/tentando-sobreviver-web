@@ -6,6 +6,8 @@ import type { WeaponKind } from '../config/weapons.config';
 import { ART_SCALE, DEPTH } from '../config/visual.config';
 import { emitGameEvent, GameEvents } from '../game/events';
 import type { Damageable } from './Damageable';
+import { audio } from '../audio/AudioSystem';
+import { audioConfig } from '../config/audio.config';
 
 interface MoveKeys {
   up: Phaser.Input.Keyboard.Key;
@@ -39,6 +41,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
   private lastDamageAt = 0;
   private alive = true;
   private weaponKind: WeaponKind = 'pistol';
+  private stepDistance = 0;
   /** Modificadores dos perks (referência viva do PerkSystem). */
   private mods: Readonly<PerkModifiers> = NEUTRAL_MODIFIERS;
   /** Multiplicador temporário de velocidade (power-up Speed Boost). */
@@ -213,6 +216,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
       this.legs.rotation = Phaser.Math.Angle.RotateTo(this.legs.rotation, target, LEGS_TURN);
       if (!this.legs.anims.isPlaying) this.legs.play(ANIM_KEYS.playerLegsWalk);
       this.legs.anims.timeScale = speed / this.config.speed;
+      // Um passo a cada ~44 px andados (som conforme o piso).
+      this.stepDistance += speed * (this.scene.game.loop.delta / 1000);
+      if (this.stepDistance >= audioConfig.stepDistance) {
+        this.stepDistance = 0;
+        audio.footstep(this.x, this.y);
+      }
     } else {
       this.legs.anims.stop();
       this.legs.setFrame(0);

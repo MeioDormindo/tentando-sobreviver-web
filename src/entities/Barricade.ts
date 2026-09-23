@@ -8,6 +8,7 @@ import type { WindowDef } from '../map/terminal/layout';
 import type { EconomySystem } from '../systems/EconomySystem';
 import type { Interactable } from '../systems/InteractionSystem';
 import type { Player } from './Player';
+import { audio } from '../audio/AudioSystem';
 
 export interface BarricadeDeps {
   economy: EconomySystem;
@@ -65,6 +66,7 @@ export class Barricade implements Interactable {
 
   private removePlank(): void {
     this.planks--;
+    audio.playAt('wood_break', this.x, this.y, { category: 'world', volume: 0.85 });
     const plank = this.plankImages[this.planks];
     const dir = this.def.rect.x < 64 ? 1 : -1; // cai para dentro da área
     this.scene.tweens.add({
@@ -103,6 +105,7 @@ export class Barricade implements Interactable {
     plank.setAlpha(0).setScale(ART_SCALE * 2.2);
     this.scene.tweens.add({ targets: plank, alpha: 1, scaleX: ART_SCALE * 1.8, scaleY: ART_SCALE * 1.6, duration: 160 });
     this.deps.economy.earn(barricadeConfig.repairReward);
+    audio.playAt('hammer', this.x, this.y, { category: 'world', volume: 0.8 });
   }
 
   private makePlank(index: number): Phaser.GameObjects.Image {
