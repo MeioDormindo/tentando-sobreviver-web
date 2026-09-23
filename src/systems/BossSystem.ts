@@ -148,6 +148,7 @@ export class BossSystem {
     this.shockwaves.push({ x, y, start: this.scene.time.now, hit: false, ring });
     audio.playAt('boss_slam', x, y, { category: 'world', volume: 1, distance: 1500 });
     this.deps.effects.surfaceImpact(x, y, 0);
+    this.deps.effects.dustBurst(x, y, 30);
     this.deps.lighting.addFlash(x, y, 200, 0.8, 400);
     this.scene.cameras.main.shake(300, 0.009);
   }

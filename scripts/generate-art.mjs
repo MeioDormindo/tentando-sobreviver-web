@@ -12,6 +12,7 @@ import * as M from './art/machines.mjs';
 import { POWERUPS, powerUpIcon } from './art/powerups.mjs';
 import { bossCorpse, bossSheet } from './art/boss.mjs';
 import * as E from './art/events.mjs';
+import * as P from './art/props.mjs';
 
 const OUT = 'public/assets';
 
@@ -74,4 +75,9 @@ write(`${OUT}/events/train_car.svg`, E.trainCar());
 write(`${OUT}/events/supply_crate.svg`, E.supplyCrate());
 write(`${OUT}/events/parachute.svg`, E.parachute());
 write(`${OUT}/events/gas_pipe.svg`, E.gasPipe());
+for (const [name, draw] of Object.entries({
+  extinguisher: P.extinguisher, luggage_cart: P.luggageCart, pallet: P.pallet, sign_stand: P.signStand,
+  desk_computer: P.deskComputer, chair: P.chair, locker: P.locker, barrier: P.barrier, cables: P.cables,
+  floor_pipe: P.floorPipe, vitrine: P.vitrine,
+})) write(`${OUT}/props/${name}.svg`, draw());
 console.log('Pronto.');

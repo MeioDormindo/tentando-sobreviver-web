@@ -46,6 +46,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
   private mods: Readonly<PerkModifiers> = NEUTRAL_MODIFIERS;
   /** Multiplicador temporário de velocidade (power-up Speed Boost). */
   speedBuff = 1;
+  /** Chamado ao levar dano (sangue no ponto do jogador). */
+  onHurt: ((x: number, y: number) => void) | null = null;
 
   constructor(scene: Phaser.Scene, x: number, y: number, config: PlayerConfig) {
     super(scene, x, y, playerTorsoKey('pistol'), PLAYER_FRAMES.aim);
@@ -188,6 +190,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
       this.die();
       return;
     }
+    this.onHurt?.(this.x, this.y);
+    // Tranco: o tronco encolhe e volta (animação de dano).
+    this.scene.tweens.add({ targets: this, scale: ART_SCALE * 0.9, duration: 60, yoyo: true, ease: 'Quad.easeOut' });
     this.setTint(HURT_TINT);
     this.legs.setTint(HURT_TINT);
     this.scene.time.delayedCall(120, () => {
@@ -240,6 +245,11 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
     this.alive = false;
     this.setVelocity(0, 0);
     this.anims.stop();
+    this.onHurt?.(this.x, this.y);
+    // Queda: o corpo tomba de lado e as pernas somem sob ele.
+    this.scene.tweens.killTweensOf(this);
+    this.scene.tweens.add({ targets: this, rotation: this.rotation + 1.4, scale: ART_SCALE * 0.92, duration: 700, ease: 'Bounce.easeOut' });
+    this.scene.tweens.add({ targets: this.legs, alpha: 0, duration: 500 });
     this.setTint(DEAD_TINT);
     this.legs.setTint(DEAD_TINT);
     emitGameEvent(this.scene.game.events, GameEvents.PlayerDied, undefined);

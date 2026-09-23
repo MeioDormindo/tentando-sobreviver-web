@@ -305,6 +305,49 @@ export class EffectsSystem {
     this.gas.explode(1, x + Math.cos(a) * d, y + Math.sin(a) * d);
   }
 
+  /** Anel que se expande (power-up coletado, pancada do boss). */
+  shockwave(x: number, y: number, radius: number, color: number, durationMs = 380): void {
+    const ring = this.scene.add.graphics().setDepth(DEPTH.glow).setBlendMode(Phaser.BlendModes.ADD).setPosition(x, y);
+    const state = { r: radius * 0.15, a: 1 };
+    this.scene.tweens.add({
+      targets: state,
+      r: radius,
+      a: 0,
+      duration: durationMs,
+      ease: 'Cubic.easeOut',
+      onUpdate: () => {
+        ring.clear();
+        ring.lineStyle(3, color, state.a).strokeCircle(0, 0, state.r);
+        ring.lineStyle(8, color, state.a * 0.25).strokeCircle(0, 0, state.r * 0.92);
+      },
+      onComplete: () => ring.destroy(),
+    });
+  }
+
+  /** Coleta de power-up: anel colorido, faíscas e clarão. */
+  pickupBurst(x: number, y: number, color: number): void {
+    this.shockwave(x, y, 46, color);
+    this.sparks.particleTint = color;
+    for (const angle of [0, 90, 180, 270]) {
+      this.emitAngle = angle;
+      this.sparks.explode(4, x, y);
+    }
+    this.sparks.particleTint = 0xffffff;
+    this.lighting?.addFlash(x, y, 90, 0.8, 260);
+  }
+
+  /** Morte do jogador: o corpo cai, o sangue se espalha. */
+  playerDeath(x: number, y: number, angle: number): void {
+    this.emitAngle = Phaser.Math.RadToDeg(angle);
+    this.blood.explode(effectsConfig.bloodParticlesOnDeath, x, y);
+    const pool = this.scene.add
+      .image(x, y, ASSET_KEYS.bloodPool)
+      .setDepth(DEPTH.corpses - 1)
+      .setRotation(Math.random() * Math.PI * 2)
+      .setScale(ART_SCALE * 0.1);
+    this.scene.tweens.add({ targets: pool, scale: ART_SCALE * 1.1, duration: 2600, ease: 'Cubic.easeOut' });
+  }
+
   /** Brilho do lança-chamas iluminando o entorno. */
   glow(x: number, y: number, radius: number, durationMs: number): void {
     this.lighting?.addFlash(x, y, radius, 0.7, durationMs);
@@ -333,9 +376,19 @@ export class EffectsSystem {
     const body = this.scene.add
       .image(cx, cy, ASSET_KEYS.corpses, CORPSE_SKINS.indexOf(skin))
       .setDepth(DEPTH.corpses)
-      .setRotation(fallAngle + Phaser.Math.FloatBetween(-0.3, 0.3))
-      .setScale(ART_SCALE * 0.95);
-    this.scene.tweens.add({ targets: body, scale: ART_SCALE, duration: 180, ease: 'Quad.easeOut' });
+      .setRotation(fallAngle - 0.5)
+      .setScale(ART_SCALE * 0.9);
+    // Queda: o corpo tomba (gira e escorrega) na direção do golpe.
+    body.setPosition(x, y);
+    this.scene.tweens.add({
+      targets: body,
+      x: cx,
+      y: cy,
+      rotation: fallAngle + Phaser.Math.FloatBetween(-0.3, 0.3),
+      scale: ART_SCALE,
+      duration: 260,
+      ease: 'Quad.easeOut',
+    });
 
     const corpse: Corpse = {
       body,

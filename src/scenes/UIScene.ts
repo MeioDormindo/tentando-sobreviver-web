@@ -1,7 +1,9 @@
 import Phaser from 'phaser';
 import { perkIconKey, powerUpKey } from '../config/assets.config';
 import { audio } from '../audio/AudioSystem';
+import { DamageOverlay } from '../ui/DamageOverlay';
 import { EventHud } from '../ui/EventHud';
+import { createGameOverOverlay } from '../ui/GameOverOverlay';
 import { COLORS, SCENE_KEYS } from '../config/game.config';
 import {
   emitGameEvent,
@@ -9,6 +11,7 @@ import {
   onGameEvent,
   type AmmoPayload,
   type BossStatePayload,
+  type GameOverStats,
   type InteractionPromptPayload,
   type MoneyPayload,
   type PlayerHpPayload,
@@ -23,6 +26,8 @@ const FONT = 'monospace';
 const TITLE_FONT = 'Impact, "Arial Black", sans-serif';
 const WAVE_COLOR = '#b33a3a';
 const MONEY_COLOR = '#e3c77a';
+/** Espera a animação de queda do jogador antes da tela de Game Over (ms). */
+const GAME_OVER_DELAY_MS = 1400;
 const formatMoney = (n: number): string => `$ ${n.toLocaleString('pt-BR')}`;
 
 /** HUD sobreposta à GameScene. Apenas escuta eventos; não contém regra de jogo. */
@@ -44,7 +49,6 @@ export class UIScene extends Phaser.Scene {
   private bossName!: Phaser.GameObjects.Text;
   private bossState: BossStatePayload | null = null;
   private warning!: Phaser.GameObjects.Container;
-  private bossesDefeated = 0;
   private statusText!: Phaser.GameObjects.Text;
   private killsText!: Phaser.GameObjects.Text;
   private crosshair!: Phaser.GameObjects.Graphics;
@@ -55,11 +59,13 @@ export class UIScene extends Phaser.Scene {
   private deathOverlay: Phaser.GameObjects.Container | null = null;
   private pauseOverlay: Phaser.GameObjects.Container | null = null;
   private eventHud!: EventHud;
+  private damageOverlay!: DamageOverlay;
+  private gameOverStats: GameOverStats | null = null;
+  private playerDead = false;
 
   private hp: PlayerHpPayload = { hp: 0, maxHp: 1, armor: 0, maxArmor: 100 };
   private kills = 0;
   private waveState: WaveStatePayload | null = null;
-  private money: MoneyPayload = { money: 0, delta: 0, earned: 0 };
   private prompt: InteractionPromptPayload | null = null;
 
   constructor() {
@@ -74,8 +80,9 @@ export class UIScene extends Phaser.Scene {
     this.perkIcons = [];
     this.timerViews = [];
     this.bossState = null;
-    this.bossesDefeated = 0;
     this.pauseOverlay = null;
+    this.gameOverStats = null;
+    this.playerDead = false;
 
     this.hpBar = this.add.graphics();
     this.hpText = this.add.text(0, 0, '', { fontFamily: FONT, fontSize: '14px', color: COLORS.text });
@@ -139,6 +146,7 @@ export class UIScene extends Phaser.Scene {
       .setOrigin(0.5, 1);
     this.warning = this.createWarning();
     this.eventHud = new EventHud(this);
+    this.damageOverlay = new DamageOverlay(this);
     this.crosshair = this.add.graphics().setDepth(100);
     this.drawCrosshair();
     this.updateKills();
@@ -148,6 +156,7 @@ export class UIScene extends Phaser.Scene {
       onGameEvent(this.game.events, GameEvents.AmmoChanged, this.onAmmoChanged, this),
       onGameEvent(this.game.events, GameEvents.ZombieKilled, this.onZombieKilled, this),
       onGameEvent(this.game.events, GameEvents.PlayerDied, this.onPlayerDied, this),
+      onGameEvent(this.game.events, GameEvents.GameOver, this.onGameOver, this),
       onGameEvent(this.game.events, GameEvents.WaveState, this.onWaveState, this),
       onGameEvent(this.game.events, GameEvents.MoneyChanged, this.onMoneyChanged, this),
       onGameEvent(this.game.events, GameEvents.InteractionPrompt, this.onPrompt, this),
@@ -179,7 +188,8 @@ export class UIScene extends Phaser.Scene {
     emitGameEvent(this.game.events, GameEvents.HudRequest, undefined);
   }
 
-  override update(): void {
+  override update(time: number, delta: number): void {
+    this.damageOverlay.update(time, delta);
     const pointer = this.input.activePointer;
     this.crosshair.setPosition(pointer.x, pointer.y);
   }
@@ -201,6 +211,7 @@ export class UIScene extends Phaser.Scene {
     this.drawBossBar();
     this.warning.setPosition(width / 2, height * 0.3);
     this.eventHud.layout(width, height, MARGIN);
+    this.damageOverlay.layout(width, height);
     this.statusText.setPosition(width / 2, height * 0.62);
     this.killsText.setPosition(width - MARGIN, MARGIN + 56);
     this.waveText.setPosition(MARGIN, MARGIN - 6);
@@ -276,7 +287,6 @@ export class UIScene extends Phaser.Scene {
   }
 
   private onMoneyChanged(payload: MoneyPayload): void {
-    this.money = payload;
     this.moneyText.setText(formatMoney(payload.money));
     if (payload.delta === 0) return;
     const gain = payload.delta > 0;
@@ -313,7 +323,7 @@ export class UIScene extends Phaser.Scene {
 
   /** Pausa/retoma a partida: física, tempo, animações e som param juntos. */
   private togglePause(): void {
-    if (this.deathOverlay) return;
+    if (this.playerDead) return;
     if (this.isPaused) {
       this.resumeGame();
       return;
@@ -400,7 +410,6 @@ export class UIScene extends Phaser.Scene {
   }
 
   private onBossDefeated(p: { name: string; reward: number }): void {
-    this.bossesDefeated++;
     this.showBanner(`${p.name.toUpperCase()} DERROTADO`, `+$${p.reward.toLocaleString('pt-BR')}`, COLORS.accent);
   }
 
@@ -441,8 +450,6 @@ export class UIScene extends Phaser.Scene {
   private onPowerUpTimers(p: { timers: PowerUpTimer[] }): void {
     this.timerViews.forEach((v) => v.destroy());
     this.timerViews = [];
-    this.bossState = null;
-    this.bossesDefeated = 0;
     for (const t of p.timers) {
       const iconId = t.id === 'fury' ? 'golden' : t.id;
       const icon = this.add.image(0, 0, powerUpKey(iconId)).setDisplaySize(34, 34);
@@ -532,49 +539,30 @@ export class UIScene extends Phaser.Scene {
   }
 
   private onPlayerDied(): void {
+    this.playerDead = true;
     this.statusText.setText('');
     this.promptText.setVisible(false);
     this.crosshair.setVisible(false);
-    this.showDeathOverlay();
+  }
+
+  /** Resumo da partida: mostrado depois da animação de morte. */
+  private onGameOver(stats: GameOverStats): void {
+    this.gameOverStats = stats;
+    this.time.delayedCall(GAME_OVER_DELAY_MS, () => this.showDeathOverlay());
   }
 
   private showDeathOverlay(): void {
-    const { width, height } = this.scale;
-    const overlay = this.add.container(0, 0).setDepth(200);
-
-    const bg = this.add.rectangle(0, 0, width, height, 0x000000, 0.7).setOrigin(0);
-    const title = this.add
-      .text(width / 2, height * 0.35, 'VOCÊ MORREU', {
-        fontFamily: 'Impact, "Arial Black", sans-serif',
-        fontSize: '64px',
-        color: '#b33a3a',
-      })
-      .setOrigin(0.5);
-    const statsText =
-      `WAVE ALCANÇADA: ${this.waveState?.wave ?? 0}\n` +
-      `ZUMBIS ABATIDOS: ${this.kills}\n` +
-      `BOSSES DERROTADOS: ${this.bossesDefeated}\n` +
-      `DINHEIRO GANHO: ${formatMoney(this.money.earned)}`;
-    const stats = this.add
-      .text(width / 2, height * 0.47, statsText, {
-        fontFamily: FONT,
-        fontSize: '20px',
-        color: COLORS.text,
-        align: 'center',
-        lineSpacing: 6,
-      })
-      .setOrigin(0.5);
-
-    const retry = this.makeButton(width / 2, height * 0.6, '[ JOGAR NOVAMENTE ]', () => {
-      this.scene.start(SCENE_KEYS.game);
+    const stats = this.gameOverStats;
+    if (!stats) return;
+    this.deathOverlay?.destroy();
+    this.deathOverlay = createGameOverOverlay(this, stats, {
+      retry: () => this.scene.start(SCENE_KEYS.game),
+      menu: () => {
+        this.scene.stop(SCENE_KEYS.game);
+        this.scene.start(SCENE_KEYS.menu);
+      },
+      makeButton: (x, y, label, onClick) => this.makeButton(x, y, label, onClick),
     });
-    const menu = this.makeButton(width / 2, height * 0.6 + 48, '[ MENU ]', () => {
-      this.scene.stop(SCENE_KEYS.game);
-      this.scene.start(SCENE_KEYS.menu);
-    });
-
-    overlay.add([bg, title, stats, retry, menu]);
-    this.deathOverlay = overlay;
   }
 
   private makeButton(x: number, y: number, label: string, onClick: () => void, once = true): Phaser.GameObjects.Text {

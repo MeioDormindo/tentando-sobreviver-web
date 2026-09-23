@@ -77,6 +77,8 @@ export class TerminalMap {
   readonly areas: AreaDef[] = AREAS;
 
   private readonly cells: Uint8Array;
+  /** Luzes dos props luminosos (telas, placas, vitrines), somadas às luminárias. */
+  private readonly propLights: Lamp[] = [];
   /** Índice da área de cada tile (-1 = fora de qualquer área). */
   private readonly areaIndex: Int8Array;
 
@@ -131,6 +133,7 @@ export class TerminalMap {
       return s.type === 'weapon' ? { type: 'weapon', weaponId: s.weaponId, x: p.x, y: p.y } : { type: 'ammo', x: p.x, y: p.y };
     });
     this.lamps = LAMPS.map((l) => ({ ...center(l.tx, l.ty), radius: l.radius, intensity: l.intensity, flicker: l.flicker }));
+    this.lamps.push(...this.propLights);
     // Luz fraca sobre cada ponto de compra, para ser encontrado no escuro.
     for (const s of this.stations) this.lamps.push({ x: s.x, y: s.y, radius: 70, intensity: 0.45, flicker: 0, emergency: true });
     this.machines = MACHINES.map((m) => ({ ...m, ...center(m.tx, m.ty) }));
@@ -321,6 +324,7 @@ export class TerminalMap {
       const x = p.tx * TILE_SIZE + TILE_SIZE / 2;
       const y = p.ty * TILE_SIZE + TILE_SIZE / 2;
       const img = this.scene.add.image(x, y, def.texture).setScale(ART_SCALE).setAngle(p.angle ?? 0);
+      if (def.light) this.propLights.push({ x, y, ...def.light, flicker: 0.05, emergency: true });
       if (def.body) {
         const zone = this.scene.add.zone(x + def.body.ox, y + def.body.oy, def.body.w, def.body.h);
         this.obstacles.add(zone);

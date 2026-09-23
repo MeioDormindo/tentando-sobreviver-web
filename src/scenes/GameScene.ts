@@ -20,6 +20,7 @@ import { CameraController } from '../systems/CameraController';
 import { CombatSystem } from '../systems/CombatSystem';
 import { EconomySystem } from '../systems/EconomySystem';
 import { EventSystem } from '../systems/EventSystem';
+import { StatsSystem } from '../systems/StatsSystem';
 import { InteractionSystem } from '../systems/InteractionSystem';
 import { PerkSystem } from '../systems/PerkSystem';
 import { PowerUpSystem } from '../systems/PowerUpSystem';
@@ -45,6 +46,7 @@ export class GameScene extends Phaser.Scene {
   private powerUps!: PowerUpSystem;
   private bossSystem!: BossSystem;
   private eventSystem!: EventSystem;
+  private effects!: EffectsSystem;
   private map!: TerminalMap;
   private currentArea = '';
   private readonly aimPoint = new Phaser.Math.Vector2();
@@ -63,6 +65,9 @@ export class GameScene extends Phaser.Scene {
     this.lighting = new LightingSystem(this, this.player, map.lamps, map.darknessAt);
     const effects = new EffectsSystem(this, map.widthPx, map.heightPx, this.lighting);
     map.scatterDecals(effects.stampDecal);
+    this.effects = effects;
+    this.player.onHurt = (x, y) => effects.bloodHit(x, y, Math.random() * Math.PI * 2);
+    new StatsSystem(this);
 
     const projectiles = this.physics.add.group({
       classType: Projectile,
@@ -277,6 +282,10 @@ export class GameScene extends Phaser.Scene {
 
   private onPlayerDied(): void {
     this.physics.pause();
+    // Animação de morte: sangue se espalhando e a câmera se aproximando devagar.
+    this.effects.playerDeath(this.player.x, this.player.y, this.player.rotation);
+    const cam = this.cameras.main;
+    cam.zoomTo(cam.zoom * 1.35, 2600, 'Sine.easeInOut');
     this.input.setDefaultCursor('default');
   }
 }

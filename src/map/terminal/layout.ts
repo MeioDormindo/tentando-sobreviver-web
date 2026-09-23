@@ -286,6 +286,53 @@ export const PROPS: Array<{ type: PropType; tx: number; ty: number; angle?: numb
   { type: 'crate', tx: 70, ty: 111 },
   { type: 'crate', tx: 71.2, ty: 112 },
   { type: 'barrel', tx: 86, ty: 116 },
+
+  // ── Props extras (GDD §52) ──
+  // Hall: carrinhos de bagagem, placas de saída, extintores
+  { type: 'luggage_cart', tx: 46.5, ty: 51 },
+  { type: 'luggage_cart', tx: 81.5, ty: 42 },
+  { type: 'sign_stand', tx: 57.5, ty: 30.5 },
+  { type: 'sign_stand', tx: 83, ty: 50.5 },
+  { type: 'extinguisher', tx: 40.3, ty: 44 },
+  { type: 'extinguisher', tx: 87.2, ty: 38 },
+  { type: 'cables', tx: 72, ty: 54.4, angle: 4 },
+  // Plataforma: barreiras na borda dos trilhos e placas
+  { type: 'barrier', tx: 19.5, ty: 13.6 },
+  { type: 'barrier', tx: 107.5, ty: 13.6 },
+  { type: 'sign_stand', tx: 36, ty: 15 },
+  { type: 'sign_stand', tx: 92, ty: 15 },
+  { type: 'extinguisher', tx: 16.3, ty: 24 },
+  // Bilheteria: guichês com computadores e cadeiras
+  { type: 'desk_computer', tx: 25.5, ty: 62.3 },
+  { type: 'desk_computer', tx: 33.5, ty: 62.3 },
+  { type: 'chair', tx: 25.5, ty: 60.3, angle: 180 },
+  { type: 'chair', tx: 33.5, ty: 60.4, angle: 170 },
+  { type: 'chair', tx: 16, ty: 70, angle: 40 },
+  { type: 'sign_stand', tx: 21, ty: 76.5 },
+  // Lojas: vitrines
+  { type: 'vitrine', tx: 89, ty: 66 },
+  { type: 'vitrine', tx: 99, ty: 66 },
+  { type: 'vitrine', tx: 111, ty: 66 },
+  { type: 'extinguisher', tx: 84.3, ty: 71 },
+  // Área técnica: armários, cabos, tubulação
+  { type: 'locker', tx: 34.5, ty: 81.4 },
+  { type: 'locker', tx: 67, ty: 81.4 },
+  { type: 'cables', tx: 50, ty: 91, angle: -8 },
+  { type: 'cables', tx: 84, ty: 88.5, angle: 12 },
+  { type: 'floor_pipe', tx: 64, ty: 94.4 },
+  { type: 'floor_pipe', tx: 97, ty: 94.4 },
+  { type: 'extinguisher', tx: 57.3, ty: 82 },
+  // Túneis: barreiras e cabos
+  { type: 'barrier', tx: 44, ty: 105.5 },
+  { type: 'barrier', tx: 86, ty: 99.5 },
+  { type: 'cables', tx: 70, ty: 100.5 },
+  { type: 'cables', tx: 30, ty: 106, angle: 180 },
+  // Manutenção: paletes, armários, tubulação
+  { type: 'pallet', tx: 40.5, ty: 116.5 },
+  { type: 'pallet', tx: 76, ty: 116.5 },
+  { type: 'locker', tx: 46.5, ty: 110.6 },
+  { type: 'floor_pipe', tx: 64, ty: 117.6 },
+  { type: 'extinguisher', tx: 36.3, ty: 113 },
 ];
 
 export interface LampDef {

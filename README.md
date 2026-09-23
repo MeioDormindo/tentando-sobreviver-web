@@ -53,8 +53,8 @@ src/
                      cápsulas, faíscas), fxTextures (texturas de luz/partículas em canvas)
   events/            eventos dinâmicos (WorldEvent + um arquivo por evento: Blackout, Alarm, Train,
                      Horde, SupplyDrop, GasLeak)
-  ui/                componentes da HUD (EventHud)
-  systems/           EventSystem (sorteio e ciclo dos eventos), WaveSystem, SpawnSystem, difficulty (fórmulas), EconomySystem, InteractionSystem,
+  ui/                componentes da HUD (EventHud, DamageOverlay, GameOverOverlay)
+  systems/           EventSystem (sorteio e ciclo dos eventos), StatsSystem (estatísticas e recordes), WaveSystem, SpawnSystem, difficulty (fórmulas), EconomySystem, InteractionSystem,
                      CombatSystem (inclui headshot), CameraController, pathfinding/NavGrid (A*),
                      PerkSystem (modificadores de perks), PowerUpSystem (drops e efeitos),
                      BossSystem (ciclo do boss), pathfinding/PathFollower (navegação comum)
@@ -96,8 +96,16 @@ Todos os sons são **sintetizados em código** durante o carregamento (sem arqui
 - [x] Fase 7 — Inimigos (Runner, Tank, Exploder, composição por wave)
 - [x] Fase 8 — Boss (The Conductor, 4 fases, 5 ataques)
 - [x] Fase 9 — Eventos (blackout, trem, horda, supply drop, gás, alarme)
+- [x] Fase 10 — Visual (props do §52, animações de dano/morte, partículas, HUD de dano, Game Over)
 
 Observações:
+- Visual (Fase 10): props novos do GDD §52 (extintores, carrinhos de bagagem, paletes, placas de
+  saída luminosas, mesas com computador, cadeiras, armários, barreiras, cabos, tubulação, vitrines);
+  zumbis recuam ao levar tiro e os corpos tombam; o jogador tranca ao levar dano e cai ao morrer
+  (câmera se aproxima); bordas da tela piscam em vermelho no dano e pulsam com vida baixa; anel e
+  faíscas ao pegar power-up; poeira na pancada do boss.
+- Game Over (GDD §63–64): wave, abates, headshots, dinheiro, tempo, bosses, dano, disparos/acertos,
+  precisão e power-ups. Recorde (melhor wave e abates) salvo no navegador e mostrado no menu.
 - Eventos (`src/config/events.config.ts`): a partir da wave 2, cada wave tem 60% de chance de um
   evento (um por vez, nunca em wave de boss), sorteado por peso, com wave mínima e cooldown:
   - Apagão: luzes piscam e apagam por 25s; só a lanterna e as luzes de emergência ficam.

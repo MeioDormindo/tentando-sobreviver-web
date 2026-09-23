@@ -38,6 +38,12 @@ export const GameEvents = {
   WorldEventStarted: 'world-event-started',
   /** Evento ativo e tempo restante (null = nenhum). */
   WorldEventState: 'world-event-state',
+  /** Estatísticas: disparos, acertos e dano causado (tela de Game Over). */
+  ShotsFired: 'shots-fired',
+  ShotHit: 'shot-hit',
+  DamageDealt: 'damage-dealt',
+  /** Fim de partida com o resumo (GDD §63–64). */
+  GameOver: 'game-over',
   /** A UI pede o estado atual (ex.: ao ser criada depois da GameScene). */
   HudRequest: 'hud-request',
 } as const;
@@ -101,6 +107,24 @@ export interface WorldEventStatePayload {
   totalMs: number | null;
 }
 
+/** Resumo da partida (GDD §63–64). */
+export interface GameOverStats {
+  wave: number;
+  kills: number;
+  headshots: number;
+  moneyEarned: number;
+  timeMs: number;
+  bosses: number;
+  shotsFired: number;
+  shotsHit: number;
+  damage: number;
+  powerUps: number;
+  /** Recordes (localStorage) e se esta partida bateu algum. */
+  bestWave: number;
+  bestKills: number;
+  newRecord: boolean;
+}
+
 export interface MoneyPayload {
   money: number;
   /** Variação que gerou o evento (0 na sincronização). */
@@ -150,6 +174,10 @@ export interface GameEventMap {
   [GameEvents.BossDefeated]: { name: string; reward: number };
   [GameEvents.WorldEventStarted]: { id: string; name: string; hint: string; color: number };
   [GameEvents.WorldEventState]: WorldEventStatePayload | null;
+  [GameEvents.ShotsFired]: { count: number };
+  [GameEvents.ShotHit]: undefined;
+  [GameEvents.DamageDealt]: { amount: number };
+  [GameEvents.GameOver]: GameOverStats;
   [GameEvents.HudRequest]: undefined;
 }
 

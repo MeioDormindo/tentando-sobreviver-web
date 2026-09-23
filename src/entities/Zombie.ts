@@ -39,6 +39,10 @@ const SHADOW_OFFSET = { x: 4, y: 6 };
 const PROGRESS_STEP = 28;
 /** Cor do tremor elétrico enquanto atordoado. */
 const STUN_TINT = 0x9fe8ff;
+/** Duração do tranco ao levar um tiro (ms). */
+const STAGGER_MS = 110;
+/** Zumbis que não podem ser empurrados (Tank) recuam só esta fração. */
+const HEAVY_KNOCKBACK = 0.25;
 
 /**
  * Zumbi genérico dirigido por ZombieConfig, reutilizado via pool.
@@ -73,6 +77,9 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
   private nextGroanAt = 0;
   /** Atordoado (Arc Gun / Energy Cannon) até este instante. */
   private stunnedUntil = 0;
+  /** Tranco ao levar tiro: recua um pouco na direção do disparo. */
+  private staggerUntil = 0;
+  private readonly knock = new Phaser.Math.Vector2();
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, zombieSheetKey('a'), 0);
@@ -114,6 +121,13 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     this.stunnedUntil = Math.max(this.stunnedUntil, this.scene.time.now + ms);
   }
 
+  /** Recuo ao ser atingido (animação de dano). */
+  knockback(angle: number, speed: number): void {
+    if (!this.isAlive || !this.config) return;
+    this.knock.setToPolar(angle, this.config.pushable ? speed : speed * HEAVY_KNOCKBACK);
+    this.staggerUntil = this.scene.time.now + STAGGER_MS;
+  }
+
   get isAlive(): boolean {
     return this.aiState !== ZombieState.Dead;
   }
@@ -135,6 +149,7 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     this.exploded = false;
     this.fuseEndsAt = 0;
     this.stunnedUntil = 0;
+    this.staggerUntil = 0;
     this.nextGroanAt = this.scene.time.now + Phaser.Math.Between(500, 5000);
 
     this.enableBody(true, x, y, true, true);
@@ -185,6 +200,11 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
       this.stunnedUntil = 0;
       this.anims.resume();
       this.clearTint();
+    }
+    if (time < this.staggerUntil) {
+      this.setVelocity(this.knock.x, this.knock.y);
+      this.knock.scale(0.8);
+      return;
     }
     const dist = Phaser.Math.Distance.Between(this.x, this.y, target.x, target.y);
 

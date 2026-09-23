@@ -3,7 +3,7 @@ import { headshotConfig } from '../config/economy.config';
 import type { PerkModifiers } from '../config/machines.config';
 import type { WeaponConfig } from '../config/weapons.config';
 import type { ExplosiveConfig } from '../config/zombies.config';
-import type { KillSource } from '../game/events';
+import { emitGameEvent, GameEvents, type KillSource } from '../game/events';
 import type { EffectsSystem, ExplosionStyle } from '../effects/EffectsSystem';
 import type { Player } from '../entities/Player';
 import { Projectile, PROJECTILE_BURST } from '../entities/Projectile';
@@ -52,6 +52,9 @@ const ARC_PROBE_STEP = 16;
 const ARC_DEFAULT_TINT = 0x7fd8ff;
 /** Intervalo entre labaredas sobre um alvo em chamas (ms). */
 const BURN_PUFF_MS = 90;
+/** Empurrão do zumbi atingido por bala (px/s), proporcional ao dano até este valor. */
+const HIT_KNOCKBACK = 240;
+const KNOCKBACK_FULL_DAMAGE = 60;
 
 interface BlastOptions {
   radius: number;
@@ -83,6 +86,8 @@ interface Burn {
  */
 export class CombatSystem {
   private readonly burning = new Map<Target, Burn>();
+  /** Dano causado pelo jogador neste frame (estatísticas). */
+  private pendingDamage = 0;
 
   constructor(private readonly scene: Phaser.Scene, private readonly deps: CombatSystemDeps) {
     const { player, zombies, projectiles, walls, obstacles, bulletBlockers, barricades, effects, modifiers, buffs, bosses } = deps;
@@ -111,19 +116,20 @@ export class CombatSystem {
         const angle = projectile.angleOfTravel;
         const damage = projectile.damage * buffs.damageMultiplier;
         const special = projectile.special;
+        this.scoreHit(projectile);
         if (special?.type === 'grenade') {
-          boss.takeDamage(damage);
+          this.hurtBoss(boss, damage);
           this.burst(projectile);
           return;
         }
         if (projectile.registerHit(boss)) projectile.kill();
         if (special?.type === 'flame') {
-          boss.takeDamage(damage, false);
+          this.hurtBoss(boss, damage, false);
           this.ignite(boss, special.burnDps * projectile.damageScale, special.burnMs);
           return;
         }
         effects.bloodHit(projectile.x, projectile.y, angle);
-        boss.takeDamage(damage);
+        this.hurtBoss(boss, damage);
       },
       (a, b) => {
         const projectile = CombatSystem.find(Projectile, a, b);
@@ -156,6 +162,7 @@ export class CombatSystem {
         const projectile = CombatSystem.find(Projectile, a, b);
         const zombie = CombatSystem.find(Zombie, a, b);
         if (!projectile || !zombie) return;
+        this.scoreHit(projectile);
         if (projectile.special) {
           this.specialHit(projectile, zombie);
           return;
@@ -168,8 +175,10 @@ export class CombatSystem {
           : projectile.damage * (headshot ? headshotMult : 1) * buffs.damageMultiplier;
         if (projectile.registerHit(zombie)) projectile.kill();
         effects.bloodHit(zombie.x, zombie.y, angle);
-        if (zombie.takeDamage(damage, headshot)) {
+        if (this.hurtZombie(zombie, damage, headshot)) {
           effects.zombieDeath(zombie.x, zombie.y, angle, zombie.skin);
+        } else {
+          zombie.knockback(angle, HIT_KNOCKBACK * Math.min(1, projectile.damage / KNOCKBACK_FULL_DAMAGE));
         }
       },
       (a, b) => {
@@ -201,13 +210,17 @@ export class CombatSystem {
       const damage = burn.dps * buffs.damageMultiplier * (delta / 1000);
       if (zombie) {
         const { x, y } = zombie;
-        if (zombie.takeDamage(damage, false, 'weapon', false)) {
+        if (this.hurtZombie(zombie, damage, false, 'weapon', false)) {
           effects.zombieDeath(x, y, Math.random() * Math.PI * 2, zombie.skin);
           this.burning.delete(target);
         }
-      } else {
-        target.takeDamage(damage, false);
+      } else if (target instanceof Boss) {
+        this.hurtBoss(target, damage, false);
       }
+    }
+    if (this.pendingDamage > 0) {
+      emitGameEvent(this.scene.game.events, GameEvents.DamageDealt, { amount: this.pendingDamage });
+      this.pendingDamage = 0;
     }
   }
 
@@ -267,6 +280,7 @@ export class CombatSystem {
       return;
     }
 
+    emitGameEvent(this.scene.game.events, GameEvents.ShotHit, undefined);
     const hit = new Set<Target>();
     let damage = cfg.damage * damageScale * buffs.damageMultiplier;
     for (let jump = 0; current && jump <= special.chains; jump++) {
@@ -302,19 +316,19 @@ export class CombatSystem {
 
     if (special.type === 'grenade') {
       // Impacto direto + explosão.
-      if (zombie.takeDamage(damage)) effects.zombieDeath(x, y, angle, zombie.skin);
+      if (this.hurtZombie(zombie, damage)) effects.zombieDeath(x, y, angle, zombie.skin);
       this.burst(projectile);
       return;
     }
     if (projectile.registerHit(zombie)) projectile.kill();
     if (special.type === 'flame') {
-      if (zombie.takeDamage(damage, false, 'weapon', false)) effects.zombieDeath(x, y, angle, zombie.skin);
+      if (this.hurtZombie(zombie, damage, false, 'weapon', false)) effects.zombieDeath(x, y, angle, zombie.skin);
       else this.ignite(zombie, special.burnDps * projectile.damageScale, special.burnMs);
       return;
     }
     // Plasma: atravessa a horda eletrocutando.
     effects.bloodHit(x, y, angle);
-    if (zombie.takeDamage(damage)) effects.zombieDeath(x, y, angle, zombie.skin);
+    if (this.hurtZombie(zombie, damage)) effects.zombieDeath(x, y, angle, zombie.skin);
     else zombie.stun(special.stunMs);
   }
 
@@ -324,7 +338,7 @@ export class CombatSystem {
     const { x, y } = projectile;
     projectile.kill();
     if (special?.type !== 'grenade' && special?.type !== 'plasma') return;
-    this.blast(x, y, {
+    const hits = this.blast(x, y, {
       radius: special.blastRadius,
       damage: special.blastDamage * projectile.damageScale * this.deps.buffs.damageMultiplier,
       zombieMultiplier: 1,
@@ -333,10 +347,13 @@ export class CombatSystem {
       style: special.type,
       stunMs: special.type === 'plasma' ? special.stunMs : undefined,
     });
+    if (hits > 0) this.scoreHit(projectile);
   }
 
   /** Dano em área com queda até a borda. Abates contam para quem causou a explosão. */
-  private blast(x: number, y: number, o: BlastOptions): void {
+  /** Retorna quantos alvos foram atingidos. */
+  private blast(x: number, y: number, o: BlastOptions): number {
+    let hits = 0;
     const { player, zombies, effects } = this.deps;
     effects.explosion(x, y, o.radius, o.style);
     const falloff = (d: number) => 1 - (1 - EXPLOSION_EDGE_FALLOFF) * (d / o.radius);
@@ -350,7 +367,7 @@ export class CombatSystem {
     for (const child of this.deps.bosses.getChildren()) {
       const boss = child as Boss;
       const d = Phaser.Math.Distance.Between(boss.x, boss.y, x, y);
-      if (boss.isAlive && d <= o.radius + boss.config.bodyRadius) boss.takeDamage(o.damage * falloff(Math.min(d, o.radius)));
+      if (boss.isAlive && d <= o.radius + boss.config.bodyRadius && ++hits) this.hurtBoss(boss, o.damage * falloff(Math.min(d, o.radius)), true, o.source === 'weapon');
     }
 
     for (const child of zombies.getChildren()) {
@@ -358,14 +375,38 @@ export class CombatSystem {
       if (z === o.exclude || !z.active || !z.isAlive) continue;
       const d = Phaser.Math.Distance.Between(z.x, z.y, x, y);
       if (d > o.radius) continue;
+      hits++;
       const zx = z.x;
       const zy = z.y;
-      if (z.takeDamage(o.damage * o.zombieMultiplier * falloff(d), false, o.source)) {
+      if (this.hurtZombie(z, o.damage * o.zombieMultiplier * falloff(d), false, o.source)) {
         effects.zombieDeath(zx, zy, Phaser.Math.Angle.Between(x, y, zx, zy), z.skin);
       } else if (o.stunMs) {
         z.stun(o.stunMs);
       }
     }
+    return hits;
+  }
+
+  /** Aplica dano a um zumbi e contabiliza o que foi realmente tirado de vida. */
+  private hurtZombie(z: Zombie, amount: number, headshot = false, source: KillSource = 'weapon', flash = true): boolean {
+    const before = Math.max(0, z.hp);
+    const killed = z.takeDamage(amount, headshot, source, flash);
+    if (source === 'weapon') this.pendingDamage += before - Math.max(0, z.hp);
+    return killed;
+  }
+
+  private hurtBoss(b: Boss, amount: number, flash = true, counts = true): boolean {
+    const before = b.hp;
+    const killed = b.takeDamage(amount, flash);
+    if (counts) this.pendingDamage += before - b.hp;
+    return killed;
+  }
+
+  /** Primeiro acerto de cada projétil conta para a precisão. */
+  private scoreHit(projectile: Projectile): void {
+    if (projectile.scored) return;
+    projectile.scored = true;
+    emitGameEvent(this.scene.game.events, GameEvents.ShotHit, undefined);
   }
 
   private ignite(target: Target, dps: number, ms: number): void {
@@ -383,12 +424,12 @@ export class CombatSystem {
   /** Dano elétrico (o boss não fica atordoado). */
   private shock(target: Target, damage: number, stunMs: number, angle: number): void {
     if (target instanceof Boss) {
-      target.takeDamage(damage);
+      this.hurtBoss(target, damage);
       return;
     }
     const { x, y } = target;
     const dealt = this.deps.buffs.instaKill ? target.hp : damage;
-    if (target.takeDamage(dealt)) this.deps.effects.zombieDeath(x, y, angle, target.skin);
+    if (this.hurtZombie(target, dealt)) this.deps.effects.zombieDeath(x, y, angle, target.skin);
     else target.stun(stunMs);
   }
 

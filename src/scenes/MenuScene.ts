@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { COLORS, SCENE_KEYS } from '../config/game.config';
+import { loadRecords } from '../systems/StatsSystem';
 
 interface MenuItem {
   label: string;
@@ -54,6 +55,15 @@ export class MenuScene extends Phaser.Scene {
       return text;
     });
 
+    const best = loadRecords();
+    const record = this.add
+      .text(0, 0, best.bestWave > 0 ? `RECORDE: WAVE ${best.bestWave} · ${best.bestKills} ABATES` : '', {
+        fontFamily: 'monospace',
+        fontSize: '16px',
+        color: '#e3c77a',
+      })
+      .setOrigin(0.5);
+
     const hint = this.add
       .text(0, 0, 'WASD mover · Mouse mirar · Clique atirar · R recarregar · E comprar · Q/1/2 trocar arma · M som · ESC pausa', {
         fontFamily: 'monospace',
@@ -65,6 +75,7 @@ export class MenuScene extends Phaser.Scene {
     const layout = (): void => {
       const { width, height } = this.scale;
       title.setPosition(width / 2, height * 0.28);
+      record.setPosition(width / 2, height * 0.28 + 106);
       buttons.forEach((b, i) => b.setPosition(width / 2, height * 0.52 + i * 44));
       hint.setPosition(width / 2, height - 32);
     };

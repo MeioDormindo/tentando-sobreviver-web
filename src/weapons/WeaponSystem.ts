@@ -220,9 +220,11 @@ export class WeaponSystem {
     const tipY = this.owner.y + sin * muzzle.forward + cos * muzzle.side;
 
     const special = cfg.special;
+    let fired = 1;
     if (special?.type === 'arc') {
       this.arcCaster?.fireArc(tipX, tipY, aim, cfg, this.mods.damageMultiplier);
     } else {
+      fired = 0;
       for (let i = 0; i < cfg.pellets; i++) {
         const projectile = this.projectiles.get(tipX, tipY) as Projectile | null;
         if (!projectile) break; // pool esgotado
@@ -232,8 +234,10 @@ export class WeaponSystem {
           damage: cfg.damage * this.mods.damageMultiplier, pierce: cfg.pierce, tint: cfg.tracerTint,
           special, damageScale: this.mods.damageMultiplier,
         });
+        fired++;
       }
     }
+    emitGameEvent(this.scene.game.events, GameEvents.ShotsFired, { count: fired });
 
     if (special?.type === 'flame') {
       // Jato contínuo: sem clarão nem cápsula, só o brilho do fogo.

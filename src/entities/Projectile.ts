@@ -37,6 +37,8 @@ export class Projectile extends Phaser.Physics.Arcade.Image {
   pierceLeft = 0;
   special: ProjectileSpecial | null = null;
   damageScale = 1;
+  /** Já contou como acerto nas estatísticas. */
+  scored = false;
   private readonly hits = new Set<object>();
 
   private startX = 0;
@@ -63,6 +65,7 @@ export class Projectile extends Phaser.Physics.Arcade.Image {
     this.damageScale = shot.damageScale ?? 1;
     this.pierceLeft = shot.pierce ?? 0;
     this.hits.clear();
+    this.scored = false;
     this.setAppearance(shot.tint ?? 0xffffff);
     this.enableBody(true, shot.x, shot.y, true, true);
     if (this.special) {

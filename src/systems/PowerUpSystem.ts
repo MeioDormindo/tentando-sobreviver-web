@@ -74,6 +74,7 @@ export class PowerUpSystem {
       const age = time - drop.spawnedAt;
       if (player.isAlive && Phaser.Math.Distance.Between(player.x, player.y, drop.x, drop.y) <= dropConfig.pickupRadius) {
         this.removeDrop(i);
+        this.deps.effects.pickupBurst(drop.x, drop.y, drop.def.color);
         this.apply(drop.def.id);
         continue;
       }
