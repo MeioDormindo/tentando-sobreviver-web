@@ -5,6 +5,8 @@ import type { LightingSystem } from './LightingSystem';
 
 const DEPTH_PARTICLES = 50_000;
 const MUZZLE_FLASH_MS = 45;
+/** Resolução da camada de decals (0.5 = metade; 4x menos memória de vídeo em mapas grandes). */
+const DECAL_RES = 0.5;
 
 interface Corpse {
   body: Phaser.GameObjects.Image;
@@ -30,7 +32,11 @@ export class EffectsSystem {
 
   constructor(scene: Phaser.Scene, mapWidth: number, mapHeight: number, private readonly lighting: LightingSystem | null) {
     this.scene = scene;
-    this.decals = scene.add.renderTexture(0, 0, mapWidth, mapHeight).setOrigin(0).setDepth(DEPTH.decals);
+    this.decals = scene.add
+      .renderTexture(0, 0, Math.ceil(mapWidth * DECAL_RES), Math.ceil(mapHeight * DECAL_RES))
+      .setOrigin(0)
+      .setScale(1 / DECAL_RES)
+      .setDepth(DEPTH.decals);
 
     const spread = (deg: number) => ({ onEmit: () => this.emitAngle + Phaser.Math.FloatBetween(-deg, deg) });
 
@@ -46,7 +52,7 @@ export class EffectsSystem {
     // Gotas que caem viram manchas permanentes no chão.
     this.blood.onParticleDeath((p) => {
       if (Math.random() < 0.55) {
-        this.decals.stamp(FX_KEYS.blood, undefined, p.x, p.y, { scale: Phaser.Math.FloatBetween(0.35, 0.8), alpha: 0.75 });
+        this.stamp(FX_KEYS.blood, undefined, p.x, p.y, { scale: Phaser.Math.FloatBetween(0.35, 0.8), alpha: 0.75 });
       }
     });
 
@@ -79,7 +85,7 @@ export class EffectsSystem {
     });
     this.shells.setDepth(DEPTH_PARTICLES);
     this.shells.onParticleDeath((p) => {
-      this.decals.stamp(FX_KEYS.shell, undefined, p.x, p.y, { rotation: Math.random() * Math.PI, alpha: 0.6 });
+      this.stamp(FX_KEYS.shell, undefined, p.x, p.y, { rotation: Math.random() * Math.PI, alpha: 0.6 });
     });
 
     this.muzzle = scene.add
@@ -92,8 +98,13 @@ export class EffectsSystem {
 
   /** Carimba um decal no chão (arte em 2x → escala ART_SCALE). */
   readonly stampDecal = (key: string, frame: number | undefined, x: number, y: number, rotation: number, alpha: number): void => {
-    this.decals.stamp(key, frame, x, y, { rotation, alpha, scale: ART_SCALE });
+    this.stamp(key, frame, x, y, { rotation, alpha, scale: ART_SCALE });
   };
+
+  /** Carimba na camada de decals convertendo coordenadas/escala do mundo para a resolução dela. */
+  private stamp(key: string, frame: number | undefined, x: number, y: number, config: Phaser.Types.Textures.StampConfig): void {
+    this.decals.stamp(key, frame, x * DECAL_RES, y * DECAL_RES, { ...config, scale: (config.scale ?? 1) * DECAL_RES });
+  }
 
   muzzleFlash(x: number, y: number, angle: number): void {
     this.muzzle
@@ -120,7 +131,7 @@ export class EffectsSystem {
     this.blood.explode(effectsConfig.bloodParticlesPerHit, x, y);
     if (Math.random() < effectsConfig.decalSplatChance) {
       const dist = Phaser.Math.Between(8, 22);
-      this.decals.stamp(
+      this.stamp(
         ASSET_KEYS.bloodSplats,
         Phaser.Math.Between(0, 2),
         x + Math.cos(bulletAngle) * dist,
@@ -211,7 +222,8 @@ export class EffectsSystem {
       onComplete: () => corpse.body.destroy(),
     });
     this.scene.tweens.killTweensOf(corpse.pool);
-    this.decals.draw(corpse.pool.setAlpha(0.7));
-    corpse.pool.destroy();
+    const pool = corpse.pool;
+    this.stamp(ASSET_KEYS.bloodPool, undefined, pool.x, pool.y, { rotation: pool.rotation, scale: pool.scaleX, alpha: 0.7 });
+    pool.destroy();
   }
 }

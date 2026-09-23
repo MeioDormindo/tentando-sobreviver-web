@@ -7,9 +7,13 @@ import { Projectile } from '../entities/Projectile';
 import { Zombie } from '../entities/Zombie';
 import { EffectsSystem } from '../effects/EffectsSystem';
 import { LightingSystem } from '../effects/LightingSystem';
+import { Barricade } from '../entities/Barricade';
 import { AmmoStation, WeaponCase } from '../entities/BuyStations';
-import { GameEvents, onGameEvent } from '../game/events';
-import { TestMap } from '../map/TestMap';
+import { Door } from '../entities/Door';
+import type { BarricadeTarget, ZombieWorld } from '../entities/Zombie';
+import { emitGameEvent, GameEvents, onGameEvent } from '../game/events';
+import { TerminalMap } from '../map/TerminalMap';
+import { START_AREA } from '../map/terminal/layout';
 import { CameraController } from '../systems/CameraController';
 import { CombatSystem } from '../systems/CombatSystem';
 import { EconomySystem } from '../systems/EconomySystem';
@@ -30,6 +34,8 @@ export class GameScene extends Phaser.Scene {
   private waveSystem!: WaveSystem;
   private economy!: EconomySystem;
   private interaction!: InteractionSystem;
+  private map!: TerminalMap;
+  private currentArea = '';
   private readonly aimPoint = new Phaser.Math.Vector2();
 
   constructor() {
@@ -37,11 +43,13 @@ export class GameScene extends Phaser.Scene {
   }
 
   create(): void {
-    const map = new TestMap(this);
+    const map = new TerminalMap(this);
+    this.map = map;
+    this.currentArea = '';
     this.physics.world.setBounds(0, 0, map.widthPx, map.heightPx);
 
     this.player = new Player(this, map.playerSpawn.x, map.playerSpawn.y, playerConfig);
-    this.lighting = new LightingSystem(this, this.player, map.lamps);
+    this.lighting = new LightingSystem(this, this.player, map.lamps, map.darknessAt);
     const effects = new EffectsSystem(this, map.widthPx, map.heightPx, this.lighting);
     map.scatterDecals(effects.stampDecal);
 
@@ -63,6 +71,7 @@ export class GameScene extends Phaser.Scene {
       getWeaponConfig(playerConfig.startingWeapon),
       effects,
     );
+    const barricadeBodies = this.physics.add.staticGroup();
     new CombatSystem(this, {
       player: this.player,
       zombies,
@@ -70,13 +79,49 @@ export class GameScene extends Phaser.Scene {
       walls: map.wallLayer,
       obstacles: map.obstacles,
       bulletBlockers: map.bulletBlockers,
+      barricades: barricadeBodies,
       effects,
     });
-    const spawner = new SpawnSystem(this, zombies, map.spawnPoints, this.player);
-    this.waveSystem = new WaveSystem(this, spawner, this.player);
 
     this.economy = new EconomySystem(this, effects);
     this.interaction = new InteractionSystem(this, this.player);
+
+    // Barricadas nas janelas (acessíveis aos zumbis pelo tile da janela)
+    const barricadeByTile = new Map<number, BarricadeTarget>();
+    for (const def of map.windows) {
+      const barricade = new Barricade(this, def, { economy: this.economy, player: this.player, bodies: barricadeBodies });
+      this.interaction.add(barricade);
+      for (let y = def.rect.y; y < def.rect.y + def.rect.h; y++) {
+        for (let x = def.rect.x; x < def.rect.x + def.rect.w; x++) barricadeByTile.set(y * map.nav.width + x, barricade);
+      }
+    }
+    const world: ZombieWorld = {
+      nav: map.nav,
+      barricadeAt: (tx, ty) => barricadeByTile.get(ty * map.nav.width + tx) ?? null,
+    };
+
+    const spawner = new SpawnSystem(this, zombies, map.spawnPoints, this.player, world);
+    spawner.unlockArea(START_AREA);
+    this.waveSystem = new WaveSystem(this, spawner, this.player);
+
+    // Portas pagas: abrir libera os spawns e a exploração da área seguinte.
+    for (const def of map.doors) {
+      this.interaction.add(
+        new Door(this, def, {
+          economy: this.economy,
+          map,
+          isUnlocked: (area) => spawner.isUnlocked(area),
+          onOpened: (door) => {
+            for (const area of door.def.areas) {
+              if (spawner.isUnlocked(area)) continue;
+              spawner.unlockArea(area);
+              const name = map.areas.find((a) => a.id === area)?.name ?? area;
+              emitGameEvent(this.game.events, GameEvents.AreaUnlocked, { id: area, name });
+            }
+          },
+        }),
+      );
+    }
     const stationDeps = { economy: this.economy, weapons: this.weaponSystem, obstacles: map.obstacles };
     for (const s of map.stations) {
       this.interaction.add(
@@ -109,8 +154,17 @@ export class GameScene extends Phaser.Scene {
     this.input.activePointer.positionToCamera(this.cameras.main, this.aimPoint);
     this.player.aimAt(this.aimPoint.x, this.aimPoint.y);
     this.weaponSystem.update(time);
-    this.interaction.update();
+    this.interaction.update(time, delta);
     this.cameraController.update();
+    this.trackArea();
+  }
+
+  /** Avisa a HUD quando o jogador entra em outra área. */
+  private trackArea(): void {
+    const area = this.map.areaAt(this.player.x, this.player.y);
+    if (!area || area.id === this.currentArea) return;
+    this.currentArea = area.id;
+    emitGameEvent(this.game.events, GameEvents.AreaEntered, { id: area.id, name: area.name });
   }
 
   private updateLighting(): void {

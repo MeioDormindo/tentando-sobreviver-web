@@ -7,6 +7,7 @@ import {
 } from './art/environment.mjs';
 import { write } from './art/lib.mjs';
 import { ammoCrate, WEAPON_KINDS, weaponCase } from './art/weapons.mjs';
+import * as T from './art/terminal.mjs';
 
 const OUT = 'public/assets';
 
@@ -38,4 +39,19 @@ write(`${OUT}/particles/papers.svg`, decalPapers());
 write(`${OUT}/particles/debris.svg`, decalDebris());
 write(`${OUT}/particles/blood_splats.svg`, decalBloodSplats());
 write(`${OUT}/particles/blood_pool.svg`, decalBloodPool());
+write(`${OUT}/map/floor_concrete.svg`, T.floorConcrete());
+write(`${OUT}/map/floor_metal.svg`, T.floorMetal());
+write(`${OUT}/map/floor_tracks.svg`, T.floorTracks());
+write(`${OUT}/map/floor_tunnel.svg`, T.floorTunnel());
+write(`${OUT}/map/floor_wagon.svg`, T.floorWagon());
+write(`${OUT}/map/tactile_strip.svg`, T.tactileStrip());
+write(`${OUT}/map/train_cap.svg`, T.trainCap());
+write(`${OUT}/map/train_full.svg`, T.trainFull());
+write(`${OUT}/map/train_roof_unit.svg`, T.trainRoofUnit());
+write(`${OUT}/props/wagon_seat.svg`, T.wagonSeat());
+write(`${OUT}/map/door_shutter.svg`, T.doorShutter());
+write(`${OUT}/map/hazard_stripe.svg`, T.hazardStripe());
+write(`${OUT}/map/plank.svg`, T.plank());
+write(`${OUT}/map/window_sill.svg`, T.windowSill());
+write(`${OUT}/props/generator.svg`, T.propGenerator());
 console.log('Pronto.');

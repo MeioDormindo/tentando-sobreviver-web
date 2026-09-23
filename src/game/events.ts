@@ -13,6 +13,10 @@ export const GameEvents = {
   InteractionPrompt: 'interaction-prompt',
   /** Tentativa de compra sem dinheiro suficiente. */
   PurchaseDenied: 'purchase-denied',
+  /** O jogador entrou em outra área do mapa. */
+  AreaEntered: 'area-entered',
+  /** Uma porta foi aberta e uma área nova foi liberada. */
+  AreaUnlocked: 'area-unlocked',
   /** A UI pede o estado atual (ex.: ao ser criada depois da GameScene). */
   HudRequest: 'hud-request',
 } as const;
@@ -74,6 +78,8 @@ export interface GameEventMap {
   [GameEvents.MoneyChanged]: MoneyPayload;
   [GameEvents.InteractionPrompt]: InteractionPromptPayload | null;
   [GameEvents.PurchaseDenied]: undefined;
+  [GameEvents.AreaEntered]: { id: string; name: string };
+  [GameEvents.AreaUnlocked]: { id: string; name: string };
   [GameEvents.HudRequest]: undefined;
 }
 

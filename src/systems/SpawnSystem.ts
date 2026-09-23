@@ -2,9 +2,9 @@ import Phaser from 'phaser';
 import { spawnConfig } from '../config/waves.config';
 import type { ZombieConfig } from '../config/zombies.config';
 import type { Player } from '../entities/Player';
-import type { Zombie } from '../entities/Zombie';
+import type { Zombie, ZombieWorld } from '../entities/Zombie';
 
-/** Ponto de spawn (GDD §20). */
+/** Ponto de spawn (GDD §20). `sector` é a área que precisa estar aberta. */
 export interface SpawnPoint {
   id: string;
   x: number;
@@ -15,21 +15,31 @@ export interface SpawnPoint {
   enabled: boolean;
 }
 
+/** Quantos dos pontos válidos mais próximos entram no sorteio. */
+const NEAREST_CANDIDATES = 5;
+
 /**
- * Escolhe onde os zumbis surgem (GDD §21): nunca perto do jogador, de preferência
- * fora da tela, e nunca em cima de outro zumbi. Não decide quantos nem quando — isso é do WaveSystem.
+ * Escolhe onde os zumbis surgem (GDD §21): só em áreas abertas, nunca perto do
+ * jogador, de preferência fora da tela e entre os pontos mais próximos (para a horda
+ * chegar logo). Não decide quantos nem quando — isso é do WaveSystem.
  */
 export class SpawnSystem {
-  private readonly scene: Phaser.Scene;
-  private readonly zombies: Phaser.Physics.Arcade.Group;
-  private readonly points: SpawnPoint[];
-  private readonly player: Player;
+  private readonly unlocked = new Set<string>();
 
-  constructor(scene: Phaser.Scene, zombies: Phaser.Physics.Arcade.Group, points: SpawnPoint[], player: Player) {
-    this.scene = scene;
-    this.zombies = zombies;
-    this.points = points;
-    this.player = player;
+  constructor(
+    private readonly scene: Phaser.Scene,
+    private readonly zombies: Phaser.Physics.Arcade.Group,
+    private readonly points: SpawnPoint[],
+    private readonly player: Player,
+    private readonly world: ZombieWorld,
+  ) {}
+
+  unlockArea(area: string): void {
+    this.unlocked.add(area);
+  }
+
+  isUnlocked(area: string): boolean {
+    return this.unlocked.has(area);
   }
 
   get aliveCount(): number {
@@ -42,13 +52,13 @@ export class SpawnSystem {
     if (!point) return null;
     const zombie = this.zombies.get(point.x, point.y) as Zombie | null;
     if (!zombie) return null;
-    zombie.spawn(point.x, point.y, config, this.player);
+    zombie.spawn(point.x, point.y, config, this.player, this.world);
     zombie.fadeIn(spawnConfig.fadeInMs);
     return zombie;
   }
 
   /**
-   * Rede de segurança: zumbis presos (sem se aproximar há muito tempo) e fora da tela
+   * Rede de segurança: zumbis presos (parados há muito tempo) e fora da tela
    * reaparecem em outro ponto, para a wave nunca travar.
    */
   relocateStuck(wave: number): void {
@@ -64,13 +74,19 @@ export class SpawnSystem {
   }
 
   private pickPoint(wave: number): SpawnPoint | null {
-    const candidates = this.points.filter(
-      (p) =>
-        p.enabled &&
-        wave >= p.minWave &&
-        Phaser.Math.Distance.Between(p.x, p.y, this.player.x, this.player.y) >= spawnConfig.minDistanceFromPlayer &&
-        this.isClear(p),
-    );
+    const px = this.player.x;
+    const py = this.player.y;
+    const candidates = this.points
+      .filter(
+        (p) =>
+          p.enabled &&
+          wave >= p.minWave &&
+          this.unlocked.has(p.sector) &&
+          Phaser.Math.Distance.Between(p.x, p.y, px, py) >= spawnConfig.minDistanceFromPlayer &&
+          this.isClear(p),
+      )
+      .sort((a, b) => Phaser.Math.Distance.Squared(a.x, a.y, px, py) - Phaser.Math.Distance.Squared(b.x, b.y, px, py))
+      .slice(0, NEAREST_CANDIDATES);
     if (candidates.length === 0) return null;
     const hidden = candidates.filter((p) => !this.isOnScreen(p));
     return Phaser.Utils.Array.GetRandom(hidden.length > 0 ? hidden : candidates);

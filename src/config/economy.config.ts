@@ -13,6 +13,17 @@ export const headshotConfig = {
   damageMultiplier: 1.5,
 };
 
+/** Barricadas das janelas (GDD §19). */
+export const barricadeConfig = {
+  maxPlanks: 5,
+  /** Dinheiro ganho por tábua reparada. */
+  repairReward: 10,
+  /** Tempo segurando E para repor uma tábua (ms). */
+  repairTimeMs: 1000,
+  /** Levar dano há menos que isso interrompe o reparo (ms). */
+  repairInterruptMs: 600,
+};
+
 /** Interação com máquinas/maletas. */
 export const interactionConfig = {
   /** Distância máxima do jogador ao ponto de interação (px). */

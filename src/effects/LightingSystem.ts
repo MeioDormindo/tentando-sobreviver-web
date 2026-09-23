@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { FX_KEYS } from '../config/assets.config';
 import { DEPTH, lightingConfig } from '../config/visual.config';
-import type { Lamp } from '../map/TestMap';
+import type { Lamp } from '../map/TerminalMap';
 
 const RADIAL_SIZE = 256;
 const CONE_LENGTH = 512;
@@ -38,8 +38,16 @@ export class LightingSystem {
   private readonly flashlightGlow: Phaser.GameObjects.Image;
   private readonly lamps: LampState[];
   private flashes: Flash[] = [];
+  /** Escuridão atual (transição suave ao mudar de área). */
+  private ambient: number = lightingConfig.ambientDarkness;
 
-  constructor(scene: Phaser.Scene, private readonly owner: LightOwner, lamps: Lamp[]) {
+  constructor(
+    scene: Phaser.Scene,
+    private readonly owner: LightOwner,
+    lamps: Lamp[],
+    /** Escuridão ambiente em um ponto do mundo (varia por área). */
+    private readonly darknessAt: (x: number, y: number) => number = () => lightingConfig.ambientDarkness,
+  ) {
     this.scene = scene;
     this.darkness = scene.add.renderTexture(0, 0, 16, 16).setOrigin(0).setDepth(DEPTH.darkness);
 
@@ -92,7 +100,8 @@ export class LightingSystem {
     const rt = this.darkness;
     rt.setPosition(ox, oy);
     rt.clear();
-    rt.fill(cfg.darknessColor, cfg.ambientDarkness);
+    this.ambient = Phaser.Math.Linear(this.ambient, this.darknessAt(this.owner.x, this.owner.y), 0.03);
+    rt.fill(cfg.darknessColor, this.ambient);
 
     const inView = (x: number, y: number, r: number): boolean =>
       x + r > ox && x - r < ox + w && y + r > oy && y - r < oy + h;

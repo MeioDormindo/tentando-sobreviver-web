@@ -30,6 +30,7 @@ export class UIScene extends Phaser.Scene {
   private moneyText!: Phaser.GameObjects.Text;
   private moneyDeltaText!: Phaser.GameObjects.Text;
   private promptText!: Phaser.GameObjects.Text;
+  private areaText!: Phaser.GameObjects.Text;
   private statusText!: Phaser.GameObjects.Text;
   private killsText!: Phaser.GameObjects.Text;
   private crosshair!: Phaser.GameObjects.Graphics;
@@ -99,6 +100,10 @@ export class UIScene extends Phaser.Scene {
       })
       .setOrigin(0.5)
       .setVisible(false);
+    this.areaText = this.add
+      .text(0, 0, '', { fontFamily: TITLE_FONT, fontSize: '26px', color: COLORS.text, stroke: '#000', strokeThickness: 4 })
+      .setOrigin(0.5)
+      .setAlpha(0);
     this.crosshair = this.add.graphics().setDepth(100);
     this.drawCrosshair();
     this.updateKills();
@@ -112,6 +117,8 @@ export class UIScene extends Phaser.Scene {
       onGameEvent(this.game.events, GameEvents.MoneyChanged, this.onMoneyChanged, this),
       onGameEvent(this.game.events, GameEvents.InteractionPrompt, this.onPrompt, this),
       onGameEvent(this.game.events, GameEvents.PurchaseDenied, this.onPurchaseDenied, this),
+      onGameEvent(this.game.events, GameEvents.AreaEntered, (a) => this.showAreaText(a.name.toUpperCase(), COLORS.text), this),
+      onGameEvent(this.game.events, GameEvents.AreaUnlocked, (a) => this.showAreaText(`ÁREA LIBERADA — ${a.name.toUpperCase()}`, COLORS.accent), this),
     ];
     this.scale.on(Phaser.Scale.Events.RESIZE, this.layout, this);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
@@ -137,6 +144,7 @@ export class UIScene extends Phaser.Scene {
     this.moneyText.setPosition(width - MARGIN, MARGIN - 4);
     this.moneyDeltaText.setPosition(width - MARGIN, MARGIN + 34);
     this.promptText.setPosition(width / 2, height * 0.72);
+    this.areaText.setPosition(width / 2, MARGIN + 18);
     this.statusText.setPosition(width / 2, height * 0.62);
     this.killsText.setPosition(width - MARGIN, MARGIN + 56);
     this.waveText.setPosition(MARGIN, MARGIN - 6);
@@ -215,6 +223,14 @@ export class UIScene extends Phaser.Scene {
     this.tweens.killTweensOf(this.moneyDeltaText);
     this.tweens.add({ targets: this.moneyDeltaText, alpha: 0, delay: 700, duration: 500 });
     this.tweens.add({ targets: this.moneyText, scale: { from: gain ? 1.12 : 0.92, to: 1 }, duration: 220 });
+  }
+
+  /** Nome da área ao entrar / aviso de área liberada, no topo da tela. */
+  private showAreaText(text: string, color: string): void {
+    this.tweens.killTweensOf(this.areaText);
+    this.areaText.setText(text).setColor(color).setAlpha(0);
+    this.tweens.add({ targets: this.areaText, alpha: 1, duration: 300 });
+    this.tweens.add({ targets: this.areaText, alpha: 0, delay: 2200, duration: 800 });
   }
 
   private onPrompt(prompt: InteractionPromptPayload | null): void {

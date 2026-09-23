@@ -92,6 +92,11 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
     this.setVelocity(this.moveDir.x, this.moveDir.y);
   }
 
+  /** Tempo desde o último dano recebido (ms). */
+  msSinceDamage(time: number): number {
+    return time - this.lastDamageAt;
+  }
+
   /** Regeneração lenta depois de um tempo sem levar dano. */
   updateRegen(time: number, delta: number): void {
     if (!this.alive || this.hp >= this.maxHp || time - this.lastDamageAt < this.config.regenDelayMs) return;

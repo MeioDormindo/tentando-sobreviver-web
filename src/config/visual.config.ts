@@ -44,7 +44,7 @@ export interface LampConfig {
 export const lightingConfig = {
   enabled: true,
   darknessColor: 0x05070a,
-  /** Opacidade da escuridão fora das luzes (0 = sem escuridão). */
+  /** Opacidade padrão da escuridão fora das luzes (cada área do mapa define a sua). */
   ambientDarkness: 0.66,
   flashlight: {
     range: 430,

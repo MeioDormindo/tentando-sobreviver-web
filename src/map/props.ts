@@ -1,6 +1,6 @@
 import { ASSET_KEYS } from '../config/assets.config';
 
-export type PropType = 'bench' | 'crate' | 'barrel' | 'trash' | 'suitcase';
+export type PropType = 'bench' | 'crate' | 'barrel' | 'trash' | 'suitcase' | 'generator' | 'wagon_seat';
 
 export interface PropDef {
   texture: string;
@@ -16,12 +16,7 @@ export const PROP_DEFS: Record<PropType, PropDef> = {
   barrel: { texture: ASSET_KEYS.barrel, body: { w: 25, h: 25, ox: -1, oy: -1 }, blocksBullets: true },
   trash: { texture: ASSET_KEYS.trash, body: { w: 22, h: 22, ox: -1, oy: -1 }, blocksBullets: true },
   suitcase: { texture: ASSET_KEYS.suitcase, blocksBullets: false },
+  generator: { texture: ASSET_KEYS.generator, body: { w: 48, h: 30, ox: -2, oy: -2 }, blocksBullets: true },
+  wagon_seat: { texture: ASSET_KEYS.wagonSeat, blocksBullets: false },
 };
 
-export interface PropPlacement {
-  type: PropType;
-  /** Posição em tiles (centro do prop). */
-  tx: number;
-  ty: number;
-  angle?: number;
-}

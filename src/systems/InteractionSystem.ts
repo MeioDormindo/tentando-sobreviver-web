@@ -7,9 +7,13 @@ import { emitGameEvent, GameEvents, type InteractionPromptPayload } from '../gam
 export interface Interactable {
   readonly x: number;
   readonly y: number;
+  /** Alcance próprio (px); padrão: interactionConfig.radius. */
+  readonly radius?: number;
   /** Texto exibido na HUD; null = indisponível no momento. */
   getPrompt(): InteractionPromptPayload | null;
   interact(): void;
+  /** Chamado a cada frame enquanto E fica pressionado (ex.: reparar barricada). */
+  onHold?(time: number, delta: number): void;
 }
 
 /**
@@ -22,11 +26,13 @@ export class InteractionSystem {
   private readonly items: Interactable[] = [];
   private focused: Interactable | null = null;
   private lastPromptKey = '';
+  private readonly key: Phaser.Input.Keyboard.Key | null;
 
   constructor(scene: Phaser.Scene, player: Player) {
     this.scene = scene;
     this.player = player;
     const kb = scene.input.keyboard;
+    this.key = kb?.addKey(Phaser.Input.Keyboard.KeyCodes.E) ?? null;
     kb?.on('keydown-E', this.onInteract, this);
     scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => kb?.off('keydown-E', this.onInteract, this));
   }
@@ -35,8 +41,9 @@ export class InteractionSystem {
     this.items.push(item);
   }
 
-  update(): void {
+  update(time: number, delta: number): void {
     this.focused = this.player.isAlive ? this.findNearest() : null;
+    if (this.focused?.onHold && this.key?.isDown) this.focused.onHold(time, delta);
     this.emitPrompt();
   }
 
@@ -47,10 +54,10 @@ export class InteractionSystem {
 
   private findNearest(): Interactable | null {
     let best: Interactable | null = null;
-    let bestDist: number = interactionConfig.radius;
+    let bestDist = Infinity;
     for (const item of this.items) {
       const d = Phaser.Math.Distance.Between(this.player.x, this.player.y, item.x, item.y);
-      if (d <= bestDist) {
+      if (d <= (item.radius ?? interactionConfig.radius) && d < bestDist) {
         best = item;
         bestDist = d;
       }

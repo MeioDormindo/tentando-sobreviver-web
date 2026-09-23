@@ -14,6 +14,8 @@ export interface CombatSystemDeps {
   obstacles: Phaser.Physics.Arcade.StaticGroup;
   /** Props que servem de cobertura contra tiros. */
   bulletBlockers: Phaser.Physics.Arcade.StaticGroup;
+  /** Barricadas das janelas: bloqueiam o jogador sempre; os zumbis, só enquanto há tábuas. */
+  barricades: Phaser.Physics.Arcade.StaticGroup;
   effects: EffectsSystem;
 }
 
@@ -25,7 +27,7 @@ type ArcadeObject = Parameters<Phaser.Types.Physics.Arcade.ArcadePhysicsCallback
  */
 export class CombatSystem {
   constructor(scene: Phaser.Scene, deps: CombatSystemDeps) {
-    const { player, zombies, projectiles, walls, obstacles, bulletBlockers, effects } = deps;
+    const { player, zombies, projectiles, walls, obstacles, bulletBlockers, barricades, effects } = deps;
     const physics = scene.physics;
 
     physics.add.collider(player, walls);
@@ -34,6 +36,11 @@ export class CombatSystem {
     physics.add.collider(zombies, obstacles);
     physics.add.collider(zombies, zombies);
     physics.add.collider(player, zombies);
+    physics.add.collider(player, barricades);
+    physics.add.collider(zombies, barricades, undefined, (a, b) => {
+      const zone = (a instanceof Zombie ? b : a) as Phaser.GameObjects.Zone;
+      return (zone.getData('barricade') as { isIntact: boolean } | undefined)?.isIntact ?? false;
+    });
 
     const stopBullet = (a: ArcadeObject, b: ArcadeObject): void => {
       const projectile = CombatSystem.find(Projectile, a, b);
