@@ -21,6 +21,9 @@ export const GameEvents = {
   PerksChanged: 'perks-changed',
   /** Aviso curto no topo da tela (ex.: som ligado/desligado). */
   Toast: 'toast',
+  /** Jogo pausado / retomado (o disparo espera o botão ser solto ao voltar). */
+  GamePaused: 'game-paused',
+  GameResumed: 'game-resumed',
   /** Power-up coletado (anúncio na HUD). */
   PowerUpCollected: 'powerup-collected',
   /** Efeitos temporários ativos (contagem regressiva na HUD). */
@@ -123,6 +126,8 @@ export interface GameEventMap {
   [GameEvents.AreaUnlocked]: { id: string; name: string };
   [GameEvents.PerksChanged]: { perks: Array<{ id: string; level: number }> };
   [GameEvents.Toast]: { text: string };
+  [GameEvents.GamePaused]: undefined;
+  [GameEvents.GameResumed]: undefined;
   [GameEvents.PowerUpCollected]: { id: string; name: string; color: number; detail?: string };
   [GameEvents.PowerUpTimers]: { timers: PowerUpTimer[] };
   [GameEvents.BossIncoming]: { name: string };

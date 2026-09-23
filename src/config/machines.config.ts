@@ -9,11 +9,11 @@ export const mysteryBoxConfig = {
   takeMs: 8000,
   /** Probabilidade de cada raridade (%). */
   rarityWeights: {
-    common: 45,
-    uncommon: 30,
-    rare: 15,
-    epic: 8,
-    legendary: 2,
+    common: 40,
+    uncommon: 28,
+    rare: 17,
+    epic: 11,
+    legendary: 4,
   } satisfies Record<Rarity, number>,
 };
 

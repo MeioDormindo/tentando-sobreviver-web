@@ -3,7 +3,7 @@ import { rng, type Rng } from './dsp';
 import { ambience } from './recipes/ambience';
 import { bossSounds, exploderFuse, playerSounds, zombieSounds } from './recipes/creatures';
 import * as ui from './recipes/ui';
-import { dryFire, mk2Layer, reload, shellCasing, shot, weaponSwitch } from './recipes/weapons';
+import { dryFire, mk2Layer, plasmaBurst, reload, shellCasing, shot, weaponSwitch } from './recipes/weapons';
 import * as world from './recipes/world';
 
 type Recipe = (sr: number, r: Rng) => Float32Array;
@@ -22,8 +22,9 @@ const HI = 44100;
 const MID = 32000;
 const LO = 22050;
 
-const WEAPON_IDS = ['m1911', 'glock', 'mp5', 'vector', 'm4', 'ak', 'pump', 'combat_shotgun', 'rpk', 'rail'];
-const WEAPON_KINDS = ['pistol', 'smg', 'rifle', 'ak', 'shotgun'];
+const WEAPON_IDS = ['m1911', 'glock', 'mp5', 'vector', 'm4', 'ak', 'pump', 'combat_shotgun', 'rpk', 'rail',
+  'grenade_launcher', 'flamethrower', 'arc_gun', 'energy_cannon'];
+const WEAPON_KINDS = ['pistol', 'smg', 'rifle', 'ak', 'shotgun', 'launcher', 'flamer', 'arc', 'energy'];
 const ZOMBIE_TYPES = ['walker', 'runner', 'tank', 'exploder'] as const;
 const SURFACES: world.Surface[] = ['terminal', 'concrete', 'metal', 'tracks', 'tunnel', 'wagon'];
 export const AMBIENCE_AREAS = Object.keys(ambience);
@@ -57,6 +58,7 @@ export const SOUND_DEFS: SoundDef[] = [
   { key: 'impact_hard', variants: 4, sr: MID, make: world.impactHard, gain: 1.9 },
   { key: 'impact_flesh', variants: 4, sr: MID, make: world.impactFlesh },
   { key: 'explosion', variants: 2, sr: MID, make: world.explosion },
+  { key: 'plasma_burst', variants: 1, sr: MID, make: plasmaBurst },
   { key: 'wood_break', variants: 3, sr: MID, make: world.woodBreak },
   { key: 'hammer', variants: 3, sr: MID, make: world.hammer },
   { key: 'door_open', variants: 1, sr: MID, make: world.doorOpen },

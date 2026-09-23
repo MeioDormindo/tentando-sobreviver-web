@@ -1,5 +1,5 @@
 import {
-  adExp, bandpass, buffer, drive, envelope, fadeEdges, highpass, lowpass, mixInto, normalize, osc, pink, range,
+  adExp, bandpass, brown, buffer, drive, envelope, fadeEdges, highpass, lowpass, mixInto, normalize, osc, pink, range,
   resonantHit, reverb, white, type Rng,
 } from '../dsp';
 
@@ -88,6 +88,7 @@ function pumpAction(sr: number, r: Rng): Float32Array {
 export function shot(id: string) {
   return (sr: number, r: Rng): Float32Array => {
     if (id === 'rail') return railShot(sr, r);
+    if (id in SPECIAL_SHOTS) return SPECIAL_SHOTS[id](sr, r);
     const out = gunshot(sr, r, SHOT_SPECS[id] ?? SHOT_SPECS.m1911);
     if (id === 'pump') {
       const withPump = buffer(sr, Math.max(out.length / sr, 0.8));
@@ -122,6 +123,117 @@ function railShot(sr: number, r: Rng): Float32Array {
   return fadeEdges(normalize(out, 0.95), sr);
 }
 
+// ───────────────────────── Armas especiais ─────────────────────────
+
+/** Lança-granadas: "thunk" oco e grave, com o tubo ressoando. */
+function grenadeThunk(sr: number, r: Rng): Float32Array {
+  const out = buffer(sr, 0.7);
+  const thump = buffer(sr, 0.3);
+  osc(thump, sr, 'sine', (t) => 95 * (1 + 1.5 * Math.exp(-t / 0.015)));
+  envelope(thump, sr, adExp(0.001, 0.06));
+  mixInto(out, thump, sr, 0, 1.4);
+  const tube = buffer(sr, 0.3);
+  white(tube, r);
+  envelope(tube, sr, adExp(0.001, 0.035));
+  bandpass(tube, sr, 380, 4);
+  mixInto(out, tube, sr, 0, 3);
+  mixInto(out, resonantHit(sr, r, [{ f: 820, q: 10, gain: 1 }, { f: 1650, q: 12, gain: 0.5 }], 0.3, 0.003), sr, 0.005, 0.5);
+  drive(out, 1.8);
+  reverb(out, sr, 0.5, 0.2, 0.5);
+  return fadeEdges(normalize(out, 0.9), sr);
+}
+
+/** Lança-chamas: rajada de ar/combustível queimando (chiado grave + crepitar). */
+function flameWhoosh(sr: number, r: Rng): Float32Array {
+  const dur = 0.32;
+  const out = buffer(sr, dur);
+  const roar = buffer(sr, dur);
+  brown(roar, r);
+  envelope(roar, sr, (t) => Math.sin(Math.min(1, t / dur) * Math.PI));
+  lowpass(roar, sr, 700);
+  mixInto(out, roar, sr, 0, 2.2);
+  const hiss = buffer(sr, dur);
+  white(hiss, r, 0.5);
+  envelope(hiss, sr, (t) => Math.sin(Math.min(1, t / dur) * Math.PI));
+  bandpass(hiss, sr, 2400, 0.7);
+  mixInto(out, hiss, sr, 0, 0.6);
+  const crackle = buffer(sr, dur);
+  for (let i = 0; i < crackle.length; i++) if (r() < 0.004) crackle[i] = r() * 2 - 1;
+  highpass(crackle, sr, 1500);
+  mixInto(out, crackle, sr, 0, 1.2);
+  return fadeEdges(normalize(out, 0.8), sr, 0.02, 0.06);
+}
+
+/** Arc Gun: estalo elétrico com zumbido modulado. */
+function arcZap(sr: number, r: Rng): Float32Array {
+  const out = buffer(sr, 0.45);
+  const buzz = buffer(sr, 0.3);
+  osc(buzz, sr, 'square', (t) => 110 + 40 * Math.sin(t * 380), 0.5);
+  osc(buzz, sr, 'saw', (t) => 2600 * Math.exp(-t * 14) + 400, 0.4);
+  envelope(buzz, sr, adExp(0.001, 0.07));
+  bandpass(buzz, sr, 1800, 0.8);
+  mixInto(out, buzz, sr, 0, 1.2);
+  const crackle = buffer(sr, 0.25);
+  for (let i = 0; i < crackle.length; i++) if (r() < 0.03) crackle[i] = r() * 2 - 1;
+  envelope(crackle, sr, adExp(0.001, 0.06));
+  highpass(crackle, sr, 2500);
+  mixInto(out, crackle, sr, 0, 2.2);
+  reverb(out, sr, 0.4, 0.2, 0.4);
+  return fadeEdges(normalize(out, 0.85), sr);
+}
+
+/** Energy Cannon: carga ascendente curta seguida de disparo profundo. */
+function plasmaShot(sr: number, r: Rng): Float32Array {
+  const out = buffer(sr, 1.2);
+  const charge = buffer(sr, 0.12);
+  osc(charge, sr, 'saw', (t) => 300 + t * 9000, 0.4);
+  envelope(charge, sr, (t) => t / 0.12);
+  lowpass(charge, sr, 4000);
+  mixInto(out, charge, sr, 0, 0.5);
+  const blast = buffer(sr, 0.8);
+  osc(blast, sr, 'sine', (t) => 70 * (1 + 4 * Math.exp(-t / 0.03)));
+  osc(blast, sr, 'triangle', (t) => 900 * Math.exp(-t * 5) + 120, 0.5);
+  envelope(blast, sr, adExp(0.002, 0.18));
+  mixInto(out, blast, sr, 0.11, 1.4);
+  const fizz = buffer(sr, 0.5);
+  white(fizz, r, 0.5);
+  envelope(fizz, sr, adExp(0.002, 0.1));
+  bandpass(fizz, sr, 5200, 1.5);
+  mixInto(out, fizz, sr, 0.11, 0.8);
+  drive(out, 1.6);
+  reverb(out, sr, 0.8, 0.3, 0.3);
+  return fadeEdges(normalize(out, 0.95), sr);
+}
+
+const SPECIAL_SHOTS: Record<string, (sr: number, r: Rng) => Float32Array> = {
+  grenade_launcher: grenadeThunk,
+  flamethrower: flameWhoosh,
+  arc_gun: arcZap,
+  energy_cannon: plasmaShot,
+};
+
+/** Explosão de plasma: descarga elétrica com estrondo (Energy Cannon). */
+export function plasmaBurst(sr: number, r: Rng): Float32Array {
+  const out = buffer(sr, 1.4);
+  const boom = buffer(sr, 0.9);
+  osc(boom, sr, 'sine', (t) => 48 * (1 + 3 * Math.exp(-t / 0.04)));
+  envelope(boom, sr, adExp(0.002, 0.25));
+  mixInto(out, boom, sr, 0, 1.5);
+  const crackle = buffer(sr, 0.7);
+  for (let i = 0; i < crackle.length; i++) if (r() < 0.035) crackle[i] = r() * 2 - 1;
+  envelope(crackle, sr, adExp(0.001, 0.18));
+  highpass(crackle, sr, 2000);
+  mixInto(out, crackle, sr, 0, 2);
+  const sweep = buffer(sr, 0.5);
+  osc(sweep, sr, 'saw', (t) => 2400 * Math.exp(-t * 6) + 80, 0.5);
+  envelope(sweep, sr, adExp(0.001, 0.12));
+  lowpass(sweep, sr, 5000);
+  mixInto(out, sweep, sr, 0, 0.7);
+  drive(out, 2);
+  reverb(out, sr, 0.85, 0.35, 0.3);
+  return fadeEdges(normalize(out, 0.95), sr);
+}
+
 /** Camada extra das armas Mk II: brilho elétrico roxo. */
 export function mk2Layer(sr: number, r: Rng): Float32Array {
   const out = buffer(sr, 0.3);
@@ -151,7 +263,7 @@ export function reload(kind: string) {
       mixInto(out, pumpAction(sr, r), sr, 0.95, 0.9);
       return fadeEdges(normalize(out, 0.7), sr);
     }
-    const heavy = kind === 'rifle' || kind === 'ak';
+    const heavy = kind === 'rifle' || kind === 'ak' || kind === 'launcher' || kind === 'flamer' || kind === 'energy';
     // Solta o carregador, encaixa o novo, puxa o ferrolho
     mixInto(out, click(sr, r, heavy ? 1400 : 2200), sr, 0.05, 1);
     const cloth = buffer(sr, 0.25);

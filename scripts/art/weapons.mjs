@@ -51,9 +51,62 @@ function place(x, y, angle, content) {
   return `<g transform="translate(${f(x)} ${f(y)}) rotate(${f(angle)})">${content}</g>`;
 }
 
+// ── Armas especiais (GDD §44), exclusivas da Mystery Box ──
+
+/** Lança-granadas: cano grosso, tambor giratório e coronha. */
+function launcherLocal() {
+  let s = `<path d="M0 -3.5 L-14 -4.5 Q-16 0 -14 4.5 L0 3.5 Z" fill="#3b3f2e" stroke="#0b0b0b" stroke-width="0.8"/>`;
+  s += `<rect x="0" y="-5" width="16" height="10" rx="2" fill="#2c3024" stroke="#0b0b0b" stroke-width="0.8"/>`;
+  s += `<circle cx="9" cy="0" r="8" fill="#4a5038" stroke="#0b0b0b" stroke-width="1"/>`;
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2;
+    s += `<circle cx="${(9 + Math.cos(a) * 4.5).toFixed(1)}" cy="${(Math.sin(a) * 4.5).toFixed(1)}" r="1.6" fill="#1a1c14"/>`;
+  }
+  s += `<rect x="16" y="-5.5" width="26" height="11" rx="3" fill="#353a2a" stroke="#0b0b0b" stroke-width="0.8"/>`;
+  s += `<rect x="18" y="-5.5" width="22" height="2.2" fill="#6b7258" opacity=".7"/>`;
+  s += `<circle cx="42" cy="0" r="4.2" fill="#0a0a0a"/>`;
+  return s;
+}
+
+/** Lança-chamas: corpo, bico longo, cilindro de combustível e chama-piloto. */
+function flamerLocal() {
+  let s = `<rect x="-6" y="-3.5" width="22" height="7" rx="2" fill="#5a2a1c" stroke="#0b0b0b" stroke-width="0.8"/>`;
+  s += `<rect x="2" y="3" width="16" height="9" rx="4" fill="#a8402a" stroke="#0b0b0b" stroke-width="0.8"/>`;
+  s += `<rect x="4" y="4" width="12" height="2" fill="#e07a5a" opacity=".6"/>`;
+  s += `<rect x="16" y="-2.5" width="28" height="5" rx="1.5" fill="#2a2a2c" stroke="#0b0b0b" stroke-width="0.8"/>`;
+  for (const x of [22, 30, 38]) s += `<rect x="${x}" y="-3.2" width="2" height="6.4" fill="#4a4a4e"/>`;
+  s += `<circle cx="45" cy="0" r="3" fill="#ffb347"/><circle cx="45.5" cy="0" r="1.5" fill="#fff2a0"/>`;
+  return s;
+}
+
+/** Arc Gun: bobinas de cobre ao longo do cano e pontas azuis brilhantes. */
+function arcLocal() {
+  let s = `<path d="M0 -3 L-12 -4 Q-14 0 -12 4 L0 3 Z" fill="#23252a" stroke="#0b0b0b" stroke-width="0.8"/>`;
+  s += `<rect x="0" y="-4.5" width="18" height="9" rx="2" fill="#2e3440" stroke="#0b0b0b" stroke-width="0.8"/>`;
+  s += `<rect x="18" y="-2" width="24" height="4" fill="#1c1f24"/>`;
+  for (let i = 0; i < 5; i++) s += `<rect x="${20 + i * 4.5}" y="-4.5" width="3" height="9" rx="1" fill="#b86b2a" stroke="#5a3010" stroke-width="0.6"/>`;
+  s += `<circle cx="44" cy="-3" r="2.2" fill="#7fe7ff"/><circle cx="44" cy="3" r="2.2" fill="#7fe7ff"/>`;
+  s += `<rect x="4" y="-1.5" width="10" height="3" rx="1" fill="#5ad0ff" opacity=".8"/>`;
+  return s;
+}
+
+/** Energy Cannon: corpo largo futurista com núcleo ciano. */
+function energyLocal() {
+  let s = `<path d="M0 -5 L-12 -6 Q-15 0 -12 6 L0 5 Z" fill="#2a2f3a" stroke="#0b0b0b" stroke-width="0.8"/>`;
+  s += `<path d="M0 -7 L34 -6 L42 -3 L42 3 L34 6 L0 7 Z" fill="#3a4250" stroke="#0b0b0b" stroke-width="1"/>`;
+  s += `<rect x="4" y="-2.5" width="28" height="5" rx="2" fill="#0f1a22"/>`;
+  s += `<rect x="6" y="-1.5" width="24" height="3" rx="1.5" fill="#6ff0ff"/>`;
+  s += `<rect x="6" y="-6" width="20" height="1.8" fill="#8a96a8" opacity=".7"/>`;
+  s += `<circle cx="44" cy="0" r="3.8" fill="#bff8ff" stroke="#2a6f80" stroke-width="1"/>`;
+  return s;
+}
+
+const SPECIAL_DRAW = { launcher: launcherLocal, flamer: flamerLocal, arc: arcLocal, energy: energyLocal };
+
 /** Desenha a arma do tipo `kind` na posição/ângulo dados (coordenadas do frame). */
 export function drawGun(kind, x, y, angle) {
   if (kind === 'pistol') return place(x, y, angle, pistolLocal());
+  if (SPECIAL_DRAW[kind]) return place(x, y, angle, SPECIAL_DRAW[kind]());
   return place(x, y, angle, longGunLocal(GUN_SPECS[kind]));
 }
 
@@ -76,6 +129,10 @@ const GRIPS = {
   rifle: { origin: [70, 72], right: 9, left: 30 },
   ak: { origin: [70, 72], right: 9, left: 28 },
   shotgun: { origin: [70, 72], right: 7, left: 22 },
+  launcher: { origin: [70, 72], right: 8, left: 26 },
+  flamer: { origin: [72, 72], right: 8, left: 24 },
+  arc: { origin: [70, 72], right: 8, left: 26 },
+  energy: { origin: [70, 72], right: 9, left: 28 },
 };
 
 function onGun(origin, angleDeg, along, across) {
@@ -105,7 +162,7 @@ function longGunPoses(kind) {
   ];
 }
 
-export const WEAPON_KINDS = ['pistol', 'smg', 'rifle', 'ak', 'shotgun'];
+export const WEAPON_KINDS = ['pistol', 'smg', 'rifle', 'ak', 'shotgun', 'launcher', 'flamer', 'arc', 'energy'];
 
 export function posesFor(kind) {
   return kind === 'pistol' ? PISTOL_POSES : longGunPoses(kind);
@@ -124,7 +181,7 @@ export function weaponCase(kind) {
   // espuma recortada
   for (let i = 0; i < 9; i++) s += `<circle cx="${18 + i * 11}" cy="50" r="2" fill="#141512" opacity=".6"/>`;
   s += `<rect x="4" y="30" width="4" height="10" rx="1" fill="#6d6f69"/><rect x="116" y="30" width="4" height="10" rx="1" fill="#6d6f69"/>`;
-  const gx = kind === 'pistol' ? 50 : kind === 'smg' ? 42 : 34;
+  const gx = kind === 'pistol' ? 50 : kind === 'smg' ? 42 : 36;
   const scale = kind === 'pistol' ? 1.3 : 1;
   s += `<g transform="translate(${gx} 35) scale(${scale})">${drawGun(kind, 0, 0, 0)}</g>`;
   s += `<rect x="6" y="8" width="112" height="3" rx="1.5" fill="#6a7063" opacity=".6"/>`;

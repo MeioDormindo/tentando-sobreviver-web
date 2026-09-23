@@ -9,6 +9,13 @@ const MUZZLE_FLASH_MS = 45;
 /** Resolução da camada de decals (0.5 = metade; 4x menos memória de vídeo em mapas grandes). */
 const DECAL_RES = 0.5;
 
+/** Aparência da explosão: gosma do Exploder, granada (fogo) ou descarga de plasma. */
+export type ExplosionStyle = 'exploder' | 'grenade' | 'plasma';
+
+const LIGHTNING_MS = 140;
+/** Desvio lateral máximo de cada trecho do raio (px). */
+const LIGHTNING_JITTER = 9;
+
 interface Corpse {
   body: Phaser.GameObjects.Image;
   pool: Phaser.GameObjects.Image;
@@ -26,6 +33,7 @@ export class EffectsSystem {
   private readonly sparks: Phaser.GameObjects.Particles.ParticleEmitter;
   private readonly smoke: Phaser.GameObjects.Particles.ParticleEmitter;
   private readonly shells: Phaser.GameObjects.Particles.ParticleEmitter;
+  private readonly flames: Phaser.GameObjects.Particles.ParticleEmitter;
   private readonly muzzle: Phaser.GameObjects.Image;
   private readonly corpses: Corpse[] = [];
   /** Direção atual das explosões de partículas (usada pelos callbacks onEmit). */
@@ -89,6 +97,18 @@ export class EffectsSystem {
       this.stamp(FX_KEYS.shell, undefined, p.x, p.y, { rotation: Math.random() * Math.PI, alpha: 0.6 });
     });
 
+    // Fogo sobre alvos em chamas: sobe e se apaga.
+    this.flames = scene.add.particles(0, 0, FX_KEYS.flame, {
+      emitting: false,
+      angle: { min: 240, max: 300 },
+      speed: { min: 15, max: 45 },
+      lifespan: { min: 220, max: 420 },
+      scale: { start: 0.55, end: 0.1 },
+      alpha: { start: 0.9, end: 0 },
+      blendMode: Phaser.BlendModes.ADD,
+    });
+    this.flames.setDepth(DEPTH.glow);
+
     this.muzzle = scene.add
       .image(0, 0, FX_KEYS.muzzle)
       .setOrigin(0, 0.5)
@@ -107,8 +127,9 @@ export class EffectsSystem {
     this.decals.stamp(key, frame, x * DECAL_RES, y * DECAL_RES, { ...config, scale: (config.scale ?? 1) * DECAL_RES });
   }
 
-  muzzleFlash(x: number, y: number, angle: number): void {
+  muzzleFlash(x: number, y: number, angle: number, tint = 0xffffff): void {
     this.muzzle
+      .setTint(tint)
       .setPosition(x, y)
       .setRotation(angle)
       .setScale(Phaser.Math.FloatBetween(0.8, 1.15), Phaser.Math.FloatBetween(0.8, 1.1) * (Math.random() < 0.5 ? -1 : 1))
@@ -153,19 +174,33 @@ export class EffectsSystem {
     this.lighting?.addFlash(x, y, 40, 0.5, 60);
   }
 
-  /** Explosão (Exploder): clarão, fogo, fumaça, gosma e mancha queimada no chão. */
-  explosion(x: number, y: number, radius: number): void {
-    audio.playAt('explosion', x, y, { category: 'world', volume: Math.min(1, 0.5 + radius / 160), distance: 1500 });
+  /** Explosão: clarão, fogo (ou descarga elétrica), fumaça e mancha queimada no chão. */
+  explosion(x: number, y: number, radius: number, style: ExplosionStyle = 'exploder'): void {
+    const plasma = style === 'plasma';
+    const volume = Math.min(1, 0.5 + radius / 160);
+    audio.playAt(plasma ? 'plasma_burst' : 'explosion', x, y, { category: 'world', volume, distance: 1500 });
     for (const angle of [0, 90, 180, 270]) {
       this.emitAngle = angle;
       this.sparks.explode(10, x, y);
-      this.blood.explode(8, x, y);
-      this.smoke.explode(3, x, y);
+      if (style === 'exploder') this.blood.explode(8, x, y);
+      if (!plasma) this.smoke.explode(3, x, y);
     }
-    this.stamp(ASSET_KEYS.burst, undefined, x, y, { rotation: Math.random() * Math.PI * 2, scale: (radius / 96) * 1.1, alpha: 0.9 });
+    if (plasma) {
+      // Descarga: raios curtos saindo do centro.
+      for (let i = 0; i < 7; i++) {
+        const a = (i / 7) * Math.PI * 2 + Math.random() * 0.5;
+        const d = radius * Phaser.Math.FloatBetween(0.6, 1);
+        this.lightning([{ x, y }, { x: x + Math.cos(a) * d, y: y + Math.sin(a) * d }], 0x7fe7ff);
+      }
+    }
+    this.stamp(ASSET_KEYS.burst, undefined, x, y, {
+      rotation: Math.random() * Math.PI * 2,
+      scale: (radius / 96) * (plasma ? 0.8 : 1.1),
+      alpha: plasma ? 0.5 : 0.9,
+    });
     const fireball = this.scene.add
       .image(x, y, FX_KEYS.lightRadial)
-      .setTint(0xffa040)
+      .setTint(plasma ? 0x6ff0ff : 0xffa040)
       .setBlendMode(Phaser.BlendModes.ADD)
       .setDepth(DEPTH.glow)
       .setScale(0.2);
@@ -179,6 +214,45 @@ export class EffectsSystem {
     });
     this.lighting?.addFlash(x, y, radius * 2.4, 1, 350);
     this.scene.cameras.main.shake(260, 0.006);
+  }
+
+  /**
+   * Raio elétrico ligando os pontos (Arc Gun): linha em zigue-zague com brilho,
+   * faíscas e clarão em cada ponto atingido.
+   */
+  lightning(points: ReadonlyArray<{ x: number; y: number }>, color: number): void {
+    if (points.length < 2) return;
+    const g = this.scene.add.graphics().setDepth(DEPTH.muzzle).setBlendMode(Phaser.BlendModes.ADD);
+    const path: Phaser.Math.Vector2[] = [new Phaser.Math.Vector2(points[0].x, points[0].y)];
+    for (let i = 1; i < points.length; i++) {
+      const a = points[i - 1];
+      const b = points[i];
+      const len = Phaser.Math.Distance.Between(a.x, a.y, b.x, b.y);
+      const segments = Math.max(2, Math.round(len / 18));
+      const nx = -(b.y - a.y) / (len || 1);
+      const ny = (b.x - a.x) / (len || 1);
+      for (let s = 1; s <= segments; s++) {
+        const t = s / segments;
+        const off = s === segments ? 0 : Phaser.Math.FloatBetween(-LIGHTNING_JITTER, LIGHTNING_JITTER);
+        path.push(new Phaser.Math.Vector2(a.x + (b.x - a.x) * t + nx * off, a.y + (b.y - a.y) * t + ny * off));
+      }
+      this.emitAngle = Phaser.Math.RadToDeg(Math.atan2(b.y - a.y, b.x - a.x));
+      this.sparks.explode(4, b.x, b.y);
+      this.lighting?.addFlash(b.x, b.y, 70, 0.8, LIGHTNING_MS);
+    }
+    g.lineStyle(6, color, 0.35).strokePoints(path);
+    g.lineStyle(2, 0xffffff, 1).strokePoints(path);
+    this.scene.tweens.add({ targets: g, alpha: 0, duration: LIGHTNING_MS, onComplete: () => g.destroy() });
+  }
+
+  /** Labaredas sobre um alvo em chamas. */
+  burnPuff(x: number, y: number): void {
+    this.flames.explode(2, x + Phaser.Math.Between(-6, 6), y + Phaser.Math.Between(-6, 6));
+  }
+
+  /** Brilho do lança-chamas iluminando o entorno. */
+  glow(x: number, y: number, radius: number, durationMs: number): void {
+    this.lighting?.addFlash(x, y, radius, 0.7, durationMs);
   }
 
   zombieDeath(x: number, y: number, fallAngle: number, skin: ZombieSkin): void {

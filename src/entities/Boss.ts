@@ -190,15 +190,15 @@ export class Boss extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
-  /** Dano recebido; retorna true se o golpe derrotou o boss. */
-  takeDamage(amount: number): boolean {
+  /** Dano recebido; retorna true se o golpe derrotou o boss. `flash` = pisca branco (não em dano contínuo). */
+  takeDamage(amount: number, flash = true): boolean {
     if (this.mode === 'dead' || this.isInvulnerable) return false;
     this.hp = Math.max(0, this.hp - amount);
     if (this.hp === 0) {
       this.die();
       return true;
     }
-    if (this.mode !== 'stunned') {
+    if (flash && this.mode !== 'stunned') {
       this.setTintFill(0xffffff);
       this.scene.time.delayedCall(50, () => {
         if (this.isAlive && this.mode !== 'stunned') this.applyPhaseTint();

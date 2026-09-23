@@ -67,7 +67,7 @@ export const goldenConfig = {
     perk: 25,
     fury: 15,
   },
-  weapons: ['rail', 'rpk'],
+  weapons: ['rail', 'energy_cannon', 'rpk', 'grenade_launcher', 'flamethrower', 'arc_gun'],
   money: 2000,
   /** "Upgrade temporário": dano dobrado. */
   furyDurationMs: 20_000,

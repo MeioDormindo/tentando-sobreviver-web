@@ -27,13 +27,14 @@ import { SpawnSystem } from '../systems/SpawnSystem';
 import { WaveSystem } from '../systems/WaveSystem';
 import { WeaponSystem } from '../weapons/WeaponSystem';
 
-const MAX_PROJECTILES = 160;
+const MAX_PROJECTILES = 220;
 const MAX_ZOMBIES = 60;
 
 /** Orquestra a partida: cria mapa, entidades e sistemas, e delega a lógica a eles. */
 export class GameScene extends Phaser.Scene {
   private player!: Player;
   private weaponSystem!: WeaponSystem;
+  private combat!: CombatSystem;
   private cameraController!: CameraController;
   private lighting!: LightingSystem;
   private waveSystem!: WaveSystem;
@@ -110,7 +111,10 @@ export class GameScene extends Phaser.Scene {
       modifiers: this.perks.modifiers,
       buffs: this.powerUps.buffs,
       bosses: bossGroup,
+      nav: map.nav,
     });
+    this.combat = combat;
+    this.weaponSystem.setArcCaster(combat);
 
     this.interaction = new InteractionSystem(this, this.player);
 
@@ -193,6 +197,11 @@ export class GameScene extends Phaser.Scene {
     const unsubscribers = [
       onGameEvent(this.game.events, GameEvents.PlayerDied, this.onPlayerDied, this),
       onGameEvent(this.game.events, GameEvents.HudRequest, this.syncHud, this),
+      onGameEvent(this.game.events, GameEvents.GamePaused, () => this.input.setDefaultCursor('default')),
+      onGameEvent(this.game.events, GameEvents.GameResumed, () => {
+        this.input.setDefaultCursor('none');
+        this.weaponSystem.holdTrigger();
+      }),
     ];
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       unsubscribers.forEach((off) => off());
@@ -216,6 +225,7 @@ export class GameScene extends Phaser.Scene {
     this.input.activePointer.positionToCamera(this.cameras.main, this.aimPoint);
     this.player.aimAt(this.aimPoint.x, this.aimPoint.y);
     this.weaponSystem.update(time);
+    this.combat.update(time, delta);
     this.interaction.update(time, delta);
     this.powerUps.update(time);
     this.bossSystem.update(time, delta);

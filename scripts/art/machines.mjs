@@ -105,7 +105,7 @@ export function weaponLab() {
 /** Silhueta clara da arma para a animação da Mystery Box (160x40). */
 export function gunIcon(kind) {
   const defs = `<filter id="gi" x="-10%" y="-40%" width="120%" height="180%"><feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="#ffe9a8" flood-opacity=".9"/></filter>`;
-  const x = kind === 'pistol' ? 64 : kind === 'smg' ? 56 : 46;
+  const x = kind === 'pistol' ? 64 : kind === 'smg' ? 56 : 48;
   const scale = kind === 'pistol' ? 1.7 : 1.5;
   return svgDoc(160, 40, defs, `<g filter="url(#gi)" transform="translate(${x} 20) scale(${scale})">${drawGun(kind, 0, 0, 0)}</g>`);
 }

@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { perkIconKey, powerUpKey } from '../config/assets.config';
+import { audio } from '../audio/AudioSystem';
 import { COLORS, SCENE_KEYS } from '../config/game.config';
 import {
   emitGameEvent,
@@ -51,6 +52,7 @@ export class UIScene extends Phaser.Scene {
   private bannerTitle!: Phaser.GameObjects.Text;
   private bannerSub!: Phaser.GameObjects.Text;
   private deathOverlay: Phaser.GameObjects.Container | null = null;
+  private pauseOverlay: Phaser.GameObjects.Container | null = null;
 
   private hp: PlayerHpPayload = { hp: 0, maxHp: 1, armor: 0, maxArmor: 100 };
   private kills = 0;
@@ -71,6 +73,7 @@ export class UIScene extends Phaser.Scene {
     this.timerViews = [];
     this.bossState = null;
     this.bossesDefeated = 0;
+    this.pauseOverlay = null;
 
     this.hpBar = this.add.graphics();
     this.hpText = this.add.text(0, 0, '', { fontFamily: FONT, fontSize: '14px', color: COLORS.text });
@@ -158,9 +161,15 @@ export class UIScene extends Phaser.Scene {
       onGameEvent(this.game.events, GameEvents.AreaUnlocked, (a) => this.showAreaText(`ÁREA LIBERADA — ${a.name.toUpperCase()}`, COLORS.accent), this),
     ];
     this.scale.on(Phaser.Scale.Events.RESIZE, this.layout, this);
+    // Pausa: ESC ou P; pausa sozinho se a janela perde o foco.
+    const kb = this.input.keyboard;
+    kb?.on('keydown-ESC', this.togglePause, this);
+    kb?.on('keydown-P', this.togglePause, this);
+    this.game.events.on(Phaser.Core.Events.BLUR, this.pauseOnBlur, this);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       unsubscribers.forEach((off) => off());
       this.scale.off(Phaser.Scale.Events.RESIZE, this.layout, this);
+      this.game.events.off(Phaser.Core.Events.BLUR, this.pauseOnBlur, this);
     });
 
     this.layout();
@@ -197,6 +206,7 @@ export class UIScene extends Phaser.Scene {
     this.drawHpBar();
     this.deathOverlay?.destroy();
     if (this.deathOverlay) this.showDeathOverlay();
+    if (this.pauseOverlay) this.showPauseOverlay();
   }
 
   private drawHpBar(): void {
@@ -285,6 +295,69 @@ export class UIScene extends Phaser.Scene {
     if (newest && this.perkIcons.length > had) {
       this.tweens.add({ targets: newest, displayWidth: { from: 56, to: 28 }, displayHeight: { from: 56, to: 28 }, duration: 350, ease: 'Back.easeOut' });
     }
+  }
+
+  // ───────────────────────── Pausa ─────────────────────────
+
+  private get isPaused(): boolean {
+    return this.pauseOverlay !== null;
+  }
+
+  private pauseOnBlur(): void {
+    if (!this.isPaused) this.togglePause();
+  }
+
+  /** Pausa/retoma a partida: física, tempo, animações e som param juntos. */
+  private togglePause(): void {
+    if (this.deathOverlay) return;
+    if (this.isPaused) {
+      this.resumeGame();
+      return;
+    }
+    if (!this.scene.isActive(SCENE_KEYS.game)) return;
+    this.scene.pause(SCENE_KEYS.game);
+    this.sound.pauseAll();
+    emitGameEvent(this.game.events, GameEvents.GamePaused, undefined);
+    this.crosshair.setVisible(false);
+    this.showPauseOverlay();
+  }
+
+  private resumeGame(): void {
+    this.pauseOverlay?.destroy();
+    this.pauseOverlay = null;
+    this.crosshair.setVisible(true);
+    this.sound.resumeAll();
+    this.scene.resume(SCENE_KEYS.game);
+    emitGameEvent(this.game.events, GameEvents.GameResumed, undefined);
+  }
+
+  private showPauseOverlay(): void {
+    const { width, height } = this.scale;
+    this.pauseOverlay?.destroy();
+    const bg = this.add.rectangle(0, 0, width, height, 0x000000, 0.72).setOrigin(0).setInteractive();
+    const title = this.add
+      .text(width / 2, height * 0.3, 'PAUSADO', { fontFamily: TITLE_FONT, fontSize: '64px', color: COLORS.text })
+      .setOrigin(0.5);
+    const soundLabel = () => (this.sound.mute ? '[ SOM: DESLIGADO ]' : '[ SOM: LIGADO ]');
+    const y0 = height * 0.46;
+    const resume = this.makeButton(width / 2, y0, '[ CONTINUAR ]', () => this.resumeGame(), false);
+    const restart = this.makeButton(width / 2, y0 + 48, '[ REINICIAR ]', () => {
+      this.sound.resumeAll();
+      this.scene.start(SCENE_KEYS.game);
+    });
+    const sound = this.makeButton(width / 2, y0 + 96, soundLabel(), () => {
+      audio.toggleMute();
+      sound.setText(soundLabel());
+    }, false);
+    const menu = this.makeButton(width / 2, y0 + 144, '[ MENU ]', () => {
+      this.sound.resumeAll();
+      this.scene.stop(SCENE_KEYS.game);
+      this.scene.start(SCENE_KEYS.menu);
+    });
+    const hint = this.add
+      .text(width / 2, height - 40, 'ESC para continuar', { fontFamily: FONT, fontSize: '14px', color: COLORS.textDim })
+      .setOrigin(0.5);
+    this.pauseOverlay = this.add.container(0, 0, [bg, title, resume, restart, sound, menu, hint]).setDepth(300);
   }
 
   // ───────────────────────── Boss ─────────────────────────
@@ -500,14 +573,15 @@ export class UIScene extends Phaser.Scene {
     this.deathOverlay = overlay;
   }
 
-  private makeButton(x: number, y: number, label: string, onClick: () => void): Phaser.GameObjects.Text {
+  private makeButton(x: number, y: number, label: string, onClick: () => void, once = true): Phaser.GameObjects.Text {
     const text = this.add
       .text(x, y, label, { fontFamily: FONT, fontSize: '24px', color: COLORS.text })
       .setOrigin(0.5)
       .setInteractive({ useHandCursor: true });
     text.on('pointerover', () => text.setColor(COLORS.accent));
     text.on('pointerout', () => text.setColor(COLORS.text));
-    text.once('pointerdown', onClick);
+    if (once) text.once('pointerdown', onClick);
+    else text.on('pointerdown', onClick);
     return text;
   }
 }

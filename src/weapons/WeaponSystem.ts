@@ -11,6 +11,15 @@ import { audio } from '../audio/AudioSystem';
 
 /** Ponto de ejeção das cápsulas, à frente do tronco. */
 const EJECT_DISTANCE = 16;
+/** O lança-chamas dispara a cada ~45ms; o som do jato só é retocado a este intervalo. */
+const FLAME_SOUND_MS = 170;
+/** Clarão das armas especiais sem cor própria (lança-granadas). */
+const SPECIAL_FLASH_TINT = 0xffe0b0;
+
+/** Quem resolve o raio instantâneo da Arc Gun (CombatSystem). */
+export interface ArcCaster {
+  fireArc(x: number, y: number, aim: number, cfg: WeaponConfig, damageScale: number): void;
+}
 
 /**
  * Inventário de armas + disparo. Toda arma usa a mesma lógica (Weapon + WeaponConfig);
@@ -28,7 +37,10 @@ export class WeaponSystem {
   /** Semiautomática: o gatilho precisa ser solto entre disparos. */
   private triggerConsumed = false;
   private lastSnapshotKey = '';
+  private releaseRequired = false;
   private mods: Readonly<PerkModifiers> = NEUTRAL_MODIFIERS;
+  private arcCaster: ArcCaster | null = null;
+  private nextFlameSoundAt = 0;
 
   constructor(
     scene: Phaser.Scene,
@@ -61,6 +73,16 @@ export class WeaponSystem {
 
   setModifiers(mods: Readonly<PerkModifiers>): void {
     this.mods = mods;
+  }
+
+  setArcCaster(caster: ArcCaster): void {
+    this.arcCaster = caster;
+  }
+
+  /** Ignora o gatilho até o botão ser solto (ex.: o clique que retomou a pausa). */
+  holdTrigger(): void {
+    this.triggerConsumed = true;
+    this.releaseRequired = true;
   }
 
   /** Weapon Lab: melhora a arma em mãos. */
@@ -116,7 +138,8 @@ export class WeaponSystem {
       const triggerDown = this.scene.input.activePointer.leftButtonDown();
       if (!triggerDown) {
         this.triggerConsumed = false;
-      } else if (this.current.config.automatic || !this.triggerConsumed) {
+        this.releaseRequired = false;
+      } else if (!this.releaseRequired && (this.current.config.automatic || !this.triggerConsumed)) {
         this.tryFire(time);
       }
     }
@@ -196,19 +219,36 @@ export class WeaponSystem {
     const tipX = this.owner.x + cos * muzzle.forward - sin * muzzle.side;
     const tipY = this.owner.y + sin * muzzle.forward + cos * muzzle.side;
 
-    for (let i = 0; i < cfg.pellets; i++) {
-      const projectile = this.projectiles.get(tipX, tipY) as Projectile | null;
-      if (!projectile) break; // pool esgotado
-      const spread = Phaser.Math.DegToRad(Phaser.Math.FloatBetween(-cfg.spread, cfg.spread));
-      projectile.fire(
-        tipX, tipY, aim + spread, cfg.projectileSpeed, cfg.range,
-        cfg.damage * this.mods.damageMultiplier, cfg.pierce ?? 0, cfg.tracerTint ?? 0xffffff,
-      );
+    const special = cfg.special;
+    if (special?.type === 'arc') {
+      this.arcCaster?.fireArc(tipX, tipY, aim, cfg, this.mods.damageMultiplier);
+    } else {
+      for (let i = 0; i < cfg.pellets; i++) {
+        const projectile = this.projectiles.get(tipX, tipY) as Projectile | null;
+        if (!projectile) break; // pool esgotado
+        const spread = Phaser.Math.DegToRad(Phaser.Math.FloatBetween(-cfg.spread, cfg.spread));
+        projectile.fire({
+          x: tipX, y: tipY, angle: aim + spread, speed: cfg.projectileSpeed, range: cfg.range,
+          damage: cfg.damage * this.mods.damageMultiplier, pierce: cfg.pierce, tint: cfg.tracerTint,
+          special, damageScale: this.mods.damageMultiplier,
+        });
+      }
     }
-    this.effects.muzzleFlash(tipX, tipY, aim);
+
+    if (special?.type === 'flame') {
+      // Jato contínuo: sem clarão nem cápsula, só o brilho do fogo.
+      this.effects.glow(tipX + cos * 40, tipY + sin * 40, 130, 90);
+      if (this.scene.time.now >= this.nextFlameSoundAt) {
+        this.nextFlameSoundAt = this.scene.time.now + FLAME_SOUND_MS;
+        audio.play(`shot_${cfg.id}`, { category: 'weapon', volume: 0.6, pitchJitter: 0.08 });
+      }
+      return;
+    }
+    this.effects.muzzleFlash(tipX, tipY, aim, special ? cfg.tracerTint ?? SPECIAL_FLASH_TINT : 0xffffff);
     audio.play(`shot_${cfg.id}`, { category: 'weapon', volume: 0.85, pitchJitter: 0.05 });
     if (cfg.upgraded) audio.play('mk2_layer', { category: 'weapon', volume: 0.5 });
-    this.effects.ejectShell(this.owner.x + cos * EJECT_DISTANCE, this.owner.y + sin * EJECT_DISTANCE, aim);
+    // Armas especiais não usam cartuchos.
+    if (!special) this.effects.ejectShell(this.owner.x + cos * EJECT_DISTANCE, this.owner.y + sin * EJECT_DISTANCE, aim);
   }
 
   private emitIfChanged(): void {

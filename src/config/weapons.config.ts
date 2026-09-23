@@ -1,7 +1,21 @@
 export type Rarity = 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
 
 /** Tipo visual: define a pose do jogador, a maleta de compra e a posição do cano. */
-export type WeaponKind = 'pistol' | 'smg' | 'rifle' | 'ak' | 'shotgun';
+export type WeaponKind = 'pistol' | 'smg' | 'rifle' | 'ak' | 'shotgun' | 'launcher' | 'flamer' | 'arc' | 'energy';
+
+/**
+ * Disparo especial (armas exclusivas da Mystery Box, GDD §44). Sem isto, a arma
+ * dispara projéteis comuns.
+ */
+export type SpecialFire =
+  /** Granada: explode ao bater em algo ou no fim do alcance (não fere o jogador). */
+  | { type: 'grenade'; blastRadius: number; blastDamage: number }
+  /** Chama: jato curto que incendeia (dano por segundo durante burnMs). */
+  | { type: 'flame'; burnDps: number; burnMs: number }
+  /** Raio elétrico instantâneo que salta entre alvos próximos e os atordoa. */
+  | { type: 'arc'; chains: number; chainRange: number; chainFalloff: number; stunMs: number }
+  /** Esfera de plasma: atravessa tudo e explode numa descarga ao bater na parede. */
+  | { type: 'plasma'; blastRadius: number; blastDamage: number; stunMs: number };
 
 export interface WeaponConfig {
   id: string;
@@ -37,6 +51,7 @@ export interface WeaponConfig {
   boxOnly?: boolean;
   /** Versão melhorada pelo Weapon Lab. */
   upgraded?: boolean;
+  special?: SpecialFire;
 }
 
 /**
@@ -105,6 +120,35 @@ export const weapons: Record<string, WeaponConfig> = {
     spread: 0.5, range: 1400, projectileSpeed: 2400, pellets: 1, automatic: false,
     price: 0, ammoPrice: 2500, rarity: 'legendary', boxOnly: true, pierce: 8, tracerTint: 0x7fe7ff,
   },
+  // Armas especiais (GDD §44): mecânicas próprias, só na Mystery Box
+  grenade_launcher: {
+    id: 'grenade_launcher', name: 'Grenade Launcher', kind: 'launcher',
+    damage: 60, fireRate: 650, magazineSize: 6, reserveAmmo: 30, reloadTime: 3000,
+    spread: 1.5, range: 560, projectileSpeed: 620, pellets: 1, automatic: false,
+    price: 0, ammoPrice: 2000, rarity: 'epic', boxOnly: true,
+    special: { type: 'grenade', blastRadius: 105, blastDamage: 220 },
+  },
+  flamethrower: {
+    id: 'flamethrower', name: 'Flamethrower', kind: 'flamer',
+    damage: 7, fireRate: 45, magazineSize: 120, reserveAmmo: 480, reloadTime: 3200,
+    spread: 11, range: 230, projectileSpeed: 450, pellets: 2, automatic: true,
+    price: 0, ammoPrice: 2000, rarity: 'epic', boxOnly: true, pierce: 99,
+    special: { type: 'flame', burnDps: 45, burnMs: 2600 },
+  },
+  arc_gun: {
+    id: 'arc_gun', name: 'Arc Gun', kind: 'arc',
+    damage: 95, fireRate: 260, magazineSize: 24, reserveAmmo: 144, reloadTime: 2600,
+    spread: 0, range: 480, projectileSpeed: 0, pellets: 1, automatic: true,
+    price: 0, ammoPrice: 2000, rarity: 'epic', boxOnly: true, tracerTint: 0x7fd8ff,
+    special: { type: 'arc', chains: 5, chainRange: 170, chainFalloff: 0.85, stunMs: 700 },
+  },
+  energy_cannon: {
+    id: 'energy_cannon', name: 'Energy Cannon', kind: 'energy',
+    damage: 320, fireRate: 1100, magazineSize: 3, reserveAmmo: 18, reloadTime: 3200,
+    spread: 0, range: 1100, projectileSpeed: 760, pellets: 1, automatic: false,
+    price: 0, ammoPrice: 3000, rarity: 'legendary', boxOnly: true, pierce: 999, tracerTint: 0x6ff0ff,
+    special: { type: 'plasma', blastRadius: 130, blastDamage: 280, stunMs: 600 },
+  },
 };
 
 /** Melhoria do Weapon Lab (GDD §38): "M4" → "M4 Mk II". */
@@ -122,6 +166,7 @@ export function upgradeWeaponConfig(cfg: WeaponConfig): WeaponConfig {
   const u = weaponUpgrade;
   return {
     ...cfg,
+    special: cfg.special && upgradeSpecial(cfg.special),
     name: `${cfg.name} Mk II`,
     damage: Math.round(cfg.damage * u.damage),
     magazineSize: Math.round(cfg.magazineSize * u.magazine),
@@ -132,6 +177,20 @@ export function upgradeWeaponConfig(cfg: WeaponConfig): WeaponConfig {
     tracerTint: u.tracerTint,
     upgraded: true,
   };
+}
+
+/** O Lab também fortalece a mecânica especial (explosão, queima, saltos do raio). */
+function upgradeSpecial(sp: SpecialFire): SpecialFire {
+  const d = weaponUpgrade.damage;
+  switch (sp.type) {
+    case 'grenade':
+    case 'plasma':
+      return { ...sp, blastDamage: Math.round(sp.blastDamage * d), blastRadius: Math.round(sp.blastRadius * 1.15) };
+    case 'flame':
+      return { ...sp, burnDps: Math.round(sp.burnDps * d) };
+    case 'arc':
+      return { ...sp, chains: sp.chains + 3 };
+  }
 }
 
 export function getWeaponConfig(id: string): WeaponConfig {

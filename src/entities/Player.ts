@@ -126,7 +126,14 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
       Number(right.isDown) - Number(left.isDown),
       Number(down.isDown) - Number(up.isDown),
     );
-    this.moveDir.normalize().scale(this.config.speed * this.mods.speedMultiplier * this.speedBuff);
+    // Andar de lado ou de costas (em relação à mira) é mais lento.
+    let facing = 1;
+    if (this.moveDir.lengthSq() > 0) {
+      const diff = Math.abs(Phaser.Math.Angle.Wrap(this.moveDir.angle() - this.rotation));
+      if (diff > Phaser.Math.DegToRad(120)) facing = this.config.backpedalMultiplier;
+      else if (diff > Phaser.Math.DegToRad(60)) facing = this.config.strafeMultiplier;
+    }
+    this.moveDir.normalize().scale(this.config.speed * this.mods.speedMultiplier * this.speedBuff * facing);
     this.setVelocity(this.moveDir.x, this.moveDir.y);
   }
 

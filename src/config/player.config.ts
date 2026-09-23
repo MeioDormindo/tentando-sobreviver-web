@@ -9,6 +9,9 @@ export interface PlayerConfig {
   startingWeapon: string;
   /** Armadura absorve dano antes da vida (GDD §24). */
   maxArmor: number;
+  /** Velocidade andando de lado (strafe) e de costas, em relação à mira. */
+  strafeMultiplier: number;
+  backpedalMultiplier: number;
   /** Tempo sem levar dano até começar a regenerar (ms). */
   regenDelayMs: number;
   /** Vida recuperada por segundo durante a regeneração. */
@@ -22,6 +25,8 @@ export const playerConfig: PlayerConfig = {
   invulnerabilityMs: 400,
   startingWeapon: 'm1911',
   maxArmor: 100,
+  strafeMultiplier: 0.85,
+  backpedalMultiplier: 0.6,
   regenDelayMs: 5000,
   regenPerSecond: 6,
 };

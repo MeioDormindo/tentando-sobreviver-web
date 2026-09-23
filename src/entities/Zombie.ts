@@ -37,6 +37,8 @@ const WALK_ANIM_SPEED = 60;
 const SHADOW_OFFSET = { x: 4, y: 6 };
 /** Deslocamento mínimo para contar como progresso (detecção de "preso"). */
 const PROGRESS_STEP = 28;
+/** Cor do tremor elétrico enquanto atordoado. */
+const STUN_TINT = 0x9fe8ff;
 
 /**
  * Zumbi genérico dirigido por ZombieConfig, reutilizado via pool.
@@ -69,6 +71,8 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
   private noProgressMs = 0;
   /** Próximo gemido (cada zumbi resmunga de tempos em tempos). */
   private nextGroanAt = 0;
+  /** Atordoado (Arc Gun / Energy Cannon) até este instante. */
+  private stunnedUntil = 0;
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, zombieSheetKey('a'), 0);
@@ -99,6 +103,17 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     return this.config?.id ?? '';
   }
 
+  /** Muda a cada spawn/morte: identifica esta "vida" do zumbi reaproveitado do pool. */
+  get lifeId(): number {
+    return this.life;
+  }
+
+  /** Choque elétrico: fica parado, tremendo, por `ms`. */
+  stun(ms: number): void {
+    if (!this.isAlive) return;
+    this.stunnedUntil = Math.max(this.stunnedUntil, this.scene.time.now + ms);
+  }
+
   get isAlive(): boolean {
     return this.aiState !== ZombieState.Dead;
   }
@@ -119,6 +134,7 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     this.skin = Phaser.Utils.Array.GetRandom(config.skins) as ZombieSkin;
     this.exploded = false;
     this.fuseEndsAt = 0;
+    this.stunnedUntil = 0;
     this.nextGroanAt = this.scene.time.now + Phaser.Math.Between(500, 5000);
 
     this.enableBody(true, x, y, true, true);
@@ -158,6 +174,17 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
       this.aiState = ZombieState.Idle;
       this.setVelocity(0, 0);
       return;
+    }
+    if (this.stunnedUntil > 0) {
+      if (time < this.stunnedUntil) {
+        this.setVelocity(0, 0);
+        this.anims.pause();
+        this.setTint(Math.floor(time / 50) % 2 === 0 ? STUN_TINT : 0xffffff);
+        return;
+      }
+      this.stunnedUntil = 0;
+      this.anims.resume();
+      this.clearTint();
     }
     const dist = Phaser.Math.Distance.Between(this.x, this.y, target.x, target.y);
 
@@ -244,8 +271,8 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
-  /** Aplica dano; retorna true se o golpe matou o zumbi. */
-  takeDamage(amount: number, headshot = false, source: KillSource = 'weapon'): boolean {
+  /** Aplica dano; retorna true se o golpe matou o zumbi. `flash` = pisca branco (não em dano contínuo). */
+  takeDamage(amount: number, headshot = false, source: KillSource = 'weapon', flash = true): boolean {
     if (!this.isAlive || !this.config) return false;
 
     this.hp -= amount;
@@ -255,6 +282,7 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     }
     // Ao ser atingido, o zumbi percebe o jogador mesmo fora do alcance de detecção.
     if (this.aiState === ZombieState.Idle) this.aiState = ZombieState.Chase;
+    if (!flash) return false;
     this.setTintFill(0xffffff);
     this.scene.time.delayedCall(60, () => {
       if (this.isAlive) this.clearTint();

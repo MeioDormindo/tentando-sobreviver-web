@@ -83,6 +83,39 @@ export function createFxTextures(scene: Phaser.Scene): void {
     ctx.fill();
   });
 
+  // Granada: esfera escura com faixa e luz vermelha piscante.
+  canvasTexture(scene, FX_KEYS.grenade, 14, 14, (ctx) => {
+    const g = ctx.createRadialGradient(5, 5, 1, 7, 7, 7);
+    g.addColorStop(0, '#7d8466');
+    g.addColorStop(1, '#23261b');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(7, 7, 6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#c9a227';
+    ctx.fillRect(1, 6, 12, 2);
+    ctx.fillStyle = '#ff4a3a';
+    ctx.fillRect(6, 2, 2, 2);
+  });
+  // Chama: bola de fogo suave (usada com blend ADD).
+  canvasTexture(scene, FX_KEYS.flame, 32, 32, (ctx) =>
+    radialDot(ctx, 32, [
+      [0, 'rgba(255,245,200,1)'],
+      [0.3, 'rgba(255,170,60,0.85)'],
+      [0.7, 'rgba(210,60,20,0.35)'],
+      [1, 'rgba(120,20,5,0)'],
+    ]),
+  );
+  // Plasma: núcleo branco com halo ciano.
+  canvasTexture(scene, FX_KEYS.plasma, 40, 40, (ctx) =>
+    radialDot(ctx, 40, [
+      [0, 'rgba(255,255,255,1)'],
+      [0.25, 'rgba(190,250,255,1)'],
+      [0.55, 'rgba(80,220,255,0.6)'],
+      [1, 'rgba(40,120,255,0)'],
+    ]),
+  );
+
   // Clarão do disparo: ápice em (0, h/2).
   canvasTexture(scene, FX_KEYS.muzzle, 40, 32, (ctx) => {
     const g = ctx.createRadialGradient(6, 16, 0, 6, 16, 30);

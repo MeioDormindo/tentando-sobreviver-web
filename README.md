@@ -20,11 +20,12 @@ npm run art        # regera a arte SVG em public/assets
 
 | Tecla | Ação |
 |---|---|
-| WASD | mover |
+| WASD | mover (de lado 85% e de costas 60% da velocidade, em relação à mira) |
 | Mouse | mirar |
 | Clique esquerdo | atirar (M1911 é semiautomática) |
 | R | recarregar |
 | M | ligar/desligar o som |
+| ESC / P | pausar (também pausa sozinho se a janela perde o foco) |
 | E | comprar (arma, munição, porta, perk, Mystery Box, Weapon Lab) |
 | segurar E | reparar barricada (+$10 por tábua) |
 | Q / 1 / 2 / roda do mouse | trocar de arma |
@@ -105,8 +106,14 @@ Observações:
 - Navegação: perseguição direta quando o zumbi enxerga o jogador; senão, caminho A* (portas e
   janelas consideradas). Zumbis parados por 12s fora da tela são realocados.
 - Escuridão varia por área (túneis quase sem luz).
-- Mystery Box ($950, Hall): sorteia por raridade (45/30/15/8/2%); exclusivas: RPK (épica) e
-  Rail Weapon (lendária, atravessa zumbis). Arma repetida vira munição.
+- Mystery Box ($950, Hall): sorteia por raridade (40/28/17/11/4%). Arma repetida vira munição.
+  Exclusivas da caixa (não vendidas nas maletas):
+  - RPK (épica) e Rail Weapon (lendária, atravessa zumbis);
+  - Grenade Launcher (épica): granadas que explodem no impacto (dano em área, não ferem você);
+  - Flamethrower (épica): jato curto e contínuo que incendeia (dano ao longo do tempo);
+  - Arc Gun (épica): raio instantâneo que salta entre até 5 zumbis próximos e os atordoa;
+  - Energy Cannon (lendária): esfera de plasma que atravessa a horda e explode numa descarga.
+  O Weapon Lab também fortalece a mecânica especial (explosão maior, fogo mais forte, +3 saltos).
 - Weapon Lab ($5000, Manutenção): arma em mãos vira "Mk II" (mais dano, pente, recarga).
 - Perks (`src/config/machines.config.ts`): Fortify, Quick Hands, Sprint+, Deadeye,
   Adrenaline e Overload, uma máquina por área.

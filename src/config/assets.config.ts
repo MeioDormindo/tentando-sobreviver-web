@@ -77,7 +77,7 @@ export const ASSET_KEYS = {
   burst: 'decal_burst',
 } as const;
 
-export const WEAPON_KINDS: WeaponKind[] = ['pistol', 'smg', 'rifle', 'ak', 'shotgun'];
+export const WEAPON_KINDS: WeaponKind[] = ['pistol', 'smg', 'rifle', 'ak', 'shotgun', 'launcher', 'flamer', 'arc', 'energy'];
 
 /** Tronco do jogador por tipo de arma (mesma ordem de frames em todas). */
 export const playerTorsoKey = (kind: WeaponKind): string => `player_torso_${kind}`;
@@ -107,6 +107,10 @@ export const WEAPON_MUZZLE: Record<WeaponKind, { forward: number; side: number }
   rifle: { forward: 29, side: 3 },
   ak: { forward: 28, side: 3 },
   shotgun: { forward: 29, side: 3 },
+  launcher: { forward: 29, side: 3 },
+  flamer: { forward: 31, side: 3 },
+  arc: { forward: 30, side: 3 },
+  energy: { forward: 31, side: 3 },
 };
 
 export const zombieSheetKey = (skin: string): string => `zombie_${skin}`;
@@ -233,4 +237,7 @@ export const FX_KEYS = {
   tracer: 'fx_tracer',
   muzzle: 'fx_muzzle',
   smoke: 'fx_smoke',
+  grenade: 'fx_grenade',
+  flame: 'fx_flame',
+  plasma: 'fx_plasma',
 } as const;
