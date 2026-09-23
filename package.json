@@ -1,0 +1,20 @@
+{
+  "name": "tentando-sobreviver",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "art": "node scripts/generate-art.mjs"
+  },
+  "dependencies": {
+    "phaser": "^3.90.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.0",
+    "vite": "^6.3.0"
+  }
+}
