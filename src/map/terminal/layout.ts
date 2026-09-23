@@ -234,6 +234,20 @@ export const MACHINES: MachinePlacement[] = [
   { type: 'perk', perkId: 'overload', tx: 90, ty: 112 },
 ];
 
+/**
+ * Locais por onde a Mystery Box passa (um por área). Ela começa no primeiro e, a cada
+ * N usos, some e reaparece em outro local de uma área aberta.
+ */
+export const BOX_SPOTS: Array<{ tx: number; ty: number; area: AreaId }> = [
+  { tx: 69, ty: 30, area: 'hall' },
+  { tx: 46, ty: 21, area: 'platform' },
+  { tx: 35, ty: 74, area: 'ticket' },
+  { tx: 108, ty: 71, area: 'shops' },
+  { tx: 80, ty: 88.5, area: 'tech' },
+  { tx: 58, ty: 99.5, area: 'tunnels' },
+  { tx: 64, ty: 111, area: 'maintenance' },
+];
+
 export const PROPS: Array<{ type: PropType; tx: number; ty: number; angle?: number }> = [
   // Hall
   { type: 'bench', tx: 52, ty: 46 },

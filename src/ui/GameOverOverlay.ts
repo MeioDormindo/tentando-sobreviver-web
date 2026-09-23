@@ -32,7 +32,10 @@ export function createGameOverOverlay(scene: Phaser.Scene, stats: GameOverStats,
   const title = scene.add
     .text(width / 2, height * 0.16, 'GAME OVER', { fontFamily: TITLE_FONT, fontSize: '72px', color: '#b33a3a', stroke: '#000', strokeThickness: 6 })
     .setOrigin(0.5);
-  overlay.add([bg, title]);
+  const score = scene.add
+    .text(width / 2, height * 0.16 + 58, `SCORE ${stats.score.toLocaleString('pt-BR')}`, { fontFamily: TITLE_FONT, fontSize: '30px', color: '#e8e2c8', stroke: '#000', strokeThickness: 4 })
+    .setOrigin(0.5);
+  overlay.add([bg, title, score]);
 
   const accuracy = stats.shotsFired > 0 ? Math.round((stats.shotsHit / stats.shotsFired) * 100) : 0;
   const rows: Array<[string, string]> = [
@@ -49,7 +52,7 @@ export function createGameOverOverlay(scene: Phaser.Scene, stats: GameOverStats,
   ];
   const colWidth = Math.min(300, width * 0.36);
   const perCol = Math.ceil(rows.length / 2);
-  const top = height * 0.3;
+  const top = height * 0.34;
   rows.forEach(([label, value], i) => {
     const col = Math.floor(i / perCol);
     const row = i % perCol;
@@ -62,8 +65,8 @@ export function createGameOverOverlay(scene: Phaser.Scene, stats: GameOverStats,
 
   const recordY = top + perCol * ROW_HEIGHT + 18;
   const recordText = stats.newRecord
-    ? 'NOVO RECORDE!'
-    : `RECORDE: WAVE ${stats.bestWave} · ${stats.bestKills} ABATES`;
+    ? 'NOVO RECORDE DE PONTOS!'
+    : `RECORDE: ${stats.bestScore.toLocaleString('pt-BR')} PONTOS · WAVE ${stats.bestWave}`;
   const record = scene.add
     .text(width / 2, recordY, recordText, { fontFamily: stats.newRecord ? TITLE_FONT : FONT, fontSize: stats.newRecord ? '28px' : '15px', color: stats.newRecord ? '#e3c77a' : COLORS.textDim })
     .setOrigin(0.5);

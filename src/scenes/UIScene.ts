@@ -51,6 +51,7 @@ export class UIScene extends Phaser.Scene {
   private warning!: Phaser.GameObjects.Container;
   private statusText!: Phaser.GameObjects.Text;
   private killsText!: Phaser.GameObjects.Text;
+  private scoreText!: Phaser.GameObjects.Text;
   private crosshair!: Phaser.GameObjects.Graphics;
   private waveText!: Phaser.GameObjects.Text;
   private waveSubText!: Phaser.GameObjects.Text;
@@ -95,6 +96,9 @@ export class UIScene extends Phaser.Scene {
     this.statusText = this.add
       .text(0, 0, '', { fontFamily: FONT, fontSize: '16px', color: COLORS.accent })
       .setOrigin(0.5);
+    this.scoreText = this.add
+      .text(0, 0, 'SCORE 0', { fontFamily: TITLE_FONT, fontSize: '20px', color: '#e8e2c8', stroke: '#000', strokeThickness: 3 })
+      .setOrigin(1, 0);
     this.killsText = this.add
       .text(0, 0, '', { fontFamily: FONT, fontSize: '16px', color: COLORS.textDim })
       .setOrigin(1, 0);
@@ -157,6 +161,10 @@ export class UIScene extends Phaser.Scene {
       onGameEvent(this.game.events, GameEvents.ZombieKilled, this.onZombieKilled, this),
       onGameEvent(this.game.events, GameEvents.PlayerDied, this.onPlayerDied, this),
       onGameEvent(this.game.events, GameEvents.GameOver, this.onGameOver, this),
+      onGameEvent(this.game.events, GameEvents.ScoreChanged, (s) => {
+        this.scoreText.setText(`SCORE ${s.score.toLocaleString('pt-BR')}`);
+        if (s.delta > 0) this.tweens.add({ targets: this.scoreText, scale: { from: 1.08, to: 1 }, duration: 160 });
+      }, this),
       onGameEvent(this.game.events, GameEvents.WaveState, this.onWaveState, this),
       onGameEvent(this.game.events, GameEvents.MoneyChanged, this.onMoneyChanged, this),
       onGameEvent(this.game.events, GameEvents.InteractionPrompt, this.onPrompt, this),
@@ -213,7 +221,8 @@ export class UIScene extends Phaser.Scene {
     this.eventHud.layout(width, height, MARGIN);
     this.damageOverlay.layout(width, height);
     this.statusText.setPosition(width / 2, height * 0.62);
-    this.killsText.setPosition(width - MARGIN, MARGIN + 56);
+    this.scoreText.setPosition(width - MARGIN, MARGIN + 54);
+    this.killsText.setPosition(width - MARGIN, MARGIN + 82);
     this.waveText.setPosition(MARGIN, MARGIN - 6);
     this.waveSubText.setPosition(MARGIN + 2, MARGIN + 44);
     this.bannerTitle.setPosition(width / 2, height * 0.28);

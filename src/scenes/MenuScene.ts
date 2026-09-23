@@ -57,7 +57,7 @@ export class MenuScene extends Phaser.Scene {
 
     const best = loadRecords();
     const record = this.add
-      .text(0, 0, best.bestWave > 0 ? `RECORDE: WAVE ${best.bestWave} · ${best.bestKills} ABATES` : '', {
+      .text(0, 0, best.bestScore > 0 ? `RECORDE: ${best.bestScore.toLocaleString('pt-BR')} PONTOS · WAVE ${best.bestWave}` : '', {
         fontFamily: 'monospace',
         fontSize: '16px',
         color: '#e3c77a',

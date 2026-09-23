@@ -107,9 +107,14 @@ export class EventSystem {
   /** Sorteio no início da wave. */
   private rollForWave(): void {
     const cfg = eventScheduleConfig;
-    if (this.running || this.wave < cfg.firstWave || waveConfig.bossWaves.includes(this.wave)) return;
-    if (Math.random() >= cfg.chancePerWave) return;
-    const id = this.pick();
+    if (this.wave < cfg.firstWave || waveConfig.bossWaves.includes(this.wave)) return;
+    const forced = cfg.forced;
+    const isForced = this.wave >= forced.firstWave && (this.wave - forced.firstWave) % forced.every === 0;
+    // O evento especial da wave tem prioridade sobre um que ainda esteja em andamento.
+    if (isForced) this.stop();
+    if (this.running) return;
+    if (!isForced && Math.random() >= cfg.chancePerWave) return;
+    const id = isForced ? forced.id : this.pick();
     if (!id) return;
     if (this.events[id].atWaveStart) {
       this.trigger(id);

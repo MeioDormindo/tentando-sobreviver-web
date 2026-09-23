@@ -46,7 +46,8 @@ src/
                      (áreas, portas, janelas, spawns, props, luzes do Terminal Central)
   entities/          Player (tronco + pernas), Zombie (Walker, Runner, Tank, Exploder), Projectile,
                      Boss (The Conductor), BuyStations (maletas, munição), Door, Barricade,
-                     Machines (Mystery Box, Weapon Lab, máquinas de perk), Damageable
+                     Machines (Weapon Lab, máquinas de perk), MysteryBox (sorteio e troca de lugar),
+                     Damageable
   weapons/           Weapon (estado/munição/recarga) e WeaponSystem (inventário de 2 armas, disparo)
   audio/             som 100% sintetizado em código: dsp.ts (síntese), recipes/ (armas, criaturas,
                      mundo, interface, ambientes), SoundBank (catálogo), AudioSystem (reprodução)
@@ -55,7 +56,8 @@ src/
   events/            eventos dinâmicos (WorldEvent + um arquivo por evento: Blackout, Alarm, Train,
                      Horde, SupplyDrop, GasLeak)
   ui/                componentes da HUD (EventHud, DamageOverlay, GameOverOverlay)
-  systems/           EventSystem (sorteio e ciclo dos eventos), StatsSystem (estatísticas e recordes), WaveSystem, SpawnSystem, difficulty (fórmulas), EconomySystem, InteractionSystem,
+  systems/           EventSystem (sorteio e ciclo dos eventos), StatsSystem (estatísticas e recordes),
+                     ScoreSystem (pontuação), WaveSystem, SpawnSystem, difficulty (fórmulas), EconomySystem, InteractionSystem,
                      CombatSystem (inclui headshot), CameraController, pathfinding/NavGrid (A*),
                      PerkSystem (modificadores de perks), PowerUpSystem (drops e efeitos),
                      BossSystem (ciclo do boss), pathfinding/PathFollower (navegação comum)
@@ -112,7 +114,11 @@ Observações:
   (câmera se aproxima); bordas da tela piscam em vermelho no dano e pulsam com vida baixa; anel e
   faíscas ao pegar power-up; poeira na pancada do boss.
 - Game Over (GDD §63–64): wave, abates, headshots, dinheiro, tempo, bosses, dano, disparos/acertos,
-  precisão e power-ups. Recorde (melhor wave e abates) salvo no navegador e mostrado no menu.
+  precisão, power-ups e score. Recorde (pontuação, melhor wave e abates) salvo no navegador e
+  mostrado no menu.
+- Score (`src/config/score.config.ts`): abates por tipo (valendo +10% a cada wave), headshot,
+  abate a queima-roupa, sequência de abates (MULTI x3...), wave completa, boss e power-ups. Mortes
+  por explosão, Nuke, trem ou gás valem metade.
 - Eventos (`src/config/events.config.ts`): a partir da wave 2, cada wave tem 60% de chance de um
   evento (um por vez, nunca em wave de boss), sorteado por peso, com wave mínima e cooldown:
   - Apagão: luzes piscam e apagam por 25s; só a lanterna e as luzes de emergência ficam.
@@ -135,7 +141,9 @@ Observações:
 - Navegação: perseguição direta quando o zumbi enxerga o jogador; senão, caminho A* (portas e
   janelas consideradas). Zumbis parados por 12s fora da tela são realocados.
 - Escuridão varia por área (túneis quase sem luz).
-- Mystery Box ($950, Hall): sorteia por raridade (40/28/17/11/4%). Arma repetida vira munição.
+- Mystery Box ($950, começa no Hall): sorteia por raridade (22/26/25/19/8% — armas boas saem com
+  frequência). Arma repetida vira munição. A cada 3 usos ela treme, some e reaparece em outra
+  área aberta (aviso na tela e coluna de luz no novo local).
   Exclusivas da caixa (não vendidas nas maletas):
   - RPK (épica) e Rail Weapon (lendária, atravessa zumbis);
   - Grenade Launcher (épica): granadas que explodem no impacto (dano em área, não ferem você);

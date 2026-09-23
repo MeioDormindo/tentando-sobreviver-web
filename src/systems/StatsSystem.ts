@@ -6,6 +6,7 @@ const RECORDS_KEY = 'ts-records';
 interface Records {
   bestWave: number;
   bestKills: number;
+  bestScore: number;
 }
 
 /** Recordes salvos no navegador (GDD §65). */
@@ -13,9 +14,9 @@ export function loadRecords(): Records {
   try {
     const raw = localStorage.getItem(RECORDS_KEY);
     const data = raw ? (JSON.parse(raw) as Partial<Records>) : {};
-    return { bestWave: Number(data.bestWave) || 0, bestKills: Number(data.bestKills) || 0 };
+    return { bestWave: Number(data.bestWave) || 0, bestKills: Number(data.bestKills) || 0, bestScore: Number(data.bestScore) || 0 };
   } catch {
-    return { bestWave: 0, bestKills: 0 };
+    return { bestWave: 0, bestKills: 0, bestScore: 0 };
   }
 }
 
@@ -42,6 +43,7 @@ export class StatsSystem {
   private shotsHit = 0;
   private damage = 0;
   private powerUps = 0;
+  private score = 0;
   private readonly startedAt: number;
 
   constructor(private readonly scene: Phaser.Scene) {
@@ -59,6 +61,7 @@ export class StatsSystem {
       onGameEvent(ev, GameEvents.ShotsFired, (s) => { this.shotsFired += s.count; }),
       onGameEvent(ev, GameEvents.ShotHit, () => { this.shotsHit++; }),
       onGameEvent(ev, GameEvents.DamageDealt, (d) => { this.damage += d.amount; }),
+      onGameEvent(ev, GameEvents.ScoreChanged, (s) => { this.score = s.score; }),
       onGameEvent(ev, GameEvents.PlayerDied, this.finish, this),
     ];
     scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => offs.forEach((off) => off()));
@@ -66,8 +69,13 @@ export class StatsSystem {
 
   private finish(): void {
     const prev = loadRecords();
-    const newRecord = this.wave > prev.bestWave || (this.wave === prev.bestWave && this.kills > prev.bestKills);
-    const records = { bestWave: Math.max(prev.bestWave, this.wave), bestKills: Math.max(prev.bestKills, this.kills) };
+    // O recorde principal é a pontuação; melhor wave e abates ficam guardados à parte.
+    const newRecord = this.score > prev.bestScore;
+    const records = {
+      bestWave: Math.max(prev.bestWave, this.wave),
+      bestKills: Math.max(prev.bestKills, this.kills),
+      bestScore: Math.max(prev.bestScore, this.score),
+    };
     saveRecords(records);
     const stats: GameOverStats = {
       wave: this.wave,
@@ -80,6 +88,7 @@ export class StatsSystem {
       shotsHit: Math.min(this.shotsHit, this.shotsFired),
       damage: Math.round(this.damage),
       powerUps: this.powerUps,
+      score: this.score,
       ...records,
       newRecord,
     };

@@ -23,6 +23,8 @@ export const eventScheduleConfig = {
   chancePerWave: 0.6,
   /** Atraso entre o início da wave e o evento (ms), exceto a Horda (começa junto). */
   startDelayMs: [5000, 16000] as [number, number],
+  /** GDD §31: wave 15 tem evento especial garantido (e depois a cada 10 waves). */
+  forced: { firstWave: 15, every: 10, id: 'horde' as WorldEventId },
 };
 
 export const worldEvents: Record<WorldEventId, WorldEventInfo> = {

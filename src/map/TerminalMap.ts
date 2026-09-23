@@ -6,7 +6,7 @@ import { NavCost, NavGrid } from '../systems/pathfinding/NavGrid';
 import type { SpawnPoint } from '../systems/SpawnSystem';
 import {
   AREAS, CARVES, DOORS, FLOORS, LAMPS, MAP_HEIGHT, MAP_WIDTH, OBSTACLES, OUTSIDE_DARKNESS, PLAYER_START,
-  MACHINES, POCKETS, PROPS, SPAWNS, STATIONS, TRAIN_ROOF_UNITS, WINDOWS,
+  BOX_SPOTS, MACHINES, POCKETS, PROPS, SPAWNS, STATIONS, TRAIN_ROOF_UNITS, WINDOWS,
   type AreaDef, type DoorDef, type FloorKind, type MachinePlacement, type Rect, type WindowDef,
 } from './terminal/layout';
 import { perks } from '../config/machines.config';
@@ -49,6 +49,13 @@ export interface Lamp {
   emergency?: boolean;
 }
 
+/** Corpo sólido colocado em tempo de execução (pode ser removido). */
+export interface SolidHandle {
+  zone: Phaser.GameObjects.Zone;
+  /** Tiles bloqueados e o custo de navegação que tinham antes. */
+  tiles: Array<{ tx: number; ty: number; cost: number }>;
+}
+
 export type MachineDef = MachinePlacement & { x: number; y: number };
 
 export type StationDef = { type: 'weapon'; weaponId: string; x: number; y: number } | { type: 'ammo'; x: number; y: number };
@@ -72,6 +79,8 @@ export class TerminalMap {
   readonly lamps: Lamp[];
   readonly stations: StationDef[];
   readonly machines: MachineDef[];
+  /** Locais da Mystery Box (centro em px + área). */
+  readonly boxSpots: Array<{ x: number; y: number; area: string }>;
   readonly doors: DoorDef[] = DOORS;
   readonly windows: WindowDef[] = WINDOWS;
   readonly areas: AreaDef[] = AREAS;
@@ -137,8 +146,11 @@ export class TerminalMap {
     // Luz fraca sobre cada ponto de compra, para ser encontrado no escuro.
     for (const s of this.stations) this.lamps.push({ x: s.x, y: s.y, radius: 70, intensity: 0.45, flicker: 0, emergency: true });
     this.machines = MACHINES.map((m) => ({ ...m, ...center(m.tx, m.ty) }));
-    // Máquinas iluminadas com a cor delas (perks) ou luz dourada/roxa.
+    this.boxSpots = BOX_SPOTS.map((s) => ({ x: s.tx * TILE_SIZE + TILE_SIZE / 2, y: s.ty * TILE_SIZE + TILE_SIZE / 2, area: s.area }));
+    // Máquinas iluminadas com a cor delas (perks) ou luz roxa. A Mystery Box tem luz
+    // própria (ela muda de lugar).
     for (const m of this.machines) {
+      if (m.type === 'mystery_box') continue;
       const color = m.type === 'perk' ? perks[m.perkId].color : m.type === 'weapon_lab' ? 0x9b59d0 : 0xffd27a;
       this.lamps.push({ x: m.x, y: m.y, radius: 95, intensity: 0.6, flicker: 0.05, color, emergency: true });
     }
@@ -176,18 +188,41 @@ export class TerminalMap {
   // ───────────────────────── Mudanças dinâmicas ─────────────────────────
 
   /** Corpo sólido extra (máquinas, maletas): colide, bloqueia tiros e a navegação. */
-  addSolid(cx: number, cy: number, w: number, h: number): void {
+  addSolid(cx: number, cy: number, w: number, h: number): SolidHandle {
     const zone = this.scene.add.zone(cx, cy, w, h);
     this.obstacles.add(zone);
     this.bulletBlockers.add(zone);
-    this.blockNav(cx, cy, w, h);
+    return { zone, tiles: this.blockNav(cx, cy, w, h) };
   }
 
-  private blockNav(cx: number, cy: number, w: number, h: number): void {
+  /** Desfaz um addSolid (ex.: a Mystery Box mudou de lugar). */
+  removeSolid(handle: SolidHandle): void {
+    this.obstacles.remove(handle.zone);
+    this.bulletBlockers.remove(handle.zone);
+    handle.zone.destroy();
+    for (const t of handle.tiles) this.nav.setCost(t.tx, t.ty, t.cost);
+  }
+
+  /** Todos os tiles cobertos pelo retângulo são chão livre? */
+  isFree(cx: number, cy: number, w: number, h: number): boolean {
+    return this.tilesUnder(cx, cy, w, h).every(([tx, ty]) => this.nav.getCost(tx, ty) === NavCost.Floor);
+  }
+
+  private tilesUnder(cx: number, cy: number, w: number, h: number): Array<[number, number]> {
     const t = (v: number) => Math.floor(v / TILE_SIZE);
+    const tiles: Array<[number, number]> = [];
     for (let ty = t(cy - h / 2 + 4); ty <= t(cy + h / 2 - 4); ty++) {
-      for (let tx = t(cx - w / 2 + 4); tx <= t(cx + w / 2 - 4); tx++) this.nav.setCost(tx, ty, NavCost.Blocked);
+      for (let tx = t(cx - w / 2 + 4); tx <= t(cx + w / 2 - 4); tx++) tiles.push([tx, ty]);
     }
+    return tiles;
+  }
+
+  private blockNav(cx: number, cy: number, w: number, h: number): Array<{ tx: number; ty: number; cost: number }> {
+    return this.tilesUnder(cx, cy, w, h).map(([tx, ty]) => {
+      const cost = this.nav.getCost(tx, ty);
+      this.nav.setCost(tx, ty, NavCost.Blocked);
+      return { tx, ty, cost };
+    });
   }
 
   /** Porta aberta: os tiles viram chão para colisão e navegação. */

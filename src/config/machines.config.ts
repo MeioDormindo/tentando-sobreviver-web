@@ -7,14 +7,21 @@ export const mysteryBoxConfig = {
   rollMs: 3000,
   /** Tempo para pegar a arma sorteada antes de ela sumir (ms). */
   takeMs: 8000,
-  /** Probabilidade de cada raridade (%). */
+  /** Probabilidade de cada raridade (%): armas boas saem com frequência. */
   rarityWeights: {
-    common: 40,
-    uncommon: 28,
-    rare: 17,
-    epic: 11,
-    legendary: 4,
+    common: 22,
+    uncommon: 26,
+    rare: 25,
+    epic: 19,
+    legendary: 8,
   } satisfies Record<Rarity, number>,
+  /** Usos no mesmo local antes de a caixa sumir e reaparecer em outro. */
+  usesBeforeMove: 3,
+  /** Animação de saída (tremer + subir) e tempo até reaparecer (ms). */
+  moveOutMs: 1600,
+  moveGapMs: 1400,
+  /** Coluna de luz que marca o novo local (ms). */
+  beaconMs: 5000,
 };
 
 /** Weapon Lab (GDD §38). */

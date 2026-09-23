@@ -57,6 +57,19 @@ export function boxReveal(sr: number, _r: Rng): Float32Array {
   return fadeEdges(normalize(out, 0.6), sr);
 }
 
+/** Mystery Box indo embora: caixinha de música descendo, desafinando, e um sopro. */
+export function boxMove(sr: number, r: Rng): Float32Array {
+  const out = buffer(sr, 2.4);
+  [81, 78, 74, 69, 66, 62].forEach((m, i) => mixInto(out, bell(sr, note(m) * (1 - i * 0.012), 0.9), sr, i * 0.18, 0.45));
+  const whoosh = buffer(sr, 1.2);
+  white(whoosh, r, 0.6);
+  lowpass(whoosh, sr, (t) => 300 + 2400 * Math.sin(Math.min(1, t / 1.2) * Math.PI));
+  envelope(whoosh, sr, (t) => Math.sin(Math.min(1, t / 1.2) * Math.PI));
+  mixInto(out, whoosh, sr, 0.9, 0.7);
+  reverb(out, sr, 0.85, 0.35);
+  return fadeEdges(normalize(out, 0.65), sr);
+}
+
 /** Weapon Lab: zumbido elétrico subindo + descarga. */
 export function labUpgrade(sr: number, r: Rng): Float32Array {
   const dur = 1.6;

@@ -42,6 +42,8 @@ export const GameEvents = {
   ShotsFired: 'shots-fired',
   ShotHit: 'shot-hit',
   DamageDealt: 'damage-dealt',
+  /** Pontuação total e o quanto mudou. */
+  ScoreChanged: 'score-changed',
   /** Fim de partida com o resumo (GDD §63–64). */
   GameOver: 'game-over',
   /** A UI pede o estado atual (ex.: ao ser criada depois da GameScene). */
@@ -119,9 +121,11 @@ export interface GameOverStats {
   shotsHit: number;
   damage: number;
   powerUps: number;
+  score: number;
   /** Recordes (localStorage) e se esta partida bateu algum. */
   bestWave: number;
   bestKills: number;
+  bestScore: number;
   newRecord: boolean;
 }
 
@@ -177,6 +181,7 @@ export interface GameEventMap {
   [GameEvents.ShotsFired]: { count: number };
   [GameEvents.ShotHit]: undefined;
   [GameEvents.DamageDealt]: { amount: number };
+  [GameEvents.ScoreChanged]: { score: number; delta: number };
   [GameEvents.GameOver]: GameOverStats;
   [GameEvents.HudRequest]: undefined;
 }
