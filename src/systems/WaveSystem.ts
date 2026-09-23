@@ -90,7 +90,8 @@ export class WaveSystem {
     const stage = [...waveConfig.composition].reverse().find((c) => this.wave >= c.fromWave) ?? waveConfig.composition[0];
     const alive = this.spawner.aliveByType();
     const entries = Object.entries(stage.weights).filter(([type]) => {
-      const cap = waveConfig.maxAlivePerType[type];
+      const late = waveConfig.lateMaxAlivePerType;
+      const cap = (this.wave >= late.fromWave ? late.caps[type] : undefined) ?? waveConfig.maxAlivePerType[type];
       return cap === undefined || (alive.get(type) ?? 0) < cap;
     });
     let pick = Math.random() * entries.reduce((sum, [, w]) => sum + w, 0);

@@ -17,7 +17,7 @@ export function getWaveParams(wave: number, cfg = waveConfig): WaveParams {
   return {
     wave: w,
     totalEnemies: cfg.baseEnemies + w * cfg.enemiesPerWave,
-    healthMultiplier: 1 + (w - 1) * cfg.healthMultiplier,
+    healthMultiplier: 1 + (w - 1) * cfg.healthMultiplier + Math.max(0, w - cfg.lateFromWave) * cfg.lateHealthMultiplier,
     damageMultiplier: 1 + (w - 1) * cfg.damageMultiplier,
     speedMultiplier: 1 + (w - 1) * cfg.speedMultiplier,
     spawnInterval: Math.max(cfg.spawnIntervalMin, cfg.spawnIntervalBase + (w - 1) * cfg.spawnIntervalPerWave),

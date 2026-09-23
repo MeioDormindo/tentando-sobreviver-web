@@ -29,7 +29,7 @@ export const eventScheduleConfig = {
 
 export const worldEvents: Record<WorldEventId, WorldEventInfo> = {
   blackout: { name: 'APAGÃO', hint: 'As luzes caíram — use a lanterna', color: 0x8fa3b8, weight: 20, minWave: 3, cooldownWaves: 3 },
-  emergency_alarm: { name: 'ALARME DE EMERGÊNCIA', hint: 'O barulho atrai mais zumbis', color: 0xff4433, weight: 18, minWave: 4, cooldownWaves: 3 },
+  emergency_alarm: { name: 'ALARME DE EMERGÊNCIA', hint: 'O barulho atrai mais zumbis', color: 0xff4433, weight: 18, minWave: 6, cooldownWaves: 3 },
   train: { name: 'TREM PASSANDO', hint: 'Saia dos trilhos da plataforma!', color: 0xffc04a, weight: 18, minWave: 2, cooldownWaves: 2 },
   horde: { name: 'HORDA', hint: 'Muito mais zumbis nesta wave', color: 0xb33a3a, weight: 14, minWave: 5, cooldownWaves: 4 },
   supply_drop: { name: 'SUPRIMENTOS', hint: 'Uma caixa caiu no terminal — pegue-a', color: 0x7bd67b, weight: 22, minWave: 2, cooldownWaves: 2 },

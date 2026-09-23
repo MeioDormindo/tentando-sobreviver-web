@@ -55,8 +55,8 @@ export interface WeaponConfig {
 }
 
 /**
- * Armas do GDD §26. Valores de dano/pente/reserva/preço do GDD; cadência, recarga,
- * dispersão e alcance são placeholders para o balanceamento da Fase 12.
+ * Armas do GDD §26. Pente/reserva/preço do GDD; cadência, recarga, dispersão e alcance
+ * ajustados na Fase 12 (as espingardas ganharam dano por chumbo e recarga menor).
  */
 export const weapons: Record<string, WeaponConfig> = {
   m1911: {
@@ -97,13 +97,13 @@ export const weapons: Record<string, WeaponConfig> = {
   },
   pump: {
     id: 'pump', name: 'Pump Shotgun', kind: 'shotgun',
-    damage: 16, fireRate: 850, magazineSize: 6, reserveAmmo: 48, reloadTime: 2600,
+    damage: 20, fireRate: 850, magazineSize: 6, reserveAmmo: 48, reloadTime: 2200,
     spread: 9, range: 320, projectileSpeed: 1000, pellets: 8, automatic: false,
     price: 1500, ammoPrice: 750, rarity: 'uncommon',
   },
   combat_shotgun: {
     id: 'combat_shotgun', name: 'Combat Shotgun', kind: 'shotgun',
-    damage: 13, fireRate: 320, magazineSize: 8, reserveAmmo: 64, reloadTime: 2600,
+    damage: 16, fireRate: 320, magazineSize: 8, reserveAmmo: 64, reloadTime: 2400,
     spread: 8, range: 360, projectileSpeed: 1000, pellets: 7, automatic: false,
     price: 2200, ammoPrice: 1100, rarity: 'rare',
   },
