@@ -2,6 +2,7 @@
  * Manifesto de assets. Os SVGs são gerados por `npm run art` (scripts/generate-art.mjs)
  * e podem ser substituídos por PNGs com o mesmo layout de frames.
  */
+import type { WeaponKind } from './weapons.config';
 
 export interface SheetAsset {
   key: string;
@@ -28,7 +29,6 @@ export const ZOMBIE_VARIANTS = ['a', 'b', 'c'] as const;
 export type ZombieVariant = (typeof ZOMBIE_VARIANTS)[number];
 
 export const ASSET_KEYS = {
-  playerTorso: 'player_torso',
   playerLegs: 'player_legs',
   corpses: 'corpses',
   shadow: 'shadow',
@@ -41,11 +41,31 @@ export const ASSET_KEYS = {
   barrel: 'prop_barrel',
   trash: 'prop_trash',
   suitcase: 'prop_suitcase',
+  ammoCrate: 'ammo_crate',
   papers: 'decal_papers',
   debris: 'decal_debris',
   bloodSplats: 'decal_blood_splats',
   bloodPool: 'decal_blood_pool',
 } as const;
+
+export const WEAPON_KINDS: WeaponKind[] = ['pistol', 'smg', 'rifle', 'ak', 'shotgun'];
+
+/** Tronco do jogador por tipo de arma (mesma ordem de frames em todas). */
+export const playerTorsoKey = (kind: WeaponKind): string => `player_torso_${kind}`;
+export const playerAnimKey = (kind: WeaponKind, anim: 'shoot' | 'reload'): string => `player_${anim}_${kind}`;
+export const weaponCaseKey = (kind: WeaponKind): string => `case_${kind}`;
+
+/**
+ * Ponta do cano em relação ao centro do jogador (px do mundo): à frente e ao lado,
+ * conforme cada pose. Usado para posicionar tiro, clarão e luz.
+ */
+export const WEAPON_MUZZLE: Record<WeaponKind, { forward: number; side: number }> = {
+  pistol: { forward: 25, side: 0 },
+  smg: { forward: 23, side: 3 },
+  rifle: { forward: 29, side: 3 },
+  ak: { forward: 28, side: 3 },
+  shotgun: { forward: 29, side: 3 },
+};
 
 export const zombieSheetKey = (v: ZombieVariant): string => `walker_${v}`;
 export const zombieAnimKey = (v: ZombieVariant, anim: 'walk' | 'attack'): string => `walker_${v}_${anim}`;
@@ -59,14 +79,18 @@ export const PLAYER_FRAMES = {
 
 export const ANIM_KEYS = {
   playerLegsWalk: 'player_legs_walk',
-  playerShoot: 'player_shoot',
-  playerReload: 'player_reload',
 } as const;
 
 const CHAR = 128;
 
 export const SHEETS: SheetAsset[] = [
-  { key: ASSET_KEYS.playerTorso, url: 'assets/player/player_torso.svg', frameWidth: CHAR, frameHeight: CHAR, frames: 7 },
+  ...WEAPON_KINDS.map((kind) => ({
+    key: playerTorsoKey(kind),
+    url: `assets/player/player_torso_${kind}.svg`,
+    frameWidth: CHAR,
+    frameHeight: CHAR,
+    frames: 7,
+  })),
   { key: ASSET_KEYS.playerLegs, url: 'assets/player/player_legs.svg', frameWidth: CHAR, frameHeight: CHAR, frames: 8 },
   ...ZOMBIE_VARIANTS.map((v) => ({
     key: zombieSheetKey(v),
@@ -90,6 +114,8 @@ export const IMAGES: ImageAsset[] = [
   { key: ASSET_KEYS.barrel, url: 'assets/props/barrel.svg' },
   { key: ASSET_KEYS.trash, url: 'assets/props/trash.svg' },
   { key: ASSET_KEYS.suitcase, url: 'assets/props/suitcase.svg' },
+  { key: ASSET_KEYS.ammoCrate, url: 'assets/weapons/ammo_crate.svg' },
+  ...WEAPON_KINDS.map((kind) => ({ key: weaponCaseKey(kind), url: `assets/weapons/case_${kind}.svg` })),
   { key: ASSET_KEYS.papers, url: 'assets/particles/papers.svg' },
   { key: ASSET_KEYS.debris, url: 'assets/particles/debris.svg' },
   { key: ASSET_KEYS.bloodPool, url: 'assets/particles/blood_pool.svg' },
@@ -100,14 +126,22 @@ const range = (from: number, to: number): number[] =>
 
 export const ANIMS: AnimAsset[] = [
   { key: ANIM_KEYS.playerLegsWalk, sheet: ASSET_KEYS.playerLegs, frames: range(0, 7), frameRate: 12, repeat: -1 },
-  { key: ANIM_KEYS.playerShoot, sheet: ASSET_KEYS.playerTorso, frames: [PLAYER_FRAMES.recoil, PLAYER_FRAMES.aim], frameRate: 18, repeat: 0 },
-  {
-    key: ANIM_KEYS.playerReload,
-    sheet: ASSET_KEYS.playerTorso,
-    frames: [...range(PLAYER_FRAMES.reloadStart, PLAYER_FRAMES.reloadEnd), PLAYER_FRAMES.aim],
-    frameRate: 5,
-    repeat: 0,
-  },
+  ...WEAPON_KINDS.flatMap((kind) => [
+    {
+      key: playerAnimKey(kind, 'shoot'),
+      sheet: playerTorsoKey(kind),
+      frames: [PLAYER_FRAMES.recoil, PLAYER_FRAMES.aim],
+      frameRate: 18,
+      repeat: 0,
+    },
+    {
+      key: playerAnimKey(kind, 'reload'),
+      sheet: playerTorsoKey(kind),
+      frames: [...range(PLAYER_FRAMES.reloadStart, PLAYER_FRAMES.reloadEnd), PLAYER_FRAMES.aim],
+      frameRate: 5,
+      repeat: 0,
+    },
+  ]),
   ...ZOMBIE_VARIANTS.flatMap((v) => [
     { key: zombieAnimKey(v, 'walk'), sheet: zombieSheetKey(v), frames: range(0, 7), frameRate: 7, repeat: -1 },
     { key: zombieAnimKey(v, 'attack'), sheet: zombieSheetKey(v), frames: range(8, 12), frameRate: 14, repeat: 0 },

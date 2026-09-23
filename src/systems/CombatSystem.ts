@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { headshotConfig } from '../config/economy.config';
 import type { EffectsSystem } from '../effects/EffectsSystem';
 import type { Player } from '../entities/Player';
 import { Projectile } from '../entities/Projectile';
@@ -50,11 +51,12 @@ export class CombatSystem {
         const projectile = CombatSystem.find(Projectile, a, b);
         const zombie = CombatSystem.find(Zombie, a, b);
         if (!projectile || !zombie) return;
-        const damage = projectile.damage;
         const angle = projectile.angleOfTravel;
+        const headshot = CombatSystem.isHeadshot(projectile, zombie, angle);
+        const damage = projectile.damage * (headshot ? headshotConfig.damageMultiplier : 1);
         projectile.kill();
         effects.bloodHit(zombie.x, zombie.y, angle);
-        if (zombie.takeDamage(damage)) {
+        if (zombie.takeDamage(damage, headshot)) {
           effects.zombieDeath(zombie.x, zombie.y, angle, zombie.variant);
         }
       },
@@ -64,6 +66,17 @@ export class CombatSystem {
         return !!projectile?.active && !!zombie?.isAlive;
       },
     );
+  }
+
+  /**
+   * Vista de cima: a cabeça fica no centro do zumbi. É headshot quando a trajetória
+   * do tiro passa a menos de headRadius desse centro.
+   */
+  private static isHeadshot(projectile: Projectile, zombie: Zombie, angle: number): boolean {
+    const dx = zombie.x - projectile.x;
+    const dy = zombie.y - projectile.y;
+    const offLine = Math.abs(dx * Math.sin(angle) - dy * Math.cos(angle));
+    return offLine <= headshotConfig.headRadius;
   }
 
   private static find<T>(

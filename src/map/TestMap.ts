@@ -99,6 +99,20 @@ const SPAWN_POINTS: SpawnPointDef[] = [
   { id: 'H12', tx: 18, ty: 41, minWave: 4 },
 ];
 
+/** Pontos de compra (em tiles). */
+const STATIONS: Array<{ type: 'weapon'; weaponId: string; tx: number; ty: number } | { type: 'ammo'; tx: number; ty: number }> = [
+  { type: 'ammo', tx: 30, ty: 22 },
+  { type: 'weapon', weaponId: 'glock', tx: 34.5, ty: 21 },
+  { type: 'weapon', weaponId: 'mp5', tx: 20, ty: 13 },
+  { type: 'weapon', weaponId: 'pump', tx: 22, ty: 34 },
+  { type: 'weapon', weaponId: 'm4', tx: 44, ty: 35 },
+  { type: 'weapon', weaponId: 'vector', tx: 51, ty: 16 },
+  { type: 'weapon', weaponId: 'ak', tx: 11, ty: 28 },
+  { type: 'weapon', weaponId: 'combat_shotgun', tx: 56, ty: 28 },
+];
+
+export type StationDef = { type: 'weapon'; weaponId: string; x: number; y: number } | { type: 'ammo'; x: number; y: number };
+
 export interface Lamp {
   x: number;
   y: number;
@@ -125,6 +139,7 @@ export class TestMap {
   readonly playerSpawn: Phaser.Math.Vector2;
   readonly spawnPoints: SpawnPoint[];
   readonly lamps: Lamp[];
+  readonly stations: StationDef[];
 
   private readonly data: number[][];
 
@@ -151,6 +166,11 @@ export class TestMap {
       const pos = TestMap.tileCenter(p.tx, p.ty);
       return { id: p.id, x: pos.x, y: pos.y, sector: 'hall', minWave: p.minWave, enabled: !this.isWall(p.tx, p.ty) };
     });
+    this.stations = STATIONS.map((s) => {
+      const x = s.tx * TILE_SIZE + TILE_SIZE / 2;
+      const y = s.ty * TILE_SIZE + TILE_SIZE / 2;
+      return s.type === 'weapon' ? { type: 'weapon', weaponId: s.weaponId, x, y } : { type: 'ammo', x, y };
+    });
     this.lamps = LAMPS.map((l) => ({
       x: l.tx * TILE_SIZE + TILE_SIZE / 2,
       y: l.ty * TILE_SIZE + TILE_SIZE / 2,
@@ -158,6 +178,8 @@ export class TestMap {
       intensity: l.intensity,
       flicker: l.flicker,
     }));
+    // Luz fraca sobre cada ponto de compra, para ser encontrado no escuro.
+    for (const s of this.stations) this.lamps.push({ x: s.x, y: s.y, radius: 70, intensity: 0.45, flicker: 0 });
   }
 
   isWall(tx: number, ty: number): boolean {

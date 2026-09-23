@@ -25,12 +25,6 @@ export const waveConfig = {
 
   /** Tipo de zumbi das waves (Runner/Tank/Exploder entram na Fase 7). */
   zombieType: 'walker',
-
-  /**
-   * PROVISÓRIO até a economia (Fase 3): reabastece a reserva de munição ao fim da wave,
-   * senão as 88 balas iniciais não bastam para 5 waves.
-   */
-  refillAmmoOnWaveEnd: true,
 };
 
 /** Regras de posicionamento de spawn (GDD §21). */

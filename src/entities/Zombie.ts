@@ -278,12 +278,12 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
   }
 
   /** Aplica dano; retorna true se o golpe matou o zumbi. */
-  takeDamage(amount: number): boolean {
+  takeDamage(amount: number, headshot = false): boolean {
     if (!this.isAlive || !this.config) return false;
 
     this.hp -= amount;
     if (this.hp <= 0) {
-      this.die();
+      this.die(headshot);
       return true;
     }
     // Ao ser atingido, o zumbi percebe o jogador mesmo fora do alcance de detecção.
@@ -296,7 +296,7 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
   }
 
   /** O corpo caído é criado pelo EffectsSystem; aqui o zumbi só volta ao pool. */
-  private die(): void {
+  private die(headshot: boolean): void {
     const config = this.config;
     this.aiState = ZombieState.Dead;
     this.life++;
@@ -308,6 +308,9 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
       emitGameEvent(this.scene.game.events, GameEvents.ZombieKilled, {
         type: config.id,
         reward: config.reward,
+        x: this.x,
+        y: this.y,
+        headshot,
       });
     }
 

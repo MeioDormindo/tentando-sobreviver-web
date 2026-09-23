@@ -1,22 +1,24 @@
 import Phaser from 'phaser';
 import { SCENE_KEYS } from '../config/game.config';
 import { playerConfig } from '../config/player.config';
-import { waveConfig } from '../config/waves.config';
 import { getWeaponConfig } from '../config/weapons.config';
 import { Player } from '../entities/Player';
 import { Projectile } from '../entities/Projectile';
 import { Zombie } from '../entities/Zombie';
 import { EffectsSystem } from '../effects/EffectsSystem';
 import { LightingSystem } from '../effects/LightingSystem';
-import { GameEvents, onGameEvent, type WaveStatePayload } from '../game/events';
+import { AmmoStation, WeaponCase } from '../entities/BuyStations';
+import { GameEvents, onGameEvent } from '../game/events';
 import { TestMap } from '../map/TestMap';
 import { CameraController } from '../systems/CameraController';
 import { CombatSystem } from '../systems/CombatSystem';
+import { EconomySystem } from '../systems/EconomySystem';
+import { InteractionSystem } from '../systems/InteractionSystem';
 import { SpawnSystem } from '../systems/SpawnSystem';
 import { WaveSystem } from '../systems/WaveSystem';
 import { WeaponSystem } from '../weapons/WeaponSystem';
 
-const MAX_PROJECTILES = 64;
+const MAX_PROJECTILES = 160;
 const MAX_ZOMBIES = 60;
 
 /** Orquestra a partida: cria mapa, entidades e sistemas, e delega a lógica a eles. */
@@ -26,7 +28,8 @@ export class GameScene extends Phaser.Scene {
   private cameraController!: CameraController;
   private lighting!: LightingSystem;
   private waveSystem!: WaveSystem;
-  private lastWavePhase = '';
+  private economy!: EconomySystem;
+  private interaction!: InteractionSystem;
   private readonly aimPoint = new Phaser.Math.Vector2();
 
   constructor() {
@@ -72,6 +75,15 @@ export class GameScene extends Phaser.Scene {
     const spawner = new SpawnSystem(this, zombies, map.spawnPoints, this.player);
     this.waveSystem = new WaveSystem(this, spawner, this.player);
 
+    this.economy = new EconomySystem(this, effects);
+    this.interaction = new InteractionSystem(this, this.player);
+    const stationDeps = { economy: this.economy, weapons: this.weaponSystem, obstacles: map.obstacles };
+    for (const s of map.stations) {
+      this.interaction.add(
+        s.type === 'weapon' ? new WeaponCase(this, s.x, s.y, s.weaponId, stationDeps) : new AmmoStation(this, s.x, s.y, stationDeps),
+      );
+    }
+
     this.cameraController = new CameraController(this, this.player, map.widthPx, map.heightPx);
     // A luz é desenhada depois da física, com as posições finais do frame.
     this.events.on(Phaser.Scenes.Events.POST_UPDATE, this.updateLighting, this);
@@ -81,7 +93,6 @@ export class GameScene extends Phaser.Scene {
     const unsubscribers = [
       onGameEvent(this.game.events, GameEvents.PlayerDied, this.onPlayerDied, this),
       onGameEvent(this.game.events, GameEvents.HudRequest, this.syncHud, this),
-      onGameEvent(this.game.events, GameEvents.WaveState, this.onWaveState, this),
     ];
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       unsubscribers.forEach((off) => off());
@@ -98,6 +109,7 @@ export class GameScene extends Phaser.Scene {
     this.input.activePointer.positionToCamera(this.cameras.main, this.aimPoint);
     this.player.aimAt(this.aimPoint.x, this.aimPoint.y);
     this.weaponSystem.update(time);
+    this.interaction.update();
     this.cameraController.update();
   }
 
@@ -109,14 +121,8 @@ export class GameScene extends Phaser.Scene {
     this.player.emitHp();
     this.weaponSystem.syncHud();
     this.waveSystem.syncHud();
-  }
-
-  /** Fim de wave: reabastece a munição (provisório até a economia da Fase 3). */
-  private onWaveState(state: WaveStatePayload): void {
-    if (state.phase === 'intermission' && this.lastWavePhase === 'active' && waveConfig.refillAmmoOnWaveEnd) {
-      this.weaponSystem.refillAmmo();
-    }
-    this.lastWavePhase = state.phase;
+    this.economy.syncHud();
+    this.interaction.syncHud();
   }
 
   private onPlayerDied(): void {

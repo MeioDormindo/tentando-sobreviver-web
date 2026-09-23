@@ -55,7 +55,7 @@ export class MenuScene extends Phaser.Scene {
     });
 
     const hint = this.add
-      .text(0, 0, 'WASD mover · Mouse mirar · Clique atirar · R recarregar', {
+      .text(0, 0, 'WASD mover · Mouse mirar · Clique atirar · R recarregar · E comprar · Q/1/2 trocar arma', {
         fontFamily: 'monospace',
         fontSize: '14px',
         color: COLORS.textDim,

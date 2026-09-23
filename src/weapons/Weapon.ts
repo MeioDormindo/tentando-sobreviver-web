@@ -47,6 +47,10 @@ export class Weapon {
     return true;
   }
 
+  cancelReload(): void {
+    this.reloadEndsAt = null;
+  }
+
   update(time: number): void {
     if (this.reloadEndsAt === null || time < this.reloadEndsAt) return;
     const needed = this.config.magazineSize - this.currentAmmo;
@@ -61,7 +65,7 @@ export class Weapon {
     this.reserveAmmo = this.config.reserveAmmo;
   }
 
-  snapshot(): AmmoPayload {
+  snapshot(): Omit<AmmoPayload, 'secondary'> {
     return {
       weaponName: this.config.name,
       current: this.currentAmmo,

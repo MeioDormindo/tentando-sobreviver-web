@@ -5,6 +5,8 @@ import {
   GameEvents,
   onGameEvent,
   type AmmoPayload,
+  type InteractionPromptPayload,
+  type MoneyPayload,
   type PlayerHpPayload,
   type WaveStatePayload,
 } from '../game/events';
@@ -15,6 +17,8 @@ const HP_BAR_HEIGHT = 14;
 const FONT = 'monospace';
 const TITLE_FONT = 'Impact, "Arial Black", sans-serif';
 const WAVE_COLOR = '#b33a3a';
+const MONEY_COLOR = '#e3c77a';
+const formatMoney = (n: number): string => `$ ${n.toLocaleString('pt-BR')}`;
 
 /** HUD sobreposta à GameScene. Apenas escuta eventos; não contém regra de jogo. */
 export class UIScene extends Phaser.Scene {
@@ -22,6 +26,10 @@ export class UIScene extends Phaser.Scene {
   private hpText!: Phaser.GameObjects.Text;
   private weaponText!: Phaser.GameObjects.Text;
   private ammoText!: Phaser.GameObjects.Text;
+  private secondaryText!: Phaser.GameObjects.Text;
+  private moneyText!: Phaser.GameObjects.Text;
+  private moneyDeltaText!: Phaser.GameObjects.Text;
+  private promptText!: Phaser.GameObjects.Text;
   private statusText!: Phaser.GameObjects.Text;
   private killsText!: Phaser.GameObjects.Text;
   private crosshair!: Phaser.GameObjects.Graphics;
@@ -34,6 +42,8 @@ export class UIScene extends Phaser.Scene {
   private hp: PlayerHpPayload = { hp: 0, maxHp: 1 };
   private kills = 0;
   private waveState: WaveStatePayload | null = null;
+  private money: MoneyPayload = { money: 0, delta: 0, earned: 0 };
+  private prompt: InteractionPromptPayload | null = null;
 
   constructor() {
     super(SCENE_KEYS.ui);
@@ -43,6 +53,7 @@ export class UIScene extends Phaser.Scene {
     this.kills = 0;
     this.deathOverlay = null;
     this.waveState = null;
+    this.prompt = null;
 
     this.hpBar = this.add.graphics();
     this.hpText = this.add.text(0, 0, '', { fontFamily: FONT, fontSize: '14px', color: COLORS.text });
@@ -68,6 +79,26 @@ export class UIScene extends Phaser.Scene {
       .text(0, 0, '', { fontFamily: FONT, fontSize: '18px', color: COLORS.text })
       .setOrigin(0.5)
       .setAlpha(0);
+    this.secondaryText = this.add
+      .text(0, 0, '', { fontFamily: FONT, fontSize: '13px', color: COLORS.textDim })
+      .setOrigin(1, 1);
+    this.moneyText = this.add
+      .text(0, 0, '', { fontFamily: TITLE_FONT, fontSize: '30px', color: MONEY_COLOR })
+      .setOrigin(1, 0);
+    this.moneyDeltaText = this.add
+      .text(0, 0, '', { fontFamily: FONT, fontSize: '15px', color: MONEY_COLOR })
+      .setOrigin(1, 0)
+      .setAlpha(0);
+    this.promptText = this.add
+      .text(0, 0, '', {
+        fontFamily: FONT,
+        fontSize: '17px',
+        color: COLORS.text,
+        backgroundColor: 'rgba(0,0,0,0.55)',
+        padding: { x: 12, y: 6 },
+      })
+      .setOrigin(0.5)
+      .setVisible(false);
     this.crosshair = this.add.graphics().setDepth(100);
     this.drawCrosshair();
     this.updateKills();
@@ -78,6 +109,9 @@ export class UIScene extends Phaser.Scene {
       onGameEvent(this.game.events, GameEvents.ZombieKilled, this.onZombieKilled, this),
       onGameEvent(this.game.events, GameEvents.PlayerDied, this.onPlayerDied, this),
       onGameEvent(this.game.events, GameEvents.WaveState, this.onWaveState, this),
+      onGameEvent(this.game.events, GameEvents.MoneyChanged, this.onMoneyChanged, this),
+      onGameEvent(this.game.events, GameEvents.InteractionPrompt, this.onPrompt, this),
+      onGameEvent(this.game.events, GameEvents.PurchaseDenied, this.onPurchaseDenied, this),
     ];
     this.scale.on(Phaser.Scale.Events.RESIZE, this.layout, this);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
@@ -99,8 +133,12 @@ export class UIScene extends Phaser.Scene {
     this.hpText.setPosition(MARGIN, height - MARGIN - HP_BAR_HEIGHT - 22);
     this.weaponText.setPosition(width - MARGIN, height - MARGIN - 40);
     this.ammoText.setPosition(width - MARGIN, height - MARGIN);
+    this.secondaryText.setPosition(width - MARGIN, height - MARGIN - 64);
+    this.moneyText.setPosition(width - MARGIN, MARGIN - 4);
+    this.moneyDeltaText.setPosition(width - MARGIN, MARGIN + 34);
+    this.promptText.setPosition(width / 2, height * 0.72);
     this.statusText.setPosition(width / 2, height * 0.62);
-    this.killsText.setPosition(width - MARGIN, MARGIN);
+    this.killsText.setPosition(width - MARGIN, MARGIN + 56);
     this.waveText.setPosition(MARGIN, MARGIN - 6);
     this.waveSubText.setPosition(MARGIN + 2, MARGIN + 44);
     this.bannerTitle.setPosition(width / 2, height * 0.28);
@@ -136,7 +174,8 @@ export class UIScene extends Phaser.Scene {
   }
 
   private onAmmoChanged(payload: AmmoPayload): void {
-    this.weaponText.setText(payload.weaponName);
+    this.weaponText.setText(payload.weaponName.toUpperCase());
+    this.secondaryText.setText(payload.secondary ? `[Q] ${payload.secondary.toUpperCase()}` : '');
     this.ammoText.setText(`${payload.current} / ${payload.reserve}`);
     this.ammoText.setColor(payload.current === 0 ? '#c05050' : COLORS.text);
 
@@ -160,8 +199,51 @@ export class UIScene extends Phaser.Scene {
     if (state.phase === 'active' && (prev.phase !== 'active' || prev.wave !== state.wave)) {
       this.showBanner(`WAVE ${state.wave}`, `${state.total} zumbis`, WAVE_COLOR);
     } else if (state.phase === 'intermission' && prev.phase === 'active') {
-      this.showBanner(`WAVE ${state.wave} SOBREVIVIDA`, 'munição reabastecida', COLORS.accent);
+      this.showBanner(`WAVE ${state.wave} SOBREVIVIDA`, 'hora de gastar', COLORS.accent);
     }
+  }
+
+  private onMoneyChanged(payload: MoneyPayload): void {
+    this.money = payload;
+    this.moneyText.setText(formatMoney(payload.money));
+    if (payload.delta === 0) return;
+    const gain = payload.delta > 0;
+    this.moneyDeltaText
+      .setText(`${gain ? '+' : '-'}${Math.abs(payload.delta).toLocaleString('pt-BR')}`)
+      .setColor(gain ? MONEY_COLOR : '#d06a5a')
+      .setAlpha(1);
+    this.tweens.killTweensOf(this.moneyDeltaText);
+    this.tweens.add({ targets: this.moneyDeltaText, alpha: 0, delay: 700, duration: 500 });
+    this.tweens.add({ targets: this.moneyText, scale: { from: gain ? 1.12 : 0.92, to: 1 }, duration: 220 });
+  }
+
+  private onPrompt(prompt: InteractionPromptPayload | null): void {
+    this.prompt = prompt;
+    if (!prompt) {
+      this.promptText.setVisible(false);
+      return;
+    }
+    this.promptText
+      .setText(prompt.text)
+      .setColor(prompt.affordable ? COLORS.text : '#9a8f86')
+      .setVisible(true);
+  }
+
+  /** Sem dinheiro: o prompt e o saldo "tremem" em vermelho. */
+  private onPurchaseDenied(): void {
+    const cx = this.scale.width / 2;
+    this.tweens.killTweensOf(this.promptText);
+    this.promptText.setColor('#e05a4a');
+    this.tweens.add({
+      targets: this.promptText,
+      x: { from: cx - 8, to: cx },
+      duration: 240,
+      ease: 'Elastic.easeOut',
+      onComplete: () => this.onPrompt(this.prompt),
+    });
+    this.moneyText.setColor('#e05a4a');
+    this.tweens.add({ targets: this.moneyText, scale: { from: 1.15, to: 1 }, duration: 260 });
+    this.time.delayedCall(300, () => this.moneyText.setColor(MONEY_COLOR));
   }
 
   private showBanner(title: string, subtitle: string, color: string): void {
@@ -186,6 +268,7 @@ export class UIScene extends Phaser.Scene {
 
   private onPlayerDied(): void {
     this.statusText.setText('');
+    this.promptText.setVisible(false);
     this.crosshair.setVisible(false);
     this.showDeathOverlay();
   }
@@ -202,7 +285,10 @@ export class UIScene extends Phaser.Scene {
         color: '#b33a3a',
       })
       .setOrigin(0.5);
-    const statsText = `WAVE ALCANÇADA: ${this.waveState?.wave ?? 0}\nZUMBIS ABATIDOS: ${this.kills}`;
+    const statsText =
+      `WAVE ALCANÇADA: ${this.waveState?.wave ?? 0}\n` +
+      `ZUMBIS ABATIDOS: ${this.kills}\n` +
+      `DINHEIRO GANHO: ${formatMoney(this.money.earned)}`;
     const stats = this.add
       .text(width / 2, height * 0.47, statsText, {
         fontFamily: FONT,

@@ -6,11 +6,16 @@ import {
   propBarrel, propBench, propCrate, propSuitcase, propTrash, wallCap, wallFull, wallShadow,
 } from './art/environment.mjs';
 import { write } from './art/lib.mjs';
+import { ammoCrate, WEAPON_KINDS, weaponCase } from './art/weapons.mjs';
 
 const OUT = 'public/assets';
 
 console.log('Gerando arte...');
-write(`${OUT}/player/player_torso.svg`, playerTorsoSheet());
+for (const kind of WEAPON_KINDS) {
+  write(`${OUT}/player/player_torso_${kind}.svg`, playerTorsoSheet(kind));
+  write(`${OUT}/weapons/case_${kind}.svg`, weaponCase(kind));
+}
+write(`${OUT}/weapons/ammo_crate.svg`, ammoCrate());
 write(`${OUT}/player/player_legs.svg`, playerLegsSheet());
 for (const id of Object.keys(ZOMBIE_VARIANTS)) {
   write(`${OUT}/zombies/walker_${id}.svg`, zombieSheet(id));

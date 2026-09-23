@@ -1,5 +1,6 @@
 // Personagens vistos de cima, virados para +X (direita). Frames de 128x128 (escala 2x do mundo).
 import { blobPath, f, ik, line, linear, polyline, radial, raggedEllipse, rng, sheet } from './lib.mjs';
+import { drawGun, posesFor } from './weapons.mjs';
 
 export const CHAR_FRAME = 128;
 const C = 64;
@@ -31,15 +32,6 @@ const playerDefs =
   radial('phr', [[0, P.hairLight], [0.7, P.hair], [1, '#1f160f']], '60%', '35%') +
   radial('psk', [[0, '#dcb799'], [1, '#a47e60']], '70%', '40%');
 
-function gunShape(x, y, angle) {
-  return `<g transform="translate(${f(x)} ${f(y)}) rotate(${f(angle)})">` +
-    `<rect x="-5" y="-3.4" width="26" height="6.8" rx="1.3" fill="${P.gun}"/>` +
-    `<rect x="-3" y="-3.4" width="23" height="2.2" rx="1" fill="${P.gunLight}"/>` +
-    `<rect x="19.5" y="-1.3" width="2.5" height="2.6" fill="#050505"/>` +
-    `<rect x="-6" y="1.5" width="7" height="6" rx="1.5" fill="#222" transform="rotate(12 -2 4)"/>` +
-    `</g>`;
-}
-
 function arm(shoulder, hand, bend) {
   const { elbow, hand: h } = ik(shoulder, hand, 19, 20, bend);
   return {
@@ -56,7 +48,7 @@ function arm(shoulder, hand, bend) {
 /**
  * Tronco do jogador. pose: posição das mãos, da arma e se segura um carregador.
  */
-function playerTorso(pose) {
+function playerTorso(pose, kind) {
   const SL = [61, 45];
   const SR = [61, 83];
   let s = '';
@@ -83,7 +75,7 @@ function playerTorso(pose) {
   s += left.svg + right.svg;
 
   // Arma entre os braços e as luvas
-  s += gunShape(pose.gun[0], pose.gun[1], pose.gun[2]);
+  s += drawGun(kind, pose.gun[0], pose.gun[1], pose.gun[2]);
 
   // Carregador na mão (recarga)
   if (pose.mag) {
@@ -105,19 +97,9 @@ function playerTorso(pose) {
   return s;
 }
 
-/** 0 = mirando · 1 = recuo do tiro · 2..6 = recarga */
-const PLAYER_POSES = [
-  { left: [91, 60.5], right: [93, 66.5], gun: [92, 64, 0] },
-  { left: [86, 60], right: [88, 66], gun: [87, 63.5, -9] },
-  { left: [80, 84], right: [86, 71], gun: [85, 70, 38] },
-  { left: [67, 93], right: [86, 71], gun: [85, 70, 38], mag: true },
-  { left: [78, 86], right: [86, 71], gun: [85, 70, 38], mag: true },
-  { left: [86, 75], right: [86, 71], gun: [85, 70, 38], mag: true },
-  { left: [97, 61], right: [90, 67], gun: [89, 65.5, 8] },
-];
-
-export function playerTorsoSheet() {
-  return sheet(CHAR_FRAME, CHAR_FRAME, playerDefs, PLAYER_POSES.map(playerTorso));
+/** Frames: 0 = mirando · 1 = recuo do tiro · 2..6 = recarga (poses por tipo de arma). */
+export function playerTorsoSheet(kind) {
+  return sheet(CHAR_FRAME, CHAR_FRAME, playerDefs, posesFor(kind).map((pose) => playerTorso(pose, kind)));
 }
 
 /** Pernas: ciclo de caminhada de 8 frames (frame 0 = parado). */

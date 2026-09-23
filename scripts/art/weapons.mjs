@@ -1,0 +1,151 @@
+// Armas vistas de cima (apontando para +X) e poses de empunhadura do jogador.
+import { f, line, linear, svgDoc } from './lib.mjs';
+
+const STEEL = '#19191b';
+const STEEL_LIGHT = '#45474c';
+const POLYMER = '#23252a';
+const WOOD = '#6b4526';
+const WOOD_LIGHT = '#8a5d35';
+
+// ───────────────────────────── Desenho das armas ─────────────────────────────
+
+function pistolLocal(tint = STEEL) {
+  return (
+    `<rect x="-5" y="-3.4" width="26" height="6.8" rx="1.3" fill="${tint}"/>` +
+    `<rect x="-3" y="-3.4" width="23" height="2.2" rx="1" fill="${STEEL_LIGHT}"/>` +
+    `<rect x="19.5" y="-1.3" width="2.5" height="2.6" fill="#050505"/>` +
+    `<rect x="-6" y="1.5" width="7" height="6" rx="1.5" fill="#222" transform="rotate(12 -2 4)"/>`
+  );
+}
+
+/**
+ * Arma longa em coordenadas locais: origem na traseira do receptor, eixo em +X.
+ * spec: stock, receiver, guard (comprimentos), length (total até a boca), cores.
+ */
+function longGunLocal(spec) {
+  const { stock, receiver, guard, length, body, furniture, thick = 7.5 } = spec;
+  const h = thick / 2;
+  let s = '';
+  if (stock > 0) {
+    s += `<path d="M0 ${-h + 0.5} L${-stock} ${-h - 0.5} Q${-stock - 2} 0 ${-stock} ${h + 0.5} L0 ${h - 0.5} Z" fill="${furniture}" stroke="#0b0b0b" stroke-width="0.8"/>`;
+  }
+  s += `<rect x="0" y="${-h}" width="${receiver}" height="${thick}" rx="1.2" fill="${body}" stroke="#0b0b0b" stroke-width="0.8"/>`;
+  s += `<rect x="1" y="${-h}" width="${receiver - 2}" height="1.8" fill="${STEEL_LIGHT}" opacity=".7"/>`;
+  s += `<rect x="${receiver}" y="${-h + 0.6}" width="${guard}" height="${thick - 1.2}" rx="1.5" fill="${furniture}" stroke="#0b0b0b" stroke-width="0.8"/>`;
+  if (furniture === WOOD) s += line([receiver + 2, -1], [receiver + guard - 2, -1], WOOD_LIGHT, 1.2, 'opacity=".6"');
+  s += `<rect x="${receiver + guard}" y="-1.5" width="${length - receiver - guard}" height="3" fill="${STEEL}"/>`;
+  s += `<rect x="${length - 2}" y="-2" width="3" height="4" fill="#050505"/>`;
+  // Mira no topo do receptor
+  s += `<rect x="${receiver * 0.35}" y="-1.3" width="${receiver * 0.35}" height="2.6" rx="0.8" fill="#0d0d0e"/>`;
+  return s;
+}
+
+export const GUN_SPECS = {
+  smg: { stock: 8, receiver: 18, guard: 8, length: 36, body: POLYMER, furniture: POLYMER, thick: 7 },
+  rifle: { stock: 16, receiver: 20, guard: 18, length: 52, body: STEEL, furniture: POLYMER },
+  ak: { stock: 16, receiver: 20, guard: 16, length: 50, body: STEEL, furniture: WOOD },
+  shotgun: { stock: 18, receiver: 14, guard: 16, length: 52, body: STEEL, furniture: WOOD, thick: 8 },
+};
+
+function place(x, y, angle, content) {
+  return `<g transform="translate(${f(x)} ${f(y)}) rotate(${f(angle)})">${content}</g>`;
+}
+
+/** Desenha a arma do tipo `kind` na posição/ângulo dados (coordenadas do frame). */
+export function drawGun(kind, x, y, angle) {
+  if (kind === 'pistol') return place(x, y, angle, pistolLocal());
+  return place(x, y, angle, longGunLocal(GUN_SPECS[kind]));
+}
+
+// ───────────────────────────── Poses ─────────────────────────────
+
+/** Poses da pistola (frames: mirando, recuo, 5 de recarga). */
+const PISTOL_POSES = [
+  { left: [91, 60.5], right: [93, 66.5], gun: [92, 64, 0] },
+  { left: [86, 60], right: [88, 66], gun: [87, 63.5, -9] },
+  { left: [80, 84], right: [86, 71], gun: [85, 70, 38] },
+  { left: [67, 93], right: [86, 71], gun: [85, 70, 38], mag: true },
+  { left: [78, 86], right: [86, 71], gun: [85, 70, 38], mag: true },
+  { left: [86, 75], right: [86, 71], gun: [85, 70, 38], mag: true },
+  { left: [97, 61], right: [90, 67], gun: [89, 65.5, 8] },
+];
+
+/** Posições locais das mãos em cada arma longa (ao longo do eixo da arma). */
+const GRIPS = {
+  smg: { origin: [74, 71], right: 8, left: 22 },
+  rifle: { origin: [70, 72], right: 9, left: 30 },
+  ak: { origin: [70, 72], right: 9, left: 28 },
+  shotgun: { origin: [70, 72], right: 7, left: 22 },
+};
+
+function onGun(origin, angleDeg, along, across) {
+  const a = (angleDeg * Math.PI) / 180;
+  return [origin[0] + Math.cos(a) * along - Math.sin(a) * across, origin[1] + Math.sin(a) * along + Math.cos(a) * across];
+}
+
+function longGunPoses(kind) {
+  const g = GRIPS[kind];
+  const pose = (dx, angle, leftOverride, mag = false) => {
+    const origin = [g.origin[0] + dx, g.origin[1]];
+    return {
+      gun: [origin[0], origin[1], angle],
+      right: onGun(origin, angle, g.right, 2.5),
+      left: leftOverride ?? onGun(origin, angle, g.left, -2),
+      mag,
+    };
+  };
+  return [
+    pose(0, -2),
+    pose(-4, -6),
+    pose(-2, 22, [82, 84]),
+    pose(-2, 22, [68, 93], kind !== 'shotgun'),
+    pose(-2, 22, [78, 86], kind !== 'shotgun'),
+    pose(-2, 22, [83, 80], kind !== 'shotgun'),
+    pose(0, 4, onGun([g.origin[0], g.origin[1]], 4, g.left - 6, -3)),
+  ];
+}
+
+export const WEAPON_KINDS = ['pistol', 'smg', 'rifle', 'ak', 'shotgun'];
+
+export function posesFor(kind) {
+  return kind === 'pistol' ? PISTOL_POSES : longGunPoses(kind);
+}
+
+// ───────────────────────────── Pontos de compra ─────────────────────────────
+
+const CASE_SHADOW = `<filter id="cs" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3"/></filter>`;
+
+/** Maleta aberta com a arma à vista. 128x72 → 64x36 no mundo. */
+export function weaponCase(kind) {
+  const defs = CASE_SHADOW + linear('cf', [[0, '#4a4f47'], [1, '#33372f']]);
+  let s = `<rect x="12" y="14" width="110" height="52" rx="5" fill="#000" opacity=".55" filter="url(#cs)"/>`;
+  s += `<rect x="6" y="8" width="112" height="54" rx="5" fill="#3a3f36" stroke="#141612" stroke-width="2"/>`;
+  s += `<rect x="11" y="13" width="102" height="44" rx="3" fill="url(#cf)"/>`;
+  // espuma recortada
+  for (let i = 0; i < 9; i++) s += `<circle cx="${18 + i * 11}" cy="50" r="2" fill="#141512" opacity=".6"/>`;
+  s += `<rect x="4" y="30" width="4" height="10" rx="1" fill="#6d6f69"/><rect x="116" y="30" width="4" height="10" rx="1" fill="#6d6f69"/>`;
+  const gx = kind === 'pistol' ? 50 : kind === 'smg' ? 42 : 34;
+  const scale = kind === 'pistol' ? 1.3 : 1;
+  s += `<g transform="translate(${gx} 35) scale(${scale})">${drawGun(kind, 0, 0, 0)}</g>`;
+  s += `<rect x="6" y="8" width="112" height="3" rx="1.5" fill="#6a7063" opacity=".6"/>`;
+  return svgDoc(128, 72, defs, s);
+}
+
+/** Caixa de munição aberta com cartuchos. 80x64 → 40x32 no mundo. */
+export function ammoCrate() {
+  const defs = CASE_SHADOW + linear('ac', [[0, '#4d5a38'], [1, '#34402a']], 0, 0, 1, 1);
+  let s = `<rect x="12" y="14" width="62" height="46" rx="3" fill="#000" opacity=".55" filter="url(#cs)"/>`;
+  s += `<rect x="6" y="8" width="64" height="48" rx="3" fill="url(#ac)" stroke="#1a2012" stroke-width="2"/>`;
+  s += `<rect x="12" y="14" width="52" height="36" rx="2" fill="#1c2016"/>`;
+  for (let r = 0; r < 3; r++) {
+    for (let c = 0; c < 7; c++) {
+      const x = 17 + c * 7;
+      const y = 19 + r * 10;
+      s += `<circle cx="${x}" cy="${y}" r="3" fill="#b8903a" stroke="#6b5220" stroke-width="0.8"/>`;
+      s += `<circle cx="${x - 0.8}" cy="${y - 0.8}" r="1" fill="#f0d27a"/>`;
+    }
+  }
+  s += `<rect x="6" y="8" width="64" height="3" fill="#7d8a5e" opacity=".5"/>`;
+  s += `<rect x="26" y="52" width="24" height="4" fill="#d4b04a" opacity=".8"/>`;
+  return svgDoc(80, 64, defs, s);
+}

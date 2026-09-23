@@ -8,6 +8,11 @@ export const GameEvents = {
   PlayerDied: 'player-died',
   /** Estado completo da wave (emitido a cada mudança). */
   WaveState: 'wave-state',
+  MoneyChanged: 'money-changed',
+  /** Texto de interação próximo ao jogador (null = nada por perto). */
+  InteractionPrompt: 'interaction-prompt',
+  /** Tentativa de compra sem dinheiro suficiente. */
+  PurchaseDenied: 'purchase-denied',
   /** A UI pede o estado atual (ex.: ao ser criada depois da GameScene). */
   HudRequest: 'hud-request',
 } as const;
@@ -22,11 +27,30 @@ export interface AmmoPayload {
   current: number;
   reserve: number;
   reloading: boolean;
+  /** Nome da outra arma do inventário (null se só há uma). */
+  secondary: string | null;
 }
 
 export interface ZombieKilledPayload {
   type: string;
   reward: number;
+  x: number;
+  y: number;
+  headshot: boolean;
+}
+
+export interface MoneyPayload {
+  money: number;
+  /** Variação que gerou o evento (0 na sincronização). */
+  delta: number;
+  /** Total ganho na partida. */
+  earned: number;
+}
+
+export interface InteractionPromptPayload {
+  text: string;
+  /** Se o jogador pode pagar agora. */
+  affordable: boolean;
 }
 
 export type WavePhase = 'waiting' | 'active' | 'intermission';
@@ -47,6 +71,9 @@ export interface GameEventMap {
   [GameEvents.ZombieKilled]: ZombieKilledPayload;
   [GameEvents.PlayerDied]: undefined;
   [GameEvents.WaveState]: WaveStatePayload;
+  [GameEvents.MoneyChanged]: MoneyPayload;
+  [GameEvents.InteractionPrompt]: InteractionPromptPayload | null;
+  [GameEvents.PurchaseDenied]: undefined;
   [GameEvents.HudRequest]: undefined;
 }
 

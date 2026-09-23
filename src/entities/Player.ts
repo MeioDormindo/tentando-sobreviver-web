@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
-import { ANIM_KEYS, ASSET_KEYS, PLAYER_FRAMES } from '../config/assets.config';
+import { ANIM_KEYS, ASSET_KEYS, PLAYER_FRAMES, playerAnimKey, playerTorsoKey } from '../config/assets.config';
 import type { PlayerConfig } from '../config/player.config';
+import type { WeaponKind } from '../config/weapons.config';
 import { ART_SCALE, DEPTH } from '../config/visual.config';
 import { emitGameEvent, GameEvents } from '../game/events';
 import type { Damageable } from './Damageable';
@@ -36,9 +37,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
   private invulnerableUntil = 0;
   private lastDamageAt = 0;
   private alive = true;
+  private weaponKind: WeaponKind = 'pistol';
 
   constructor(scene: Phaser.Scene, x: number, y: number, config: PlayerConfig) {
-    super(scene, x, y, ASSET_KEYS.playerTorso, PLAYER_FRAMES.aim);
+    super(scene, x, y, playerTorsoKey('pistol'), PLAYER_FRAMES.aim);
     this.config = config;
     this.maxHp = config.maxHp;
     this.hp = config.maxHp;
@@ -103,13 +105,20 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
     this.rotation = Phaser.Math.Angle.Between(this.x, this.y, worldX, worldY);
   }
 
+  /** Troca a pose/arma desenhada no tronco. */
+  setWeaponKind(kind: WeaponKind): void {
+    this.weaponKind = kind;
+    this.anims.stop();
+    this.setTexture(playerTorsoKey(kind), PLAYER_FRAMES.aim);
+  }
+
   playShoot(): void {
-    if (this.anims.currentAnim?.key === ANIM_KEYS.playerReload && this.anims.isPlaying) return;
-    this.play(ANIM_KEYS.playerShoot);
+    if (this.anims.currentAnim?.key === playerAnimKey(this.weaponKind, 'reload') && this.anims.isPlaying) return;
+    this.play(playerAnimKey(this.weaponKind, 'shoot'));
   }
 
   playReload(durationMs: number): void {
-    this.play({ key: ANIM_KEYS.playerReload, duration: durationMs });
+    this.play({ key: playerAnimKey(this.weaponKind, 'reload'), duration: durationMs });
   }
 
   takeDamage(amount: number, time: number): void {

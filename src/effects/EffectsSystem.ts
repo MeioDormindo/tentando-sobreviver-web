@@ -176,6 +176,29 @@ export class EffectsSystem {
     }
   }
 
+  /** Texto que sobe e some (ex.: dinheiro ganho). Fica acima da escuridão. */
+  floatingText(x: number, y: number, text: string, color: string, emphasis = false): void {
+    const label = this.scene.add
+      .text(x, y, text, {
+        fontFamily: 'Impact, "Arial Black", sans-serif',
+        fontSize: emphasis ? '15px' : '12px',
+        color,
+        stroke: '#000000',
+        strokeThickness: 3,
+        resolution: 3,
+      })
+      .setOrigin(0.5)
+      .setDepth(DEPTH.muzzle + 1);
+    this.scene.tweens.add({
+      targets: label,
+      y: y - 26,
+      alpha: { from: 1, to: 0 },
+      duration: 1000,
+      ease: 'Quad.easeOut',
+      onComplete: () => label.destroy(),
+    });
+  }
+
   /** O cadáver some aos poucos; a poça fica gravada no chão. */
   private removeCorpse(corpse: Corpse): void {
     const index = this.corpses.indexOf(corpse);
