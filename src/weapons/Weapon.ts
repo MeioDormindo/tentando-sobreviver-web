@@ -56,6 +56,11 @@ export class Weapon {
     this.reloadEndsAt = null;
   }
 
+  /** Enche a reserva até o máximo da arma. */
+  refillReserve(): void {
+    this.reserveAmmo = this.config.reserveAmmo;
+  }
+
   snapshot(): AmmoPayload {
     return {
       weaponName: this.config.name,

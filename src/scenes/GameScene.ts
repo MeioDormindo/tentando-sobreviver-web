@@ -1,17 +1,19 @@
 import Phaser from 'phaser';
 import { SCENE_KEYS } from '../config/game.config';
 import { playerConfig } from '../config/player.config';
+import { waveConfig } from '../config/waves.config';
 import { getWeaponConfig } from '../config/weapons.config';
 import { Player } from '../entities/Player';
 import { Projectile } from '../entities/Projectile';
 import { Zombie } from '../entities/Zombie';
 import { EffectsSystem } from '../effects/EffectsSystem';
 import { LightingSystem } from '../effects/LightingSystem';
-import { GameEvents, onGameEvent } from '../game/events';
+import { GameEvents, onGameEvent, type WaveStatePayload } from '../game/events';
 import { TestMap } from '../map/TestMap';
 import { CameraController } from '../systems/CameraController';
 import { CombatSystem } from '../systems/CombatSystem';
-import { TestSpawner } from '../systems/TestSpawner';
+import { SpawnSystem } from '../systems/SpawnSystem';
+import { WaveSystem } from '../systems/WaveSystem';
 import { WeaponSystem } from '../weapons/WeaponSystem';
 
 const MAX_PROJECTILES = 64;
@@ -23,6 +25,8 @@ export class GameScene extends Phaser.Scene {
   private weaponSystem!: WeaponSystem;
   private cameraController!: CameraController;
   private lighting!: LightingSystem;
+  private waveSystem!: WaveSystem;
+  private lastWavePhase = '';
   private readonly aimPoint = new Phaser.Math.Vector2();
 
   constructor() {
@@ -65,7 +69,8 @@ export class GameScene extends Phaser.Scene {
       bulletBlockers: map.bulletBlockers,
       effects,
     });
-    new TestSpawner(this, zombies, map.spawnPoints, this.player);
+    const spawner = new SpawnSystem(this, zombies, map.spawnPoints, this.player);
+    this.waveSystem = new WaveSystem(this, spawner, this.player);
 
     this.cameraController = new CameraController(this, this.player, map.widthPx, map.heightPx);
     // A luz é desenhada depois da física, com as posições finais do frame.
@@ -76,6 +81,7 @@ export class GameScene extends Phaser.Scene {
     const unsubscribers = [
       onGameEvent(this.game.events, GameEvents.PlayerDied, this.onPlayerDied, this),
       onGameEvent(this.game.events, GameEvents.HudRequest, this.syncHud, this),
+      onGameEvent(this.game.events, GameEvents.WaveState, this.onWaveState, this),
     ];
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       unsubscribers.forEach((off) => off());
@@ -85,8 +91,10 @@ export class GameScene extends Phaser.Scene {
     this.scene.launch(SCENE_KEYS.ui);
   }
 
-  override update(time: number): void {
+  override update(time: number, delta: number): void {
     this.player.updateMovement();
+    this.player.updateRegen(time, delta);
+    this.waveSystem.update(delta);
     this.input.activePointer.positionToCamera(this.cameras.main, this.aimPoint);
     this.player.aimAt(this.aimPoint.x, this.aimPoint.y);
     this.weaponSystem.update(time);
@@ -100,6 +108,15 @@ export class GameScene extends Phaser.Scene {
   private syncHud(): void {
     this.player.emitHp();
     this.weaponSystem.syncHud();
+    this.waveSystem.syncHud();
+  }
+
+  /** Fim de wave: reabastece a munição (provisório até a economia da Fase 3). */
+  private onWaveState(state: WaveStatePayload): void {
+    if (state.phase === 'intermission' && this.lastWavePhase === 'active' && waveConfig.refillAmmoOnWaveEnd) {
+      this.weaponSystem.refillAmmo();
+    }
+    this.lastWavePhase = state.phase;
   }
 
   private onPlayerDied(): void {

@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { ASSET_KEYS } from '../config/assets.config';
 import { TEXTURE_KEYS, TILE_SIZE } from '../config/game.config';
 import { ART_SCALE, DEPTH, type LampConfig } from '../config/visual.config';
+import type { SpawnPoint } from '../systems/SpawnSystem';
 import { PROP_DEFS, type PropPlacement } from './props';
 
 export const TileIndex = {
@@ -75,11 +76,27 @@ const LAMPS: LampConfig[] = [
   { tx: 55, ty: 39, radius: 160, intensity: 0.5, flicker: 0.4 },
 ];
 
-/** Pontos de spawn de teste (em tiles), próximos às bordas. */
-const SPAWN_TILES: ReadonlyArray<readonly [number, number]> = [
-  [3, 3], [32, 2], [60, 3],
-  [2, 22], [61, 22],
-  [3, 40], [32, 41], [60, 40],
+interface SpawnPointDef {
+  id: string;
+  tx: number;
+  ty: number;
+  minWave: number;
+}
+
+/** Pontos de spawn (GDD §20), próximos às bordas; alguns só abrem em waves mais altas. */
+const SPAWN_POINTS: SpawnPointDef[] = [
+  { id: 'H1', tx: 3, ty: 3, minWave: 1 },
+  { id: 'H2', tx: 60, ty: 3, minWave: 1 },
+  { id: 'H3', tx: 3, ty: 40, minWave: 1 },
+  { id: 'H4', tx: 60, ty: 40, minWave: 1 },
+  { id: 'H5', tx: 32, ty: 2, minWave: 1 },
+  { id: 'H6', tx: 32, ty: 41, minWave: 1 },
+  { id: 'H7', tx: 2, ty: 22, minWave: 2 },
+  { id: 'H8', tx: 61, ty: 22, minWave: 2 },
+  { id: 'H9', tx: 18, ty: 2, minWave: 3 },
+  { id: 'H10', tx: 46, ty: 41, minWave: 3 },
+  { id: 'H11', tx: 46, ty: 2, minWave: 4 },
+  { id: 'H12', tx: 18, ty: 41, minWave: 4 },
 ];
 
 export interface Lamp {
@@ -106,7 +123,7 @@ export class TestMap {
   /** Props que bloqueiam tiros. */
   readonly bulletBlockers: Phaser.Physics.Arcade.StaticGroup;
   readonly playerSpawn: Phaser.Math.Vector2;
-  readonly spawnPoints: Phaser.Math.Vector2[];
+  readonly spawnPoints: SpawnPoint[];
   readonly lamps: Lamp[];
 
   private readonly data: number[][];
@@ -130,7 +147,10 @@ export class TestMap {
     this.createProps();
 
     this.playerSpawn = TestMap.tileCenter(MAP_WIDTH / 2, MAP_HEIGHT / 2);
-    this.spawnPoints = SPAWN_TILES.map(([tx, ty]) => TestMap.tileCenter(tx, ty));
+    this.spawnPoints = SPAWN_POINTS.map((p) => {
+      const pos = TestMap.tileCenter(p.tx, p.ty);
+      return { id: p.id, x: pos.x, y: pos.y, sector: 'hall', minWave: p.minWave, enabled: !this.isWall(p.tx, p.ty) };
+    });
     this.lamps = LAMPS.map((l) => ({
       x: l.tx * TILE_SIZE + TILE_SIZE / 2,
       y: l.ty * TILE_SIZE + TILE_SIZE / 2,

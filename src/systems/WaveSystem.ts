@@ -1,0 +1,115 @@
+import Phaser from 'phaser';
+import { waveConfig } from '../config/waves.config';
+import { getZombieConfig } from '../config/zombies.config';
+import type { Player } from '../entities/Player';
+import { emitGameEvent, GameEvents, onGameEvent, type WavePhase, type WaveStatePayload } from '../game/events';
+import { getWaveParams, scaleZombie, type WaveParams } from './difficulty';
+import type { SpawnSystem } from './SpawnSystem';
+
+/** Nova tentativa quando nenhum ponto de spawn está livre (ms). */
+const SPAWN_RETRY_MS = 250;
+
+/**
+ * Ciclo das waves (GDD §30): espera → wave ativa (spawn progressivo até o total)
+ * → todos mortos → intervalo → próxima wave, mais difícil.
+ */
+export class WaveSystem {
+  private readonly scene: Phaser.Scene;
+  private readonly spawner: SpawnSystem;
+  private readonly player: Player;
+
+  private wave = 0;
+  private phase: WavePhase = 'waiting';
+  private params: WaveParams = getWaveParams(1);
+  private spawned = 0;
+  private killed = 0;
+  private countdownMs: number = waveConfig.firstWaveDelay;
+  private spawnTimerMs = 0;
+  private lastEmittedKey = '';
+
+  constructor(scene: Phaser.Scene, spawner: SpawnSystem, player: Player) {
+    this.scene = scene;
+    this.spawner = spawner;
+    this.player = player;
+
+    const off = onGameEvent(scene.game.events, GameEvents.ZombieKilled, this.onZombieKilled, this);
+    scene.events.once(Phaser.Scenes.Events.SHUTDOWN, off);
+    this.emitState(true);
+  }
+
+  get currentWave(): number {
+    return this.wave;
+  }
+
+  get currentPhase(): WavePhase {
+    return this.phase;
+  }
+
+  update(delta: number): void {
+    if (!this.player.isAlive) return;
+
+    if (this.phase !== 'active') {
+      this.countdownMs -= delta;
+      if (this.countdownMs <= 0) this.startWave(this.wave + 1);
+      this.emitState();
+      return;
+    }
+
+    this.spawner.relocateStuck(this.wave);
+    this.spawnTimerMs -= delta;
+    const alive = this.spawned - this.killed;
+    if (this.spawnTimerMs <= 0 && this.spawned < this.params.totalEnemies && alive < this.params.maxAlive) {
+      const config = scaleZombie(getZombieConfig(waveConfig.zombieType), this.params);
+      if (this.spawner.spawn(config, this.wave)) {
+        this.spawned++;
+        this.spawnTimerMs = this.params.spawnInterval;
+      } else {
+        this.spawnTimerMs = SPAWN_RETRY_MS;
+      }
+    }
+  }
+
+  /** Reenvia o estado para a HUD. */
+  syncHud(): void {
+    this.emitState(true);
+  }
+
+  private startWave(wave: number): void {
+    this.wave = wave;
+    this.params = getWaveParams(wave);
+    this.phase = 'active';
+    this.spawned = 0;
+    this.killed = 0;
+    this.spawnTimerMs = 0;
+    this.emitState(true);
+  }
+
+  private onZombieKilled(): void {
+    if (this.phase !== 'active') return;
+    this.killed++;
+    if (this.killed >= this.params.totalEnemies) {
+      this.phase = 'intermission';
+      this.countdownMs = waveConfig.intermission;
+    }
+    this.emitState(true);
+  }
+
+  private snapshot(): WaveStatePayload {
+    return {
+      wave: this.wave,
+      phase: this.phase,
+      remaining: this.phase === 'active' ? this.params.totalEnemies - this.killed : 0,
+      total: this.params.totalEnemies,
+      nextWaveInMs: this.phase === 'active' ? 0 : Math.max(0, this.countdownMs),
+    };
+  }
+
+  /** Durante contagens, emite só quando o segundo exibido muda. */
+  private emitState(force = false): void {
+    const s = this.snapshot();
+    const key = `${s.wave}|${s.phase}|${s.remaining}|${Math.ceil(s.nextWaveInMs / 1000)}`;
+    if (!force && key === this.lastEmittedKey) return;
+    this.lastEmittedKey = key;
+    emitGameEvent(this.scene.game.events, GameEvents.WaveState, s);
+  }
+}

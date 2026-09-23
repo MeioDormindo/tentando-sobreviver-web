@@ -41,7 +41,7 @@ src/
   weapons/           Weapon (estado/munição/recarga) e WeaponSystem (input → disparo)
   effects/           LightingSystem (escuridão, lanterna, luzes), EffectsSystem (sangue, cadáveres,
                      cápsulas, faíscas), fxTextures (texturas de luz/partículas em canvas)
-  systems/           CombatSystem, CameraController, TestSpawner (temporário)
+  systems/           WaveSystem, SpawnSystem, difficulty (fórmulas), CombatSystem, CameraController
 public/assets/       arte gerada (SVG) — pode ser trocada por PNGs com o mesmo layout de frames
 ```
 
@@ -58,9 +58,14 @@ public/assets/       arte gerada (SVG) — pode ser trocada por PNGs com o mesmo
 - [x] Fase 0 — Setup
 - [x] Fase 1 — MVP Core (player, câmera, tiro, M1911, Walker, dano, morte, reinício)
 - [x] Passe visual (arte original, iluminação, câmera, efeitos) — antecipado da Fase 10
-- [ ] Fase 2 — Waves (SpawnSystem + WaveSystem substituem o `TestSpawner`)
+- [x] Fase 2 — Waves (WaveSystem, SpawnSystem, dificuldade progressiva, HUD de wave)
 - [ ] Fase 3 — Economia
 
-Observações da Fase 1:
+Observações:
+- Waves seguem as fórmulas do GDD §32 (`src/config/waves.config.ts`).
+- Provisório até a Fase 3: munição reabastecida ao fim de cada wave e regeneração lenta de vida.
+  Só com a M1911, a munição fica apertada na wave 5 e não fecha a partir da wave 6. A economia
+  (compra de munição e armas) resolve isso.
+- Zumbis presos fora da tela por 12s são realocados para outro spawn (a wave nunca trava).
 - Zumbis perseguem em linha reta e contornam paredes deslizando por elas. O pathfinding A* entra na Fase 4.
 - Em modo dev, `window.__GAME__` expõe a instância do jogo para depuração.

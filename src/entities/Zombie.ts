@@ -28,6 +28,8 @@ const TURN_SPEED = 0.12;
 /** Velocidade de referência da animação de caminhada (px/s). */
 const WALK_ANIM_SPEED = 60;
 const SHADOW_OFFSET = { x: 4, y: 6 };
+/** Quanto o zumbi precisa se aproximar do alvo para contar como progresso (px). */
+const PROGRESS_STEP = 24;
 
 /**
  * Zumbi genérico dirigido por ZombieConfig. Reutilizado via pool (Physics Group).
@@ -51,6 +53,9 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
   private readonly shadow: Phaser.GameObjects.Image;
   /** Incrementa a cada spawn: invalida golpes agendados de uma "vida" anterior do pool. */
   private life = 0;
+  /** Menor distância já alcançada até o alvo e há quanto tempo não melhora (detecção de "preso"). */
+  private bestDistance = Infinity;
+  private noProgressMs = 0;
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, zombieSheetKey('a'), 0);
@@ -82,6 +87,7 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     this.detourAlong.set(0, 0);
     this.aiState = ZombieState.Idle;
     this.life++;
+    this.resetProgress();
     this.variant = Phaser.Utils.Array.GetRandom([...ZOMBIE_VARIANTS]);
 
     this.enableBody(true, x, y, true, true);
@@ -94,6 +100,30 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     this.shadow.setVisible(true);
   }
 
+  /** Tempo (ms) sem se aproximar do alvo enquanto persegue. */
+  get stuckMs(): number {
+    return this.noProgressMs;
+  }
+
+  /** Move o zumbi para outro ponto (usado quando fica preso), mantendo vida e estado. */
+  relocate(x: number, y: number): void {
+    this.body?.reset(x, y);
+    this.detouring = false;
+    this.resetProgress();
+  }
+
+  private resetProgress(): void {
+    this.bestDistance = Infinity;
+    this.noProgressMs = 0;
+  }
+
+  /** Surge aos poucos (saindo da escuridão). */
+  fadeIn(durationMs: number): void {
+    this.setAlpha(0);
+    this.shadow.setAlpha(0);
+    this.scene.tweens.add({ targets: [this, this.shadow], alpha: 1, duration: durationMs });
+  }
+
   private get isAttacking(): boolean {
     return this.anims.isPlaying && this.anims.currentAnim?.key === zombieAnimKey(this.variant, 'attack');
   }
@@ -104,7 +134,7 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     this.shadow.setPosition(this.x + SHADOW_OFFSET.x, this.y + SHADOW_OFFSET.y);
   }
 
-  override update(time: number): void {
+  override update(time: number, delta: number): void {
     if (!this.active || !this.config || !this.target || this.aiState === ZombieState.Dead) return;
 
     const target = this.target;
@@ -131,11 +161,13 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
         } else {
           this.chase(time, target);
           this.playWalk();
+          this.trackProgress(dist, delta);
         }
         break;
 
       case ZombieState.Attack:
         this.setVelocity(0, 0);
+        this.resetProgress();
         if (dist > this.config.attackRange * ATTACK_EXIT_FACTOR && !this.isAttacking) {
           this.aiState = ZombieState.Chase;
         } else if (time >= this.nextAttackAt) {
@@ -211,6 +243,15 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
       (this.detourAlong.x + this.detourInto.x * DETOUR_HUG) * speed,
       (this.detourAlong.y + this.detourInto.y * DETOUR_HUG) * speed,
     );
+  }
+
+  private trackProgress(dist: number, delta: number): void {
+    if (dist < this.bestDistance - PROGRESS_STEP) {
+      this.bestDistance = dist;
+      this.noProgressMs = 0;
+    } else {
+      this.noProgressMs += delta;
+    }
   }
 
   private playWalk(): void {

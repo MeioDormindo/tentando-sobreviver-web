@@ -34,6 +34,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
   private readonly legs: Phaser.GameObjects.Sprite;
   private readonly shadow: Phaser.GameObjects.Image;
   private invulnerableUntil = 0;
+  private lastDamageAt = 0;
   private alive = true;
 
   constructor(scene: Phaser.Scene, x: number, y: number, config: PlayerConfig) {
@@ -89,6 +90,14 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
     this.setVelocity(this.moveDir.x, this.moveDir.y);
   }
 
+  /** Regeneração lenta depois de um tempo sem levar dano. */
+  updateRegen(time: number, delta: number): void {
+    if (!this.alive || this.hp >= this.maxHp || time - this.lastDamageAt < this.config.regenDelayMs) return;
+    const before = Math.ceil(this.hp);
+    this.hp = Math.min(this.maxHp, this.hp + (this.config.regenPerSecond * delta) / 1000);
+    if (Math.ceil(this.hp) !== before) this.emitHp();
+  }
+
   aimAt(worldX: number, worldY: number): void {
     if (!this.alive) return;
     this.rotation = Phaser.Math.Angle.Between(this.x, this.y, worldX, worldY);
@@ -108,6 +117,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
 
     this.hp = Math.max(0, this.hp - amount);
     this.invulnerableUntil = time + this.config.invulnerabilityMs;
+    this.lastDamageAt = time;
     this.emitHp();
     this.scene.cameras.main.shake(90, 0.005);
 

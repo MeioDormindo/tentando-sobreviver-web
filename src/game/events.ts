@@ -6,6 +6,8 @@ export const GameEvents = {
   AmmoChanged: 'ammo-changed',
   ZombieKilled: 'zombie-killed',
   PlayerDied: 'player-died',
+  /** Estado completo da wave (emitido a cada mudança). */
+  WaveState: 'wave-state',
   /** A UI pede o estado atual (ex.: ao ser criada depois da GameScene). */
   HudRequest: 'hud-request',
 } as const;
@@ -27,11 +29,24 @@ export interface ZombieKilledPayload {
   reward: number;
 }
 
+export type WavePhase = 'waiting' | 'active' | 'intermission';
+
+export interface WaveStatePayload {
+  wave: number;
+  phase: WavePhase;
+  /** Zumbis que ainda faltam matar nesta wave (inclui os que ainda não surgiram). */
+  remaining: number;
+  total: number;
+  /** Tempo até a próxima wave começar (ms), quando phase != 'active'. */
+  nextWaveInMs: number;
+}
+
 export interface GameEventMap {
   [GameEvents.PlayerHpChanged]: PlayerHpPayload;
   [GameEvents.AmmoChanged]: AmmoPayload;
   [GameEvents.ZombieKilled]: ZombieKilledPayload;
   [GameEvents.PlayerDied]: undefined;
+  [GameEvents.WaveState]: WaveStatePayload;
   [GameEvents.HudRequest]: undefined;
 }
 

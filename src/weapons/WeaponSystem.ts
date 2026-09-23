@@ -63,6 +63,12 @@ export class WeaponSystem {
     this.emitIfChanged();
   }
 
+  /** Enche a reserva da arma equipada. */
+  refillAmmo(): void {
+    this.weapon.refillReserve();
+    this.emitIfChanged();
+  }
+
   /** Reenvia o estado atual para a HUD. */
   syncHud(): void {
     this.lastSnapshotKey = '';
