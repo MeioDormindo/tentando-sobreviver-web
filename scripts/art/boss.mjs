@@ -1,84 +1,186 @@
-// Boss 1 — The Conductor (GDD §46): ex-funcionário do terminal, casaco de condutor,
-// quepe, lanterna e um braço gigante mutado. Vista de cima, virado para +X.
-import { blobPath, f, ik, line, linear, radial, raggedEllipse, rng, svgDoc } from './lib.mjs';
+// Boss 1 — The Conductor (GDD §46): ex-condutor do terminal transformado. Casaco longo de
+// uniforme com abas rasgadas, quepe, lanterna acesa na mão esquerda e o braço direito
+// mutado em uma massa de músculo com espinhos de osso. Vista de cima, virado para +X.
+import { blobPath, f, ik, rng, svgDoc } from './lib.mjs';
+import { limb } from './undead.mjs';
 
 export const BOSS_FRAME = 224;
 export const BOSS_COLUMNS = 10;
 const C = 112;
+const OUT = '#07080b';
 
 const B = {
-  coat: '#26324a',
+  coat: '#27344d',
   coatShade: '#141b2a',
-  coatLight: '#3b4a68',
-  brass: '#c9a33e',
-  skin: '#7c8570',
-  skinShade: '#4d5545',
-  flesh: '#7a4c46',
-  fleshShade: '#4a2622',
-  bone: '#e4dcc4',
-  pants: '#1d2433',
-  boots: '#15120f',
+  coatLight: '#41527a',
+  brass: '#caa441',
+  brassDark: '#6a5214',
+  stripe: '#8e2a22',
+  skin: '#86907a',
+  skinShade: '#56604b',
+  skinDark: '#383f31',
+  flesh: '#8a4d45',
+  fleshLight: '#b7766b',
+  fleshShade: '#4a2420',
+  bone: '#e6dec6',
+  pants: '#1c2331',
+  boots: '#141210',
 };
 
 const defs =
-  radial('bc', [[0, B.coatLight], [0.6, B.coat], [1, B.coatShade]], '40%', '35%', '75%') +
-  radial('bf', [[0, '#9a6660'], [0.6, B.flesh], [1, B.fleshShade]], '40%', '35%', '75%') +
-  radial('bs', [[0, B.skin], [1, B.skinShade]], '60%', '40%') +
-  radial('bl', [[0, '#fff3b0'], [0.4, '#ffc94a', 0.9], [1, '#ff9a1f', 0]], '50%', '50%', '50%') +
-  radial('bb', [[0, '#5a0f0c', 0.9], [0.6, '#3d0907', 0.7], [1, '#3d0907', 0]], '50%', '50%', '50%') +
-  linear('cap', [[0, '#2c3a55'], [1, '#161e2e']]);
+  `<radialGradient id="bc" cx="38%" cy="30%" r="80%"><stop offset="0" stop-color="${B.coatLight}"/><stop offset=".55" stop-color="${B.coat}"/><stop offset="1" stop-color="${B.coatShade}"/></radialGradient>` +
+  `<radialGradient id="bf" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="${B.fleshLight}"/><stop offset=".6" stop-color="${B.flesh}"/><stop offset="1" stop-color="${B.fleshShade}"/></radialGradient>` +
+  `<radialGradient id="bs" cx="40%" cy="32%" r="75%"><stop offset="0" stop-color="${B.skin}"/><stop offset=".7" stop-color="${B.skinShade}"/><stop offset="1" stop-color="${B.skinDark}"/></radialGradient>` +
+  `<radialGradient id="bl" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff6c0"/><stop offset=".35" stop-color="#ffcf55" stop-opacity=".85"/><stop offset="1" stop-color="#ff9a1f" stop-opacity="0"/></radialGradient>` +
+  `<radialGradient id="bb" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#5c0d0a" stop-opacity=".95"/><stop offset=".6" stop-color="#3f0806" stop-opacity=".75"/><stop offset="1" stop-color="#3f0806" stop-opacity="0"/></radialGradient>` +
+  `<radialGradient id="cap" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#34466a"/><stop offset="1" stop-color="#121a2a"/></radialGradient>`;
+
+const pt = (p) => `${f(p[0])} ${f(p[1])}`;
+const lerp = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+const angle = (a, b) => Math.atan2(b[1] - a[1], b[0] - a[0]);
+const polar = (p, ang, d) => [p[0] + Math.cos(ang) * d, p[1] + Math.sin(ang) * d];
 
 function legs(phase, amp) {
   let s = '';
-  for (const [hipY, sign] of [[96, 1], [128, -1]]) {
+  for (const [hipY, sign] of [[94, 1], [130, -1]]) {
     const off = Math.sin(phase) * amp * sign;
-    const foot = [106 + off, hipY + (hipY < C ? -3 : 3)];
-    s += line([104, hipY], foot, '#0c0f16', 21) + line([104, hipY], foot, B.pants, 17);
-    s += `<ellipse cx="${f(foot[0] + 5)}" cy="${f(foot[1])}" rx="12" ry="8" fill="${B.boots}" stroke="#050505" stroke-width="1.5"/>`;
+    const hip = [98, hipY];
+    const foot = [100 + off, hipY + (hipY < C ? -4 : 4)];
+    const knee = lerp(hip, foot, 0.5);
+    s += limb(hip, knee, 21, 18, B.pants, OUT, 2) + limb(knee, foot, 18, 15, B.pants, OUT, 2);
+    // faixa vermelha do uniforme
+    s += `<path d="M${pt(hip)} L${pt(foot)}" stroke="${B.stripe}" stroke-width="2.4" opacity=".85"/>`;
+    s += `<ellipse cx="${f(foot[0] + 7)}" cy="${f(foot[1])}" rx="15" ry="9.5" fill="${B.boots}" stroke="${OUT}" stroke-width="1.8"/>`;
+    s += `<ellipse cx="${f(foot[0] + 10)}" cy="${f(foot[1] - 2.5)}" rx="6" ry="2.2" fill="#fff" opacity=".08"/>`;
   }
   return s;
 }
 
-/** Braço esquerdo (humano, magro, com garras). */
-function normalArm(hand) {
-  const shoulder = [104, 70];
+/** Braço esquerdo: manga do casaco, mão cinzenta segurando a lanterna acesa. */
+function lanternArm(hand) {
+  const shoulder = [108, 72];
   const { elbow, hand: h } = ik(shoulder, hand, 30, 32, -1);
-  let s = line(shoulder, elbow, '#0c0f16', 16) + line(shoulder, elbow, B.coat, 13);
-  s += line(elbow, h, '#1a1d16', 11) + line(elbow, h, B.skin, 8.5);
-  const ang = Math.atan2(h[1] - elbow[1], h[0] - elbow[0]);
-  for (const sp of [-0.5, 0, 0.5]) s += line(h, [h[0] + Math.cos(ang + sp) * 11, h[1] + Math.sin(ang + sp) * 11], B.skinShade, 3);
-  return s + `<circle cx="${f(h[0])}" cy="${f(h[1])}" r="6.5" fill="${B.skin}" stroke="#1a1d16" stroke-width="1.2"/>`;
+  let s = limb(elbow, h, 12, 10, 'url(#bs)', OUT, 1.8);
+  s += limb(shoulder, lerp(elbow, h, 0.2), 20, 16, 'url(#bc)', OUT, 2);
+  // punho dourado da manga
+  const cuff = lerp(elbow, h, 0.2);
+  s += `<circle cx="${f(cuff[0])}" cy="${f(cuff[1])}" r="7.5" fill="none" stroke="${B.brass}" stroke-width="2.2" opacity=".85"/>`;
+  // lanterna pendurada (brilho + corpo)
+  const ang = angle(elbow, h);
+  const lamp = polar(h, ang + 0.2, 13);
+  s += `<circle cx="${f(lamp[0])}" cy="${f(lamp[1])}" r="26" fill="url(#bl)"/>`;
+  s += `<path d="M${pt(h)} L${pt(lamp)}" stroke="#2a2418" stroke-width="2"/>`;
+  s += `<rect x="${f(lamp[0] - 7)}" y="${f(lamp[1] - 8)}" width="14" height="16" rx="2.5" fill="#3a2e18" stroke="#120e06" stroke-width="1.8"/>`;
+  s += `<rect x="${f(lamp[0] - 4)}" y="${f(lamp[1] - 5)}" width="8" height="10" rx="1" fill="#ffe594"/>`;
+  s += `<circle cx="${f(lamp[0])}" cy="${f(lamp[1])}" r="2.4" fill="#fffbe0"/>`;
+  // mão fechada na alça
+  s += `<ellipse cx="${f(h[0])}" cy="${f(h[1])}" rx="7" ry="6" fill="${B.skin}" stroke="${OUT}" stroke-width="1.5"/>`;
+  for (const sp of [-0.5, -0.1, 0.3]) s += `<circle cx="${f(polar(h, ang + sp, 5.5)[0])}" cy="${f(polar(h, ang + sp, 5.5)[1])}" r="2.4" fill="${B.skinShade}" stroke="${OUT}" stroke-width=".8"/>`;
+  return s;
 }
 
-/** Braço direito mutado: enorme, carne exposta, espinhos de osso e garras longas. */
-function mutatedArm(hand) {
-  const shoulder = [104, 154];
-  const { elbow, hand: h } = ik(shoulder, hand, 36, 40, 1);
-  let s = line(shoulder, elbow, '#1b0c0a', 30) + line(shoulder, elbow, B.flesh, 26);
-  s += line(elbow, h, '#1b0c0a', 26) + line(elbow, h, B.flesh, 22);
-  s += line(shoulder, elbow, '#9a6660', 6, 'opacity=".5"') + line(elbow, h, '#9a6660', 5, 'opacity=".45"');
-  // veias
-  const mid = [(elbow[0] + h[0]) / 2, (elbow[1] + h[1]) / 2];
-  s += line(elbow, mid, '#3a0d0a', 1.6, 'opacity=".8"') + line(shoulder, elbow, '#3a0d0a', 1.4, 'opacity=".7"');
-  // espinhos de osso ao longo do braço
-  for (const t of [0.25, 0.55, 0.85]) {
-    for (const [a, b, side] of [[shoulder, elbow, 1], [elbow, h, 1]]) {
-      const px = a[0] + (b[0] - a[0]) * t;
-      const py = a[1] + (b[1] - a[1]) * t;
-      const ang = Math.atan2(b[1] - a[1], b[0] - a[0]) + (side * Math.PI) / 2;
-      const tip = [px + Math.cos(ang) * 14, py + Math.sin(ang) * 14];
-      const back = [px - Math.cos(ang - Math.PI / 2) * 5, py - Math.sin(ang - Math.PI / 2) * 5];
-      const fwd = [px + Math.cos(ang - Math.PI / 2) * 5, py + Math.sin(ang - Math.PI / 2) * 5];
-      s += `<path d="M${f(back[0])} ${f(back[1])} L${f(tip[0])} ${f(tip[1])} L${f(fwd[0])} ${f(fwd[1])} Z" fill="${B.bone}" stroke="#6b6450" stroke-width="1"/>`;
+/** Braço direito mutado: manga arrancada, músculo exposto, espinhos de osso e garras. */
+function mutatedArm(hand, r) {
+  const shoulder = [104, 152];
+  const { elbow, hand: h } = ik(shoulder, hand, 38, 42, 1);
+  let s = '';
+  // massa muscular (ombro inchado → antebraço grosso)
+  s += limb(shoulder, elbow, 38, 32, 'url(#bf)', '#1b0907', 2.4);
+  s += limb(elbow, h, 32, 24, 'url(#bf)', '#1b0907', 2.4);
+  // fibras musculares
+  for (const [a, b, n] of [[shoulder, elbow, 4], [elbow, h, 3]]) {
+    const ang = angle(a, b);
+    for (let i = 0; i < n; i++) {
+      const off = (i - (n - 1) / 2) * 5.5;
+      const p0 = polar(lerp(a, b, 0.12), ang + Math.PI / 2, off);
+      const p1 = polar(lerp(a, b, 0.88), ang + Math.PI / 2, off * 0.8);
+      s += `<path d="M${pt(p0)} Q${pt(polar(lerp(p0, p1, 0.5), ang + Math.PI / 2, 2.5))} ${pt(p1)}" stroke="${B.fleshShade}" stroke-width="1.3" fill="none" opacity=".7"/>`;
     }
   }
-  // mão com três garras longas
-  const ang = Math.atan2(h[1] - elbow[1], h[0] - elbow[0]);
-  for (const sp of [-0.55, 0, 0.55]) {
-    const tip = [h[0] + Math.cos(ang + sp) * 26, h[1] + Math.sin(ang + sp) * 26];
-    s += line(h, tip, '#1b0c0a', 6) + line(h, tip, B.bone, 3.6);
+  // espinhos de osso saindo da parte de fora do braço
+  for (const [a, b] of [[shoulder, elbow], [elbow, h]]) {
+    const ang = angle(a, b);
+    for (const t of [0.2, 0.5, 0.8]) {
+      const base = polar(lerp(a, b, t), ang + Math.PI / 2, 12);
+      const tip = polar(base, ang + Math.PI / 2 - 0.45, 17 + r.range(-3, 4));
+      const b1 = polar(base, ang, -5.5);
+      const b2 = polar(base, ang, 5.5);
+      s += `<path d="M${pt(b1)} L${pt(tip)} L${pt(b2)} Z" fill="${B.bone}" stroke="#6b6450" stroke-width="1.2"/>`;
+      s += `<path d="M${pt(base)} L${pt(lerp(base, tip, 0.7))}" stroke="#b3aa90" stroke-width="1"/>`;
+    }
   }
-  s += `<circle cx="${f(h[0])}" cy="${f(h[1])}" r="14" fill="url(#bf)" stroke="#1b0c0a" stroke-width="2"/>`;
+  // restos da manga rasgada no ombro
+  s += `<path d="${blobPath(shoulder[0], shoulder[1] - 4, 15, 0.6, 9, r)}" fill="url(#bc)" stroke="${OUT}" stroke-width="1.5"/>`;
+  // mão: três garras longas de osso
+  const ang = angle(elbow, h);
+  for (const sp of [-0.6, 0, 0.6]) {
+    const knuckle = polar(h, ang + sp, 9);
+    const tip = polar(knuckle, ang + sp * 0.6, 24);
+    s += `<path d="M${pt(knuckle)} L${pt(tip)}" stroke="#1b0907" stroke-width="7" stroke-linecap="round"/>`;
+    s += `<path d="M${pt(knuckle)} L${pt(tip)}" stroke="${B.bone}" stroke-width="4.2" stroke-linecap="round"/>`;
+  }
+  s += `<circle cx="${f(h[0])}" cy="${f(h[1])}" r="15" fill="url(#bf)" stroke="#1b0907" stroke-width="2.2"/>`;
+  s += `<circle cx="${f(h[0] - 3)}" cy="${f(h[1] - 3)}" r="4" fill="${B.fleshLight}" opacity=".5"/>`;
+  return s;
+}
+
+/** Tronco: casaco longo com abas rasgadas, fileiras de botões, dragonas e corrente do apito. */
+function coat(r) {
+  let s = '';
+  // abas do casaco atrás (rasgadas, balançando)
+  s += `<path d="${blobPath(76, C, 30, 0.5, 14, r)}" fill="${B.coatShade}" stroke="${OUT}" stroke-width="1.8"/>`;
+  for (const y of [C - 22, C, C + 22]) s += `<path d="M78 ${y} L${f(50 + r.range(-4, 4))} ${f(y + r.range(-6, 6))}" stroke="#0b1018" stroke-width="2" opacity=".8"/>`;
+  // corpo (costas largas e peito)
+  const pts = [[70, 80], [84, 62], [106, 58], [124, 70], [132, 92], [134, C], [132, 132], [124, 154], [106, 166], [84, 162], [70, 144], [66, C]];
+  let d = '';
+  for (let i = 0; i < pts.length; i++) {
+    const p = pts[i];
+    const q = pts[(i + 1) % pts.length];
+    const n = pts[(i + 2) % pts.length];
+    if (i === 0) d += `M${pt([(p[0] + q[0]) / 2, (p[1] + q[1]) / 2])}`;
+    d += ` Q${pt(q)} ${pt([(q[0] + n[0]) / 2, (q[1] + n[1]) / 2])}`;
+  }
+  s += `<path d="${d} Z" fill="url(#bc)" stroke="${OUT}" stroke-width="2.2"/>`;
+  // costura das costas e cinto
+  s += `<path d="M82 76 Q72 ${C} 82 148" stroke="${B.coatShade}" stroke-width="3" fill="none"/>`;
+  s += `<path d="M96 60 L96 164" stroke="#10151f" stroke-width="5" opacity=".65"/>`;
+  s += `<rect x="92" y="${C - 6}" width="9" height="12" rx="2" fill="${B.brass}" stroke="${B.brassDark}" stroke-width="1"/>`;
+  // duas fileiras de botões de latão no peito
+  for (const x of [118, 127]) for (const y of [86, 100, 124, 138]) s += `<circle cx="${x}" cy="${y}" r="2.8" fill="${B.brass}" stroke="${B.brassDark}" stroke-width=".9"/>`;
+  // corrente do apito atravessando o peito
+  s += `<path d="M112 78 Q126 96 124 116" stroke="${B.brass}" stroke-width="1.6" stroke-dasharray="2 1.5" fill="none"/>`;
+  s += `<rect x="120" y="114" width="8" height="5" rx="2" fill="#d9d2b8" stroke="#6b6450" stroke-width=".8"/>`;
+  // dragonas com franjas
+  for (const y of [70, 154]) {
+    s += `<ellipse cx="104" cy="${y}" rx="13" ry="9" fill="${B.brass}" stroke="${B.brassDark}" stroke-width="1.4"/>`;
+    for (let i = -3; i <= 3; i++) s += `<path d="M${104 + i * 3.4} ${y + (y < C ? -7 : 7)} l0 ${y < C ? -5 : 5}" stroke="${B.brass}" stroke-width="1.6"/>`;
+  }
+  // rasgo lateral com costelas aparecendo e sangue
+  s += `<path d="${blobPath(112, 140, 10, 0.5, 9, r)}" fill="url(#bs)" stroke="${OUT}" stroke-width="1"/>`;
+  for (let i = -1; i <= 1; i++) s += `<path d="M104 ${140 + i * 4} q8 -2 16 0" stroke="${B.skinDark}" stroke-width="1.2" fill="none"/>`;
+  for (let i = 0; i < 6; i++) s += `<ellipse cx="${f(r.range(80, 128))}" cy="${f(r.range(74, 152))}" rx="${f(r.range(6, 13))}" ry="${f(r.range(4, 9))}" fill="url(#bb)"/>`;
+  // luz de borda
+  s += `<path d="M84 64 Q104 54 124 68" stroke="#fff" stroke-width="2" fill="none" opacity=".14"/>`;
+  return s;
+}
+
+/** Cabeça com quepe de condutor (aba para a frente) e mandíbula aparecendo sob a aba. */
+function headWithCap(hx) {
+  let s = '';
+  // pescoço grosso
+  s += limb([100, C], [hx - 6, C], 20, 18, 'url(#bs)', OUT, 1.8);
+  // mandíbula aberta à frente da aba
+  s += `<path d="M${f(hx + 14)} ${C - 12} Q${f(hx + 30)} ${C} ${f(hx + 14)} ${C + 12} Z" fill="${B.skinDark}" stroke="${OUT}" stroke-width="1.5"/>`;
+  s += `<path d="M${f(hx + 16)} ${C - 8} Q${f(hx + 26)} ${C} ${f(hx + 16)} ${C + 8} Z" fill="#1a0806"/>`;
+  for (let i = -3; i <= 3; i++) s += `<rect x="${f(hx + 16.5)}" y="${f(C + i * 2.4 - 0.9)}" width="2.6" height="1.8" fill="#dcd3b2"/>`;
+  // orelhas
+  for (const sgn of [-1, 1]) s += `<ellipse cx="${f(hx - 2)}" cy="${f(C + sgn * 18)}" rx="4.5" ry="3.2" fill="${B.skinShade}" stroke="${OUT}" stroke-width="1.2"/>`;
+  // quepe: copa redonda, faixa dourada, distintivo e aba escura à frente
+  s += `<path d="M${f(hx + 10)} ${C - 18} Q${f(hx + 30)} ${C} ${f(hx + 10)} ${C + 18} Q${f(hx + 18)} ${C} ${f(hx + 10)} ${C - 18} Z" fill="#090c14" stroke="${OUT}" stroke-width="1.5"/>`;
+  s += `<circle cx="${f(hx)}" cy="${C}" r="19" fill="url(#cap)" stroke="${OUT}" stroke-width="2"/>`;
+  s += `<circle cx="${f(hx)}" cy="${C}" r="15.5" fill="none" stroke="${B.brass}" stroke-width="3"/>`;
+  s += `<circle cx="${f(hx - 4)}" cy="${C - 5}" r="6" fill="#fff" opacity=".07"/>`;
+  s += `<path d="M${f(hx + 9)} ${C - 4} L${f(hx + 15)} ${C} L${f(hx + 9)} ${C + 4} L${f(hx + 5)} ${C} Z" fill="${B.brass}" stroke="${B.brassDark}" stroke-width=".9"/>`;
   return s;
 }
 
@@ -87,29 +189,11 @@ function bossFrame(pose) {
   const r = rng(314);
   let s = legs(pose.phase, pose.legAmp);
   s += `<g transform="rotate(${f(pose.rot ?? 0)} ${C} ${C}) translate(${f(pose.lean)} 0)">`;
-  // cauda do casaco rasgada (atrás)
-  s += `<path d="${blobPath(84, C, 26, 0.45, 12, r)}" fill="${B.coatShade}" stroke="#07090e" stroke-width="1.5"/>`;
-  // lanterna na cintura (brilha)
-  s += `<circle cx="86" cy="64" r="16" fill="url(#bl)"/>`;
-  s += `<rect x="80" y="58" width="12" height="13" rx="2" fill="#3a2e18" stroke="#120e06" stroke-width="1.5"/><rect x="82.5" y="60.5" width="7" height="8" fill="#ffe08a"/>`;
-  // tronco (casaco)
-  s += `<path d="${raggedEllipse(106, C, 31, 45, 0.06, 44, r)}" fill="url(#bc)" stroke="#07090e" stroke-width="2"/>`;
-  s += `<path d="M118 76 Q130 ${C} 118 148" stroke="${B.coatShade}" stroke-width="3" fill="none"/>`;
-  for (const y of [92, 104, 120, 132]) s += `<circle cx="125" cy="${y}" r="2.6" fill="${B.brass}" stroke="#5a4412" stroke-width="0.8"/>`;
-  // dragonas douradas
-  for (const y of [72, 152]) s += `<rect x="94" y="${y - 7}" width="20" height="14" rx="3" fill="${B.brass}" stroke="#5a4412" stroke-width="1.2"/>`;
-  // manchas de sangue e rasgos
-  for (let i = 0; i < 5; i++) s += `<ellipse cx="${f(r.range(92, 124))}" cy="${f(r.range(80, 146))}" rx="${f(r.range(6, 13))}" ry="${f(r.range(4, 9))}" fill="url(#bb)"/>`;
-  // braços
-  s += normalArm(pose.handL);
-  s += mutatedArm(pose.handR);
-  // cabeça com quepe de condutor
-  const hx = 112 + pose.headFwd;
-  s += `<circle cx="${f(hx + 4)}" cy="${C}" r="17" fill="url(#bs)" stroke="#1a1d16" stroke-width="1.5"/>`;
-  s += `<circle cx="${f(hx)}" cy="${C}" r="19" fill="url(#cap)" stroke="#06080c" stroke-width="2"/>`;
-  s += `<circle cx="${f(hx)}" cy="${C}" r="14" fill="none" stroke="${B.brass}" stroke-width="2.5" opacity=".9"/>`;
-  s += `<path d="M${f(hx + 12)} ${C - 15} A19 19 0 0 1 ${f(hx + 12)} ${C + 15} L${f(hx + 22)} ${C + 9} A12 12 0 0 0 ${f(hx + 22)} ${C - 9} Z" fill="#0a0d14"/>`;
-  s += `<rect x="${f(hx - 4)}" y="${C - 3}" width="8" height="6" rx="1" fill="${B.brass}"/>`;
+  s += `<ellipse cx="102" cy="${C}" rx="36" ry="52" fill="#000" opacity=".25"/>`;
+  s += coat(r);
+  s += lanternArm(pose.handL);
+  s += mutatedArm(pose.handR, r);
+  s += headWithCap(116 + pose.headFwd);
   s += `</g>`;
   return s;
 }
@@ -119,14 +203,14 @@ function poses() {
   const list = [];
   for (let i = 0; i < 8; i++) {
     const p = (i / 8) * Math.PI * 2;
-    list.push({ phase: p, legAmp: 16, lean: 0, headFwd: 2, rot: Math.sin(p) * 3, handL: [166 + Math.sin(p) * 6, 86], handR: [160 - Math.sin(p) * 8, 148] });
+    list.push({ phase: p, legAmp: 16, lean: 0, headFwd: 2, rot: Math.sin(p) * 3, handL: [160 + Math.sin(p) * 6, 78], handR: [158 - Math.sin(p) * 8, 156] });
   }
-  for (const h of [[112, 196], [172, 178], [198, 114], [162, 76]]) list.push({ phase: 0, legAmp: 16, lean: 4, headFwd: 4, handL: [158, 80], handR: h });
-  for (const p of [0.8, 2.4]) list.push({ phase: p, legAmp: 20, lean: 12, headFwd: 8, handL: [84, 52], handR: [84, 176] });
-  for (const [l, rr, lean] of [[[118, 28], [118, 196], -4], [[150, 36], [150, 188], 0], [[190, 92], [190, 134], 8], [[178, 98], [178, 128], 6]]) {
+  for (const h of [[112, 200], [176, 182], [204, 116], [166, 76]]) list.push({ phase: 0, legAmp: 16, lean: 4, headFwd: 4, handL: [150, 70], handR: h });
+  for (const p of [0.8, 2.4]) list.push({ phase: p, legAmp: 20, lean: 12, headFwd: 8, handL: [80, 48], handR: [82, 178] });
+  for (const [l, rr, lean] of [[[118, 26], [118, 200], -4], [[150, 34], [150, 192], 0], [[192, 90], [192, 136], 8], [[180, 96], [180, 130], 6]]) {
     list.push({ phase: 0, legAmp: 16, lean, headFwd: 4, handL: l, handR: rr });
   }
-  for (const spread of [0, 6]) list.push({ phase: 0, legAmp: 16, lean: 2, headFwd: 8, handL: [112 - spread, 22 - spread], handR: [112 - spread, 202 + spread] });
+  for (const spread of [0, 6]) list.push({ phase: 0, legAmp: 16, lean: 2, headFwd: 8, handL: [112 - spread, 20 - spread], handR: [112 - spread, 204 + spread] });
   return list;
 }
 
@@ -143,6 +227,6 @@ export function bossSheet() {
 export function bossCorpse() {
   const r = rng(271);
   let s = `<path d="${blobPath(150, 112, 92, 0.35, 16, r)}" fill="#300604" opacity=".85"/>`;
-  s += `<g transform="translate(150 112) rotate(90) translate(-112 -112)">${bossFrame({ phase: 0, legAmp: 0, lean: 0, headFwd: 0, handL: [150, 40], handR: [170, 196] })}</g>`;
+  s += `<g transform="translate(150 112) rotate(90) translate(-112 -112)">${bossFrame({ phase: 0, legAmp: 0, lean: 0, headFwd: 0, handL: [150, 36], handR: [172, 198] })}</g>`;
   return svgDoc(288, 224, defs, s);
 }

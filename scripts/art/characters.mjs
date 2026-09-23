@@ -1,6 +1,7 @@
 // Personagens vistos de cima, virados para +X (direita). Frames de 128x128 (escala 2x do mundo).
 import { blobPath, f, ik, line, linear, polyline, radial, raggedEllipse, rng, sheet } from './lib.mjs';
 import { drawGun, posesFor } from './weapons.mjs';
+import { UNDEAD, undeadCorpse, undeadDefs, undeadFrame, undeadPoses } from './undead.mjs';
 
 export const CHAR_FRAME = 128;
 const C = 64;
@@ -241,49 +242,15 @@ function zombieFrame(v, id, pose) {
 /** Tamanho do frame de uma variante (o Tank é maior). */
 export const zombieFrameSize = (id) => Math.round(CHAR_FRAME * (ZOMBIE_VARIANTS[id].scale ?? 1));
 
-/** Frames 0-7: andar (arrastado ou correndo) · 8-12: ataque. */
+/** Frames 0-7: andar (arrastado ou correndo) · 8-12: ataque. Arte em undead.mjs. */
 export function zombieSheet(id) {
   const v = ZOMBIE_VARIANTS[id];
-  const frames = [];
-  const run = v.gait === 'run';
-  for (let i = 0; i < 8; i++) {
-    const p = (i / 8) * Math.PI * 2;
-    frames.push(zombieFrame(v, id, run
-      ? {
-          // Corrida: passadas longas, corpo inclinado, braços balançando forte
-          phase: p,
-          legAmp: 18,
-          sway: Math.sin(p) * 9,
-          lean: 3,
-          headFwd: 4,
-          handL: [94 + Math.sin(p) * 12, 44 - Math.cos(p) * 3],
-          handR: [94 - Math.sin(p) * 12, 84 + Math.cos(p) * 3],
-        }
-      : {
-          phase: p,
-          legAmp: 11,
-          sway: Math.sin(p) * 6,
-          lean: 0,
-          headFwd: 1.5,
-          handL: [99 + Math.sin(p) * 4, 47 - Math.cos(p) * 2],
-          handR: [96 - Math.sin(p) * 4, 81 + Math.cos(p) * 2],
-        }));
-  }
-  const attack = [
-    { handL: [90, 42], handR: [88, 86], lean: -3, headFwd: 0 },
-    { handL: [84, 40], handR: [82, 88], lean: -5, headFwd: -1 },
-    { handL: [113, 55], handR: [112, 73], lean: 5, headFwd: 5 },
-    { handL: [110, 57], handR: [108, 71], lean: 4, headFwd: 4 },
-    { handL: [100, 50], handR: [98, 78], lean: 1, headFwd: 2 },
-  ];
-  for (const a of attack) {
-    frames.push(zombieFrame(v, id, { phase: 0, legAmp: 11, sway: 0, ...a }));
-  }
-  // Variantes maiores: desenha no espaço de 128 e escala para o frame maior.
+  const u = UNDEAD[id];
+  const frames = undeadPoses(u).map((pose) => undeadFrame(u, id, pose));
   const size = zombieFrameSize(id);
   const scale = v.scale ?? 1;
   const scaled = scale === 1 ? frames : frames.map((fr) => `<g transform="scale(${scale})">${fr}</g>`);
-  return sheet(size, size, zombieDefs(v, id), scaled);
+  return sheet(size, size, undeadDefs(u, id), scaled);
 }
 
 /** Variantes que deixam cadáver (o Exploder explode). */
@@ -326,9 +293,9 @@ function corpseFrame(v, id, seed) {
 
 export function corpseSheet() {
   const ids = CORPSE_IDS;
-  const defs = ids.map((id) => zombieDefs(ZOMBIE_VARIANTS[id], id)).join('');
+  const defs = ids.map((id) => undeadDefs(UNDEAD[id], id)).join('');
   const frames = ids.map((id, i) => {
-    const content = corpseFrame(ZOMBIE_VARIANTS[id], id, 100 + i * 17);
+    const content = undeadCorpse(UNDEAD[id], id, 100 + i * 17);
     const scale = ZOMBIE_VARIANTS[id].scale ?? 1;
     return scale === 1 ? content : `<g transform="translate(88 72) scale(${scale * 0.95}) translate(-88 -72)">${content}</g>`;
   });
