@@ -38,6 +38,9 @@ export class LightingSystem {
   private readonly flashlightGlow: Phaser.GameObjects.Image;
   private readonly lamps: LampState[];
   private flashes: Flash[] = [];
+  private readonly dynamicLights: Array<{ x: number; y: number; radius: number; intensity: number; color?: number; glow: Phaser.GameObjects.Image }> = [];
+  /** Rage Mode do boss: luzes vermelhas pulsando e mais escuridão. */
+  private alarm = false;
   /** Escuridão atual (transição suave ao mudar de área). */
   private ambient: number = lightingConfig.ambientDarkness;
 
@@ -81,6 +84,32 @@ export class LightingSystem {
     for (const lamp of this.lamps) lamp.glow.setVisible(enabled);
   }
 
+  /** Luz que acompanha algo em movimento (ex.: a lanterna do boss). Altere x/y do objeto retornado. */
+  addDynamicLight<T extends { x: number; y: number; radius: number; intensity: number; color?: number }>(light: T): T {
+    const glow = this.scene.add
+      .image(light.x, light.y, FX_KEYS.lightRadial)
+      .setScale((light.radius * 2) / RADIAL_SIZE)
+      .setTint(light.color ?? lightingConfig.lampGlowColor)
+      .setBlendMode(Phaser.BlendModes.ADD)
+      .setAlpha(0.18)
+      .setDepth(DEPTH.glow);
+    this.dynamicLights.push(Object.assign(light, { glow }));
+    return light;
+  }
+
+  removeDynamicLight(light: object): void {
+    const i = this.dynamicLights.findIndex((l) => l === light);
+    if (i >= 0) {
+      this.dynamicLights[i].glow.destroy();
+      this.dynamicLights.splice(i, 1);
+    }
+  }
+
+  setAlarm(on: boolean): void {
+    this.alarm = on;
+    for (const lamp of this.lamps) lamp.glow.setTint(on ? 0xff3322 : lamp.color ?? lightingConfig.lampGlowColor);
+  }
+
   addFlash(x: number, y: number, radius: number, intensity: number, duration: number): void {
     this.flashes.push({ x, y, radius, intensity, start: this.scene.time.now, duration });
   }
@@ -100,18 +129,26 @@ export class LightingSystem {
     const rt = this.darkness;
     rt.setPosition(ox, oy);
     rt.clear();
-    this.ambient = Phaser.Math.Linear(this.ambient, this.darknessAt(this.owner.x, this.owner.y), 0.03);
+    const alarmExtra = this.alarm ? 0.1 : 0;
+    this.ambient = Phaser.Math.Linear(this.ambient, Math.min(0.95, this.darknessAt(this.owner.x, this.owner.y) + alarmExtra), 0.03);
     rt.fill(cfg.darknessColor, this.ambient);
 
     const inView = (x: number, y: number, r: number): boolean =>
       x + r > ox && x - r < ox + w && y + r > oy && y - r < oy + h;
 
     // Luminárias
+    // Alarme: todas as luzes pulsam juntas em vermelho.
+    const alarmPulse = this.alarm ? 0.35 + 0.65 * Math.abs(Math.sin(time / 260)) : 1;
     for (const lamp of this.lamps) {
-      const intensity = this.lampIntensity(lamp, time);
+      const intensity = this.lampIntensity(lamp, time) * alarmPulse;
       lamp.glow.setAlpha(cfg.lampGlowAlpha * intensity / lamp.intensity);
       if (!inView(lamp.x, lamp.y, lamp.radius) || intensity <= 0.01) continue;
       this.eraseRadial(lamp.x - ox, lamp.y - oy, lamp.radius, intensity);
+    }
+
+    for (const light of this.dynamicLights) {
+      light.glow.setPosition(light.x, light.y);
+      if (inView(light.x, light.y, light.radius)) this.eraseRadial(light.x - ox, light.y - oy, light.radius, light.intensity);
     }
 
     // Lanterna do jogador

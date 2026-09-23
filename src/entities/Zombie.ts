@@ -3,7 +3,7 @@ import { ASSET_KEYS, FX_KEYS, ZOMBIE_SKINS, zombieAnimKey, zombieSheetKey, type 
 import { ART_SCALE, DEPTH } from '../config/visual.config';
 import type { ExplosiveConfig, ZombieConfig } from '../config/zombies.config';
 import { emitGameEvent, GameEvents, type KillSource } from '../game/events';
-import type { NavGrid, PathPoint } from '../systems/pathfinding/NavGrid';
+import { PathFollower, type BarricadeTarget, type NavWorld } from '../systems/pathfinding/PathFollower';
 import type { Damageable } from './Damageable';
 
 export const ZombieState = {
@@ -17,18 +17,10 @@ export const ZombieState = {
 } as const;
 export type ZombieState = (typeof ZombieState)[keyof typeof ZombieState];
 
-/** O que o zumbi precisa saber de uma barricada. */
-export interface BarricadeTarget {
-  readonly x: number;
-  readonly y: number;
-  readonly isIntact: boolean;
-  takeHit(amount?: number): void;
-}
+export type { BarricadeTarget } from '../systems/pathfinding/PathFollower';
 
-/** Acesso do zumbi ao mundo: navegação e barricadas por tile. */
-export interface ZombieWorld {
-  nav: NavGrid;
-  barricadeAt(tx: number, ty: number): BarricadeTarget | null;
+/** Acesso do zumbi ao mundo: navegação, barricadas e explosões. */
+export interface ZombieWorld extends NavWorld {
   /** Explosão de um Exploder (dano em área ao jogador e a outros zumbis). */
   explode(x: number, y: number, explosive: ExplosiveConfig, source: KillSource, self: Zombie): void;
 }
@@ -44,19 +36,6 @@ const WALK_ANIM_SPEED = 60;
 const SHADOW_OFFSET = { x: 4, y: 6 };
 /** Deslocamento mínimo para contar como progresso (detecção de "preso"). */
 const PROGRESS_STEP = 28;
-/** Intervalo entre checagens de linha de visão (ms). */
-const LOS_INTERVAL = 140;
-/** Intervalo base entre recálculos de caminho (ms) + aleatório, para espalhar o custo. */
-const REPATH_BASE = 650;
-const REPATH_JITTER = 400;
-/** Distância para considerar um ponto do caminho alcançado (px). */
-const WAYPOINT_REACHED = 12;
-/** Distância da barricada para começar a arrancar tábuas (px). */
-const BARRICADE_REACH = 46;
-/** Deslize ao encostar em obstáculos durante a perseguição direta. */
-const DETOUR_MEMORY_MS = 1500;
-const DETOUR_HUG = 0.3;
-const DETOUR_ALIGN_TOLERANCE = 16;
 
 /**
  * Zumbi genérico dirigido por ZombieConfig, reutilizado via pool.
@@ -80,20 +59,9 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
   /** Incrementa a cada spawn: invalida golpes agendados de uma "vida" anterior do pool. */
   private life = 0;
 
-  // Navegação
-  private path: PathPoint[] | null = null;
-  private pathIndex = 0;
-  private nextRepathAt = 0;
-  private nextLosAt = 0;
-  private hasLos = false;
+  // Navegação (compartilhada com o boss)
+  private readonly follower = new PathFollower(this);
   private breaking: BarricadeTarget | null = null;
-
-  // Deslize em obstáculos (perseguição direta)
-  private detouring = false;
-  private detourUntil = 0;
-  private lastDetourEnd = -Infinity;
-  private readonly detourAlong = new Phaser.Math.Vector2();
-  private readonly detourInto = new Phaser.Math.Vector2();
 
   // Detecção de "preso"
   private readonly progressAnchor = new Phaser.Math.Vector2();
@@ -249,7 +217,7 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
         if (!barricade || !barricade.isIntact) {
           this.breaking = null;
           this.aiState = ZombieState.Chase;
-          this.nextRepathAt = 0;
+          this.follower.reset();
           break;
         }
         this.faceTowards(barricade.x, barricade.y);
@@ -291,114 +259,18 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     const world = this.world;
     const config = this.config;
     if (!world || !config) return;
-
-    if (time >= this.nextLosAt) {
-      this.hasLos = world.nav.lineOfSight(this.x, this.y, target.x, target.y, config.bodyRadius - 2);
-      this.nextLosAt = time + LOS_INTERVAL;
-    }
-    if (this.hasLos) {
-      this.path = null;
-      this.chaseDirect(time, target.x, target.y);
-      return;
-    }
-
-    if (!this.path || this.pathIndex >= this.path.length || time >= this.nextRepathAt) {
-      this.path = world.nav.findPath(this.x, this.y, target.x, target.y);
-      this.pathIndex = 1;
-      this.nextRepathAt = time + REPATH_BASE + Math.random() * REPATH_JITTER;
-    }
-    const path = this.path;
-    if (!path || this.pathIndex >= path.length) {
-      this.chaseDirect(time, target.x, target.y);
-      return;
-    }
-
-    // Avança os pontos já alcançados e "puxa a corda" quando o seguinte já está à vista.
-    let wp = path[this.pathIndex];
-    if (Phaser.Math.Distance.Between(this.x, this.y, wp.x, wp.y) < WAYPOINT_REACHED) this.pathIndex++;
-    else if (this.pathIndex + 1 < path.length) {
-      const next = path[this.pathIndex + 1];
-      if (world.nav.lineOfSight(this.x, this.y, next.x, next.y, config.bodyRadius - 2)) this.pathIndex++;
-    }
-    if (this.pathIndex >= path.length) return;
-    wp = path[this.pathIndex];
-
-    // Janela com barricada no caminho: para e arranca as tábuas.
-    const tile = world.nav.tileSize;
-    const barricade = world.barricadeAt(Math.floor(wp.x / tile), Math.floor(wp.y / tile));
-    if (barricade?.isIntact && Phaser.Math.Distance.Between(this.x, this.y, barricade.x, barricade.y) < BARRICADE_REACH) {
+    const barricade = this.follower.step(world, time, target.x, target.y, config.speed, config.bodyRadius);
+    this.faceTowards(this.follower.face.x, this.follower.face.y);
+    if (barricade) {
+      // Janela com barricada no caminho: para e arranca as tábuas.
       this.breaking = barricade;
       this.aiState = ZombieState.BreakBarricade;
-      this.setVelocity(0, 0);
-      return;
     }
-
-    this.detouring = false;
-    this.scene.physics.moveTo(this, wp.x, wp.y, config.speed);
-    this.faceTowards(wp.x, wp.y);
-  }
-
-  /**
-   * Perseguição direta com deslize em obstáculos: ao bater, desliza ao longo dele
-   * mantendo o mesmo sentido até passar da quina.
-   */
-  private chaseDirect(time: number, tx: number, ty: number): void {
-    const body = this.body as Phaser.Physics.Arcade.Body | null;
-    if (!body || !this.config) return;
-    const speed = this.config.speed;
-    const blockedX = body.blocked.left || body.blocked.right;
-    const blockedY = body.blocked.up || body.blocked.down;
-    this.faceTowards(tx, ty);
-
-    if (this.detouring) {
-      if ((this.detourAlong.x !== 0 && blockedX) || (this.detourAlong.y !== 0 && blockedY)) this.detourAlong.negate();
-      const touching = this.detourAlong.x !== 0 ? blockedY : blockedX;
-      if (touching) this.detourUntil = time + ((this.config.bodyRadius * 2.5) / speed) * 1000;
-      else if (time >= this.detourUntil) {
-        this.detouring = false;
-        this.lastDetourEnd = time;
-      }
-      if (this.detouring) {
-        this.applyDetourVelocity(speed);
-        return;
-      }
-    }
-    if (blockedX || blockedY) {
-      const recent = time - this.lastDetourEnd < DETOUR_MEMORY_MS;
-      const prevSign = this.detourAlong.x + this.detourAlong.y;
-      const delta = blockedX ? ty - this.y : tx - this.x;
-      let sign: number;
-      if (recent && prevSign !== 0) sign = Math.sign(prevSign);
-      else if (Math.abs(delta) > DETOUR_ALIGN_TOLERANCE) sign = Math.sign(delta);
-      else sign = Phaser.Math.RND.sign();
-      this.detourAlong.set(blockedX ? 0 : sign, blockedX ? sign : 0);
-      if (blockedX) this.detourInto.set(body.blocked.right ? 1 : -1, 0);
-      else this.detourInto.set(0, body.blocked.down ? 1 : -1);
-      this.detouring = true;
-      this.detourUntil = time;
-      this.applyDetourVelocity(speed);
-      return;
-    }
-    this.scene.physics.moveTo(this, tx, ty, speed);
-  }
-
-  private applyDetourVelocity(speed: number): void {
-    this.setVelocity(
-      (this.detourAlong.x + this.detourInto.x * DETOUR_HUG) * speed,
-      (this.detourAlong.y + this.detourInto.y * DETOUR_HUG) * speed,
-    );
   }
 
   private resetNavigation(): void {
-    this.path = null;
-    this.pathIndex = 0;
-    this.nextRepathAt = 0;
-    this.nextLosAt = 0;
-    this.hasLos = false;
+    this.follower.reset();
     this.breaking = null;
-    this.detouring = false;
-    this.lastDetourEnd = -Infinity;
-    this.detourAlong.set(0, 0);
     this.resetProgress();
   }
 

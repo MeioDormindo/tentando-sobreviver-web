@@ -40,8 +40,11 @@ export class PreloadScene extends Phaser.Scene {
   private sliceSheets(): void {
     for (const sheet of SHEETS) {
       const texture = this.textures.get(sheet.key);
+      const columns = sheet.columns ?? sheet.frames;
       for (let i = 0; i < sheet.frames; i++) {
-        texture.add(i, 0, i * sheet.frameWidth, 0, sheet.frameWidth, sheet.frameHeight);
+        const col = i % columns;
+        const row = Math.floor(i / columns);
+        texture.add(i, 0, col * sheet.frameWidth, row * sheet.frameHeight, sheet.frameWidth, sheet.frameHeight);
       }
     }
   }

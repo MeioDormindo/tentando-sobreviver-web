@@ -7,6 +7,7 @@ import type { EffectsSystem } from '../effects/EffectsSystem';
 import type { Player } from '../entities/Player';
 import { Projectile } from '../entities/Projectile';
 import { Zombie } from '../entities/Zombie';
+import { Boss } from '../entities/Boss';
 
 export interface CombatSystemDeps {
   player: Player;
@@ -23,6 +24,8 @@ export interface CombatSystemDeps {
   modifiers: Readonly<PerkModifiers>;
   /** Efeitos temporários de power-ups. */
   buffs: Readonly<CombatBuffs>;
+  /** Grupo com o boss atual (se houver). */
+  bosses: Phaser.Physics.Arcade.Group;
 }
 
 export interface CombatBuffs {
@@ -45,7 +48,7 @@ const EXPLOSION_EDGE_FALLOFF = 0.3;
  */
 export class CombatSystem {
   constructor(private readonly scene: Phaser.Scene, private readonly deps: CombatSystemDeps) {
-    const { player, zombies, projectiles, walls, obstacles, bulletBlockers, barricades, effects, modifiers, buffs } = deps;
+    const { player, zombies, projectiles, walls, obstacles, bulletBlockers, barricades, effects, modifiers, buffs, bosses } = deps;
     const physics = scene.physics;
 
     physics.add.collider(player, walls);
@@ -55,6 +58,31 @@ export class CombatSystem {
     physics.add.collider(zombies, zombies);
     physics.add.collider(player, zombies);
     physics.add.collider(player, barricades);
+    physics.add.collider(bosses, walls);
+    physics.add.collider(bosses, obstacles);
+    physics.add.collider(player, bosses);
+    physics.add.collider(zombies, bosses);
+
+    // Tiros no boss: sem Instant Kill (só inimigos comuns), mas a Fúria vale.
+    physics.add.overlap(
+      projectiles,
+      bosses,
+      (a, b) => {
+        const projectile = CombatSystem.find(Projectile, a, b);
+        const boss = CombatSystem.find(Boss, a, b);
+        if (!projectile || !boss) return;
+        const angle = projectile.angleOfTravel;
+        const damage = projectile.damage * buffs.damageMultiplier;
+        if (projectile.registerHit(boss)) projectile.kill();
+        effects.bloodHit(projectile.x, projectile.y, angle);
+        boss.takeDamage(damage);
+      },
+      (a, b) => {
+        const projectile = CombatSystem.find(Projectile, a, b);
+        const boss = CombatSystem.find(Boss, a, b);
+        return !!projectile?.active && !!boss?.isAlive && !projectile.hasHit(boss);
+      },
+    );
     physics.add.collider(zombies, barricades, undefined, (a, b) => {
       const zone = (a instanceof Zombie ? b : a) as Phaser.GameObjects.Zone;
       return (zone.getData('barricade') as { isIntact: boolean } | undefined)?.isIntact ?? false;
@@ -108,6 +136,13 @@ export class CombatSystem {
     const dp = Phaser.Math.Distance.Between(player.x, player.y, x, y);
     if (source !== 'nuke' && dp <= explosive.radius) {
       player.takeDamage(Math.round(explosive.damage * falloff(dp)), this.scene.time.now);
+    }
+
+    // O boss também sofre com explosões (dano normal).
+    for (const child of this.deps.bosses.getChildren()) {
+      const boss = child as Boss;
+      const d = Phaser.Math.Distance.Between(boss.x, boss.y, x, y);
+      if (boss.isAlive && d <= explosive.radius + boss.config.bodyRadius) boss.takeDamage(explosive.damage * falloff(Math.min(d, explosive.radius)));
     }
 
     const credit: KillSource = source === 'weapon' ? 'weapon' : source;

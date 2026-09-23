@@ -42,14 +42,15 @@ src/
   map/               TerminalMap (grade, colisão, navegação, visual 3/4) e terminal/layout.ts
                      (áreas, portas, janelas, spawns, props, luzes do Terminal Central)
   entities/          Player (tronco + pernas), Zombie (Walker, Runner, Tank, Exploder), Projectile,
-                     BuyStations (maletas de arma, caixa de munição), Door, Barricade,
+                     Boss (The Conductor), BuyStations (maletas, munição), Door, Barricade,
                      Machines (Mystery Box, Weapon Lab, máquinas de perk), Damageable
   weapons/           Weapon (estado/munição/recarga) e WeaponSystem (inventário de 2 armas, disparo)
   effects/           LightingSystem (escuridão, lanterna, luzes), EffectsSystem (sangue, cadáveres,
                      cápsulas, faíscas), fxTextures (texturas de luz/partículas em canvas)
   systems/           WaveSystem, SpawnSystem, difficulty (fórmulas), EconomySystem, InteractionSystem,
                      CombatSystem (inclui headshot), CameraController, pathfinding/NavGrid (A*),
-                     PerkSystem (modificadores de perks), PowerUpSystem (drops e efeitos)
+                     PerkSystem (modificadores de perks), PowerUpSystem (drops e efeitos),
+                     BossSystem (ciclo do boss), pathfinding/PathFollower (navegação comum)
 public/assets/       arte gerada (SVG) — pode ser trocada por PNGs com o mesmo layout de frames
 ```
 
@@ -72,7 +73,8 @@ public/assets/       arte gerada (SVG) — pode ser trocada por PNGs com o mesmo
 - [x] Fase 5 — Máquinas (Mystery Box, Weapon Lab, 6 perks)
 - [x] Fase 6 — Power-ups (7 comuns + Golden Drop, armadura)
 - [x] Fase 7 — Inimigos (Runner, Tank, Exploder, composição por wave)
-- [ ] Fase 8 — Boss (The Conductor)
+- [x] Fase 8 — Boss (The Conductor, 4 fases, 5 ataques)
+- [ ] Fase 9 — Eventos (blackout, trem, horda, supply drop, gás, alarme)
 
 Observações:
 - Waves seguem as fórmulas do GDD §32 (`src/config/waves.config.ts`).
@@ -98,4 +100,8 @@ Observações:
   2 tábuas por golpe, não é empurrado); Exploder (arma a explosão perto do jogador e explode ao
   morrer — abatido a tiro, as mortes na explosão contam para você). Composição por wave em
   `waves.config.ts`: Runners a partir da wave 3, Tanks da 6, Exploders da 11.
+- Boss (`src/config/bosses.config.ts`): The Conductor nas waves 10, 20 e 30, com escolta reduzida.
+  Fases 100–75% (golpe + investida), 75–50% (+ onda de choque), 50–25% (+ invoca zumbis) e
+  Rage Mode (+ ataque em área; a arena escurece com luzes vermelhas). Investida contra a parede
+  deixa o boss atordoado. Recompensa: $2000, Golden Drop e Max Ammo.
 - Em modo dev, `window.__GAME__` expõe a instância do jogo para depuração.

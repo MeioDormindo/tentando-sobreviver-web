@@ -10,6 +10,8 @@ export interface SheetAsset {
   frameWidth: number;
   frameHeight: number;
   frames: number;
+  /** Frames por linha (padrão: todos numa linha só). */
+  columns?: number;
 }
 
 export interface ImageAsset {
@@ -108,6 +110,9 @@ export const WEAPON_MUZZLE: Record<WeaponKind, { forward: number; side: number }
 };
 
 export const zombieSheetKey = (skin: string): string => `zombie_${skin}`;
+export const bossSheetKey = (id: string): string => `boss_${id}`;
+export const bossCorpseKey = (id: string): string => `boss_${id}_corpse`;
+export const bossAnimKey = (id: string, anim: 'walk' | 'swipe' | 'charge' | 'slam' | 'roar'): string => `boss_${id}_${anim}`;
 export const zombieAnimKey = (skin: string, anim: 'walk' | 'attack'): string => `zombie_${skin}_${anim}`;
 
 export const PLAYER_FRAMES = {
@@ -141,6 +146,8 @@ export const SHEETS: SheetAsset[] = [
   })),
   { key: ASSET_KEYS.corpses, url: 'assets/zombies/corpses.svg', frameWidth: 176, frameHeight: 144, frames: CORPSE_SKINS.length },
   { key: ASSET_KEYS.bloodSplats, url: 'assets/particles/blood_splats.svg', frameWidth: 96, frameHeight: 96, frames: 3 },
+  // The Conductor: 20 frames em grade 10x2 (andar, golpe, investida, pancada, rugido)
+  { key: bossSheetKey('conductor'), url: 'assets/bosses/conductor.svg', frameWidth: 224, frameHeight: 224, frames: 20, columns: 10 },
 ];
 
 export const IMAGES: ImageAsset[] = [
@@ -181,6 +188,7 @@ export const IMAGES: ImageAsset[] = [
   { key: ASSET_KEYS.debris, url: 'assets/particles/debris.svg' },
   { key: ASSET_KEYS.bloodPool, url: 'assets/particles/blood_pool.svg' },
   { key: ASSET_KEYS.burst, url: 'assets/particles/burst.svg' },
+  { key: bossCorpseKey('conductor'), url: 'assets/bosses/conductor_corpse.svg' },
 ];
 
 const range = (from: number, to: number): number[] =>
@@ -204,6 +212,11 @@ export const ANIMS: AnimAsset[] = [
       repeat: 0,
     },
   ]),
+  { key: bossAnimKey('conductor', 'walk'), sheet: bossSheetKey('conductor'), frames: range(0, 7), frameRate: 8, repeat: -1 },
+  { key: bossAnimKey('conductor', 'swipe'), sheet: bossSheetKey('conductor'), frames: range(8, 11), frameRate: 10, repeat: 0 },
+  { key: bossAnimKey('conductor', 'charge'), sheet: bossSheetKey('conductor'), frames: range(12, 13), frameRate: 10, repeat: -1 },
+  { key: bossAnimKey('conductor', 'slam'), sheet: bossSheetKey('conductor'), frames: range(14, 17), frameRate: 8, repeat: 0 },
+  { key: bossAnimKey('conductor', 'roar'), sheet: bossSheetKey('conductor'), frames: range(18, 19), frameRate: 6, repeat: -1 },
   ...ZOMBIE_SKIN_IDS.flatMap((skin) => [
     { key: zombieAnimKey(skin, 'walk'), sheet: zombieSheetKey(skin), frames: range(0, 7), frameRate: 7, repeat: -1 },
     { key: zombieAnimKey(skin, 'attack'), sheet: zombieSheetKey(skin), frames: range(8, 12), frameRate: 14, repeat: 0 },

@@ -4,7 +4,9 @@ import { getZombieConfig } from '../config/zombies.config';
 import type { Player } from '../entities/Player';
 import { emitGameEvent, GameEvents, onGameEvent, type WavePhase, type WaveStatePayload } from '../game/events';
 import { getWaveParams, scaleZombie, type WaveParams } from './difficulty';
+import type { BossSystem } from './BossSystem';
 import type { SpawnSystem } from './SpawnSystem';
+import { bosses, bossForWave } from '../config/bosses.config';
 
 /** Nova tentativa quando nenhum ponto de spawn está livre (ms). */
 const SPAWN_RETRY_MS = 250;
@@ -27,7 +29,7 @@ export class WaveSystem {
   private spawnTimerMs = 0;
   private lastEmittedKey = '';
 
-  constructor(scene: Phaser.Scene, spawner: SpawnSystem, player: Player) {
+  constructor(scene: Phaser.Scene, spawner: SpawnSystem, player: Player, private readonly boss: BossSystem) {
     this.scene = scene;
     this.spawner = spawner;
     this.player = player;
@@ -56,6 +58,7 @@ export class WaveSystem {
     }
 
     this.spawner.relocateStuck(this.wave);
+    this.completeIfDone();
     this.spawnTimerMs -= delta;
     const alive = this.spawned - this.killed;
     if (this.spawnTimerMs <= 0 && this.spawned < this.params.totalEnemies && alive < this.params.maxAlive) {
@@ -90,9 +93,26 @@ export class WaveSystem {
     this.emitState(true);
   }
 
+  /** Zumbis extras que entraram na wave (invocados pelo boss). */
+  addSummoned(count: number): void {
+    this.params.totalEnemies += count;
+    this.spawned += count;
+    this.emitState(true);
+  }
+
+  private get isBossWave(): boolean {
+    return waveConfig.bossWaves.includes(this.wave);
+  }
+
   private startWave(wave: number): void {
     this.wave = wave;
     this.params = getWaveParams(wave);
+    // Wave de boss: o boss vem com uma horda reduzida de escolta.
+    if (this.isBossWave) {
+      const ratio = bosses[bossForWave(wave)].escortRatio;
+      this.params.totalEnemies = Math.max(2, Math.round(this.params.totalEnemies * ratio));
+      this.boss.startBossWave(wave);
+    }
     this.phase = 'active';
     this.spawned = 0;
     this.killed = 0;
@@ -103,10 +123,15 @@ export class WaveSystem {
   private onZombieKilled(): void {
     if (this.phase !== 'active') return;
     this.killed++;
-    if (this.killed >= this.params.totalEnemies) {
-      this.phase = 'intermission';
-      this.countdownMs = waveConfig.intermission;
-    }
+    this.completeIfDone();
+    this.emitState(true);
+  }
+
+  /** A wave termina quando todos os zumbis morreram e não há boss vivo. */
+  private completeIfDone(): void {
+    if (this.phase !== 'active' || this.killed < this.params.totalEnemies || this.boss.isActive) return;
+    this.phase = 'intermission';
+    this.countdownMs = waveConfig.intermission;
     this.emitState(true);
   }
 
@@ -114,7 +139,7 @@ export class WaveSystem {
     return {
       wave: this.wave,
       phase: this.phase,
-      remaining: this.phase === 'active' ? this.params.totalEnemies - this.killed : 0,
+      remaining: this.phase === 'active' ? this.params.totalEnemies - this.killed + (this.boss.isActive ? 1 : 0) : 0,
       total: this.params.totalEnemies,
       nextWaveInMs: this.phase === 'active' ? 0 : Math.max(0, this.countdownMs),
     };

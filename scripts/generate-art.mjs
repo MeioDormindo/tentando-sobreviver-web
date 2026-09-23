@@ -10,6 +10,7 @@ import { ammoCrate, WEAPON_KINDS, weaponCase } from './art/weapons.mjs';
 import * as T from './art/terminal.mjs';
 import * as M from './art/machines.mjs';
 import { POWERUPS, powerUpIcon } from './art/powerups.mjs';
+import { bossCorpse, bossSheet } from './art/boss.mjs';
 
 const OUT = 'public/assets';
 
@@ -65,4 +66,6 @@ for (const id of Object.keys(M.PERKS)) {
 }
 for (const kind of WEAPON_KINDS) write(`${OUT}/weapons/gun_${kind}.svg`, M.gunIcon(kind));
 for (const id of Object.keys(POWERUPS)) write(`${OUT}/powerups/${id}.svg`, powerUpIcon(id));
+write(`${OUT}/bosses/conductor.svg`, bossSheet());
+write(`${OUT}/bosses/conductor_corpse.svg`, bossCorpse());
 console.log('Pronto.');

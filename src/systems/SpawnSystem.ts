@@ -67,6 +67,22 @@ export class SpawnSystem {
     return zombie;
   }
 
+  /** Cria um zumbi numa posição específica (invocações do boss); falha se o ponto não for livre. */
+  spawnAt(config: ZombieConfig, x: number, y: number): Zombie | null {
+    const nav = this.world.nav;
+    if (nav.getCost(nav.toTile(x), nav.toTile(y)) !== 1) return null;
+    const zombie = this.zombies.get(x, y) as Zombie | null;
+    if (!zombie) return null;
+    zombie.spawn(x, y, config, this.player, this.world);
+    zombie.fadeIn(spawnConfig.fadeInMs);
+    return zombie;
+  }
+
+  /** Ponto de spawn válido agora (usado também pelo boss). */
+  pickSpawnPoint(wave: number): SpawnPoint | null {
+    return this.pickPoint(wave);
+  }
+
   /**
    * Rede de segurança: zumbis presos (parados há muito tempo) e fora da tela
    * reaparecem em outro ponto, para a wave nunca travar.

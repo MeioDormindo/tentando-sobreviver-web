@@ -6,6 +6,7 @@ import {
   GameEvents,
   onGameEvent,
   type AmmoPayload,
+  type BossStatePayload,
   type InteractionPromptPayload,
   type MoneyPayload,
   type PlayerHpPayload,
@@ -37,6 +38,11 @@ export class UIScene extends Phaser.Scene {
   private powerUpTitle!: Phaser.GameObjects.Text;
   private powerUpDetail!: Phaser.GameObjects.Text;
   private timerViews: Phaser.GameObjects.GameObject[] = [];
+  private bossBar!: Phaser.GameObjects.Graphics;
+  private bossName!: Phaser.GameObjects.Text;
+  private bossState: BossStatePayload | null = null;
+  private warning!: Phaser.GameObjects.Container;
+  private bossesDefeated = 0;
   private statusText!: Phaser.GameObjects.Text;
   private killsText!: Phaser.GameObjects.Text;
   private crosshair!: Phaser.GameObjects.Graphics;
@@ -63,6 +69,8 @@ export class UIScene extends Phaser.Scene {
     this.prompt = null;
     this.perkIcons = [];
     this.timerViews = [];
+    this.bossState = null;
+    this.bossesDefeated = 0;
 
     this.hpBar = this.add.graphics();
     this.hpText = this.add.text(0, 0, '', { fontFamily: FONT, fontSize: '14px', color: COLORS.text });
@@ -120,6 +128,11 @@ export class UIScene extends Phaser.Scene {
       .text(0, 0, '', { fontFamily: FONT, fontSize: '17px', color: COLORS.text, stroke: '#000', strokeThickness: 3 })
       .setOrigin(0.5)
       .setAlpha(0);
+    this.bossBar = this.add.graphics();
+    this.bossName = this.add
+      .text(0, 0, '', { fontFamily: TITLE_FONT, fontSize: '20px', color: '#e8d8c8', stroke: '#000', strokeThickness: 4 })
+      .setOrigin(0.5, 1);
+    this.warning = this.createWarning();
     this.crosshair = this.add.graphics().setDepth(100);
     this.drawCrosshair();
     this.updateKills();
@@ -136,6 +149,10 @@ export class UIScene extends Phaser.Scene {
       onGameEvent(this.game.events, GameEvents.PerksChanged, this.onPerksChanged, this),
       onGameEvent(this.game.events, GameEvents.PowerUpCollected, this.onPowerUpCollected, this),
       onGameEvent(this.game.events, GameEvents.PowerUpTimers, this.onPowerUpTimers, this),
+      onGameEvent(this.game.events, GameEvents.BossIncoming, this.onBossIncoming, this),
+      onGameEvent(this.game.events, GameEvents.BossState, this.onBossState, this),
+      onGameEvent(this.game.events, GameEvents.BossPhase, this.onBossPhase, this),
+      onGameEvent(this.game.events, GameEvents.BossDefeated, this.onBossDefeated, this),
       onGameEvent(this.game.events, GameEvents.AreaEntered, (a) => this.showAreaText(a.name.toUpperCase(), COLORS.text), this),
       onGameEvent(this.game.events, GameEvents.AreaUnlocked, (a) => this.showAreaText(`ÁREA LIBERADA — ${a.name.toUpperCase()}`, COLORS.accent), this),
     ];
@@ -168,6 +185,8 @@ export class UIScene extends Phaser.Scene {
     this.powerUpTitle.setPosition(width / 2, height * 0.4);
     this.powerUpDetail.setPosition(width / 2, height * 0.4 + 34);
     this.layoutTimers();
+    this.drawBossBar();
+    this.warning.setPosition(width / 2, height * 0.3);
     this.statusText.setPosition(width / 2, height * 0.62);
     this.killsText.setPosition(width - MARGIN, MARGIN + 56);
     this.waveText.setPosition(MARGIN, MARGIN - 6);
@@ -267,6 +286,69 @@ export class UIScene extends Phaser.Scene {
     }
   }
 
+  // ───────────────────────── Boss ─────────────────────────
+
+  /** Aviso "WARNING / BOSS INCOMING" com faixas de alerta (GDD §61). */
+  private createWarning(): Phaser.GameObjects.Container {
+    const stripe = (y: number) => this.add.rectangle(0, y, 560, 6, 0xb33a3a).setOrigin(0.5);
+    const title = this.add
+      .text(0, -22, 'WARNING', { fontFamily: TITLE_FONT, fontSize: '54px', color: '#e0412f', stroke: '#000', strokeThickness: 5 })
+      .setOrigin(0.5);
+    const sub = this.add
+      .text(0, 30, 'BOSS INCOMING', { fontFamily: TITLE_FONT, fontSize: '30px', color: '#f0e0d0', stroke: '#000', strokeThickness: 4 })
+      .setOrigin(0.5);
+    return this.add.container(0, 0, [stripe(-66), stripe(66), title, sub]).setAlpha(0).setDepth(150);
+  }
+
+  private onBossIncoming(): void {
+    // O aviso do boss substitui a faixa "WAVE N".
+    this.tweens.killTweensOf([this.bannerTitle, this.bannerSub]);
+    this.bannerTitle.setAlpha(0);
+    this.bannerSub.setAlpha(0);
+    this.tweens.killTweensOf(this.warning);
+    this.warning.setAlpha(0);
+    // Pisca três vezes e some.
+    this.tweens.add({ targets: this.warning, alpha: 1, duration: 260, yoyo: true, hold: 280, repeat: 2, onComplete: () => this.warning.setAlpha(0) });
+  }
+
+  private onBossState(state: BossStatePayload): void {
+    this.bossState = state.active ? state : null;
+    this.drawBossBar();
+  }
+
+  private onBossPhase(p: { phase: number }): void {
+    const text = p.phase >= 4 ? 'RAGE MODE' : `FASE ${p.phase}`;
+    this.showBanner(text, p.phase >= 4 ? 'a arena está mudando' : 'ele está mais rápido', '#e0412f');
+  }
+
+  private onBossDefeated(p: { name: string; reward: number }): void {
+    this.bossesDefeated++;
+    this.showBanner(`${p.name.toUpperCase()} DERROTADO`, `+$${p.reward.toLocaleString('pt-BR')}`, COLORS.accent);
+  }
+
+  /** Barra do boss no topo (GDD §61), com marcas nas trocas de fase. */
+  private drawBossBar(): void {
+    const g = this.bossBar;
+    g.clear();
+    const state = this.bossState;
+    if (!state) {
+      this.bossName.setText('');
+      return;
+    }
+    const { width } = this.scale;
+    const w = Math.min(520, width * 0.5);
+    const h = 12;
+    const x = width / 2 - w / 2;
+    const y = MARGIN + 62;
+    const ratio = Phaser.Math.Clamp(state.hp / state.maxHp, 0, 1);
+    g.fillStyle(0x1a0c0a, 0.85).fillRect(x - 2, y - 2, w + 4, h + 4);
+    g.fillStyle(state.phase >= 4 ? 0xe0412f : 0xa8322a, 1).fillRect(x, y, w * ratio, h);
+    g.fillStyle(0xffffff, 0.15).fillRect(x, y, w * ratio, 3);
+    g.lineStyle(1, 0x000000, 0.9).strokeRect(x - 2, y - 2, w + 4, h + 4);
+    for (const t of state.thresholds) g.fillStyle(0xf0e0d0, 0.8).fillRect(x + w * t - 1, y - 3, 2, h + 6);
+    this.bossName.setText(state.name.toUpperCase()).setPosition(width / 2, y - 4);
+  }
+
   private onPowerUpCollected(p: { name: string; color: number; detail?: string }): void {
     const color = `#${p.color.toString(16).padStart(6, '0')}`;
     const targets = [this.powerUpTitle, this.powerUpDetail];
@@ -281,6 +363,8 @@ export class UIScene extends Phaser.Scene {
   private onPowerUpTimers(p: { timers: PowerUpTimer[] }): void {
     this.timerViews.forEach((v) => v.destroy());
     this.timerViews = [];
+    this.bossState = null;
+    this.bossesDefeated = 0;
     for (const t of p.timers) {
       const iconId = t.id === 'fury' ? 'golden' : t.id;
       const icon = this.add.image(0, 0, powerUpKey(iconId)).setDisplaySize(34, 34);
@@ -391,6 +475,7 @@ export class UIScene extends Phaser.Scene {
     const statsText =
       `WAVE ALCANÇADA: ${this.waveState?.wave ?? 0}\n` +
       `ZUMBIS ABATIDOS: ${this.kills}\n` +
+      `BOSSES DERROTADOS: ${this.bossesDefeated}\n` +
       `DINHEIRO GANHO: ${formatMoney(this.money.earned)}`;
     const stats = this.add
       .text(width / 2, height * 0.47, statsText, {

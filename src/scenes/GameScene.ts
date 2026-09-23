@@ -21,6 +21,7 @@ import { EconomySystem } from '../systems/EconomySystem';
 import { InteractionSystem } from '../systems/InteractionSystem';
 import { PerkSystem } from '../systems/PerkSystem';
 import { PowerUpSystem } from '../systems/PowerUpSystem';
+import { BossSystem } from '../systems/BossSystem';
 import { SpawnSystem } from '../systems/SpawnSystem';
 import { WaveSystem } from '../systems/WaveSystem';
 import { WeaponSystem } from '../weapons/WeaponSystem';
@@ -39,6 +40,7 @@ export class GameScene extends Phaser.Scene {
   private interaction!: InteractionSystem;
   private perks!: PerkSystem;
   private powerUps!: PowerUpSystem;
+  private bossSystem!: BossSystem;
   private map!: TerminalMap;
   private currentArea = '';
   private readonly aimPoint = new Phaser.Math.Vector2();
@@ -94,6 +96,7 @@ export class GameScene extends Phaser.Scene {
     });
 
     const barricadeBodies = this.physics.add.staticGroup();
+    const bossGroup = this.physics.add.group();
     const combat = new CombatSystem(this, {
       player: this.player,
       zombies,
@@ -105,6 +108,7 @@ export class GameScene extends Phaser.Scene {
       effects,
       modifiers: this.perks.modifiers,
       buffs: this.powerUps.buffs,
+      bosses: bossGroup,
     });
 
     this.interaction = new InteractionSystem(this, this.player);
@@ -141,7 +145,18 @@ export class GameScene extends Phaser.Scene {
 
     const spawner = new SpawnSystem(this, zombies, map.spawnPoints, this.player, world);
     spawner.unlockArea(START_AREA);
-    this.waveSystem = new WaveSystem(this, spawner, this.player);
+    this.bossSystem = new BossSystem(this, {
+      player: this.player,
+      world,
+      spawner,
+      bossGroup,
+      effects,
+      lighting: this.lighting,
+      economy: this.economy,
+      powerUps: this.powerUps,
+    });
+    this.waveSystem = new WaveSystem(this, spawner, this.player, this.bossSystem);
+    this.bossSystem.onSummoned = (count) => this.waveSystem.addSummoned(count);
 
     // Portas pagas: abrir libera os spawns e a exploração da área seguinte.
     for (const def of map.doors) {
@@ -195,6 +210,7 @@ export class GameScene extends Phaser.Scene {
     this.weaponSystem.update(time);
     this.interaction.update(time, delta);
     this.powerUps.update(time);
+    this.bossSystem.update(time, delta);
     this.cameraController.update();
     this.trackArea();
   }
@@ -219,6 +235,7 @@ export class GameScene extends Phaser.Scene {
     this.interaction.syncHud();
     this.perks.syncHud();
     this.powerUps.syncHud();
+    this.bossSystem.syncHud();
   }
 
   private onPlayerDied(): void {

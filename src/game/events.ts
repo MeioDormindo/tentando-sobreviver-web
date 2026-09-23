@@ -23,6 +23,12 @@ export const GameEvents = {
   PowerUpCollected: 'powerup-collected',
   /** Efeitos temporários ativos (contagem regressiva na HUD). */
   PowerUpTimers: 'powerup-timers',
+  /** Aviso "BOSS INCOMING" (GDD §61). */
+  BossIncoming: 'boss-incoming',
+  /** Vida/fase do boss para a barra da HUD. */
+  BossState: 'boss-state',
+  BossPhase: 'boss-phase',
+  BossDefeated: 'boss-defeated',
   /** A UI pede o estado atual (ex.: ao ser criada depois da GameScene). */
   HudRequest: 'hud-request',
 } as const;
@@ -56,6 +62,16 @@ export interface ZombieKilledPayload {
   y: number;
   headshot: boolean;
   source: KillSource;
+}
+
+export interface BossStatePayload {
+  active: boolean;
+  name: string;
+  hp: number;
+  maxHp: number;
+  phase: number;
+  /** Frações de vida das trocas de fase (marcas na barra). */
+  thresholds: number[];
 }
 
 export interface PowerUpTimer {
@@ -106,6 +122,10 @@ export interface GameEventMap {
   [GameEvents.PerksChanged]: { perks: Array<{ id: string; level: number }> };
   [GameEvents.PowerUpCollected]: { id: string; name: string; color: number; detail?: string };
   [GameEvents.PowerUpTimers]: { timers: PowerUpTimer[] };
+  [GameEvents.BossIncoming]: { name: string };
+  [GameEvents.BossState]: BossStatePayload;
+  [GameEvents.BossPhase]: { name: string; phase: number };
+  [GameEvents.BossDefeated]: { name: string; reward: number };
   [GameEvents.HudRequest]: undefined;
 }
 
