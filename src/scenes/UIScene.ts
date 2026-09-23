@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { perkIconKey } from '../config/assets.config';
+import { perkIconKey, powerUpKey } from '../config/assets.config';
 import { COLORS, SCENE_KEYS } from '../config/game.config';
 import {
   emitGameEvent,
@@ -9,6 +9,7 @@ import {
   type InteractionPromptPayload,
   type MoneyPayload,
   type PlayerHpPayload,
+  type PowerUpTimer,
   type WaveStatePayload,
 } from '../game/events';
 
@@ -33,6 +34,9 @@ export class UIScene extends Phaser.Scene {
   private promptText!: Phaser.GameObjects.Text;
   private areaText!: Phaser.GameObjects.Text;
   private perkIcons: Phaser.GameObjects.Image[] = [];
+  private powerUpTitle!: Phaser.GameObjects.Text;
+  private powerUpDetail!: Phaser.GameObjects.Text;
+  private timerViews: Phaser.GameObjects.GameObject[] = [];
   private statusText!: Phaser.GameObjects.Text;
   private killsText!: Phaser.GameObjects.Text;
   private crosshair!: Phaser.GameObjects.Graphics;
@@ -42,7 +46,7 @@ export class UIScene extends Phaser.Scene {
   private bannerSub!: Phaser.GameObjects.Text;
   private deathOverlay: Phaser.GameObjects.Container | null = null;
 
-  private hp: PlayerHpPayload = { hp: 0, maxHp: 1 };
+  private hp: PlayerHpPayload = { hp: 0, maxHp: 1, armor: 0, maxArmor: 100 };
   private kills = 0;
   private waveState: WaveStatePayload | null = null;
   private money: MoneyPayload = { money: 0, delta: 0, earned: 0 };
@@ -58,6 +62,7 @@ export class UIScene extends Phaser.Scene {
     this.waveState = null;
     this.prompt = null;
     this.perkIcons = [];
+    this.timerViews = [];
 
     this.hpBar = this.add.graphics();
     this.hpText = this.add.text(0, 0, '', { fontFamily: FONT, fontSize: '14px', color: COLORS.text });
@@ -107,6 +112,14 @@ export class UIScene extends Phaser.Scene {
       .text(0, 0, '', { fontFamily: TITLE_FONT, fontSize: '26px', color: COLORS.text, stroke: '#000', strokeThickness: 4 })
       .setOrigin(0.5)
       .setAlpha(0);
+    this.powerUpTitle = this.add
+      .text(0, 0, '', { fontFamily: TITLE_FONT, fontSize: '40px', color: COLORS.text, stroke: '#000', strokeThickness: 5 })
+      .setOrigin(0.5)
+      .setAlpha(0);
+    this.powerUpDetail = this.add
+      .text(0, 0, '', { fontFamily: FONT, fontSize: '17px', color: COLORS.text, stroke: '#000', strokeThickness: 3 })
+      .setOrigin(0.5)
+      .setAlpha(0);
     this.crosshair = this.add.graphics().setDepth(100);
     this.drawCrosshair();
     this.updateKills();
@@ -121,6 +134,8 @@ export class UIScene extends Phaser.Scene {
       onGameEvent(this.game.events, GameEvents.InteractionPrompt, this.onPrompt, this),
       onGameEvent(this.game.events, GameEvents.PurchaseDenied, this.onPurchaseDenied, this),
       onGameEvent(this.game.events, GameEvents.PerksChanged, this.onPerksChanged, this),
+      onGameEvent(this.game.events, GameEvents.PowerUpCollected, this.onPowerUpCollected, this),
+      onGameEvent(this.game.events, GameEvents.PowerUpTimers, this.onPowerUpTimers, this),
       onGameEvent(this.game.events, GameEvents.AreaEntered, (a) => this.showAreaText(a.name.toUpperCase(), COLORS.text), this),
       onGameEvent(this.game.events, GameEvents.AreaUnlocked, (a) => this.showAreaText(`ÁREA LIBERADA — ${a.name.toUpperCase()}`, COLORS.accent), this),
     ];
@@ -150,6 +165,9 @@ export class UIScene extends Phaser.Scene {
     this.promptText.setPosition(width / 2, height * 0.72);
     this.areaText.setPosition(width / 2, MARGIN + 18);
     this.layoutPerks();
+    this.powerUpTitle.setPosition(width / 2, height * 0.4);
+    this.powerUpDetail.setPosition(width / 2, height * 0.4 + 34);
+    this.layoutTimers();
     this.statusText.setPosition(width / 2, height * 0.62);
     this.killsText.setPosition(width - MARGIN, MARGIN + 56);
     this.waveText.setPosition(MARGIN, MARGIN - 6);
@@ -170,6 +188,12 @@ export class UIScene extends Phaser.Scene {
     this.hpBar.fillStyle(COLORS.hpBarBg, 0.9).fillRect(x, y, HP_BAR_WIDTH, HP_BAR_HEIGHT);
     this.hpBar.fillStyle(COLORS.hpBar, 1).fillRect(x, y, HP_BAR_WIDTH * ratio, HP_BAR_HEIGHT);
     this.hpBar.lineStyle(1, 0x000000, 0.8).strokeRect(x, y, HP_BAR_WIDTH, HP_BAR_HEIGHT);
+    // Armadura: barra azul fina logo acima da vida (GDD §59).
+    if (this.hp.armor > 0) {
+      const armorRatio = Phaser.Math.Clamp(this.hp.armor / this.hp.maxArmor, 0, 1);
+      this.hpBar.fillStyle(0x16283a, 0.9).fillRect(x, y - 7, HP_BAR_WIDTH, 5);
+      this.hpBar.fillStyle(0x3d8fd6, 1).fillRect(x, y - 7, HP_BAR_WIDTH * armorRatio, 5);
+    }
   }
 
   private drawCrosshair(): void {
@@ -182,7 +206,8 @@ export class UIScene extends Phaser.Scene {
 
   private onHpChanged(payload: PlayerHpPayload): void {
     this.hp = payload;
-    this.hpText.setText(`HP ${Math.ceil(payload.hp)} / ${payload.maxHp}`);
+    const armor = payload.armor > 0 ? `   ARMOR ${Math.ceil(payload.armor)}` : '';
+    this.hpText.setText(`HP ${Math.ceil(payload.hp)} / ${payload.maxHp}${armor}`);
     this.drawHpBar();
   }
 
@@ -239,6 +264,46 @@ export class UIScene extends Phaser.Scene {
     const newest = this.perkIcons[this.perkIcons.length - 1];
     if (newest && this.perkIcons.length > had) {
       this.tweens.add({ targets: newest, displayWidth: { from: 56, to: 28 }, displayHeight: { from: 56, to: 28 }, duration: 350, ease: 'Back.easeOut' });
+    }
+  }
+
+  private onPowerUpCollected(p: { name: string; color: number; detail?: string }): void {
+    const color = `#${p.color.toString(16).padStart(6, '0')}`;
+    const targets = [this.powerUpTitle, this.powerUpDetail];
+    this.tweens.killTweensOf(targets);
+    this.powerUpTitle.setText(p.name.toUpperCase() + '!').setColor(color).setAlpha(1).setScale(1.3);
+    this.powerUpDetail.setText(p.detail ?? '').setAlpha(p.detail ? 1 : 0);
+    this.tweens.add({ targets: this.powerUpTitle, scale: 1, duration: 300, ease: 'Back.easeOut' });
+    this.tweens.add({ targets, alpha: 0, delay: 1600, duration: 600 });
+  }
+
+  /** Efeitos temporários ativos: ícone + segundos restantes, no centro inferior. */
+  private onPowerUpTimers(p: { timers: PowerUpTimer[] }): void {
+    this.timerViews.forEach((v) => v.destroy());
+    this.timerViews = [];
+    for (const t of p.timers) {
+      const iconId = t.id === 'fury' ? 'golden' : t.id;
+      const icon = this.add.image(0, 0, powerUpKey(iconId)).setDisplaySize(34, 34);
+      const secs = Math.ceil(t.remainingMs / 1000);
+      const label = this.add
+        .text(0, 0, `${secs}s`, { fontFamily: FONT, fontSize: '14px', color: secs <= 5 ? '#e05a4a' : COLORS.text })
+        .setOrigin(0.5, 0);
+      if (secs <= 5) icon.setAlpha(secs % 2 === 0 ? 0.5 : 1);
+      this.timerViews.push(icon, label);
+    }
+    this.layoutTimers();
+  }
+
+  private layoutTimers(): void {
+    const { width, height } = this.scale;
+    const count = this.timerViews.length / 2;
+    const spacing = 48;
+    const startX = width / 2 - ((count - 1) * spacing) / 2;
+    for (let i = 0; i < count; i++) {
+      const icon = this.timerViews[i * 2] as Phaser.GameObjects.Image;
+      const label = this.timerViews[i * 2 + 1] as Phaser.GameObjects.Text;
+      icon.setPosition(startX + i * spacing, height - MARGIN - 40);
+      label.setPosition(startX + i * spacing, height - MARGIN - 20);
     }
   }
 

@@ -96,6 +96,12 @@ export class WeaponSystem {
     }
   }
 
+  /** Max Ammo: enche a reserva de todas as armas. */
+  refillAllAmmo(): void {
+    for (const weapon of this.slots) weapon.refillReserve();
+    this.emitIfChanged();
+  }
+
   /** Enche a reserva de uma arma possuída. */
   refillAmmo(weaponId: string): void {
     this.slots.find((w) => w.config.id === weaponId)?.refillReserve();

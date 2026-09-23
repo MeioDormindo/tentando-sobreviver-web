@@ -20,6 +20,7 @@ import { CombatSystem } from '../systems/CombatSystem';
 import { EconomySystem } from '../systems/EconomySystem';
 import { InteractionSystem } from '../systems/InteractionSystem';
 import { PerkSystem } from '../systems/PerkSystem';
+import { PowerUpSystem } from '../systems/PowerUpSystem';
 import { SpawnSystem } from '../systems/SpawnSystem';
 import { WaveSystem } from '../systems/WaveSystem';
 import { WeaponSystem } from '../weapons/WeaponSystem';
@@ -37,6 +38,7 @@ export class GameScene extends Phaser.Scene {
   private economy!: EconomySystem;
   private interaction!: InteractionSystem;
   private perks!: PerkSystem;
+  private powerUps!: PowerUpSystem;
   private map!: TerminalMap;
   private currentArea = '';
   private readonly aimPoint = new Phaser.Math.Vector2();
@@ -80,6 +82,17 @@ export class GameScene extends Phaser.Scene {
     this.weaponSystem.setModifiers(this.perks.modifiers);
     this.perks.onChange(() => this.player.onPerksChanged());
 
+    this.economy = new EconomySystem(this, effects);
+    this.powerUps = new PowerUpSystem(this, {
+      player: this.player,
+      economy: this.economy,
+      weapons: this.weaponSystem,
+      perks: this.perks,
+      effects,
+      lighting: this.lighting,
+      zombies,
+    });
+
     const barricadeBodies = this.physics.add.staticGroup();
     new CombatSystem(this, {
       player: this.player,
@@ -91,9 +104,9 @@ export class GameScene extends Phaser.Scene {
       barricades: barricadeBodies,
       effects,
       modifiers: this.perks.modifiers,
+      buffs: this.powerUps.buffs,
     });
 
-    this.economy = new EconomySystem(this, effects);
     this.interaction = new InteractionSystem(this, this.player);
 
     // Máquinas: Mystery Box, Weapon Lab e perks
@@ -180,6 +193,7 @@ export class GameScene extends Phaser.Scene {
     this.player.aimAt(this.aimPoint.x, this.aimPoint.y);
     this.weaponSystem.update(time);
     this.interaction.update(time, delta);
+    this.powerUps.update(time);
     this.cameraController.update();
     this.trackArea();
   }
@@ -203,6 +217,7 @@ export class GameScene extends Phaser.Scene {
     this.economy.syncHud();
     this.interaction.syncHud();
     this.perks.syncHud();
+    this.powerUps.syncHud();
   }
 
   private onPlayerDied(): void {

@@ -28,6 +28,7 @@ const SHADOW_OFFSET = { x: 4, y: 6 };
  */
 export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
   hp: number;
+  armor = 0;
 
   private readonly config: PlayerConfig;
   private readonly keys: MoveKeys;
@@ -40,6 +41,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
   private weaponKind: WeaponKind = 'pistol';
   /** Modificadores dos perks (referência viva do PerkSystem). */
   private mods: Readonly<PerkModifiers> = NEUTRAL_MODIFIERS;
+  /** Multiplicador temporário de velocidade (power-up Speed Boost). */
+  speedBuff = 1;
 
   constructor(scene: Phaser.Scene, x: number, y: number, config: PlayerConfig) {
     super(scene, x, y, playerTorsoKey('pistol'), PLAYER_FRAMES.aim);
@@ -82,6 +85,22 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
     return this.config.maxHp + this.mods.maxHpBonus;
   }
 
+  get maxArmor(): number {
+    return this.config.maxArmor;
+  }
+
+  heal(): void {
+    if (!this.alive) return;
+    this.hp = this.maxHp;
+    this.emitHp();
+  }
+
+  refillArmor(): void {
+    if (!this.alive) return;
+    this.armor = this.maxArmor;
+    this.emitHp();
+  }
+
   setModifiers(mods: Readonly<PerkModifiers>): void {
     this.mods = mods;
   }
@@ -104,7 +123,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
       Number(right.isDown) - Number(left.isDown),
       Number(down.isDown) - Number(up.isDown),
     );
-    this.moveDir.normalize().scale(this.config.speed * this.mods.speedMultiplier);
+    this.moveDir.normalize().scale(this.config.speed * this.mods.speedMultiplier * this.speedBuff);
     this.setVelocity(this.moveDir.x, this.moveDir.y);
   }
 
@@ -146,7 +165,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
   takeDamage(amount: number, time: number): void {
     if (!this.alive || time < this.invulnerableUntil) return;
 
-    this.hp = Math.max(0, this.hp - amount);
+    // A armadura absorve o dano primeiro.
+    const absorbed = Math.min(this.armor, amount);
+    this.armor -= absorbed;
+    this.hp = Math.max(0, this.hp - (amount - absorbed));
     this.invulnerableUntil = time + this.config.invulnerabilityMs;
     this.lastDamageAt = time;
     this.emitHp();
@@ -169,6 +191,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
     emitGameEvent(this.scene.game.events, GameEvents.PlayerHpChanged, {
       hp: this.hp,
       maxHp: this.maxHp,
+      armor: this.armor,
+      maxArmor: this.maxArmor,
     });
   }
 

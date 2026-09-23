@@ -19,6 +19,15 @@ export interface CombatSystemDeps {
   barricades: Phaser.Physics.Arcade.StaticGroup;
   effects: EffectsSystem;
   modifiers: Readonly<PerkModifiers>;
+  /** Efeitos temporários de power-ups. */
+  buffs: Readonly<CombatBuffs>;
+}
+
+export interface CombatBuffs {
+  /** Instant Kill: um acerto mata zumbis comuns. */
+  instaKill: boolean;
+  /** Fúria (Golden Drop): multiplicador de dano. */
+  damageMultiplier: number;
 }
 
 type ArcadeObject = Parameters<Phaser.Types.Physics.Arcade.ArcadePhysicsCallback>[0];
@@ -29,7 +38,7 @@ type ArcadeObject = Parameters<Phaser.Types.Physics.Arcade.ArcadePhysicsCallback
  */
 export class CombatSystem {
   constructor(scene: Phaser.Scene, deps: CombatSystemDeps) {
-    const { player, zombies, projectiles, walls, obstacles, bulletBlockers, barricades, effects, modifiers } = deps;
+    const { player, zombies, projectiles, walls, obstacles, bulletBlockers, barricades, effects, modifiers, buffs } = deps;
     const physics = scene.physics;
 
     physics.add.collider(player, walls);
@@ -63,7 +72,9 @@ export class CombatSystem {
         const angle = projectile.angleOfTravel;
         const headshot = CombatSystem.isHeadshot(projectile, zombie, angle);
         const headshotMult = headshotConfig.damageMultiplier + modifiers.headshotBonus;
-        const damage = projectile.damage * (headshot ? headshotMult : 1);
+        const damage = buffs.instaKill
+          ? zombie.hp
+          : projectile.damage * (headshot ? headshotMult : 1) * buffs.damageMultiplier;
         if (projectile.registerHit(zombie)) projectile.kill();
         effects.bloodHit(zombie.x, zombie.y, angle);
         if (zombie.takeDamage(damage, headshot)) {

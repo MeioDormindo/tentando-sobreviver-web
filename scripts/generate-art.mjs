@@ -9,6 +9,7 @@ import { write } from './art/lib.mjs';
 import { ammoCrate, WEAPON_KINDS, weaponCase } from './art/weapons.mjs';
 import * as T from './art/terminal.mjs';
 import * as M from './art/machines.mjs';
+import { POWERUPS, powerUpIcon } from './art/powerups.mjs';
 
 const OUT = 'public/assets';
 
@@ -62,4 +63,5 @@ for (const id of Object.keys(M.PERKS)) {
   write(`${OUT}/ui/perk_icon_${id}.svg`, M.perkIcon(id));
 }
 for (const kind of WEAPON_KINDS) write(`${OUT}/weapons/gun_${kind}.svg`, M.gunIcon(kind));
+for (const id of Object.keys(POWERUPS)) write(`${OUT}/powerups/${id}.svg`, powerUpIcon(id));
 console.log('Pronto.');

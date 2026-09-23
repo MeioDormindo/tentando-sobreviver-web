@@ -19,6 +19,8 @@ export class EconomySystem {
   private money = economyConfig.startingMoney;
   private earned = 0;
   private lastPhase: WavePhase = 'waiting';
+  /** Multiplicador temporário de ganhos (power-up Double Cash). */
+  cashMultiplier = 1;
 
   constructor(scene: Phaser.Scene, private readonly effects: EffectsSystem) {
     this.scene = scene;
@@ -41,11 +43,14 @@ export class EconomySystem {
     return this.money >= cost;
   }
 
-  earn(amount: number): void {
-    if (amount <= 0) return;
-    this.money += amount;
-    this.earned += amount;
-    this.emit(amount);
+  /** Soma dinheiro (aplica o Double Cash); retorna o valor efetivamente ganho. */
+  earn(amount: number): number {
+    if (amount <= 0) return 0;
+    const value = Math.round(amount * this.cashMultiplier);
+    this.money += value;
+    this.earned += value;
+    this.emit(value);
+    return value;
   }
 
   /** Debita se houver saldo; senão avisa a HUD e retorna false. */
@@ -64,8 +69,8 @@ export class EconomySystem {
   }
 
   private onZombieKilled(kill: ZombieKilledPayload): void {
-    const amount = kill.reward + (kill.headshot ? economyConfig.headshotBonus : 0);
-    this.earn(amount);
+    if (kill.source !== 'weapon') return;
+    const amount = this.earn(kill.reward + (kill.headshot ? economyConfig.headshotBonus : 0));
     this.effects.floatingText(kill.x, kill.y - 14, `+$${amount}`, kill.headshot ? '#ffd166' : '#d9c89a', kill.headshot);
   }
 

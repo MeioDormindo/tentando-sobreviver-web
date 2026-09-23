@@ -74,6 +74,9 @@ export const gunIconKey = (kind: WeaponKind): string => `gun_${kind}`;
 export const PERK_IDS = ['fortify', 'quick_hands', 'sprint', 'deadeye', 'adrenaline', 'overload'] as const;
 export const perkIconKey = (id: string): string => `perk_icon_${id}`;
 
+export const POWERUP_IDS = ['max_ammo', 'double_cash', 'insta_kill', 'nuke', 'full_heal', 'armor', 'speed_boost', 'golden'] as const;
+export const powerUpKey = (id: string): string => `powerup_${id}`;
+
 export const machineKeys = {
   mysteryBox: 'machine_mystery_box',
   weaponLab: 'machine_weapon_lab',
@@ -161,6 +164,7 @@ export const IMAGES: ImageAsset[] = [
   { key: machineKeys.weaponLab, url: 'assets/machines/weapon_lab.svg' },
   ...PERK_IDS.map((id) => ({ key: machineKeys.perk(id), url: `assets/machines/perk_${id}.svg` })),
   ...PERK_IDS.map((id) => ({ key: perkIconKey(id), url: `assets/ui/perk_icon_${id}.svg` })),
+  ...POWERUP_IDS.map((id) => ({ key: powerUpKey(id), url: `assets/powerups/${id}.svg` })),
   { key: ASSET_KEYS.papers, url: 'assets/particles/papers.svg' },
   { key: ASSET_KEYS.debris, url: 'assets/particles/debris.svg' },
   { key: ASSET_KEYS.bloodPool, url: 'assets/particles/blood_pool.svg' },

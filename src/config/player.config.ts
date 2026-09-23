@@ -7,6 +7,8 @@ export interface PlayerConfig {
   /** Tempo de invulnerabilidade após receber dano (ms). */
   invulnerabilityMs: number;
   startingWeapon: string;
+  /** Armadura absorve dano antes da vida (GDD §24). */
+  maxArmor: number;
   /** Tempo sem levar dano até começar a regenerar (ms). */
   regenDelayMs: number;
   /** Vida recuperada por segundo durante a regeneração. */
@@ -19,6 +21,7 @@ export const playerConfig: PlayerConfig = {
   bodyRadius: 12,
   invulnerabilityMs: 400,
   startingWeapon: 'm1911',
+  maxArmor: 100,
   regenDelayMs: 5000,
   regenPerSecond: 6,
 };

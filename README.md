@@ -49,7 +49,7 @@ src/
                      cápsulas, faíscas), fxTextures (texturas de luz/partículas em canvas)
   systems/           WaveSystem, SpawnSystem, difficulty (fórmulas), EconomySystem, InteractionSystem,
                      CombatSystem (inclui headshot), CameraController, pathfinding/NavGrid (A*),
-                     PerkSystem (modificadores de perks)
+                     PerkSystem (modificadores de perks), PowerUpSystem (drops e efeitos)
 public/assets/       arte gerada (SVG) — pode ser trocada por PNGs com o mesmo layout de frames
 ```
 
@@ -70,7 +70,8 @@ public/assets/       arte gerada (SVG) — pode ser trocada por PNGs com o mesmo
 - [x] Fase 3 — Economia (dinheiro, headshot, 8 armas, compras, munição)
 - [x] Fase 4 — Mapa Terminal Central (7 áreas, portas, barricadas, spawn por área, A*)
 - [x] Fase 5 — Máquinas (Mystery Box, Weapon Lab, 6 perks)
-- [ ] Fase 6 — Power-ups
+- [x] Fase 6 — Power-ups (7 comuns + Golden Drop, armadura)
+- [ ] Fase 7 — Inimigos (Runner, Tank, Exploder)
 
 Observações:
 - Waves seguem as fórmulas do GDD §32 (`src/config/waves.config.ts`).
@@ -89,4 +90,7 @@ Observações:
 - Weapon Lab ($5000, Manutenção): arma em mãos vira "Mk II" (mais dano, pente, recarga).
 - Perks (`src/config/machines.config.ts`): Fortify, Quick Hands, Sprint+, Deadeye,
   Adrenaline e Overload, uma máquina por área.
+- Power-ups (`src/config/powerups.config.ts`): 5% de drop por abate (máx. 4 por wave) — Max Ammo,
+  Double Cash, Instant Kill, Nuke, Full Heal, Armor, Speed Boost — e 0,5% de Golden Drop
+  (arma especial, $2000, perk grátis ou Fúria). Somem após 30s. Armadura absorve dano antes da vida.
 - Em modo dev, `window.__GAME__` expõe a instância do jogo para depuração.
