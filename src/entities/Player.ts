@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { ANIM_KEYS, ASSET_KEYS, PLAYER_FRAMES, playerAnimKey, playerTorsoKey } from '../config/assets.config';
+import { NEUTRAL_MODIFIERS, type PerkModifiers } from '../config/machines.config';
 import type { PlayerConfig } from '../config/player.config';
 import type { WeaponKind } from '../config/weapons.config';
 import { ART_SCALE, DEPTH } from '../config/visual.config';
@@ -27,7 +28,6 @@ const SHADOW_OFFSET = { x: 4, y: 6 };
  */
 export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
   hp: number;
-  readonly maxHp: number;
 
   private readonly config: PlayerConfig;
   private readonly keys: MoveKeys;
@@ -38,11 +38,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
   private lastDamageAt = 0;
   private alive = true;
   private weaponKind: WeaponKind = 'pistol';
+  /** Modificadores dos perks (referência viva do PerkSystem). */
+  private mods: Readonly<PerkModifiers> = NEUTRAL_MODIFIERS;
 
   constructor(scene: Phaser.Scene, x: number, y: number, config: PlayerConfig) {
     super(scene, x, y, playerTorsoKey('pistol'), PLAYER_FRAMES.aim);
     this.config = config;
-    this.maxHp = config.maxHp;
     this.hp = config.maxHp;
 
     this.shadow = scene.add.image(x, y, ASSET_KEYS.shadow).setScale(ART_SCALE * 0.9).setDepth(DEPTH.shadows);
@@ -77,6 +78,21 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
     return this.alive;
   }
 
+  get maxHp(): number {
+    return this.config.maxHp + this.mods.maxHpBonus;
+  }
+
+  setModifiers(mods: Readonly<PerkModifiers>): void {
+    this.mods = mods;
+  }
+
+  /** Após comprar perk: ganha a vida extra imediatamente. */
+  onPerksChanged(): void {
+    if (!this.alive) return;
+    this.hp = this.maxHp;
+    this.emitHp();
+  }
+
   /** Movimento WASD normalizado (diagonal não é mais rápida). */
   updateMovement(): void {
     if (!this.alive) {
@@ -88,7 +104,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
       Number(right.isDown) - Number(left.isDown),
       Number(down.isDown) - Number(up.isDown),
     );
-    this.moveDir.normalize().scale(this.config.speed);
+    this.moveDir.normalize().scale(this.config.speed * this.mods.speedMultiplier);
     this.setVelocity(this.moveDir.x, this.moveDir.y);
   }
 
@@ -99,9 +115,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
 
   /** Regeneração lenta depois de um tempo sem levar dano. */
   updateRegen(time: number, delta: number): void {
-    if (!this.alive || this.hp >= this.maxHp || time - this.lastDamageAt < this.config.regenDelayMs) return;
+    const regen = this.mods.regenMultiplier;
+    if (!this.alive || this.hp >= this.maxHp || time - this.lastDamageAt < this.config.regenDelayMs / regen) return;
     const before = Math.ceil(this.hp);
-    this.hp = Math.min(this.maxHp, this.hp + (this.config.regenPerSecond * delta) / 1000);
+    this.hp = Math.min(this.maxHp, this.hp + (this.config.regenPerSecond * regen * delta) / 1000);
     if (Math.ceil(this.hp) !== before) this.emitHp();
   }
 

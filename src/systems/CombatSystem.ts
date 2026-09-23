@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { headshotConfig } from '../config/economy.config';
+import type { PerkModifiers } from '../config/machines.config';
 import type { EffectsSystem } from '../effects/EffectsSystem';
 import type { Player } from '../entities/Player';
 import { Projectile } from '../entities/Projectile';
@@ -17,6 +18,7 @@ export interface CombatSystemDeps {
   /** Barricadas das janelas: bloqueiam o jogador sempre; os zumbis, só enquanto há tábuas. */
   barricades: Phaser.Physics.Arcade.StaticGroup;
   effects: EffectsSystem;
+  modifiers: Readonly<PerkModifiers>;
 }
 
 type ArcadeObject = Parameters<Phaser.Types.Physics.Arcade.ArcadePhysicsCallback>[0];
@@ -27,7 +29,7 @@ type ArcadeObject = Parameters<Phaser.Types.Physics.Arcade.ArcadePhysicsCallback
  */
 export class CombatSystem {
   constructor(scene: Phaser.Scene, deps: CombatSystemDeps) {
-    const { player, zombies, projectiles, walls, obstacles, bulletBlockers, barricades, effects } = deps;
+    const { player, zombies, projectiles, walls, obstacles, bulletBlockers, barricades, effects, modifiers } = deps;
     const physics = scene.physics;
 
     physics.add.collider(player, walls);
@@ -60,8 +62,9 @@ export class CombatSystem {
         if (!projectile || !zombie) return;
         const angle = projectile.angleOfTravel;
         const headshot = CombatSystem.isHeadshot(projectile, zombie, angle);
-        const damage = projectile.damage * (headshot ? headshotConfig.damageMultiplier : 1);
-        projectile.kill();
+        const headshotMult = headshotConfig.damageMultiplier + modifiers.headshotBonus;
+        const damage = projectile.damage * (headshot ? headshotMult : 1);
+        if (projectile.registerHit(zombie)) projectile.kill();
         effects.bloodHit(zombie.x, zombie.y, angle);
         if (zombie.takeDamage(damage, headshot)) {
           effects.zombieDeath(zombie.x, zombie.y, angle, zombie.variant);
@@ -70,7 +73,7 @@ export class CombatSystem {
       (a, b) => {
         const projectile = CombatSystem.find(Projectile, a, b);
         const zombie = CombatSystem.find(Zombie, a, b);
-        return !!projectile?.active && !!zombie?.isAlive;
+        return !!projectile?.active && !!zombie?.isAlive && !projectile.hasHit(zombie);
       },
     );
   }

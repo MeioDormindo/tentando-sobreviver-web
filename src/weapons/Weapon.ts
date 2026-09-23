@@ -1,4 +1,4 @@
-import type { WeaponConfig } from '../config/weapons.config';
+import { upgradeWeaponConfig, type WeaponConfig } from '../config/weapons.config';
 import type { AmmoPayload } from '../game/events';
 
 /**
@@ -6,7 +6,7 @@ import type { AmmoPayload } from '../game/events';
  * toda arma usa esta mesma lógica, variando apenas o WeaponConfig.
  */
 export class Weapon {
-  readonly config: WeaponConfig;
+  private cfg: WeaponConfig;
   currentAmmo: number;
   reserveAmmo: number;
 
@@ -14,9 +14,23 @@ export class Weapon {
   private reloadEndsAt: number | null = null;
 
   constructor(config: WeaponConfig) {
-    this.config = config;
+    this.cfg = config;
     this.currentAmmo = config.magazineSize;
     this.reserveAmmo = config.reserveAmmo;
+  }
+
+  get config(): WeaponConfig {
+    return this.cfg;
+  }
+
+  /** Weapon Lab: vira a versão Mk II com pente e reserva cheios. */
+  upgrade(): boolean {
+    if (this.cfg.upgraded) return false;
+    this.cfg = upgradeWeaponConfig(this.cfg);
+    this.reloadEndsAt = null;
+    this.currentAmmo = this.cfg.magazineSize;
+    this.reserveAmmo = this.cfg.reserveAmmo;
+    return true;
   }
 
   get isReloading(): boolean {
@@ -41,10 +55,12 @@ export class Weapon {
     return !this.isReloading && this.currentAmmo < this.config.magazineSize && this.reserveAmmo > 0;
   }
 
-  startReload(time: number): boolean {
-    if (!this.canReload()) return false;
-    this.reloadEndsAt = time + this.config.reloadTime;
-    return true;
+  /** Inicia a recarga; retorna a duração (ms) ou 0 se não pôde recarregar. */
+  startReload(time: number, speedMultiplier = 1): number {
+    if (!this.canReload()) return 0;
+    const duration = this.config.reloadTime * speedMultiplier;
+    this.reloadEndsAt = time + duration;
+    return duration;
   }
 
   cancelReload(): void {

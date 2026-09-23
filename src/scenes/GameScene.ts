@@ -10,6 +10,7 @@ import { LightingSystem } from '../effects/LightingSystem';
 import { Barricade } from '../entities/Barricade';
 import { AmmoStation, WeaponCase } from '../entities/BuyStations';
 import { Door } from '../entities/Door';
+import { MysteryBox, PerkMachine, WeaponLab, type MachineDeps } from '../entities/Machines';
 import type { BarricadeTarget, ZombieWorld } from '../entities/Zombie';
 import { emitGameEvent, GameEvents, onGameEvent } from '../game/events';
 import { TerminalMap } from '../map/TerminalMap';
@@ -18,6 +19,7 @@ import { CameraController } from '../systems/CameraController';
 import { CombatSystem } from '../systems/CombatSystem';
 import { EconomySystem } from '../systems/EconomySystem';
 import { InteractionSystem } from '../systems/InteractionSystem';
+import { PerkSystem } from '../systems/PerkSystem';
 import { SpawnSystem } from '../systems/SpawnSystem';
 import { WaveSystem } from '../systems/WaveSystem';
 import { WeaponSystem } from '../weapons/WeaponSystem';
@@ -34,6 +36,7 @@ export class GameScene extends Phaser.Scene {
   private waveSystem!: WaveSystem;
   private economy!: EconomySystem;
   private interaction!: InteractionSystem;
+  private perks!: PerkSystem;
   private map!: TerminalMap;
   private currentArea = '';
   private readonly aimPoint = new Phaser.Math.Vector2();
@@ -71,6 +74,12 @@ export class GameScene extends Phaser.Scene {
       getWeaponConfig(playerConfig.startingWeapon),
       effects,
     );
+    // Perks: um único objeto de modificadores lido pelo jogador, armas e combate.
+    this.perks = new PerkSystem(this);
+    this.player.setModifiers(this.perks.modifiers);
+    this.weaponSystem.setModifiers(this.perks.modifiers);
+    this.perks.onChange(() => this.player.onPerksChanged());
+
     const barricadeBodies = this.physics.add.staticGroup();
     new CombatSystem(this, {
       player: this.player,
@@ -81,10 +90,26 @@ export class GameScene extends Phaser.Scene {
       bulletBlockers: map.bulletBlockers,
       barricades: barricadeBodies,
       effects,
+      modifiers: this.perks.modifiers,
     });
 
     this.economy = new EconomySystem(this, effects);
     this.interaction = new InteractionSystem(this, this.player);
+
+    // Máquinas: Mystery Box, Weapon Lab e perks
+    const machineDeps: MachineDeps = {
+      economy: this.economy,
+      weapons: this.weaponSystem,
+      perks: this.perks,
+      effects,
+      lighting: this.lighting,
+      solids: map,
+    };
+    for (const m of map.machines) {
+      if (m.type === 'mystery_box') this.interaction.add(new MysteryBox(this, m.x, m.y, machineDeps));
+      else if (m.type === 'weapon_lab') this.interaction.add(new WeaponLab(this, m.x, m.y, machineDeps));
+      else this.interaction.add(new PerkMachine(this, m.x, m.y, m.perkId, machineDeps));
+    }
 
     // Barricadas nas janelas (acessíveis aos zumbis pelo tile da janela)
     const barricadeByTile = new Map<number, BarricadeTarget>();
@@ -122,7 +147,7 @@ export class GameScene extends Phaser.Scene {
         }),
       );
     }
-    const stationDeps = { economy: this.economy, weapons: this.weaponSystem, obstacles: map.obstacles };
+    const stationDeps = { economy: this.economy, weapons: this.weaponSystem, solids: map };
     for (const s of map.stations) {
       this.interaction.add(
         s.type === 'weapon' ? new WeaponCase(this, s.x, s.y, s.weaponId, stationDeps) : new AmmoStation(this, s.x, s.y, stationDeps),
@@ -177,6 +202,7 @@ export class GameScene extends Phaser.Scene {
     this.waveSystem.syncHud();
     this.economy.syncHud();
     this.interaction.syncHud();
+    this.perks.syncHud();
   }
 
   private onPlayerDied(): void {

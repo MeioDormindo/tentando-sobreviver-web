@@ -29,6 +29,14 @@ export interface WeaponConfig {
   /** Preço para reabastecer a munição. */
   ammoPrice: number;
   rarity: Rarity;
+  /** Quantos zumbis extras o projétil atravessa (0 = para no primeiro). */
+  pierce?: number;
+  /** Cor do traçante (padrão: amarelado). */
+  tracerTint?: number;
+  /** Só sai na Mystery Box (não é vendida nas maletas). */
+  boxOnly?: boolean;
+  /** Versão melhorada pelo Weapon Lab. */
+  upgraded?: boolean;
 }
 
 /**
@@ -84,7 +92,47 @@ export const weapons: Record<string, WeaponConfig> = {
     spread: 8, range: 360, projectileSpeed: 1000, pellets: 7, automatic: false,
     price: 2200, ammoPrice: 1100, rarity: 'rare',
   },
+  // Exclusivas da Mystery Box (preenchem as raridades épica e lendária)
+  rpk: {
+    id: 'rpk', name: 'RPK', kind: 'ak',
+    damage: 40, fireRate: 90, magazineSize: 75, reserveAmmo: 300, reloadTime: 3800,
+    spread: 4, range: 900, projectileSpeed: 1300, pellets: 1, automatic: true,
+    price: 0, ammoPrice: 1500, rarity: 'epic', boxOnly: true,
+  },
+  rail: {
+    id: 'rail', name: 'Rail Weapon', kind: 'rifle',
+    damage: 420, fireRate: 900, magazineSize: 4, reserveAmmo: 28, reloadTime: 2600,
+    spread: 0.5, range: 1400, projectileSpeed: 2400, pellets: 1, automatic: false,
+    price: 0, ammoPrice: 2500, rarity: 'legendary', boxOnly: true, pierce: 8, tracerTint: 0x7fe7ff,
+  },
 };
+
+/** Melhoria do Weapon Lab (GDD §38): "M4" → "M4 Mk II". */
+export const weaponUpgrade = {
+  damage: 1.8,
+  magazine: 1.5,
+  reserve: 1.5,
+  reload: 0.75,
+  fireRate: 0.9,
+  tracerTint: 0xc38bff,
+};
+
+export function upgradeWeaponConfig(cfg: WeaponConfig): WeaponConfig {
+  if (cfg.upgraded) return cfg;
+  const u = weaponUpgrade;
+  return {
+    ...cfg,
+    name: `${cfg.name} Mk II`,
+    damage: Math.round(cfg.damage * u.damage),
+    magazineSize: Math.round(cfg.magazineSize * u.magazine),
+    reserveAmmo: Math.round(cfg.reserveAmmo * u.reserve),
+    reloadTime: Math.round(cfg.reloadTime * u.reload),
+    fireRate: Math.round(cfg.fireRate * u.fireRate),
+    pierce: (cfg.pierce ?? 0) + 1,
+    tracerTint: u.tracerTint,
+    upgraded: true,
+  };
+}
 
 export function getWeaponConfig(id: string): WeaponConfig {
   const cfg = weapons[id];

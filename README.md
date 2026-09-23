@@ -24,7 +24,7 @@ npm run art        # regera a arte SVG em public/assets
 | Mouse | mirar |
 | Clique esquerdo | atirar (M1911 é semiautomática) |
 | R | recarregar |
-| E | comprar (arma, munição, porta) |
+| E | comprar (arma, munição, porta, perk, Mystery Box, Weapon Lab) |
 | segurar E | reparar barricada (+$10 por tábua) |
 | Q / 1 / 2 / roda do mouse | trocar de arma |
 
@@ -42,12 +42,14 @@ src/
   map/               TerminalMap (grade, colisão, navegação, visual 3/4) e terminal/layout.ts
                      (áreas, portas, janelas, spawns, props, luzes do Terminal Central)
   entities/          Player (tronco + pernas), Zombie (3 variantes), Projectile (traçante),
-                     BuyStations (maletas de arma, caixa de munição), Door, Barricade, Damageable
+                     BuyStations (maletas de arma, caixa de munição), Door, Barricade,
+                     Machines (Mystery Box, Weapon Lab, máquinas de perk), Damageable
   weapons/           Weapon (estado/munição/recarga) e WeaponSystem (inventário de 2 armas, disparo)
   effects/           LightingSystem (escuridão, lanterna, luzes), EffectsSystem (sangue, cadáveres,
                      cápsulas, faíscas), fxTextures (texturas de luz/partículas em canvas)
   systems/           WaveSystem, SpawnSystem, difficulty (fórmulas), EconomySystem, InteractionSystem,
-                     CombatSystem (inclui headshot), CameraController, pathfinding/NavGrid (A*)
+                     CombatSystem (inclui headshot), CameraController, pathfinding/NavGrid (A*),
+                     PerkSystem (modificadores de perks)
 public/assets/       arte gerada (SVG) — pode ser trocada por PNGs com o mesmo layout de frames
 ```
 
@@ -67,7 +69,8 @@ public/assets/       arte gerada (SVG) — pode ser trocada por PNGs com o mesmo
 - [x] Fase 2 — Waves (WaveSystem, SpawnSystem, dificuldade progressiva, HUD de wave)
 - [x] Fase 3 — Economia (dinheiro, headshot, 8 armas, compras, munição)
 - [x] Fase 4 — Mapa Terminal Central (7 áreas, portas, barricadas, spawn por área, A*)
-- [ ] Fase 5 — Máquinas (Mystery Box, Weapon Lab, perks)
+- [x] Fase 5 — Máquinas (Mystery Box, Weapon Lab, 6 perks)
+- [ ] Fase 6 — Power-ups
 
 Observações:
 - Waves seguem as fórmulas do GDD §32 (`src/config/waves.config.ts`).
@@ -81,4 +84,9 @@ Observações:
 - Navegação: perseguição direta quando o zumbi enxerga o jogador; senão, caminho A* (portas e
   janelas consideradas). Zumbis parados por 12s fora da tela são realocados.
 - Escuridão varia por área (túneis quase sem luz).
+- Mystery Box ($950, Hall): sorteia por raridade (45/30/15/8/2%); exclusivas: RPK (épica) e
+  Rail Weapon (lendária, atravessa zumbis). Arma repetida vira munição.
+- Weapon Lab ($5000, Manutenção): arma em mãos vira "Mk II" (mais dano, pente, recarga).
+- Perks (`src/config/machines.config.ts`): Fortify, Quick Hands, Sprint+, Deadeye,
+  Adrenaline e Overload, uma máquina por área.
 - Em modo dev, `window.__GAME__` expõe a instância do jogo para depuração.

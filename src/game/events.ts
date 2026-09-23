@@ -17,6 +17,8 @@ export const GameEvents = {
   AreaEntered: 'area-entered',
   /** Uma porta foi aberta e uma área nova foi liberada. */
   AreaUnlocked: 'area-unlocked',
+  /** Perks adquiridos mudaram. */
+  PerksChanged: 'perks-changed',
   /** A UI pede o estado atual (ex.: ao ser criada depois da GameScene). */
   HudRequest: 'hud-request',
 } as const;
@@ -80,6 +82,7 @@ export interface GameEventMap {
   [GameEvents.PurchaseDenied]: undefined;
   [GameEvents.AreaEntered]: { id: string; name: string };
   [GameEvents.AreaUnlocked]: { id: string; name: string };
+  [GameEvents.PerksChanged]: { perks: Array<{ id: string; level: number }> };
   [GameEvents.HudRequest]: undefined;
 }
 

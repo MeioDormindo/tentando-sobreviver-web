@@ -217,6 +217,23 @@ export const STATIONS: StationPlacement[] = [
   { type: 'ammo', tx: 48, ty: 92 },
 ];
 
+export type MachinePlacement =
+  | { type: 'mystery_box'; tx: number; ty: number }
+  | { type: 'weapon_lab'; tx: number; ty: number }
+  | { type: 'perk'; perkId: 'fortify' | 'quick_hands' | 'sprint' | 'deadeye' | 'adrenaline' | 'overload'; tx: number; ty: number };
+
+/** Máquinas (GDD §37–40): a Mystery Box no Hall, o Weapon Lab na Manutenção e um perk por área. */
+export const MACHINES: MachinePlacement[] = [
+  { type: 'mystery_box', tx: 69, ty: 30 },
+  { type: 'weapon_lab', tx: 56, ty: 111 },
+  { type: 'perk', perkId: 'fortify', tx: 42, ty: 40 },
+  { type: 'perk', perkId: 'quick_hands', tx: 41, ty: 69 },
+  { type: 'perk', perkId: 'sprint', tx: 108, ty: 59 },
+  { type: 'perk', perkId: 'deadeye', tx: 18, ty: 20 },
+  { type: 'perk', perkId: 'adrenaline', tx: 82, ty: 82 },
+  { type: 'perk', perkId: 'overload', tx: 90, ty: 112 },
+];
+
 export const PROPS: Array<{ type: PropType; tx: number; ty: number; angle?: number }> = [
   // Hall
   { type: 'bench', tx: 52, ty: 46 },

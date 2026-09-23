@@ -8,6 +8,7 @@ import {
 import { write } from './art/lib.mjs';
 import { ammoCrate, WEAPON_KINDS, weaponCase } from './art/weapons.mjs';
 import * as T from './art/terminal.mjs';
+import * as M from './art/machines.mjs';
 
 const OUT = 'public/assets';
 
@@ -54,4 +55,11 @@ write(`${OUT}/map/hazard_stripe.svg`, T.hazardStripe());
 write(`${OUT}/map/plank.svg`, T.plank());
 write(`${OUT}/map/window_sill.svg`, T.windowSill());
 write(`${OUT}/props/generator.svg`, T.propGenerator());
+write(`${OUT}/machines/mystery_box.svg`, M.mysteryBox());
+write(`${OUT}/machines/weapon_lab.svg`, M.weaponLab());
+for (const id of Object.keys(M.PERKS)) {
+  write(`${OUT}/machines/perk_${id}.svg`, M.perkMachine(id));
+  write(`${OUT}/ui/perk_icon_${id}.svg`, M.perkIcon(id));
+}
+for (const kind of WEAPON_KINDS) write(`${OUT}/weapons/gun_${kind}.svg`, M.gunIcon(kind));
 console.log('Pronto.');

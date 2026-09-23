@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { WEAPON_MUZZLE } from '../config/assets.config';
+import { NEUTRAL_MODIFIERS, type PerkModifiers } from '../config/machines.config';
 import { getWeaponConfig, INVENTORY_SLOTS, WEAPON_SWITCH_MS, type WeaponConfig } from '../config/weapons.config';
 import type { EffectsSystem } from '../effects/EffectsSystem';
 import type { Player } from '../entities/Player';
@@ -26,6 +27,7 @@ export class WeaponSystem {
   /** Semiautomática: o gatilho precisa ser solto entre disparos. */
   private triggerConsumed = false;
   private lastSnapshotKey = '';
+  private mods: Readonly<PerkModifiers> = NEUTRAL_MODIFIERS;
 
   constructor(
     scene: Phaser.Scene,
@@ -54,6 +56,17 @@ export class WeaponSystem {
       kb?.off('keydown-TWO', this.onSlotTwo, this);
       scene.input.off(Phaser.Input.Events.POINTER_WHEEL, this.cycle, this);
     });
+  }
+
+  setModifiers(mods: Readonly<PerkModifiers>): void {
+    this.mods = mods;
+  }
+
+  /** Weapon Lab: melhora a arma em mãos. */
+  upgradeCurrent(): boolean {
+    const ok = this.current.upgrade();
+    if (ok) this.emitIfChanged();
+    return ok;
   }
 
   get current(): Weapon {
@@ -158,7 +171,8 @@ export class WeaponSystem {
   }
 
   private startReload(time: number): void {
-    if (this.current.startReload(time)) this.owner.playReload(this.current.config.reloadTime);
+    const duration = this.current.startReload(time, this.mods.reloadMultiplier);
+    if (duration > 0) this.owner.playReload(duration);
   }
 
   private spawnProjectiles(): void {
@@ -174,7 +188,10 @@ export class WeaponSystem {
       const projectile = this.projectiles.get(tipX, tipY) as Projectile | null;
       if (!projectile) break; // pool esgotado
       const spread = Phaser.Math.DegToRad(Phaser.Math.FloatBetween(-cfg.spread, cfg.spread));
-      projectile.fire(tipX, tipY, aim + spread, cfg.projectileSpeed, cfg.range, cfg.damage);
+      projectile.fire(
+        tipX, tipY, aim + spread, cfg.projectileSpeed, cfg.range,
+        cfg.damage * this.mods.damageMultiplier, cfg.pierce ?? 0, cfg.tracerTint ?? 0xffffff,
+      );
     }
     this.effects.muzzleFlash(tipX, tipY, aim);
     this.effects.ejectShell(this.owner.x + cos * EJECT_DISTANCE, this.owner.y + sin * EJECT_DISTANCE, aim);

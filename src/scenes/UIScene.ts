@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { perkIconKey } from '../config/assets.config';
 import { COLORS, SCENE_KEYS } from '../config/game.config';
 import {
   emitGameEvent,
@@ -31,6 +32,7 @@ export class UIScene extends Phaser.Scene {
   private moneyDeltaText!: Phaser.GameObjects.Text;
   private promptText!: Phaser.GameObjects.Text;
   private areaText!: Phaser.GameObjects.Text;
+  private perkIcons: Phaser.GameObjects.Image[] = [];
   private statusText!: Phaser.GameObjects.Text;
   private killsText!: Phaser.GameObjects.Text;
   private crosshair!: Phaser.GameObjects.Graphics;
@@ -55,6 +57,7 @@ export class UIScene extends Phaser.Scene {
     this.deathOverlay = null;
     this.waveState = null;
     this.prompt = null;
+    this.perkIcons = [];
 
     this.hpBar = this.add.graphics();
     this.hpText = this.add.text(0, 0, '', { fontFamily: FONT, fontSize: '14px', color: COLORS.text });
@@ -117,6 +120,7 @@ export class UIScene extends Phaser.Scene {
       onGameEvent(this.game.events, GameEvents.MoneyChanged, this.onMoneyChanged, this),
       onGameEvent(this.game.events, GameEvents.InteractionPrompt, this.onPrompt, this),
       onGameEvent(this.game.events, GameEvents.PurchaseDenied, this.onPurchaseDenied, this),
+      onGameEvent(this.game.events, GameEvents.PerksChanged, this.onPerksChanged, this),
       onGameEvent(this.game.events, GameEvents.AreaEntered, (a) => this.showAreaText(a.name.toUpperCase(), COLORS.text), this),
       onGameEvent(this.game.events, GameEvents.AreaUnlocked, (a) => this.showAreaText(`ÁREA LIBERADA — ${a.name.toUpperCase()}`, COLORS.accent), this),
     ];
@@ -145,6 +149,7 @@ export class UIScene extends Phaser.Scene {
     this.moneyDeltaText.setPosition(width - MARGIN, MARGIN + 34);
     this.promptText.setPosition(width / 2, height * 0.72);
     this.areaText.setPosition(width / 2, MARGIN + 18);
+    this.layoutPerks();
     this.statusText.setPosition(width / 2, height * 0.62);
     this.killsText.setPosition(width - MARGIN, MARGIN + 56);
     this.waveText.setPosition(MARGIN, MARGIN - 6);
@@ -223,6 +228,23 @@ export class UIScene extends Phaser.Scene {
     this.tweens.killTweensOf(this.moneyDeltaText);
     this.tweens.add({ targets: this.moneyDeltaText, alpha: 0, delay: 700, duration: 500 });
     this.tweens.add({ targets: this.moneyText, scale: { from: gain ? 1.12 : 0.92, to: 1 }, duration: 220 });
+  }
+
+  /** Ícones dos perks adquiridos, acima da barra de vida. */
+  private onPerksChanged(payload: { perks: Array<{ id: string; level: number }> }): void {
+    const had = this.perkIcons.length;
+    this.perkIcons.forEach((icon) => icon.destroy());
+    this.perkIcons = payload.perks.map(({ id }) => this.add.image(0, 0, perkIconKey(id)).setDisplaySize(28, 28));
+    this.layoutPerks();
+    const newest = this.perkIcons[this.perkIcons.length - 1];
+    if (newest && this.perkIcons.length > had) {
+      this.tweens.add({ targets: newest, displayWidth: { from: 56, to: 28 }, displayHeight: { from: 56, to: 28 }, duration: 350, ease: 'Back.easeOut' });
+    }
+  }
+
+  private layoutPerks(): void {
+    const y = this.scale.height - MARGIN - HP_BAR_HEIGHT - 58;
+    this.perkIcons.forEach((icon, i) => icon.setPosition(MARGIN + 14 + i * 32, y));
   }
 
   /** Nome da área ao entrar / aviso de área liberada, no topo da tela. */

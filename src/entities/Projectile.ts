@@ -7,6 +7,9 @@ const BODY_RADIUS = 3;
 /** Projétil reutilizável (pool via Physics Group), desenhado como traçante luminoso. */
 export class Projectile extends Phaser.Physics.Arcade.Image {
   damage = 0;
+  /** Zumbis que ainda pode atravessar. */
+  pierceLeft = 0;
+  private readonly hits = new Set<object>();
 
   private startX = 0;
   private startY = 0;
@@ -24,7 +27,10 @@ export class Projectile extends Phaser.Physics.Arcade.Image {
     return this.rotation;
   }
 
-  fire(x: number, y: number, angle: number, speed: number, range: number, damage: number): void {
+  fire(x: number, y: number, angle: number, speed: number, range: number, damage: number, pierce = 0, tint = 0xffffff): void {
+    this.pierceLeft = pierce;
+    this.hits.clear();
+    this.setTint(tint);
     this.enableBody(true, x, y, true, true);
     const r = BODY_RADIUS;
     this.setCircle(r, this.width - r * 2, this.height / 2 - r);
@@ -41,6 +47,21 @@ export class Projectile extends Phaser.Physics.Arcade.Image {
     if (Phaser.Math.Distance.Between(this.startX, this.startY, this.x, this.y) > this.range) {
       this.kill();
     }
+  }
+
+  /** Já atingiu este alvo? (evita acertar o mesmo zumbi em frames seguidos ao atravessar). */
+  hasHit(target: object): boolean {
+    return this.hits.has(target);
+  }
+
+  /** Registra o acerto; retorna true se o projétil deve parar aqui. */
+  registerHit(target: object): boolean {
+    this.hits.add(target);
+    if (this.pierceLeft > 0) {
+      this.pierceLeft--;
+      return false;
+    }
+    return true;
   }
 
   kill(): void {

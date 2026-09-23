@@ -59,7 +59,7 @@ export class LightingSystem {
       glow: scene.add
         .image(lamp.x, lamp.y, FX_KEYS.lightRadial)
         .setScale((lamp.radius * 2) / RADIAL_SIZE)
-        .setTint(lightingConfig.lampGlowColor)
+        .setTint(lamp.color ?? lightingConfig.lampGlowColor)
         .setBlendMode(Phaser.BlendModes.ADD)
         .setDepth(DEPTH.glow),
     }));

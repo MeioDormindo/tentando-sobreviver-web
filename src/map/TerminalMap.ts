@@ -6,9 +6,10 @@ import { NavCost, NavGrid } from '../systems/pathfinding/NavGrid';
 import type { SpawnPoint } from '../systems/SpawnSystem';
 import {
   AREAS, CARVES, DOORS, FLOORS, LAMPS, MAP_HEIGHT, MAP_WIDTH, OBSTACLES, OUTSIDE_DARKNESS, PLAYER_START,
-  POCKETS, PROPS, SPAWNS, STATIONS, TRAIN_ROOF_UNITS, WINDOWS,
-  type AreaDef, type DoorDef, type FloorKind, type Rect, type WindowDef,
+  MACHINES, POCKETS, PROPS, SPAWNS, STATIONS, TRAIN_ROOF_UNITS, WINDOWS,
+  type AreaDef, type DoorDef, type FloorKind, type MachinePlacement, type Rect, type WindowDef,
 } from './terminal/layout';
+import { perks } from '../config/machines.config';
 import { PROP_DEFS } from './props';
 
 /** Conteúdo de cada tile. */
@@ -42,7 +43,11 @@ export interface Lamp {
   radius: number;
   intensity: number;
   flicker: number;
+  /** Cor do brilho (padrão: luz quente de lâmpada). */
+  color?: number;
 }
+
+export type MachineDef = MachinePlacement & { x: number; y: number };
 
 export type StationDef = { type: 'weapon'; weaponId: string; x: number; y: number } | { type: 'ammo'; x: number; y: number };
 
@@ -64,6 +69,7 @@ export class TerminalMap {
   readonly spawnPoints: SpawnPoint[];
   readonly lamps: Lamp[];
   readonly stations: StationDef[];
+  readonly machines: MachineDef[];
   readonly doors: DoorDef[] = DOORS;
   readonly windows: WindowDef[] = WINDOWS;
   readonly areas: AreaDef[] = AREAS;
@@ -125,6 +131,12 @@ export class TerminalMap {
     this.lamps = LAMPS.map((l) => ({ ...center(l.tx, l.ty), radius: l.radius, intensity: l.intensity, flicker: l.flicker }));
     // Luz fraca sobre cada ponto de compra, para ser encontrado no escuro.
     for (const s of this.stations) this.lamps.push({ x: s.x, y: s.y, radius: 70, intensity: 0.45, flicker: 0 });
+    this.machines = MACHINES.map((m) => ({ ...m, ...center(m.tx, m.ty) }));
+    // Máquinas iluminadas com a cor delas (perks) ou luz dourada/roxa.
+    for (const m of this.machines) {
+      const color = m.type === 'perk' ? perks[m.perkId].color : m.type === 'weapon_lab' ? 0x9b59d0 : 0xffd27a;
+      this.lamps.push({ x: m.x, y: m.y, radius: 95, intensity: 0.6, flicker: 0.05, color });
+    }
   }
 
   // ───────────────────────── Consultas ─────────────────────────
@@ -146,6 +158,21 @@ export class TerminalMap {
   readonly darknessAt = (x: number, y: number): number => this.areaAt(x, y)?.darkness ?? OUTSIDE_DARKNESS;
 
   // ───────────────────────── Mudanças dinâmicas ─────────────────────────
+
+  /** Corpo sólido extra (máquinas, maletas): colide, bloqueia tiros e a navegação. */
+  addSolid(cx: number, cy: number, w: number, h: number): void {
+    const zone = this.scene.add.zone(cx, cy, w, h);
+    this.obstacles.add(zone);
+    this.bulletBlockers.add(zone);
+    this.blockNav(cx, cy, w, h);
+  }
+
+  private blockNav(cx: number, cy: number, w: number, h: number): void {
+    const t = (v: number) => Math.floor(v / TILE_SIZE);
+    for (let ty = t(cy - h / 2 + 4); ty <= t(cy + h / 2 - 4); ty++) {
+      for (let tx = t(cx - w / 2 + 4); tx <= t(cx + w / 2 - 4); tx++) this.nav.setCost(tx, ty, NavCost.Blocked);
+    }
+  }
 
   /** Porta aberta: os tiles viram chão para colisão e navegação. */
   openDoorTiles(rect: Rect): void {
@@ -287,12 +314,7 @@ export class TerminalMap {
         if (def.blocksBullets) this.bulletBlockers.add(zone);
         img.setDepth(y + def.body.oy + def.body.h / 2);
         // Props sólidos também bloqueiam a navegação dos zumbis.
-        const t = (v: number) => Math.floor(v / TILE_SIZE);
-        const cx = x + def.body.ox;
-        const cy = y + def.body.oy;
-        for (let ty = t(cy - def.body.h / 2 + 4); ty <= t(cy + def.body.h / 2 - 4); ty++) {
-          for (let tx = t(cx - def.body.w / 2 + 4); tx <= t(cx + def.body.w / 2 - 4); tx++) this.nav.setCost(tx, ty, NavCost.Blocked);
-        }
+        this.blockNav(x + def.body.ox, y + def.body.oy, def.body.w, def.body.h);
       } else {
         img.setDepth(DEPTH.corpses + 1);
       }

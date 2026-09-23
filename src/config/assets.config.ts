@@ -69,6 +69,16 @@ export const WEAPON_KINDS: WeaponKind[] = ['pistol', 'smg', 'rifle', 'ak', 'shot
 export const playerTorsoKey = (kind: WeaponKind): string => `player_torso_${kind}`;
 export const playerAnimKey = (kind: WeaponKind, anim: 'shoot' | 'reload'): string => `player_${anim}_${kind}`;
 export const weaponCaseKey = (kind: WeaponKind): string => `case_${kind}`;
+export const gunIconKey = (kind: WeaponKind): string => `gun_${kind}`;
+
+export const PERK_IDS = ['fortify', 'quick_hands', 'sprint', 'deadeye', 'adrenaline', 'overload'] as const;
+export const perkIconKey = (id: string): string => `perk_icon_${id}`;
+
+export const machineKeys = {
+  mysteryBox: 'machine_mystery_box',
+  weaponLab: 'machine_weapon_lab',
+  perk: (id: string): string => `machine_perk_${id}`,
+};
 
 /**
  * Ponta do cano em relação ao centro do jogador (px do mundo): à frente e ao lado,
@@ -146,6 +156,11 @@ export const IMAGES: ImageAsset[] = [
   { key: ASSET_KEYS.plank, url: 'assets/map/plank.svg' },
   { key: ASSET_KEYS.windowSill, url: 'assets/map/window_sill.svg' },
   ...WEAPON_KINDS.map((kind) => ({ key: weaponCaseKey(kind), url: `assets/weapons/case_${kind}.svg` })),
+  ...WEAPON_KINDS.map((kind) => ({ key: gunIconKey(kind), url: `assets/weapons/gun_${kind}.svg` })),
+  { key: machineKeys.mysteryBox, url: 'assets/machines/mystery_box.svg' },
+  { key: machineKeys.weaponLab, url: 'assets/machines/weapon_lab.svg' },
+  ...PERK_IDS.map((id) => ({ key: machineKeys.perk(id), url: `assets/machines/perk_${id}.svg` })),
+  ...PERK_IDS.map((id) => ({ key: perkIconKey(id), url: `assets/ui/perk_icon_${id}.svg` })),
   { key: ASSET_KEYS.papers, url: 'assets/particles/papers.svg' },
   { key: ASSET_KEYS.debris, url: 'assets/particles/debris.svg' },
   { key: ASSET_KEYS.bloodPool, url: 'assets/particles/blood_pool.svg' },

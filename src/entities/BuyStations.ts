@@ -4,21 +4,22 @@ import { ART_SCALE } from '../config/visual.config';
 import { getWeaponConfig, type WeaponConfig } from '../config/weapons.config';
 import type { InteractionPromptPayload } from '../game/events';
 import type { EconomySystem } from '../systems/EconomySystem';
+import type { SolidPlacer } from './Machines';
 import type { Interactable } from '../systems/InteractionSystem';
 import type { WeaponSystem } from '../weapons/WeaponSystem';
 
 export interface StationDeps {
   economy: EconomySystem;
   weapons: WeaponSystem;
-  obstacles: Phaser.Physics.Arcade.StaticGroup;
+  solids: SolidPlacer;
 }
 
 const money = (n: number): string => `$${n.toLocaleString('pt-BR')}`;
 
 /** Cria a imagem do ponto de compra com um corpo sólido (o jogador não o atravessa). */
-function createProp(scene: Phaser.Scene, x: number, y: number, texture: string, body: { w: number; h: number }, obstacles: Phaser.Physics.Arcade.StaticGroup): void {
+function createProp(scene: Phaser.Scene, x: number, y: number, texture: string, body: { w: number; h: number }, solids: SolidPlacer): void {
   scene.add.image(x, y, texture).setScale(ART_SCALE).setDepth(y + body.h / 2);
-  obstacles.add(scene.add.zone(x - 1, y - 1, body.w, body.h));
+  solids.addSolid(x - 1, y - 1, body.w, body.h);
 }
 
 /**
@@ -29,7 +30,7 @@ export class WeaponCase implements Interactable {
 
   constructor(scene: Phaser.Scene, readonly x: number, readonly y: number, weaponId: string, private readonly deps: StationDeps) {
     this.config = getWeaponConfig(weaponId);
-    createProp(scene, x, y, weaponCaseKey(this.config.kind), { w: 54, h: 26 }, deps.obstacles);
+    createProp(scene, x, y, weaponCaseKey(this.config.kind), { w: 54, h: 26 }, deps.solids);
   }
 
   getPrompt(): InteractionPromptPayload | null {
@@ -56,7 +57,7 @@ export class WeaponCase implements Interactable {
 /** Caixa de munição (GDD §36): reabastece a arma em mãos pelo preço de munição dela. */
 export class AmmoStation implements Interactable {
   constructor(scene: Phaser.Scene, readonly x: number, readonly y: number, private readonly deps: StationDeps) {
-    createProp(scene, x, y, ASSET_KEYS.ammoCrate, { w: 32, h: 24 }, deps.obstacles);
+    createProp(scene, x, y, ASSET_KEYS.ammoCrate, { w: 32, h: 24 }, deps.solids);
   }
 
   getPrompt(): InteractionPromptPayload | null {
