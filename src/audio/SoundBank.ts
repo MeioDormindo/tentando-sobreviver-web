@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { rng, type Rng } from './dsp';
 import { ambience } from './recipes/ambience';
 import { bossSounds, exploderFuse, playerSounds, zombieSounds } from './recipes/creatures';
+import * as ev from './recipes/events';
 import * as ui from './recipes/ui';
 import { dryFire, mk2Layer, plasmaBurst, reload, shellCasing, shot, weaponSwitch } from './recipes/weapons';
 import * as world from './recipes/world';
@@ -80,6 +81,16 @@ export const SOUND_DEFS: SoundDef[] = [
   { key: 'amb_creak', variants: 3, sr: LO, make: world.creak },
   { key: 'amb_moan', variants: 3, sr: LO, make: world.distantMoan },
   { key: 'amb_steam', variants: 2, sr: LO, make: world.steamHiss },
+  // Eventos
+  { key: 'evt_siren', variants: 1, sr: LO, make: ev.siren },
+  { key: 'evt_power_down', variants: 1, sr: LO, make: ev.powerDown },
+  { key: 'evt_power_up', variants: 1, sr: LO, make: ev.powerUpSurge },
+  { key: 'evt_train_pass', variants: 1, sr: LO, make: ev.trainPass },
+  { key: 'evt_train_warning', variants: 1, sr: LO, make: ev.trainWarning },
+  { key: 'evt_plane', variants: 1, sr: LO, make: ev.supplyPlane },
+  { key: 'evt_crate_land', variants: 1, sr: MID, make: ev.crateLand },
+  { key: 'evt_gas', variants: 1, sr: MID, make: ev.gasHiss },
+  { key: 'evt_horde', variants: 1, sr: LO, make: ev.hordeRoar },
 ];
 
 /** Quantas variações existem de cada som (preenchido na geração). */

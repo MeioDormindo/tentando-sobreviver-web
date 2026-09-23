@@ -34,6 +34,11 @@ export class EffectsSystem {
   private readonly smoke: Phaser.GameObjects.Particles.ParticleEmitter;
   private readonly shells: Phaser.GameObjects.Particles.ParticleEmitter;
   private readonly flames: Phaser.GameObjects.Particles.ParticleEmitter;
+  private readonly dust: Phaser.GameObjects.Particles.ParticleEmitter;
+  /** Fumaça colorida que sobe (sinalizador dos suprimentos). */
+  private readonly flare: Phaser.GameObjects.Particles.ParticleEmitter;
+  /** Nuvem de gás espalhando. */
+  private readonly gas: Phaser.GameObjects.Particles.ParticleEmitter;
   private readonly muzzle: Phaser.GameObjects.Image;
   private readonly corpses: Corpse[] = [];
   /** Direção atual das explosões de partículas (usada pelos callbacks onEmit). */
@@ -108,6 +113,37 @@ export class EffectsSystem {
       blendMode: Phaser.BlendModes.ADD,
     });
     this.flames.setDepth(DEPTH.glow);
+
+    this.dust = scene.add.particles(0, 0, FX_KEYS.smoke, {
+      emitting: false,
+      angle: { min: 0, max: 360 },
+      speed: { min: 30, max: 120 },
+      lifespan: { min: 400, max: 900 },
+      scale: { start: 0.5, end: 1.8 },
+      alpha: { start: 0.55, end: 0 },
+      tint: 0xb8b0a0,
+    });
+    this.dust.setDepth(DEPTH_PARTICLES + 1);
+
+    this.flare = scene.add.particles(0, 0, FX_KEYS.smoke, {
+      emitting: false,
+      angle: { min: 245, max: 295 },
+      speed: { min: 15, max: 40 },
+      lifespan: { min: 1200, max: 1900 },
+      scale: { start: 0.5, end: 2.4 },
+      alpha: { start: 0.6, end: 0 },
+    });
+    this.flare.setDepth(DEPTH.glow);
+
+    this.gas = scene.add.particles(0, 0, FX_KEYS.smoke, {
+      emitting: false,
+      angle: { min: 0, max: 360 },
+      speed: { min: 4, max: 22 },
+      lifespan: { min: 1400, max: 2400 },
+      scale: { start: 1.2, end: 3.6 },
+      alpha: { start: 0.4, end: 0 },
+    });
+    this.gas.setDepth(DEPTH.glow);
 
     this.muzzle = scene.add
       .image(0, 0, FX_KEYS.muzzle)
@@ -248,6 +284,25 @@ export class EffectsSystem {
   /** Labaredas sobre um alvo em chamas. */
   burnPuff(x: number, y: number): void {
     this.flames.explode(2, x + Phaser.Math.Between(-6, 6), y + Phaser.Math.Between(-6, 6));
+  }
+
+  /** Poeira levantada (caixa caindo, cano rompendo). */
+  dustBurst(x: number, y: number, count: number): void {
+    this.dust.explode(count, x, y);
+  }
+
+  /** Fumaça colorida do sinalizador. */
+  flareSmoke(x: number, y: number, color: number): void {
+    this.flare.particleTint = color;
+    this.flare.explode(1, x, y);
+  }
+
+  /** Nuvem de gás: baforadas espalhadas até `spread` do centro. */
+  gasPuff(x: number, y: number, spread: number, color: number): void {
+    this.gas.particleTint = color;
+    const a = Math.random() * Math.PI * 2;
+    const d = Math.sqrt(Math.random()) * spread;
+    this.gas.explode(1, x + Math.cos(a) * d, y + Math.sin(a) * d);
   }
 
   /** Brilho do lança-chamas iluminando o entorno. */

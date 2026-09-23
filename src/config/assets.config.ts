@@ -75,6 +75,11 @@ export const ASSET_KEYS = {
   bloodSplats: 'decal_blood_splats',
   bloodPool: 'decal_blood_pool',
   burst: 'decal_burst',
+  trainHead: 'event_train_head',
+  trainCar: 'event_train_car',
+  supplyCrate: 'event_supply_crate',
+  parachute: 'event_parachute',
+  gasPipe: 'event_gas_pipe',
 } as const;
 
 export const WEAPON_KINDS: WeaponKind[] = ['pistol', 'smg', 'rifle', 'ak', 'shotgun', 'launcher', 'flamer', 'arc', 'energy'];
@@ -193,6 +198,11 @@ export const IMAGES: ImageAsset[] = [
   { key: ASSET_KEYS.bloodPool, url: 'assets/particles/blood_pool.svg' },
   { key: ASSET_KEYS.burst, url: 'assets/particles/burst.svg' },
   { key: bossCorpseKey('conductor'), url: 'assets/bosses/conductor_corpse.svg' },
+  { key: ASSET_KEYS.trainHead, url: 'assets/events/train_head.svg' },
+  { key: ASSET_KEYS.trainCar, url: 'assets/events/train_car.svg' },
+  { key: ASSET_KEYS.supplyCrate, url: 'assets/events/supply_crate.svg' },
+  { key: ASSET_KEYS.parachute, url: 'assets/events/parachute.svg' },
+  { key: ASSET_KEYS.gasPipe, url: 'assets/events/gas_pipe.svg' },
 ];
 
 const range = (from: number, to: number): number[] =>

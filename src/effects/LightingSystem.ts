@@ -41,6 +41,8 @@ export class LightingSystem {
   private readonly dynamicLights: Array<{ x: number; y: number; radius: number; intensity: number; color?: number; glow: Phaser.GameObjects.Image }> = [];
   /** Rage Mode do boss: luzes vermelhas pulsando e mais escuridão. */
   private alarm = false;
+  /** Apagão: nível atual (0 = normal, 1 = luzes apagadas) e transição piscando. */
+  private blackout = { target: 0, level: 0, changedAt: -Infinity, flickerMs: 0, extraDarkness: 0, emergencyFactor: 1 };
   /** Escuridão atual (transição suave ao mudar de área). */
   private ambient: number = lightingConfig.ambientDarkness;
 
@@ -110,6 +112,14 @@ export class LightingSystem {
     for (const lamp of this.lamps) lamp.glow.setTint(on ? 0xff3322 : lamp.color ?? lightingConfig.lampGlowColor);
   }
 
+  /**
+   * Apagão (evento): as luminárias piscam e apagam; as luzes de emergência ficam fracas
+   * e o ambiente escurece. `on = false` religa com o mesmo efeito de piscar.
+   */
+  setBlackout(on: boolean, opts: { extraDarkness: number; emergencyFactor: number; flickerMs: number }): void {
+    this.blackout = { ...opts, target: on ? 1 : 0, level: this.blackout.level, changedAt: this.scene.time.now };
+  }
+
   addFlash(x: number, y: number, radius: number, intensity: number, duration: number): void {
     this.flashes.push({ x, y, radius, intensity, start: this.scene.time.now, duration });
   }
@@ -130,7 +140,11 @@ export class LightingSystem {
     rt.setPosition(ox, oy);
     rt.clear();
     const alarmExtra = this.alarm ? 0.1 : 0;
-    this.ambient = Phaser.Math.Linear(this.ambient, Math.min(0.95, this.darknessAt(this.owner.x, this.owner.y) + alarmExtra), 0.03);
+    const b = this.blackout;
+    // Na transição, a energia oscila (liga/desliga em saltos) antes de firmar.
+    b.level = time - b.changedAt < b.flickerMs ? (Math.sin(time * 0.037) * Math.sin(time * 0.011) > 0 ? 1 : 0) : b.target;
+    const blackoutExtra = b.extraDarkness * b.level;
+    this.ambient = Phaser.Math.Linear(this.ambient, Math.min(0.97, this.darknessAt(this.owner.x, this.owner.y) + alarmExtra + blackoutExtra), 0.05);
     rt.fill(cfg.darknessColor, this.ambient);
 
     const inView = (x: number, y: number, r: number): boolean =>
@@ -140,8 +154,9 @@ export class LightingSystem {
     // Alarme: todas as luzes pulsam juntas em vermelho.
     const alarmPulse = this.alarm ? 0.35 + 0.65 * Math.abs(Math.sin(time / 260)) : 1;
     for (const lamp of this.lamps) {
-      const intensity = this.lampIntensity(lamp, time) * alarmPulse;
-      lamp.glow.setAlpha(cfg.lampGlowAlpha * intensity / lamp.intensity);
+      const power = 1 - b.level * (lamp.emergency ? 1 - b.emergencyFactor : 1);
+      const intensity = this.lampIntensity(lamp, time) * alarmPulse * power;
+      lamp.glow.setAlpha((cfg.lampGlowAlpha * intensity) / lamp.intensity);
       if (!inView(lamp.x, lamp.y, lamp.radius) || intensity <= 0.01) continue;
       this.eraseRadial(lamp.x - ox, lamp.y - oy, lamp.radius, intensity);
     }

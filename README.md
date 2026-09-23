@@ -51,7 +51,10 @@ src/
                      mundo, interface, ambientes), SoundBank (catálogo), AudioSystem (reprodução)
   effects/           LightingSystem (escuridão, lanterna, luzes), EffectsSystem (sangue, cadáveres,
                      cápsulas, faíscas), fxTextures (texturas de luz/partículas em canvas)
-  systems/           WaveSystem, SpawnSystem, difficulty (fórmulas), EconomySystem, InteractionSystem,
+  events/            eventos dinâmicos (WorldEvent + um arquivo por evento: Blackout, Alarm, Train,
+                     Horde, SupplyDrop, GasLeak)
+  ui/                componentes da HUD (EventHud)
+  systems/           EventSystem (sorteio e ciclo dos eventos), WaveSystem, SpawnSystem, difficulty (fórmulas), EconomySystem, InteractionSystem,
                      CombatSystem (inclui headshot), CameraController, pathfinding/NavGrid (A*),
                      PerkSystem (modificadores de perks), PowerUpSystem (drops e efeitos),
                      BossSystem (ciclo do boss), pathfinding/PathFollower (navegação comum)
@@ -92,9 +95,20 @@ Todos os sons são **sintetizados em código** durante o carregamento (sem arqui
 - [x] Fase 6 — Power-ups (7 comuns + Golden Drop, armadura)
 - [x] Fase 7 — Inimigos (Runner, Tank, Exploder, composição por wave)
 - [x] Fase 8 — Boss (The Conductor, 4 fases, 5 ataques)
-- [ ] Fase 9 — Eventos (blackout, trem, horda, supply drop, gás, alarme)
+- [x] Fase 9 — Eventos (blackout, trem, horda, supply drop, gás, alarme)
 
 Observações:
+- Eventos (`src/config/events.config.ts`): a partir da wave 2, cada wave tem 60% de chance de um
+  evento (um por vez, nunca em wave de boss), sorteado por peso, com wave mínima e cooldown:
+  - Apagão: luzes piscam e apagam por 25s; só a lanterna e as luzes de emergência ficam.
+  - Alarme de Emergência: luzes vermelhas, sirene e spawn 2× mais rápido por 20s.
+  - Trem: aviso (buzina, faixa vermelha) e um trem cruza a faixa livre dos trilhos da Plataforma,
+    matando os zumbis nela e ferindo quem estiver nos trilhos (só com a Plataforma aberta).
+  - Horda: +60% de zumbis na wave, chegando mais rápido.
+  - Suprimentos: uma caixa cai de paraquedas (sinalizador vermelho); [E] dá munição cheia,
+    armadura e $750. Some em 60s.
+  - Vazamento de Gás: nuvem verde perto do jogador que fere quem ficar dentro (jogador e zumbis).
+  Mortes por trem/gás não pagam nem soltam power-ups. HUD: anúncio + indicador com tempo no topo.
 - Waves seguem as fórmulas do GDD §32 (`src/config/waves.config.ts`).
 - Economia em `src/config/economy.config.ts`: $500 iniciais, $100 por Walker, +$50 por headshot
   (1,5× de dano), bônus de wave $300 + $50 × wave. Armas e preços em `weapons.config.ts`.

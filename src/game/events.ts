@@ -34,6 +34,10 @@ export const GameEvents = {
   BossState: 'boss-state',
   BossPhase: 'boss-phase',
   BossDefeated: 'boss-defeated',
+  /** Evento dinâmico começou (apagão, trem, horda...) — anúncio na HUD. */
+  WorldEventStarted: 'world-event-started',
+  /** Evento ativo e tempo restante (null = nenhum). */
+  WorldEventState: 'world-event-state',
   /** A UI pede o estado atual (ex.: ao ser criada depois da GameScene). */
   HudRequest: 'hud-request',
 } as const;
@@ -57,8 +61,9 @@ export interface AmmoPayload {
 /**
  * O que matou o zumbi: só abates por arma pagam e soltam power-ups. Explosões de um
  * Exploder abatido a tiro contam como 'weapon'; as que ele mesmo detona, como 'explosion'.
+ * 'hazard' = perigos do mapa (trem, gás).
  */
-export type KillSource = 'weapon' | 'nuke' | 'explosion';
+export type KillSource = 'weapon' | 'nuke' | 'explosion' | 'hazard';
 
 export interface ZombieKilledPayload {
   type: string;
@@ -85,6 +90,15 @@ export interface PowerUpTimer {
   color: number;
   remainingMs: number;
   totalMs: number;
+}
+
+export interface WorldEventStatePayload {
+  id: string;
+  name: string;
+  color: number;
+  /** null = dura até o fim da wave. */
+  remainingMs: number | null;
+  totalMs: number | null;
 }
 
 export interface MoneyPayload {
@@ -134,6 +148,8 @@ export interface GameEventMap {
   [GameEvents.BossState]: BossStatePayload;
   [GameEvents.BossPhase]: { name: string; phase: number };
   [GameEvents.BossDefeated]: { name: string; reward: number };
+  [GameEvents.WorldEventStarted]: { id: string; name: string; hint: string; color: number };
+  [GameEvents.WorldEventState]: WorldEventStatePayload | null;
   [GameEvents.HudRequest]: undefined;
 }
 

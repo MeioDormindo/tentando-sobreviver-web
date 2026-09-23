@@ -17,6 +17,24 @@ export interface SpatialOptions extends PlayOptions {
   distance?: number;
 }
 
+/** Som em loop preso a um ponto do mundo (mova com x/y; pare com stop). */
+export interface SpatialLoop {
+  x: number;
+  y: number;
+  stop(fadeMs?: number): void;
+}
+
+type VolumeSound = Phaser.Sound.BaseSound & { setVolume(v: number): unknown; setPan?(p: number): unknown };
+
+interface ActiveLoop {
+  handle: SpatialLoop;
+  sound: VolumeSound;
+  /** Volume máximo (já com categoria e master). */
+  base: number;
+  distance: number;
+  fade: number;
+}
+
 interface Listener {
   readonly x: number;
   readonly y: number;
@@ -40,6 +58,7 @@ export class AudioSystem {
   private lastHp = -1;
   private muted = false;
   private offs: Array<() => void> = [];
+  private loops: ActiveLoop[] = [];
 
   constructor() {
     try {
@@ -87,6 +106,8 @@ export class AudioSystem {
     this.offs = [];
     this.ambience?.sound.destroy();
     this.ambience = null;
+    for (const loop of this.loops) loop.sound.destroy();
+    this.loops = [];
     this.stopHeartbeat();
     this.scene = null;
     this.listener = null;
@@ -142,6 +163,41 @@ export class AudioSystem {
     if (sound && 'setPan' in sound) (sound as Phaser.Sound.WebAudioSound).setPan(Phaser.Math.Clamp((x - l.x) / 480, -0.85, 0.85));
   }
 
+  /** Loop posicional (sirene, gás, trem): o volume acompanha a distância a cada frame. */
+  loopAt(key: string, x: number, y: number, opts: SpatialOptions = {}): SpatialLoop | null {
+    const category = opts.category ?? 'world';
+    const sound = this.play(key, { ...opts, category, loop: true, volume: 0, pitchJitter: 0 }) as VolumeSound | null;
+    if (!sound) return null;
+    const loop: ActiveLoop = {
+      handle: { x, y, stop: (fadeMs = 400) => { loop.fade = fadeMs; } },
+      sound,
+      base: (opts.volume ?? 1) * audioConfig.categories[category] * audioConfig.master,
+      distance: opts.distance ?? audioConfig.hearingDistance,
+      fade: -1,
+    };
+    this.loops.push(loop);
+    this.updateLoop(loop, 0);
+    return loop.handle;
+  }
+
+  private updateLoop(loop: ActiveLoop, delta: number): boolean {
+    const l = this.listener;
+    if (loop.fade >= 0) {
+      loop.base -= (loop.base * delta) / Math.max(1, loop.fade);
+      loop.fade -= delta;
+      if (loop.fade <= 0) {
+        loop.sound.destroy();
+        return false;
+      }
+    }
+    if (!l) return true;
+    const d = Phaser.Math.Distance.Between(l.x, l.y, loop.handle.x, loop.handle.y);
+    const falloff = d >= loop.distance ? 0 : Math.pow(1 - d / loop.distance, 1.6);
+    loop.sound.setVolume(loop.base * falloff);
+    loop.sound.setPan?.(Phaser.Math.Clamp((loop.handle.x - l.x) / 480, -0.85, 0.85));
+    return true;
+  }
+
   /** Passo do jogador conforme o piso sob ele. */
   footstep(x: number, y: number): void {
     this.playAt(`step_${this.surfaceAt(x, y)}`, x, y, { category: 'player', volume: 0.55, pitchJitter: 0.08 });
@@ -164,6 +220,8 @@ export class AudioSystem {
 
   /** Sons ambientes aleatórios em volta do jogador (estrondos, gemidos, gotas, trem distante). */
   update(time: number): void {
+    const delta = this.scene?.game.loop.delta ?? 16;
+    this.loops = this.loops.filter((loop) => this.updateLoop(loop, delta));
     const l = this.listener;
     if (!l || !this.ambience || time < this.nextAmbientEventAt) return;
     const [min, max] = audioConfig.ambientEventMs;

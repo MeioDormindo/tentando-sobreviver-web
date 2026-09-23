@@ -45,6 +45,8 @@ export interface Lamp {
   flicker: number;
   /** Cor do brilho (padrão: luz quente de lâmpada). */
   color?: number;
+  /** Luz de emergência: continua fraca durante um apagão (máquinas, pontos de compra). */
+  emergency?: boolean;
 }
 
 export type MachineDef = MachinePlacement & { x: number; y: number };
@@ -130,12 +132,12 @@ export class TerminalMap {
     });
     this.lamps = LAMPS.map((l) => ({ ...center(l.tx, l.ty), radius: l.radius, intensity: l.intensity, flicker: l.flicker }));
     // Luz fraca sobre cada ponto de compra, para ser encontrado no escuro.
-    for (const s of this.stations) this.lamps.push({ x: s.x, y: s.y, radius: 70, intensity: 0.45, flicker: 0 });
+    for (const s of this.stations) this.lamps.push({ x: s.x, y: s.y, radius: 70, intensity: 0.45, flicker: 0, emergency: true });
     this.machines = MACHINES.map((m) => ({ ...m, ...center(m.tx, m.ty) }));
     // Máquinas iluminadas com a cor delas (perks) ou luz dourada/roxa.
     for (const m of this.machines) {
       const color = m.type === 'perk' ? perks[m.perkId].color : m.type === 'weapon_lab' ? 0x9b59d0 : 0xffd27a;
-      this.lamps.push({ x: m.x, y: m.y, radius: 95, intensity: 0.6, flicker: 0.05, color });
+      this.lamps.push({ x: m.x, y: m.y, radius: 95, intensity: 0.6, flicker: 0.05, color, emergency: true });
     }
   }
 

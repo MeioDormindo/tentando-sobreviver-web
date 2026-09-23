@@ -19,6 +19,7 @@ import { START_AREA } from '../map/terminal/layout';
 import { CameraController } from '../systems/CameraController';
 import { CombatSystem } from '../systems/CombatSystem';
 import { EconomySystem } from '../systems/EconomySystem';
+import { EventSystem } from '../systems/EventSystem';
 import { InteractionSystem } from '../systems/InteractionSystem';
 import { PerkSystem } from '../systems/PerkSystem';
 import { PowerUpSystem } from '../systems/PowerUpSystem';
@@ -43,6 +44,7 @@ export class GameScene extends Phaser.Scene {
   private perks!: PerkSystem;
   private powerUps!: PowerUpSystem;
   private bossSystem!: BossSystem;
+  private eventSystem!: EventSystem;
   private map!: TerminalMap;
   private currentArea = '';
   private readonly aimPoint = new Phaser.Math.Vector2();
@@ -162,6 +164,20 @@ export class GameScene extends Phaser.Scene {
     });
     this.waveSystem = new WaveSystem(this, spawner, this.player, this.bossSystem);
     this.bossSystem.onSummoned = (count) => this.waveSystem.addSummoned(count);
+    // Eventos dinâmicos (apagão, trem, horda, suprimentos, gás, alarme).
+    this.eventSystem = new EventSystem({
+      scene: this,
+      player: this.player,
+      map,
+      lighting: this.lighting,
+      effects,
+      waves: this.waveSystem,
+      zombies,
+      interaction: this.interaction,
+      weapons: this.weaponSystem,
+      economy: this.economy,
+      isAreaOpen: (area) => spawner.isUnlocked(area),
+    });
 
     // Portas pagas: abrir libera os spawns e a exploração da área seguinte.
     for (const def of map.doors) {
@@ -229,6 +245,7 @@ export class GameScene extends Phaser.Scene {
     this.interaction.update(time, delta);
     this.powerUps.update(time);
     this.bossSystem.update(time, delta);
+    this.eventSystem.update(time, delta);
     audio.update(time);
     this.cameraController.update();
     this.trackArea();
@@ -255,6 +272,7 @@ export class GameScene extends Phaser.Scene {
     this.perks.syncHud();
     this.powerUps.syncHud();
     this.bossSystem.syncHud();
+    this.eventSystem.syncHud();
   }
 
   private onPlayerDied(): void {

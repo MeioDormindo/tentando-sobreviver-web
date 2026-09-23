@@ -11,6 +11,12 @@ import { bosses, bossForWave } from '../config/bosses.config';
 /** Nova tentativa quando nenhum ponto de spawn está livre (ms). */
 const SPAWN_RETRY_MS = 250;
 
+/** Alteração temporária do ritmo de spawn (eventos como Horda e Alarme). */
+export interface SpawnModifier {
+  intervalMultiplier: number;
+  maxAliveBonus: number;
+}
+
 /**
  * Ciclo das waves (GDD §30): espera → wave ativa (spawn progressivo até o total)
  * → todos mortos → intervalo → próxima wave, mais difícil.
@@ -28,6 +34,7 @@ export class WaveSystem {
   private countdownMs: number = waveConfig.firstWaveDelay;
   private spawnTimerMs = 0;
   private lastEmittedKey = '';
+  private readonly spawnMods = new Map<string, SpawnModifier>();
 
   constructor(scene: Phaser.Scene, spawner: SpawnSystem, player: Player, private readonly boss: BossSystem) {
     this.scene = scene;
@@ -61,11 +68,17 @@ export class WaveSystem {
     this.completeIfDone();
     this.spawnTimerMs -= delta;
     const alive = this.spawned - this.killed;
-    if (this.spawnTimerMs <= 0 && this.spawned < this.params.totalEnemies && alive < this.params.maxAlive) {
+    let interval = this.params.spawnInterval;
+    let maxAlive = this.params.maxAlive;
+    for (const mod of this.spawnMods.values()) {
+      interval *= mod.intervalMultiplier;
+      maxAlive += mod.maxAliveBonus;
+    }
+    if (this.spawnTimerMs <= 0 && this.spawned < this.params.totalEnemies && alive < maxAlive) {
       const config = scaleZombie(getZombieConfig(this.pickType()), this.params);
       if (this.spawner.spawn(config, this.wave)) {
         this.spawned++;
-        this.spawnTimerMs = this.params.spawnInterval;
+        this.spawnTimerMs = interval;
       } else {
         this.spawnTimerMs = SPAWN_RETRY_MS;
       }
@@ -100,7 +113,20 @@ export class WaveSystem {
     this.emitState(true);
   }
 
-  private get isBossWave(): boolean {
+  /** Liga (ou desliga, com null) um modificador de spawn identificado por `id`. */
+  setSpawnModifier(id: string, mod: SpawnModifier | null): void {
+    if (mod) this.spawnMods.set(id, mod);
+    else this.spawnMods.delete(id);
+  }
+
+  /** Zumbis extras na wave atual (Horda). */
+  addEnemies(count: number): void {
+    if (this.phase !== 'active' || count <= 0) return;
+    this.params.totalEnemies += count;
+    this.emitState(true);
+  }
+
+  get isBossWave(): boolean {
     return waveConfig.bossWaves.includes(this.wave);
   }
 

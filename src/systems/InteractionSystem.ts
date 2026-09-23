@@ -41,6 +41,13 @@ export class InteractionSystem {
     this.items.push(item);
   }
 
+  /** Remove um interagível temporário (ex.: caixa de suprimentos já aberta). */
+  remove(item: Interactable): void {
+    const i = this.items.indexOf(item);
+    if (i >= 0) this.items.splice(i, 1);
+    if (this.focused === item) this.focused = null;
+  }
+
   update(time: number, delta: number): void {
     this.focused = this.player.isAlive ? this.findNearest() : null;
     if (this.focused?.onHold && this.key?.isDown) this.focused.onHold(time, delta);

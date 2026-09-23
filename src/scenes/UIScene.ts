@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { perkIconKey, powerUpKey } from '../config/assets.config';
 import { audio } from '../audio/AudioSystem';
+import { EventHud } from '../ui/EventHud';
 import { COLORS, SCENE_KEYS } from '../config/game.config';
 import {
   emitGameEvent,
@@ -53,6 +54,7 @@ export class UIScene extends Phaser.Scene {
   private bannerSub!: Phaser.GameObjects.Text;
   private deathOverlay: Phaser.GameObjects.Container | null = null;
   private pauseOverlay: Phaser.GameObjects.Container | null = null;
+  private eventHud!: EventHud;
 
   private hp: PlayerHpPayload = { hp: 0, maxHp: 1, armor: 0, maxArmor: 100 };
   private kills = 0;
@@ -136,6 +138,7 @@ export class UIScene extends Phaser.Scene {
       .text(0, 0, '', { fontFamily: TITLE_FONT, fontSize: '20px', color: '#e8d8c8', stroke: '#000', strokeThickness: 4 })
       .setOrigin(0.5, 1);
     this.warning = this.createWarning();
+    this.eventHud = new EventHud(this);
     this.crosshair = this.add.graphics().setDepth(100);
     this.drawCrosshair();
     this.updateKills();
@@ -197,6 +200,7 @@ export class UIScene extends Phaser.Scene {
     this.layoutTimers();
     this.drawBossBar();
     this.warning.setPosition(width / 2, height * 0.3);
+    this.eventHud.layout(width, height, MARGIN);
     this.statusText.setPosition(width / 2, height * 0.62);
     this.killsText.setPosition(width - MARGIN, MARGIN + 56);
     this.waveText.setPosition(MARGIN, MARGIN - 6);
