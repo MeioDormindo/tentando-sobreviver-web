@@ -24,7 +24,8 @@ npm run art        # regera a arte SVG em public/assets
 | Mouse | mirar |
 | Clique esquerdo | atirar (M1911 é semiautomática) |
 | R | recarregar |
-| E | comprar (arma, munição) |
+| E | comprar (arma, munição, porta) |
+| segurar E | reparar barricada (+$10 por tábua) |
 | Q / 1 / 2 / roda do mouse | trocar de arma |
 
 ## Estrutura
@@ -38,14 +39,15 @@ src/
   config/            valores de gameplay e visual (game, player, weapons, zombies, spawn, visual, assets)
   game/events.ts     eventos globais tipados (lógica → HUD)
   scenes/            Boot → Preload (carrega SVGs, fatia frames, cria animações) → Menu → Game (+ UI)
-  map/               TestMap (piso, paredes 3/4, props, luminárias) e definições de props
+  map/               TerminalMap (grade, colisão, navegação, visual 3/4) e terminal/layout.ts
+                     (áreas, portas, janelas, spawns, props, luzes do Terminal Central)
   entities/          Player (tronco + pernas), Zombie (3 variantes), Projectile (traçante),
-                     BuyStations (maletas de arma, caixa de munição), Damageable
+                     BuyStations (maletas de arma, caixa de munição), Door, Barricade, Damageable
   weapons/           Weapon (estado/munição/recarga) e WeaponSystem (inventário de 2 armas, disparo)
   effects/           LightingSystem (escuridão, lanterna, luzes), EffectsSystem (sangue, cadáveres,
                      cápsulas, faíscas), fxTextures (texturas de luz/partículas em canvas)
   systems/           WaveSystem, SpawnSystem, difficulty (fórmulas), EconomySystem, InteractionSystem,
-                     CombatSystem (inclui headshot), CameraController
+                     CombatSystem (inclui headshot), CameraController, pathfinding/NavGrid (A*)
 public/assets/       arte gerada (SVG) — pode ser trocada por PNGs com o mesmo layout de frames
 ```
 
@@ -64,7 +66,8 @@ public/assets/       arte gerada (SVG) — pode ser trocada por PNGs com o mesmo
 - [x] Passe visual (arte original, iluminação, câmera, efeitos) — antecipado da Fase 10
 - [x] Fase 2 — Waves (WaveSystem, SpawnSystem, dificuldade progressiva, HUD de wave)
 - [x] Fase 3 — Economia (dinheiro, headshot, 8 armas, compras, munição)
-- [ ] Fase 4 — Mapa Terminal Central (portas, barricadas, pathfinding)
+- [x] Fase 4 — Mapa Terminal Central (7 áreas, portas, barricadas, spawn por área, A*)
+- [ ] Fase 5 — Máquinas (Mystery Box, Weapon Lab, perks)
 
 Observações:
 - Waves seguem as fórmulas do GDD §32 (`src/config/waves.config.ts`).
@@ -72,6 +75,10 @@ Observações:
   (1,5× de dano), bônus de wave $300 + $50 × wave. Armas e preços em `weapons.config.ts`.
 - Comprar numa maleta de arma que você já tem compra munição dela (metade do preço).
 - Vida regenera devagar após 5s sem levar dano.
-- Zumbis presos fora da tela por 12s são realocados para outro spawn (a wave nunca trava).
-- Zumbis perseguem em linha reta e contornam paredes deslizando por elas. O pathfinding A* entra na Fase 4.
+- Mapa: Hall Central (início), Plataforma Norte com trem (um vagão aberto), Bilheteria, Lojas,
+  Área Técnica, Túneis e Manutenção. Portas pagas liberam as áreas e os spawns delas.
+- Zumbis do Hall, Bilheteria e Lojas surgem do lado de fora e entram quebrando as barricadas.
+- Navegação: perseguição direta quando o zumbi enxerga o jogador; senão, caminho A* (portas e
+  janelas consideradas). Zumbis parados por 12s fora da tela são realocados.
+- Escuridão varia por área (túneis quase sem luz).
 - Em modo dev, `window.__GAME__` expõe a instância do jogo para depuração.
