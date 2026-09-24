@@ -28,24 +28,56 @@ npm run art        # regera a arte SVG em public/assets
 | N | ligar/desligar só a música |
 | ESC / P | pausar (também pausa sozinho se a janela perde o foco) |
 | E | comprar (arma, munição, porta, perk, Mystery Box, Weapon Lab) |
-| segurar E | reparar barricada (+$10 por tábua) |
+| segurar E | reparar barricada (+$10 por tábua), comprar o elemento da arma na maleta dela, usar painéis do mapa |
 
 **Celular / tablet** (detectado automaticamente; jogue na horizontal — em pé aparece um aviso):
 
 | Controle | Ação |
 |---|---|
 | Analógico esquerdo (toque na metade esquerda) | mover (empurrar pouco = andar devagar) |
-| Analógico direito (metade direita) | mirar; empurrado além do anel vermelho, atira |
-| USAR | comprar/usar; segurar repara barricada |
+| Analógico direito (metade direita) | só gira a lanterna (sem ele, a lanterna segue o movimento) |
+| ATIRAR (botão grande) | atira para onde a lanterna aponta, com mira assistida (puxa de leve para o zumbi mais perto dentro do cone da lanterna) |
+| USAR | comprar/usar; segurar = ações de "SEGURE E" |
 | RECARR. / TROCAR | recarregar / trocar de arma |
 | II | pausar |
 
-Ao começar uma partida no celular o jogo entra em tela cheia.
+Ao começar uma partida no celular o jogo entra em tela cheia. Não há mira na tela: o tiro sai sempre
+na direção da lanterna. Os controles de toque também ligam sozinhos no primeiro toque na tela.
+
+## Armas: Mk III e elementos
+
+- **Weapon Lab**: Mk II ($5.000) e depois **Mk III** ($10.000) — o Mk III dobra os projéteis de
+  qualquer arma (espingardas 2× chumbos, Arc Gun 2 raios, lançador 2 granadas), traçante dourado.
+- **Elementos** (`src/config/elements.config.ts`): cada arma de maleta tem o seu, comprado
+  **segurando E** na maleta da própria arma (tocar E continua comprando munição). O da M1911 é
+  vendido na caixa de munição do Hall. O elemento continua depois do Mk II/III.
+
+| Arma | Elemento | Efeito |
+|---|---|---|
+| M1911 | ☀ Luz | atordoa e causa +50% de dano no boss |
+| Glock | ☾ Sombra | cada acerto cura um pouco o jogador |
+| MP5 / Combat Shotgun | ❄ Gelo | deixa lento e às vezes congela |
+| Vector | ⚡ Raio | salta para 2 zumbis próximos |
+| M4 / Pump | 🔥 Fogo | incendeia (dano ao longo do tempo) |
+| AK | 💥 Explosivo | pequena explosão no acerto (não fere você) |
+
+## Interações e segredos no mapa
+
+- **Painel de energia** (Área Técnica): durante um Apagão, segure E ($500) para religar a luz.
+- **Botão do alarme** (Hall): durante o Alarme de Emergência, segure E ($750) para desligar.
+- **Painel do trem** (Plataforma): $1.500 chama o trem na hora (recarga de 90s).
+- **Armadilhas elétricas** (Hall, logo abaixo da porta da Plataforma, e corredor de baixo dos
+  Túneis): $1.000 eletrifica a grade por 15s matando os zumbis que passam; recarga de 45s.
+- **Válvula do gás**: no Vazamento de Gás, segure E no cano para fechar a válvula.
+- Segredos (spoiler): 3 ursinhos escondidos em cantos escuros (achar os 3 toca uma canção e solta
+  um Golden Drop), um rádio velho na Manutenção que conta a história do terminal, a placa perto da
+  Plataforma e o código Konami no menu (↑↑↓↓←→←→BA, ou tocar 10 vezes no título no celular), que
+  libera o "modo cabeção" em Configurações.
 
 ## Menus, minimapa e configurações
 
 - **ARMAS**: catálogo das 14 armas com raridade, atributos, onde conseguir (maleta e área, arma
-  inicial ou só na Mystery Box), mecânica especial e a versão Mk II.
+  inicial ou só na Mystery Box), mecânica especial, versões Mk II/Mk III e o elemento.
 - **CONFIGURAÇÕES**: volume geral, som, música, minimapa, tremor de tela, controles de toque
   (automático/sempre/nunca), tela cheia, estatísticas acumuladas e apagar progresso.
 - **Minimapa** no canto superior esquerdo: áreas abertas (claras) e trancadas (escuras), portas
@@ -171,11 +203,19 @@ Observações:
   - Apagão: luzes piscam e apagam por 25s; só a lanterna e as luzes de emergência ficam.
   - Alarme de Emergência: luzes vermelhas, sirene e spawn 2× mais rápido por 20s.
   - Trem: aviso (buzina, faixa vermelha) e um trem cruza a faixa livre dos trilhos da Plataforma,
-    matando os zumbis nela e ferindo quem estiver nos trilhos (só com a Plataforma aberta).
+    matando os zumbis nela e ferindo quem estiver nos trilhos. Tem sorteio próprio e roda junto
+    com os outros eventos: com a Plataforma aberta, 65% das waves têm trem (e 40% de chance de
+    passar de novo na mesma wave).
   - Horda: +60% de zumbis na wave, chegando mais rápido.
   - Suprimentos: uma caixa cai de paraquedas (sinalizador vermelho); [E] dá munição cheia,
     armadura e $750. Some em 60s.
   - Vazamento de Gás: nuvem verde perto do jogador que fere quem ficar dentro (jogador e zumbis).
+  - Zumbi Dourado: um zumbi brilhante e rápido que foge de você; matá-lo em 20s dá $1.000 e um
+    Golden Drop.
+  - Lua de Sangue: 25s de luz vermelha, zumbis 30% mais rápidos e dinheiro/score em dobro.
+  - Desabamento: pedaços do teto caem perto de você (círculo vermelho de aviso) e ferem quem
+    estiver embaixo, zumbis também.
+  - Neblina: 25s com escuridão extra, lanterna mais curta e névoa.
   Mortes por trem/gás não pagam nem soltam power-ups. HUD: anúncio + indicador com tempo no topo.
 - Waves seguem as fórmulas do GDD §32 (`src/config/waves.config.ts`).
 - Economia em `src/config/economy.config.ts`: $500 iniciais, $100 por Walker, +$50 por headshot
