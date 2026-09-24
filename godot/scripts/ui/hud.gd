@@ -22,6 +22,7 @@ var _other_weapon_label: Label
 var _prompt_label: Label
 var _banner: Label
 var _toast: Label
+var _perks_label: Label
 var _hit_marker: Label
 var _pause_panel: Control
 var _game_over_panel: Control
@@ -44,6 +45,8 @@ func _ready() -> void:
 	Events.area_opened.connect(func(_id: StringName, area_name: String) -> void: _show_banner(area_name.to_upper() + " ABERTA", GOLD))
 	Events.purchase_denied.connect(func() -> void: _flash_points_denied())
 	Events.toast.connect(_show_toast)
+	Events.power_changed.connect(func(on: bool) -> void: if on: _show_banner("ENERGIA LIGADA", GOLD))
+	Events.perks_changed.connect(func(names: Array[String]) -> void: _perks_label.text = "  ·  ".join(names).to_upper())
 	Events.pause_changed.connect(func(paused: bool) -> void: _pause_panel.visible = paused)
 	Events.game_over.connect(_on_game_over)
 
@@ -75,6 +78,7 @@ func _build() -> void:
 	root.add_child(_health_bar)
 	_health_bar.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT, Control.PRESET_MODE_KEEP_SIZE, MARGIN)
 	_health_label = _label(root, "VIDA", 15, TEXT, Control.PRESET_BOTTOM_LEFT, HORIZONTAL_ALIGNMENT_LEFT, -22)
+	_perks_label = _label(root, "", 14, GOLD, Control.PRESET_BOTTOM_LEFT, HORIZONTAL_ALIGNMENT_LEFT, -44)
 
 	_weapon_label = _label(root, "", 18, TEXT, Control.PRESET_BOTTOM_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, -46)
 	_ammo_label = _label(root, "", 36, TEXT, Control.PRESET_BOTTOM_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT)

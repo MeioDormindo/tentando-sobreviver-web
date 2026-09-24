@@ -19,6 +19,10 @@ var reloading: bool = false
 var busy: bool = false
 ## Nível no Weapon Lab: 0 normal, 1 Mk II, 2 Mk III.
 var level: int = 0
+## Modificadores dos perks (aplicados pelo Player): dano, bônus de headshot e recarga.
+var damage_multiplier: float = 1.0
+var headshot_bonus: float = 0.0
+var reload_multiplier: float = 1.0
 
 var _cooldown := 0.0
 var _reload_left := 0.0
@@ -35,7 +39,9 @@ func _ready() -> void:
 		reset_ammo()
 
 
-func _process(delta: float) -> void:
+## Mesmo relógio do jogador (física): o gatilho marcado no _physics_process do Player é lido
+## aqui logo depois. No _process, frames sem passo de física soltariam o gatilho da minigun.
+func _physics_process(delta: float) -> void:
 	tick(delta)
 
 
@@ -106,7 +112,7 @@ func start_reload() -> bool:
 	if reloading or busy or magazine >= data.magazine_size or reserve <= 0:
 		return false
 	reloading = true
-	_reload_left = data.reload_time
+	_reload_left = data.reload_time * reload_multiplier
 	_emit_ammo()
 	return true
 
@@ -158,7 +164,7 @@ func _trace(space: PhysicsDirectSpaceState3D, origin: Vector3, direction: Vector
 		if hurtbox.health in struck:
 			continue
 		struck.append(hurtbox.health)
-		hits.append(hurtbox.receive_hit(data.damage, data.headshot_multiplier, DamageInfo.Kind.WEAPON, shooter, hit.position))
+		hits.append(hurtbox.receive_hit(data.damage * damage_multiplier, data.headshot_multiplier + headshot_bonus, DamageInfo.Kind.WEAPON, shooter, hit.position))
 		if struck.size() > data.pierce:
 			end = hit.position
 			break

@@ -20,6 +20,7 @@ func run(tree: SceneTree) -> int:
 	_test_barricade(tree)
 	_test_mystery_box()
 	_test_weapon_lab()
+	_test_perks()
 	print("\n%d ok, %d falharam" % [_passed, _failed])
 	return _failed
 
@@ -197,6 +198,11 @@ func _test_maps(tree: SceneTree) -> void:
 			var t := Vector2i(floori(b.position.x), floori(b.position.z))
 			return [Vector2i.UP, Vector2i.LEFT, Vector2i.RIGHT, Vector2i.DOWN].any(func(d: Vector2i) -> bool: return "#T".contains(map.cell(t.x + d.x, t.y + d.y))))
 		check(on_wall, "%s: cada compra fica encostada numa parede" % map.name)
+		var perk_count: int = map.data.machines.filter(func(m: Dictionary) -> bool: return m.type == "perk").size()
+		var machines := map.find_children("*", "StaticBody3D", true, false).filter(func(n: Node) -> bool: return n is PerkMachine)
+		check(machines.size() == perk_count and perk_count > 0, "%s: %d máquinas de perk" % [map.name, machines.size()])
+		var breaker := map.find_children("*", "StaticBody3D", true, false).filter(func(n: Node) -> bool: return n is Breaker)
+		check(breaker.size() == 1 and not map.power.is_on, "%s: disjuntor no mapa, energia começa desligada" % map.name)
 		var nav_polys := map.nav_region.navigation_mesh.get_polygon_count()
 		check(nav_polys > 0, "%s: malha de navegação gerada (%d polígonos)" % [map.name, nav_polys])
 		map.free()
@@ -266,3 +272,25 @@ func _test_weapon_lab() -> void:
 	check(weapon.level == 1 and weapon.magazine == mk2.magazine_size, "arma sobe de nível com munição cheia")
 	check(WeaponUpgrade.next_level(mk3, 2, lab) == null, "Mk III é o máximo")
 	weapon.free()
+
+
+func _test_perks() -> void:
+	print("Perks")
+	var perks := PerkSystem.new()
+	var fortify := load("res://data/perks/fortify.tres") as PerkData
+	var sprint := load("res://data/perks/sprint.tres") as PerkData
+	var deadeye := load("res://data/perks/deadeye.tres") as PerkData
+	var revive := load("res://data/perks/quick_revive.tres") as PerkData
+	check(perks.grant(fortify) and is_equal_approx(perks.max_health_bonus, 50.0), "Fortify: +50 de vida")
+	check(not perks.grant(fortify), "não compra o mesmo perk duas vezes")
+	perks.grant(sprint)
+	perks.grant(deadeye)
+	check(is_equal_approx(perks.speed_multiplier, 1.2) and is_equal_approx(perks.headshot_bonus, 1.0), "Sprint+ (+20%) e Deadeye (+100% no headshot) somam")
+	check(revive.works_without_power and not fortify.works_without_power, "só o Quick Revive funciona sem energia")
+	var uses := 0
+	for i in 5:
+		if perks.grant(revive) and perks.consume_self_revive():
+			uses += 1
+	check(uses == 3, "Quick Revive: no máximo 3 por partida (%d)" % uses)
+	check(perks.consume_self_revive() == null, "sem Quick Revive, não levanta")
+	perks.free()

@@ -33,6 +33,9 @@ const PROP_COLOR := Color(0.4, 0.33, 0.24)
 @export var weapon_catalog: WeaponCatalog
 @export var weapon_lab_scene: PackedScene
 @export var weapon_lab_data: WeaponLabData
+@export var perk_machine_scene: PackedScene
+@export_dir var perks_dir: String = "res://data/perks"
+@export var breaker_scene: PackedScene
 ## Pasta dos WeaponData (compras na parede pelo id da arma).
 @export_dir var weapons_dir: String = "res://data/weapons"
 
@@ -45,6 +48,8 @@ var _materials: Dictionary = {}
 var _area_names: Dictionary = {}
 
 @onready var nav_region: NavigationRegion3D = $NavigationRegion3D
+## Energia do mapa (luzes fracas e máquinas desligadas até o disjuntor).
+@onready var power: PowerSystem = get_node_or_null("PowerSystem")
 
 
 func _ready() -> void:
@@ -63,6 +68,7 @@ func _ready() -> void:
 	_build_doors()
 	_build_wall_buys()
 	_build_machines()
+	_build_interactions()
 	_build_props()
 	_build_lamps()
 	_build_spawns()
@@ -278,12 +284,31 @@ func _build_machines() -> void:
 					box.setup(mystery_box_data, weapon_catalog, data.id, spots, self)
 					nav_region.add_child(box)
 					box.position = at
+			"perk":
+				var path := "%s/%s.tres" % [perks_dir, machine.perkId]
+				if perk_machine_scene and ResourceLoader.exists(path):
+					var machine_node := perk_machine_scene.instantiate() as PerkMachine
+					machine_node.setup(load(path))
+					nav_region.add_child(machine_node)
+					machine_node.position = at
+					if power and not machine_node.perk.works_without_power:
+						power.register_light(machine_node.get_light())
 			"weapon_lab":
 				if weapon_lab_scene and weapon_lab_data:
 					var lab := weapon_lab_scene.instantiate() as WeaponLab
 					lab.setup(weapon_lab_data)
 					nav_region.add_child(lab)
 					lab.position = at
+
+
+## Painéis do mapa. Por enquanto o disjuntor principal (os outros vêm com os eventos).
+func _build_interactions() -> void:
+	for item: Dictionary in data.interactions:
+		if item.type == "breaker" and breaker_scene and power:
+			var breaker := breaker_scene.instantiate() as Breaker
+			breaker.setup(power)
+			nav_region.add_child(breaker)
+			breaker.position = Vector3(float(item.tx) + 0.5, 0.0, float(item.ty) + 0.5)
 
 
 func _build_props() -> void:
@@ -332,6 +357,8 @@ func _add_light(position_3d: Vector3, radius: float, intensity: float, color_hex
 	light.omni_range = maxf(3.0, radius * 1.6)
 	add_child(light)
 	light.position = position_3d
+	if power:
+		power.register_light(light)
 
 
 func _build_spawns() -> void:

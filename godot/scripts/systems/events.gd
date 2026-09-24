@@ -32,6 +32,10 @@ signal area_opened(area_id: StringName, area_name: String)
 signal purchase_denied()
 ## Aviso curto no meio da tela (a caixa mudou de lugar, arma melhorada...).
 signal toast(text: String)
+## Energia do mapa ligada/desligada.
+signal power_changed(on: bool)
+## Perks ativos do jogador (nomes).
+signal perks_changed(names: Array[String])
 ## Pausa ligada/desligada.
 signal pause_changed(paused: bool)
 ## A HUD pediu para jogar de novo.

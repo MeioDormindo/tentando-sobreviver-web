@@ -10,6 +10,10 @@
 [ext_resource type="Resource" path="res://data/weapons/catalog.tres" id="8_catalog"]
 [ext_resource type="PackedScene" path="res://scenes/interactables/weapon_lab.tscn" id="9_lab"]
 [ext_resource type="Resource" path="res://data/configs/weapon_lab.tres" id="10_lab_data"]
+[ext_resource type="PackedScene" path="res://scenes/interactables/perk_machine.tscn" id="11_perk"]
+[ext_resource type="PackedScene" path="res://scenes/interactables/breaker.tscn" id="12_breaker"]
+[ext_resource type="Script" path="res://scripts/systems/power_system.gd" id="13_power"]
+[ext_resource type="Resource" path="res://data/configs/power.tres" id="14_power_data"]
 
 [sub_resource type="NavigationMesh" id="NavMesh"]
 geometry_parsed_geometry_type = 1
@@ -38,6 +42,12 @@ mystery_box_data = ExtResource("7_box_data")
 weapon_catalog = ExtResource("8_catalog")
 weapon_lab_scene = ExtResource("9_lab")
 weapon_lab_data = ExtResource("10_lab_data")
+perk_machine_scene = ExtResource("11_perk")
+breaker_scene = ExtResource("12_breaker")
+
+[node name="PowerSystem" type="Node" parent="."]
+script = ExtResource("13_power")
+data = ExtResource("14_power_data")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavMesh")

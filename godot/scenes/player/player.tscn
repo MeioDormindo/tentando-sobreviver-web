@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://scripts/weapons/weapon_inventory.gd" id="3_inventory"]
 [ext_resource type="Resource" path="res://data/configs/player.tres" id="4_data"]
 [ext_resource type="Script" path="res://scripts/weapons/melee.gd" id="5_melee"]
+[ext_resource type="Script" path="res://scripts/systems/perk_system.gd" id="6_perks"]
 
 [sub_resource type="CapsuleShape3D" id="Shape_body"]
 radius = 0.35
@@ -80,3 +81,6 @@ spot_angle = 32.0
 
 [node name="Melee" type="Node3D" parent="."]
 script = ExtResource("5_melee")
+
+[node name="Perks" type="Node" parent="."]
+script = ExtResource("6_perks")

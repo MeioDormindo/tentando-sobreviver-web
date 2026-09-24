@@ -33,6 +33,10 @@ var _last_prompt := ""
 @onready var inventory: WeaponInventory = $Pivot/Hand
 @onready var melee: Melee = $Melee
 @onready var muzzle: Marker3D = $Pivot/Hand/Muzzle
+@onready var perks: PerkSystem = $Perks
+
+## Caído esperando o Quick Revive levantar.
+var is_down: bool = false
 
 ## Arma em mãos.
 var weapon: Weapon:
@@ -47,6 +51,7 @@ func _ready() -> void:
 	inventory.switch_time = data.switch_time
 	melee.data = data.knife
 	inventory.weapon_changed.connect(_on_weapon_changed)
+	perks.perks_changed.connect(_on_perks_changed)
 	inventory.give(data.starting_weapon)
 	health.health_changed.connect(func(current: float, maximum: float) -> void: Events.player_health_changed.emit(current, maximum))
 	aim_point = global_position - global_basis.z * 3.0
@@ -60,10 +65,10 @@ func _emit_initial_state() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if not is_alive():
+	_clock += delta
+	if not is_alive() or is_down:
 		velocity = Vector3.ZERO
 		return
-	_clock += delta
 	_firing = false
 	if controlled:
 		_read_input()
@@ -123,6 +128,34 @@ func take_damage(info: DamageInfo) -> float:
 	return applied
 
 
+func _go_down(revive: PerkData) -> void:
+	is_down = true
+	health.invulnerable = true
+	Events.interaction_prompt.emit("")
+	Events.toast.emit("QUICK REVIVE!")
+	var tween := create_tween()
+	tween.tween_property(pivot, "rotation:z", deg_to_rad(70.0), 0.3)
+	tween.tween_interval(revive.down_time)
+	tween.tween_property(pivot, "rotation:z", 0.0, 0.3)
+	tween.tween_callback(_stand_up.bind(revive))
+
+
+func _stand_up(revive: PerkData) -> void:
+	is_down = false
+	health.invulnerable = false
+	health.reset(data.max_health + perks.max_health_bonus)
+	_last_hurt_at = _clock
+	# Empurra os zumbis em volta ao levantar.
+	for node in get_tree().get_nodes_in_group(&"zombies"):
+		var zombie := node as ZombieBase
+		if zombie == null:
+			continue
+		var offset := zombie.global_position - global_position
+		offset.y = 0.0
+		if offset.length() <= revive.revive_push_radius:
+			zombie.apply_knockback(offset.normalized() * revive.revive_push_speed)
+
+
 func _read_input() -> void:
 	move_input = Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down")
 	_update_aim_from_input()
@@ -148,7 +181,7 @@ func _read_input() -> void:
 
 func _move(delta: float) -> void:
 	var direction := Vector3(move_input.x, 0.0, move_input.y)
-	var speed := data.move_speed * _speed_factor(direction)
+	var speed := data.move_speed * _speed_factor(direction) * perks.speed_multiplier
 	var target := direction * speed
 	if melee.lunge_left > 0.0:
 		target = melee.lunge_velocity
@@ -198,8 +231,9 @@ func _update_interaction() -> void:
 
 
 func _regenerate(delta: float) -> void:
-	if _clock - _last_hurt_at >= data.regen_delay and health.current < health.max_health:
-		health.heal(data.regen_per_second * delta)
+	var regen := perks.regen_multiplier
+	if _clock - _last_hurt_at >= data.regen_delay / regen and health.current < health.max_health:
+		health.heal(data.regen_per_second * regen * delta)
 
 
 func _face_aim() -> void:
@@ -233,7 +267,30 @@ func _update_aim_from_input() -> void:
 		aim_point = on_plane
 
 
+## Perks mudaram: vida máxima e os modificadores de todas as armas.
+func _on_perks_changed() -> void:
+	var new_max := data.max_health + perks.max_health_bonus
+	if not is_equal_approx(new_max, health.max_health):
+		var gained := new_max - health.max_health
+		health.max_health = new_max
+		health.current = clampf(health.current + maxf(0.0, gained), 0.0, new_max)
+		health.health_changed.emit(health.current, health.max_health)
+	_apply_weapon_modifiers()
+	var names: Array[String] = []
+	for perk in perks.owned:
+		names.append(perk.display_name)
+	Events.perks_changed.emit(names)
+
+
+func _apply_weapon_modifiers() -> void:
+	for w in inventory.weapons:
+		w.damage_multiplier = perks.damage_multiplier
+		w.headshot_bonus = perks.headshot_bonus
+		w.reload_multiplier = perks.reload_multiplier
+
+
 func _on_weapon_changed(current: Weapon, other: Weapon) -> void:
+	_apply_weapon_modifiers()
 	for w in inventory.weapons:
 		if w.ammo_changed.is_connected(_on_ammo_changed):
 			w.ammo_changed.disconnect(_on_ammo_changed)
@@ -247,6 +304,11 @@ func _on_ammo_changed(magazine: int, reserve: int, reloading: bool) -> void:
 
 
 func _on_health_died(info: DamageInfo) -> void:
+	# Quick Revive: cai, fica alguns segundos no chão e levanta sozinho (gasta o perk).
+	var revive := perks.consume_self_revive()
+	if revive:
+		_go_down(revive)
+		return
 	super(info)
 	Events.interaction_prompt.emit("")
 	# Cai de lado.

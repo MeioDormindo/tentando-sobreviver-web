@@ -28,6 +28,12 @@ var _repaired := false
 var _box_step := 0
 var _box_weapon := ""
 var _upgraded := ""
+## Energia e perks.
+var _perk_refused_without_power := false
+var _power_on := false
+var _fortify_health := 0.0
+var _has_revive := false
+var _saw_revive := false
 var _gave_glock := false
 var _gave_pump := false
 var _switched := false
@@ -62,15 +68,19 @@ func _physics_process(delta: float) -> void:
 	var rounds := main.get_node("RoundManager") as RoundManager
 	_game_time += delta
 	if int(_game_time / 10.0) != int((_game_time - delta) / 10.0):
-		print("t=%.0f fase=%s round=%d abates=%d vida=%.0f arma=%s %d/%d" % [_game_time, _phase, rounds.round_number, _kills, player.health.current, player.weapon.data.id, player.weapon.magazine, player.weapon.reserve])
+		var alive := main.get_node("Zombies").get_children().filter(func(z: Node) -> bool: return z is ZombieBase and (z as ZombieBase).is_alive())
+		print("t=%.0f fase=%s round=%d abates=%d vida=%.0f arma=%s %d/%d vivos=%d spawnados=%d busy=%s spun=%s estados=%s" % [_game_time, _phase, rounds.round_number, _kills, player.health.current, player.weapon.data.id, player.weapon.magazine, player.weapon.reserve, alive.size(), rounds.spawned, player.weapon.busy, player.weapon.is_spun_up(), alive.map(func(z: ZombieBase) -> String: return "%s@%.0f,%.0f" % [ZombieBase.State.keys()[z.state], z.global_position.x, z.global_position.z])])
 	match _phase:
 		&"play":
 			_play(main, player, rounds)
 		&"die":
+			if player.is_down:
+				_saw_revive = true
 			# Se nenhum zumbi alcançar o jogador a tempo, o golpe final vem do teste.
-			if player.is_alive() and _game_time - _die_started > 30.0:
+			if player.is_alive() and not player.is_down and _game_time - _die_started > 30.0:
 				player.take_damage(DamageInfo.new(9999.0, DamageInfo.Kind.ENVIRONMENT))
-			if not player.is_alive():
+			# Caído no Quick Revive não é o fim: espera a morte de verdade.
+			if not player.is_alive() and not player.is_down:
 				_phase = &"game_over"
 				_finish_game_over.call_deferred(main)
 
@@ -97,6 +107,7 @@ func _play(main: Node, player: Player, rounds: RoundManager) -> void:
 	player.move_input = Vector2.ZERO
 	_use_inventory(player, rounds)
 	_shop_and_barricades(main, player)
+	_power_and_perks(main, player)
 	_box_and_lab(main, player)
 	if _door_step < 2 and _game_time > 6.0:
 		_buy_door(main, player)
@@ -186,6 +197,29 @@ func _box_and_lab(main: Node, player: Player) -> void:
 			_upgraded = player.weapon.data.display_name
 
 
+## Sem energia a máquina recusa; liga o disjuntor (segurando E); compra Fortify e Quick Revive.
+func _power_and_perks(main: Node, player: Player) -> void:
+	if _has_revive or _game_time < 8.0:
+		return
+	var world := main.get_node("World") as LayoutMap
+	var points := main.get_node("PointsManager") as PointsManager
+	var machines := world.find_children("*", "StaticBody3D", true, false).filter(func(n: Node) -> bool: return n is PerkMachine)
+	var fortify: PerkMachine = machines.filter(func(m: PerkMachine) -> bool: return m.perk.id == &"fortify").front()
+	var revive: PerkMachine = machines.filter(func(m: PerkMachine) -> bool: return m.perk.id == &"quick_revive").front()
+	if not world.power.is_on:
+		points.add(fortify.perk.price)
+		_perk_refused_without_power = not fortify.interact(player)
+		var breaker: Breaker = world.find_children("*", "StaticBody3D", true, false).filter(func(n: Node) -> bool: return n is Breaker).front()
+		breaker.hold_interact(player, world.power.data.breaker_hold_time * 0.5)
+		breaker.hold_interact(player, world.power.data.breaker_hold_time * 0.6)
+		_power_on = world.power.is_on
+		return
+	points.add(fortify.perk.price + revive.perk.price)
+	fortify.interact(player)
+	_fortify_health = player.health.max_health
+	_has_revive = revive.interact(player) and player.perks.has_perk(&"quick_revive")
+
+
 ## Troca de arma: pega a Glock no começo e a Pump no round 2 (confere a troca e os chumbos).
 func _use_inventory(player: Player, rounds: RoundManager) -> void:
 	if not _gave_glock:
@@ -215,6 +249,10 @@ func _end_play(main: Node, player: Player, rounds: RoundManager) -> void:
 	_check(_switched, "troca de arma (Glock → M1911)")
 	_check(_max_hits_one_shot > 1, "espingarda: vários chumbos acertam no mesmo tiro (%d)" % _max_hits_one_shot)
 	_check(_melee_hits > 0, "faca acerta zumbis (%d acertos em %d golpes)" % [_melee_hits, _knife_swings])
+	_check(_perk_refused_without_power, "sem energia a máquina de perk recusa")
+	_check(_power_on, "disjuntor liga a energia (segurando E)")
+	_check(is_equal_approx(_fortify_health, 150.0), "Fortify: vida máxima 150 (%.0f)" % _fortify_health)
+	_check(_has_revive, "comprou o Quick Revive")
 	_check(_box_step == 2 and _box_weapon != "", "Mystery Box sorteou e entregou: %s" % _box_weapon)
 	_check(_upgraded.ends_with("Mk II") or _upgraded == "Tornado", "Weapon Lab melhorou a arma: %s" % _upgraded)
 	_check(_bought_glock, "comprou a Glock na parede (-500)")
@@ -235,6 +273,7 @@ func _finish_game_over(main: Node) -> void:
 	await get_tree().create_timer(2.0 * TIME_SCALE).timeout
 	var hud := main.get_node("HUD")
 	var panel := hud.get(&"_game_over_panel") as Control
+	_check(_saw_revive, "Quick Revive: caiu e levantou antes de morrer de vez")
 	_check(panel != null and panel.visible, "tela de fim de jogo aparece quando o jogador morre")
 	await _screenshot("playtest_game_over")
 	Events.restart_requested.emit()

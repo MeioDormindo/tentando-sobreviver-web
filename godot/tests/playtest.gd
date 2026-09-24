@@ -6,5 +6,10 @@ extends SceneTree
 
 
 func _initialize() -> void:
-	var bot: Node = load("res://tests/playtest_bot.gd").new()
+	var script := load("res://tests/playtest_bot.gd") as GDScript
+	if script == null or not script.can_instantiate():
+		printerr("O bot do teste não compilou (veja o erro acima).")
+		quit(1)
+		return
+	var bot: Node = script.new()
 	root.add_child(bot)
