@@ -80,4 +80,10 @@ for (const [name, draw] of Object.entries({
   desk_computer: P.deskComputer, chair: P.chair, locker: P.locker, barrier: P.barrier, cables: P.cables,
   floor_pipe: P.floorPipe, vitrine: P.vitrine,
 })) write(`${OUT}/props/${name}.svg`, draw());
+for (const [name, color] of Object.entries({ power: '#e8c14a', alarm: '#e0412f', train: '#4ac0e8', trap: '#7fd8ff' })) {
+  write(`${OUT}/props/panel_${name}.svg`, P.controlPanel(color));
+}
+write(`${OUT}/props/trap_grate.svg`, P.trapGrate());
+write(`${OUT}/props/teddy.svg`, P.teddyBear());
+write(`${OUT}/props/radio.svg`, P.radio());
 console.log('Pronto.');

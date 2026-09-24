@@ -11,6 +11,7 @@ import { Barricade } from '../entities/Barricade';
 import { AmmoStation, WeaponCase } from '../entities/BuyStations';
 import { Door } from '../entities/Door';
 import { PerkMachine, WeaponLab, type MachineDeps } from '../entities/Machines';
+import { MapInteractions } from '../entities/MapInteractions';
 import { MysteryBox } from '../entities/MysteryBox';
 import type { BarricadeTarget, ZombieWorld } from '../entities/Zombie';
 import { emitGameEvent, GameEvents, onGameEvent } from '../game/events';
@@ -53,6 +54,7 @@ export class GameScene extends Phaser.Scene {
   private waveSystem!: WaveSystem;
   private economy!: EconomySystem;
   private interaction!: InteractionSystem;
+  private mapInteractions!: MapInteractions;
   private perks!: PerkSystem;
   private powerUps!: PowerUpSystem;
   private bossSystem!: BossSystem;
@@ -239,6 +241,14 @@ export class GameScene extends Phaser.Scene {
       },
       toast: (text) => emitGameEvent(this.game.events, GameEvents.Toast, { text }),
     });
+    this.mapInteractions = new MapInteractions(this, this.interaction, {
+      economy: this.economy,
+      effects,
+      lighting: this.lighting,
+      solids: map,
+      zombies,
+      events: this.eventSystem,
+    });
     this.minimap = new MinimapFeed(this, {
       map,
       player: this.player,
@@ -320,6 +330,7 @@ export class GameScene extends Phaser.Scene {
     this.powerUps.update(time);
     this.bossSystem.update(time, delta);
     this.eventSystem.update(time, delta);
+    this.mapInteractions.update(time);
     this.minimap.update(time);
     audio.update(time);
     this.music.update(time, delta);

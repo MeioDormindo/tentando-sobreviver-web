@@ -170,3 +170,52 @@ export function vitrine() {
   s += line([16, 16], [40, 16], '#fff', 2, 'opacity=".35"');
   return svgDoc(128, 72, defs, s);
 }
+
+// ───────────── Interações do mapa e easter eggs ─────────────
+
+/** Painel de controle na parede (64x48 → 32x24): caixa metálica, alavanca e luz da cor do painel. */
+export function controlPanel(accent) {
+  const defs = SHADOW + linear('cp', [[0, '#6b737a'], [1, '#3e454b']], 0, 0, 1, 1);
+  let s = shadowRect(6, 6, 52, 36, 3);
+  s += `<rect x="6" y="6" width="52" height="36" rx="3" fill="url(#cp)" stroke="#15181b" stroke-width="2"/>`;
+  s += `<rect x="10" y="10" width="44" height="6" rx="2" fill="${accent}" opacity=".9"/>`;
+  s += `<rect x="12" y="20" width="16" height="16" rx="2" fill="#1c2024"/>`;
+  s += `<rect x="18" y="22" width="4" height="12" rx="1" fill="#c9c3b0"/><circle cx="20" cy="22" r="3.4" fill="${accent}" stroke="#1b1b1b" stroke-width="1"/>`;
+  s += `<circle cx="40" cy="28" r="7" fill="#1c2024"/><circle cx="40" cy="28" r="4.5" fill="${accent}"/><circle cx="38.5" cy="26.5" r="1.4" fill="#fff" opacity=".6"/>`;
+  s += `<rect x="50" y="20" width="4" height="16" fill="#2a2f33"/>`;
+  return svgDoc(64, 48, defs, s);
+}
+
+/** Grade elétrica no chão da armadilha (128x64 → 64x32, repete). */
+export function trapGrate() {
+  let s = `<rect width="128" height="64" fill="#23272a" opacity=".85"/>`;
+  for (let x = 4; x < 128; x += 10) s += `<rect x="${x}" y="4" width="5" height="56" rx="1.5" fill="#3a4045"/>`;
+  s += `<rect x="0" y="0" width="128" height="4" fill="#c9a227"/><rect x="0" y="60" width="128" height="4" fill="#c9a227"/>`;
+  for (let x = -8; x < 128; x += 16) s += `<path d="M${x} 4 L${x + 8} 0 L${x + 16} 0 L${x + 8} 4 Z" fill="#1b1b1b"/><path d="M${x} 64 L${x + 8} 60 L${x + 16} 60 L${x + 8} 64 Z" fill="#1b1b1b"/>`;
+  return svgDoc(128, 64, '', s);
+}
+
+/** Ursinho de pelúcia sujo (48x48 → 24x24): easter egg escondido. */
+export function teddyBear() {
+  const defs = SHADOW + radial('tb', [[0, '#b0865a'], [1, '#6e4a2a']], '40%', '35%');
+  let s = `<circle cx="26" cy="28" r="14" fill="#000" opacity=".4" filter="url(#ps)"/>`;
+  for (const [x, y] of [[13, 13], [35, 13]]) s += `<circle cx="${x}" cy="${y}" r="6" fill="url(#tb)" stroke="#3a2412" stroke-width="1.2"/><circle cx="${x}" cy="${y}" r="3" fill="#d9b88f"/>`;
+  s += `<circle cx="24" cy="24" r="13" fill="url(#tb)" stroke="#3a2412" stroke-width="1.5"/>`;
+  s += `<ellipse cx="24" cy="29" rx="6" ry="4.5" fill="#d9b88f"/><circle cx="24" cy="27" r="1.8" fill="#1b1310"/>`;
+  s += `<circle cx="19" cy="21" r="1.7" fill="#1b1310"/><path d="M27 19.5 l3 3 m0 -3 l-3 3" stroke="#1b1310" stroke-width="1.3"/>`;
+  s += `<path d="M30 30 q4 2 6 -1" stroke="#7a1a14" stroke-width="1.4" fill="none"/>`;
+  return svgDoc(48, 48, defs, s);
+}
+
+/** Rádio antigo (64x48 → 32x24): mensagem escondida. */
+export function radio() {
+  const defs = SHADOW + linear('rd', [[0, '#6e5a3a'], [1, '#43351f']]);
+  let s = shadowRect(6, 10, 52, 30, 4);
+  s += `<rect x="6" y="10" width="52" height="30" rx="4" fill="url(#rd)" stroke="#1d160c" stroke-width="2"/>`;
+  s += `<rect x="10" y="14" width="26" height="22" rx="2" fill="#2a2418"/>`;
+  for (let y = 16; y < 35; y += 3) s += `<rect x="12" y="${y}" width="22" height="1.4" fill="#4a3f2a"/>`;
+  s += `<rect x="40" y="15" width="14" height="8" rx="1" fill="#d8c88a" opacity=".85"/><path d="M44 15 v8" stroke="#8a2a1c" stroke-width="1.2"/>`;
+  s += `<circle cx="43" cy="31" r="3.5" fill="#1b160c"/><circle cx="51" cy="31" r="3.5" fill="#1b160c"/>`;
+  s += line([46, 10], [56, 2], '#9a9a90', 1.6);
+  return svgDoc(64, 48, defs, s);
+}

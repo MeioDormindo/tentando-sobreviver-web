@@ -2,13 +2,36 @@ import Phaser from 'phaser';
 import { ASSET_KEYS, FX_KEYS } from '../config/assets.config';
 import { gasLeakConfig } from '../config/events.config';
 import { ART_SCALE, DEPTH } from '../config/visual.config';
+import { interactionsConfig } from '../config/interactions.config';
 import { audio, type SpatialLoop } from '../audio/AudioSystem';
+import { HoldProgress } from '../entities/HoldProgress';
+import type { InteractionPromptPayload } from '../game/events';
+import type { Interactable } from '../systems/InteractionSystem';
 import { liveZombies, pickFloorPoint, type EventContext, type WorldEvent } from './WorldEvent';
 
 type Light = { x: number; y: number; radius: number; intensity: number; color?: number };
 
 const GAS_COLOR = 0x9acd32;
 const PUFF_EVERY_MS = 90;
+
+/** Válvula do cano rompido: segurar E fecha o gás. */
+class GasValve implements Interactable {
+  readonly radius = 60;
+  closed = false;
+  private readonly progress = new HoldProgress(interactionsConfig.valve.holdMs);
+
+  constructor(readonly x: number, readonly y: number, private readonly now: () => number) {}
+
+  getPrompt(): InteractionPromptPayload | null {
+    return this.closed ? null : { text: `SEGURE E: FECHAR A VÁLVULA${this.progress.bar(this.now())}`, affordable: true };
+  }
+
+  interact(): void {}
+
+  onHold(time: number, delta: number): void {
+    if (!this.closed && this.progress.hold(time, delta)) this.closed = true;
+  }
+}
 
 /**
  * Vazamento de gás: um cano se rompe perto do jogador e uma nuvem verde toma a
@@ -30,6 +53,7 @@ export class GasLeakEvent implements WorldEvent {
   private zone: Phaser.GameObjects.Image | null = null;
   private glow: Light | null = null;
   private hiss: SpatialLoop | null = null;
+  private valve: GasValve | null = null;
 
   canStart(ctx: EventContext): boolean {
     const [min, max] = gasLeakConfig.distance;
@@ -57,11 +81,17 @@ export class GasLeakEvent implements WorldEvent {
     this.glow = ctx.lighting.addDynamicLight({ x: this.x, y: this.y, radius: gasLeakConfig.radius, intensity: 0.35, color: GAS_COLOR });
     this.hiss = audio.loopAt('evt_gas', this.x, this.y, { category: 'world', volume: 0.9, distance: 800 });
     ctx.effects.dustBurst(this.x, this.y, 10);
+    this.valve = new GasValve(this.x, this.y, () => ctx.scene.time.now);
+    ctx.interaction.add(this.valve);
   }
 
   update(time: number): boolean {
     const ctx = this.ctx;
     if (!ctx) return false;
+    if (this.valve?.closed) {
+      audio.playAt('lab_upgrade', this.x, this.y, { category: 'world', volume: 0.6, rate: 0.7, pitchJitter: 0 });
+      return false;
+    }
     const armed = time >= this.startedAt + gasLeakConfig.warningMs;
     if (time >= this.nextPuffAt) {
       this.nextPuffAt = time + PUFF_EVERY_MS;
@@ -83,6 +113,8 @@ export class GasLeakEvent implements WorldEvent {
     ctx.scene.tweens.killTweensOf(fading);
     ctx.scene.tweens.add({ targets: this.zone, alpha: 0, duration: 1500, onComplete: () => fading.forEach((o) => o.destroy()) });
     if (this.glow) ctx.lighting.removeDynamicLight(this.glow);
+    if (this.valve) ctx.interaction.remove(this.valve);
+    this.valve = null;
     this.hiss?.stop(1500);
     this.zone = null;
     this.pipe = null;

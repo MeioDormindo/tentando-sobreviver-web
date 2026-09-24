@@ -134,6 +134,13 @@ export class EventSystem {
     return true;
   }
 
+  /** Encerra o evento em andamento se for `id` (painéis do mapa). */
+  endEvent(id: WorldEventId): boolean {
+    if (this.running?.event.id !== id) return false;
+    this.stop();
+    return true;
+  }
+
   syncHud(): void {
     this.lastStateKey = '#';
     this.emitState(this.ctx.scene.time.now);

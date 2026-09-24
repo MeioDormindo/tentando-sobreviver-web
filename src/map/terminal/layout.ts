@@ -260,6 +260,24 @@ export const BOSS_SPAWNS: Array<{ tx: number; ty: number }> = [
   { tx: 64, ty: 49 },
 ];
 
+/** Painéis e armadilhas interativos (posição do painel; zona da armadilha em tiles). */
+export type MapInteractionDef =
+  | { type: 'power' | 'alarm' | 'train'; tx: number; ty: number }
+  | { type: 'trap'; tx: number; ty: number; zone: Rect };
+
+export const INTERACTIONS: MapInteractionDef[] = [
+  // Área Técnica: religa a energia durante um Apagão
+  { type: 'power', tx: 32.4, ty: 86 },
+  // Hall: desliga o Alarme de Emergência
+  { type: 'alarm', tx: 46, ty: 28.7 },
+  // Plataforma: chama o trem
+  { type: 'train', tx: 55, ty: 14 },
+  // Armadilha elétrica logo abaixo da porta Hall ↔ Plataforma
+  { type: 'trap', tx: 60, ty: 28.7, zone: { x: 61, y: 28, w: 6, h: 2 } },
+  // Armadilha elétrica no corredor de baixo dos Túneis
+  { type: 'trap', tx: 41.4, ty: 103.3, zone: { x: 45, y: 103, w: 5, h: 5 } },
+];
+
 export const PROPS: Array<{ type: PropType; tx: number; ty: number; angle?: number }> = [
   // Hall
   { type: 'bench', tx: 52, ty: 46 },
