@@ -29,7 +29,9 @@ npm run art        # regera a arte SVG em public/assets
 | N | ligar/desligar só a música |
 | ESC / P | pausar (também pausa sozinho se a janela perde o foco) |
 | E | comprar (arma, munição, porta, perk, Mystery Box, Weapon Lab) |
-| segurar E | reparar barricada (+$10 por tábua), comprar o elemento da arma na maleta dela, usar painéis do mapa |
+| segurar E | reparar barricada (+$10 por tábua), comprar o elemento da arma na parede dela, usar painéis do mapa, ligar o disjuntor |
+| Tab (segurar) | mapa grande no centro da tela (no celular: tocar no minimapa) |
+| Q / 1 / 2 / roda do mouse | trocar de arma |
 
 **Celular / tablet** (detectado automaticamente; jogue na horizontal — em pé aparece um aviso):
 
@@ -50,9 +52,14 @@ na direção da lanterna. Os controles de toque também ligam sozinhos no primei
 
 - **Weapon Lab**: Mk II ($5.000) e depois **Mk III** ($10.000) — o Mk III dobra os projéteis de
   qualquer arma (espingardas 2× chumbos, Arc Gun 2 raios, lançador 2 granadas), traçante dourado.
-- **Elementos** (`src/config/elements.config.ts`): cada arma de maleta tem o seu, comprado
-  **segurando E** na maleta da própria arma (tocar E continua comprando munição). O da M1911 é
-  vendido na caixa de munição do Hall. O elemento continua depois do Mk II/III.
+- **Armas na parede** (como no CoD Zombies): cada arma à venda é um contorno de giz com o preço
+  na parede; o ponto de compra é encaixado sozinho na parede livre mais próxima do lugar
+  planejado (`src/map/wallSnap.ts`). Tocar E compra a arma (ou a munição dela, se já for sua).
+- **Soltar a arma**: com os 2 espaços cheios, a arma em mãos cai no chão ao pegar outra (com
+  munição, Mk e elemento) e pode ser pega de volta por 60s.
+- **Elementos** (`src/config/elements.config.ts`): cada arma de parede tem o seu, comprado
+  **segurando E** no desenho da própria arma (tocar E continua comprando munição). O da M1911 é
+  vendido na munição de parede do Hall. O elemento continua depois do Mk II/III.
 
 | Arma | Elemento | Efeito |
 |---|---|---|
@@ -81,7 +88,7 @@ gravador do Dr. Almeida no Laboratório contando a origem do vírus.
     de você, com névoa azulada; o último cão deixa um Max Ammo.
 - **Boss — Paciente Zero** (waves de boss do Hospital): vômito ácido em cone, investida, grito que
   deixa você lento e chama rastejantes e cuspidores, e chuva de ácido a partir da fase 3.
-- **Armas novas** (maletas no Hospital, e todas também na Mystery Box de qualquer mapa):
+- **Armas novas** (na parede do Hospital, e todas também na Mystery Box de qualquer mapa):
   - Magnum .44 (Recepção, $1500): 6 tiros fortes, headshot 3×, atravessa 1 zumbi.
   - Barrett .50 (UTI, $3000): 450 de dano, atravessa 5 zumbis.
   - Uzi Dupla (Farmácia, $2000): uma Uzi em cada mão, tiros alternando os canos.
@@ -121,9 +128,9 @@ gravador do Dr. Almeida no Laboratório contando a origem do vírus.
 
 ## Menus, minimapa e configurações
 
-- **ARMAS**: catálogo das 14 armas com raridade, atributos, onde conseguir (maleta e área, arma
+- **ARMAS**: catálogo das 14 armas com raridade, atributos, onde conseguir (parede e área, arma
   inicial ou só na Mystery Box), mecânica especial, versões Mk II/Mk III e o elemento.
-- **CONFIGURAÇÕES**: volume geral, som, música, minimapa, tremor de tela, controles de toque
+- **CONFIGURAÇÕES** (também no menu de pausa): volume geral, som, música, minimapa e tamanho, tremor de tela, controles de toque
   (automático/sempre/nunca), tela cheia, estatísticas acumuladas e apagar progresso.
 - **Minimapa** no canto superior esquerdo: áreas abertas (claras) e trancadas (escuras), portas
   fechadas (laranja), você (seta amarela), zumbis (vermelho), boss, Mystery Box (dourado) e
@@ -139,9 +146,35 @@ gravador do Dr. Almeida no Laboratório contando a origem do vírus.
 - Save local no navegador (`src/save/SaveStore.ts`, chave `ts-save-v1`): som/música, nome,
   recordes por mapa, mapas liberados, ranking e totais (partidas, abates, bosses, tempo).
   Dados antigos (recordes e som) são migrados automaticamente.
-- Ranking por mapa (top 10) em Menu → RANKING. Se a pontuação entrar no top, a tela de Game Over
-  pede o nome. O ranking é deste navegador/aparelho (não é online).
-| Q / 1 / 2 / roda do mouse | trocar de arma |
+- Ranking por mapa em Menu → RANKING, com abas **LOCAL** (top 10 deste aparelho) e **GLOBAL**
+  (online, Supabase). O global tem **temporadas de 15 dias**: ao virar a temporada o ranking começa
+  do zero (os dados antigos ficam guardados). No Game Over o nome vai para os dois.
+
+## Energia, missão, online e progressão
+
+- **Energia**: os mapas começam sem energia. O **disjuntor principal** (Área Técnica no Terminal,
+  Necrotério no Hospital; segure E) liga perks e Weapon Lab. O Quick Revive funciona sem energia.
+- **Missão do Hospital — O Soro do Dr. Almeida**: ligar a energia, juntar 3 componentes (geladeira
+  da UTI, cadeado da Farmácia a tiro, cartão do Blindado para a gaveta do Necrotério), defender a
+  centrífuga por 60s e enfrentar o Paciente Zero enfurecido. A recompensa é todos os perks e o Tornado.
+- **Fire Sale** (power-up): por 30s a Mystery Box custa $10 e aparece em todos os locais abertos.
+- **Conquistas** (Menu → CONQUISTAS, `src/config/achievements.config.ts`): 17 conquistas (de
+  partida, acumuladas com progresso e segredos) e estatísticas por mapa. Aviso na tela ao liberar.
+- **Personagem** (Menu → PERSONAGEM): visuais liberados por conquistas (Enfermeiro pelo Soro,
+  Maquinista pelo The Conductor, Agente pela wave 20). O jogo baixa só a arte do visual escolhido.
+- **Conta na nuvem** (Menu → CONTA): usuário e senha para levar o progresso para outros aparelhos
+  (recordes, mapas, conquistas, totais e configurações são mesclados sem perder nada).
+  - A senha fica só como **hash bcrypt** no Supabase Auth: não é guardada em texto nem pode ser
+    recuperada. No aparelho fica apenas o token da sessão.
+  - Cada conta lê e grava só o próprio save (RLS). Não há SQL montado no cliente: a API REST do
+    Supabase parametriza tudo, e o usuário é validado no cliente e no banco.
+  - Sem e-mail não há "esqueci a senha".
+- **Anti-trapaça** (`src/systems/AntiCheat.ts`, `src/config/anticheat.config.ts`): ganho de
+  dinheiro ou score impossível para a wave, ou valor alterado por fora (console, editor de memória),
+  invalida a partida. Aparece uma mensagem zombando do jogador, e a partida não entra em recordes,
+  totais, conquistas, ranking local nem global. O banco também recusa pontuação implausível para a wave.
+- SQL do banco em `supabase/schema.sql` (ranking) e `supabase/cloud.sql` (save na nuvem);
+  URL e chave publicável em `src/config/online.config.ts` (deixe a URL vazia para jogar offline).
 
 ## Estrutura
 
@@ -155,11 +188,11 @@ src/
   config/            valores de gameplay e visual (game, player, weapons, zombies, spawn, visual, assets)
   game/events.ts     eventos globais tipados (lógica → HUD)
   scenes/            Boot → Preload (carrega SVGs, fatia frames, cria animações) → Menu → MapSelect /
-                     Ranking / Armory / Settings → Game (+ UI)
+                     Ranking / Armory / Settings / Account / Achievements / Character → Game (+ UI)
   map/               TerminalMap (grade, colisão, navegação, visual 3/4) e terminal/layout.ts
                      (áreas, portas, janelas, spawns, props, luzes do Terminal Central)
   entities/          Player (tronco + pernas), Zombie (Walker, Runner, Tank, Exploder), Projectile,
-                     Boss (The Conductor), BuyStations (maletas, munição), Door, Barricade,
+                     Boss (The Conductor), BuyStations (armas e munição na parede), Door, Barricade,
                      Machines (Weapon Lab, máquinas de perk), MysteryBox (sorteio e troca de lugar),
                      Damageable
   weapons/           Weapon (estado/munição/recarga) e WeaponSystem (inventário de 2 armas, disparo)
@@ -172,12 +205,15 @@ src/
   ui/                componentes da HUD (EventHud, DamageOverlay, GameOverOverlay, TouchControls,
                      MiniMap, menuWidgets)
   input/             toque no celular (touchInput: estado dos analógicos/botões; device)
-  save/              SaveStore (save local versionado)
+  save/              SaveStore (save local versionado, mescla com a nuvem)
+  online/            Supabase sem SDK: http, leaderboard (ranking global), auth (conta), cloudSync
+  quests/            QuestSystem (etapas genéricas) e a missão do Soro do Hospital
   systems/           EventSystem (sorteio e ciclo dos eventos), StatsSystem (estatísticas e recordes),
                      ScoreSystem (pontuação), ProgressSystem (libera mapas), MinimapFeed, WaveSystem, SpawnSystem, difficulty (fórmulas), EconomySystem, InteractionSystem,
                      CombatSystem (inclui headshot), CameraController, pathfinding/NavGrid (A*),
                      PerkSystem (modificadores de perks), PowerUpSystem (drops e efeitos),
-                     BossSystem (ciclo do boss), pathfinding/PathFollower (navegação comum)
+                     BossSystem (ciclo do boss), pathfinding/PathFollower (navegação comum),
+                     PowerSystem (energia), AntiCheat, AchievementSystem, FireSale
 public/assets/       arte gerada (SVG) — pode ser trocada por PNGs com o mesmo layout de frames
 ```
 
@@ -267,7 +303,7 @@ Observações:
 - Waves seguem as fórmulas do GDD §32 (`src/config/waves.config.ts`).
 - Economia em `src/config/economy.config.ts`: $500 iniciais, $100 por Walker, +$50 por headshot
   (1,5× de dano), bônus de wave $300 + $50 × wave. Armas e preços em `weapons.config.ts`.
-- Comprar numa maleta de arma que você já tem compra munição dela (metade do preço).
+- Comprar na parede uma arma que você já tem compra munição dela (metade do preço).
 - Vida regenera devagar após 5s sem levar dano.
 - Mapa: Hall Central (início), Plataforma Norte (dois trilhos, ilha e trem parado com um vagão aberto), Bilheteria, Lojas,
   Área Técnica, Túneis e Manutenção. Portas pagas liberam as áreas e os spawns delas.
@@ -279,7 +315,7 @@ Observações:
   frequência). Arma repetida vira munição. A cada 3 usos ela treme, some e reaparece em outro
   local do mapa — 4 pontos no Hall e 1 em cada outra área, inclusive áreas ainda fechadas (aí é
   preciso abrir a porta para alcançá-la). Aviso na tela, coluna de luz e marcador no minimapa.
-  Exclusivas da caixa (não vendidas nas maletas):
+  Exclusivas da caixa (não vendidas nas paredes):
   - RPK (épica) e Rail Weapon (lendária, atravessa zumbis);
   - Grenade Launcher (épica): granadas que explodem no impacto (dano em área, não ferem você);
   - Flamethrower (épica): jato curto e contínuo que incendeia (dano ao longo do tempo);

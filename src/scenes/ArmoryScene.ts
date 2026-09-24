@@ -38,11 +38,11 @@ function specialText(cfg: WeaponConfig): string {
   }
 }
 
-/** Onde conseguir a arma: arma inicial, maleta (preço e área) ou só na Mystery Box. */
+/** Onde conseguir a arma: arma inicial, parede (preço e área) ou só na Mystery Box. */
 function sourceText(cfg: WeaponConfig): string {
   if (cfg.boxOnly) return cfg.maps ? `Só na Mystery Box do ${cfg.maps.map((m) => MAPS[m].name).join(' / ')}` : 'Só na Mystery Box';
   if (cfg.price === 0) return 'Arma inicial';
-  // Maletas em todos os mapas: "Mapa · Área".
+  // Armas de parede em todos os mapas: "Mapa · Área".
   const places: string[] = [];
   for (const layout of Object.values(LAYOUTS)) {
     if (!layout) continue;
@@ -51,7 +51,7 @@ function sourceText(cfg: WeaponConfig): string {
     const area = layout.areas.find((a) => a.rects.some((r) => station.tx >= r.x && station.tx < r.x + r.w && station.ty >= r.y && station.ty < r.y + r.h));
     places.push(area ? `${MAPS[layout.id].name} · ${area.name}` : MAPS[layout.id].name);
   }
-  return `Maleta: ${cfg.price.toLocaleString('pt-BR')}${places.length ? ` · ${places.join(' / ')}` : ''} · também na Mystery Box`;
+  return `Parede: ${cfg.price.toLocaleString('pt-BR')}${places.length ? ` · ${places.join(' / ')}` : ''} · também na Mystery Box`;
 }
 
 interface Stat {
@@ -174,7 +174,7 @@ export class ArmoryScene extends Phaser.Scene {
       ]);
     });
     const el = base.element ? elements[base.element] : null;
-    const elementLine = el ? `Elemento ${el.icon} ${el.name} (${el.price.toLocaleString('pt-BR')}, segure E na ${base.price === 0 ? 'caixa de munição' : 'maleta'}): ${el.description}` : '';
+    const elementLine = el ? `Elemento ${el.icon} ${el.name} (${el.price.toLocaleString('pt-BR')}, segure E na ${base.price === 0 ? 'munição da parede' : 'arma na parede'}): ${el.description}` : '';
     const info = [sourceText(base), elementLine, specialText(cfg), 'Weapon Lab: Mk II ($5.000) — mais dano, pente e reserva, recarga menor. Mk III ($10.000) — projéteis em dobro.']
       .filter(Boolean)
       .join('\n\n');

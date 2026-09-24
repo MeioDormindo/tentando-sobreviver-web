@@ -159,7 +159,7 @@ export class WeaponSystem {
     return weapon && id ? { id, owned: weapon.element === id } : null;
   }
 
-  /** Aplica o elemento à arma possuída (a cobrança é feita pela maleta). */
+  /** Aplica o elemento à arma possuída (a cobrança é feita pela compra na parede). */
   giveElement(weaponId: string): boolean {
     const weapon = this.slots.find((w) => w.config.id === weaponId);
     const id = weapon?.config.element;

@@ -26,7 +26,7 @@ export const barricadeConfig = {
   repairInterruptMs: 600,
 };
 
-/** Interação com máquinas/maletas. */
+/** Interação com máquinas e compras na parede. */
 export const interactionConfig = {
   /** Distância máxima do jogador ao ponto de interação (px). */
   radius: 44,

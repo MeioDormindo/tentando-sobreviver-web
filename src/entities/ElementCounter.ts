@@ -13,7 +13,7 @@ const BAR = 6;
 const money = (n: number): string => `$${n.toLocaleString('pt-BR')}`;
 
 /**
- * Venda do elemento de uma arma, embutida numa maleta (ou na caixa de munição, para a
+ * Venda do elemento de uma arma, embutida numa arma de parede (ou na munição de parede, para a
  * M1911): segurar E compra; o texto mostra o elemento, o preço e uma barra de progresso.
  */
 export class ElementCounter {

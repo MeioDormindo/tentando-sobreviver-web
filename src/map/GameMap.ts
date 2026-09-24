@@ -280,7 +280,7 @@ export class GameMap {
 
   // ───────────────────────── Mudanças dinâmicas ─────────────────────────
 
-  /** Corpo sólido extra (máquinas, maletas): colide, bloqueia tiros e a navegação. */
+  /** Corpo sólido extra (máquinas, props): colide, bloqueia tiros e a navegação. */
   addSolid(cx: number, cy: number, w: number, h: number): SolidHandle {
     const zone = this.scene.add.zone(cx, cy, w, h);
     this.obstacles.add(zone);

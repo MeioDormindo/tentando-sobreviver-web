@@ -3,7 +3,7 @@ import type { MapId } from './maps.config';
 
 export type Rarity = 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
 
-/** Tipo visual: define a pose do jogador, a maleta de compra e a posição do cano. */
+/** Tipo visual: define a pose do jogador, o ícone (e o desenho na parede) e a posição do cano. */
 export type WeaponKind =
   | 'pistol' | 'smg' | 'rifle' | 'ak' | 'shotgun' | 'launcher' | 'flamer' | 'arc' | 'energy'
   // Hospital: revólver, sniper, duas Uzis, metralhadora giratória e o Canhão de Vento
@@ -46,7 +46,7 @@ export interface WeaponConfig {
   pellets: number;
   /** true = segurar o botão dispara continuamente. */
   automatic: boolean;
-  /** Preço na maleta de compra (0 = arma inicial). */
+  /** Preço na parede (0 = arma inicial). */
   price: number;
   /** Preço para reabastecer a munição. */
   ammoPrice: number;
@@ -55,13 +55,13 @@ export interface WeaponConfig {
   pierce?: number;
   /** Cor do traçante (padrão: amarelado). */
   tracerTint?: number;
-  /** Só sai na Mystery Box (não é vendida nas maletas). */
+  /** Só sai na Mystery Box (não é vendida nas paredes). */
   boxOnly?: boolean;
   /** Versão melhorada pelo Weapon Lab (Mk II ou Mk III). */
   upgraded?: boolean;
   /** Nível no Weapon Lab: 0 normal, 1 Mk II, 2 Mk III. */
   upgradeLevel?: number;
-  /** Elemento vendido na maleta desta arma (comprado à parte). */
+  /** Elemento vendido na parede desta arma (comprado à parte). */
   element?: ElementId;
   special?: SpecialFire;
   /** Multiplicador do headshot desta arma (padrão: o global de headshotConfig). */

@@ -4,7 +4,7 @@ import type { Player } from '../entities/Player';
 import { emitGameEvent, GameEvents, type InteractionPromptPayload } from '../game/events';
 import { touchInput } from '../input/touchInput';
 
-/** Algo com que o jogador interage pela tecla E (maletas, máquinas, portas...). */
+/** Algo com que o jogador interage pela tecla E (armas na parede, máquinas, portas...). */
 export interface Interactable {
   readonly x: number;
   readonly y: number;

@@ -13,7 +13,7 @@ export interface StationDeps {
   weapons: WeaponSystem;
 }
 
-/** Arma inicial (sem maleta): o elemento dela sai na caixa de munição. */
+/** Arma inicial (não está na parede): o elemento dela sai na munição de parede. */
 const STARTING_ELEMENT_WEAPON = 'm1911';
 
 const money = (n: number): string => `$${n.toLocaleString('pt-BR')}`;
@@ -105,7 +105,7 @@ export class AmmoStation implements Interactable {
     drawChalk(scene, wall, ASSET_KEYS.ammoCrate, 'MUNIÇÃO');
   }
 
-  /** A M1911 não tem maleta: o elemento dela é vendido na caixa de munição. */
+  /** A M1911 não está na parede: o elemento dela é vendido na munição de parede. */
   private elementWeapon(): string | null {
     const id = this.deps.weapons.current.config.id;
     return id === STARTING_ELEMENT_WEAPON ? id : null;

@@ -1,4 +1,4 @@
-/** Elementos especiais das armas: comprados na maleta da própria arma (segurando E / USAR). */
+/** Elementos especiais das armas: comprados na parede da própria arma (segurando E / USAR). */
 export type ElementId = 'light' | 'shadow' | 'ice' | 'lightning' | 'fire' | 'explosive';
 
 export interface ElementInfo {

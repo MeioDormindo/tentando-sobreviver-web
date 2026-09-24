@@ -10,7 +10,7 @@ export class Weapon {
   private cfg: WeaponConfig;
   currentAmmo: number;
   reserveAmmo: number;
-  /** Elemento comprado na maleta (continua depois do Weapon Lab). */
+  /** Elemento comprado na parede (continua depois do Weapon Lab). */
   element: ElementId | null = null;
 
   private nextFireAt = 0;
