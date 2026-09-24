@@ -27,12 +27,26 @@ export class MiniMap {
   private x = 0;
   private y = 0;
   private scale = 1;
+  private expanded = false;
+  /** Largura pedida no último layout normal (recalcula quando o mapa chega). */
+  private maxWidth = 150;
+  private readonly backdrop: Phaser.GameObjects.Rectangle;
+  /** Tocar no minimapa (celular) alterna o modo expandido. */
+  onTap: (() => void) | null = null;
 
   constructor(private readonly scene: Phaser.Scene) {
+    this.backdrop = scene.add.rectangle(0, 0, 10, 10, 0x000000, 0.6).setOrigin(0).setVisible(false);
     this.frame = scene.add.rectangle(0, 0, 10, 10, 0x000000, 0.55).setOrigin(0).setStrokeStyle(1, 0x6a6d64, 0.9);
+    this.frame.setInteractive().on('pointerdown', () => this.onTap?.());
     this.image = scene.add.image(0, 0, '__DEFAULT').setOrigin(0).setVisible(false);
     this.dots = scene.add.graphics();
     this.label = scene.add.text(0, 0, 'MAPA', { fontFamily: 'monospace', fontSize: '10px', color: '#8a8d84' });
+    // Acima do resto da HUD (o modo expandido cobre a tela).
+    this.backdrop.setDepth(150);
+    this.frame.setDepth(151);
+    this.image.setDepth(152);
+    this.dots.setDepth(153);
+    this.label.setDepth(153);
     const offs = [
       onGameEvent(scene.game.events, GameEvents.MinimapBase, (b) => this.setBase(b)),
       onGameEvent(scene.game.events, GameEvents.MinimapState, (s) => {
@@ -43,13 +57,37 @@ export class MiniMap {
     scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => offs.forEach((off) => off()));
   }
 
-  /** Canto superior esquerdo (abaixo da wave); o tamanho acompanha a tela. */
+  /** Canto superior esquerdo (abaixo da wave); o tamanho acompanha a tela e a configuração. */
   layout(x: number, y: number, maxWidth: number): void {
+    this.expanded = false;
+    this.backdrop.setVisible(false);
     this.x = x;
     this.y = y;
+    this.maxWidth = maxWidth;
     const cols = this.base?.cols ?? 128;
-    this.scale = Phaser.Math.Clamp(maxWidth / cols, 0.7, 1.3);
+    this.scale = Phaser.Math.Clamp(maxWidth / cols, 0.5, 3.5);
     this.place();
+  }
+
+  /** Mapa grande no centro da tela (Tab / tocar no minimapa). */
+  layoutExpanded(screenW: number, screenH: number): void {
+    const cols = this.base?.cols ?? 128;
+    const rows = this.base?.rows ?? 120;
+    this.expanded = true;
+    this.scale = Math.min((screenW * 0.8) / cols, (screenH * 0.8) / rows);
+    this.x = (screenW - cols * this.scale) / 2;
+    this.y = (screenH - rows * this.scale) / 2;
+    this.backdrop.setPosition(0, 0).setSize(screenW, screenH).setVisible(true);
+    this.place();
+  }
+
+  get isExpanded(): boolean {
+    return this.expanded;
+  }
+
+  setVisible(visible: boolean): void {
+    for (const o of [this.frame, this.image, this.dots, this.label]) o.setVisible(visible && (o !== this.image || this.base !== null));
+    if (!visible) this.backdrop.setVisible(false);
   }
 
   private place(): void {
@@ -80,7 +118,10 @@ export class MiniMap {
     }
     ctx.putImageData(img, 0, 0);
     tex.refresh();
-    this.image.setTexture(TEXTURE).setVisible(true);
+    // Pixels nítidos ao ampliar (mapa expandido).
+    tex.setFilter(Phaser.Textures.FilterMode.NEAREST);
+    this.image.setTexture(TEXTURE).setVisible(this.frame.visible);
+    if (!this.expanded) this.scale = Phaser.Math.Clamp(this.maxWidth / b.cols, 0.5, 3.5);
     this.place();
   }
 
@@ -117,9 +158,10 @@ export class MiniMap {
     const [px, py, rot] = s.player;
     const cx = toX(px);
     const cy = toY(py);
-    const tip = [cx + Math.cos(rot) * 5, cy + Math.sin(rot) * 5];
-    const l = [cx + Math.cos(rot + 2.5) * 3.5, cy + Math.sin(rot + 2.5) * 3.5];
-    const r = [cx + Math.cos(rot - 2.5) * 3.5, cy + Math.sin(rot - 2.5) * 3.5];
+    const arrow = this.expanded ? 2.4 : 1;
+    const tip = [cx + Math.cos(rot) * 5 * arrow, cy + Math.sin(rot) * 5 * arrow];
+    const l = [cx + Math.cos(rot + 2.5) * 3.5 * arrow, cy + Math.sin(rot + 2.5) * 3.5 * arrow];
+    const r = [cx + Math.cos(rot - 2.5) * 3.5 * arrow, cy + Math.sin(rot - 2.5) * 3.5 * arrow];
     g.fillStyle(0xffe66a, 1).fillTriangle(tip[0], tip[1], l[0], l[1], r[0], r[1]);
     g.lineStyle(1, 0x000000, 0.9).strokeTriangle(tip[0], tip[1], l[0], l[1], r[0], r[1]);
   }

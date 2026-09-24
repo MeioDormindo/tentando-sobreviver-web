@@ -1,10 +1,11 @@
 import Phaser from 'phaser';
+import { uiConfig } from '../config/visual.config';
 import { uiPointer, uiView } from '../ui/uiScale';
 import { perkIconKey, powerUpKey } from '../config/assets.config';
-import { audio } from '../audio/AudioSystem';
 import { DamageOverlay } from '../ui/DamageOverlay';
 import { EventHud } from '../ui/EventHud';
 import { QuestHud } from '../ui/QuestHud';
+import { commonSettingsRows, drawSettingsRows } from '../ui/settingsRows';
 import { TouchControls } from '../ui/TouchControls';
 import { MiniMap } from '../ui/MiniMap';
 import { save } from '../save/SaveStore';
@@ -73,6 +74,8 @@ export class UIScene extends Phaser.Scene {
   private questHud!: QuestHud;
   private touch: TouchControls | null = null;
   private miniMap: MiniMap | null = null;
+  private mapExpanded = false;
+  private pauseSettings: Phaser.GameObjects.GameObject[] = [];
   private damageOverlay!: DamageOverlay;
   private gameOverStats: GameOverStats | null = null;
   private playerDead = false;
@@ -165,7 +168,12 @@ export class UIScene extends Phaser.Scene {
     this.eventHud = new EventHud(this);
     this.questHud = new QuestHud(this);
     this.damageOverlay = new DamageOverlay(this);
-    this.miniMap = save.setting('minimap') ? new MiniMap(this) : null;
+    this.miniMap = new MiniMap(this);
+    this.miniMap.onTap = () => this.toggleMapExpanded();
+    // Tab segurado: mapa grande no centro da tela.
+    this.input.keyboard?.addCapture('TAB');
+    this.input.keyboard?.on('keydown-TAB', () => this.setMapExpanded(true));
+    this.input.keyboard?.on('keyup-TAB', () => this.setMapExpanded(false));
     this.crosshair = this.add.graphics().setDepth(100);
     this.drawCrosshair();
     this.touch = useTouchControls(save.setting('touchMode')) ? new TouchControls(this) : null;
@@ -260,8 +268,10 @@ export class UIScene extends Phaser.Scene {
     this.warning.setPosition(width / 2, height * 0.3);
     this.eventHud.layout(width, height, MARGIN);
     this.touch?.layout(width, height);
-    const mapSize = Math.min(150, width * 0.17, height * 0.28);
-    this.miniMap?.layout(MARGIN, MARGIN + 74, mapSize);
+    const mapSize = Math.min(150, width * 0.17, height * 0.28) * uiConfig.minimapScale[save.setting('minimapSize')];
+    this.miniMap?.setVisible(save.setting('minimap') || this.mapExpanded);
+    if (this.mapExpanded) this.miniMap?.layoutExpanded(width, height);
+    else this.miniMap?.layout(MARGIN, MARGIN + 74, mapSize);
     this.questHud.layout(MARGIN, MARGIN + 74 + mapSize + 24);
     this.damageOverlay.layout(width, height);
     this.statusText.setPosition(width / 2, height * 0.62);
@@ -366,6 +376,18 @@ export class UIScene extends Phaser.Scene {
     }
   }
 
+  // ───────────────────────── Minimapa ─────────────────────────
+
+  private setMapExpanded(on: boolean): void {
+    if (this.mapExpanded === on || this.isPaused) return;
+    this.mapExpanded = on;
+    this.layout();
+  }
+
+  private toggleMapExpanded(): void {
+    this.setMapExpanded(!this.mapExpanded);
+  }
+
   // ───────────────────────── Pausa ─────────────────────────
 
   private get isPaused(): boolean {
@@ -395,6 +417,8 @@ export class UIScene extends Phaser.Scene {
   private resumeGame(): void {
     this.pauseOverlay?.destroy();
     this.pauseOverlay = null;
+    this.pauseSettings.forEach((o) => o.destroy());
+    this.pauseSettings = [];
     this.crosshair.setVisible(!this.touch);
     this.touch?.setVisible(true);
     this.sound.resumeAll();
@@ -405,30 +429,43 @@ export class UIScene extends Phaser.Scene {
   private showPauseOverlay(): void {
     const { width, height } = uiView(this);
     this.pauseOverlay?.destroy();
-    const bg = this.add.rectangle(0, 0, width, height, 0x000000, 0.72).setOrigin(0).setInteractive();
+    this.pauseSettings.forEach((o) => o.destroy());
+    this.pauseSettings = [];
+    const bg = this.add.rectangle(0, 0, width, height, 0x000000, 0.78).setOrigin(0).setInteractive();
     const title = this.add
-      .text(width / 2, height * 0.3, 'PAUSADO', { fontFamily: TITLE_FONT, fontSize: '64px', color: COLORS.text })
+      .text(width / 2, Math.max(40, height * 0.1), 'PAUSADO', { fontFamily: TITLE_FONT, fontSize: '54px', color: COLORS.text })
       .setOrigin(0.5);
-    const soundLabel = () => (this.sound.mute ? '[ SOM: DESLIGADO ]' : '[ SOM: LIGADO ]');
-    const y0 = height * 0.46;
-    const resume = this.makeButton(width / 2, y0, '[ CONTINUAR ]', () => this.resumeGame(), false);
-    const restart = this.makeButton(width / 2, y0 + 48, '[ REINICIAR ]', () => {
+    // Botões lado a lado
+    const by = Math.max(96, height * 0.2);
+    const resume = this.makeButton(width / 2 - 210, by, '[ CONTINUAR ]', () => this.resumeGame(), false);
+    const restart = this.makeButton(width / 2, by, '[ REINICIAR ]', () => {
       this.sound.resumeAll();
       this.scene.start(SCENE_KEYS.game);
     });
-    const sound = this.makeButton(width / 2, y0 + 96, soundLabel(), () => {
-      audio.toggleMute();
-      sound.setText(soundLabel());
-    }, false);
-    const menu = this.makeButton(width / 2, y0 + 144, '[ MENU ]', () => {
+    const menu = this.makeButton(width / 2 + 210, by, '[ MENU ]', () => {
       this.sound.resumeAll();
       this.scene.stop(SCENE_KEYS.game);
       this.scene.start(SCENE_KEYS.menu);
     });
     const hint = this.add
-      .text(width / 2, height - 40, 'ESC para continuar', { fontFamily: FONT, fontSize: '14px', color: COLORS.textDim })
+      .text(width / 2, height - 24, 'ESC para continuar · Tab: mapa grande', { fontFamily: FONT, fontSize: '13px', color: COLORS.textDim })
       .setOrigin(0.5);
-    this.pauseOverlay = this.add.container(0, 0, [bg, title, resume, restart, sound, menu, hint]).setDepth(300);
+    this.pauseOverlay = this.add.container(0, 0, [bg, title, resume, restart, menu, hint]).setDepth(300);
+    this.drawPauseSettings(by + 44);
+  }
+
+  /** Configurações dentro da pausa: valem na hora (minimapa, volume, tremor, música). */
+  private drawPauseSettings(top: number): void {
+    const { width, height } = uiView(this);
+    this.pauseSettings.forEach((o) => o.destroy());
+    const rows = commonSettingsRows(this, () => {
+      emitGameEvent(this.game.events, GameEvents.SettingsChanged, undefined);
+      this.layout();
+    });
+    const w = Math.min(520, width - 32);
+    const rowH = Math.min(36, (height - top - 50) / rows.length);
+    this.pauseSettings = drawSettingsRows(this, rows, { x: width / 2 - w / 2, y: top, width: w, rowHeight: rowH }, () => this.drawPauseSettings(top));
+    for (const o of this.pauseSettings) (o as Phaser.GameObjects.Text).setDepth(301);
   }
 
   // ───────────────────────── Boss ─────────────────────────

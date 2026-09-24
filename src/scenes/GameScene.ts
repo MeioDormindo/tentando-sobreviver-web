@@ -394,6 +394,10 @@ export class GameScene extends Phaser.Scene {
 
     const unsubscribers = [
       onGameEvent(this.game.events, GameEvents.PlayerDied, this.onPlayerDied, this),
+      onGameEvent(this.game.events, GameEvents.SettingsChanged, () => {
+        this.music.syncSetting();
+        Zombie.bigHeads = save.secret('konami') && save.setting('bigHeads');
+      }),
       onGameEvent(this.game.events, GameEvents.HudRequest, this.syncHud, this),
       onGameEvent(this.game.events, GameEvents.GamePaused, () => this.input.setDefaultCursor('default')),
       onGameEvent(this.game.events, GameEvents.GameResumed, () => {

@@ -62,6 +62,11 @@ export class MusicSystem {
     return this.enabled;
   }
 
+  /** Configuração mudou no menu de pausa. */
+  syncSetting(): void {
+    this.enabled = save.musicOn;
+  }
+
   /** Liga/desliga só a música (os efeitos continuam). */
   toggle(): boolean {
     this.enabled = !this.enabled;

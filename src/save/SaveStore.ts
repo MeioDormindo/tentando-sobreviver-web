@@ -27,6 +27,9 @@ export interface LifetimeStats {
   playTimeMs: number;
 }
 
+/** Tamanho do minimapa no canto da HUD. */
+export type MinimapSize = 'small' | 'medium' | 'large';
+
 /** Controles de toque: automático (detecta o aparelho), sempre ou nunca. */
 export type TouchMode = 'auto' | 'on' | 'off';
 
@@ -37,6 +40,7 @@ export interface Settings {
   /** Volume geral (0 a 1). */
   volume: number;
   minimap: boolean;
+  minimapSize: MinimapSize;
   touchMode: TouchMode;
   /** Tremor de câmera (explosões, dano). */
   screenShake: boolean;
@@ -65,7 +69,7 @@ const emptyRecords = (): MapRecords => ({ bestWave: 0, bestKills: 0, bestScore: 
 function defaults(): SaveData {
   return {
     version: SAVE_VERSION,
-    settings: { muted: false, musicOn: true, playerName: 'SOBREVIVENTE', volume: 1, minimap: true, touchMode: 'auto', screenShake: true, bigHeads: false },
+    settings: { muted: false, musicOn: true, playerName: 'SOBREVIVENTE', volume: 1, minimap: true, minimapSize: 'medium', touchMode: 'auto', screenShake: true, bigHeads: false },
     records: Object.fromEntries(MAP_IDS.map((id) => [id, emptyRecords()])) as Record<MapId, MapRecords>,
     unlockedMaps: MAP_IDS.filter((id) => MAPS[id].unlock === null),
     ranking: Object.fromEntries(MAP_IDS.map((id) => [id, []])) as unknown as Record<MapId, RankEntry[]>,
@@ -97,6 +101,7 @@ function sanitize(raw: unknown): SaveData {
   if (typeof s.playerName === 'string' && s.playerName.trim()) d.settings.playerName = s.playerName.slice(0, PLAYER_NAME_MAX);
   if (typeof s.volume === 'number' && Number.isFinite(s.volume)) d.settings.volume = Math.min(1, Math.max(0, s.volume));
   d.settings.minimap = s.minimap !== false;
+  if (s.minimapSize === 'small' || s.minimapSize === 'large') d.settings.minimapSize = s.minimapSize;
   d.settings.screenShake = s.screenShake !== false;
   d.settings.bigHeads = s.bigHeads === true;
   if (s.touchMode === 'on' || s.touchMode === 'off') d.settings.touchMode = s.touchMode;

@@ -17,6 +17,8 @@ export const DEPTH = {
 
 /** Escala da HUD e dos menus: 1 até esta altura de janela (px), crescendo acima dela. */
 export const uiConfig = {
+  /** Fator do tamanho do minimapa em cada opção. */
+  minimapScale: { small: 0.7, medium: 1, large: 1.5 },
   refHeight: 900,
   maxScale: 3,
 };

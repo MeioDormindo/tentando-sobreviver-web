@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { GameEvents, onGameEvent } from '../game/events';
 import { cameraConfig } from '../config/visual.config';
 import { touchInput } from '../input/touchInput';
 import { save } from '../save/SaveStore';
@@ -22,11 +23,17 @@ export class CameraController {
     this.applyZoom();
     this.applyPostFx();
     // Configuração "Tremor de tela" desligada: os tremores viram nada.
-    if (!save.setting('screenShake')) this.cam.shake = () => this.cam;
+    const realShake = this.cam.shake.bind(this.cam);
+    const applyShake = () => {
+      this.cam.shake = save.setting('screenShake') ? realShake : () => this.cam;
+    };
+    applyShake();
+    const offSettings = onGameEvent(scene.game.events, GameEvents.SettingsChanged, applyShake);
 
     scene.scale.on(Phaser.Scale.Events.RESIZE, this.applyZoom, this);
     scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       scene.scale.off(Phaser.Scale.Events.RESIZE, this.applyZoom, this);
+      offSettings();
     });
   }
 

@@ -24,6 +24,8 @@ export const GameEvents = {
   Toast: 'toast',
   /** Energia do mapa ligada/desligada. */
   PowerChanged: 'power-changed',
+  /** Alguma configuração mudou no menu de pausa (aplicar na hora). */
+  SettingsChanged: 'settings-changed',
   /** Objetivo atual da missão principal (null = sem missão ativa). */
   QuestState: 'quest-state',
   /** Missão principal concluída. */
@@ -212,6 +214,7 @@ export interface GameEventMap {
   [GameEvents.GameResumed]: undefined;
   [GameEvents.PowerUpCollected]: { id: string; name: string; color: number; detail?: string };
   [GameEvents.PowerChanged]: { on: boolean };
+  [GameEvents.SettingsChanged]: undefined;
   [GameEvents.QuestState]: { title: string; objective: string; step: number; total: number } | null;
   [GameEvents.QuestComplete]: { id: string; title: string; subtitle: string };
   [GameEvents.PowerUpTimers]: { timers: PowerUpTimer[] };
