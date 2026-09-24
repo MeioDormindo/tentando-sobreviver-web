@@ -292,6 +292,12 @@ export function getWeaponConfig(id: string): WeaponConfig {
   return cfg;
 }
 
+/** Arma largada no chão ao pegar outra: some depois disto (ms) e pisca a partir de blinkAtMs. */
+export const weaponDropConfig = {
+  lifetimeMs: 60_000,
+  blinkAtMs: 50_000,
+};
+
 /** Quantas armas o jogador carrega ao mesmo tempo. */
 export const INVENTORY_SLOTS = 2;
 /** Tempo para trocar de arma (ms). */

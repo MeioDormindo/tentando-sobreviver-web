@@ -50,6 +50,8 @@ export class WeaponSystem {
   private akimboSide = 1;
   private mods: Readonly<PerkModifiers> = NEUTRAL_MODIFIERS;
   private arcCaster: ArcCaster | null = null;
+  /** A arma em mãos foi trocada por outra (cai no chão). */
+  onDropped: ((weapon: Weapon) => void) | null = null;
   private nextFlameSoundAt = 0;
 
   constructor(
@@ -125,17 +127,29 @@ export class WeaponSystem {
     return !!weapon && weapon.reserveAmmo >= weapon.config.reserveAmmo;
   }
 
-  /** Adiciona uma arma: ocupa um espaço livre ou substitui a arma em mãos. */
+  /** Adiciona uma arma: ocupa um espaço livre ou substitui a arma em mãos (que cai no chão). */
   give(weaponId: string): void {
     if (this.owns(weaponId)) return;
-    const weapon = new Weapon(getWeaponConfig(weaponId));
+    this.add(new Weapon(getWeaponConfig(weaponId)));
+  }
+
+  /** Pega de volta uma arma largada (com a munição, o Mk e o elemento que tinha). */
+  takeBack(weapon: Weapon): void {
+    if (this.owns(weapon.config.id)) return;
+    this.add(weapon);
+  }
+
+  private add(weapon: Weapon): void {
     if (this.slots.length < INVENTORY_SLOTS) {
       this.slots.push(weapon);
       this.equip(this.slots.length - 1, true);
-    } else {
-      this.slots[this.active] = weapon;
-      this.equip(this.active, true);
+      return;
     }
+    const dropped = this.slots[this.active];
+    dropped.cancelReload();
+    this.slots[this.active] = weapon;
+    this.equip(this.active, true);
+    this.onDropped?.(dropped);
   }
 
   /** Elemento vendido para a arma (ou null) e se já foi comprado. */

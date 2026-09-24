@@ -21,6 +21,7 @@ import { mapSkins, type ZombieConfig } from '../config/zombies.config';
 import { houndRounds } from '../config/waves.config';
 import { liveZombies } from '../events/WorldEvent';
 import { Knife } from '../weapons/Knife';
+import { WeaponDrop } from '../entities/WeaponDrop';
 import { HazardSystem } from '../systems/HazardSystem';
 import { PowerSystem } from '../systems/PowerSystem';
 import { EasterEggs } from '../systems/EasterEggs';
@@ -187,6 +188,15 @@ export class GameScene extends Phaser.Scene {
       nav: map.nav,
     });
     this.combat = combat;
+    // Arma trocada cai no chão (pode ser pega de volta por 60s).
+    this.weaponSystem.onDropped = (weapon) => {
+      const p = this.player;
+      new WeaponDrop(this, p.x - Math.cos(p.rotation) * 26, p.y - Math.sin(p.rotation) * 26, weapon, {
+        interaction: this.interaction,
+        currentName: () => this.weaponSystem.current.config.name,
+        takeBack: (w) => this.weaponSystem.takeBack(w),
+      });
+    };
     new Knife(this, {
       player: this.player,
       weapons: this.weaponSystem,
