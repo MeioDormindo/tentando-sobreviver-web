@@ -87,7 +87,17 @@ export function createGameOverOverlay(scene: Phaser.Scene, stats: GameOverStats,
   box.add(record);
   if (stats.newRecord) scene.tweens.add({ targets: record, scale: 1.12, duration: 500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
 
-  if (stats.score > 0 && (stats.rankEligible || isOnlineConfigured())) addRankingEntry(scene, root, box, scale, stats);
+  if (stats.cheatTaunt) {
+    // Anti-trapaça: nada de recorde nem ranking — só a zoeira.
+    record.setText('PARTIDA INVALIDADA — NÃO VALE SAVE NEM RANKING').setColor('#e05a4a');
+    const taunt = scene.add
+      .text(0, 50, stats.cheatTaunt, { fontFamily: TITLE_FONT, fontSize: '26px', color: '#ff7a5c', stroke: '#000', strokeThickness: 5, align: 'center', wordWrap: { width: 760 } })
+      .setOrigin(0.5);
+    box.add(taunt);
+    scene.tweens.add({ targets: taunt, angle: { from: -2, to: 2 }, duration: 260, yoyo: true, repeat: -1 });
+  } else if (stats.score > 0 && (stats.rankEligible || isOnlineConfigured())) {
+    addRankingEntry(scene, root, box, scale, stats);
+  }
 
   box.add(actions.makeButton(0, 150, '[ JOGAR NOVAMENTE ]', actions.retry));
   box.add(actions.makeButton(0, 196, '[ RANKING ]', actions.ranking));

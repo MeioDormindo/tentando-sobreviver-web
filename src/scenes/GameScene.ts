@@ -38,6 +38,7 @@ import { EconomySystem } from '../systems/EconomySystem';
 import { EventSystem } from '../systems/EventSystem';
 import { ScoreSystem } from '../systems/ScoreSystem';
 import { StatsSystem } from '../systems/StatsSystem';
+import { AntiCheat } from '../systems/AntiCheat';
 import { ProgressSystem } from '../systems/ProgressSystem';
 import { MinimapFeed } from '../systems/MinimapFeed';
 import { DEFAULT_MAP, MAPS, type MapId } from '../config/maps.config';
@@ -157,6 +158,7 @@ export class GameScene extends Phaser.Scene {
     this.player.onRevived = () => this.onQuickRevive(effects);
 
     this.economy = new EconomySystem(this, effects);
+    new AntiCheat(this, [this.economy, this.score]);
     this.powerUps = new PowerUpSystem(this, {
       player: this.player,
       economy: this.economy,

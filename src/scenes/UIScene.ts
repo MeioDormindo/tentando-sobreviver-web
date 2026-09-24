@@ -9,6 +9,8 @@ import { commonSettingsRows, drawSettingsRows } from '../ui/settingsRows';
 import { TouchControls } from '../ui/TouchControls';
 import { MiniMap } from '../ui/MiniMap';
 import { save } from '../save/SaveStore';
+import { antiCheatConfig } from '../config/anticheat.config';
+import { audio } from '../audio/AudioSystem';
 import { useTouchControls } from '../input/device';
 import { touchInput } from '../input/touchInput';
 import { createGameOverOverlay } from '../ui/GameOverOverlay';
@@ -62,6 +64,8 @@ export class UIScene extends Phaser.Scene {
   private warning!: Phaser.GameObjects.Container;
   private statusText!: Phaser.GameObjects.Text;
   private killsText!: Phaser.GameObjects.Text;
+  /** Aviso fixo quando o anti-trapaça invalida a partida. */
+  private invalidText: Phaser.GameObjects.Text | null = null;
   private scoreText!: Phaser.GameObjects.Text;
   private crosshair!: Phaser.GameObjects.Graphics;
   private waveText!: Phaser.GameObjects.Text;
@@ -99,6 +103,7 @@ export class UIScene extends Phaser.Scene {
     this.bossState = null;
     this.pauseOverlay = null;
     this.gameOverStats = null;
+    this.invalidText = null;
     this.playerDead = false;
 
     this.hpBar = this.add.graphics();
@@ -192,6 +197,7 @@ export class UIScene extends Phaser.Scene {
       onGameEvent(this.game.events, GameEvents.ZombieKilled, this.onZombieKilled, this),
       onGameEvent(this.game.events, GameEvents.PlayerDied, this.onPlayerDied, this),
       onGameEvent(this.game.events, GameEvents.GameOver, this.onGameOver, this),
+      onGameEvent(this.game.events, GameEvents.CheatDetected, (c) => this.onCheatDetected(c.taunt), this),
       onGameEvent(this.game.events, GameEvents.MapUnlocked, (m) => this.showBanner(`${m.name.toUpperCase()} DESBLOQUEADO!`, 'disponível na escolha de mapa', COLORS.accent), this),
       onGameEvent(this.game.events, GameEvents.ScoreChanged, (s) => {
         this.scoreText.setText(`SCORE ${s.score.toLocaleString('pt-BR')}`);
@@ -277,6 +283,7 @@ export class UIScene extends Phaser.Scene {
     this.statusText.setPosition(width / 2, height * 0.62);
     this.scoreText.setPosition(width - MARGIN, MARGIN + 54);
     this.killsText.setPosition(width - MARGIN, MARGIN + 82);
+    this.invalidText?.setPosition(width - MARGIN, MARGIN + 106);
     this.waveText.setPosition(MARGIN, MARGIN - 6);
     this.waveSubText.setPosition(MARGIN + 2, MARGIN + 44);
     this.bannerTitle.setPosition(width / 2, height * 0.28);
@@ -620,6 +627,28 @@ export class UIScene extends Phaser.Scene {
     this.moneyText.setColor('#e05a4a');
     this.tweens.add({ targets: this.moneyText, scale: { from: 1.15, to: 1 }, duration: 260 });
     this.time.delayedCall(300, () => this.moneyText.setColor(MONEY_COLOR));
+  }
+
+/** Anti-trapaça: zoa o jogador e deixa um aviso fixo de partida invalidada. */
+  private onCheatDetected(taunt: string): void {
+    audio.play('denied', { category: 'ui', volume: 0.9, rate: 0.6, pitchJitter: 0 });
+    // Texto próprio (o banner das waves não pode apagar a zoeira).
+    const { width, height } = uiView(this);
+    const msg = this.add
+      .text(width / 2, height * 0.4, `${taunt}
+${antiCheatConfig.tauntSubtitle}`, {
+        fontFamily: 'Impact, "Arial Black", sans-serif', fontSize: '30px', color: '#ff7a5c', stroke: '#000', strokeThickness: 6, align: 'center', wordWrap: { width: width - 32 },
+      })
+      .setOrigin(0.5)
+      .setScale(1.4)
+      .setAlpha(0);
+    this.tweens.add({ targets: msg, alpha: 1, scale: 1, duration: 450, ease: 'Back.easeOut' });
+    this.tweens.add({ targets: msg, angle: { from: -3, to: 3 }, duration: 220, yoyo: true, repeat: 12 });
+    this.tweens.add({ targets: msg, alpha: 0, delay: 5000, duration: 800, onComplete: () => msg.destroy() });
+    this.invalidText ??= this.add
+      .text(0, 0, 'PARTIDA INVALIDADA', { fontFamily: 'monospace', fontSize: '14px', color: '#e05a4a', stroke: '#000', strokeThickness: 3 })
+      .setOrigin(1, 0);
+    this.layout();
   }
 
   private showBanner(title: string, subtitle: string, color: string): void {

@@ -26,6 +26,13 @@ begin
   ) then
     raise exception 'Aguarde alguns segundos antes de enviar outra pontuação';
   end if;
+  -- Anti-trapaça: pontuação e abates impossíveis para a wave alcançada são recusados.
+  if new.score > 10000 + 2500 * new.wave * new.wave + 50 * new.wave * new.wave * new.wave then
+    raise exception 'Pontuação implausível para a wave';
+  end if;
+  if new.kills > 20 + 10 * new.wave + 3 * new.wave * new.wave then
+    raise exception 'Abates implausíveis para a wave';
+  end if;
   new.season := floor(extract(epoch from now()) / 1296000)::int;
   new.created_at := now();
   return new;

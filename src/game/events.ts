@@ -63,6 +63,8 @@ export const GameEvents = {
   GameOver: 'game-over',
   /** A UI pede o estado atual (ex.: ao ser criada depois da GameScene). */
   HudRequest: 'hud-request',
+  /** Anti-trapaça: ganho impossível ou valor alterado por fora (a partida deixa de valer). */
+  CheatDetected: 'cheat-detected',
 } as const;
 
 export interface PlayerHpPayload {
@@ -148,6 +150,8 @@ export interface GameOverStats {
   mapId: MapId;
   /** A pontuação entra no ranking do mapa (a tela pede o nome). */
   rankEligible: boolean;
+  /** Partida invalidada pelo anti-trapaça (mensagem de zoeira), ou null. */
+  cheatTaunt: string | null;
 }
 
 export interface MinimapBasePayload {
@@ -233,6 +237,7 @@ export interface GameEventMap {
   [GameEvents.MinimapState]: MinimapStatePayload;
   [GameEvents.GameOver]: GameOverStats;
   [GameEvents.HudRequest]: undefined;
+  [GameEvents.CheatDetected]: { taunt: string };
 }
 
 export type GameEventName = keyof GameEventMap;

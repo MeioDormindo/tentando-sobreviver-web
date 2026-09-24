@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { scoreConfig } from '../config/score.config';
 import type { EffectsSystem } from '../effects/EffectsSystem';
+import { IntegrityGuard, type GuardedValue } from './AntiCheat';
 import { emitGameEvent, GameEvents, onGameEvent, type WavePhase, type ZombieKilledPayload } from '../game/events';
 
 interface Position {
@@ -13,8 +14,9 @@ interface Position {
  * abates a queima-roupa, sequências de abates, waves completas, bosses e power-ups.
  * Só escuta eventos; a HUD e o Game Over recebem o total por ScoreChanged.
  */
-export class ScoreSystem {
+export class ScoreSystem implements GuardedValue {
   private score = 0;
+  private readonly guard = new IntegrityGuard(0);
   /** Multiplicador de eventos (Lua de Sangue: pontos em dobro). */
   multiplier = 1;
   private wave = 1;
@@ -39,6 +41,10 @@ export class ScoreSystem {
 
   get total(): number {
     return this.score;
+  }
+
+  intact(): boolean {
+    return this.guard.matches(this.score);
   }
 
   syncHud(): void {
@@ -71,6 +77,7 @@ export class ScoreSystem {
     const delta = Math.round(points * this.multiplier);
     if (delta <= 0) return;
     this.score += delta;
+    this.guard.set(this.score);
     emitGameEvent(this.scene.game.events, GameEvents.ScoreChanged, { score: this.score, delta });
   }
 }

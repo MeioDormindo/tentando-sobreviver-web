@@ -9,17 +9,21 @@ import { save } from '../save/SaveStore';
  */
 export class ProgressSystem {
   private wave = 0;
+  /** Partida invalidada pelo anti-trapaça: não libera nada. */
+  private flagged = false;
 
   constructor(private readonly scene: Phaser.Scene, private readonly mapId: MapId) {
     const ev = scene.game.events;
     const offs = [
       onGameEvent(ev, GameEvents.WaveState, (s) => { this.wave = s.wave; }),
       onGameEvent(ev, GameEvents.BossDefeated, this.onBossDefeated, this),
+      onGameEvent(ev, GameEvents.CheatDetected, () => { this.flagged = true; }),
     ];
     scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => offs.forEach((off) => off()));
   }
 
   private onBossDefeated(): void {
+    if (this.flagged) return;
     for (const id of MAP_IDS) {
       const rule = MAPS[id].unlock;
       if (!rule || rule.onMap !== this.mapId || this.wave < rule.bossWave) continue;

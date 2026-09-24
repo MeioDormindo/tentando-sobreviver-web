@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { economyConfig } from '../config/economy.config';
 import type { EffectsSystem } from '../effects/EffectsSystem';
 import { audio } from '../audio/AudioSystem';
+import { IntegrityGuard, type GuardedValue } from './AntiCheat';
 import {
   emitGameEvent,
   GameEvents,
@@ -15,10 +16,11 @@ import {
  * Dinheiro do jogador (GDD §33–34): ganha por abate, headshot e wave completa;
  * gasta em compras. Única fonte de verdade do saldo (no multiplayer, ficará no servidor).
  */
-export class EconomySystem {
+export class EconomySystem implements GuardedValue {
   private readonly scene: Phaser.Scene;
   private money = economyConfig.startingMoney;
   private earned = 0;
+  private readonly guard = new IntegrityGuard(this.money);
   private lastPhase: WavePhase = 'waiting';
   /** Multiplicador temporário de ganhos (power-up Double Cash). */
   cashMultiplier = 1;
@@ -51,6 +53,7 @@ export class EconomySystem {
     if (amount <= 0) return 0;
     const value = Math.round(amount * this.cashMultiplier * this.eventMultiplier);
     this.money += value;
+    this.guard.set(this.money);
     this.earned += value;
     this.emit(value);
     return value;
@@ -63,9 +66,14 @@ export class EconomySystem {
       return false;
     }
     this.money -= cost;
+    this.guard.set(this.money);
     this.emit(-cost);
     audio.play('purchase', { category: 'ui', volume: 0.7 });
     return true;
+  }
+
+  intact(): boolean {
+    return this.guard.matches(this.money);
   }
 
   syncHud(): void {
