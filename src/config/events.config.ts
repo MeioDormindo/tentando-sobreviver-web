@@ -1,6 +1,8 @@
 /** Eventos dinâmicos (GDD §48–49). Valores iniciais — balancear na Fase 12. */
 
-export type WorldEventId = 'blackout' | 'emergency_alarm' | 'train' | 'horde' | 'supply_drop' | 'gas_leak';
+export type WorldEventId =
+  | 'blackout' | 'emergency_alarm' | 'train' | 'horde' | 'supply_drop' | 'gas_leak'
+  | 'golden_zombie' | 'blood_moon' | 'collapse' | 'fog';
 
 export interface WorldEventInfo {
   /** Nome exibido na HUD. */
@@ -35,6 +37,10 @@ export const worldEvents: Record<WorldEventId, WorldEventInfo> = {
   horde: { name: 'HORDA', hint: 'Muito mais zumbis nesta wave', color: 0xb33a3a, weight: 14, minWave: 5, cooldownWaves: 4 },
   supply_drop: { name: 'SUPRIMENTOS', hint: 'Uma caixa caiu no terminal — pegue-a', color: 0x7bd67b, weight: 22, minWave: 2, cooldownWaves: 2 },
   gas_leak: { name: 'VAZAMENTO DE GÁS', hint: 'Fique longe da nuvem verde', color: 0x9acd32, weight: 16, minWave: 4, cooldownWaves: 3 },
+  golden_zombie: { name: 'ZUMBI DOURADO', hint: 'Mate-o antes que fuja: dinheiro e Golden Drop!', color: 0xffd35a, weight: 14, minWave: 3, cooldownWaves: 3 },
+  blood_moon: { name: 'LUA DE SANGUE', hint: 'Zumbis mais rápidos — dinheiro e pontos em dobro', color: 0xd0342c, weight: 12, minWave: 5, cooldownWaves: 4 },
+  collapse: { name: 'DESABAMENTO', hint: 'O teto está caindo: saia dos círculos vermelhos!', color: 0xc8b48a, weight: 14, minWave: 4, cooldownWaves: 3 },
+  fog: { name: 'NEBLINA', hint: 'Você mal enxerga — atenção aos gemidos', color: 0x9aa4ad, weight: 14, minWave: 3, cooldownWaves: 3 },
 };
 
 export const blackoutConfig = {
@@ -101,4 +107,44 @@ export const gasLeakConfig = {
   playerDamagePerTick: 5,
   zombieDamagePerTick: 12,
   distance: [170, 380] as [number, number],
+};
+
+export const goldenZombieConfig = {
+  /** Tempo para matar antes de ele fugir (ms). */
+  escapeMs: 20_000,
+  health: 450,
+  healthPerWave: 60,
+  speed: 150,
+  reward: 1000,
+  /** Distância em que ele começa a procurar outro esconderijo (px). */
+  fleeRange: 380,
+};
+
+export const bloodMoonConfig = {
+  durationMs: 25_000,
+  zombieSpeed: 1.3,
+  rewardMultiplier: 2,
+  /** Tom avermelhado da escuridão. */
+  darknessTint: 0x2a0606,
+};
+
+export const collapseConfig = {
+  durationMs: 20_000,
+  /** Intervalo entre pedaços do teto caindo (ms). */
+  everyMs: 1100,
+  warningMs: 1200,
+  radius: 42,
+  playerDamage: 25,
+  zombieDamage: 220,
+  /** Distância máxima do jogador onde cai (px); às vezes mira onde ele está. */
+  spread: 220,
+  aimAtPlayerChance: 0.35,
+};
+
+export const fogConfig = {
+  durationMs: 25_000,
+  extraDarkness: 0.14,
+  /** Alcance da lanterna durante a neblina (fração). */
+  flashlightFactor: 0.6,
+  puffEveryMs: 70,
 };

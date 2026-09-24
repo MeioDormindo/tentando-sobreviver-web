@@ -43,6 +43,10 @@ export class LightingSystem {
   private alarm = false;
   /** Apagão: nível atual (0 = normal, 1 = luzes apagadas) e transição piscando. */
   private blackout = { target: 0, level: 0, changedAt: -Infinity, flickerMs: 0, extraDarkness: 0, emergencyFactor: 1 };
+  /** Cor da escuridão (null = padrão); a Lua de Sangue deixa avermelhada. */
+  private darknessTint: number | null = null;
+  /** Neblina: escuridão extra e lanterna mais curta. */
+  private fog = { extra: 0, flashlight: 1 };
   /** Escuridão atual (transição suave ao mudar de área). */
   private ambient: number = lightingConfig.ambientDarkness;
 
@@ -120,6 +124,14 @@ export class LightingSystem {
     this.blackout = { ...opts, target: on ? 1 : 0, level: this.blackout.level, changedAt: this.scene.time.now };
   }
 
+  setDarknessTint(color: number | null): void {
+    this.darknessTint = color;
+  }
+
+  setFog(extra: number, flashlightFactor: number): void {
+    this.fog = { extra, flashlight: flashlightFactor };
+  }
+
   addFlash(x: number, y: number, radius: number, intensity: number, duration: number): void {
     this.flashes.push({ x, y, radius, intensity, start: this.scene.time.now, duration });
   }
@@ -144,8 +156,8 @@ export class LightingSystem {
     // Na transição, a energia oscila (liga/desliga em saltos) antes de firmar.
     b.level = time - b.changedAt < b.flickerMs ? (Math.sin(time * 0.037) * Math.sin(time * 0.011) > 0 ? 1 : 0) : b.target;
     const blackoutExtra = b.extraDarkness * b.level;
-    this.ambient = Phaser.Math.Linear(this.ambient, Math.min(0.97, this.darknessAt(this.owner.x, this.owner.y) + alarmExtra + blackoutExtra), 0.05);
-    rt.fill(cfg.darknessColor, this.ambient);
+    this.ambient = Phaser.Math.Linear(this.ambient, Math.min(0.97, this.darknessAt(this.owner.x, this.owner.y) + alarmExtra + blackoutExtra + this.fog.extra), 0.05);
+    rt.fill(this.darknessTint ?? cfg.darknessColor, this.ambient);
 
     const inView = (x: number, y: number, r: number): boolean =>
       x + r > ox && x - r < ox + w && y + r > oy && y - r < oy + h;
@@ -175,7 +187,7 @@ export class LightingSystem {
         rotation: owner.rotation,
         originX: 0,
         originY: 0.5,
-        scale: fl.range / CONE_LENGTH,
+        scale: (fl.range * this.fog.flashlight) / CONE_LENGTH,
         alpha: fl.intensity,
         erase: true,
       });

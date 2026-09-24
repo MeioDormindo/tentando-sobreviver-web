@@ -15,6 +15,8 @@ interface Position {
  */
 export class ScoreSystem {
   private score = 0;
+  /** Multiplicador de eventos (Lua de Sangue: pontos em dobro). */
+  multiplier = 1;
   private wave = 1;
   private phase: WavePhase = 'waiting';
   private streak = 0;
@@ -65,7 +67,7 @@ export class ScoreSystem {
   }
 
   private add(points: number): void {
-    const delta = Math.round(points);
+    const delta = Math.round(points * this.multiplier);
     if (delta <= 0) return;
     this.score += delta;
     emitGameEvent(this.scene.game.events, GameEvents.ScoreChanged, { score: this.score, delta });

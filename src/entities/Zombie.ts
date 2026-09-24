@@ -22,6 +22,8 @@ export type { BarricadeTarget } from '../systems/pathfinding/PathFollower';
 
 /** Acesso do zumbi ao mundo: navegação, barricadas e explosões. */
 export interface ZombieWorld extends NavWorld {
+  /** Multiplicador global de velocidade (eventos como a Lua de Sangue). */
+  speedMultiplier(): number;
   /** Explosão de um Exploder (dano em área ao jogador e a outros zumbis). */
   explode(x: number, y: number, explosive: ExplosiveConfig, source: KillSource, self: Zombie): void;
 }
@@ -55,6 +57,8 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
   aiState: ZombieState = ZombieState.Dead;
   hp = 0;
   skin: ZombieSkin = 'a';
+  /** Destino próprio em vez do jogador (ex.: Zumbi Dourado fugindo). */
+  goal: { x: number; y: number } | null = null;
 
   private config: ZombieConfig | null = null;
   private target: Damageable | null = null;
@@ -164,6 +168,7 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     this.staggerUntil = 0;
     this.slowUntil = 0;
     this.slowFactor = 1;
+    this.goal = null;
     this.nextGroanAt = this.scene.time.now + Phaser.Math.Between(500, 5000);
 
     this.enableBody(true, x, y, true, true);
@@ -339,8 +344,9 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     const world = this.world;
     const config = this.config;
     if (!world || !config) return;
-    const speed = config.speed * (time < this.slowUntil ? this.slowFactor : 1);
-    const barricade = this.follower.step(world, time, target.x, target.y, speed, config.bodyRadius);
+    const speed = config.speed * (time < this.slowUntil ? this.slowFactor : 1) * world.speedMultiplier();
+    const dest = this.goal ?? target;
+    const barricade = this.follower.step(world, time, dest.x, dest.y, speed, config.bodyRadius);
     this.faceTowards(this.follower.face.x, this.follower.face.y);
     if (barricade) {
       // Janela com barricada no caminho: para e arranca as tábuas.

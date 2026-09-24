@@ -7,6 +7,10 @@ import { GasLeakEvent } from '../events/GasLeakEvent';
 import { HordeEvent } from '../events/HordeEvent';
 import { SupplyDropEvent } from '../events/SupplyDropEvent';
 import { TrainEvent } from '../events/TrainEvent';
+import { GoldenZombieEvent } from '../events/GoldenZombieEvent';
+import { BloodMoonEvent } from '../events/BloodMoonEvent';
+import { CollapseEvent } from '../events/CollapseEvent';
+import { FogEvent } from '../events/FogEvent';
 import type { EventContext, WorldEvent } from '../events/WorldEvent';
 import { emitGameEvent, GameEvents, onGameEvent, type WavePhase, type WaveStatePayload } from '../game/events';
 
@@ -28,6 +32,10 @@ export class EventSystem {
     horde: new HordeEvent(),
     supply_drop: new SupplyDropEvent(),
     gas_leak: new GasLeakEvent(),
+    golden_zombie: new GoldenZombieEvent(),
+    blood_moon: new BloodMoonEvent(),
+    collapse: new CollapseEvent(),
+    fog: new FogEvent(),
   };
   /** Wave em que cada evento aconteceu por último. */
   private readonly lastWave = new Map<WorldEventId, number>();

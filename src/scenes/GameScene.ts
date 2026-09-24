@@ -34,6 +34,8 @@ import { BossSystem } from '../systems/BossSystem';
 import { SpawnSystem } from '../systems/SpawnSystem';
 import { WaveSystem } from '../systems/WaveSystem';
 import { WeaponSystem } from '../weapons/WeaponSystem';
+import { getZombieConfig } from '../config/zombies.config';
+import { getWaveParams, scaleZombie } from '../systems/difficulty';
 import { touchInput } from '../input/touchInput';
 import { assistAngle } from '../input/aimAssist';
 import { touchConfig } from '../config/input.config';
@@ -63,6 +65,8 @@ export class GameScene extends Phaser.Scene {
   private bossGroup!: Phaser.Physics.Arcade.Group;
   private map!: TerminalMap;
   private currentArea = '';
+  /** Velocidade global dos zumbis (eventos como a Lua de Sangue). */
+  private zombieSpeed = 1;
   private readonly aimPoint = new Phaser.Math.Vector2();
 
   /** Mapa desta partida (escolhido no menu). */
@@ -194,6 +198,7 @@ export class GameScene extends Phaser.Scene {
       nav: map.nav,
       barricadeAt: (tx, ty) => barricadeByTile.get(ty * map.nav.width + tx) ?? null,
       explode: (x, y, explosive, source, self) => combat.explode(x, y, explosive, source, self),
+      speedMultiplier: () => this.zombieSpeed,
     };
 
     const spawner = new SpawnSystem(this, zombies, map.spawnPoints, this.player, world);
@@ -224,6 +229,15 @@ export class GameScene extends Phaser.Scene {
       weapons: this.weaponSystem,
       economy: this.economy,
       isAreaOpen: (area) => spawner.isUnlocked(area),
+      spawnZombie: (type, x, y, overrides) =>
+        spawner.spawnAt({ ...scaleZombie(getZombieConfig(type), getWaveParams(Math.max(1, this.waveSystem.currentWave))), ...overrides }, x, y),
+      spawnPowerUp: (id, x, y) => this.powerUps.spawnDrop(id, x, y),
+      setZombieSpeed: (m) => (this.zombieSpeed = m),
+      setRewardMultiplier: (m) => {
+        this.economy.eventMultiplier = m;
+        this.score.multiplier = m;
+      },
+      toast: (text) => emitGameEvent(this.game.events, GameEvents.Toast, { text }),
     });
     this.minimap = new MinimapFeed(this, {
       map,

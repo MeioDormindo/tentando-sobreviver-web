@@ -22,6 +22,8 @@ export class EconomySystem {
   private lastPhase: WavePhase = 'waiting';
   /** Multiplicador temporário de ganhos (power-up Double Cash). */
   cashMultiplier = 1;
+  /** Multiplicador de eventos (Lua de Sangue: dinheiro em dobro). */
+  eventMultiplier = 1;
 
   constructor(scene: Phaser.Scene, private readonly effects: EffectsSystem) {
     this.scene = scene;
@@ -47,7 +49,7 @@ export class EconomySystem {
   /** Soma dinheiro (aplica o Double Cash); retorna o valor efetivamente ganho. */
   earn(amount: number): number {
     if (amount <= 0) return 0;
-    const value = Math.round(amount * this.cashMultiplier);
+    const value = Math.round(amount * this.cashMultiplier * this.eventMultiplier);
     this.money += value;
     this.earned += value;
     this.emit(value);

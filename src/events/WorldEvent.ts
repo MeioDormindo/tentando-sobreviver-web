@@ -4,6 +4,8 @@ import type { EffectsSystem } from '../effects/EffectsSystem';
 import type { LightingSystem } from '../effects/LightingSystem';
 import type { Player } from '../entities/Player';
 import type { Zombie } from '../entities/Zombie';
+import type { ZombieConfig } from '../config/zombies.config';
+import type { PowerUpId } from '../config/powerups.config';
 import type { TerminalMap } from '../map/TerminalMap';
 import type { EconomySystem } from '../systems/EconomySystem';
 import type { InteractionSystem } from '../systems/InteractionSystem';
@@ -15,6 +17,8 @@ export interface WaveControl {
   readonly currentWave: number;
   setSpawnModifier(id: string, mod: SpawnModifier | null): void;
   addEnemies(count: number): void;
+  /** Zumbis criados por eventos entram na conta da wave. */
+  addSummoned(count: number): void;
 }
 
 /** Acesso dos eventos ao mundo (montado pela GameScene). */
@@ -30,6 +34,14 @@ export interface EventContext {
   weapons: WeaponSystem;
   economy: EconomySystem;
   isAreaOpen(area: string): boolean;
+  /** Cria um zumbi (tipo + ajustes) num ponto livre; null se não couber. */
+  spawnZombie(type: string, x: number, y: number, overrides?: Partial<ZombieConfig>): Zombie | null;
+  spawnPowerUp(id: PowerUpId, x: number, y: number): void;
+  setZombieSpeed(multiplier: number): void;
+  /** Dinheiro e pontos (1 = normal). */
+  setRewardMultiplier(multiplier: number): void;
+  /** Mensagem curta na HUD. */
+  toast(text: string): void;
 }
 
 /**
