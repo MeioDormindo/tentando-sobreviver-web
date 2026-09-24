@@ -21,6 +21,7 @@ var _ammo_label: Label
 var _other_weapon_label: Label
 var _prompt_label: Label
 var _banner: Label
+var _toast: Label
 var _hit_marker: Label
 var _pause_panel: Control
 var _game_over_panel: Control
@@ -42,6 +43,7 @@ func _ready() -> void:
 	Events.zombie_killed.connect(func(_z: Node3D, info: DamageInfo) -> void: _flash_hit(RED if info.is_headshot else GOLD))
 	Events.area_opened.connect(func(_id: StringName, area_name: String) -> void: _show_banner(area_name.to_upper() + " ABERTA", GOLD))
 	Events.purchase_denied.connect(func() -> void: _flash_points_denied())
+	Events.toast.connect(_show_toast)
 	Events.pause_changed.connect(func(paused: bool) -> void: _pause_panel.visible = paused)
 	Events.game_over.connect(_on_game_over)
 
@@ -82,6 +84,8 @@ func _build() -> void:
 
 	_banner = _label(root, "", 56, RED, Control.PRESET_CENTER_TOP, HORIZONTAL_ALIGNMENT_CENTER, 130)
 	_banner.modulate.a = 0.0
+	_toast = _label(root, "", 20, GOLD, Control.PRESET_CENTER_TOP, HORIZONTAL_ALIGNMENT_CENTER, 220)
+	_toast.modulate.a = 0.0
 
 	_hit_marker = _label(root, "✕", 26, TEXT, Control.PRESET_TOP_LEFT, HORIZONTAL_ALIGNMENT_CENTER)
 	_hit_marker.modulate.a = 0.0
@@ -195,6 +199,15 @@ func _show_banner(text: String, color: Color) -> void:
 	tween.tween_property(_banner, "modulate:a", 1.0, 0.3)
 	tween.tween_interval(1.6)
 	tween.tween_property(_banner, "modulate:a", 0.0, 0.6)
+
+
+func _show_toast(text: String) -> void:
+	_toast.text = text
+	create_tween().kill()
+	var tween := create_tween()
+	tween.tween_property(_toast, "modulate:a", 1.0, 0.2)
+	tween.tween_interval(2.4)
+	tween.tween_property(_toast, "modulate:a", 0.0, 0.5)
 
 
 func _flash_points_denied() -> void:

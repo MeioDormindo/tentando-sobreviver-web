@@ -17,6 +17,8 @@ var reserve: int = 0
 var reloading: bool = false
 ## Arma parada por outra ação (troca de arma, faca).
 var busy: bool = false
+## Nível no Weapon Lab: 0 normal, 1 Mk II, 2 Mk III.
+var level: int = 0
 
 var _cooldown := 0.0
 var _reload_left := 0.0
@@ -44,6 +46,15 @@ func reset_ammo() -> void:
 	reloading = false
 	_reload_left = 0.0
 	_emit_ammo()
+
+
+## Troca pelos dados melhorados do Weapon Lab (sobe um nível, enche a munição).
+func upgrade_to(upgraded: WeaponData) -> void:
+	data = upgraded
+	level += 1
+	_tracer_material = null
+	reloading = false
+	reset_ammo()
 
 
 func is_ammo_full() -> bool:

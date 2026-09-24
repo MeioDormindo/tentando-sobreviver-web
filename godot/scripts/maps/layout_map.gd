@@ -28,6 +28,11 @@ const PROP_COLOR := Color(0.4, 0.33, 0.24)
 @export var barricade_scene: PackedScene
 @export var barricade_data: BarricadeData
 @export var wall_buy_scene: PackedScene
+@export var mystery_box_scene: PackedScene
+@export var mystery_box_data: MysteryBoxData
+@export var weapon_catalog: WeaponCatalog
+@export var weapon_lab_scene: PackedScene
+@export var weapon_lab_data: WeaponLabData
 ## Pasta dos WeaponData (compras na parede pelo id da arma).
 @export_dir var weapons_dir: String = "res://data/weapons"
 
@@ -57,6 +62,7 @@ func _ready() -> void:
 	_build_barricades()
 	_build_doors()
 	_build_wall_buys()
+	_build_machines()
 	_build_props()
 	_build_lamps()
 	_build_spawns()
@@ -78,6 +84,14 @@ func active_spawn_points(round_number: int) -> Array[Vector3]:
 		if is_area_open(marker.get_meta(&"area", &"")) and round_number >= int(marker.get_meta(&"min_round", 1)):
 			points.append(marker.global_position)
 	return points
+
+
+func area_of(point: Vector3) -> StringName:
+	for area: Dictionary in data.areas:
+		for r: Dictionary in area.rects:
+			if Rect2(r.x, r.y, r.w, r.h).has_point(Vector2(point.x, point.z)):
+				return StringName(area.id)
+	return &""
 
 
 func area_display_name(area_id: StringName) -> String:
@@ -247,6 +261,29 @@ func _near_opening(tile: Vector2i) -> bool:
 			if ch == "D" or ch == "W":
 				return true
 	return false
+
+
+## Mystery Box (no primeiro local, com os outros para onde ela muda) e Weapon Lab.
+## Os perks entram no próximo bloco.
+func _build_machines() -> void:
+	var spots: Array[Vector3] = []
+	for spot: Dictionary in data.box_spots:
+		spots.append(Vector3(spot.x, 0.0, spot.z))
+	for machine: Dictionary in data.machines:
+		var at := Vector3(machine.x, 0.0, machine.z)
+		match machine.type:
+			"mystery_box":
+				if mystery_box_scene and mystery_box_data and weapon_catalog:
+					var box := mystery_box_scene.instantiate() as MysteryBox
+					box.setup(mystery_box_data, weapon_catalog, data.id, spots, self)
+					nav_region.add_child(box)
+					box.position = at
+			"weapon_lab":
+				if weapon_lab_scene and weapon_lab_data:
+					var lab := weapon_lab_scene.instantiate() as WeaponLab
+					lab.setup(weapon_lab_data)
+					nav_region.add_child(lab)
+					lab.position = at
 
 
 func _build_props() -> void:

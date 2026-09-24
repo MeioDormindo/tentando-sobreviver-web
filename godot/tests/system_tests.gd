@@ -18,6 +18,8 @@ func run(tree: SceneTree) -> int:
 	_test_migrated_data()
 	_test_maps(tree)
 	_test_barricade(tree)
+	_test_mystery_box()
+	_test_weapon_lab()
 	print("\n%d ok, %d falharam" % [_passed, _failed])
 	return _failed
 
@@ -172,12 +174,8 @@ func _test_migrated_data() -> void:
 	check(pump.pellets > 1, "pump dispara %d chumbos" % pump.pellets)
 	var launcher := load("res://data/weapons/grenade_launcher.tres") as WeaponData
 	check(launcher.special_type == &"grenade" and launcher.box_only, "lança-granadas: especial e só na Mystery Box")
-	var dir := DirAccess.open("res://data/weapons")
-	var count := 0
-	for file in dir.get_files():
-		if file.ends_with(".tres") and file != "knife.tres":
-			count += 1
-	check(count == 19, "19 armas migradas (%d)" % count)
+	var catalog := load("res://data/weapons/catalog.tres") as WeaponCatalog
+	check(catalog.weapons.size() == 19, "19 armas migradas no catálogo (%d)" % catalog.weapons.size())
 
 
 func _test_maps(tree: SceneTree) -> void:
@@ -221,3 +219,50 @@ func _test_barricade(tree: SceneTree) -> void:
 	check(barricade.planks == 1 and barricade.collision_layer & PhysicsLayers.BARRICADES, "com tábua volta a bloquear")
 	fake_player.free()
 	barricade.free()
+
+
+func _test_mystery_box() -> void:
+	print("Mystery Box (sorteio)")
+	var catalog := load("res://data/weapons/catalog.tres") as WeaponCatalog
+	var data := load("res://data/configs/mystery_box.tres") as MysteryBoxData
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 42
+	var counts := {}
+	var wind_on_terminal := 0
+	for i in 2000:
+		var weapon := MysteryBox.roll_weapon(catalog, data.rarity_weights, "terminal", rng)
+		counts[weapon.rarity] = counts.get(weapon.rarity, 0) + 1
+		if weapon.id == &"wind_cannon":
+			wind_on_terminal += 1
+	check(wind_on_terminal == 0, "Canhão de Vento não sai no Terminal (só no Hospital)")
+	var legendary := float(counts.get(&"legendary", 0)) / 2000.0
+	check(legendary > 0.04 and legendary < 0.13, "lendárias perto do peso do jogo web (8%%): %.1f%%" % (legendary * 100.0))
+	var wind_on_hospital := false
+	for i in 3000:
+		if MysteryBox.roll_weapon(catalog, data.rarity_weights, "map2", rng).id == &"wind_cannon":
+			wind_on_hospital = true
+			break
+	check(wind_on_hospital, "Canhão de Vento pode sair no Hospital")
+
+
+func _test_weapon_lab() -> void:
+	print("Weapon Lab (Mk II e Mk III)")
+	var lab := load("res://data/configs/weapon_lab.tres") as WeaponLabData
+	var m4 := load("res://data/weapons/m4.tres") as WeaponData
+	var original_damage := m4.damage
+	var original_magazine := m4.magazine_size
+	var mk2 := WeaponUpgrade.mk2(m4, lab)
+	check(is_equal_approx(mk2.damage, roundf(m4.damage * 1.8)) and mk2.magazine_size == roundi(m4.magazine_size * 1.5), "Mk II: dano ×1.8 e pente ×1.5")
+	check(mk2.pierce == m4.pierce + 1 and mk2.display_name == "M4 Mk II", "Mk II: atravessa +1 zumbi e muda o nome")
+	check(m4.damage == original_damage and m4.magazine_size == original_magazine and m4.display_name == "M4", "os dados originais (compartilhados) não mudam")
+	var mk3 := WeaponUpgrade.mk3(mk2, lab)
+	check(mk3.pellets == mk2.pellets * 2 and mk3.display_name == "M4 Mk III", "Mk III: projéteis em dobro")
+	var wind := load("res://data/weapons/wind_cannon.tres") as WeaponData
+	check(WeaponUpgrade.mk2(wind, lab).display_name == "Tornado", "Canhão de Vento vira Tornado")
+	var weapon := Weapon.new()
+	weapon.data = m4
+	weapon.reset_ammo()
+	weapon.upgrade_to(mk2)
+	check(weapon.level == 1 and weapon.magazine == mk2.magazine_size, "arma sobe de nível com munição cheia")
+	check(WeaponUpgrade.next_level(mk3, 2, lab) == null, "Mk III é o máximo")
+	weapon.free()

@@ -5,6 +5,11 @@
 [ext_resource type="PackedScene" path="res://scenes/interactables/barricade.tscn" id="3_barricade"]
 [ext_resource type="Resource" path="res://data/configs/barricade.tres" id="4_barricade_data"]
 [ext_resource type="PackedScene" path="res://scenes/interactables/wall_buy.tscn" id="5_wall_buy"]
+[ext_resource type="PackedScene" path="res://scenes/interactables/mystery_box.tscn" id="6_box"]
+[ext_resource type="Resource" path="res://data/configs/mystery_box.tres" id="7_box_data"]
+[ext_resource type="Resource" path="res://data/weapons/catalog.tres" id="8_catalog"]
+[ext_resource type="PackedScene" path="res://scenes/interactables/weapon_lab.tscn" id="9_lab"]
+[ext_resource type="Resource" path="res://data/configs/weapon_lab.tres" id="10_lab_data"]
 
 [sub_resource type="NavigationMesh" id="NavMesh"]
 geometry_parsed_geometry_type = 1
@@ -28,6 +33,11 @@ door_scene = ExtResource("2_door")
 barricade_scene = ExtResource("3_barricade")
 barricade_data = ExtResource("4_barricade_data")
 wall_buy_scene = ExtResource("5_wall_buy")
+mystery_box_scene = ExtResource("6_box")
+mystery_box_data = ExtResource("7_box_data")
+weapon_catalog = ExtResource("8_catalog")
+weapon_lab_scene = ExtResource("9_lab")
+weapon_lab_data = ExtResource("10_lab_data")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavMesh")

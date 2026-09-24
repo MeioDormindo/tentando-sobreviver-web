@@ -30,6 +30,8 @@ signal game_over(summary: Dictionary)
 signal area_opened(area_id: StringName, area_name: String)
 ## Compra recusada (pontos insuficientes).
 signal purchase_denied()
+## Aviso curto no meio da tela (a caixa mudou de lugar, arma melhorada...).
+signal toast(text: String)
 ## Pausa ligada/desligada.
 signal pause_changed(paused: bool)
 ## A HUD pediu para jogar de novo.

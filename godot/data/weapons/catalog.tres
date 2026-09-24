@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="WeaponCatalog" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_catalog.gd" id="1_script"]
+[ext_resource type="Resource" path="res://data/weapons/m1911.tres" id="w0"]
+[ext_resource type="Resource" path="res://data/weapons/glock.tres" id="w1"]
+[ext_resource type="Resource" path="res://data/weapons/mp5.tres" id="w2"]
+[ext_resource type="Resource" path="res://data/weapons/vector.tres" id="w3"]
+[ext_resource type="Resource" path="res://data/weapons/m4.tres" id="w4"]
+[ext_resource type="Resource" path="res://data/weapons/ak.tres" id="w5"]
+[ext_resource type="Resource" path="res://data/weapons/pump.tres" id="w6"]
+[ext_resource type="Resource" path="res://data/weapons/combat_shotgun.tres" id="w7"]
+[ext_resource type="Resource" path="res://data/weapons/rpk.tres" id="w8"]
+[ext_resource type="Resource" path="res://data/weapons/rail.tres" id="w9"]
+[ext_resource type="Resource" path="res://data/weapons/grenade_launcher.tres" id="w10"]
+[ext_resource type="Resource" path="res://data/weapons/flamethrower.tres" id="w11"]
+[ext_resource type="Resource" path="res://data/weapons/arc_gun.tres" id="w12"]
+[ext_resource type="Resource" path="res://data/weapons/energy_cannon.tres" id="w13"]
+[ext_resource type="Resource" path="res://data/weapons/magnum.tres" id="w14"]
+[ext_resource type="Resource" path="res://data/weapons/barrett.tres" id="w15"]
+[ext_resource type="Resource" path="res://data/weapons/uzi_dual.tres" id="w16"]
+[ext_resource type="Resource" path="res://data/weapons/minigun.tres" id="w17"]
+[ext_resource type="Resource" path="res://data/weapons/wind_cannon.tres" id="w18"]
+
+[resource]
+script = ExtResource("1_script")
+weapons = Array[Resource]([ExtResource("w0"), ExtResource("w1"), ExtResource("w2"), ExtResource("w3"), ExtResource("w4"), ExtResource("w5"), ExtResource("w6"), ExtResource("w7"), ExtResource("w8"), ExtResource("w9"), ExtResource("w10"), ExtResource("w11"), ExtResource("w12"), ExtResource("w13"), ExtResource("w14"), ExtResource("w15"), ExtResource("w16"), ExtResource("w17"), ExtResource("w18")])

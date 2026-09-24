@@ -104,6 +104,21 @@ function exportWeapons(): void {
   }
 }
 
+/** Catálogo com todas as armas (sorteio da Mystery Box; listar pastas não funciona no jogo exportado). */
+function exportCatalog(): void {
+  const list = Object.values(weapons);
+  const ext = list.map((w, i) => `[ext_resource type="Resource" path="res://data/weapons/${w.id}.tres" id="w${i}"]`).join('\n');
+  write("weapons/catalog.tres", `[gd_resource type="Resource" script_class="WeaponCatalog" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_catalog.gd" id="1_script"]
+${ext}
+
+[resource]
+script = ExtResource("1_script")
+weapons = Array[Resource]([${list.map((_, i) => `ExtResource("w${i}")`).join(", ")}])
+`);
+}
+
 function exportKnifeAndPlayer(): void {
   write('weapons/knife.tres', tres('MeleeData', 'res://scripts/weapons/melee_data.gd', {
     damage: knifeConfig.damage,
@@ -183,6 +198,7 @@ function exportZombies(): void {
 
 console.log('Exportando dados do jogo web para o Godot:');
 exportWeapons();
+exportCatalog();
 exportKnifeAndPlayer();
 exportRoundsAndPoints();
 exportZombies();

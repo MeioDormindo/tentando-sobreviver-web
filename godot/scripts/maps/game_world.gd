@@ -33,6 +33,11 @@ func open_area(area_id: StringName) -> bool:
 	return true
 
 
+## Área que contém o ponto (vazio se nenhuma).
+func area_of(_point: Vector3) -> StringName:
+	return &""
+
+
 func area_display_name(area_id: StringName) -> String:
 	return String(area_id)
 

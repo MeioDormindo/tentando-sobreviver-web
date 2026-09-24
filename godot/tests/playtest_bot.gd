@@ -24,6 +24,10 @@ var _bought_glock := false
 var _bought_ammo := false
 var _saw_break := false
 var _repaired := false
+## Mystery Box: 0 = não usou, 1 = sorteando, 2 = pegou. Weapon Lab: melhorou a arma.
+var _box_step := 0
+var _box_weapon := ""
+var _upgraded := ""
 var _gave_glock := false
 var _gave_pump := false
 var _switched := false
@@ -93,6 +97,7 @@ func _play(main: Node, player: Player, rounds: RoundManager) -> void:
 	player.move_input = Vector2.ZERO
 	_use_inventory(player, rounds)
 	_shop_and_barricades(main, player)
+	_box_and_lab(main, player)
 	if _door_step < 2 and _game_time > 6.0:
 		_buy_door(main, player)
 		return
@@ -160,6 +165,27 @@ func _shop_and_barricades(main: Node, player: Player) -> void:
 				_repaired = points.points == before + barricade.data.repair_reward
 
 
+## Usa a Mystery Box (paga, espera a roleta, pega a arma) e melhora a arma no Weapon Lab.
+func _box_and_lab(main: Node, player: Player) -> void:
+	var points := main.get_node("PointsManager") as PointsManager
+	var box := main.find_child("MysteryBox", true, false) as MysteryBox
+	if box == null or _game_time < 12.0:
+		return
+	if _box_step == 0 and box.state == MysteryBox.State.IDLE:
+		points.add(box.price)
+		if box.interact(player):
+			_box_step = 1
+	elif _box_step == 1 and box.state == MysteryBox.State.READY:
+		_box_weapon = box.result.display_name
+		box.interact(player)
+		_box_step = 2
+	elif _box_step == 2 and _upgraded == "":
+		var lab := main.find_child("WeaponLab", true, false) as WeaponLab
+		points.add(lab.price_for(player.weapon.level))
+		if lab.interact(player):
+			_upgraded = player.weapon.data.display_name
+
+
 ## Troca de arma: pega a Glock no começo e a Pump no round 2 (confere a troca e os chumbos).
 func _use_inventory(player: Player, rounds: RoundManager) -> void:
 	if not _gave_glock:
@@ -189,6 +215,8 @@ func _end_play(main: Node, player: Player, rounds: RoundManager) -> void:
 	_check(_switched, "troca de arma (Glock → M1911)")
 	_check(_max_hits_one_shot > 1, "espingarda: vários chumbos acertam no mesmo tiro (%d)" % _max_hits_one_shot)
 	_check(_melee_hits > 0, "faca acerta zumbis (%d acertos em %d golpes)" % [_melee_hits, _knife_swings])
+	_check(_box_step == 2 and _box_weapon != "", "Mystery Box sorteou e entregou: %s" % _box_weapon)
+	_check(_upgraded.ends_with("Mk II") or _upgraded == "Tornado", "Weapon Lab melhorou a arma: %s" % _upgraded)
 	_check(_bought_glock, "comprou a Glock na parede (-500)")
 	_check(_bought_ammo, "comprou munição na parede quando acabou")
 	_check(_saw_break, "zumbis arrancaram tábuas das barricadas")
