@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ZombieData" format=3]
 
 [ext_resource type="Script" path="res://scripts/zombies/zombie_data.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://scenes/zombies/zombie_walker.tscn" id="2_scene"]
+[ext_resource type="PackedScene" path="res://scenes/zombies/hound.tscn" id="2_scene"]
 
 [resource]
 script = ExtResource("1_script")
@@ -15,3 +15,10 @@ attack_range = 1.138
 attack_interval = 0.65
 points_kill = 150
 plank_damage = 1
+body_radius = 0.406
+pushable = true
+burns_on_death = true
+shirt_color = Color(0.227, 0.102, 0.078, 1)
+skin_color = Color(0.353, 0.141, 0.102, 1)
+model_scale = 1
+crawls = false

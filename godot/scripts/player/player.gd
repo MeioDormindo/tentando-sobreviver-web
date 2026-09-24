@@ -46,6 +46,7 @@ var weapon: Weapon:
 
 func _ready() -> void:
 	super()
+	add_to_group(&"player")
 	health.reset(data.max_health)
 	inventory.slots = data.inventory_slots
 	inventory.switch_time = data.switch_time
@@ -119,11 +120,14 @@ func knife() -> bool:
 
 
 func take_damage(info: DamageInfo) -> float:
-	if _clock < _invulnerable_until:
+	# Invulnerável por um instante só contra golpes (ácido e gás ferem continuamente).
+	var is_blow := info.kind == DamageInfo.Kind.ZOMBIE
+	if is_blow and _clock < _invulnerable_until:
 		return 0.0
 	var applied := super(info)
 	if applied > 0.0:
-		_invulnerable_until = _clock + data.invulnerability_time
+		if is_blow:
+			_invulnerable_until = _clock + data.invulnerability_time
 		_last_hurt_at = _clock
 	return applied
 

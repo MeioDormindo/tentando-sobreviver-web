@@ -31,6 +31,12 @@ var _stun_left := 0.0
 var _burn_dps := 0.0
 var _burn_left := 0.0
 var _burn_source: Node
+## Tempo sem se aproximar do alvo (o SpawnManager realoca zumbis presos).
+var stuck_time: float = 0.0
+var _best_distance := INF
+var _abilities: ZombieAbilities
+var _materials: Array[StandardMaterial3D] = []
+var _armor_meshes: Array[MeshInstance3D] = []
 
 @onready var agent: NavigationAgent3D = $NavigationAgent3D
 @onready var pivot: Node3D = $Pivot
@@ -51,6 +57,11 @@ func _ready() -> void:
 	move_speed = data.move_speed * _speed_mult
 	attack_damage = data.damage * _damage_mult
 	add_to_group(&"zombies")
+	_apply_look()
+	if not (data.explosive.is_empty() and data.ranged.is_empty() and data.armor.is_empty() and data.death_cloud.is_empty()):
+		_abilities = ZombieAbilities.new()
+		add_child(_abilities)
+		_abilities.setup(self)
 	health.damaged.connect(func(info: DamageInfo, _current: float) -> void: Events.zombie_hit.emit(self, info))
 	# Espalha o recálculo de caminho entre os zumbis (nem todos no mesmo frame).
 	_repath_left = randf() * repath_interval
@@ -82,7 +93,11 @@ func _physics_process(delta: float) -> void:
 	to_target.y = 0.0
 	_attack_cooldown = maxf(0.0, _attack_cooldown - delta)
 	var barricade := _blocking_barricade()
-	if to_target.length() <= data.attack_range:
+	if _abilities and _abilities.override_movement(delta, to_target):
+		velocity.x = 0.0
+		velocity.z = 0.0
+		_face(to_target)
+	elif to_target.length() <= data.attack_range:
 		_attack(to_target)
 	elif barricade:
 		_break(barricade)
@@ -97,6 +112,12 @@ func _physics_process(delta: float) -> void:
 func _chase(to_target: Vector3, delta: float) -> void:
 	if state == State.ATTACK or state == State.BREAK_BARRICADE:
 		state = State.CHASE
+	# Preso: não chega mais perto do alvo há um tempo.
+	if to_target.length() < _best_distance - 0.5:
+		_best_distance = to_target.length()
+		stuck_time = 0.0
+	else:
+		stuck_time += delta
 	_repath_left -= delta
 	if _repath_left <= 0.0:
 		_repath_left = repath_interval
@@ -170,9 +191,90 @@ func apply_burn(dps: float, seconds: float, source: Node) -> void:
 	_burn_source = source
 
 
-## Empurra o zumbi (velocidade em m/s, no plano).
+## Empurra o zumbi (velocidade em m/s, no plano). Tank e Blindado não saem do lugar.
 func apply_knockback(push: Vector3) -> void:
-	_knockback = Vector3(push.x, 0.0, push.z)
+	if data.pushable:
+		_knockback = Vector3(push.x, 0.0, push.z)
+
+
+## Recomeça a contagem de "preso" (depois de ser realocado).
+func reset_stuck() -> void:
+	stuck_time = 0.0
+	_best_distance = INF
+
+
+## Linha de visão até o alvo (paredes bloqueiam).
+func has_line_of_sight() -> bool:
+	if target == null:
+		return false
+	var query := PhysicsRayQueryParameters3D.create(global_position + Vector3.UP * 1.4, target.global_position + Vector3.UP * 1.2, PhysicsLayers.WORLD)
+	return get_world_3d().direct_space_state.intersect_ray(query).is_empty()
+
+
+## Brilho rápido no corpo (aviso de explosão, preparo do cuspe).
+func flash(color: Color) -> void:
+	for material in _materials:
+		material.emission_enabled = true
+		material.emission = color * 0.6
+	get_tree().create_timer(0.08).timeout.connect(func() -> void:
+		for material in _materials:
+			material.emission_enabled = false)
+
+
+## A armadura caiu (headshot ou dano suficiente).
+func break_armor() -> void:
+	for mesh in _armor_meshes:
+		if is_instance_valid(mesh):
+			mesh.queue_free()
+	_armor_meshes.clear()
+
+
+## Aparência provisória por tipo (cores, tamanho, rastejante, armadura) e raio do corpo.
+func _apply_look() -> void:
+	var shirt := StandardMaterial3D.new()
+	shirt.albedo_color = data.shirt_color
+	shirt.roughness = 0.95
+	var skin := StandardMaterial3D.new()
+	skin.albedo_color = data.skin_color
+	skin.roughness = 0.9
+	_materials = [shirt, skin]
+	for part in pivot.get_children():
+		var mesh := part as MeshInstance3D
+		if mesh == null or part.name.begins_with("Eye"):
+			continue
+		mesh.material_override = shirt if part.name == "Body" else skin
+	var scale_xz := data.model_scale
+	var scale_y := data.model_scale * (0.45 if data.crawls else 1.0)
+	pivot.scale = Vector3(scale_xz, scale_y, scale_xz)
+	for child in get_children():
+		if child is Hurtbox:
+			var hurtbox := child as Hurtbox
+			hurtbox.position.y *= scale_y
+			hurtbox.scale = Vector3(scale_xz, scale_xz, scale_xz)
+	var body_shape := ($CollisionShape3D as CollisionShape3D).shape.duplicate() as CapsuleShape3D
+	if body_shape:
+		body_shape.radius = data.body_radius
+		($CollisionShape3D as CollisionShape3D).shape = body_shape
+	if not data.armor.is_empty():
+		var metal := StandardMaterial3D.new()
+		metal.albedo_color = Color(0.25, 0.27, 0.3)
+		metal.metallic = 0.6
+		var helmet := MeshInstance3D.new()
+		var helmet_mesh := SphereMesh.new()
+		helmet_mesh.radius = 0.23
+		helmet_mesh.height = 0.3
+		helmet.mesh = helmet_mesh
+		helmet.material_override = metal
+		helmet.position = Vector3(0, 1.72, 0)
+		var vest := MeshInstance3D.new()
+		var vest_mesh := BoxMesh.new()
+		vest_mesh.size = Vector3(0.72, 0.6, 0.5)
+		vest.mesh = vest_mesh
+		vest.material_override = metal
+		vest.position = Vector3(0, 0.95, 0)
+		pivot.add_child(helmet)
+		pivot.add_child(vest)
+		_armor_meshes = [helmet, vest]
 
 
 func _face(direction: Vector3) -> void:
@@ -185,12 +287,21 @@ func _on_health_died(info: DamageInfo) -> void:
 	remove_from_group(&"zombies")
 	super(info)
 	Events.zombie_killed.emit(self, info)
+	if _abilities:
+		_abilities.on_death(info)
 	# Não bloqueia mais ninguém nem recebe tiros; cai e afunda no chão.
 	collision_layer = 0
 	collision_mask = PhysicsLayers.WORLD
 	for child in get_children():
 		if child is Hurtbox:
 			(child as Hurtbox).disable()
+	if data.burns_on_death:
+		# Cão: pega fogo e some, sem corpo.
+		flash(Color(1.0, 0.45, 0.1))
+		var burn := create_tween()
+		burn.tween_property(pivot, "scale", Vector3.ONE * 0.05, 0.4)
+		burn.tween_callback(queue_free)
+		return
 	var tween := create_tween()
 	tween.tween_property(pivot, "rotation:x", deg_to_rad(-85.0), 0.35)
 	tween.tween_interval(CORPSE_TIME * 0.5)

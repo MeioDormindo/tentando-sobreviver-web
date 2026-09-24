@@ -76,6 +76,10 @@ func _ready() -> void:
 	nav_region.bake_navigation_mesh(false)
 
 
+func map_id() -> String:
+	return String(data.get("id", ""))
+
+
 func get_player_spawn() -> Vector3:
 	var start: Dictionary = data.get("player_start", {"x": 0.0, "z": 0.0})
 	return Vector3(start.x, 0.1, start.z)

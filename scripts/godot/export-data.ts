@@ -148,6 +148,12 @@ function exportKnifeAndPlayer(): void {
     .replace('\n[resource]\nscript = ExtResource("1_script")\n', '\n[resource]\nscript = ExtResource("1_script")\nstarting_weapon = ExtResource("2_weapon")\nknife = ExtResource("3_knife")\n'));
 }
 
+/** Tabela de composição: [{ "from_round": n, "weights": { &"walker": 100, ... } }, ...]. */
+function composition(list: Array<{ fromWave: number; weights: Record<string, number> }>): { raw: string } {
+  const items = list.map((c) => `{ "from_round": ${c.fromWave}, "weights": { ${Object.entries(c.weights).map(([k, v]) => `&"${k}": ${v}`).join(', ')} } }`);
+  return raw(`[${items.join(', ')}]`);
+}
+
 function exportRoundsAndPoints(): void {
   const w = waveConfig;
   write('configs/rounds.tres', tres('RoundData', 'res://scripts/systems/round_data.gd', {
@@ -168,6 +174,11 @@ function exportRoundsAndPoints(): void {
     intermission: s(w.intermission),
     // O jogo web não reabastece: a munição vem das compras na parede.
     refill_ammo_on_round_end: false,
+    composition: composition(w.composition),
+    composition_by_map: raw(`{\n${Object.entries(w.compositionByMap).map(([id, list]) => `"${id}": ${composition(list!).raw}`).join(',\n')}\n}`),
+    max_alive_per_type: raw(`{ ${Object.entries(w.maxAlivePerType).map(([k, v]) => `&"${k}": ${v}`).join(', ')} }`),
+    late_caps_from_round: w.lateMaxAlivePerType.fromWave,
+    late_max_alive_per_type: raw(`{ ${Object.entries(w.lateMaxAlivePerType.caps).map(([k, v]) => `&"${k}": ${v}`).join(', ')} }`),
   }));
   const e = economyConfig;
   write('configs/points.tres', tres('PointsData', 'res://scripts/systems/points_data.gd', {
@@ -179,12 +190,41 @@ function exportRoundsAndPoints(): void {
   }));
 }
 
+/** Dicionário .tres com distâncias em m e tempos em s (chaves em snake_case). */
+function dict(obj: Record<string, unknown> | undefined): { raw: string } | undefined {
+  if (!obj) return undefined;
+  const entries = Object.entries(obj).flatMap(([k, v]) => {
+    if (typeof v === 'object' && v !== null) return [`"${snake(k)}": ${dict(v as Record<string, unknown>)!.raw}`];
+    if (typeof v !== 'number') return [];
+    const key = snake(k.replace(/Ms$/, '_time'));
+    const value = /Ms$/.test(k) ? s(v) : /range|radius|speed/i.test(k) ? m(v) : v;
+    return [`"${key}": ${value}`];
+  });
+  return raw(`{ ${entries.join(', ')} }`);
+}
+const snake = (k: string): string => k.replace(/([A-Z])/g, '_$1').toLowerCase();
+
+/**
+ * Aparência provisória de cada tipo (blockout, até os modelos do Blender): cores, escala e
+ * se anda rastejando. Não existe no jogo web (lá são sprites).
+ */
+const LOOKS: Record<string, { scene?: string; shirt: number; skin: number; scale: number; low?: boolean }> = {
+  walker: { shirt: 0x5e5343, skin: 0x6c765f, scale: 1 },
+  runner: { shirt: 0x3d4a58, skin: 0x77806b, scale: 0.92 },
+  tank: { shirt: 0x6b4a3a, skin: 0x5d6752, scale: 1.4 },
+  exploder: { shirt: 0x8a6a2a, skin: 0x9aa05a, scale: 1.1 },
+  crawler: { shirt: 0x6a6f74, skin: 0x7b8570, scale: 0.9, low: true },
+  spitter: { shirt: 0x4f6a3a, skin: 0x8fb04a, scale: 1 },
+  armored: { shirt: 0x2c3140, skin: 0x5a6150, scale: 1.1 },
+  hound: { scene: 'res://scenes/zombies/hound.tscn', shirt: 0x3a1a14, skin: 0x5a241a, scale: 1 },
+};
+
 function exportZombies(): void {
   for (const z of Object.values(zombieTypes)) {
+    const look = LOOKS[z.id] ?? LOOKS.walker;
     write(`zombies/${z.id}.tres`, tres('ZombieData', 'res://scripts/zombies/zombie_data.gd', {
       id: name(z.id),
       display_name: z.name,
-      // Cena própria de cada tipo vem na Fase 4; por enquanto todos usam o corpo do Walker.
       scene: raw('ExtResource("2_scene")'),
       max_health: z.health,
       move_speed: m(z.speed),
@@ -193,7 +233,18 @@ function exportZombies(): void {
       attack_interval: s(z.attackCooldown),
       points_kill: z.reward,
       plank_damage: z.plankDamage,
-    }, '[ext_resource type="PackedScene" path="res://scenes/zombies/zombie_walker.tscn" id="2_scene"]\n'));
+      body_radius: m(z.bodyRadius),
+      pushable: z.pushable,
+      explosive: dict(z.explosive as unknown as Record<string, unknown>),
+      ranged: dict(z.ranged as unknown as Record<string, unknown>),
+      armor: z.armor ? raw(`{ "hp": ${z.armor.hp}, "body_factor": ${z.armor.bodyFactor} }`) : undefined,
+      death_cloud: dict(z.deathCloud as unknown as Record<string, unknown>),
+      burns_on_death: z.burnsOnDeath ?? false,
+      shirt_color: color(look.shirt),
+      skin_color: color(look.skin),
+      model_scale: look.scale,
+      crawls: look.low ?? false,
+    }, `[ext_resource type="PackedScene" path="${look.scene ?? 'res://scenes/zombies/zombie_walker.tscn'}" id="2_scene"]\n`));
   }
 }
 

@@ -15,10 +15,12 @@ var spawned: int = 0
 var killed: int = 0
 
 var _timer := 0.0
+var _rng := RandomNumberGenerator.new()
 var _spawn_timer := 0.0
 
 
 func _ready() -> void:
+	_rng.randomize()
 	Events.zombie_killed.connect(_on_zombie_killed)
 	Events.player_died.connect(stop)
 	_timer = data.first_round_delay
@@ -64,8 +66,13 @@ func _try_spawn() -> void:
 	if spawn_manager.alive_count() >= data.max_alive(round_number):
 		_spawn_timer = 0.25
 		return
+	var map_id := spawn_manager.world.map_id() if spawn_manager.world else ""
+	var type := data.pick_type(round_number, map_id, spawn_manager.alive_by_type(), _rng)
+	if type == &"":
+		_spawn_timer = 0.25  # todos os tipos no limite de vivos
+		return
 	var zombie := spawn_manager.spawn_zombie(
-		data.health_multiplier(round_number), data.damage_multiplier(round_number), data.speed_multiplier(round_number), round_number)
+		data.health_multiplier(round_number), data.damage_multiplier(round_number), data.speed_multiplier(round_number), round_number, type)
 	if zombie:
 		spawned += 1
 		_spawn_timer = data.spawn_interval(round_number)

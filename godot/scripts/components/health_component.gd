@@ -11,6 +11,8 @@ signal died(info: DamageInfo)
 @export var invulnerable: bool = false
 
 var current: float = 0.0
+## Filtro opcional do dano (ex.: armadura do Blindado): recebe o DamageInfo e devolve o dano final.
+var damage_filter: Callable
 var is_dead: bool = false
 
 
@@ -31,6 +33,8 @@ func reset(new_max: float = -1.0) -> void:
 func apply_damage(info: DamageInfo) -> float:
 	if is_dead or invulnerable or info.amount <= 0.0:
 		return 0.0
+	if damage_filter.is_valid():
+		info.amount = damage_filter.call(info)
 	var applied := minf(current, info.amount)
 	current -= applied
 	damaged.emit(info, current)

@@ -20,3 +20,10 @@ max_alive_cap = 30
 first_round_delay = 3.5
 intermission = 10
 refill_ammo_on_round_end = false
+composition = [{ "from_round": 1, "weights": { &"walker": 100 } }, { "from_round": 3, "weights": { &"walker": 85, &"runner": 15 } }, { "from_round": 6, "weights": { &"walker": 68, &"runner": 24, &"tank": 8 } }, { "from_round": 11, "weights": { &"walker": 45, &"runner": 30, &"tank": 10, &"exploder": 15 } }, { "from_round": 16, "weights": { &"walker": 38, &"runner": 32, &"tank": 15, &"exploder": 15 } }]
+composition_by_map = {
+"map2": [{ "from_round": 1, "weights": { &"walker": 100 } }, { "from_round": 3, "weights": { &"walker": 75, &"runner": 12, &"crawler": 13 } }, { "from_round": 6, "weights": { &"walker": 56, &"runner": 16, &"crawler": 12, &"spitter": 9, &"tank": 7 } }, { "from_round": 8, "weights": { &"walker": 48, &"runner": 16, &"crawler": 11, &"spitter": 10, &"tank": 7, &"armored": 8 } }, { "from_round": 11, "weights": { &"walker": 36, &"runner": 20, &"crawler": 10, &"spitter": 10, &"armored": 9, &"tank": 6, &"exploder": 9 } }, { "from_round": 16, "weights": { &"walker": 30, &"runner": 22, &"crawler": 10, &"spitter": 12, &"armored": 10, &"tank": 7, &"exploder": 9 } }]
+}
+max_alive_per_type = { &"tank": 2, &"exploder": 4, &"armored": 2, &"spitter": 4, &"crawler": 6 }
+late_caps_from_round = 16
+late_max_alive_per_type = { &"tank": 3 }

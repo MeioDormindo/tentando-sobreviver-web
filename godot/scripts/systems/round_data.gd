@@ -37,6 +37,17 @@ extends Resource
 ## munição; desligar quando as armas e munição na parede existirem.
 @export var refill_ammo_on_round_end: bool = true
 
+@export_group("Composição")
+## Tipos por round: [{"from_round": n, "weights": {&"walker": 100, ...}}] (vale o último cujo
+## from_round já chegou).
+@export var composition: Array = []
+## Composição própria de um mapa (id do mapa → tabela como a de cima).
+@export var composition_by_map: Dictionary = {}
+## Máximo de vivos ao mesmo tempo por tipo (tipos fortes não dominam a tela).
+@export var max_alive_per_type: Dictionary = {}
+@export var late_caps_from_round: int = 16
+@export var late_max_alive_per_type: Dictionary = {}
+
 
 func total_zombies(round_number: int) -> int:
 	return base_zombies + _r(round_number) * zombies_per_round
@@ -65,3 +76,34 @@ func max_alive(round_number: int) -> int:
 
 func _r(round_number: int) -> int:
 	return maxi(1, round_number)
+
+
+## Sorteia o tipo do próximo zumbi (função pura): pesos da composição do round (do mapa, se
+## houver), sem os tipos que já estão no limite de vivos. Vazio se nenhum couber.
+func pick_type(round_number: int, map_id: String, alive_by_type: Dictionary, rng: RandomNumberGenerator) -> StringName:
+	var table: Array = composition_by_map.get(map_id, composition)
+	var weights: Dictionary = {&"walker": 1}
+	for entry: Dictionary in table:
+		if int(entry.from_round) <= _r(round_number):
+			weights = entry.weights
+	var total := 0.0
+	var options: Array[StringName] = []
+	for type: StringName in weights:
+		if int(alive_by_type.get(type, 0)) < type_cap(type, round_number):
+			options.append(type)
+			total += float(weights[type])
+	if options.is_empty():
+		return &""
+	var pick := rng.randf() * total
+	for type in options:
+		pick -= float(weights[type])
+		if pick < 0.0:
+			return type
+	return options.back()
+
+
+## Limite de vivos do tipo neste round (sem limite = muito alto).
+func type_cap(type: StringName, round_number: int) -> int:
+	if _r(round_number) >= late_caps_from_round and late_max_alive_per_type.has(type):
+		return int(late_max_alive_per_type[type])
+	return int(max_alive_per_type.get(type, 999))

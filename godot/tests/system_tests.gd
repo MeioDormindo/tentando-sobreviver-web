@@ -21,6 +21,7 @@ func run(tree: SceneTree) -> int:
 	_test_mystery_box()
 	_test_weapon_lab()
 	_test_perks()
+	_test_composition()
 	print("\n%d ok, %d falharam" % [_passed, _failed])
 	return _failed
 
@@ -294,3 +295,22 @@ func _test_perks() -> void:
 	check(uses == 3, "Quick Revive: no máximo 3 por partida (%d)" % uses)
 	check(perks.consume_self_revive() == null, "sem Quick Revive, não levanta")
 	perks.free()
+
+
+func _test_composition() -> void:
+	print("Composição por round (jogo web)")
+	var data := load("res://data/configs/rounds.tres") as RoundData
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 7
+	var seen := func(round_number: int, map_id: String, alive: Dictionary) -> Dictionary:
+		var types := {}
+		for i in 400:
+			types[data.pick_type(round_number, map_id, alive, rng)] = true
+		return types
+	check(seen.call(1, "terminal", {}).keys() == [&"walker"], "round 1: só Walkers")
+	var r6: Dictionary = seen.call(6, "terminal", {})
+	check(r6.has(&"tank") and r6.has(&"runner") and not r6.has(&"exploder"), "round 6: Tanks e Runners, sem Exploders ainda")
+	check(seen.call(11, "terminal", {}).has(&"exploder"), "round 11: Exploders")
+	check(not seen.call(8, "terminal", {}).has(&"crawler") and seen.call(8, "map2", {}).has(&"armored"), "inimigos do Hospital só no Hospital")
+	check(not seen.call(6, "terminal", {&"tank": 2}).has(&"tank"), "no máximo 2 Tanks vivos")
+	check(data.type_cap(&"tank", 16) == 3, "a partir do round 16: até 3 Tanks")

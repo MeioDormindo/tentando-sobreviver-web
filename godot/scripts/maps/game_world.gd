@@ -11,6 +11,11 @@ func get_player_spawn() -> Vector3:
 	return Vector3.ZERO
 
 
+## Id do mapa (composição de zumbis, armas da Mystery Box). Vazio = genérico.
+func map_id() -> String:
+	return ""
+
+
 ## Pontos de spawn que valem neste round (área aberta e round mínimo atingido).
 func active_spawn_points(_round_number: int) -> Array[Vector3]:
 	var points: Array[Vector3] = []
