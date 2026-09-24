@@ -30,7 +30,8 @@ export const eventScheduleConfig = {
 export const worldEvents: Record<WorldEventId, WorldEventInfo> = {
   blackout: { name: 'APAGÃO', hint: 'As luzes caíram — use a lanterna', color: 0x8fa3b8, weight: 20, minWave: 3, cooldownWaves: 3 },
   emergency_alarm: { name: 'ALARME DE EMERGÊNCIA', hint: 'O barulho atrai mais zumbis', color: 0xff4433, weight: 18, minWave: 6, cooldownWaves: 3 },
-  train: { name: 'TREM PASSANDO', hint: 'Saia dos trilhos da plataforma!', color: 0xffc04a, weight: 18, minWave: 2, cooldownWaves: 2 },
+  // O trem não entra no sorteio (weight 0): tem agenda própria (trainConfig).
+  train: { name: 'TREM PASSANDO', hint: 'Saia dos trilhos da plataforma!', color: 0xffc04a, weight: 0, minWave: 2, cooldownWaves: 0 },
   horde: { name: 'HORDA', hint: 'Muito mais zumbis nesta wave', color: 0xb33a3a, weight: 14, minWave: 5, cooldownWaves: 4 },
   supply_drop: { name: 'SUPRIMENTOS', hint: 'Uma caixa caiu no terminal — pegue-a', color: 0x7bd67b, weight: 22, minWave: 2, cooldownWaves: 2 },
   gas_leak: { name: 'VAZAMENTO DE GÁS', hint: 'Fique longe da nuvem verde', color: 0x9acd32, weight: 16, minWave: 4, cooldownWaves: 3 },
@@ -60,6 +61,14 @@ export const hordeConfig = {
 };
 
 export const trainConfig = {
+  /**
+   * O trem tem agenda própria (roda junto com qualquer outro evento): chance por wave com a
+   * Plataforma aberta e, depois de passar, chance de uma segunda passagem na mesma wave.
+   */
+  chancePerWave: 0.65,
+  secondPassChance: 0.4,
+  /** Atraso entre o início da wave (ou a passagem anterior) e o trem (ms). */
+  delayMs: [4000, 22000] as [number, number],
   /** Aviso (buzina, luzes) antes de o trem passar (ms). */
   warningMs: 4500,
   speed: 1500,

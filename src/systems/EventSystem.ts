@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { eventScheduleConfig, worldEvents, type WorldEventId } from '../config/events.config';
+import { eventScheduleConfig, trainConfig, worldEvents, type WorldEventId } from '../config/events.config';
 import { waveConfig } from '../config/waves.config';
 import { AlarmEvent } from '../events/AlarmEvent';
 import { BlackoutEvent } from '../events/BlackoutEvent';
@@ -33,6 +33,10 @@ export class EventSystem {
   private readonly lastWave = new Map<WorldEventId, number>();
   private running: Running | null = null;
   private pending: { id: WorldEventId; at: number } | null = null;
+  /** O trem roda num espaço próprio, em paralelo ao evento sorteado. */
+  private train: Running | null = null;
+  private trainAt: number | null = null;
+  private trainPassesThisWave = 0;
   private wave = 0;
   private phase: WavePhase = 'waiting';
   private lastStateKey = '';
@@ -43,6 +47,8 @@ export class EventSystem {
     scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       off();
       this.stop();
+      this.train?.event.end();
+      this.train = null;
     });
   }
 
@@ -69,11 +75,45 @@ export class EventSystem {
       const expired = run.event.durationMs !== null && time - run.startedAt >= run.event.durationMs;
       if (expired || !run.event.update(time, delta)) this.stop();
     }
+    this.updateTrain(time, delta);
     this.emitState(time);
+  }
+
+  /** Chama o trem agora (painel da Plataforma, testes). Retorna false se já está passando. */
+  callTrain(): boolean {
+    const event = this.events.train;
+    if (this.train || !event.canStart(this.ctx)) return false;
+    event.start(this.ctx);
+    this.train = { event, startedAt: this.ctx.scene.time.now };
+    this.trainPassesThisWave++;
+    const info = worldEvents.train;
+    emitGameEvent(this.ctx.scene.game.events, GameEvents.WorldEventStarted, { id: 'train', name: info.name, hint: info.hint, color: info.color });
+    this.lastStateKey = '';
+    return true;
+  }
+
+  /** O trem passou por completo: talvez agenda outra passagem na mesma wave. */
+  private updateTrain(time: number, delta: number): void {
+    if (this.train && !this.train.event.update(time, delta)) {
+      this.train.event.end();
+      this.train = null;
+      this.lastStateKey = '';
+      if (this.phase === 'active' && this.trainPassesThisWave === 1 && Math.random() < trainConfig.secondPassChance) this.scheduleTrain(time);
+    }
+    if (this.trainAt !== null && time >= this.trainAt) {
+      this.trainAt = null;
+      if (this.phase === 'active') this.callTrain();
+    }
+  }
+
+  private scheduleTrain(now: number): void {
+    const [min, max] = trainConfig.delayMs;
+    this.trainAt = now + Phaser.Math.Between(min, max);
   }
 
   /** Inicia um evento agora (também usado em testes). Retorna false se não pôde. */
   trigger(id: WorldEventId): boolean {
+    if (id === 'train') return this.callTrain();
     if (this.running) return false;
     const event = this.events[id];
     if (!event.canStart(this.ctx)) return false;
@@ -105,14 +145,19 @@ export class EventSystem {
     this.phase = s.phase;
     if (ended) {
       this.pending = null;
+      this.trainAt = null;
       if (this.running?.event.endsWithWave) this.stop();
     }
     if (started) this.rollForWave();
   }
 
-  /** Sorteio no início da wave. */
+  /** Sorteio no início da wave (o trem tem rolagem própria, independente dos outros eventos). */
   private rollForWave(): void {
     const cfg = eventScheduleConfig;
+    this.trainPassesThisWave = 0;
+    if (this.wave >= worldEvents.train.minWave && !waveConfig.bossWaves.includes(this.wave) && this.events.train.canStart(this.ctx) && Math.random() < trainConfig.chancePerWave) {
+      this.scheduleTrain(this.ctx.scene.time.now);
+    }
     if (this.wave < cfg.firstWave || waveConfig.bossWaves.includes(this.wave)) return;
     const forced = cfg.forced;
     const isForced = this.wave >= forced.firstWave && (this.wave - forced.firstWave) % forced.every === 0;
@@ -133,6 +178,7 @@ export class EventSystem {
   private pick(): WorldEventId | null {
     const eligible = (Object.keys(this.events) as WorldEventId[]).filter((id) => {
       const info = worldEvents[id];
+      if (info.weight <= 0) return false;
       const last = this.lastWave.get(id);
       return this.wave >= info.minWave && (last === undefined || this.wave - last > info.cooldownWaves) && this.events[id].canStart(this.ctx);
     });
@@ -146,7 +192,8 @@ export class EventSystem {
 
   /** Estado para a HUD, emitido quando o segundo exibido muda. */
   private emitState(time: number): void {
-    const run = this.running;
+    // Sem evento sorteado, o indicador mostra o trem (se estiver passando).
+    const run = this.running ?? this.train;
     const events = this.ctx.scene.game.events;
     if (!run) {
       if (this.lastStateKey !== '') {
@@ -157,10 +204,12 @@ export class EventSystem {
     }
     const total = run.event.durationMs;
     const remaining = total === null ? null : Math.max(0, total - (time - run.startedAt));
-    const key = `${run.event.id}|${remaining === null ? '-' : Math.ceil(remaining / 1000)}`;
+    const withTrain = this.train !== null && run !== this.train;
+    const key = `${run.event.id}|${withTrain}|${remaining === null ? '-' : Math.ceil(remaining / 1000)}`;
     if (key === this.lastStateKey) return;
     this.lastStateKey = key;
     const info = worldEvents[run.event.id];
-    emitGameEvent(events, GameEvents.WorldEventState, { id: run.event.id, name: info.name, color: info.color, remainingMs: remaining, totalMs: total });
+    const name = withTrain ? `${info.name} + ${worldEvents.train.name}` : info.name;
+    emitGameEvent(events, GameEvents.WorldEventState, { id: run.event.id, name, color: info.color, remainingMs: remaining, totalMs: total });
   }
 }
