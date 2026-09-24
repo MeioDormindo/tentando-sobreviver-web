@@ -1,4 +1,4 @@
-import { upgradeWeaponConfig, type WeaponConfig } from '../config/weapons.config';
+import { MAX_UPGRADE_LEVEL, upgradeWeaponConfig, type WeaponConfig } from '../config/weapons.config';
 import type { AmmoPayload } from '../game/events';
 
 /**
@@ -23,9 +23,14 @@ export class Weapon {
     return this.cfg;
   }
 
-  /** Weapon Lab: vira a versão Mk II com pente e reserva cheios. */
+  /** Nível no Weapon Lab (0 normal, 1 Mk II, 2 Mk III). */
+  get level(): number {
+    return this.cfg.upgradeLevel ?? 0;
+  }
+
+  /** Weapon Lab: sobe um nível (Mk II → Mk III) com pente e reserva cheios. */
   upgrade(): boolean {
-    if (this.cfg.upgraded) return false;
+    if (this.level >= MAX_UPGRADE_LEVEL) return false;
     this.cfg = upgradeWeaponConfig(this.cfg);
     this.reloadEndsAt = null;
     this.currentAmmo = this.cfg.magazineSize;

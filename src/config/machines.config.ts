@@ -27,6 +27,8 @@ export const mysteryBoxConfig = {
 /** Weapon Lab (GDD §38). */
 export const weaponLabConfig = {
   price: 5000,
+  /** Segundo upgrade: Mk II → Mk III (projéteis em dobro). */
+  priceMk3: 10000,
 };
 
 export type PerkId = 'fortify' | 'quick_hands' | 'sprint' | 'deadeye' | 'adrenaline' | 'overload';

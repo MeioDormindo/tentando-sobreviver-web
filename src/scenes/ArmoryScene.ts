@@ -68,7 +68,8 @@ export class ArmoryScene extends Phaser.Scene {
   private perPage = 8;
   private rows: Phaser.GameObjects.GameObject[] = [];
   private detail: Phaser.GameObjects.GameObject[] = [];
-  private showMk2 = false;
+  /** Nível mostrado: 0 normal, 1 Mk II, 2 Mk III. */
+  private showLevel = 0;
 
   constructor() {
     super(SCENE_KEYS.armory);
@@ -134,7 +135,8 @@ export class ArmoryScene extends Phaser.Scene {
 
     // Detalhes da arma selecionada (painel escalado para caber em telas baixas, ex. celular)
     const base = this.list[this.selected];
-    const cfg = this.showMk2 ? upgradeWeaponConfig(base) : base;
+    let cfg = base;
+    for (let i = 0; i < this.showLevel; i++) cfg = upgradeWeaponConfig(cfg);
     const dx = x0 + listW + 20;
     const scale = Math.min(1, (height - top - 48) / DETAIL_H);
     const dw = Math.min(520, width - dx - 16) / scale;
@@ -161,11 +163,12 @@ export class ArmoryScene extends Phaser.Scene {
         this.add.text(dw - 12, y, st.format(cfg), { fontFamily: MENU_FONT, fontSize: '12px', color: COLORS.text }).setOrigin(1, 0),
       ]);
     });
-    const info = [sourceText(base), specialText(cfg), 'Weapon Lab ($5.000): versão Mk II — mais dano, pente e reserva, recarga menor.']
+    const info = [sourceText(base), specialText(cfg), 'Weapon Lab: Mk II ($5.000) — mais dano, pente e reserva, recarga menor. Mk III ($10.000) — projéteis em dobro.']
       .filter(Boolean)
       .join('\n\n');
     box.add(this.add.text(14, 132 + STATS.length * 24 + 8, info, { fontFamily: MENU_FONT, fontSize: '12px', color: '#c8c3b0', wordWrap: { width: dw - 28 }, lineSpacing: 2 }));
-    const mk2 = menuButton(this, this.showMk2 ? '[ VER NORMAL ]' : '[ VER MK II ]', () => { this.showMk2 = !this.showMk2; this.redraw(); }, 14);
+    const labels = ['[ VER MK II ]', '[ VER MK III ]', '[ VER NORMAL ]'];
+    const mk2 = menuButton(this, labels[this.showLevel], () => { this.showLevel = (this.showLevel + 1) % 3; this.redraw(); }, 14);
     box.add(mk2.setPosition(dw - 70, 18));
   }
 }

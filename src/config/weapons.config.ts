@@ -49,8 +49,10 @@ export interface WeaponConfig {
   tracerTint?: number;
   /** Só sai na Mystery Box (não é vendida nas maletas). */
   boxOnly?: boolean;
-  /** Versão melhorada pelo Weapon Lab. */
+  /** Versão melhorada pelo Weapon Lab (Mk II ou Mk III). */
   upgraded?: boolean;
+  /** Nível no Weapon Lab: 0 normal, 1 Mk II, 2 Mk III. */
+  upgradeLevel?: number;
   special?: SpecialFire;
 }
 
@@ -151,6 +153,17 @@ export const weapons: Record<string, WeaponConfig> = {
   },
 };
 
+/** Nível máximo no Weapon Lab (2 = Mk III). */
+export const MAX_UPGRADE_LEVEL = 2;
+
+/** Mk III: dobra os projéteis de todas as armas (espingardas, lança-chamas, granadas, raios...). */
+export const weaponUpgradeMk3 = {
+  pelletMultiplier: 2,
+  /** Espalhamento extra (graus) para os projéteis dobrados não saírem sobrepostos. */
+  extraSpread: 2.5,
+  tracerTint: 0xffd35a,
+};
+
 /** Melhoria do Weapon Lab (GDD §38): "M4" → "M4 Mk II". */
 export const weaponUpgrade = {
   damage: 1.8,
@@ -161,8 +174,28 @@ export const weaponUpgrade = {
   tracerTint: 0xc38bff,
 };
 
+/** Próximo nível do Weapon Lab: normal → Mk II → Mk III. */
 export function upgradeWeaponConfig(cfg: WeaponConfig): WeaponConfig {
-  if (cfg.upgraded) return cfg;
+  const level = cfg.upgradeLevel ?? (cfg.upgraded ? 1 : 0);
+  if (level >= MAX_UPGRADE_LEVEL) return cfg;
+  return level === 0 ? toMk2(cfg) : toMk3(cfg);
+}
+
+/** Mk III: mesmos atributos do Mk II, projéteis em dobro e traçante dourado. */
+function toMk3(cfg: WeaponConfig): WeaponConfig {
+  const u = weaponUpgradeMk3;
+  return {
+    ...cfg,
+    name: cfg.name.replace(/ Mk II$/, ' Mk III'),
+    pellets: cfg.pellets * u.pelletMultiplier,
+    spread: cfg.spread + u.extraSpread,
+    tracerTint: u.tracerTint,
+    upgraded: true,
+    upgradeLevel: 2,
+  };
+}
+
+function toMk2(cfg: WeaponConfig): WeaponConfig {
   const u = weaponUpgrade;
   return {
     ...cfg,
@@ -176,6 +209,7 @@ export function upgradeWeaponConfig(cfg: WeaponConfig): WeaponConfig {
     pierce: (cfg.pierce ?? 0) + 1,
     tracerTint: u.tracerTint,
     upgraded: true,
+    upgradeLevel: 1,
   };
 }
 

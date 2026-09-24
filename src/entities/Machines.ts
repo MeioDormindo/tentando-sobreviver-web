@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { machineKeys } from '../config/assets.config';
 import { perks, weaponLabConfig, type PerkId } from '../config/machines.config';
+import { MAX_UPGRADE_LEVEL } from '../config/weapons.config';
 import { ART_SCALE } from '../config/visual.config';
 import type { EffectsSystem } from '../effects/EffectsSystem';
 import type { LightingSystem } from '../effects/LightingSystem';
@@ -41,19 +42,28 @@ export class WeaponLab implements Interactable {
   }
 
   getPrompt(): InteractionPromptPayload | null {
-    const weapon = this.deps.weapons.current.config;
-    if (weapon.upgraded) return { text: `WEAPON LAB — ${weapon.name.toUpperCase()} JÁ MELHORADA`, affordable: false };
-    const price = weaponLabConfig.price;
-    return { text: `[E] WEAPON LAB: ${weapon.name.toUpperCase()} → MK II — ${money(price)}`, affordable: this.deps.economy.canAfford(price) };
+    const current = this.deps.weapons.current;
+    const weapon = current.config;
+    if (current.level >= MAX_UPGRADE_LEVEL) return { text: `WEAPON LAB — ${weapon.name.toUpperCase()} NO NÍVEL MÁXIMO`, affordable: false };
+    const next = current.level === 0 ? 'MK II' : 'MK III (PROJÉTEIS EM DOBRO)';
+    const price = this.price();
+    return { text: `[E] WEAPON LAB: ${weapon.name.toUpperCase()} → ${next} — ${money(price)}`, affordable: this.deps.economy.canAfford(price) };
+  }
+
+  /** Preço do próximo nível da arma em mãos. */
+  private price(): number {
+    return this.deps.weapons.current.level === 0 ? weaponLabConfig.price : weaponLabConfig.priceMk3;
   }
 
   interact(): void {
     const { weapons, economy, effects, lighting } = this.deps;
-    if (weapons.current.config.upgraded || !economy.spend(weaponLabConfig.price)) return;
+    if (weapons.current.level >= MAX_UPGRADE_LEVEL || !economy.spend(this.price())) return;
     weapons.upgradeCurrent();
-    audio.playAt('lab_upgrade', this.x, this.y, { category: 'ui', volume: 1, pitchJitter: 0 });
+    const mk3 = weapons.current.level >= MAX_UPGRADE_LEVEL;
+    audio.playAt('lab_upgrade', this.x, this.y, { category: 'ui', volume: 1, pitchJitter: 0, rate: mk3 ? 0.8 : 1 });
     effects.surfaceImpact(this.x, this.y - 10, -Math.PI / 2);
-    effects.floatingText(this.x, this.y - 40, weapons.current.config.name.toUpperCase(), '#c38bff', true);
+    effects.floatingText(this.x, this.y - 40, weapons.current.config.name.toUpperCase(), mk3 ? '#ffd35a' : '#c38bff', true);
+    if (mk3) effects.shockwave(this.x, this.y, 90, 0xffd35a, 600);
     lighting.addFlash(this.x, this.y, 220, 1, 700);
     this.scene.cameras.main.shake(180, 0.003);
   }

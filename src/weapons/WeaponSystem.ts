@@ -229,7 +229,11 @@ export class WeaponSystem {
     const special = cfg.special;
     let fired = 1;
     if (special?.type === 'arc') {
-      this.arcCaster?.fireArc(tipX, tipY, aim, cfg, this.mods.damageMultiplier);
+      for (let i = 0; i < cfg.pellets; i++) {
+        const offset = cfg.pellets > 1 ? Phaser.Math.DegToRad((i - (cfg.pellets - 1) / 2) * 16) : 0;
+        this.arcCaster?.fireArc(tipX, tipY, aim + offset, cfg, this.mods.damageMultiplier);
+      }
+      fired = cfg.pellets;
     } else {
       fired = 0;
       for (let i = 0; i < cfg.pellets; i++) {
@@ -257,7 +261,7 @@ export class WeaponSystem {
     }
     this.effects.muzzleFlash(tipX, tipY, aim, special ? cfg.tracerTint ?? SPECIAL_FLASH_TINT : 0xffffff);
     audio.play(`shot_${cfg.id}`, { category: 'weapon', volume: 0.85, pitchJitter: 0.05 });
-    if (cfg.upgraded) audio.play('mk2_layer', { category: 'weapon', volume: 0.5 });
+    if (cfg.upgraded) audio.play('mk2_layer', { category: 'weapon', volume: 0.5, rate: (cfg.upgradeLevel ?? 1) >= 2 ? 0.75 : 1 });
     // Armas especiais não usam cartuchos.
     if (!special) this.effects.ejectShell(this.owner.x + cos * EJECT_DISTANCE, this.owner.y + sin * EJECT_DISTANCE, aim);
   }
