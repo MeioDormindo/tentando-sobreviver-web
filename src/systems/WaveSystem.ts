@@ -48,6 +48,7 @@ export class WaveSystem {
   private houndRound = false;
   private lastKill = { x: 0, y: 0 };
   hounds: HoundRoundHooks | null = null;
+  private forcedBoss: { wave: number; healthMultiplier: number } | null = null;
 
   constructor(
     scene: Phaser.Scene,
@@ -155,7 +156,14 @@ export class WaveSystem {
   }
 
   get isBossWave(): boolean {
-    return waveConfig.bossWaves.includes(this.wave);
+    return waveConfig.bossWaves.includes(this.wave) || this.forcedBoss?.wave === this.wave;
+  }
+
+  /** A próxima wave passa a ser de boss, com vida extra (final da missão). */
+  forceBossNextWave(healthMultiplier: number): number {
+    const wave = this.wave + 1;
+    this.forcedBoss = { wave, healthMultiplier };
+    return wave;
   }
 
   private startWave(wave: number): void {
@@ -165,10 +173,10 @@ export class WaveSystem {
     if (this.isBossWave) {
       const ratio = bosses[bossForWave(this.mapId, wave)].escortRatio;
       this.params.totalEnemies = Math.max(2, Math.round(this.params.totalEnemies * ratio));
-      this.boss.startBossWave(wave);
+      this.boss.startBossWave(wave, this.forcedBoss?.wave === wave ? this.forcedBoss.healthMultiplier : 1);
     }
     // Rodada dos cães: só cães, ritmo próprio.
-    this.houndRound = isHoundRound(this.mapId, wave);
+    this.houndRound = !this.isBossWave && isHoundRound(this.mapId, wave);
     const hound = houndRounds[this.mapId];
     if (this.houndRound && hound) {
       this.params.totalEnemies = Math.min(hound.cap, Math.floor(hound.perWave * wave));

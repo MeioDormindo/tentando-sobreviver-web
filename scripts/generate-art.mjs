@@ -108,4 +108,7 @@ write(`${OUT}/props/lab_bench.svg`, H.labBench());
 write(`${OUT}/props/vending.svg`, H.vending());
 write(`${OUT}/props/surgical_light.svg`, H.surgicalLight());
 write(`${OUT}/props/waiting_chairs.svg`, H.waitingChairs());
+for (const [file, fn] of [['sample_fridge', H.sampleFridge], ['padlock', H.padlock], ['centrifuge', H.centrifuge], ['keycard', H.keycard], ['serum_vial', H.serumVial]]) {
+  write(`${OUT}/props/${file}.svg`, fn());
+}
 console.log('Pronto.');

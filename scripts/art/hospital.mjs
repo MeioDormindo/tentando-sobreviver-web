@@ -212,3 +212,58 @@ export function waitingChairs() {
   }
   return svgDoc(160, 44, SHADOW, s);
 }
+
+// ───────────────────────────── Missão: O Soro do Dr. Almeida ─────────────────────────────
+
+/** Geladeira de amostras da UTI (72x56 → 36x28), com luz azul e frascos. */
+export function sampleFridge() {
+  let s = shadowRect(4, 4, 64, 48);
+  s += `<rect x="4" y="4" width="64" height="48" rx="4" fill="#d9dfdc" stroke="#4a524e" stroke-width="2"/>`;
+  s += `<rect x="10" y="10" width="52" height="34" rx="2" fill="#9fd6ef" opacity=".55" stroke="#4a524e" stroke-width="1.5"/>`;
+  for (let i = 0; i < 6; i++) s += `<rect x="${14 + i * 8}" y="16" width="5" height="12" rx="2" fill="${i % 2 ? '#c0392b' : '#9ccf2a'}"/>`;
+  s += `<rect x="12" y="32" width="48" height="2" fill="#6d8290"/>`;
+  s += `<circle cx="60" cy="48" r="2.5" fill="#3ce0ff"/>`;
+  return svgDoc(72, 56, SHADOW, s);
+}
+
+/** Cadeado grande do armário da Farmácia (32x32 → 16x16). */
+export function padlock() {
+  let s = `<path d="M9 14 V9 Q16 1 23 9 V14" stroke="#9aa3a8" stroke-width="3" fill="none"/>`;
+  s += `<rect x="6" y="13" width="20" height="15" rx="3" fill="#c9a227" stroke="#3a2e0a" stroke-width="1.6"/>`;
+  s += `<circle cx="16" cy="20" r="2.4" fill="#3a2e0a"/><rect x="15" y="21" width="2" height="4" fill="#3a2e0a"/>`;
+  return svgDoc(32, 32, '', s);
+}
+
+/** Centrífuga do Laboratório (96x80 → 48x40): tambor com tubos e painel. */
+export function centrifuge() {
+  const defs = SHADOW + radial('cfg', [[0, '#e8ecee'], [1, '#8a9398']], '40%', '35%', '70%');
+  let s = shadowRect(6, 6, 84, 68, 8);
+  s += `<rect x="6" y="6" width="84" height="68" rx="8" fill="#5a6368" stroke="#1d2224" stroke-width="2"/>`;
+  s += `<circle cx="40" cy="40" r="26" fill="url(#cfg)" stroke="#1d2224" stroke-width="2"/>`;
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2;
+    s += `<circle cx="${f(40 + Math.cos(a) * 16)}" cy="${f(40 + Math.sin(a) * 16)}" r="4.5" fill="#9ccf2a" stroke="#2f4210" stroke-width="1.2"/>`;
+  }
+  s += `<circle cx="40" cy="40" r="5" fill="#2a3034"/>`;
+  s += `<rect x="72" y="16" width="12" height="48" rx="2" fill="#1d2224"/>`;
+  for (const [y, c] of [[24, '#3ce0ff'], [36, '#9ccf2a'], [48, '#e0503c']]) s += `<circle cx="78" cy="${y}" r="3" fill="${c}"/>`;
+  return svgDoc(96, 80, defs, s);
+}
+
+/** Cartão de acesso do Blindado (40x28 → 20x14). */
+export function keycard() {
+  let s = `<rect x="2" y="2" width="36" height="24" rx="3" fill="#e8e2c8" stroke="#3a3a3a" stroke-width="1.6"/>`;
+  s += `<rect x="2" y="2" width="36" height="7" rx="3" fill="#c0392b"/>`;
+  s += `<rect x="6" y="12" width="10" height="11" rx="1" fill="#8a96a8"/>`;
+  s += `<rect x="19" y="13" width="15" height="2.4" fill="#555"/><rect x="19" y="18" width="11" height="2.4" fill="#555"/>`;
+  return svgDoc(40, 28, '', s);
+}
+
+/** Frasco do soro pronto (32x48 → 16x24), brilhando. */
+export function serumVial() {
+  const defs = radial('srm', [[0, '#e8ff8a'], [1, '#6fe0d8']], '45%', '40%', '60%');
+  let s = `<rect x="10" y="4" width="12" height="6" rx="1.5" fill="#6d7571"/>`;
+  s += `<path d="M9 10 H23 V38 Q23 44 16 44 Q9 44 9 38 Z" fill="url(#srm)" stroke="#1d3a38" stroke-width="1.6"/>`;
+  s += `<rect x="11" y="14" width="3" height="20" rx="1.5" fill="#fff" opacity=".45"/>`;
+  return svgDoc(32, 48, defs, s);
+}

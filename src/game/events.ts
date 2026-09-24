@@ -24,6 +24,10 @@ export const GameEvents = {
   Toast: 'toast',
   /** Energia do mapa ligada/desligada. */
   PowerChanged: 'power-changed',
+  /** Objetivo atual da missão principal (null = sem missão ativa). */
+  QuestState: 'quest-state',
+  /** Missão principal concluída. */
+  QuestComplete: 'quest-complete',
   /** Jogo pausado / retomado (o disparo espera o botão ser solto ao voltar). */
   GamePaused: 'game-paused',
   GameResumed: 'game-resumed',
@@ -208,11 +212,13 @@ export interface GameEventMap {
   [GameEvents.GameResumed]: undefined;
   [GameEvents.PowerUpCollected]: { id: string; name: string; color: number; detail?: string };
   [GameEvents.PowerChanged]: { on: boolean };
+  [GameEvents.QuestState]: { title: string; objective: string; step: number; total: number } | null;
+  [GameEvents.QuestComplete]: { id: string; title: string; subtitle: string };
   [GameEvents.PowerUpTimers]: { timers: PowerUpTimer[] };
   [GameEvents.BossIncoming]: { name: string };
   [GameEvents.BossState]: BossStatePayload;
   [GameEvents.BossPhase]: { name: string; phase: number };
-  [GameEvents.BossDefeated]: { name: string; reward: number };
+  [GameEvents.BossDefeated]: { name: string; reward: number; id: string; x: number; y: number };
   [GameEvents.WorldEventStarted]: { id: string; name: string; hint: string; color: number };
   [GameEvents.WorldEventState]: WorldEventStatePayload | null;
   [GameEvents.ShotsFired]: { count: number };

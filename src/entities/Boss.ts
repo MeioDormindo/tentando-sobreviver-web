@@ -54,10 +54,19 @@ export class Boss extends Phaser.Physics.Arcade.Sprite {
   private noProgressMs = 0;
   private stepDistance = 0;
 
-  constructor(scene: Phaser.Scene, x: number, y: number, config: BossConfig, appearance: number, private readonly world: BossWorld) {
+  constructor(
+    scene: Phaser.Scene,
+    x: number,
+    y: number,
+    config: BossConfig,
+    appearance: number,
+    private readonly world: BossWorld,
+    /** Vida extra (Paciente Zero enfurecido da missão). */
+    healthMultiplier = 1,
+  ) {
     super(scene, x, y, bossSheetKey(config.id), 0);
     this.config = config;
-    this.maxHp = Math.round(config.health * (1 + config.healthPerAppearance * appearance));
+    this.maxHp = Math.round(config.health * (1 + config.healthPerAppearance * appearance) * healthMultiplier);
     this.hp = this.maxHp;
 
     this.shadow = scene.add.image(x, y, ASSET_KEYS.shadow).setScale(ART_SCALE * 2.2).setDepth(DEPTH.shadows);

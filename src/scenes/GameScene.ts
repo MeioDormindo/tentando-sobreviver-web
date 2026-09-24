@@ -14,7 +14,9 @@ import { Door } from '../entities/Door';
 import { PerkMachine, WeaponLab, type MachineDeps } from '../entities/Machines';
 import { MapInteractions } from '../entities/MapInteractions';
 import { StationBoard } from '../entities/StationBoard';
-import { quickReviveConfig } from '../config/machines.config';
+import { perks, quickReviveConfig, type PerkId } from '../config/machines.config';
+import { createSerumQuest } from '../quests/serumQuest';
+import type { QuestSystem } from '../quests/QuestSystem';
 import { mapSkins, type ZombieConfig } from '../config/zombies.config';
 import { houndRounds } from '../config/waves.config';
 import { liveZombies } from '../events/WorldEvent';
@@ -70,6 +72,8 @@ export class GameScene extends Phaser.Scene {
   private hazards!: HazardSystem;
   /** Energia do mapa (também usada pela missão principal). */
   power!: PowerSystem;
+  /** Missão principal do mapa (só no Hospital). */
+  quest: QuestSystem | null = null;
   private perks!: PerkSystem;
   private powerUps!: PowerUpSystem;
   private bossSystem!: BossSystem;
@@ -334,7 +338,7 @@ export class GameScene extends Phaser.Scene {
       box: () => box,
       supply: () => this.eventSystem.supplyDrop,
       // Objetivo no minimapa: o disjuntor, enquanto a energia estiver desligada.
-      objective: () => (power.isOn ? null : breaker),
+      objective: () => this.quest?.target ?? (power.isOn ? null : breaker),
     });
 
     // Portas pagas: abrir libera os spawns e a exploração da área seguinte.
@@ -360,6 +364,26 @@ export class GameScene extends Phaser.Scene {
       this.interaction.add(
         s.type === 'weapon' ? new WeaponCase(this, s.x, s.y, s.weaponId, stationDeps) : new AmmoStation(this, s.x, s.y, stationDeps),
       );
+    }
+
+    // Missão principal do Hospital: O Soro do Dr. Almeida.
+    if (this.mapId === 'map2') {
+      this.quest = createSerumQuest(this, {
+        interaction: this.interaction,
+        player: this.player,
+        power,
+        breaker,
+        zombies,
+        projectiles,
+        spawnArmored: () => {
+          const wave = Math.max(1, this.waveSystem.currentWave);
+          return spawner.spawn(scaleZombie(getZombieConfig('armored'), getWaveParams(wave)), wave);
+        },
+        waves: this.waveSystem,
+        effects,
+        lighting: this.lighting,
+        reward: () => this.serumReward(),
+      });
     }
 
     this.cameraController = new CameraController(this, this.player, map.widthPx, map.heightPx);
@@ -412,6 +436,7 @@ export class GameScene extends Phaser.Scene {
     this.mapInteractions.update(time);
     this.station?.update(time);
     this.minimap.update(time);
+    this.quest?.update(time, delta);
     audio.update(time);
     this.music.update(time, delta);
     this.cameraController.update();
@@ -487,6 +512,13 @@ export class GameScene extends Phaser.Scene {
     this.lighting.setFog(0, 1);
     this.lighting.setDarknessTint(null);
     this.powerUps.spawnDrop('max_ammo', x, y);
+  }
+
+  /** Final da missão: todos os perks e o Canhão de Vento já como Tornado. */
+  private serumReward(): void {
+    for (const id of Object.keys(perks) as PerkId[]) if (!this.perks.isMaxed(id)) this.perks.grant(id);
+    this.weaponSystem.give('wind_cannon');
+    if (this.weaponSystem.current.config.id === 'wind_cannon' && this.weaponSystem.current.level === 0) this.weaponSystem.upgradeCurrent();
   }
 
   /** Levantou do Quick Revive: gasta o perk e afasta os zumbis em volta. */

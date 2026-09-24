@@ -80,13 +80,13 @@ export class BossSystem {
   }
 
   /** Inicia a wave de boss: aviso e, depois, o boss surge num ponto de spawn. */
-  startBossWave(wave: number): void {
+  startBossWave(wave: number, healthMultiplier = 1): void {
     const config = bosses[bossForWave(this.deps.mapId, wave)];
     this.wave = wave;
     this.pending = true;
     emitGameEvent(this.scene.game.events, GameEvents.BossIncoming, { name: config.name });
     this.scene.cameras.main.shake(600, 0.003);
-    this.scene.time.delayedCall(WARNING_MS, () => this.spawn(config));
+    this.scene.time.delayedCall(WARNING_MS, () => this.spawn(config, healthMultiplier));
   }
 
   update(time: number, delta: number): void {
@@ -107,12 +107,12 @@ export class BossSystem {
 
   // ───────────────────────── Surgimento ─────────────────────────
 
-  private spawn(config: BossConfig): void {
+  private spawn(config: BossConfig, healthMultiplier: number): void {
     const { x, y } = this.arenaPoint();
     const appearance = this.appearances.get(config.id) ?? 0;
     this.appearances.set(config.id, appearance + 1);
 
-    const boss = new Boss(this.scene, x, y, config, appearance, this.createWorld(config));
+    const boss = new Boss(this.scene, x, y, config, appearance, this.createWorld(config), healthMultiplier);
     this.deps.bossGroup.add(boss);
     boss.setPushable(false);
     this.boss = boss;
@@ -332,7 +332,7 @@ export class BossSystem {
     const reward = economy.earn(boss.config.reward);
     powerUps.spawnDrop('golden', x, y);
     powerUps.spawnDrop('max_ammo', x + 40, y);
-    emitGameEvent(this.scene.game.events, GameEvents.BossDefeated, { name: boss.config.name, reward });
+    emitGameEvent(this.scene.game.events, GameEvents.BossDefeated, { name: boss.config.name, reward, id: boss.config.id, x, y });
     this.emitState(true);
   }
 
