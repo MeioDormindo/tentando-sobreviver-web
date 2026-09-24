@@ -35,6 +35,13 @@ export const ZOMBIE_SKINS = {
   runner: { frame: 128, corpse: true },
   tank: { frame: 176, corpse: true },
   exploder: { frame: 128, corpse: false },
+  // Hospital Santa Luzia
+  h_a: { frame: 128, corpse: true },
+  h_b: { frame: 128, corpse: true },
+  h_c: { frame: 128, corpse: true },
+  h_runner: { frame: 128, corpse: true },
+  h_tank: { frame: 176, corpse: true },
+  h_exploder: { frame: 128, corpse: false },
 } as const;
 export type ZombieSkin = keyof typeof ZOMBIE_SKINS;
 export const ZOMBIE_SKIN_IDS = Object.keys(ZOMBIE_SKINS) as ZombieSkin[];

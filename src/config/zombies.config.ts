@@ -1,3 +1,4 @@
+import type { MapId } from './maps.config';
 export interface ExplosiveConfig {
   /** Dano no centro da explosão (cai até 30% na borda). */
   damage: number;
@@ -106,3 +107,13 @@ export function getZombieConfig(id: string): ZombieConfig {
   if (!cfg) throw new Error(`Zumbi desconhecido: ${id}`);
   return cfg;
 }
+
+/** Roupas de cada tipo por mapa (os valores de vida/dano/velocidade não mudam). */
+export const mapSkins: Partial<Record<MapId, Record<string, string[]>>> = {
+  map2: {
+    walker: ['h_a', 'h_b', 'h_c'],
+    runner: ['h_runner'],
+    tank: ['h_tank'],
+    exploder: ['h_exploder'],
+  },
+};

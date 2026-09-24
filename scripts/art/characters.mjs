@@ -141,6 +141,13 @@ export const ZOMBIE_VARIANTS = {
   // Tank: corpo maior com proteção improvisada e capacete (GDD §55)
   tank: { shirt: '#3d4238', shirtShade: '#262a22', pants: '#33372f', pantsShade: '#20231d', shoes: '#191714', skin: '#6c7560', skinShade: '#444c3b', hair: '#1d1a17', seed: 67, bald: true, rx: 19, ry: 28, armor: true, helmet: true, scale: 1.375 },
   // Exploder: inchado, com pústulas brilhantes — sinal claro de infecção (GDD §55)
+  // Hospital: as mesmas proporções dos tipos originais
+  h_a: { scale: 1 },
+  h_b: { scale: 1 },
+  h_c: { scale: 1 },
+  h_runner: { scale: 1 },
+  h_tank: { scale: 1.375 },
+  h_exploder: { scale: 1, noCorpse: true },
   exploder: { shirt: '#4f5a36', shirtShade: '#303822', pants: '#3a3a2c', pantsShade: '#23231a', shoes: '#1d1a17', skin: '#7f8c56', skinShade: '#4f5a32', hair: '#1d1a17', seed: 79, bald: true, rx: 19.5, ry: 27, pustules: true, noCorpse: true },
 };
 

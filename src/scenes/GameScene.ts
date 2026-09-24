@@ -15,6 +15,7 @@ import { PerkMachine, WeaponLab, type MachineDeps } from '../entities/Machines';
 import { MapInteractions } from '../entities/MapInteractions';
 import { StationBoard } from '../entities/StationBoard';
 import { quickReviveConfig } from '../config/machines.config';
+import { mapSkins } from '../config/zombies.config';
 import { liveZombies } from '../events/WorldEvent';
 import { Knife } from '../weapons/Knife';
 import { EasterEggs } from '../systems/EasterEggs';
@@ -93,6 +94,7 @@ export class GameScene extends Phaser.Scene {
   create(): void {
     const map = new GameMap(this, layoutFor(this.mapId));
     Zombie.bigHeads = save.secret('konami') && save.setting('bigHeads');
+    Zombie.skinOverrides = mapSkins[this.mapId] ?? {};
     this.map = map;
     this.currentArea = '';
     this.physics.world.setBounds(0, 0, map.widthPx, map.heightPx);

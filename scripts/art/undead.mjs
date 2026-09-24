@@ -55,6 +55,19 @@ export const UNDEAD = {
   c: { outfit: 'vest', cloth: '#5a5d52', clothShade: '#393b33', accent: '#d8892a', pants: '#34404f', pantsShade: '#222a35', shoes: '#1d1a17', skin: '#8e977c', skinShade: '#5c6450', skinDark: '#3c4234', hair: '#1d1a17', seed: 37, hairStyle: 'bald' },
   runner: { outfit: 'rags', cloth: '#6e3530', clothShade: '#431e1b', accent: '#2a0a08', pants: '#2c2e33', pantsShade: '#1b1c20', shoes: '#1a1614', skin: '#7a8466', skinShade: '#4d5540', skinDark: '#30362a', hair: '#15120f', seed: 53, hairStyle: 'long', thin: true },
   tank: { outfit: 'armor', cloth: '#454a3e', clothShade: '#2b2f26', accent: '#b8932a', pants: '#383c33', pantsShade: '#23261f', shoes: '#191714', skin: '#7d8770', skinShade: '#4f5745', skinDark: '#343a2d', hair: '#1d1a17', seed: 67, hairStyle: 'helmet', bulk: 1.3 },
+  // ── Hospital Santa Luzia: mesmos tipos, roupas do hospital ──
+  // Paciente de camisola (walker)
+  h_a: { outfit: 'gown', cloth: '#9fb4bf', clothShade: '#6d8290', accent: '#d8e2e8', pants: '#7c866f', pantsShade: '#555d4b', shoes: '#9aa0a0', skin: '#8a9478', skinShade: '#58604b', skinDark: '#3a4031', hair: '#2b241c', seed: 113, hairStyle: 'short' },
+  // Enfermeira de uniforme verde (walker)
+  h_b: { outfit: 'scrubs', cloth: '#4f8a7a', clothShade: '#2f5a4e', accent: '#d8e2e0', pants: '#467b6c', pantsShade: '#2c5147', shoes: '#d0d4cf', skin: '#7f8a6f', skinShade: '#525b46', skinDark: '#353b2d', hair: '#5a4630', seed: 127, hairStyle: 'long' },
+  // Médico de jaleco (walker)
+  h_c: { outfit: 'labcoat', cloth: '#cfd3cc', clothShade: '#8f958c', accent: '#2e86c1', pants: '#2f343c', pantsShade: '#1f2228', shoes: '#1b1714', skin: '#8e977c', skinShade: '#5c6450', skinDark: '#3c4234', hair: '#8a8a82', seed: 139, hairStyle: 'short' },
+  // Paciente magro de camisola rasgada (runner)
+  h_runner: { outfit: 'gown', cloth: '#b7a9b8', clothShade: '#7e7080', accent: '#e2d8e2', pants: '#7a8466', pantsShade: '#4d5540', shoes: '#7a8466', skin: '#7a8466', skinShade: '#4d5540', skinDark: '#30362a', hair: '#15120f', seed: 151, hairStyle: 'long', thin: true },
+  // Segurança do hospital, enorme, com colete (tank)
+  h_tank: { outfit: 'security', cloth: '#26324a', clothShade: '#161e2e', accent: '#c9a227', pants: '#1f2533', pantsShade: '#141822', shoes: '#111', skin: '#7d8770', skinShade: '#4f5745', skinDark: '#343a2d', hair: '#1d1a17', seed: 163, hairStyle: 'bald', bulk: 1.3 },
+  // Paciente inchado ligado ao soro (exploder)
+  h_exploder: { outfit: 'bloated', cloth: '#9fb4bf', clothShade: '#6d8290', accent: '#d7e04a', pants: '#96a466', pantsShade: '#63703f', shoes: '#96a466', skin: '#96a466', skinShade: '#63703f', skinDark: '#3f4a27', hair: '#1d1a17', seed: 179, hairStyle: 'bald', bloat: true },
   exploder: { outfit: 'bloated', cloth: '#5a6440', clothShade: '#383f27', accent: '#d7e04a', pants: '#3a3a2c', pantsShade: '#23231a', shoes: '#1d1a17', skin: '#96a466', skinShade: '#63703f', skinDark: '#3f4a27', hair: '#1d1a17', seed: 79, hairStyle: 'bald', bloat: true },
 };
 
@@ -173,6 +186,32 @@ function clothingDetails(v, id, cx, cy, w, d, r) {
       s += `<path d="M${f(cx - d * 0.7)} ${f(cy + sgn * w * 0.25)} L${f(cx + d * 0.75)} ${f(cy + sgn * w * 0.3)} L${f(cx + d * 0.6)} ${f(cy + sgn * w * 0.82)} L${f(cx - d * 0.45)} ${f(cy + sgn * w * 0.85)} Z" fill="${v.accent}" opacity=".95"/>`;
       s += `<path d="M${f(cx - d * 0.1)} ${f(cy + sgn * w * 0.3)} L${f(cx - d * 0.05)} ${f(cy + sgn * w * 0.84)}" stroke="#d8dcd0" stroke-width="2.4" opacity=".8"/>`;
     }
+  } else if (v.outfit === 'gown') {
+    // camisola hospitalar: estampa de bolinhas e amarras soltas nas costas
+    const dots = rng(v.seed + 3);
+    for (let i = 0; i < 16; i++) s += `<circle cx="${f(cx + dots.range(-d * 0.8, d * 0.8))}" cy="${f(cy + dots.range(-w * 0.85, w * 0.85))}" r="1.1" fill="${v.accent}" opacity=".6"/>`;
+    for (const sgn of [-1, 1]) s += `<path d="M${f(cx - d * 0.95)} ${f(cy + sgn * 3)} q-6 ${f(sgn * 2)} -9 ${f(sgn * 6)}" stroke="${v.clothShade}" stroke-width="1.4" fill="none"/>`;
+    // pulseira de identificação
+    s += `<path d="M${f(cx + d * 0.2)} ${f(cy - w * 0.95)} l4 -1" stroke="#f4efe2" stroke-width="2"/>`;
+  } else if (v.outfit === 'scrubs') {
+    // gola em V, bolso no peito com caneta
+    s += `<path d="M${f(cx + d * 0.5)} ${f(cy - 7)} L${f(cx + d * 0.95)} ${f(cy)} L${f(cx + d * 0.5)} ${f(cy + 7)}" stroke="${v.clothShade}" stroke-width="2" fill="none"/>`;
+    s += `<rect x="${f(cx + d * 0.05)}" y="${f(cy - w * 0.62)}" width="7" height="6" fill="${v.clothShade}" opacity=".8"/>`;
+    s += `<path d="M${f(cx + d * 0.1)} ${f(cy - w * 0.62)} l0 -3" stroke="${v.accent}" stroke-width="1.4"/>`;
+  } else if (v.outfit === 'labcoat') {
+    // jaleco branco aberto: lapelas, crachá e estetoscópio no pescoço
+    for (const sgn of [-1, 1]) s += `<path d="M${f(cx + d * 0.85)} ${f(cy + sgn * 2)} L${f(cx + d * 0.1)} ${f(cy + sgn * w * 0.55)}" stroke="${v.clothShade}" stroke-width="2.2"/>`;
+    s += `<path d="M${f(cx + d * 0.85)} ${f(cy)} L${f(cx - d * 0.2)} ${f(cy)}" stroke="#3a4b5c" stroke-width="3" opacity=".8"/>`;
+    s += `<path d="M${f(cx + d * 0.7)} ${f(cy - w * 0.4)} Q${f(cx + d * 0.1)} ${f(cy)} ${f(cx + d * 0.7)} ${f(cy + w * 0.4)}" stroke="#20262b" stroke-width="1.6" fill="none"/>`;
+    s += `<circle cx="${f(cx + d * 0.1)}" cy="${f(cy + 1)}" r="2.2" fill="#9aa3a8"/>`;
+    s += `<rect x="${f(cx + d * 0.2)}" y="${f(cy + w * 0.5)}" width="6" height="8" rx="1" fill="${v.accent}"/>`;
+  } else if (v.outfit === 'security') {
+    // camisa escura com distintivo, rádio no ombro e cinto de utilidades
+    s += `<path d="M${f(cx + d * 0.1)} ${f(cy - w * 0.62)} l3 2 l-3 2 l-3 -2 Z" fill="${v.accent}"/>`;
+    s += `<rect x="${f(cx - d * 0.2)}" y="${f(cy + w * 0.62)}" width="7" height="5" rx="1" fill="#111"/>`;
+    s += `<path d="M${f(cx - d * 0.95)} ${f(cy - w * 0.9)} L${f(cx - d * 0.95)} ${f(cy + w * 0.9)}" stroke="#3a2a16" stroke-width="3"/>`;
+    // colete à prova de facada
+    for (const sgn of [-1, 1]) s += `<path d="M${f(cx - d * 0.6)} ${f(cy + sgn * w * 0.2)} L${f(cx + d * 0.6)} ${f(cy + sgn * w * 0.25)} L${f(cx + d * 0.5)} ${f(cy + sgn * w * 0.8)} L${f(cx - d * 0.4)} ${f(cy + sgn * w * 0.82)} Z" fill="#1a1f29" opacity=".85"/>`;
   } else if (v.outfit === 'rags') {
     // camiseta em farrapos: costelas aparecendo
     s += `<path d="${blobPath(cx + d * 0.3, cy + w * 0.1, w * 0.45, 0.5, 9, r)}" fill="url(#uk${id})"/>`;
@@ -306,8 +345,8 @@ export function undeadFrame(v, id, pose) {
 
   // Braços por cima do tronco; a mão direita do Tank é enorme
   const armOpts = { id, upper: 18 * bulk, fore: 19 * bulk };
-  s += arm(v, r, [cx + 3, cy - w * 0.74], pose.handL, -1, { ...armOpts, bone: v.outfit === 'office', bloodyHand: true, bare: v.outfit === 'rags' });
-  s += arm(v, r, [cx + 3, cy + w * 0.74], pose.handR, 1, { ...armOpts, scale: v.bulk ? 1.25 : 1, bare: v.outfit === 'rags' || v.bloat, bone: v.outfit === 'rags' });
+  s += arm(v, r, [cx + 3, cy - w * 0.74], pose.handL, -1, { ...armOpts, bone: v.outfit === 'office', bloodyHand: true, bare: v.outfit === 'rags' || v.outfit === 'gown' });
+  s += arm(v, r, [cx + 3, cy + w * 0.74], pose.handR, 1, { ...armOpts, scale: v.bulk ? 1.25 : 1, bare: v.outfit === 'rags' || v.outfit === 'gown' || v.bloat, bone: v.outfit === 'rags' });
 
   // Pescoço e cabeça caída para a frente
   const hx = cx + d * 0.72 + pose.headFwd;
@@ -320,7 +359,7 @@ export function undeadFrame(v, id, pose) {
 /** Poses de andar (8) + ataque (5) para uma variante. */
 export function undeadPoses(v) {
   const list = [];
-  const run = v.outfit === 'rags';
+  const run = v.outfit === 'rags' || !!v.thin;
   const bulk = v.bulk ?? 1;
   const reach = (x) => 64 + (x - 64) * bulk;
   for (let i = 0; i < 8; i++) {

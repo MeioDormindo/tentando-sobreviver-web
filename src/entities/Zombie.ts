@@ -94,6 +94,8 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
   private readonly knock = new Phaser.Math.Vector2();
   /** Easter egg "modo cabeção" (ligado pela GameScene conforme o save). */
   static bigHeads = false;
+  /** Roupas do mapa atual por tipo (ligado pela GameScene; vazio = as do tipo). */
+  static skinOverrides: Readonly<Record<string, string[]>> = {};
   private bigHead: Phaser.GameObjects.Image | null = null;
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
@@ -168,7 +170,7 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     this.nextAttackAt = 0;
     this.aiState = ZombieState.Idle;
     this.life++;
-    this.skin = Phaser.Utils.Array.GetRandom(config.skins) as ZombieSkin;
+    this.skin = Phaser.Utils.Array.GetRandom(Zombie.skinOverrides[config.id] ?? config.skins) as ZombieSkin;
     this.exploded = false;
     this.fuseEndsAt = 0;
     this.stunnedUntil = 0;
