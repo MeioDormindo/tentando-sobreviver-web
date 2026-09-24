@@ -6,7 +6,7 @@ import { NavCost, NavGrid } from '../systems/pathfinding/NavGrid';
 import type { SpawnPoint } from '../systems/SpawnSystem';
 import {
   AREAS, CARVES, DOORS, FLOORS, LAMPS, MAP_HEIGHT, MAP_WIDTH, OBSTACLES, OUTSIDE_DARKNESS, PLAYER_START,
-  BOSS_SPAWNS, BOX_SPOTS, MACHINES, POCKETS, PROPS, SPAWNS, STATIONS, TRAIN_ROOF_UNITS, WINDOWS,
+  BOSS_SPAWNS, BOX_SPOTS, MACHINES, POCKETS, PLATFORM_EDGES, PROPS, SPAWNS, STATIONS, TRAIN_ROOF_UNITS, WINDOWS,
   type AreaDef, type DoorDef, type FloorKind, type MachinePlacement, type Rect, type WindowDef,
 } from './terminal/layout';
 import { perks } from '../config/machines.config';
@@ -361,20 +361,22 @@ export class TerminalMap {
 
   /** Faixa tátil na borda da plataforma e equipamentos no teto do trem. */
   private renderPlatformDetails(): void {
-    const platform = FLOORS.find((f) => f.kind === 'concrete');
-    if (platform) {
-      const r = platform.rect;
+    for (const e of PLATFORM_EDGES) {
+      const y = e.y * TILE_SIZE + (e.down ? -12 : 2);
       this.scene.add
-        .tileSprite(r.x * TILE_SIZE, r.y * TILE_SIZE + 2, r.w * TILE_SIZE, 10, ASSET_KEYS.tactile)
+        .tileSprite(e.x * TILE_SIZE, y, e.w * TILE_SIZE, 10, ASSET_KEYS.tactile)
         .setOrigin(0)
         .setTileScale(ART_SCALE)
         .setDepth(DEPTH.decals + 1);
     }
+    // O teto do trem parado fica logo acima da última linha dele.
+    const train = OBSTACLES.find((o) => o.kind === 'train')?.rect;
+    const roofDepth = train ? (train.y + train.h) * TILE_SIZE + 1 : 0;
     for (const u of TRAIN_ROOF_UNITS) {
       this.scene.add
         .image(u.tx * TILE_SIZE, u.ty * TILE_SIZE - WALL_RISE, ASSET_KEYS.trainRoofUnit)
         .setScale(ART_SCALE)
-        .setDepth(12 * TILE_SIZE + 1);
+        .setDepth(roofDepth);
     }
   }
 

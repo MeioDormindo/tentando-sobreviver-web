@@ -84,7 +84,7 @@ export const trainConfig = {
   /** Dano ao jogador atropelado (uma vez por passagem). */
   playerDamage: 70,
   /** Faixa livre dos trilhos por onde o trem passa (tiles). */
-  lane: { y: 4, h: 3 },
+  lane: { y: 12, h: 4 },
   /** Área necessária aberta. */
   area: 'platform',
 };

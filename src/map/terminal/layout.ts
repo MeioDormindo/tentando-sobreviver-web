@@ -55,15 +55,19 @@ export const POCKETS: Rect[] = [
 
 /** Pisos (ordem de desenho). */
 export const FLOORS: Array<{ rect: Rect; kind: FloorKind }> = [
-  { rect: { x: 16, y: 4, w: 96, h: 9 }, kind: 'tracks' },
-  { rect: { x: 16, y: 13, w: 96, h: 13 }, kind: 'concrete' },
+  // Plataforma Norte (de cima para baixo): trilho de trás com o trem parado, ilha,
+  // trilho da frente (onde o trem passa) e a plataforma principal, ligada ao Hall.
+  { rect: { x: 16, y: 4, w: 96, h: 5 }, kind: 'tracks' },
+  { rect: { x: 16, y: 9, w: 96, h: 3 }, kind: 'concrete' },
+  { rect: { x: 16, y: 12, w: 96, h: 4 }, kind: 'tracks' },
+  { rect: { x: 16, y: 16, w: 96, h: 10 }, kind: 'concrete' },
   { rect: { x: 40, y: 28, w: 48, h: 28 }, kind: 'terminal' },
   { rect: { x: 12, y: 58, w: 32, h: 20 }, kind: 'terminal' },
   { rect: { x: 84, y: 58, w: 32, h: 20 }, kind: 'terminal' },
   { rect: { x: 24, y: 81, w: 80, h: 14 }, kind: 'metal' },
   { rect: { x: 16, y: 98, w: 96, h: 10 }, kind: 'tunnel' },
   { rect: { x: 36, y: 110, w: 56, h: 9 }, kind: 'metal' },
-  { rect: { x: 58, y: 8, w: 12, h: 4 }, kind: 'wagon' },
+  { rect: { x: 58, y: 5, w: 12, h: 4 }, kind: 'wagon' },
   ...POCKETS.map((rect) => ({ rect, kind: 'concrete' as FloorKind })),
 ];
 
@@ -77,12 +81,12 @@ export const OBSTACLES: Array<{ rect: Rect; kind: SolidKind }> = [
   { rect: { x: 48, y: 48, w: 2, h: 2 }, kind: 'wall' },
   { rect: { x: 78, y: 48, w: 2, h: 2 }, kind: 'wall' },
   { rect: { x: 60, y: 34, w: 8, h: 2 }, kind: 'wall' },
-  // Plataforma: pilares e o trem
-  { rect: { x: 28, y: 17, w: 2, h: 2 }, kind: 'wall' },
-  { rect: { x: 44, y: 17, w: 2, h: 2 }, kind: 'wall' },
-  { rect: { x: 82, y: 17, w: 2, h: 2 }, kind: 'wall' },
-  { rect: { x: 98, y: 17, w: 2, h: 2 }, kind: 'wall' },
-  { rect: { x: 24, y: 7, w: 80, h: 5 }, kind: 'train' },
+  // Plataforma: pilares da plataforma principal e o trem parado no trilho de trás
+  { rect: { x: 28, y: 19, w: 2, h: 2 }, kind: 'wall' },
+  { rect: { x: 44, y: 19, w: 2, h: 2 }, kind: 'wall' },
+  { rect: { x: 82, y: 19, w: 2, h: 2 }, kind: 'wall' },
+  { rect: { x: 98, y: 19, w: 2, h: 2 }, kind: 'wall' },
+  { rect: { x: 24, y: 4, w: 80, h: 5 }, kind: 'train' },
   // Bilheteria: balcão com guichês
   { rect: { x: 16, y: 65, w: 6, h: 1 }, kind: 'wall' },
   { rect: { x: 23, y: 65, w: 7, h: 1 }, kind: 'wall' },
@@ -120,8 +124,8 @@ export const OBSTACLES: Array<{ rect: Rect; kind: SolidKind }> = [
 
 /** Recortes feitos depois dos obstáculos: interior do vagão aberto e a porta dele. */
 export const CARVES: Rect[] = [
-  { x: 58, y: 8, w: 12, h: 3 },
-  { x: 62, y: 11, w: 3, h: 1 },
+  { x: 58, y: 5, w: 12, h: 3 },
+  { x: 62, y: 8, w: 3, h: 1 },
 ];
 
 export interface DoorDef {
@@ -177,10 +181,11 @@ export const SPAWNS: SpawnDef[] = [
   { id: 'H2', tx: 36, ty: 48, area: 'hall', minWave: 1 },
   { id: 'H3', tx: 91, ty: 33, area: 'hall', minWave: 1 },
   { id: 'H4', tx: 91, ty: 48, area: 'hall', minWave: 1 },
-  { id: 'P1', tx: 18, ty: 9, area: 'platform', minWave: 1 },
-  { id: 'P2', tx: 109, ty: 9, area: 'platform', minWave: 1 },
-  { id: 'P3', tx: 40, ty: 5, area: 'platform', minWave: 1 },
-  { id: 'P4', tx: 88, ty: 5, area: 'platform', minWave: 1 },
+  // Bocas dos túneis: nas pontas do trilho da frente (na rota do trem) e do trilho de trás
+  { id: 'P1', tx: 17, ty: 13, area: 'platform', minWave: 1 },
+  { id: 'P2', tx: 110, ty: 14, area: 'platform', minWave: 1 },
+  { id: 'P3', tx: 18, ty: 6, area: 'platform', minWave: 1 },
+  { id: 'P4', tx: 109, ty: 6, area: 'platform', minWave: 1 },
   { id: 'B1', tx: 8, ty: 63, area: 'ticket', minWave: 1 },
   { id: 'B2', tx: 8, ty: 72, area: 'ticket', minWave: 1 },
   { id: 'L1', tx: 119, ty: 63, area: 'shops', minWave: 1 },
@@ -213,7 +218,7 @@ export const STATIONS: StationPlacement[] = [
   { type: 'ammo', tx: 90, ty: 74 },
   { type: 'weapon', weaponId: 'ak', tx: 52, ty: 22 },
   { type: 'ammo', tx: 76, ty: 22 },
-  { type: 'weapon', weaponId: 'combat_shotgun', tx: 66.5, ty: 9 },
+  { type: 'weapon', weaponId: 'combat_shotgun', tx: 66.5, ty: 6 },
   { type: 'ammo', tx: 48, ty: 92 },
 ];
 
@@ -271,7 +276,7 @@ export const INTERACTIONS: MapInteractionDef[] = [
   // Hall: desliga o Alarme de Emergência
   { type: 'alarm', tx: 46, ty: 28.7 },
   // Plataforma: chama o trem
-  { type: 'train', tx: 55, ty: 14 },
+  { type: 'train', tx: 55, ty: 16.4 },
   // Armadilha elétrica logo abaixo da porta Hall ↔ Plataforma
   { type: 'trap', tx: 60, ty: 28.7, zone: { x: 61, y: 28, w: 6, h: 2 } },
   // Armadilha elétrica no corredor de baixo dos Túneis
@@ -297,9 +302,9 @@ export const PROPS: Array<{ type: PropType; tx: number; ty: number; angle?: numb
   { type: 'trash', tx: 70, ty: 24 },
   { type: 'suitcase', tx: 40, ty: 20, angle: -30 },
   { type: 'suitcase', tx: 90, ty: 21, angle: 60 },
-  { type: 'wagon_seat', tx: 59.5, ty: 8 },
-  { type: 'wagon_seat', tx: 59.5, ty: 10 },
-  { type: 'wagon_seat', tx: 68.5, ty: 10 },
+  { type: 'wagon_seat', tx: 59.5, ty: 5 },
+  { type: 'wagon_seat', tx: 59.5, ty: 7 },
+  { type: 'wagon_seat', tx: 68.5, ty: 7 },
   // Bilheteria
   { type: 'trash', tx: 14, ty: 76 },
   { type: 'trash', tx: 42, ty: 76 },
@@ -341,10 +346,15 @@ export const PROPS: Array<{ type: PropType; tx: number; ty: number; angle?: numb
   { type: 'extinguisher', tx: 87.2, ty: 38 },
   { type: 'cables', tx: 72, ty: 54.4, angle: 4 },
   // Plataforma: barreiras na borda dos trilhos e placas
-  { type: 'barrier', tx: 19.5, ty: 13.6 },
-  { type: 'barrier', tx: 107.5, ty: 13.6 },
-  { type: 'sign_stand', tx: 36, ty: 15 },
-  { type: 'sign_stand', tx: 92, ty: 15 },
+  { type: 'barrier', tx: 19.5, ty: 16.6 },
+  { type: 'barrier', tx: 107.5, ty: 16.6 },
+  { type: 'sign_stand', tx: 36, ty: 17.5 },
+  { type: 'sign_stand', tx: 92, ty: 17.5 },
+  // Ilha entre os trilhos
+  { type: 'bench', tx: 40, ty: 10 },
+  { type: 'bench', tx: 88, ty: 10 },
+  { type: 'trash', tx: 50, ty: 9.6 },
+  { type: 'suitcase', tx: 78, ty: 10.2, angle: 15 },
   { type: 'extinguisher', tx: 16.3, ty: 24 },
   // Bilheteria: guichês com computadores e cadeiras
   { type: 'desk_computer', tx: 25.5, ty: 62.3 },
@@ -398,7 +408,10 @@ export const LAMPS: LampDef[] = [
   { tx: 52, ty: 21, radius: 200, intensity: 0.6, flicker: 0.1 },
   { tx: 76, ty: 21, radius: 200, intensity: 0.6, flicker: 0.5 },
   { tx: 98, ty: 21, radius: 200, intensity: 0.65, flicker: 0.15 },
-  { tx: 64, ty: 14, radius: 170, intensity: 0.5, flicker: 0.3 },
+  // Ilha entre os trilhos
+  { tx: 34, ty: 10, radius: 170, intensity: 0.5, flicker: 0.3 },
+  { tx: 64, ty: 10, radius: 170, intensity: 0.55, flicker: 0.1 },
+  { tx: 94, ty: 10, radius: 170, intensity: 0.5, flicker: 0.6 },
   // Bilheteria
   { tx: 20, ty: 61, radius: 170, intensity: 0.55, flicker: 0.3 },
   { tx: 34, ty: 72, radius: 180, intensity: 0.6, flicker: 0.6 },
@@ -419,7 +432,14 @@ export const LAMPS: LampDef[] = [
   { tx: 78, ty: 114, radius: 180, intensity: 0.6, flicker: 0.4 },
 ];
 
+/** Bordas das plataformas que dão para os trilhos (faixa tátil amarela). y em tiles; `down` = trilho abaixo. */
+export const PLATFORM_EDGES: Array<{ x: number; y: number; w: number; down: boolean }> = [
+  { x: 16, y: 9, w: 96, down: false },
+  { x: 16, y: 12, w: 96, down: true },
+  { x: 16, y: 16, w: 96, down: false },
+];
+
 /** Unidades de ar-condicionado sobre o teto do trem (decoração). */
 export const TRAIN_ROOF_UNITS: Array<{ tx: number; ty: number }> = [
-  { tx: 30, ty: 9 }, { tx: 40, ty: 9 }, { tx: 48, ty: 9 }, { tx: 78, ty: 9 }, { tx: 88, ty: 9 }, { tx: 97, ty: 9 },
+  { tx: 30, ty: 6 }, { tx: 40, ty: 6 }, { tx: 48, ty: 6 }, { tx: 78, ty: 6 }, { tx: 88, ty: 6 }, { tx: 97, ty: 6 },
 ];
