@@ -5,6 +5,7 @@ import { COLORS, SCENE_KEYS, TEXTURE_KEYS, TILE_SIZE } from '../config/game.conf
 import { createFxTextures } from '../effects/fxTextures';
 import { generateSounds } from '../audio/SoundBank';
 import { save } from '../save/SaveStore';
+import { SKINS, skinUrl } from '../config/skins.config';
 
 /** Carrega a arte (SVG), fatia as spritesheets, cria animações e texturas de efeitos. */
 export class PreloadScene extends Phaser.Scene {
@@ -14,7 +15,11 @@ export class PreloadScene extends Phaser.Scene {
 
   preload(): void {
     this.createLoadingBar();
-    for (const sheet of SHEETS) this.load.svg(sheet.key, sheet.url);
+    // Só o visual escolhido do personagem é baixado.
+    // Visual trancado (ex.: save de outro aparelho) volta ao padrão.
+    const chosen = SKINS.find((s) => s.id === save.setting('skin'));
+    const skin = chosen && (chosen.unlock === null || save.hasAchievement(chosen.unlock)) ? chosen.id : 'default';
+    for (const sheet of SHEETS) this.load.svg(sheet.key, skinUrl(sheet.url, skin));
     for (const image of IMAGES) this.load.svg(image.key, image.url);
   }
 

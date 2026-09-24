@@ -1,5 +1,6 @@
 import { DEFAULT_MAP, MAP_IDS, MAPS, PLAYER_NAME_MAX, RANKING_SIZE, type MapId } from '../config/maps.config';
 import { achievementById, type AchievementId, type TotalKey } from '../config/achievements.config';
+import { isSkinId, type SkinId } from '../config/skins.config';
 
 /** Save local (GDD §65): configurações, recordes, desbloqueios, ranking e totais. */
 
@@ -49,6 +50,8 @@ export interface Settings {
   screenShake: boolean;
   /** Easter egg: zumbis cabeçudos (liberado pelo código Konami). */
   bigHeads: boolean;
+  /** Visual do personagem (liberado por conquistas). */
+  skin: SkinId;
 }
 
 /** Segredos descobertos (easter eggs). */
@@ -74,7 +77,7 @@ const emptyRecords = (): MapRecords => ({ bestWave: 0, bestKills: 0, bestScore: 
 function defaults(): SaveData {
   return {
     version: SAVE_VERSION,
-    settings: { muted: false, musicOn: true, playerName: 'SOBREVIVENTE', volume: 1, minimap: true, minimapSize: 'medium', touchMode: 'auto', screenShake: true, bigHeads: false },
+    settings: { muted: false, musicOn: true, playerName: 'SOBREVIVENTE', volume: 1, minimap: true, minimapSize: 'medium', touchMode: 'auto', screenShake: true, bigHeads: false, skin: 'default' },
     records: Object.fromEntries(MAP_IDS.map((id) => [id, emptyRecords()])) as Record<MapId, MapRecords>,
     unlockedMaps: MAP_IDS.filter((id) => MAPS[id].unlock === null),
     ranking: Object.fromEntries(MAP_IDS.map((id) => [id, []])) as unknown as Record<MapId, RankEntry[]>,
@@ -110,6 +113,7 @@ function sanitize(raw: unknown): SaveData {
   if (s.minimapSize === 'small' || s.minimapSize === 'large') d.settings.minimapSize = s.minimapSize;
   d.settings.screenShake = s.screenShake !== false;
   d.settings.bigHeads = s.bigHeads === true;
+  if (isSkinId(s.skin)) d.settings.skin = s.skin;
   if (s.touchMode === 'on' || s.touchMode === 'off') d.settings.touchMode = s.touchMode;
   const recs = (r.records ?? {}) as Partial<Record<MapId, Partial<MapRecords>>>;
   for (const id of MAP_IDS) {

@@ -18,6 +18,7 @@ const P = {
   pantsShade: '#262a30',
   shoes: '#2a2420',
   pack: '#5d4731',
+  packLight: '#7a5f42',
   packShade: '#3c2d1d',
   strap: '#2a2016',
   glove: '#232323',
@@ -28,9 +29,19 @@ const P = {
   gunLight: '#44464b',
 };
 
-const playerDefs =
+/**
+ * Visuais do jogador (liberados por conquistas): trocam as cores da jaqueta, mochila e cabelo.
+ * O padrão usa a paleta P como está.
+ */
+export const PLAYER_SKINS = {
+  nurse: { jacket: '#5f9c96', jacketShade: '#35625e', jacketLight: '#8fc4bd', jacketLine: '#1a3533', pack: '#c9c4b6', packShade: '#8e897c', packLight: '#e6e2d6', hair: '#1c1612', hairLight: '#3a2e24' },
+  conductor: { jacket: '#2c3a5a', jacketShade: '#18213a', jacketLight: '#4a5d88', jacketLine: '#0d1222', pack: '#6b4a2a', packShade: '#43301b', packLight: '#8a6640', hair: '#8a8a88', hairLight: '#b4b4b0' },
+  agent: { jacket: '#27292e', jacketShade: '#141518', jacketLight: '#474a52', jacketLine: '#08090a', pack: '#2f3136', packShade: '#1a1b1e', packLight: '#4a4d54', glove: '#101010', hair: '#0f0d0b', hairLight: '#2a2520' },
+};
+
+const playerDefs = () =>
   radial('pjk', [[0, P.jacketLight], [0.55, P.jacket], [1, P.jacketShade]]) +
-  radial('ppk', [[0, '#7a5f42'], [0.6, P.pack], [1, P.packShade]]) +
+  radial('ppk', [[0, P.packLight], [0.6, P.pack], [1, P.packShade]]) +
   radial('phr', [[0, P.hairLight], [0.7, P.hair], [1, '#1f160f']], '60%', '35%') +
   radial('psk', [[0, '#dcb799'], [1, '#a47e60']], '70%', '40%');
 
@@ -102,8 +113,14 @@ function playerTorso(pose, kind) {
 }
 
 /** Frames: 0 = mirando · 1 = recuo do tiro · 2..6 = recarga (poses por tipo de arma). */
-export function playerTorsoSheet(kind) {
-  return sheet(CHAR_FRAME, CHAR_FRAME, playerDefs, posesFor(kind).map((pose) => playerTorso(pose, kind)));
+export function playerTorsoSheet(kind, skin = null) {
+  const base = { ...P };
+  if (skin) Object.assign(P, PLAYER_SKINS[skin]);
+  try {
+    return sheet(CHAR_FRAME, CHAR_FRAME, playerDefs(), posesFor(kind).map((pose) => playerTorso(pose, kind)));
+  } finally {
+    Object.assign(P, base);
+  }
 }
 
 /** Pernas: ciclo de caminhada de 8 frames (frame 0 = parado). */

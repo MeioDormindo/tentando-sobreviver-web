@@ -6,6 +6,7 @@ import { MapSelectScene } from '../scenes/MapSelectScene';
 import { RankingScene } from '../scenes/RankingScene';
 import { AccountScene } from '../scenes/AccountScene';
 import { AchievementsScene } from '../scenes/AchievementsScene';
+import { CharacterScene } from '../scenes/CharacterScene';
 import { ArmoryScene } from '../scenes/ArmoryScene';
 import { SettingsScene } from '../scenes/SettingsScene';
 import { GameScene } from '../scenes/GameScene';
@@ -35,6 +36,7 @@ export const SCENE_KEYS = {
   settings: 'SettingsScene',
   account: 'AccountScene',
   achievements: 'AchievementsScene',
+  character: 'CharacterScene',
   game: 'GameScene',
   ui: 'UIScene',
 } as const;
@@ -67,5 +69,5 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
     antialias: true,
     pixelArt: false,
   },
-  scene: [BootScene, PreloadScene, MenuScene, MapSelectScene, RankingScene, ArmoryScene, SettingsScene, AccountScene, AchievementsScene, GameScene, UIScene],
+  scene: [BootScene, PreloadScene, MenuScene, MapSelectScene, RankingScene, ArmoryScene, SettingsScene, AccountScene, AchievementsScene, CharacterScene, GameScene, UIScene],
 };

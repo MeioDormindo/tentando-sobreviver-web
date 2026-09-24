@@ -34,6 +34,7 @@ export class MenuScene extends Phaser.Scene {
       menuButton(this, '[ RANKING ]', () => this.scene.start(SCENE_KEYS.ranking)),
       menuButton(this, '[ ARMAS ]', () => this.scene.start(SCENE_KEYS.armory)),
       menuButton(this, '[ CONQUISTAS ]', () => this.scene.start(SCENE_KEYS.achievements)),
+      menuButton(this, '[ PERSONAGEM ]', () => this.scene.start(SCENE_KEYS.character)),
       menuButton(this, currentUser() ? `[ CONTA: ${currentUser()?.toUpperCase()} ]` : '[ CONTA / SALVAR NA NUVEM ]', () => this.scene.start(SCENE_KEYS.account)),
       menuButton(this, '[ CONFIGURAÇÕES ]', () => this.scene.start(SCENE_KEYS.settings)),
     ];

@@ -1,6 +1,6 @@
 // Gera toda a arte vetorial do jogo em public/assets (SVG).
 // Uso: npm run art
-import { zombieBigHead, corpseSheet, playerLegsSheet, playerTorsoSheet, softShadow, zombieSheet, ZOMBIE_VARIANTS } from './art/characters.mjs';
+import { zombieBigHead, corpseSheet, playerLegsSheet, playerTorsoSheet, PLAYER_SKINS, softShadow, zombieSheet, ZOMBIE_VARIANTS } from './art/characters.mjs';
 import {
   decalBloodPool, decalBloodSplats, decalDebris, decalPapers, floorTerminal,
   propBarrel, propBench, propCrate, propSuitcase, propTrash, wallCap, wallFull, wallShadow,
@@ -21,6 +21,7 @@ const OUT = 'public/assets';
 console.log('Gerando arte...');
 for (const kind of WEAPON_KINDS) {
   write(`${OUT}/player/player_torso_${kind}.svg`, playerTorsoSheet(kind));
+  for (const skin of Object.keys(PLAYER_SKINS)) write(`${OUT}/player/player_torso_${kind}_${skin}.svg`, playerTorsoSheet(kind, skin));
 }
 write(`${OUT}/weapons/ammo_crate.svg`, ammoCrate());
 write(`${OUT}/player/player_legs.svg`, playerLegsSheet());
