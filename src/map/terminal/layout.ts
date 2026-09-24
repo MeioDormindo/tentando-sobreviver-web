@@ -240,12 +240,24 @@ export const MACHINES: MachinePlacement[] = [
  */
 export const BOX_SPOTS: Array<{ tx: number; ty: number; area: AreaId }> = [
   { tx: 69, ty: 30, area: 'hall' },
+  // Outros pontos no próprio Hall: a caixa muda de lugar mesmo sem outras áreas abertas.
+  { tx: 53, ty: 29.6, area: 'hall' },
+  { tx: 85, ty: 36, area: 'hall' },
+  { tx: 64, ty: 54, area: 'hall' },
   { tx: 46, ty: 21, area: 'platform' },
   { tx: 35, ty: 74, area: 'ticket' },
   { tx: 108, ty: 71, area: 'shops' },
   { tx: 80, ty: 88.5, area: 'tech' },
   { tx: 58, ty: 99.5, area: 'tunnels' },
   { tx: 64, ty: 111, area: 'maintenance' },
+];
+
+/** Onde o boss surge (e volta se ficar preso): o centro do Hall, amplo e sempre aberto. */
+export const BOSS_SPAWNS: Array<{ tx: number; ty: number }> = [
+  { tx: 64, ty: 44 },
+  { tx: 55, ty: 42 },
+  { tx: 73, ty: 42 },
+  { tx: 64, ty: 49 },
 ];
 
 export const PROPS: Array<{ type: PropType; tx: number; ty: number; angle?: number }> = [

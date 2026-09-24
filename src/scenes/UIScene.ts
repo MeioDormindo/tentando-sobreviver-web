@@ -4,7 +4,9 @@ import { audio } from '../audio/AudioSystem';
 import { DamageOverlay } from '../ui/DamageOverlay';
 import { EventHud } from '../ui/EventHud';
 import { TouchControls } from '../ui/TouchControls';
-import { isTouchDevice } from '../input/device';
+import { MiniMap } from '../ui/MiniMap';
+import { save } from '../save/SaveStore';
+import { useTouchControls } from '../input/device';
 import { touchInput } from '../input/touchInput';
 import { createGameOverOverlay } from '../ui/GameOverOverlay';
 import { COLORS, SCENE_KEYS } from '../config/game.config';
@@ -64,6 +66,7 @@ export class UIScene extends Phaser.Scene {
   private pauseOverlay: Phaser.GameObjects.Container | null = null;
   private eventHud!: EventHud;
   private touch: TouchControls | null = null;
+  private miniMap: MiniMap | null = null;
   private damageOverlay!: DamageOverlay;
   private gameOverStats: GameOverStats | null = null;
   private playerDead = false;
@@ -155,9 +158,11 @@ export class UIScene extends Phaser.Scene {
     this.warning = this.createWarning();
     this.eventHud = new EventHud(this);
     this.damageOverlay = new DamageOverlay(this);
+    this.miniMap = save.setting('minimap') ? new MiniMap(this) : null;
     this.crosshair = this.add.graphics().setDepth(100);
     this.drawCrosshair();
-    this.touch = isTouchDevice() ? new TouchControls(this) : null;
+    this.touch = useTouchControls(save.setting('touchMode')) ? new TouchControls(this) : null;
+    if (!this.touch) touchInput.enabled = false;
     if (this.touch) this.crosshair.setVisible(false);
     this.updateKills();
 
@@ -229,6 +234,7 @@ export class UIScene extends Phaser.Scene {
     this.warning.setPosition(width / 2, height * 0.3);
     this.eventHud.layout(width, height, MARGIN);
     this.touch?.layout(width, height);
+    this.miniMap?.layout(MARGIN, MARGIN + 74, Math.min(150, width * 0.17, height * 0.28));
     this.damageOverlay.layout(width, height);
     this.statusText.setPosition(width / 2, height * 0.62);
     this.scoreText.setPosition(width - MARGIN, MARGIN + 54);

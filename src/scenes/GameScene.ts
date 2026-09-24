@@ -25,6 +25,7 @@ import { EventSystem } from '../systems/EventSystem';
 import { ScoreSystem } from '../systems/ScoreSystem';
 import { StatsSystem } from '../systems/StatsSystem';
 import { ProgressSystem } from '../systems/ProgressSystem';
+import { MinimapFeed } from '../systems/MinimapFeed';
 import { DEFAULT_MAP, MAPS, type MapId } from '../config/maps.config';
 import { InteractionSystem } from '../systems/InteractionSystem';
 import { PerkSystem } from '../systems/PerkSystem';
@@ -55,6 +56,7 @@ export class GameScene extends Phaser.Scene {
   private effects!: EffectsSystem;
   private music!: MusicSystem;
   private score!: ScoreSystem;
+  private minimap!: MinimapFeed;
   private map!: TerminalMap;
   private currentArea = '';
   private readonly aimPoint = new Phaser.Math.Vector2();
@@ -154,16 +156,17 @@ export class GameScene extends Phaser.Scene {
       lighting: this.lighting,
       solids: map,
     };
+    let box: MysteryBox | null = null;
     for (const m of map.machines) {
       if (m.type === 'mystery_box') {
         this.interaction.add(
-          new MysteryBox(this, m.x, m.y, machineDeps, {
+          (box = new MysteryBox(this, m.x, m.y, machineDeps, {
             spots: map.boxSpots,
             solids: map,
             // O spawner é criado logo abaixo; só é consultado quando a caixa muda de lugar.
             isAreaOpen: (area) => spawner.isUnlocked(area),
             areaName: (area) => map.areas.find((a) => a.id === area)?.name ?? area,
-          }),
+          })),
         );
       } else if (m.type === 'weapon_lab') {
         this.interaction.add(new WeaponLab(this, m.x, m.y, machineDeps));
@@ -193,6 +196,7 @@ export class GameScene extends Phaser.Scene {
       player: this.player,
       world,
       spawner,
+      bossSpawns: map.bossSpawns,
       bossGroup,
       effects,
       lighting: this.lighting,
@@ -214,6 +218,15 @@ export class GameScene extends Phaser.Scene {
       weapons: this.weaponSystem,
       economy: this.economy,
       isAreaOpen: (area) => spawner.isUnlocked(area),
+    });
+    this.minimap = new MinimapFeed(this, {
+      map,
+      player: this.player,
+      zombies,
+      bosses: bossGroup,
+      isAreaOpen: (area) => spawner.isUnlocked(area),
+      box: () => box,
+      supply: () => this.eventSystem.supplyDrop,
     });
 
     // Portas pagas: abrir libera os spawns e a exploração da área seguinte.
@@ -287,6 +300,7 @@ export class GameScene extends Phaser.Scene {
     this.powerUps.update(time);
     this.bossSystem.update(time, delta);
     this.eventSystem.update(time, delta);
+    this.minimap.update(time);
     audio.update(time);
     this.music.update(time, delta);
     this.cameraController.update();

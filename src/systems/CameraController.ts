@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { cameraConfig } from '../config/visual.config';
 import { touchInput } from '../input/touchInput';
+import { save } from '../save/SaveStore';
 
 /**
  * Câmera no estilo de survival top-down: zoom adaptado à altura da janela,
@@ -20,6 +21,8 @@ export class CameraController {
     this.cam.setRoundPixels(false);
     this.applyZoom();
     this.applyPostFx();
+    // Configuração "Tremor de tela" desligada: os tremores viram nada.
+    if (!save.setting('screenShake')) this.cam.shake = () => this.cam;
 
     scene.scale.on(Phaser.Scale.Events.RESIZE, this.applyZoom, this);
     scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {

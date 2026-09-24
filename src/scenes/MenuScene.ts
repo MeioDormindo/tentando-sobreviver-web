@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { SCENE_KEYS } from '../config/game.config';
 import { DEFAULT_MAP } from '../config/maps.config';
-import { isTouchDevice } from '../input/device';
+import { useTouchControls } from '../input/device';
 import { save } from '../save/SaveStore';
 import { MENU_FONT, menuButton, menuTitle, onResize } from '../ui/menuWidgets';
 
@@ -25,11 +25,11 @@ export class MenuScene extends Phaser.Scene {
     const buttons = [
       menuButton(this, '[ JOGAR ]', () => this.scene.start(SCENE_KEYS.mapSelect)),
       menuButton(this, '[ RANKING ]', () => this.scene.start(SCENE_KEYS.ranking)),
-      menuButton(this, '[ ARMAS ]', null),
-      menuButton(this, '[ CONFIGURAÇÕES ]', null),
+      menuButton(this, '[ ARMAS ]', () => this.scene.start(SCENE_KEYS.armory)),
+      menuButton(this, '[ CONFIGURAÇÕES ]', () => this.scene.start(SCENE_KEYS.settings)),
     ];
     const hint = this.add
-      .text(0, 0, isTouchDevice() ? TOUCH_HINT : KEYBOARD_HINT, { fontFamily: MENU_FONT, fontSize: '14px', color: '#7a7d78', align: 'center' })
+      .text(0, 0, useTouchControls(save.setting('touchMode')) ? TOUCH_HINT : KEYBOARD_HINT, { fontFamily: MENU_FONT, fontSize: '14px', color: '#7a7d78', align: 'center' })
       .setOrigin(0.5);
 
     onResize(this, () => {

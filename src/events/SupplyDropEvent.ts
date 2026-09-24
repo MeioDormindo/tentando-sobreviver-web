@@ -97,6 +97,11 @@ export class SupplyDropEvent implements WorldEvent, Interactable {
     this.ctx = null;
   }
 
+  /** A caixa já pousou e ainda não foi aberta. */
+  get isWaiting(): boolean {
+    return this.landed && !this.opened;
+  }
+
   getPrompt(): InteractionPromptPayload | null {
     return this.landed && !this.opened ? { text: '[E] ABRIR SUPRIMENTOS', affordable: true } : null;
   }

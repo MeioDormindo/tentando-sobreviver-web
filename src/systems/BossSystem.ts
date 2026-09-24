@@ -19,6 +19,8 @@ export interface BossSystemDeps {
   player: Player;
   world: NavWorld;
   spawner: SpawnSystem;
+  /** Onde o boss surge: sempre no centro do mapa (Hall), longe do jogador. */
+  bossSpawns: ReadonlyArray<{ x: number; y: number }>;
   bossGroup: Phaser.Physics.Arcade.Group;
   effects: EffectsSystem;
   lighting: LightingSystem;
@@ -100,10 +102,7 @@ export class BossSystem {
   // ───────────────────────── Surgimento ─────────────────────────
 
   private spawn(config: BossConfig): void {
-    const point = this.deps.spawner.pickSpawnPoint(this.wave);
-    const player = this.deps.player;
-    const x = point?.x ?? player.x + 400;
-    const y = point?.y ?? player.y;
+    const { x, y } = this.arenaPoint();
     const appearance = this.appearances.get(config.id) ?? 0;
     this.appearances.set(config.id, appearance + 1);
 
@@ -137,8 +136,23 @@ export class BossSystem {
     if (!boss?.isAlive || boss.stuckMs < STUCK_TIMEOUT_MS) return;
     const view = this.scene.cameras.main.worldView;
     if (view.contains(boss.x, boss.y)) return;
-    const point = this.deps.spawner.pickSpawnPoint(this.wave);
-    if (point) boss.relocate(point.x, point.y);
+    const point = this.arenaPoint();
+    boss.relocate(point.x, point.y);
+  }
+
+  /** Ponto do centro do Hall mais distante do jogador (o boss nunca surge em cima dele). */
+  private arenaPoint(): { x: number; y: number } {
+    const { player, bossSpawns } = this.deps;
+    let best = bossSpawns[0];
+    let bestDist = -1;
+    for (const p of bossSpawns) {
+      const d = Phaser.Math.Distance.Between(p.x, p.y, player.x, player.y);
+      if (d > bestDist) {
+        best = p;
+        bestDist = d;
+      }
+    }
+    return best;
   }
 
   // ───────────────────────── Ataques em área ─────────────────────────

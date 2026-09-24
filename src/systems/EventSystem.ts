@@ -46,6 +46,12 @@ export class EventSystem {
     });
   }
 
+  /** Caixa de suprimentos no chão (marcador do minimapa), ou null. */
+  get supplyDrop(): { x: number; y: number } | null {
+    const e = this.running?.event;
+    return e instanceof SupplyDropEvent && e.isWaiting ? { x: e.x, y: e.y } : null;
+  }
+
   /** Evento em andamento (para testes/HUD). */
   get activeId(): WorldEventId | null {
     return this.running?.event.id ?? null;

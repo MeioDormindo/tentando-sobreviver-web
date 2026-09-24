@@ -105,6 +105,14 @@ export class AudioSystem {
     this.listener = null;
   }
 
+  /** Liga/desliga o som (tela de Configurações). */
+  setMuted(muted: boolean, sound?: Phaser.Sound.BaseSoundManager): void {
+    this.muted = muted;
+    const manager = sound ?? this.scene?.sound;
+    if (manager) manager.mute = muted;
+    save.muted = muted;
+  }
+
   toggleMute(): boolean {
     this.muted = !this.muted;
     if (this.scene) this.scene.sound.mute = this.muted;

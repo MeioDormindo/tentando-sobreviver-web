@@ -27,9 +27,24 @@ export interface LifetimeStats {
   playTimeMs: number;
 }
 
+/** Controles de toque: automático (detecta o aparelho), sempre ou nunca. */
+export type TouchMode = 'auto' | 'on' | 'off';
+
+export interface Settings {
+  muted: boolean;
+  musicOn: boolean;
+  playerName: string;
+  /** Volume geral (0 a 1). */
+  volume: number;
+  minimap: boolean;
+  touchMode: TouchMode;
+  /** Tremor de câmera (explosões, dano). */
+  screenShake: boolean;
+}
+
 interface SaveData {
   version: number;
-  settings: { muted: boolean; musicOn: boolean; playerName: string };
+  settings: Settings;
   records: Record<MapId, MapRecords>;
   unlockedMaps: MapId[];
   ranking: Record<MapId, RankEntry[]>;
@@ -41,7 +56,7 @@ const emptyRecords = (): MapRecords => ({ bestWave: 0, bestKills: 0, bestScore: 
 function defaults(): SaveData {
   return {
     version: SAVE_VERSION,
-    settings: { muted: false, musicOn: true, playerName: 'SOBREVIVENTE' },
+    settings: { muted: false, musicOn: true, playerName: 'SOBREVIVENTE', volume: 1, minimap: true, touchMode: 'auto', screenShake: true },
     records: Object.fromEntries(MAP_IDS.map((id) => [id, emptyRecords()])) as Record<MapId, MapRecords>,
     unlockedMaps: MAP_IDS.filter((id) => MAPS[id].unlock === null),
     ranking: Object.fromEntries(MAP_IDS.map((id) => [id, []])) as unknown as Record<MapId, RankEntry[]>,
@@ -70,6 +85,10 @@ function sanitize(raw: unknown): SaveData {
   d.settings.muted = s.muted === true;
   d.settings.musicOn = s.musicOn !== false;
   if (typeof s.playerName === 'string' && s.playerName.trim()) d.settings.playerName = s.playerName.slice(0, PLAYER_NAME_MAX);
+  if (typeof s.volume === 'number' && Number.isFinite(s.volume)) d.settings.volume = Math.min(1, Math.max(0, s.volume));
+  d.settings.minimap = s.minimap !== false;
+  d.settings.screenShake = s.screenShake !== false;
+  if (s.touchMode === 'on' || s.touchMode === 'off') d.settings.touchMode = s.touchMode;
   const recs = (r.records ?? {}) as Partial<Record<MapId, Partial<MapRecords>>>;
   for (const id of MAP_IDS) {
     const m = recs[id] ?? {};
@@ -135,6 +154,22 @@ class SaveStore {
   }
   get playerName(): string {
     return this.data.settings.playerName;
+  }
+
+  /** Configuração pelo nome (tela de Configurações). */
+  setting<K extends keyof Settings>(key: K): Settings[K] {
+    return this.data.settings[key];
+  }
+
+  set<K extends keyof Settings>(key: K, value: Settings[K]): void {
+    this.data.settings[key] = value;
+    this.persist();
+  }
+
+  /** Apaga todo o progresso (recordes, ranking, mapas liberados e configurações). */
+  reset(): void {
+    this.data = defaults();
+    this.persist();
   }
 
   // ── Mapas ──

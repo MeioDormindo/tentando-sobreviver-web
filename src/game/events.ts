@@ -43,6 +43,10 @@ export const GameEvents = {
   ShotsFired: 'shots-fired',
   ShotHit: 'shot-hit',
   DamageDealt: 'damage-dealt',
+  /** Base do minimapa (paredes, áreas abertas/trancadas, portas) — muda ao abrir portas. */
+  MinimapBase: 'minimap-base',
+  /** Posições no minimapa (jogador, zumbis, boss, caixa, suprimentos). */
+  MinimapState: 'minimap-state',
   /** Um mapa novo foi liberado (anúncio na HUD). */
   MapUnlocked: 'map-unlocked',
   /** Pontuação total e o quanto mudou. */
@@ -135,6 +139,23 @@ export interface GameOverStats {
   rankEligible: boolean;
 }
 
+export interface MinimapBasePayload {
+  cols: number;
+  rows: number;
+  tileSize: number;
+  /** Código por tile (ver TerminalMap.minimapCells). */
+  cells: number[];
+}
+
+export interface MinimapStatePayload {
+  player: [number, number, number];
+  /** Posições dos zumbis em pares x, y. */
+  zombies: number[];
+  boss: [number, number] | null;
+  box: [number, number] | null;
+  supply: [number, number] | null;
+}
+
 export interface MoneyPayload {
   money: number;
   /** Variação que gerou o evento (0 na sincronização). */
@@ -189,6 +210,8 @@ export interface GameEventMap {
   [GameEvents.DamageDealt]: { amount: number };
   [GameEvents.ScoreChanged]: { score: number; delta: number };
   [GameEvents.MapUnlocked]: { id: MapId; name: string };
+  [GameEvents.MinimapBase]: MinimapBasePayload;
+  [GameEvents.MinimapState]: MinimapStatePayload;
   [GameEvents.GameOver]: GameOverStats;
   [GameEvents.HudRequest]: undefined;
 }

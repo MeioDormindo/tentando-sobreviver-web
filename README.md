@@ -42,6 +42,17 @@ npm run art        # regera a arte SVG em public/assets
 
 Ao começar uma partida no celular o jogo entra em tela cheia.
 
+## Menus, minimapa e configurações
+
+- **ARMAS**: catálogo das 14 armas com raridade, atributos, onde conseguir (maleta e área, arma
+  inicial ou só na Mystery Box), mecânica especial e a versão Mk II.
+- **CONFIGURAÇÕES**: volume geral, som, música, minimapa, tremor de tela, controles de toque
+  (automático/sempre/nunca), tela cheia, estatísticas acumuladas e apagar progresso.
+- **Minimapa** no canto superior esquerdo: áreas abertas (claras) e trancadas (escuras), portas
+  fechadas (laranja), você (seta amarela), zumbis (vermelho), boss, Mystery Box (dourado) e
+  suprimentos (verde).
+- O boss sempre surge no centro do Hall Central (no ponto mais longe de você).
+
 ## Mapas, save e ranking
 
 - Menu → JOGAR abre a escolha de mapa. O **Mapa 2** fica trancado até você derrotar o boss da
@@ -65,7 +76,7 @@ src/
   config/            valores de gameplay e visual (game, player, weapons, zombies, spawn, visual, assets)
   game/events.ts     eventos globais tipados (lógica → HUD)
   scenes/            Boot → Preload (carrega SVGs, fatia frames, cria animações) → Menu → MapSelect /
-                     Ranking → Game (+ UI)
+                     Ranking / Armory / Settings → Game (+ UI)
   map/               TerminalMap (grade, colisão, navegação, visual 3/4) e terminal/layout.ts
                      (áreas, portas, janelas, spawns, props, luzes do Terminal Central)
   entities/          Player (tronco + pernas), Zombie (Walker, Runner, Tank, Exploder), Projectile,
@@ -80,11 +91,11 @@ src/
   events/            eventos dinâmicos (WorldEvent + um arquivo por evento: Blackout, Alarm, Train,
                      Horde, SupplyDrop, GasLeak)
   ui/                componentes da HUD (EventHud, DamageOverlay, GameOverOverlay, TouchControls,
-                     menuWidgets)
+                     MiniMap, menuWidgets)
   input/             toque no celular (touchInput: estado dos analógicos/botões; device)
   save/              SaveStore (save local versionado)
   systems/           EventSystem (sorteio e ciclo dos eventos), StatsSystem (estatísticas e recordes),
-                     ScoreSystem (pontuação), ProgressSystem (libera mapas), WaveSystem, SpawnSystem, difficulty (fórmulas), EconomySystem, InteractionSystem,
+                     ScoreSystem (pontuação), ProgressSystem (libera mapas), MinimapFeed, WaveSystem, SpawnSystem, difficulty (fórmulas), EconomySystem, InteractionSystem,
                      CombatSystem (inclui headshot), CameraController, pathfinding/NavGrid (A*),
                      PerkSystem (modificadores de perks), PowerUpSystem (drops e efeitos),
                      BossSystem (ciclo do boss), pathfinding/PathFollower (navegação comum)
@@ -178,8 +189,9 @@ Observações:
   janelas consideradas). Zumbis parados por 12s fora da tela são realocados.
 - Escuridão varia por área (túneis quase sem luz).
 - Mystery Box ($950, começa no Hall): sorteia por raridade (22/26/25/19/8% — armas boas saem com
-  frequência). Arma repetida vira munição. A cada 3 usos ela treme, some e reaparece em outra
-  área aberta (aviso na tela e coluna de luz no novo local).
+  frequência). Arma repetida vira munição. A cada 3 usos ela treme, some e reaparece em outro
+  local — há 4 pontos no próprio Hall e 1 em cada outra área aberta (aviso na tela e coluna de
+  luz no novo local).
   Exclusivas da caixa (não vendidas nas maletas):
   - RPK (épica) e Rail Weapon (lendária, atravessa zumbis);
   - Grenade Launcher (épica): granadas que explodem no impacto (dano em área, não ferem você);

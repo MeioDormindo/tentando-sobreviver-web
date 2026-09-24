@@ -6,7 +6,7 @@ import { NavCost, NavGrid } from '../systems/pathfinding/NavGrid';
 import type { SpawnPoint } from '../systems/SpawnSystem';
 import {
   AREAS, CARVES, DOORS, FLOORS, LAMPS, MAP_HEIGHT, MAP_WIDTH, OBSTACLES, OUTSIDE_DARKNESS, PLAYER_START,
-  BOX_SPOTS, MACHINES, POCKETS, PROPS, SPAWNS, STATIONS, TRAIN_ROOF_UNITS, WINDOWS,
+  BOSS_SPAWNS, BOX_SPOTS, MACHINES, POCKETS, PROPS, SPAWNS, STATIONS, TRAIN_ROOF_UNITS, WINDOWS,
   type AreaDef, type DoorDef, type FloorKind, type MachinePlacement, type Rect, type WindowDef,
 } from './terminal/layout';
 import { perks } from '../config/machines.config';
@@ -81,6 +81,8 @@ export class TerminalMap {
   readonly machines: MachineDef[];
   /** Locais da Mystery Box (centro em px + área). */
   readonly boxSpots: Array<{ x: number; y: number; area: string }>;
+  /** Pontos de surgimento do boss (centro do Hall). */
+  readonly bossSpawns: Array<{ x: number; y: number }>;
   readonly doors: DoorDef[] = DOORS;
   readonly windows: WindowDef[] = WINDOWS;
   readonly areas: AreaDef[] = AREAS;
@@ -146,6 +148,7 @@ export class TerminalMap {
     // Luz fraca sobre cada ponto de compra, para ser encontrado no escuro.
     for (const s of this.stations) this.lamps.push({ x: s.x, y: s.y, radius: 70, intensity: 0.45, flicker: 0, emergency: true });
     this.machines = MACHINES.map((m) => ({ ...m, ...center(m.tx, m.ty) }));
+    this.bossSpawns = BOSS_SPAWNS.map((s) => center(s.tx, s.ty));
     this.boxSpots = BOX_SPOTS.map((s) => ({ x: s.tx * TILE_SIZE + TILE_SIZE / 2, y: s.ty * TILE_SIZE + TILE_SIZE / 2, area: s.area }));
     // Máquinas iluminadas com a cor delas (perks) ou luz roxa. A Mystery Box tem luz
     // própria (ela muda de lugar).
@@ -169,6 +172,28 @@ export class TerminalMap {
     if (tx < 0 || ty < 0 || tx >= MAP_WIDTH || ty >= MAP_HEIGHT) return null;
     const i = this.areaIndex[ty * MAP_WIDTH + tx];
     return i >= 0 ? AREAS[i] : null;
+  }
+
+  /**
+   * Base do minimapa, um código por tile: 0 parede/vazio, 1 chão de área aberta, 2 chão
+   * trancado ou de fora, 3 porta fechada, 4 trem, 5 janela.
+   */
+  minimapCells(isOpen: (area: string) => boolean): { cols: number; rows: number; cells: number[] } {
+    const cells: number[] = new Array(MAP_WIDTH * MAP_HEIGHT);
+    for (let ty = 0; ty < MAP_HEIGHT; ty++) {
+      for (let tx = 0; tx < MAP_WIDTH; tx++) {
+        const i = ty * MAP_WIDTH + tx;
+        const c = this.cells[i];
+        const area = this.areaIndex[i];
+        cells[i] =
+          c === Cell.Floor ? (area >= 0 && isOpen(AREAS[area].id) ? 1 : 2)
+          : c === Cell.Door ? 3
+          : c === Cell.Train ? 4
+          : c === Cell.Window ? 5
+          : 0;
+      }
+    }
+    return { cols: MAP_WIDTH, rows: MAP_HEIGHT, cells };
   }
 
   /** Tipo de piso num ponto (som dos passos). */

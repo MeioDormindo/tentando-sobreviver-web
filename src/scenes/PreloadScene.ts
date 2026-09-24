@@ -3,6 +3,7 @@ import { ANIMS, IMAGES, SHEETS } from '../config/assets.config';
 import { COLORS, SCENE_KEYS, TEXTURE_KEYS, TILE_SIZE } from '../config/game.config';
 import { createFxTextures } from '../effects/fxTextures';
 import { generateSounds } from '../audio/SoundBank';
+import { save } from '../save/SaveStore';
 
 /** Carrega a arte (SVG), fatia as spritesheets, cria animações e texturas de efeitos. */
 export class PreloadScene extends Phaser.Scene {
@@ -17,6 +18,9 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   create(): void {
+    // Volume e mudo salvos valem para o jogo todo (o gerenciador de som é global).
+    this.sound.volume = save.setting('volume');
+    this.sound.mute = save.muted;
     this.sliceSheets();
     this.createAnimations();
     createFxTextures(this);
