@@ -66,6 +66,8 @@ export interface PlayerHpPayload {
 
 export interface AmmoPayload {
   weaponName: string;
+  /** Elemento comprado para a arma em mãos (null = nenhum). */
+  element: { icon: string; name: string; color: number } | null;
   current: number;
   reserve: number;
   reloading: boolean;

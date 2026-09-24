@@ -101,6 +101,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
     this.emitHp();
   }
 
+  /** Cura parcial (elemento Sombra), sem passar da vida máxima. */
+  healBy(amount: number): void {
+    if (!this.alive || amount <= 0 || this.hp >= this.maxHp) return;
+    this.hp = Math.min(this.maxHp, this.hp + amount);
+    this.emitHp();
+  }
+
   refillArmor(): void {
     if (!this.alive) return;
     this.armor = this.maxArmor;

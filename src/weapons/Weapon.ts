@@ -1,5 +1,6 @@
 import { MAX_UPGRADE_LEVEL, upgradeWeaponConfig, type WeaponConfig } from '../config/weapons.config';
 import type { AmmoPayload } from '../game/events';
+import { elements, type ElementId } from '../config/elements.config';
 
 /**
  * Estado de uma arma (munição, cadência, recarga). Não conhece input nem projéteis:
@@ -9,6 +10,8 @@ export class Weapon {
   private cfg: WeaponConfig;
   currentAmmo: number;
   reserveAmmo: number;
+  /** Elemento comprado na maleta (continua depois do Weapon Lab). */
+  element: ElementId | null = null;
 
   private nextFireAt = 0;
   private reloadEndsAt: number | null = null;
@@ -89,6 +92,7 @@ export class Weapon {
   snapshot(): Omit<AmmoPayload, 'secondary'> {
     return {
       weaponName: this.config.name,
+      element: this.element ? { icon: elements[this.element].icon, name: elements[this.element].name, color: elements[this.element].color } : null,
       current: this.currentAmmo,
       reserve: this.reserveAmmo,
       reloading: this.isReloading,

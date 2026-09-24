@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { FX_KEYS } from '../config/assets.config';
 import { DEPTH } from '../config/visual.config';
 import type { SpecialFire } from '../config/weapons.config';
+import type { ElementId } from '../config/elements.config';
 
 const TRACER_RADIUS = 3;
 /** Raio de colisão de cada tipo especial (px da textura). */
@@ -28,6 +29,10 @@ export interface ProjectileShot {
   special?: ProjectileSpecial;
   /** Multiplicador de dano do atirador (perks), também aplicado à explosão/queima. */
   damageScale?: number;
+  /** Elemento da arma (efeito extra no acerto). */
+  element?: ElementId | null;
+  /** Chance de o efeito do elemento ocorrer neste projétil (espingardas dividem). */
+  elementChance?: number;
 }
 
 /** Projétil reutilizável (pool via Physics Group): traçante, granada, chama ou plasma. */
@@ -39,6 +44,8 @@ export class Projectile extends Phaser.Physics.Arcade.Image {
   damageScale = 1;
   /** Já contou como acerto nas estatísticas. */
   scored = false;
+  element: ElementId | null = null;
+  elementChance = 1;
   private readonly hits = new Set<object>();
 
   private startX = 0;
@@ -66,6 +73,8 @@ export class Projectile extends Phaser.Physics.Arcade.Image {
     this.pierceLeft = shot.pierce ?? 0;
     this.hits.clear();
     this.scored = false;
+    this.element = shot.element ?? null;
+    this.elementChance = shot.elementChance ?? 1;
     this.setAppearance(shot.tint ?? 0xffffff);
     this.enableBody(true, shot.x, shot.y, true, true);
     if (this.special) {

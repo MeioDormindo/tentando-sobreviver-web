@@ -9,6 +9,7 @@ import { emitGameEvent, GameEvents } from '../game/events';
 import { Weapon } from './Weapon';
 import { audio } from '../audio/AudioSystem';
 import { touchInput } from '../input/touchInput';
+import { elements, elementParams, type ElementId } from '../config/elements.config';
 
 /** Ponto de ejeção das cápsulas, à frente do tronco. */
 const EJECT_DISTANCE = 16;
@@ -16,6 +17,8 @@ const EJECT_DISTANCE = 16;
 const FLAME_SOUND_MS = 170;
 /** Clarão das armas especiais sem cor própria (lança-granadas). */
 const SPECIAL_FLASH_TINT = 0xffe0b0;
+
+const isPerShot = (id: ElementId): boolean => 'perShot' in elementParams[id];
 
 /** Quem resolve o raio instantâneo da Arc Gun (CombatSystem). */
 export interface ArcCaster {
@@ -122,6 +125,23 @@ export class WeaponSystem {
       this.slots[this.active] = weapon;
       this.equip(this.active, true);
     }
+  }
+
+  /** Elemento vendido para a arma (ou null) e se já foi comprado. */
+  elementOf(weaponId: string): { id: ElementId; owned: boolean } | null {
+    const weapon = this.slots.find((w) => w.config.id === weaponId);
+    const id = weapon?.config.element;
+    return weapon && id ? { id, owned: weapon.element === id } : null;
+  }
+
+  /** Aplica o elemento à arma possuída (a cobrança é feita pela maleta). */
+  giveElement(weaponId: string): boolean {
+    const weapon = this.slots.find((w) => w.config.id === weaponId);
+    const id = weapon?.config.element;
+    if (!weapon || !id || weapon.element === id) return false;
+    weapon.element = id;
+    this.emitIfChanged();
+    return true;
   }
 
   /** Max Ammo: enche a reserva de todas as armas. */
@@ -240,10 +260,15 @@ export class WeaponSystem {
         const projectile = this.projectiles.get(tipX, tipY) as Projectile | null;
         if (!projectile) break; // pool esgotado
         const spread = Phaser.Math.DegToRad(Phaser.Math.FloatBetween(-cfg.spread, cfg.spread));
+        const element = this.current.element;
         projectile.fire({
           x: tipX, y: tipY, angle: aim + spread, speed: cfg.projectileSpeed, range: cfg.range,
-          damage: cfg.damage * this.mods.damageMultiplier, pierce: cfg.pierce, tint: cfg.tracerTint,
+          damage: cfg.damage * this.mods.damageMultiplier, pierce: cfg.pierce,
+          tint: element ? elements[element].color : cfg.tracerTint,
           special, damageScale: this.mods.damageMultiplier,
+          element,
+          // Efeitos "por disparo" (explosão, raio) se dividem entre os chumbos da espingarda.
+          elementChance: element && isPerShot(element) ? 1 / cfg.pellets : 1,
         });
         fired++;
       }
@@ -269,7 +294,7 @@ export class WeaponSystem {
   private emitIfChanged(): void {
     const snap = this.current.snapshot();
     const other = this.slots.length > 1 ? this.slots[(this.active + 1) % this.slots.length].config.name : null;
-    const key = `${snap.weaponName}|${snap.current}|${snap.reserve}|${snap.reloading}|${other}`;
+    const key = `${snap.weaponName}|${snap.current}|${snap.reserve}|${snap.reloading}|${other}|${snap.element?.name ?? ''}`;
     if (key === this.lastSnapshotKey) return;
     this.lastSnapshotKey = key;
     emitGameEvent(this.scene.game.events, GameEvents.AmmoChanged, { ...snap, secondary: other });

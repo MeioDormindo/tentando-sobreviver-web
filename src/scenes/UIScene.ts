@@ -297,7 +297,9 @@ export class UIScene extends Phaser.Scene {
   }
 
   private onAmmoChanged(payload: AmmoPayload): void {
-    this.weaponText.setText(payload.weaponName.toUpperCase());
+    const el = payload.element;
+    this.weaponText.setText(el ? `${payload.weaponName.toUpperCase()}  ${el.icon} ${el.name}` : payload.weaponName.toUpperCase());
+    this.weaponText.setColor(el ? `#${el.color.toString(16).padStart(6, '0')}` : COLORS.text);
     this.secondaryText.setText(payload.secondary ? `[Q] ${payload.secondary.toUpperCase()}` : '');
     this.ammoText.setText(`${payload.current} / ${payload.reserve}`);
     this.ammoText.setColor(payload.current === 0 ? '#c05050' : COLORS.text);
@@ -538,7 +540,7 @@ export class UIScene extends Phaser.Scene {
       return;
     }
     // No celular não há tecla E: o botão USAR faz a ação.
-    const text = this.touch ? prompt.text.replace(/^\[E\]\s*/, 'USAR ▸ ') : prompt.text;
+    const text = this.touch ? prompt.text.replace(/^\[E\]\s*/, 'USAR ▸ ').replace('SEGURE E', 'SEGURE USAR') : prompt.text;
     this.promptText
       .setText(text)
       .setColor(prompt.affordable ? COLORS.text : '#9a8f86')

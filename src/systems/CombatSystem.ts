@@ -10,6 +10,7 @@ import { Projectile, PROJECTILE_BURST } from '../entities/Projectile';
 import { Zombie } from '../entities/Zombie';
 import { Boss } from '../entities/Boss';
 import type { NavGrid } from './pathfinding/NavGrid';
+import { applyElement, type ElementHooks } from './elementEffects';
 
 export interface CombatSystemDeps {
   player: Player;
@@ -88,10 +89,29 @@ export class CombatSystem {
   private readonly burning = new Map<Target, Burn>();
   /** Dano causado pelo jogador neste frame (estatísticas). */
   private pendingDamage = 0;
+  /** Ganchos para os efeitos dos elementos das armas. */
+  private readonly elementHooks: ElementHooks;
 
   constructor(private readonly scene: Phaser.Scene, private readonly deps: CombatSystemDeps) {
     const { player, zombies, projectiles, walls, obstacles, bulletBlockers, barricades, effects, modifiers, buffs, bosses } = deps;
     const physics = scene.physics;
+    this.elementHooks = {
+      effects,
+      player,
+      targets: () => this.liveTargets(),
+      lineOfSight: (ax, ay, bx, by) => deps.nav.lineOfSight(ax, ay, bx, by, 0),
+      hurt: (t, amount, angle) => {
+        if (t instanceof Boss) {
+          this.hurtBoss(t, amount);
+          return;
+        }
+        const { x, y } = t;
+        if (this.hurtZombie(t, amount)) effects.zombieDeath(x, y, angle, t.skin);
+      },
+      ignite: (t, dps, ms) => this.ignite(t, dps, ms),
+      blast: (x, y, radius, damage) =>
+        this.blast(x, y, { radius, damage, zombieMultiplier: 1, harmPlayer: false, source: 'weapon', style: 'mini' }),
+    };
 
     physics.add.collider(player, walls);
     physics.add.collider(player, obstacles);
@@ -130,6 +150,7 @@ export class CombatSystem {
         }
         effects.bloodHit(projectile.x, projectile.y, angle);
         this.hurtBoss(boss, damage);
+        if (projectile.element) applyElement(this.elementHooks, projectile.element, boss, damage, angle, projectile.elementChance);
       },
       (a, b) => {
         const projectile = CombatSystem.find(Projectile, a, b);
@@ -180,6 +201,7 @@ export class CombatSystem {
         } else {
           zombie.knockback(angle, HIT_KNOCKBACK * Math.min(1, projectile.damage / KNOCKBACK_FULL_DAMAGE));
         }
+        if (projectile.element) applyElement(this.elementHooks, projectile.element, zombie, damage, angle, projectile.elementChance);
       },
       (a, b) => {
         const projectile = CombatSystem.find(Projectile, a, b);

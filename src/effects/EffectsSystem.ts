@@ -10,7 +10,8 @@ const MUZZLE_FLASH_MS = 45;
 const DECAL_RES = 0.5;
 
 /** Aparência da explosão: gosma do Exploder, granada (fogo) ou descarga de plasma. */
-export type ExplosionStyle = 'exploder' | 'grenade' | 'plasma';
+/** mini = estouro do elemento Explosivo (frequente: sem tremor, som baixo). */
+export type ExplosionStyle = 'exploder' | 'grenade' | 'plasma' | 'mini';
 
 const LIGHTNING_MS = 140;
 /** Desvio lateral máximo de cada trecho do raio (px). */
@@ -213,13 +214,14 @@ export class EffectsSystem {
   /** Explosão: clarão, fogo (ou descarga elétrica), fumaça e mancha queimada no chão. */
   explosion(x: number, y: number, radius: number, style: ExplosionStyle = 'exploder'): void {
     const plasma = style === 'plasma';
-    const volume = Math.min(1, 0.5 + radius / 160);
-    audio.playAt(plasma ? 'plasma_burst' : 'explosion', x, y, { category: 'world', volume, distance: 1500 });
+    const mini = style === 'mini';
+    const volume = mini ? 0.35 : Math.min(1, 0.5 + radius / 160);
+    audio.playAt(plasma ? 'plasma_burst' : 'explosion', x, y, { category: 'world', volume, distance: mini ? 700 : 1500, rate: mini ? 1.5 : 1 });
     for (const angle of [0, 90, 180, 270]) {
       this.emitAngle = angle;
-      this.sparks.explode(10, x, y);
+      this.sparks.explode(mini ? 3 : 10, x, y);
       if (style === 'exploder') this.blood.explode(8, x, y);
-      if (!plasma) this.smoke.explode(3, x, y);
+      if (!plasma) this.smoke.explode(mini ? 1 : 3, x, y);
     }
     if (plasma) {
       // Descarga: raios curtos saindo do centro.
@@ -248,8 +250,8 @@ export class EffectsSystem {
       ease: 'Cubic.easeOut',
       onComplete: () => fireball.destroy(),
     });
-    this.lighting?.addFlash(x, y, radius * 2.4, 1, 350);
-    this.scene.cameras.main.shake(260, 0.006);
+    this.lighting?.addFlash(x, y, radius * 2.4, mini ? 0.6 : 1, mini ? 180 : 350);
+    if (!mini) this.scene.cameras.main.shake(260, 0.006);
   }
 
   /**

@@ -3,6 +3,7 @@ import { gunIconKey } from '../config/assets.config';
 import { COLORS, SCENE_KEYS } from '../config/game.config';
 import { upgradeWeaponConfig, weapons, type Rarity, type WeaponConfig } from '../config/weapons.config';
 import { RARITY_COLORS } from '../entities/MysteryBox';
+import { elements } from '../config/elements.config';
 import { AREAS, STATIONS } from '../map/terminal/layout';
 import { MENU_FONT, MENU_TITLE_FONT, menuButton, menuTitle, onResize } from '../ui/menuWidgets';
 
@@ -163,7 +164,9 @@ export class ArmoryScene extends Phaser.Scene {
         this.add.text(dw - 12, y, st.format(cfg), { fontFamily: MENU_FONT, fontSize: '12px', color: COLORS.text }).setOrigin(1, 0),
       ]);
     });
-    const info = [sourceText(base), specialText(cfg), 'Weapon Lab: Mk II ($5.000) — mais dano, pente e reserva, recarga menor. Mk III ($10.000) — projéteis em dobro.']
+    const el = base.element ? elements[base.element] : null;
+    const elementLine = el ? `Elemento ${el.icon} ${el.name} (${el.price.toLocaleString('pt-BR')}, segure E na ${base.price === 0 ? 'caixa de munição' : 'maleta'}): ${el.description}` : '';
+    const info = [sourceText(base), elementLine, specialText(cfg), 'Weapon Lab: Mk II ($5.000) — mais dano, pente e reserva, recarga menor. Mk III ($10.000) — projéteis em dobro.']
       .filter(Boolean)
       .join('\n\n');
     box.add(this.add.text(14, 132 + STATS.length * 24 + 8, info, { fontFamily: MENU_FONT, fontSize: '12px', color: '#c8c3b0', wordWrap: { width: dw - 28 }, lineSpacing: 2 }));

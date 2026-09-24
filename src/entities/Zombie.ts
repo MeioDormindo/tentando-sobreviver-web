@@ -39,6 +39,8 @@ const SHADOW_OFFSET = { x: 4, y: 6 };
 const PROGRESS_STEP = 28;
 /** Cor do tremor elétrico enquanto atordoado. */
 const STUN_TINT = 0x9fe8ff;
+/** Tom azulado enquanto está lento (elemento Gelo). */
+const CHILL_TINT = 0xa8dcff;
 /** Duração do tranco ao levar um tiro (ms). */
 const STAGGER_MS = 110;
 /** Zumbis que não podem ser empurrados (Tank) recuam só esta fração. */
@@ -79,6 +81,9 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
   private stunnedUntil = 0;
   /** Tranco ao levar tiro: recua um pouco na direção do disparo. */
   private staggerUntil = 0;
+  /** Lento (Gelo) até este instante, com este multiplicador de velocidade. */
+  private slowUntil = 0;
+  private slowFactor = 1;
   private readonly knock = new Phaser.Math.Vector2();
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
@@ -121,6 +126,13 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     this.stunnedUntil = Math.max(this.stunnedUntil, this.scene.time.now + ms);
   }
 
+  /** Gelo: fica mais lento por `ms` (factor 0.5 = metade da velocidade). */
+  chill(ms: number, factor: number): void {
+    if (!this.isAlive) return;
+    this.slowUntil = Math.max(this.slowUntil, this.scene.time.now + ms);
+    this.slowFactor = Math.min(this.slowUntil > this.scene.time.now ? this.slowFactor : 1, factor);
+  }
+
   /** Recuo ao ser atingido (animação de dano). */
   knockback(angle: number, speed: number): void {
     if (!this.isAlive || !this.config) return;
@@ -150,6 +162,8 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     this.fuseEndsAt = 0;
     this.stunnedUntil = 0;
     this.staggerUntil = 0;
+    this.slowUntil = 0;
+    this.slowFactor = 1;
     this.nextGroanAt = this.scene.time.now + Phaser.Math.Between(500, 5000);
 
     this.enableBody(true, x, y, true, true);
@@ -200,6 +214,15 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
       this.stunnedUntil = 0;
       this.anims.resume();
       this.clearTint();
+    }
+    if (this.slowUntil > 0) {
+      if (time < this.slowUntil) {
+        if (!this.isTinted) this.setTint(CHILL_TINT);
+      } else {
+        this.slowUntil = 0;
+        this.slowFactor = 1;
+        if (this.tintTopLeft === CHILL_TINT) this.clearTint();
+      }
     }
     if (time < this.staggerUntil) {
       this.setVelocity(this.knock.x, this.knock.y);
@@ -316,7 +339,8 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     const world = this.world;
     const config = this.config;
     if (!world || !config) return;
-    const barricade = this.follower.step(world, time, target.x, target.y, config.speed, config.bodyRadius);
+    const speed = config.speed * (time < this.slowUntil ? this.slowFactor : 1);
+    const barricade = this.follower.step(world, time, target.x, target.y, speed, config.bodyRadius);
     this.faceTowards(this.follower.face.x, this.follower.face.y);
     if (barricade) {
       // Janela com barricada no caminho: para e arranca as tábuas.
