@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="MeleeData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/melee_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+damage = 150
+reach = 1.5
+arc_degrees = 120
+cooldown = 1
+windup = 0.07
+busy_time = 0.38
+lunge_range = 3.75
+lunge_speed = 17.5
+lunge_time = 0.13
+knockback = 8.125

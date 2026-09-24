@@ -12,6 +12,8 @@ signal player_health_changed(current: float, maximum: float)
 signal player_died()
 ## Munição da arma em mãos (nome, pente, reserva, recarregando).
 signal ammo_changed(weapon_name: String, magazine: int, reserve: int, reloading: bool)
+## Arma em mãos trocada (nome da atual e da outra; vazio = só uma arma).
+signal weapon_changed(current_name: String, other_name: String)
 ## Pontos do jogador (total e variação).
 signal points_changed(total: int, delta: int)
 ## Round começou (número e total de zumbis).

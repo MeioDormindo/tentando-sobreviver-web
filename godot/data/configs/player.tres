@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PlayerData" format=3]
+
+[ext_resource type="Script" path="res://scripts/player/player_data.gd" id="1_script"]
+[ext_resource type="Resource" path="res://data/weapons/m1911.tres" id="2_weapon"]
+[ext_resource type="Resource" path="res://data/weapons/knife.tres" id="3_knife"]
+
+[resource]
+script = ExtResource("1_script")
+starting_weapon = ExtResource("2_weapon")
+knife = ExtResource("3_knife")
+move_speed = 6.25
+max_health = 100
+max_armor = 100
+invulnerability_time = 0.4
+strafe_multiplier = 0.85
+backpedal_multiplier = 0.6
+regen_delay = 5
+regen_per_second = 6
+inventory_slots = 2
+switch_time = 0.35

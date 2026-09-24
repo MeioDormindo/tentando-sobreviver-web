@@ -18,6 +18,7 @@ var _health_bar: ProgressBar
 var _health_label: Label
 var _weapon_label: Label
 var _ammo_label: Label
+var _other_weapon_label: Label
 var _prompt_label: Label
 var _banner: Label
 var _hit_marker: Label
@@ -35,6 +36,7 @@ func _ready() -> void:
 	Events.points_changed.connect(_on_points_changed)
 	Events.player_health_changed.connect(_on_health_changed)
 	Events.ammo_changed.connect(_on_ammo_changed)
+	Events.weapon_changed.connect(func(_current: String, other: String) -> void: _other_weapon_label.text = ("[Q] " + other.to_upper()) if other != "" else "")
 	Events.interaction_prompt.connect(func(text: String) -> void: _prompt_label.text = text)
 	Events.zombie_hit.connect(func(_z: Node3D, _i: DamageInfo) -> void: _flash_hit(TEXT))
 	Events.zombie_killed.connect(func(_z: Node3D, info: DamageInfo) -> void: _flash_hit(RED if info.is_headshot else GOLD))
@@ -72,6 +74,7 @@ func _build() -> void:
 
 	_weapon_label = _label(root, "", 18, TEXT, Control.PRESET_BOTTOM_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, -46)
 	_ammo_label = _label(root, "", 36, TEXT, Control.PRESET_BOTTOM_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT)
+	_other_weapon_label = _label(root, "", 14, DIM, Control.PRESET_BOTTOM_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, -70)
 
 	_prompt_label = _label(root, "", 20, TEXT, Control.PRESET_CENTER_BOTTOM, HORIZONTAL_ALIGNMENT_CENTER, -110)
 

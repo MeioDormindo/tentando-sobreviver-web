@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"wind_cannon"
+display_name = "Canhão de Vento"
+kind = &"wind"
+rarity = &"legendary"
+damage = 0
+fire_rate = 1.111
+automatic = false
+magazine_size = 2
+reserve_ammo = 12
+reload_time = 2.6
+spread_degrees = 0
+max_range = 10.625
+pellets = 1
+pierce = 0
+headshot_multiplier = 1.5
+price = 0
+ammo_price = 4000
+box_only = true
+element = &""
+tracer_color = Color(0.624, 0.91, 1, 1)
+upgrade_name = "Tornado"
+maps = PackedStringArray("map2")
+special_type = &"gust"
+special_params = {
+"range": 10.625,
+"arc_deg": 70,
+"damage": 1500,
+"knockback": 28.125
+}

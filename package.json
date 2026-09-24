@@ -8,7 +8,8 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "art": "node scripts/generate-art.mjs"
+    "art": "node scripts/generate-art.mjs",
+    "godot:data": "esbuild scripts/godot/export-data.ts --bundle --platform=node --format=esm --log-level=warning --outfile=node_modules/.cache/godot-export.mjs && node node_modules/.cache/godot-export.mjs"
   },
   "dependencies": {
     "phaser": "^3.90.0"

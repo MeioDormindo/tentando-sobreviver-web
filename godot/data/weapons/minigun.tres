@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"minigun"
+display_name = "Minigun"
+kind = &"lmg"
+rarity = &"epic"
+damage = 32
+fire_rate = 22.222
+automatic = true
+magazine_size = 150
+reserve_ammo = 450
+reload_time = 4
+spread_degrees = 4
+max_range = 23.438
+pellets = 1
+pierce = 0
+headshot_multiplier = 1.5
+price = 0
+ammo_price = 3000
+box_only = true
+element = &""
+spin_up_time = 0.7
+move_multiplier_while_firing = 0.55
+tracer_color = Color(1, 0.816, 0.439, 1)
+special_type = &""

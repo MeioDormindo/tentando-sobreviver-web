@@ -5,12 +5,12 @@
 
 [resource]
 script = ExtResource("1_script")
-id = &"walker"
-display_name = "Walker"
+id = &"crawler"
+display_name = "Rastejante"
 scene = ExtResource("2_scene")
-max_health = 100
-move_speed = 1.875
-damage = 10
-attack_range = 1.138
-attack_interval = 1
-points_kill = 100
+max_health = 70
+move_speed = 1.406
+damage = 8
+attack_range = 1.013
+attack_interval = 0.9
+points_kill = 90

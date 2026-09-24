@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"flamethrower"
+display_name = "Flamethrower"
+kind = &"flamer"
+rarity = &"epic"
+damage = 7
+fire_rate = 22.222
+automatic = true
+magazine_size = 120
+reserve_ammo = 480
+reload_time = 3.2
+spread_degrees = 11
+max_range = 7.188
+pellets = 2
+pierce = 99
+headshot_multiplier = 1.5
+price = 0
+ammo_price = 2000
+box_only = true
+element = &""
+special_type = &"flame"
+special_params = {
+"burn_dps": 45,
+"burn_time": 2.6
+}

@@ -20,6 +20,14 @@ var _shot_mid := false
 var _body_turn := false
 ## Munição cheia ao começar o round 2 (reabastecimento do MVP).
 var _refilled := false
+var _gave_glock := false
+var _gave_pump := false
+var _switched := false
+var _max_hits_one_shot := 0
+var _melee_hits := 0
+var _knife_swings := 0
+## Quando começou a esperar a morte do jogador (s de jogo).
+var _die_started := 0.0
 
 
 func _ready() -> void:
@@ -27,6 +35,7 @@ func _ready() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://tests/output"))
 	Events.zombie_killed.connect(_on_zombie_killed)
 	Events.round_started.connect(_on_round_started)
+	Events.zombie_hit.connect(func(_z: Node3D, info: DamageInfo) -> void: _melee_hits += 1 if info.kind == DamageInfo.Kind.MELEE else 0)
 	get_tree().change_scene_to_file.call_deferred("res://scenes/main.tscn")
 	Engine.time_scale = TIME_SCALE
 	_phase = &"play"
@@ -39,10 +48,15 @@ func _physics_process(delta: float) -> void:
 	var player := main.get_node("Player") as Player
 	var rounds := main.get_node("RoundManager") as RoundManager
 	_game_time += delta
+	if int(_game_time / 10.0) != int((_game_time - delta) / 10.0):
+		print("t=%.0f fase=%s round=%d abates=%d vida=%.0f arma=%s %d/%d" % [_game_time, _phase, rounds.round_number, _kills, player.health.current, player.weapon.data.id, player.weapon.magazine, player.weapon.reserve])
 	match _phase:
 		&"play":
 			_play(main, player, rounds)
 		&"die":
+			# Se nenhum zumbi alcançar o jogador a tempo, o golpe final vem do teste.
+			if player.is_alive() and _game_time - _die_started > 30.0:
+				player.take_damage(DamageInfo.new(9999.0, DamageInfo.Kind.ENVIRONMENT))
 			if not player.is_alive():
 				_phase = &"game_over"
 				_finish_game_over.call_deferred(main)
@@ -68,12 +82,34 @@ func _play(main: Node, player: Player, rounds: RoundManager) -> void:
 		if nearest == null or player.global_position.distance_to(z.global_position) < player.global_position.distance_to(nearest.global_position):
 			nearest = z
 	player.move_input = Vector2.ZERO
+	_use_inventory(player, rounds)
 	if nearest and not hold_fire:
 		var aim := nearest.get_node("BodyHurtbox" if _body_turn else "HeadHurtbox") as Node3D
 		player.aim_point = aim.global_position
-		player.fire()
+		# Faca quando um zumbi chega perto (algumas vezes).
+		if _knife_swings < 4 and player.global_position.distance_to(nearest.global_position) < 2.5 and player.melee.ready_to_swing():
+			if player.knife():
+				_knife_swings += 1
+			return
+		var hits := player.fire()
+		if player.weapon.data.pellets > 1:
+			_max_hits_one_shot = maxi(_max_hits_one_shot, hits.size())
 	if rounds.round_number >= TARGET_ROUND or _game_time > MAX_GAME_TIME:
 		_end_play(main, player, rounds)
+
+
+## Troca de arma: pega a Glock no começo e a Pump no round 2 (confere a troca e os chumbos).
+func _use_inventory(player: Player, rounds: RoundManager) -> void:
+	if not _gave_glock:
+		_gave_glock = true
+		player.give_weapon(load("res://data/weapons/glock.tres"))
+	elif not _switched and not player.inventory.is_switching() and _game_time > 3.0:
+		_switched = player.inventory.switch_to(0) and player.weapon.data.id == &"m1911"
+	if rounds.round_number >= 2 and not _gave_pump:
+		_gave_pump = true
+		var dropped := player.give_weapon(load("res://data/weapons/pump.tres"))
+		if dropped:
+			dropped.queue_free()
 
 
 func _end_play(main: Node, player: Player, rounds: RoundManager) -> void:
@@ -83,6 +119,9 @@ func _end_play(main: Node, player: Player, rounds: RoundManager) -> void:
 	_check(_saw_attack, "zumbis chegaram e atacaram o jogador")
 	_check(_kills >= 21, "abateu os zumbis dos rounds 1 e 2 (%d abates)" % _kills)
 	_check(_headshots > 0 and _body_kills > 0, "abates na cabeça (%d) e no corpo (%d)" % [_headshots, _body_kills])
+	_check(_switched, "troca de arma (Glock → M1911)")
+	_check(_max_hits_one_shot > 1, "espingarda: vários chumbos acertam no mesmo tiro (%d)" % _max_hits_one_shot)
+	_check(_melee_hits > 0, "faca acerta zumbis (%d acertos em %d golpes)" % [_melee_hits, _knife_swings])
 	_check(_refilled, "munição reabastecida ao fim do round")
 	_check(points > 500, "pontos subiram (%d)" % points)
 	var data := (main.get_node("RoundManager") as RoundManager).data
@@ -90,6 +129,7 @@ func _end_play(main: Node, player: Player, rounds: RoundManager) -> void:
 	_check(alive <= data.max_alive(rounds.round_number), "respeita o limite de vivos (%d)" % alive)
 	# Agora o jogador fica vulnerável e para de atirar: os zumbis devem matá-lo.
 	player.health.invulnerable = false
+	_die_started = _game_time
 	_phase = &"die"
 
 

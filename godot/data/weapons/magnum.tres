@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"magnum"
+display_name = "Magnum .44"
+kind = &"revolver"
+rarity = &"rare"
+damage = 140
+fire_rate = 2.381
+automatic = false
+magazine_size = 6
+reserve_ammo = 48
+reload_time = 2.1
+spread_degrees = 1
+max_range = 28.125
+pellets = 1
+pierce = 1
+headshot_multiplier = 3
+price = 1500
+ammo_price = 750
+box_only = false
+element = &"lightning"
+special_type = &""

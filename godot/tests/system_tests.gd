@@ -13,6 +13,9 @@ func run() -> int:
 	_test_round_formulas()
 	_test_spawn_pick()
 	_test_points_data()
+	_test_inventory()
+	_test_spin_up()
+	_test_migrated_data()
 	print("\n%d ok, %d falharam" % [_passed, _failed])
 	return _failed
 
@@ -111,3 +114,65 @@ func _test_points_data() -> void:
 	var data := load("res://data/configs/points.tres") as PointsData
 	check(data.start_points == 500, "começa com 500")
 	check(data.round_bonus(1) == 350 and data.round_bonus(4) == 500, "bônus do round: 300 + 50 × round")
+
+
+func _test_inventory() -> void:
+	print("WeaponInventory (2 espaços, troca)")
+	var inventory := WeaponInventory.new()
+	var m1911 := load("res://data/weapons/m1911.tres") as WeaponData
+	var glock := load("res://data/weapons/glock.tres") as WeaponData
+	var mp5 := load("res://data/weapons/mp5.tres") as WeaponData
+	check(inventory.give(m1911) == null and inventory.weapons.size() == 1, "pega a arma inicial")
+	check(not inventory.current.busy, "a primeira arma já vem pronta")
+	inventory.give(glock)
+	check(inventory.weapons.size() == 2 and inventory.current.data.id == &"glock", "segunda arma vai para a mão")
+	check(inventory.is_switching() and not inventory.current.can_fire(), "trocando: não atira")
+	inventory._process(0.4)
+	check(not inventory.is_switching() and inventory.current.can_fire(), "depois de 0.35s pode atirar")
+	var dropped := inventory.give(mp5)
+	check(dropped != null and dropped.data.id == &"glock" and inventory.current.data.id == &"mp5", "com 2 armas, a nova substitui a da mão")
+	dropped.free()
+	check(inventory.owns(&"m1911") and not inventory.owns(&"glock"), "owns() confere o inventário")
+	inventory.current.magazine = 0
+	inventory.give(mp5)
+	check(inventory.current.magazine == mp5.magazine_size, "pegar arma repetida só enche a munição")
+	check(inventory.switch_next() and inventory.current.data.id == &"m1911", "troca para a outra arma")
+	inventory.free()
+
+
+func _test_spin_up() -> void:
+	print("Minigun (giro do cano)")
+	var weapon := Weapon.new()
+	weapon.data = load("res://data/weapons/minigun.tres") as WeaponData
+	weapon.reset_ammo()
+	check(weapon.data.spin_up_time > 0.0, "minigun tem tempo de giro (%.1fs)" % weapon.data.spin_up_time)
+	check(not weapon.consume_shot(), "não atira sem girar")
+	var fired_at := -1.0
+	var t := 0.0
+	while t < 2.0 and fired_at < 0.0:
+		weapon.tick(0.05)
+		t += 0.05
+		if weapon.consume_shot():
+			fired_at = t
+	check(fired_at >= weapon.data.spin_up_time - 0.06, "atira depois de girar (%.2fs)" % fired_at)
+	weapon.tick(0.05)
+	weapon.tick(0.05)
+	check(not weapon.is_spun_up(), "soltar o gatilho para o giro")
+	weapon.free()
+
+
+func _test_migrated_data() -> void:
+	print("Dados migrados do jogo web")
+	var player := load("res://data/configs/player.tres") as PlayerData
+	check(is_equal_approx(player.move_speed, 6.25) and player.starting_weapon.id == &"m1911", "jogador: 200 px/s = 6.25 m/s, começa com a M1911")
+	check(is_equal_approx(player.knife.damage, 150.0) and is_equal_approx(player.knife.cooldown, 1.0), "faca: 150 de dano, 1 golpe/s")
+	var pump := load("res://data/weapons/pump.tres") as WeaponData
+	check(pump.pellets > 1, "pump dispara %d chumbos" % pump.pellets)
+	var launcher := load("res://data/weapons/grenade_launcher.tres") as WeaponData
+	check(launcher.special_type == &"grenade" and launcher.box_only, "lança-granadas: especial e só na Mystery Box")
+	var dir := DirAccess.open("res://data/weapons")
+	var count := 0
+	for file in dir.get_files():
+		if file.ends_with(".tres") and file != "knife.tres":
+			count += 1
+	check(count == 19, "19 armas migradas (%d)" % count)

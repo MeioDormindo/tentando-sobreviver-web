@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"rail"
+display_name = "Rail Weapon"
+kind = &"rifle"
+rarity = &"legendary"
+damage = 420
+fire_rate = 1.111
+automatic = false
+magazine_size = 4
+reserve_ammo = 28
+reload_time = 2.6
+spread_degrees = 0.5
+max_range = 43.75
+pellets = 1
+pierce = 8
+headshot_multiplier = 1.5
+price = 0
+ammo_price = 2500
+box_only = true
+element = &""
+tracer_color = Color(0.498, 0.906, 1, 1)
+special_type = &""

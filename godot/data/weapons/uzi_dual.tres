@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"uzi_dual"
+display_name = "Uzi Dupla"
+kind = &"akimbo"
+rarity = &"rare"
+damage = 26
+fire_rate = 18.182
+automatic = true
+magazine_size = 64
+reserve_ammo = 320
+reload_time = 2.3
+spread_degrees = 5
+max_range = 16.25
+pellets = 1
+pierce = 0
+headshot_multiplier = 1.5
+price = 2000
+ammo_price = 1000
+box_only = false
+element = &"shadow"
+akimbo = true
+special_type = &""

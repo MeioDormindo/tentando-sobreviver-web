@@ -4,23 +4,23 @@
 
 [resource]
 script = ExtResource("1_script")
-id = &"m1911"
-display_name = "M1911"
-kind = &"pistol"
-rarity = &"common"
-damage = 35
-fire_rate = 4
+id = &"combat_shotgun"
+display_name = "Combat Shotgun"
+kind = &"shotgun"
+rarity = &"rare"
+damage = 16
+fire_rate = 3.125
 automatic = false
 magazine_size = 8
-reserve_ammo = 80
-reload_time = 1.4
-spread_degrees = 2
-max_range = 21.875
-pellets = 1
+reserve_ammo = 64
+reload_time = 2.4
+spread_degrees = 8
+max_range = 11.25
+pellets = 7
 pierce = 0
 headshot_multiplier = 1.5
-price = 0
-ammo_price = 250
+price = 2200
+ammo_price = 1100
 box_only = false
-element = &"light"
+element = &"ice"
 special_type = &""

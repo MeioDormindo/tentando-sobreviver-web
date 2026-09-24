@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"grenade_launcher"
+display_name = "Grenade Launcher"
+kind = &"launcher"
+rarity = &"epic"
+damage = 60
+fire_rate = 1.538
+automatic = false
+magazine_size = 6
+reserve_ammo = 30
+reload_time = 3
+spread_degrees = 1.5
+max_range = 17.5
+pellets = 1
+pierce = 0
+headshot_multiplier = 1.5
+price = 0
+ammo_price = 2000
+box_only = true
+element = &""
+special_type = &"grenade"
+special_params = {
+"blast_radius": 3.281,
+"blast_damage": 220
+}

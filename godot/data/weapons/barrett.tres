@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"barrett"
+display_name = "Barrett .50"
+kind = &"sniper"
+rarity = &"epic"
+damage = 450
+fire_rate = 0.833
+automatic = false
+magazine_size = 5
+reserve_ammo = 30
+reload_time = 2.8
+spread_degrees = 0.3
+max_range = 46.875
+pellets = 1
+pierce = 5
+headshot_multiplier = 1.5
+price = 3000
+ammo_price = 1500
+box_only = false
+element = &"explosive"
+tracer_color = Color(1, 0.949, 0.753, 1)
+special_type = &""

@@ -52,7 +52,8 @@ func _on_zombie_killed(_zombie: Node3D, info: DamageInfo) -> void:
 
 func _on_round_completed(_round_number: int) -> void:
 	if round_manager.data.refill_ammo_on_round_end and player.is_alive():
-		player.weapon.reset_ammo()
+		for weapon in player.inventory.weapons:
+			weapon.reset_ammo()
 
 
 func _on_player_died() -> void:

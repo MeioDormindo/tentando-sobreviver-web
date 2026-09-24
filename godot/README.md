@@ -4,9 +4,13 @@ Versão em **Godot 4.7 + GDScript** do jogo de sobrevivência por rounds (especi
 projeto). O jogo web em TypeScript (raiz deste repositório) continua no ar e serve de referência
 de conceitos: ver `docs/analise-typescript.md`.
 
-**Estado: MVP jogável (seção 39).** Tem:
+**Estado: MVP jogável + combate migrado do jogo web.** Tem:
 - mapa de teste;
-- jogador com lanterna e M1911 (tiro, munição, recarga, headshot);
+- jogador com os atributos do jogo web (velocidade, regeneração, invulnerabilidade curta, mais
+  lento de lado e de costas);
+- 2 armas com troca, faca com avanço, e as 19 armas do jogo web em dados (chumbos, perfuração,
+  giro da minigun). As mecânicas especiais (granada, chama, raio, plasma, vento) entram com a
+  Mystery Box;
 - zumbi Walker com navegação e ataque;
 - rounds cada vez mais difíceis, pontos, HUD, pausa, fim de jogo e reinício.
 
@@ -23,20 +27,35 @@ de conceitos: ver `docs/analise-typescript.md`.
 | Mirar | mouse (sobre a cabeça do zumbi = headshot) | analógico direito |
 | Atirar | botão esquerdo | RT |
 | Recarregar | R | X |
+| Trocar arma | Q, 1 / 2, roda do mouse | Y |
+| Faca | V / botão direito | RB |
 | Pausar | ESC / P | Start |
 
-Já mapeados para as próximas fases: interagir (E / A), trocar arma (Q / Y), faca (V ou botão
-direito / RB) e pular (Espaço / B).
+Já mapeados para as próximas fases: interagir (E / A) e pular (Espaço / B).
+
+## Migração do jogo web
+
+Os dados não são copiados à mão: `npm run godot:data` (na raiz do repositório) lê as configs
+reais do jogo web (`src/config`) e gera os `.tres` de `data/`:
+- as 19 armas e a faca;
+- o jogador;
+- as fórmulas dos rounds e a economia;
+- os 8 tipos de zumbi.
+
+Conversão: 32 px = 1 m, ms → s. O script é `scripts/godot/export-data.ts`. Enquanto o jogo web
+for a referência, mude os valores lá e rode de novo. Quando o Godot virar a fonte, os `.tres`
+passam a ser editados direto no Godot.
 
 ## Testes
 
 ```sh
 # Sistemas isolados, sem janela (vida, headshot, munição e recarga, fórmulas dos rounds,
-# escolha do ponto de spawn, pontos):
+# escolha do ponto de spawn, pontos, inventário, giro da minigun, dados migrados):
 Godot --headless --path godot -s res://tests/run_tests.gd
 
 # Jogado (abre uma janela): um bot joga até o round 3, confere navegação, ataque, abates
-# na cabeça e no corpo, reabastecimento, pontos, limite de vivos, morte e reinício.
+# na cabeça e no corpo, troca de arma, chumbos da espingarda, faca, reabastecimento, pontos,
+# limite de vivos, morte e reinício.
 # Salva prints em tests/output/.
 Godot --path godot -s res://tests/playtest.gd
 ```
@@ -53,10 +72,12 @@ scripts/systems/events.gd        autoload Events: barramento de sinais (sistemas
 scripts/systems/input_bindings.gd autoload InputBindings: ações abstratas (teclado, mouse, controle)
 scripts/components/              HealthComponent, Hurtbox (corpo/cabeça), DamageInfo
 scripts/characters/              CharacterBase (CharacterBody3D + vida por composição)
-scripts/player/                  Player (movimento, mira, tiro), TopDownCamera
+scripts/player/                  Player + PlayerData (movimento, mira, tiro, faca, regeneração),
+                                 TopDownCamera
 scripts/zombies/                 ZombieBase (perseguir → atacar → morto, NavigationAgent3D),
                                  ZombieData, ZombieFactory
-scripts/weapons/                 Weapon (munição, recarga, raycast), WeaponData
+scripts/weapons/                 Weapon (munição, recarga, raycast, chumbos, perfuração, giro),
+                                 WeaponData, WeaponInventory (2 espaços), Melee + MeleeData (faca)
 scripts/systems/                 RoundManager + RoundData, SpawnManager, PointsManager +
                                  PointsData, GameManager, AudioManager
 scripts/maps/arena.gd            blockout a partir de dados + malha de navegação gerada
@@ -81,7 +102,6 @@ Decisões:
 
 ## Próximas fases (roadmap da especificação)
 
-- **Fase 3 (combate):** faca, mais armas, `Melee`.
 - **Fase 4 (rounds):** novos tipos de zumbi e composição por round.
 - **Fase 5 (mapa):** portas e áreas, armas na parede, Mystery Box, perks, energia.
 - **Fase 7 (polimento):** sons e efeitos, modelos do Blender no lugar das primitivas.

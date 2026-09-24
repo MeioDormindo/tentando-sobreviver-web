@@ -22,6 +22,8 @@ var _health_mult := 1.0
 var _damage_mult := 1.0
 var _speed_mult := 1.0
 var _repath_left := 0.0
+## Empurrão (faca, explosões) que se soma ao movimento e some rápido.
+var _knockback := Vector3.ZERO
 var _attack_cooldown := 0.0
 
 @onready var agent: NavigationAgent3D = $NavigationAgent3D
@@ -42,6 +44,7 @@ func _ready() -> void:
 	health.reset(data.max_health * _health_mult)
 	move_speed = data.move_speed * _speed_mult
 	attack_damage = data.damage * _damage_mult
+	add_to_group(&"zombies")
 	health.damaged.connect(func(info: DamageInfo, _current: float) -> void: Events.zombie_hit.emit(self, info))
 	# Espalha o recálculo de caminho entre os zumbis (nem todos no mesmo frame).
 	_repath_left = randf() * repath_interval
@@ -64,6 +67,9 @@ func _physics_process(delta: float) -> void:
 		_attack(to_target)
 	else:
 		_chase(to_target, delta)
+	velocity.x += _knockback.x
+	velocity.z += _knockback.z
+	_knockback = _knockback.move_toward(Vector3.ZERO, 30.0 * delta)
 	move_and_slide()
 
 
@@ -104,6 +110,11 @@ func _attack(to_target: Vector3) -> void:
 		tween.tween_property(pivot, "position", Vector3.ZERO, 0.15)
 
 
+## Empurra o zumbi (velocidade em m/s, no plano).
+func apply_knockback(push: Vector3) -> void:
+	_knockback = Vector3(push.x, 0.0, push.z)
+
+
 func _face(direction: Vector3) -> void:
 	if direction.length() > 0.01:
 		pivot.rotation.y = atan2(-direction.x, -direction.z)
@@ -111,6 +122,7 @@ func _face(direction: Vector3) -> void:
 
 func _on_health_died(info: DamageInfo) -> void:
 	state = State.DEAD
+	remove_from_group(&"zombies")
 	super(info)
 	Events.zombie_killed.emit(self, info)
 	# Não bloqueia mais ninguém nem recebe tiros; cai e afunda no chão.

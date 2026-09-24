@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"energy_cannon"
+display_name = "Energy Cannon"
+kind = &"energy"
+rarity = &"legendary"
+damage = 320
+fire_rate = 0.909
+automatic = false
+magazine_size = 3
+reserve_ammo = 18
+reload_time = 3.2
+spread_degrees = 0
+max_range = 34.375
+pellets = 1
+pierce = 999
+headshot_multiplier = 1.5
+price = 0
+ammo_price = 3000
+box_only = true
+element = &""
+tracer_color = Color(0.435, 0.941, 1, 1)
+special_type = &"plasma"
+special_params = {
+"blast_radius": 4.063,
+"blast_damage": 280,
+"stun_time": 0.6
+}
