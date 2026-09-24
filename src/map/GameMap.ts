@@ -6,6 +6,7 @@ import { NavCost, NavGrid } from '../systems/pathfinding/NavGrid';
 import type { SpawnPoint } from '../systems/SpawnSystem';
 import type { AreaDef, DoorDef, FloorKind, MachinePlacement, MapLayout, Rect, WindowDef } from './types';
 import { perks } from '../config/machines.config';
+import { powerConfig } from '../config/power.config';
 import { PROP_DEFS } from './props';
 
 /** Conteúdo de cada tile. */
@@ -46,6 +47,8 @@ export interface Lamp {
   color?: number;
   /** Luz de emergência: continua fraca durante um apagão (máquinas, pontos de compra). */
   emergency?: boolean;
+  /** Só acende com a energia ligada (máquinas de perk e Weapon Lab). */
+  needsPower?: boolean;
 }
 
 /** Corpo sólido colocado em tempo de execução (pode ser removido). */
@@ -168,7 +171,8 @@ export class GameMap {
     for (const m of this.machines) {
       if (m.type === 'mystery_box') continue;
       const color = m.type === 'perk' ? perks[m.perkId].color : m.type === 'weapon_lab' ? 0x9b59d0 : 0xffd27a;
-      this.lamps.push({ x: m.x, y: m.y, radius: 95, intensity: 0.6, flicker: 0.05, color, emergency: true });
+      const needsPower = !(m.type === 'perk' && powerConfig.worksWithoutPower.includes(m.perkId));
+      this.lamps.push({ x: m.x, y: m.y, radius: 95, intensity: 0.6, flicker: 0.05, color, emergency: true, needsPower });
     }
   }
 

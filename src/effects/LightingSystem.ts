@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { powerConfig } from '../config/power.config';
 import { FX_KEYS } from '../config/assets.config';
 import { DEPTH, lightingConfig } from '../config/visual.config';
 import type { Lamp } from '../map/GameMap';
@@ -42,6 +43,7 @@ export class LightingSystem {
   /** Rage Mode do boss: luzes vermelhas pulsando e mais escuridão. */
   private alarm = false;
   /** Apagão: nível atual (0 = normal, 1 = luzes apagadas) e transição piscando. */
+  private power = { on: true, changedAt: -Infinity, flickerMs: 0 };
   private blackout = { target: 0, level: 0, changedAt: -Infinity, flickerMs: 0, extraDarkness: 0, emergencyFactor: 1 };
   /** Cor da escuridão (null = padrão); a Lua de Sangue deixa avermelhada. */
   private darknessTint: number | null = null;
@@ -120,6 +122,11 @@ export class LightingSystem {
    * Apagão (evento): as luminárias piscam e apagam; as luzes de emergência ficam fracas
    * e o ambiente escurece. `on = false` religa com o mesmo efeito de piscar.
    */
+  /** Energia do mapa: sem ela, luzes das máquinas apagadas e luminárias mais fracas. */
+  setPowered(on: boolean, flickerMs: number): void {
+    this.power = { on, changedAt: this.scene.time.now, flickerMs };
+  }
+
   setBlackout(on: boolean, opts: { extraDarkness: number; emergencyFactor: number; flickerMs: number }): void {
     this.blackout = { ...opts, target: on ? 1 : 0, level: this.blackout.level, changedAt: this.scene.time.now };
   }
@@ -165,8 +172,12 @@ export class LightingSystem {
     // Luminárias
     // Alarme: todas as luzes pulsam juntas em vermelho.
     const alarmPulse = this.alarm ? 0.35 + 0.65 * Math.abs(Math.sin(time / 260)) : 1;
+    // Energia: ao ligar, as luzes oscilam antes de firmar.
+    const pw = this.power;
+    const powered = time - pw.changedAt < pw.flickerMs ? Math.sin(time * 0.041) * Math.sin(time * 0.013) > 0 : pw.on;
     for (const lamp of this.lamps) {
-      const power = 1 - b.level * (lamp.emergency ? 1 - b.emergencyFactor : 1);
+      const mains = powered ? 1 : lamp.needsPower ? 0 : lamp.emergency ? 1 : powerConfig.lampFactorOff;
+      const power = mains * (1 - b.level * (lamp.emergency ? 1 - b.emergencyFactor : 1));
       const intensity = this.lampIntensity(lamp, time) * alarmPulse * power;
       lamp.glow.setAlpha((cfg.lampGlowAlpha * intensity) / lamp.intensity);
       if (!inView(lamp.x, lamp.y, lamp.radius) || intensity <= 0.01) continue;

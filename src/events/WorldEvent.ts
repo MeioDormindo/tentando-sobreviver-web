@@ -36,6 +36,8 @@ export interface EventContext {
   weapons: WeaponSystem;
   economy: EconomySystem;
   isAreaOpen(area: string): boolean;
+  /** Energia do mapa ligada (o Apagão só acontece com ela). */
+  isPowered(): boolean;
   /** Cria um zumbi (tipo + ajustes) num ponto livre; null se não couber. */
   spawnZombie(type: string, x: number, y: number, overrides?: Partial<ZombieConfig>): Zombie | null;
   spawnPowerUp(id: PowerUpId, x: number, y: number): void;

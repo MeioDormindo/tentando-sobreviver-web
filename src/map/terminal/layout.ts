@@ -218,7 +218,8 @@ export const BOSS_SPAWNS: TilePos[] = [
 ];
 
 export const INTERACTIONS: MapInteractionDef[] = [
-  // Área Técnica: religa a energia durante um Apagão
+  // Área Técnica: disjuntor principal (liga a energia da partida) e o painel que religa após um Apagão
+  { type: 'breaker', tx: 64, ty: 86.4 },
   { type: 'power', tx: 32.4, ty: 86 },
   // Hall: desliga o Alarme de Emergência
   { type: 'alarm', tx: 46, ty: 28.7 },

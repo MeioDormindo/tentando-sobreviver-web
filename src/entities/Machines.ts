@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { powerConfig } from '../config/power.config';
 import { machineKeys } from '../config/assets.config';
 import { perks, weaponLabConfig, type PerkId } from '../config/machines.config';
 import { MAX_UPGRADE_LEVEL } from '../config/weapons.config';
@@ -25,7 +26,12 @@ export interface MachineDeps {
   effects: EffectsSystem;
   lighting: LightingSystem;
   solids: SolidPlacer;
+  /** Energia do mapa (perks e Weapon Lab só funcionam com ela). */
+  power: { readonly isOn: boolean };
 }
+
+/** Aviso das máquinas sem energia. */
+const NO_POWER = 'SEM ENERGIA — ligue o disjuntor';
 
 /** Preço formatado ($1.500). */
 export const money = (n: number): string => `$${n.toLocaleString('pt-BR')}`;
@@ -42,6 +48,7 @@ export class WeaponLab implements Interactable {
   }
 
   getPrompt(): InteractionPromptPayload | null {
+    if (!this.deps.power.isOn) return { text: `WEAPON LAB — ${NO_POWER}`, affordable: false };
     const current = this.deps.weapons.current;
     const weapon = current.config;
     if (current.level >= MAX_UPGRADE_LEVEL) return { text: `WEAPON LAB — ${weapon.name.toUpperCase()} NO NÍVEL MÁXIMO`, affordable: false };
@@ -56,8 +63,8 @@ export class WeaponLab implements Interactable {
   }
 
   interact(): void {
-    const { weapons, economy, effects, lighting } = this.deps;
-    if (weapons.current.level >= MAX_UPGRADE_LEVEL || !economy.spend(this.price())) return;
+    const { weapons, economy, effects, lighting, power } = this.deps;
+    if (!power.isOn || weapons.current.level >= MAX_UPGRADE_LEVEL || !economy.spend(this.price())) return;
     weapons.upgradeCurrent();
     const mk3 = weapons.current.level >= MAX_UPGRADE_LEVEL;
     audio.playAt('lab_upgrade', this.x, this.y, { category: 'ui', volume: 1, pitchJitter: 0, rate: mk3 ? 0.8 : 1 });
@@ -83,6 +90,7 @@ export class PerkMachine implements Interactable {
   getPrompt(): InteractionPromptPayload | null {
     const def = perks[this.perkId];
     const { perks: perkSystem, economy } = this.deps;
+    if (!this.powered) return { text: `${def.name.toUpperCase()} — ${NO_POWER}`, affordable: false };
     if (perkSystem.isMaxed(this.perkId)) {
       const soldOut = perkSystem.level(this.perkId) === 0;
       return { text: soldOut ? `${def.name.toUpperCase()} — ESGOTADO` : `${def.name.toUpperCase()} ✓  ${def.description}`, affordable: false };
@@ -93,10 +101,15 @@ export class PerkMachine implements Interactable {
 
   interact(): void {
     const { perks: perkSystem, economy, effects } = this.deps;
-    if (perkSystem.isMaxed(this.perkId) || !economy.spend(perkSystem.priceOf(this.perkId))) return;
+    if (!this.powered || perkSystem.isMaxed(this.perkId) || !economy.spend(perkSystem.priceOf(this.perkId))) return;
     perkSystem.grant(this.perkId);
     audio.playAt('perk', this.x, this.y, { category: 'ui', volume: 1, pitchJitter: 0 });
     const def = perks[this.perkId];
     effects.floatingText(this.x, this.y - 30, def.name.toUpperCase(), `#${def.color.toString(16).padStart(6, '0')}`, true);
+  }
+
+  /** Com energia, ou um perk que funciona sem ela (Quick Revive). */
+  private get powered(): boolean {
+    return this.deps.power.isOn || powerConfig.worksWithoutPower.includes(this.perkId);
   }
 }

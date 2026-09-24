@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { SCENE_KEYS } from '../config/game.config';
+import { SCENE_KEYS, TILE_SIZE } from '../config/game.config';
 import { playerConfig } from '../config/player.config';
 import { getWeaponConfig } from '../config/weapons.config';
 import { Player } from '../entities/Player';
@@ -20,6 +20,7 @@ import { houndRounds } from '../config/waves.config';
 import { liveZombies } from '../events/WorldEvent';
 import { Knife } from '../weapons/Knife';
 import { HazardSystem } from '../systems/HazardSystem';
+import { PowerSystem } from '../systems/PowerSystem';
 import { EasterEggs } from '../systems/EasterEggs';
 import { MysteryBox } from '../entities/MysteryBox';
 import type { BarricadeTarget, ZombieWorld } from '../entities/Zombie';
@@ -67,6 +68,8 @@ export class GameScene extends Phaser.Scene {
   private mapInteractions!: MapInteractions;
   private station: StationBoard | null = null;
   private hazards!: HazardSystem;
+  /** Energia do mapa (também usada pela missão principal). */
+  power!: PowerSystem;
   private perks!: PerkSystem;
   private powerUps!: PowerUpSystem;
   private bossSystem!: BossSystem;
@@ -108,6 +111,9 @@ export class GameScene extends Phaser.Scene {
     const effects = new EffectsSystem(this, map.widthPx, map.heightPx, this.lighting);
     map.scatterDecals(effects.stampDecal);
     this.effects = effects;
+    // Energia: começa desligada; o disjuntor do mapa liga.
+    const power = new PowerSystem(this, this.lighting);
+    this.power = power;
     this.player.onHurt = (x, y) => effects.bloodHit(x, y, Math.random() * Math.PI * 2);
     // Estatísticas, recordes e desbloqueios (ficam no save).
     new StatsSystem(this, this.mapId);
@@ -197,6 +203,7 @@ export class GameScene extends Phaser.Scene {
       effects,
       lighting: this.lighting,
       solids: map,
+      power,
     };
     let box: MysteryBox | null = null;
     for (const m of map.machines) {
@@ -287,6 +294,7 @@ export class GameScene extends Phaser.Scene {
       weapons: this.weaponSystem,
       economy: this.economy,
       isAreaOpen: (area) => spawner.isUnlocked(area),
+      isPowered: () => power.isOn,
       spawnZombie: (type, x, y, overrides) =>
         spawner.spawnAt({ ...scaleZombie(getZombieConfig(type), getWaveParams(Math.max(1, this.waveSystem.currentWave))), ...overrides }, x, y),
       spawnPowerUp: (id, x, y) => this.powerUps.spawnDrop(id, x, y),
@@ -304,6 +312,7 @@ export class GameScene extends Phaser.Scene {
       solids: map,
       zombies,
       events: this.eventSystem,
+      power,
     }, map.layout.interactions);
     // Painel de horários, semáforos e bocas de túnel: só em mapas com estação de trem.
     const station = map.layout.station;
@@ -314,6 +323,8 @@ export class GameScene extends Phaser.Scene {
       spawnGoldenDrop: (x, y) => this.powerUps.spawnDrop('golden', x, y),
       secrets: map.layout.secrets,
     });
+    const breakerDef = map.layout.interactions.find((i) => i.type === 'breaker');
+    const breaker = breakerDef ? { x: breakerDef.tx * TILE_SIZE + TILE_SIZE / 2, y: breakerDef.ty * TILE_SIZE + TILE_SIZE / 2 } : null;
     this.minimap = new MinimapFeed(this, {
       map,
       player: this.player,
@@ -322,6 +333,8 @@ export class GameScene extends Phaser.Scene {
       isAreaOpen: (area) => spawner.isUnlocked(area),
       box: () => box,
       supply: () => this.eventSystem.supplyDrop,
+      // Objetivo no minimapa: o disjuntor, enquanto a energia estiver desligada.
+      objective: () => (power.isOn ? null : breaker),
     });
 
     // Portas pagas: abrir libera os spawns e a exploração da área seguinte.

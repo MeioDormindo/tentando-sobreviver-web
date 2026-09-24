@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { powerConfig } from '../config/power.config';
 import { ASSET_KEYS } from '../config/assets.config';
 import { TILE_SIZE } from '../config/game.config';
 import { interactionsConfig } from '../config/interactions.config';
@@ -23,6 +24,7 @@ export interface MapInteractionDeps {
   lighting: LightingSystem;
   solids: SolidPlacer;
   zombies: Phaser.Physics.Arcade.Group;
+  power: { readonly isOn: boolean; turnOn(): boolean };
   events: {
     readonly activeId: WorldEventId | null;
     endEvent(id: WorldEventId): boolean;
@@ -85,6 +87,23 @@ class EventSwitch extends Panel {
     this.deps.events.endEvent(this.event);
     audio.playAt('lab_upgrade', this.x, this.y, { category: 'ui', volume: 0.8, pitchJitter: 0 });
     this.deps.effects.shockwave(this.x, this.y, 50, 0xe8c14a);
+  }
+}
+
+/** Disjuntor principal: segurar E liga a energia do mapa (grátis, uma vez). */
+class Breaker extends Panel {
+  private readonly progress = new HoldProgress(powerConfig.breakerHoldMs);
+
+  getPrompt(): InteractionPromptPayload | null {
+    if (this.deps.power.isOn) return { text: 'DISJUNTOR PRINCIPAL — ENERGIA LIGADA', affordable: false };
+    return { text: `SEGURE E: LIGAR A ENERGIA${this.progress.bar(this.scene.time.now)}`, affordable: true };
+  }
+
+  onHold(time: number, delta: number): void {
+    if (this.deps.power.isOn || !this.progress.hold(time, delta)) return;
+    this.deps.power.turnOn();
+    this.deps.effects.shockwave(this.x, this.y, 80, 0xffd35a, 500);
+    this.deps.lighting.addFlash(this.x, this.y, 180, 1, 600);
   }
 }
 
@@ -194,6 +213,8 @@ export class MapInteractions {
         const trap = new ElectricTrap(scene, def, deps);
         this.traps.push(trap);
         interaction.add(trap);
+      } else if (def.type === 'breaker') {
+        interaction.add(new Breaker(scene, def, ASSET_KEYS.panelPower, deps));
       } else if (def.type === 'power') {
         interaction.add(new EventSwitch(scene, def, ASSET_KEYS.panelPower, deps, 'blackout', 'RELIGAR A ENERGIA', 'PAINEL DE ENERGIA — FUNCIONANDO', p.power.price, p.power.holdMs));
       } else if (def.type === 'alarm') {

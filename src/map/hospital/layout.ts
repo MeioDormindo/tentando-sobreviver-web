@@ -187,7 +187,8 @@ const BOSS_SPAWNS: TilePos[] = [
 ];
 
 const INTERACTIONS: MapInteractionDef[] = [
-  // Necrotério: gerador de emergência (encerra o Apagão)
+  // Necrotério: disjuntor principal (liga a energia) e o gerador de emergência (encerra o Apagão)
+  { type: 'breaker', tx: 72.6, ty: 81.5 },
   { type: 'power', tx: 72.6, ty: 85 },
   // Recepção: alarme de incêndio
   { type: 'alarm', tx: 38.6, ty: 40 },

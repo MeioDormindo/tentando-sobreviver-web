@@ -104,7 +104,7 @@ export interface LampDef {
 
 /** Painéis e armadilhas interativos (posição do painel; zona da armadilha em tiles). */
 export type MapInteractionDef =
-  | { type: 'power' | 'alarm' | 'train'; tx: number; ty: number }
+  | { type: 'power' | 'alarm' | 'train' | 'breaker'; tx: number; ty: number }
   | { type: 'trap'; tx: number; ty: number; zone: Rect };
 
 /** Easter eggs do mapa (posições em tiles). */

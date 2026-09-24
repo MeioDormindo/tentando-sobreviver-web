@@ -19,6 +19,8 @@ export interface MinimapSources {
   isAreaOpen(area: string): boolean;
   box(): Point | null;
   supply(): Point | null;
+  /** Objetivo atual (disjuntor, etapa da missão). */
+  objective(): Point | null;
 }
 
 /**
@@ -49,12 +51,14 @@ export class MinimapFeed {
     const boss = bosses.getChildren().find((b) => b.active) as (Phaser.GameObjects.Sprite & { isAlive?: boolean }) | undefined;
     const box = this.src.box();
     const supply = this.src.supply();
+    const objective = this.src.objective();
     emitGameEvent(this.scene.game.events, GameEvents.MinimapState, {
       player: [player.x, player.y, player.rotation],
       zombies: list,
       boss: boss?.isAlive ? [boss.x, boss.y] : null,
       box: box ? [box.x, box.y] : null,
       supply: supply ? [supply.x, supply.y] : null,
+      objective: objective ? [objective.x, objective.y] : null,
     });
   }
 

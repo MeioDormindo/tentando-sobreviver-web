@@ -22,6 +22,8 @@ export const GameEvents = {
   PerksChanged: 'perks-changed',
   /** Aviso curto no topo da tela (ex.: som ligado/desligado). */
   Toast: 'toast',
+  /** Energia do mapa ligada/desligada. */
+  PowerChanged: 'power-changed',
   /** Jogo pausado / retomado (o disparo espera o botão ser solto ao voltar). */
   GamePaused: 'game-paused',
   GameResumed: 'game-resumed',
@@ -157,6 +159,8 @@ export interface MinimapStatePayload {
   boss: [number, number] | null;
   box: [number, number] | null;
   supply: [number, number] | null;
+  /** Objetivo atual (disjuntor, etapa da missão). */
+  objective: [number, number] | null;
 }
 
 export interface MoneyPayload {
@@ -203,6 +207,7 @@ export interface GameEventMap {
   [GameEvents.GamePaused]: undefined;
   [GameEvents.GameResumed]: undefined;
   [GameEvents.PowerUpCollected]: { id: string; name: string; color: number; detail?: string };
+  [GameEvents.PowerChanged]: { on: boolean };
   [GameEvents.PowerUpTimers]: { timers: PowerUpTimer[] };
   [GameEvents.BossIncoming]: { name: string };
   [GameEvents.BossState]: BossStatePayload;

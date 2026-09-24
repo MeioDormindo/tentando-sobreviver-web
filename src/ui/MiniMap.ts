@@ -96,6 +96,14 @@ export class MiniMap {
     g.fillStyle(0xe0412f, 0.95);
     for (let i = 0; i < s.zombies.length; i += 2) g.fillRect(toX(s.zombies[i]) - 1, toY(s.zombies[i + 1]) - 1, 2.2, 2.2);
     if (s.supply) g.fillStyle(0x7bd67b, 1).fillRect(toX(s.supply[0]) - 2.5, toY(s.supply[1]) - 2.5, 5, 5);
+    if (s.objective) {
+      // Objetivo: losango amarelo pulsando
+      const ox = toX(s.objective[0]);
+      const oy = toY(s.objective[1]);
+      const r = 3.5 + Math.sin(this.scene.time.now / 200) * 1;
+      g.fillStyle(0xffd35a, 1).fillTriangle(ox, oy - r, ox + r, oy, ox, oy + r).fillTriangle(ox, oy - r, ox - r, oy, ox, oy + r);
+      g.lineStyle(1, 0x000000, 0.9).strokeTriangle(ox, oy - r, ox + r, oy, ox - r, oy);
+    }
     if (s.box) {
       g.fillStyle(0xffd27a, 1).fillRect(toX(s.box[0]) - 2.5, toY(s.box[1]) - 2.5, 5, 5);
       g.lineStyle(1, 0x000000, 0.8).strokeRect(toX(s.box[0]) - 2.5, toY(s.box[1]) - 2.5, 5, 5);

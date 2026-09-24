@@ -16,8 +16,9 @@ export class BlackoutEvent implements WorldEvent {
   readonly atWaveStart = false;
   private ctx: EventContext | null = null;
 
-  canStart(): boolean {
-    return true;
+  /** Sem energia não há o que apagar. */
+  canStart(ctx: EventContext): boolean {
+    return ctx.isPowered();
   }
 
   start(ctx: EventContext): void {
