@@ -35,6 +35,8 @@ import { SpawnSystem } from '../systems/SpawnSystem';
 import { WaveSystem } from '../systems/WaveSystem';
 import { WeaponSystem } from '../weapons/WeaponSystem';
 import { touchInput } from '../input/touchInput';
+import { assistAngle } from '../input/aimAssist';
+import { touchConfig } from '../config/input.config';
 
 const MAX_PROJECTILES = 220;
 const MAX_ZOMBIES = 60;
@@ -57,6 +59,8 @@ export class GameScene extends Phaser.Scene {
   private music!: MusicSystem;
   private score!: ScoreSystem;
   private minimap!: MinimapFeed;
+  private zombies!: Phaser.Physics.Arcade.Group;
+  private bossGroup!: Phaser.Physics.Arcade.Group;
   private map!: TerminalMap;
   private currentArea = '';
   private readonly aimPoint = new Phaser.Math.Vector2();
@@ -127,6 +131,8 @@ export class GameScene extends Phaser.Scene {
 
     const barricadeBodies = this.physics.add.staticGroup();
     const bossGroup = this.physics.add.group();
+    this.zombies = zombies;
+    this.bossGroup = bossGroup;
     const combat = new CombatSystem(this, {
       player: this.player,
       zombies,
@@ -311,12 +317,34 @@ export class GameScene extends Phaser.Scene {
   private updateAim(): void {
     const p = this.player;
     if (touchInput.enabled) {
-      if (touchInput.aiming) p.aimAt(p.x + touchInput.aimX * 100, p.y + touchInput.aimY * 100);
-      else if (touchInput.moving) p.aimAt(p.x + touchInput.moveX * 100, p.y + touchInput.moveY * 100);
+      // Celular: a lanterna é a mira. Analógico direito gira; sem ele, segue o movimento
+      // (enquanto não está atirando). Ao atirar, a mira assistida puxa para o zumbi do cone.
+      let facing = p.rotation;
+      if (touchInput.aiming) facing = Math.atan2(touchInput.aimY, touchInput.aimX);
+      else if (touchInput.moving && !touchInput.firing) facing = Math.atan2(touchInput.moveY, touchInput.moveX);
+      if (touchInput.firing) {
+        const target = assistAngle(
+          p.x, p.y, facing, this.aimTargets(),
+          Phaser.Math.DegToRad(touchConfig.assistConeDeg), touchConfig.assistRange,
+          (tx, ty) => this.map.nav.lineOfSight(p.x, p.y, tx, ty, 0),
+        );
+        if (target !== null) facing = Phaser.Math.Angle.RotateTo(p.rotation, target, touchConfig.assistTurn);
+      }
+      p.aimAt(p.x + Math.cos(facing) * 100, p.y + Math.sin(facing) * 100);
       return;
     }
     this.input.activePointer.positionToCamera(this.cameras.main, this.aimPoint);
     p.aimAt(this.aimPoint.x, this.aimPoint.y);
+  }
+
+  /** Zumbis e boss vivos (alvos da mira assistida). */
+  private *aimTargets(): Generator<{ x: number; y: number }> {
+    for (const group of [this.zombies, this.bossGroup]) {
+      for (const c of group.getChildren()) {
+        const t = c as Phaser.Physics.Arcade.Sprite & { isAlive?: boolean };
+        if (t.active && t.isAlive) yield t;
+      }
+    }
   }
 
   /** Avisa a HUD quando o jogador entra em outra área. */

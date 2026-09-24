@@ -1,8 +1,6 @@
 import Phaser from 'phaser';
 import { touchInput, type TouchAction } from '../input/touchInput';
 
-/** Fração do raio a partir da qual o analógico direito atira. */
-const FIRE_THRESHOLD = 0.35;
 const DEAD_ZONE = 0.12;
 const FONT = 'monospace';
 
@@ -14,8 +12,9 @@ interface Stick {
   y: number;
 }
 
+/** Botão na tela; 'fire' fica ativo enquanto segurado, os demais disparam uma ação. */
 interface Button {
-  action: TouchAction;
+  action: TouchAction | 'fire';
   label: string;
   x: number;
   y: number;
@@ -26,9 +25,12 @@ interface Button {
 }
 
 /**
- * Controles de toque (celular): analógico esquerdo move, direito mira e atira ao ser
- * empurrado; botões USAR (segure para reparar), RECARREGAR, TROCAR e pausa.
- * Os analógicos aparecem onde o polegar toca (metade esquerda / direita da tela).
+ * Controles de toque (celular):
+ * - analógico esquerdo (metade esquerda) move;
+ * - analógico direito (metade direita) gira a lanterna — o tiro sai sempre para onde ela aponta;
+ * - ATIRAR (segurar) atira, com mira assistida no zumbi mais próximo do cone da lanterna;
+ * - USAR (segurar repara), RECARREGAR, TROCAR e pausa.
+ * Não há mira na tela: a própria lanterna é a mira.
  */
 export class TouchControls {
   private readonly g: Phaser.GameObjects.Graphics;
@@ -46,7 +48,8 @@ export class TouchControls {
     // Até 4 dedos ao mesmo tempo (2 analógicos + botões).
     scene.input.addPointer(3);
     this.g = scene.add.graphics().setDepth(90);
-    const defs: Array<[TouchAction, string, number]> = [
+    const defs: Array<[Button['action'], string, number]> = [
+      ['fire', 'ATIRAR', 0xe0503c],
       ['interact', 'USAR', 0xc9a45c],
       ['reload', 'RECARR.', 0x8fa3b8],
       ['swap', 'TROCAR', 0x8fa3b8],
@@ -54,7 +57,7 @@ export class TouchControls {
     ];
     for (const [action, label, color] of defs) {
       const text = scene.add
-        .text(0, 0, label, { fontFamily: FONT, fontSize: '13px', color: '#e8e2c8', fontStyle: 'bold' })
+        .text(0, 0, label, { fontFamily: FONT, fontSize: '13px', color: '#f0ece0', fontStyle: 'bold' })
         .setOrigin(0.5)
         .setDepth(91);
       this.buttons.push({ action, label, x: 0, y: 0, r: 30, color, pointerId: null, text });
@@ -86,23 +89,34 @@ export class TouchControls {
     this.width = width;
     this.height = height;
     this.radius = Phaser.Math.Clamp(Math.min(width, height) * 0.13, 44, 80);
-    const r = this.radius;
-    const br = Phaser.Math.Clamp(r * 0.48, 24, 36);
-    // Botões acima da área do polegar direito (que fica no canto de baixo); pausa no topo.
-    const above = height - r * 2.2;
-    const place: Record<TouchAction, [number, number, number]> = {
-      reload: [width - br * 1.3, above - br * 1.2, br],
-      swap: [width - br * 1.3, above - br * 3.6, br],
-      interact: [width - br * 3.9, above - br * 2.3, br * 1.15],
+    const br = Phaser.Math.Clamp(this.radius * 0.48, 24, 36);
+    // ATIRAR grande no canto inferior direito (onde o polegar descansa); os outros acima dele.
+    const fireR = br * 1.75;
+    const fx = width - fireR - 16;
+    const fy = height - fireR - 16;
+    const place: Record<Button['action'], [number, number, number]> = {
+      fire: [fx, fy, fireR],
+      interact: [fx - fireR - br * 1.6, fy + fireR * 0.2, br * 1.1],
+      reload: [fx + fireR * 0.25, fy - fireR - br * 1.2, br],
+      swap: [fx - fireR * 0.95, fy - fireR - br * 0.6, br],
       pause: [width / 2, br * 0.9 + 4, br * 0.7],
     };
     for (const b of this.buttons) {
       [b.x, b.y, b.r] = place[b.action];
-      b.text.setPosition(b.x, b.y).setFontSize(Math.round(b.r * 0.42));
+      b.text.setPosition(b.x, b.y).setFontSize(Math.round(b.r * (b.action === 'fire' ? 0.3 : 0.42)));
     }
-    this.resetStick(this.move, r * 1.7, height - r * 1.7);
-    this.resetStick(this.aim, width - r * 1.7, height - r * 1.7);
+    this.resetStick(this.move, this.moveHome()[0], this.moveHome()[1]);
+    this.resetStick(this.aim, this.aimHome()[0], this.aimHome()[1]);
     this.draw();
+  }
+
+  private moveHome(): [number, number] {
+    return [this.radius * 1.7, this.height - this.radius * 1.7];
+  }
+
+  /** Posição de repouso do analógico de mira: à esquerda dos botões. */
+  private aimHome(): [number, number] {
+    return [this.width * 0.62, this.height - this.radius * 1.5];
   }
 
   // ───────────── Toques ─────────────
@@ -112,8 +126,11 @@ export class TouchControls {
     const button = this.buttons.find((b) => b.pointerId === null && Phaser.Math.Distance.Between(p.x, p.y, b.x, b.y) <= b.r * 1.15);
     if (button) {
       button.pointerId = p.id;
-      if (button.action === 'interact') touchInput.interactHeld = true;
-      touchInput.press(button.action);
+      if (button.action === 'fire') touchInput.firing = true;
+      else {
+        if (button.action === 'interact') touchInput.interactHeld = true;
+        touchInput.press(button.action);
+      }
       this.draw();
       return;
     }
@@ -141,18 +158,17 @@ export class TouchControls {
       if (b.pointerId !== p.id) continue;
       b.pointerId = null;
       if (b.action === 'interact') touchInput.interactHeld = false;
+      if (b.action === 'fire') touchInput.firing = false;
     }
-    const r = this.radius;
-    if (this.move.pointerId === p.id) this.resetStick(this.move, r * 1.7, this.height - r * 1.7);
-    if (this.aim.pointerId === p.id) this.resetStick(this.aim, this.width - r * 1.7, this.height - r * 1.7);
+    if (this.move.pointerId === p.id) this.resetStick(this.move, ...this.moveHome());
+    if (this.aim.pointerId === p.id) this.resetStick(this.aim, ...this.aimHome());
     this.apply();
   }
 
   private releaseAll(): void {
     for (const b of this.buttons) b.pointerId = null;
-    const r = this.radius;
-    this.resetStick(this.move, r * 1.7, this.height - r * 1.7);
-    this.resetStick(this.aim, this.width - r * 1.7, this.height - r * 1.7);
+    this.resetStick(this.move, ...this.moveHome());
+    this.resetStick(this.aim, ...this.aimHome());
     touchInput.release();
   }
 
@@ -174,7 +190,6 @@ export class TouchControls {
       touchInput.aimX = ax / len;
       touchInput.aimY = ay / len;
     }
-    touchInput.firing = touchInput.aiming && len >= FIRE_THRESHOLD;
     this.draw();
   }
 
@@ -198,18 +213,19 @@ export class TouchControls {
     g.clear();
     if (!this.visible) return;
     const r = this.radius;
-    for (const [stick, color] of [[this.move, 0xe8e2c8], [this.aim, touchInput.firing ? 0xe0503c : 0xe8e2c8]] as const) {
+    for (const stick of [this.move, this.aim]) {
       const active = stick.pointerId !== null;
+      // O analógico de mira só aparece enquanto está sendo usado (a lanterna já mostra a direção).
+      if (stick === this.aim && !active) continue;
       const [vx, vy] = this.vector(stick);
       g.fillStyle(0x000000, active ? 0.3 : 0.15).fillCircle(stick.baseX, stick.baseY, r);
-      g.lineStyle(2, color, active ? 0.55 : 0.25).strokeCircle(stick.baseX, stick.baseY, r);
-      if (stick === this.aim) g.lineStyle(1, 0xe0503c, 0.3).strokeCircle(stick.baseX, stick.baseY, r * FIRE_THRESHOLD);
-      g.fillStyle(color, active ? 0.6 : 0.3).fillCircle(stick.baseX + vx * r, stick.baseY + vy * r, r * 0.42);
+      g.lineStyle(2, 0xe8e2c8, active ? 0.55 : 0.25).strokeCircle(stick.baseX, stick.baseY, r);
+      g.fillStyle(0xe8e2c8, active ? 0.6 : 0.3).fillCircle(stick.baseX + vx * r, stick.baseY + vy * r, r * 0.42);
     }
     for (const b of this.buttons) {
       const held = b.pointerId !== null;
-      g.fillStyle(b.color, held ? 0.55 : 0.25).fillCircle(b.x, b.y, b.r);
-      g.lineStyle(2, b.color, held ? 0.9 : 0.55).strokeCircle(b.x, b.y, b.r);
+      g.fillStyle(b.color, held ? 0.6 : b.action === 'fire' ? 0.35 : 0.25).fillCircle(b.x, b.y, b.r);
+      g.lineStyle(b.action === 'fire' ? 3 : 2, b.color, held ? 0.95 : 0.6).strokeCircle(b.x, b.y, b.r);
     }
   }
 }

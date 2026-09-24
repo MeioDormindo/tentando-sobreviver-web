@@ -6,7 +6,7 @@ import { save } from '../save/SaveStore';
 import { MENU_FONT, menuButton, menuTitle, onResize } from '../ui/menuWidgets';
 
 const KEYBOARD_HINT = 'WASD mover · Mouse mirar · Clique atirar · R recarregar · E comprar · Q/1/2 trocar arma · M som · N música · ESC pausa';
-const TOUCH_HINT = 'Analógico esquerdo: mover · Analógico direito: mirar e atirar · Botões: usar, recarregar, trocar arma';
+const TOUCH_HINT = 'Analógico esquerdo: mover · Analógico direito: girar a lanterna · ATIRAR: atira para onde a lanterna aponta';
 
 export class MenuScene extends Phaser.Scene {
   constructor() {

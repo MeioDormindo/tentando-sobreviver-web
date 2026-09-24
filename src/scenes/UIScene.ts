@@ -162,7 +162,12 @@ export class UIScene extends Phaser.Scene {
     this.crosshair = this.add.graphics().setDepth(100);
     this.drawCrosshair();
     this.touch = useTouchControls(save.setting('touchMode')) ? new TouchControls(this) : null;
-    if (!this.touch) touchInput.enabled = false;
+    if (!this.touch) {
+      touchInput.enabled = false;
+      // Modo automático: se o primeiro toque vier de um dedo (celular não detectado),
+      // liga os controles de toque na hora e some com a mira do mouse.
+      if (save.setting('touchMode') === 'auto') this.input.on(Phaser.Input.Events.POINTER_DOWN, this.detectTouch, this);
+    }
     if (this.touch) this.crosshair.setVisible(false);
     this.updateKills();
 
@@ -216,12 +221,22 @@ export class UIScene extends Phaser.Scene {
     this.crosshair.setPosition(pointer.x, pointer.y);
   }
 
+  private detectTouch(p: Phaser.Input.Pointer): void {
+    if (!p.wasTouch || this.touch) return;
+    this.input.off(Phaser.Input.Events.POINTER_DOWN, this.detectTouch, this);
+    this.touch = new TouchControls(this);
+    this.crosshair.setVisible(false);
+    this.layout();
+  }
+
   private layout(): void {
     const { width, height } = this.scale;
     this.hpText.setPosition(MARGIN, height - MARGIN - HP_BAR_HEIGHT - 22);
-    this.weaponText.setPosition(width - MARGIN, height - MARGIN - 40);
-    this.ammoText.setPosition(width - MARGIN, height - MARGIN);
-    this.secondaryText.setPosition(width - MARGIN, height - MARGIN - 64);
+    // No celular o canto inferior direito é dos botões: arma e munição sobem para o topo.
+    const ammoY = this.touch ? MARGIN + 196 : height - MARGIN;
+    this.weaponText.setPosition(width - MARGIN, ammoY - 40);
+    this.ammoText.setPosition(width - MARGIN, ammoY);
+    this.secondaryText.setPosition(width - MARGIN, ammoY - 64);
     this.moneyText.setPosition(width - MARGIN, MARGIN - 4);
     this.moneyDeltaText.setPosition(width - MARGIN, MARGIN + 34);
     this.promptText.setPosition(width / 2, height * 0.72);
