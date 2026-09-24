@@ -4,11 +4,7 @@ import { TEXTURE_KEYS, TILE_SIZE } from '../config/game.config';
 import { ART_SCALE, DEPTH } from '../config/visual.config';
 import { NavCost, NavGrid } from '../systems/pathfinding/NavGrid';
 import type { SpawnPoint } from '../systems/SpawnSystem';
-import {
-  AREAS, CARVES, DOORS, FLOORS, LAMPS, MAP_HEIGHT, MAP_WIDTH, OBSTACLES, OUTSIDE_DARKNESS, PLAYER_START,
-  BOSS_SPAWNS, BOX_SPOTS, MACHINES, POCKETS, PLATFORM_EDGES, PROPS, SPAWNS, STATIONS, TRAIN_ROOF_UNITS, WINDOWS,
-  type AreaDef, type DoorDef, type FloorKind, type MachinePlacement, type Rect, type WindowDef,
-} from './terminal/layout';
+import type { AreaDef, DoorDef, FloorKind, MachinePlacement, MapLayout, Rect, WindowDef } from './types';
 import { perks } from '../config/machines.config';
 import { PROP_DEFS } from './props';
 
@@ -35,6 +31,9 @@ const FLOOR_TEXTURES: Record<FloorKind, string> = {
   tracks: ASSET_KEYS.floorTracks,
   tunnel: ASSET_KEYS.floorTunnel,
   wagon: ASSET_KEYS.floorWagon,
+  hospital: ASSET_KEYS.floor,
+  linoleum: ASSET_KEYS.floor,
+  morgue: ASSET_KEYS.floor,
 };
 
 export interface Lamp {
@@ -63,13 +62,13 @@ export type StationDef = { type: 'weapon'; weaponId: string; x: number; y: numbe
 export type DecalStamper = (key: string, frame: number | undefined, x: number, y: number, rotation: number, alpha: number) => void;
 
 /**
- * Mapa Terminal Central (GDD §6–17): monta a grade a partir do layout, cria colisão,
- * navegação e visual (pisos, paredes 3/4, trem, props). Portas e barricadas são
- * entidades à parte (a porta aberta chama openDoorTiles).
+ * Mapa jogável (GDD §6–17): monta a grade a partir de um layout (Terminal, Hospital...),
+ * cria colisão, navegação e visual (pisos, paredes 3/4, trem, props). Portas e barricadas
+ * são entidades à parte (a porta aberta chama openDoorTiles).
  */
-export class TerminalMap {
-  readonly widthPx = MAP_WIDTH * TILE_SIZE;
-  readonly heightPx = MAP_HEIGHT * TILE_SIZE;
+export class GameMap {
+  readonly widthPx: number;
+  readonly heightPx: number;
   readonly wallLayer: Phaser.Tilemaps.TilemapLayer;
   readonly obstacles: Phaser.Physics.Arcade.StaticGroup;
   readonly bulletBlockers: Phaser.Physics.Arcade.StaticGroup;
@@ -83,9 +82,13 @@ export class TerminalMap {
   readonly boxSpots: Array<{ x: number; y: number; area: string }>;
   /** Pontos de surgimento do boss (centro do Hall). */
   readonly bossSpawns: Array<{ x: number; y: number }>;
-  readonly doors: DoorDef[] = DOORS;
-  readonly windows: WindowDef[] = WINDOWS;
-  readonly areas: AreaDef[] = AREAS;
+  readonly doors: DoorDef[];
+  readonly windows: WindowDef[];
+  readonly areas: AreaDef[];
+  /** Área onde o jogador começa (aberta desde o início). */
+  readonly startArea: string;
+  private readonly W: number;
+  private readonly H: number;
 
   private readonly cells: Uint8Array;
   /** Luzes dos props luminosos (telas, placas, vitrines), somadas às luminárias. */
@@ -93,7 +96,17 @@ export class TerminalMap {
   /** Índice da área de cada tile (-1 = fora de qualquer área). */
   private readonly areaIndex: Int8Array;
 
-  constructor(private readonly scene: Phaser.Scene) {
+  constructor(private readonly scene: Phaser.Scene, readonly layout: MapLayout) {
+    const MAP_WIDTH = layout.width;
+    const MAP_HEIGHT = layout.height;
+    this.W = MAP_WIDTH;
+    this.H = MAP_HEIGHT;
+    this.widthPx = MAP_WIDTH * TILE_SIZE;
+    this.heightPx = MAP_HEIGHT * TILE_SIZE;
+    this.doors = layout.doors;
+    this.windows = layout.windows;
+    this.areas = layout.areas;
+    this.startArea = layout.startArea;
     this.cells = new Uint8Array(MAP_WIDTH * MAP_HEIGHT).fill(Cell.Wall);
     this.areaIndex = new Int8Array(MAP_WIDTH * MAP_HEIGHT).fill(-1);
     this.buildCells();
@@ -134,22 +147,22 @@ export class TerminalMap {
     this.renderProps();
 
     const center = (tx: number, ty: number) => new Phaser.Math.Vector2(tx * TILE_SIZE + TILE_SIZE / 2, ty * TILE_SIZE + TILE_SIZE / 2);
-    this.playerSpawn = center(PLAYER_START.tx, PLAYER_START.ty);
-    this.spawnPoints = SPAWNS.map((s) => {
+    this.playerSpawn = center(layout.playerStart.tx, layout.playerStart.ty);
+    this.spawnPoints = layout.spawns.map((s) => {
       const p = center(s.tx, s.ty);
       return { id: s.id, x: p.x, y: p.y, sector: s.area, minWave: s.minWave, enabled: this.cell(s.tx, s.ty) === Cell.Floor };
     });
-    this.stations = STATIONS.map((s) => {
+    this.stations = layout.stations.map((s) => {
       const p = center(s.tx, s.ty);
       return s.type === 'weapon' ? { type: 'weapon', weaponId: s.weaponId, x: p.x, y: p.y } : { type: 'ammo', x: p.x, y: p.y };
     });
-    this.lamps = LAMPS.map((l) => ({ ...center(l.tx, l.ty), radius: l.radius, intensity: l.intensity, flicker: l.flicker }));
+    this.lamps = layout.lamps.map((l) => ({ ...center(l.tx, l.ty), radius: l.radius, intensity: l.intensity, flicker: l.flicker }));
     this.lamps.push(...this.propLights);
     // Luz fraca sobre cada ponto de compra, para ser encontrado no escuro.
     for (const s of this.stations) this.lamps.push({ x: s.x, y: s.y, radius: 70, intensity: 0.45, flicker: 0, emergency: true });
-    this.machines = MACHINES.map((m) => ({ ...m, ...center(m.tx, m.ty) }));
-    this.bossSpawns = BOSS_SPAWNS.map((s) => center(s.tx, s.ty));
-    this.boxSpots = BOX_SPOTS.map((s) => ({ x: s.tx * TILE_SIZE + TILE_SIZE / 2, y: s.ty * TILE_SIZE + TILE_SIZE / 2, area: s.area }));
+    this.machines = layout.machines.map((m) => ({ ...m, ...center(m.tx, m.ty) }));
+    this.bossSpawns = layout.bossSpawns.map((s) => center(s.tx, s.ty));
+    this.boxSpots = layout.boxSpots.map((s) => ({ x: s.tx * TILE_SIZE + TILE_SIZE / 2, y: s.ty * TILE_SIZE + TILE_SIZE / 2, area: s.area }));
     // Máquinas iluminadas com a cor delas (perks) ou luz roxa. A Mystery Box tem luz
     // própria (ela muda de lugar).
     for (const m of this.machines) {
@@ -162,16 +175,16 @@ export class TerminalMap {
   // ───────────────────────── Consultas ─────────────────────────
 
   cell(tx: number, ty: number): CellValue {
-    if (tx < 0 || ty < 0 || tx >= MAP_WIDTH || ty >= MAP_HEIGHT) return Cell.Wall;
-    return this.cells[ty * MAP_WIDTH + tx] as CellValue;
+    if (tx < 0 || ty < 0 || tx >= this.W || ty >= this.H) return Cell.Wall;
+    return this.cells[ty * this.W + tx] as CellValue;
   }
 
   areaAt(x: number, y: number): AreaDef | null {
     const tx = Math.floor(x / TILE_SIZE);
     const ty = Math.floor(y / TILE_SIZE);
-    if (tx < 0 || ty < 0 || tx >= MAP_WIDTH || ty >= MAP_HEIGHT) return null;
-    const i = this.areaIndex[ty * MAP_WIDTH + tx];
-    return i >= 0 ? AREAS[i] : null;
+    if (tx < 0 || ty < 0 || tx >= this.W || ty >= this.H) return null;
+    const i = this.areaIndex[ty * this.W + tx];
+    return i >= 0 ? this.areas[i] : null;
   }
 
   /**
@@ -179,36 +192,36 @@ export class TerminalMap {
    * trancado ou de fora, 3 porta fechada, 4 trem, 5 janela.
    */
   minimapCells(isOpen: (area: string) => boolean): { cols: number; rows: number; cells: number[] } {
-    const cells: number[] = new Array(MAP_WIDTH * MAP_HEIGHT);
-    for (let ty = 0; ty < MAP_HEIGHT; ty++) {
-      for (let tx = 0; tx < MAP_WIDTH; tx++) {
-        const i = ty * MAP_WIDTH + tx;
+    const cells: number[] = new Array(this.W * this.H);
+    for (let ty = 0; ty < this.H; ty++) {
+      for (let tx = 0; tx < this.W; tx++) {
+        const i = ty * this.W + tx;
         const c = this.cells[i];
         const area = this.areaIndex[i];
         cells[i] =
-          c === Cell.Floor ? (area >= 0 && isOpen(AREAS[area].id) ? 1 : 2)
+          c === Cell.Floor ? (area >= 0 && isOpen(this.areas[area].id) ? 1 : 2)
           : c === Cell.Door ? 3
           : c === Cell.Train ? 4
           : c === Cell.Window ? 5
           : 0;
       }
     }
-    return { cols: MAP_WIDTH, rows: MAP_HEIGHT, cells };
+    return { cols: this.W, rows: this.H, cells };
   }
 
   /** Tipo de piso num ponto (som dos passos). */
   floorAt(x: number, y: number): FloorKind {
     const tx = Math.floor(x / TILE_SIZE);
     const ty = Math.floor(y / TILE_SIZE);
-    for (let i = FLOORS.length - 1; i >= 0; i--) {
-      const r = FLOORS[i].rect;
-      if (tx >= r.x && tx < r.x + r.w && ty >= r.y && ty < r.y + r.h) return FLOORS[i].kind;
+    for (let i = this.layout.floors.length - 1; i >= 0; i--) {
+      const r = this.layout.floors[i].rect;
+      if (tx >= r.x && tx < r.x + r.w && ty >= r.y && ty < r.y + r.h) return this.layout.floors[i].kind;
     }
     return 'concrete';
   }
 
   /** Escuridão ambiente no ponto (varia por área, GDD §50). */
-  readonly darknessAt = (x: number, y: number): number => this.areaAt(x, y)?.darkness ?? OUTSIDE_DARKNESS;
+  readonly darknessAt = (x: number, y: number): number => this.areaAt(x, y)?.darkness ?? this.layout.outsideDarkness;
 
   // ───────────────────────── Mudanças dinâmicas ─────────────────────────
 
@@ -253,7 +266,7 @@ export class TerminalMap {
   /** Porta aberta: os tiles viram chão para colisão e navegação. */
   openDoorTiles(rect: Rect): void {
     this.forEachTile(rect, (x, y) => {
-      this.cells[y * MAP_WIDTH + x] = Cell.Floor;
+      this.cells[y * this.W + x] = Cell.Floor;
       this.wallLayer.putTileAt(EMPTY, x, y);
       this.nav.setCost(x, y, NavCost.Floor);
     });
@@ -261,8 +274,8 @@ export class TerminalMap {
 
   /** Espalha sujeira, papéis e sangue antigo pelo chão das áreas (determinístico). */
   scatterDecals(stamp: DecalStamper): void {
-    const rnd = new Phaser.Math.RandomDataGenerator(['terminal-decals']);
-    for (const area of AREAS) {
+    const rnd = new Phaser.Math.RandomDataGenerator([this.layout.decalSeed]);
+    for (const area of this.areas) {
       for (const r of area.rects) {
         const tiles = r.w * r.h;
         const place = (count: number, key: string, frames: number | undefined, alpha: [number, number]): void => {
@@ -284,23 +297,23 @@ export class TerminalMap {
   // ───────────────────────── Construção ─────────────────────────
 
   private buildCells(): void {
-    const set = (r: Rect, value: CellValue) => this.forEachTile(r, (x, y) => (this.cells[y * MAP_WIDTH + x] = value));
-    for (const a of AREAS) for (const r of a.rects) set(r, Cell.Floor);
-    for (const r of POCKETS) set(r, Cell.Floor);
-    for (const o of OBSTACLES) set(o.rect, o.kind === 'train' ? Cell.Train : Cell.Wall);
-    for (const r of CARVES) set(r, Cell.Floor);
-    for (const d of DOORS) set(d.rect, Cell.Door);
-    for (const w of WINDOWS) set(w.rect, Cell.Window);
+    const set = (r: Rect, value: CellValue) => this.forEachTile(r, (x, y) => (this.cells[y * this.W + x] = value));
+    for (const a of this.areas) for (const r of a.rects) set(r, Cell.Floor);
+    for (const r of this.layout.pockets) set(r, Cell.Floor);
+    for (const o of this.layout.obstacles) set(o.rect, o.kind === 'train' ? Cell.Train : Cell.Wall);
+    for (const r of this.layout.carves) set(r, Cell.Floor);
+    for (const d of this.layout.doors) set(d.rect, Cell.Door);
+    for (const w of this.layout.windows) set(w.rect, Cell.Window);
 
-    AREAS.forEach((area, index) => {
-      for (const r of area.rects) this.forEachTile(r, (x, y) => (this.areaIndex[y * MAP_WIDTH + x] = index));
+    this.areas.forEach((area, index) => {
+      for (const r of area.rects) this.forEachTile(r, (x, y) => (this.areaIndex[y * this.W + x] = index));
     });
   }
 
   private forEachTile(r: Rect, fn: (x: number, y: number) => void): void {
     for (let y = r.y; y < r.y + r.h; y++) {
       for (let x = r.x; x < r.x + r.w; x++) {
-        if (x >= 0 && y >= 0 && x < MAP_WIDTH && y < MAP_HEIGHT) fn(x, y);
+        if (x >= 0 && y >= 0 && x < this.W && y < this.H) fn(x, y);
       }
     }
   }
@@ -311,7 +324,7 @@ export class TerminalMap {
   }
 
   private renderFloors(): void {
-    for (const { rect, kind } of FLOORS) {
+    for (const { rect, kind } of this.layout.floors) {
       this.scene.add
         .tileSprite(rect.x * TILE_SIZE, rect.y * TILE_SIZE, rect.w * TILE_SIZE, rect.h * TILE_SIZE, FLOOR_TEXTURES[kind])
         .setOrigin(0)
@@ -332,8 +345,8 @@ export class TerminalMap {
       return false;
     };
 
-    for (let ty = 0; ty < MAP_HEIGHT; ty++) {
-      for (let tx = 0; tx < MAP_WIDTH; tx++) {
+    for (let ty = 0; ty < this.H; ty++) {
+      for (let tx = 0; tx < this.W; tx++) {
         if (!this.isSolidVisual(tx, ty)) continue;
         const train = this.cell(tx, ty) === Cell.Train;
         // O trem é sempre desenhado inteiro (é um objeto, não massa de parede).
@@ -361,7 +374,9 @@ export class TerminalMap {
 
   /** Faixa tátil na borda da plataforma e equipamentos no teto do trem. */
   private renderPlatformDetails(): void {
-    for (const e of PLATFORM_EDGES) {
+    const station = this.layout.station;
+    if (!station) return;
+    for (const e of station.edges) {
       const y = e.y * TILE_SIZE + (e.down ? -12 : 2);
       this.scene.add
         .tileSprite(e.x * TILE_SIZE, y, e.w * TILE_SIZE, 10, ASSET_KEYS.tactile)
@@ -370,9 +385,9 @@ export class TerminalMap {
         .setDepth(DEPTH.decals + 1);
     }
     // O teto do trem parado fica logo acima da última linha dele.
-    const train = OBSTACLES.find((o) => o.kind === 'train')?.rect;
+    const train = this.layout.obstacles.find((o) => o.kind === 'train')?.rect;
     const roofDepth = train ? (train.y + train.h) * TILE_SIZE + 1 : 0;
-    for (const u of TRAIN_ROOF_UNITS) {
+    for (const u of station.roofUnits) {
       this.scene.add
         .image(u.tx * TILE_SIZE, u.ty * TILE_SIZE - WALL_RISE, ASSET_KEYS.trainRoofUnit)
         .setScale(ART_SCALE)
@@ -381,7 +396,7 @@ export class TerminalMap {
   }
 
   private renderProps(): void {
-    for (const p of PROPS) {
+    for (const p of this.layout.props) {
       const def = PROP_DEFS[p.type];
       const x = p.tx * TILE_SIZE + TILE_SIZE / 2;
       const y = p.ty * TILE_SIZE + TILE_SIZE / 2;

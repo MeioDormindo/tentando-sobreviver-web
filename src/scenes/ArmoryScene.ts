@@ -5,7 +5,8 @@ import { COLORS, SCENE_KEYS } from '../config/game.config';
 import { upgradeWeaponConfig, weapons, type Rarity, type WeaponConfig } from '../config/weapons.config';
 import { RARITY_COLORS } from '../entities/MysteryBox';
 import { elements } from '../config/elements.config';
-import { AREAS, STATIONS } from '../map/terminal/layout';
+import { MAPS } from '../config/maps.config';
+import { LAYOUTS } from '../map/registry';
 import { MENU_FONT, MENU_TITLE_FONT, menuButton, menuTitle, onResize } from '../ui/menuWidgets';
 
 /** Altura do painel de detalhes (px de desenho, antes de escalar). */
@@ -39,11 +40,16 @@ function specialText(cfg: WeaponConfig): string {
 function sourceText(cfg: WeaponConfig): string {
   if (cfg.boxOnly) return 'Só na Mystery Box';
   if (cfg.price === 0) return 'Arma inicial';
-  const station = STATIONS.find((s) => s.type === 'weapon' && s.weaponId === cfg.id);
-  const area = station
-    ? AREAS.find((a) => a.rects.some((r) => station.tx >= r.x && station.tx < r.x + r.w && station.ty >= r.y && station.ty < r.y + r.h))
-    : undefined;
-  return `Maleta: $${cfg.price.toLocaleString('pt-BR')}${area ? ` · ${area.name}` : ''} · também na Mystery Box`;
+  // Maletas em todos os mapas: "Mapa · Área".
+  const places: string[] = [];
+  for (const layout of Object.values(LAYOUTS)) {
+    if (!layout) continue;
+    const station = layout.stations.find((s) => s.type === 'weapon' && s.weaponId === cfg.id);
+    if (!station) continue;
+    const area = layout.areas.find((a) => a.rects.some((r) => station.tx >= r.x && station.tx < r.x + r.w && station.ty >= r.y && station.ty < r.y + r.h));
+    places.push(area ? `${MAPS[layout.id].name} · ${area.name}` : MAPS[layout.id].name);
+  }
+  return `Maleta: ${cfg.price.toLocaleString('pt-BR')}${places.length ? ` · ${places.join(' / ')}` : ''} · também na Mystery Box`;
 }
 
 interface Stat {

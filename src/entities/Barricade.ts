@@ -4,7 +4,7 @@ import { barricadeConfig } from '../config/economy.config';
 import { TILE_SIZE } from '../config/game.config';
 import { ART_SCALE, DEPTH } from '../config/visual.config';
 import type { InteractionPromptPayload } from '../game/events';
-import type { WindowDef } from '../map/terminal/layout';
+import type { WindowDef } from '../map/types';
 import type { EconomySystem } from '../systems/EconomySystem';
 import type { Interactable } from '../systems/InteractionSystem';
 import type { Player } from './Player';

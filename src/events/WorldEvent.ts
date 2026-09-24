@@ -6,7 +6,7 @@ import type { Player } from '../entities/Player';
 import type { Zombie } from '../entities/Zombie';
 import type { ZombieConfig } from '../config/zombies.config';
 import type { PowerUpId } from '../config/powerups.config';
-import type { TerminalMap } from '../map/TerminalMap';
+import type { GameMap } from '../map/GameMap';
 import type { EconomySystem } from '../systems/EconomySystem';
 import type { InteractionSystem } from '../systems/InteractionSystem';
 import type { SpawnModifier } from '../systems/WaveSystem';
@@ -25,7 +25,7 @@ export interface WaveControl {
 export interface EventContext {
   scene: Phaser.Scene;
   player: Player;
-  map: TerminalMap;
+  map: GameMap;
   lighting: LightingSystem;
   effects: EffectsSystem;
   waves: WaveControl;

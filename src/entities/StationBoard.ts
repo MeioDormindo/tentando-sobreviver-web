@@ -4,6 +4,7 @@ import { stationConfig } from '../config/events.config';
 import { TILE_SIZE } from '../config/game.config';
 import { ART_SCALE, DEPTH } from '../config/visual.config';
 import type { LightingSystem } from '../effects/LightingSystem';
+import type { StationLayout } from '../map/types';
 
 type Light = { x: number; y: number; radius: number; intensity: number; color?: number };
 export type TrainStatus = { state: 'none' | 'scheduled' | 'warning' | 'passing'; inMs: number };
@@ -16,8 +17,6 @@ const BLINK_MS = 260;
 const TUNNEL_DEPTH = DEPTH.darkness - 1000;
 /** Largura da boca de túnel (tiles). */
 const TUNNEL_TILES = 3;
-/** Borda interna do mapa na Plataforma (tiles). */
-const PLATFORM_X = { from: 16, to: 112 };
 
 interface Signal {
   red: Phaser.GameObjects.Image;
@@ -39,21 +38,22 @@ export class StationBoard {
   constructor(
     scene: Phaser.Scene,
     lighting: LightingSystem,
+    station: StationLayout,
     private readonly status: () => TrainStatus,
   ) {
     const tunnelW = TUNNEL_TILES * TILE_SIZE;
-    for (const t of stationConfig.tunnels) {
+    for (const t of station.tunnels) {
       const y = t.y * TILE_SIZE;
       const h = t.h * TILE_SIZE;
-      scene.add.image(PLATFORM_X.from * TILE_SIZE - 64, y, ASSET_KEYS.tunnelMouth).setOrigin(0).setDisplaySize(tunnelW, h).setDepth(TUNNEL_DEPTH);
+      scene.add.image(station.span.from * TILE_SIZE - 64, y, ASSET_KEYS.tunnelMouth).setOrigin(0).setDisplaySize(tunnelW, h).setDepth(TUNNEL_DEPTH);
       scene.add
-        .image(PLATFORM_X.to * TILE_SIZE + 64 - tunnelW, y, ASSET_KEYS.tunnelMouth)
+        .image(station.span.to * TILE_SIZE + 64 - tunnelW, y, ASSET_KEYS.tunnelMouth)
         .setOrigin(0)
         .setDisplaySize(tunnelW, h)
         .setFlipX(true)
         .setDepth(TUNNEL_DEPTH);
     }
-    for (const s of stationConfig.signals) {
+    for (const s of station.signals) {
       const x = s.tx * TILE_SIZE;
       const y = s.ty * TILE_SIZE;
       scene.add.image(x, y, ASSET_KEYS.railSignal).setScale(ART_SCALE).setDepth(y + 8);
@@ -67,7 +67,7 @@ export class StationBoard {
         y,
       });
     }
-    const b = stationConfig.board;
+    const b = station.board;
     const bx = b.tx * TILE_SIZE;
     const by = b.ty * TILE_SIZE;
     scene.add.image(bx, by, ASSET_KEYS.departureBoard).setScale(ART_SCALE).setDepth(by + 18);

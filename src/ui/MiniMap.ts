@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { GameEvents, onGameEvent, type MinimapBasePayload, type MinimapStatePayload } from '../game/events';
 
 const TEXTURE = 'ui_minimap_base';
-/** Cor de cada código de tile (ver TerminalMap.minimapCells). */
+/** Cor de cada código de tile (ver GameMap.minimapCells). */
 const COLORS: Record<number, [number, number, number, number]> = {
   0: [0, 0, 0, 0],
   1: [120, 124, 112, 235],

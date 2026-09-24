@@ -146,7 +146,7 @@ export interface MinimapBasePayload {
   cols: number;
   rows: number;
   tileSize: number;
-  /** Código por tile (ver TerminalMap.minimapCells). */
+  /** Código por tile (ver GameMap.minimapCells). */
   cells: number[];
 }
 

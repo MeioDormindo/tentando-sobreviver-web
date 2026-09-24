@@ -21,10 +21,10 @@ import { EasterEggs } from '../systems/EasterEggs';
 import { MysteryBox } from '../entities/MysteryBox';
 import type { BarricadeTarget, ZombieWorld } from '../entities/Zombie';
 import { emitGameEvent, GameEvents, onGameEvent } from '../game/events';
-import { TerminalMap } from '../map/TerminalMap';
+import { GameMap } from '../map/GameMap';
 import { audio } from '../audio/AudioSystem';
 import { MusicSystem } from '../audio/MusicSystem';
-import { START_AREA } from '../map/terminal/layout';
+import { layoutFor } from '../map/registry';
 import { CameraController } from '../systems/CameraController';
 import { CombatSystem } from '../systems/CombatSystem';
 import { EconomySystem } from '../systems/EconomySystem';
@@ -61,7 +61,7 @@ export class GameScene extends Phaser.Scene {
   private economy!: EconomySystem;
   private interaction!: InteractionSystem;
   private mapInteractions!: MapInteractions;
-  private station!: StationBoard;
+  private station: StationBoard | null = null;
   private perks!: PerkSystem;
   private powerUps!: PowerUpSystem;
   private bossSystem!: BossSystem;
@@ -72,7 +72,7 @@ export class GameScene extends Phaser.Scene {
   private minimap!: MinimapFeed;
   private zombies!: Phaser.Physics.Arcade.Group;
   private bossGroup!: Phaser.Physics.Arcade.Group;
-  private map!: TerminalMap;
+  private map!: GameMap;
   private currentArea = '';
   /** Velocidade global dos zumbis (eventos como a Lua de Sangue). */
   private zombieSpeed = 1;
@@ -91,7 +91,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   create(): void {
-    const map = new TerminalMap(this);
+    const map = new GameMap(this, layoutFor(this.mapId));
     Zombie.bigHeads = save.secret('konami') && save.setting('bigHeads');
     this.map = map;
     this.currentArea = '';
@@ -229,7 +229,7 @@ export class GameScene extends Phaser.Scene {
     };
 
     const spawner = new SpawnSystem(this, zombies, map.spawnPoints, this.player, world);
-    spawner.unlockArea(START_AREA);
+    spawner.unlockArea(map.startArea);
     this.bossSystem = new BossSystem(this, {
       player: this.player,
       world,
@@ -273,12 +273,15 @@ export class GameScene extends Phaser.Scene {
       solids: map,
       zombies,
       events: this.eventSystem,
-    });
-    this.station = new StationBoard(this, this.lighting, () => this.eventSystem.trainStatus);
+    }, map.layout.interactions);
+    // Painel de horários, semáforos e bocas de túnel: só em mapas com estação de trem.
+    const station = map.layout.station;
+    this.station = station ? new StationBoard(this, this.lighting, station, () => this.eventSystem.trainStatus) : null;
     new EasterEggs(this, {
       interaction: this.interaction,
       player: this.player,
       spawnGoldenDrop: (x, y) => this.powerUps.spawnDrop('golden', x, y),
+      secrets: map.layout.secrets,
     });
     this.minimap = new MinimapFeed(this, {
       map,
@@ -362,7 +365,7 @@ export class GameScene extends Phaser.Scene {
     this.bossSystem.update(time, delta);
     this.eventSystem.update(time, delta);
     this.mapInteractions.update(time);
-    this.station.update(time);
+    this.station?.update(time);
     this.minimap.update(time);
     audio.update(time);
     this.music.update(time, delta);

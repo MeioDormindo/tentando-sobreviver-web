@@ -8,8 +8,6 @@ import { liveZombies, type EventContext, type WorldEvent } from './WorldEvent';
 
 type Light = { x: number; y: number; radius: number; intensity: number; color?: number };
 
-/** Largura da faixa dos trilhos na plataforma (tiles): só o trecho aberto recebe o aviso. */
-const PLATFORM_SPAN = { from: 16, to: 112 };
 const WARNING_BLINK_MS = 260;
 
 /**
@@ -34,22 +32,32 @@ export class TrainEvent implements WorldEvent {
   private playerHit = false;
   private runOverCount = 0;
 
-  private readonly top = trainConfig.lane.y * TILE_SIZE;
-  private readonly bottom = (trainConfig.lane.y + trainConfig.lane.h) * TILE_SIZE;
+  /** Faixa dos trilhos e trecho da plataforma (px), lidos da estação do mapa ao começar. */
+  private top = 0;
+  private bottom = 0;
+  private span = { from: 0, to: 0 };
   private readonly length = trainConfig.cars * trainConfig.carLength;
 
+  /** Só em mapas com estação, e com a área dos trilhos aberta. */
   canStart(ctx: EventContext): boolean {
-    return ctx.isAreaOpen(trainConfig.area);
+    const station = ctx.map.layout.station;
+    return !!station && ctx.isAreaOpen(station.area);
   }
 
   start(ctx: EventContext): void {
+    const station = ctx.map.layout.station;
+    if (station) {
+      this.top = station.lane.y * TILE_SIZE;
+      this.bottom = (station.lane.y + station.lane.h) * TILE_SIZE;
+      this.span = { from: station.span.from * TILE_SIZE, to: station.span.to * TILE_SIZE };
+    }
     this.ctx = ctx;
     this.startedAt = ctx.scene.time.now;
     this.dir = Math.random() < 0.5 ? 1 : -1;
     this.playerHit = false;
     this.runOverCount = 0;
-    const x0 = PLATFORM_SPAN.from * TILE_SIZE;
-    const x1 = PLATFORM_SPAN.to * TILE_SIZE;
+    const x0 = this.span.from;
+    const x1 = this.span.to;
     const cy = (this.top + this.bottom) / 2;
     this.stripe = ctx.scene.add
       .rectangle(x0, this.top, x1 - x0, this.bottom - this.top, 0xff2a1a, 0)

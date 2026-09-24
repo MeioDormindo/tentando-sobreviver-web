@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { TILE_SIZE } from '../config/game.config';
 import { emitGameEvent, GameEvents, onGameEvent } from '../game/events';
-import type { TerminalMap } from '../map/TerminalMap';
+import type { GameMap } from '../map/GameMap';
 
 /** Intervalo entre atualizações das posições no minimapa (ms). */
 const STATE_EVERY_MS = 150;
@@ -12,7 +12,7 @@ interface Point {
 }
 
 export interface MinimapSources {
-  map: TerminalMap;
+  map: GameMap;
   player: Point & { readonly rotation: number };
   zombies: Phaser.Physics.Arcade.Group;
   bosses: Phaser.Physics.Arcade.Group;

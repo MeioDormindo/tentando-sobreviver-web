@@ -1,4 +1,7 @@
-import type { PropType } from '../props';
+import type {
+  AreaDef, BoxSpot, DoorDef, FloorDef, LampDef, MachinePlacement, MapInteractionDef, MapLayout, ObstacleDef,
+  PropPlacement, Rect, SpawnDef, StationPlacement, TilePos, WindowDef,
+} from '../types';
 
 /**
  * Terminal Central (GDD §6–17). Tudo em tiles de 32 px.
@@ -6,27 +9,9 @@ import type { PropType } from '../props';
  * voltam a ser sólidos → recortes (vagão aberto) → portas → janelas.
  */
 
-export interface Rect {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}
-
-export type AreaId = 'hall' | 'platform' | 'ticket' | 'shops' | 'tech' | 'tunnels' | 'maintenance';
-export type FloorKind = 'terminal' | 'concrete' | 'metal' | 'tracks' | 'tunnel' | 'wagon';
-
-export interface AreaDef {
-  id: AreaId;
-  name: string;
-  /** Escuridão ambiente quando o jogador está na área (GDD §50). */
-  darkness: number;
-  rects: Rect[];
-}
-
 export const MAP_WIDTH = 128;
 export const MAP_HEIGHT = 121;
-export const START_AREA: AreaId = 'hall';
+export const START_AREA = 'hall';
 export const PLAYER_START = { tx: 64, ty: 42 };
 /** Escuridão fora das áreas (bolsões externos). */
 export const OUTSIDE_DARKNESS = 0.82;
@@ -54,7 +39,7 @@ export const POCKETS: Rect[] = [
 ];
 
 /** Pisos (ordem de desenho). */
-export const FLOORS: Array<{ rect: Rect; kind: FloorKind }> = [
+export const FLOORS: FloorDef[] = [
   // Plataforma Norte (de cima para baixo): trilho de trás com o trem parado, ilha,
   // trilho da frente (onde o trem passa) e a plataforma principal, ligada ao Hall.
   { rect: { x: 16, y: 4, w: 96, h: 5 }, kind: 'tracks' },
@@ -68,13 +53,11 @@ export const FLOORS: Array<{ rect: Rect; kind: FloorKind }> = [
   { rect: { x: 16, y: 98, w: 96, h: 10 }, kind: 'tunnel' },
   { rect: { x: 36, y: 110, w: 56, h: 9 }, kind: 'metal' },
   { rect: { x: 58, y: 5, w: 12, h: 4 }, kind: 'wagon' },
-  ...POCKETS.map((rect) => ({ rect, kind: 'concrete' as FloorKind })),
+  ...POCKETS.map((rect): FloorDef => ({ rect, kind: 'concrete' })),
 ];
 
-export type SolidKind = 'wall' | 'train';
-
 /** Obstáculos sólidos dentro das áreas. */
-export const OBSTACLES: Array<{ rect: Rect; kind: SolidKind }> = [
+export const OBSTACLES: ObstacleDef[] = [
   // Hall: pilares e balcão de informações
   { rect: { x: 48, y: 33, w: 2, h: 2 }, kind: 'wall' },
   { rect: { x: 78, y: 33, w: 2, h: 2 }, kind: 'wall' },
@@ -128,13 +111,6 @@ export const CARVES: Rect[] = [
   { x: 62, y: 8, w: 3, h: 1 },
 ];
 
-export interface DoorDef {
-  id: string;
-  rect: Rect;
-  cost: number;
-  areas: [AreaId, AreaId];
-}
-
 /** Portas e custos (GDD §18). */
 export const DOORS: DoorDef[] = [
   { id: 'door_hall_ticket', rect: { x: 41, y: 56, w: 3, h: 2 }, cost: 750, areas: ['hall', 'ticket'] },
@@ -145,14 +121,6 @@ export const DOORS: DoorDef[] = [
   { id: 'door_tech_tunnels', rect: { x: 62, y: 95, w: 3, h: 3 }, cost: 2500, areas: ['tech', 'tunnels'] },
   { id: 'door_tunnels_maint', rect: { x: 86, y: 108, w: 3, h: 2 }, cost: 3000, areas: ['tunnels', 'maintenance'] },
 ];
-
-export interface WindowDef {
-  id: string;
-  /** Tiles da janela (numa parede vertical). */
-  rect: Rect;
-  /** Área para onde a janela dá acesso. */
-  area: AreaId;
-}
 
 /** Janelas com barricada (GDD §19): ligam um bolsão externo a uma área. */
 export const WINDOWS: WindowDef[] = [
@@ -165,15 +133,6 @@ export const WINDOWS: WindowDef[] = [
   { id: 'win_shops_1', rect: { x: 116, y: 62, w: 1, h: 2 }, area: 'shops' },
   { id: 'win_shops_2', rect: { x: 116, y: 71, w: 1, h: 2 }, area: 'shops' },
 ];
-
-export interface SpawnDef {
-  id: string;
-  tx: number;
-  ty: number;
-  /** Área que precisa estar aberta para o ponto funcionar. */
-  area: AreaId;
-  minWave: number;
-}
 
 /** Pontos de spawn (GDD §20). Os do Hall, Bilheteria e Lojas ficam nos bolsões atrás das janelas. */
 export const SPAWNS: SpawnDef[] = [
@@ -204,10 +163,6 @@ export const SPAWNS: SpawnDef[] = [
   { id: 'M2', tx: 89, ty: 117, area: 'maintenance', minWave: 1 },
 ];
 
-export type StationPlacement =
-  | { type: 'weapon'; weaponId: string; tx: number; ty: number }
-  | { type: 'ammo'; tx: number; ty: number };
-
 export const STATIONS: StationPlacement[] = [
   { type: 'weapon', weaponId: 'glock', tx: 56, ty: 40 },
   { type: 'ammo', tx: 71, ty: 40 },
@@ -221,11 +176,6 @@ export const STATIONS: StationPlacement[] = [
   { type: 'weapon', weaponId: 'combat_shotgun', tx: 66.5, ty: 6 },
   { type: 'ammo', tx: 48, ty: 92 },
 ];
-
-export type MachinePlacement =
-  | { type: 'mystery_box'; tx: number; ty: number }
-  | { type: 'weapon_lab'; tx: number; ty: number }
-  | { type: 'perk'; perkId: 'fortify' | 'quick_hands' | 'sprint' | 'deadeye' | 'adrenaline' | 'overload' | 'quick_revive'; tx: number; ty: number };
 
 /** Máquinas (GDD §37–40): a Mystery Box no Hall, o Weapon Lab na Manutenção e um perk por área. */
 export const MACHINES: MachinePlacement[] = [
@@ -245,7 +195,7 @@ export const MACHINES: MachinePlacement[] = [
  * Locais por onde a Mystery Box passa (um por área). Ela começa no primeiro e, a cada
  * N usos, some e reaparece em outro local de uma área aberta.
  */
-export const BOX_SPOTS: Array<{ tx: number; ty: number; area: AreaId }> = [
+export const BOX_SPOTS: BoxSpot[] = [
   { tx: 69, ty: 30, area: 'hall' },
   // Outros pontos no próprio Hall: a caixa muda de lugar mesmo sem outras áreas abertas.
   { tx: 53, ty: 29.6, area: 'hall' },
@@ -260,17 +210,12 @@ export const BOX_SPOTS: Array<{ tx: number; ty: number; area: AreaId }> = [
 ];
 
 /** Onde o boss surge (e volta se ficar preso): o centro do Hall, amplo e sempre aberto. */
-export const BOSS_SPAWNS: Array<{ tx: number; ty: number }> = [
+export const BOSS_SPAWNS: TilePos[] = [
   { tx: 64, ty: 44 },
   { tx: 55, ty: 42 },
   { tx: 73, ty: 42 },
   { tx: 64, ty: 49 },
 ];
-
-/** Painéis e armadilhas interativos (posição do painel; zona da armadilha em tiles). */
-export type MapInteractionDef =
-  | { type: 'power' | 'alarm' | 'train'; tx: number; ty: number }
-  | { type: 'trap'; tx: number; ty: number; zone: Rect };
 
 export const INTERACTIONS: MapInteractionDef[] = [
   // Área Técnica: religa a energia durante um Apagão
@@ -285,7 +230,7 @@ export const INTERACTIONS: MapInteractionDef[] = [
   { type: 'trap', tx: 41.4, ty: 103.3, zone: { x: 45, y: 103, w: 5, h: 5 } },
 ];
 
-export const PROPS: Array<{ type: PropType; tx: number; ty: number; angle?: number }> = [
+export const PROPS: PropPlacement[] = [
   // Hall
   { type: 'bench', tx: 52, ty: 46 },
   { type: 'bench', tx: 76, ty: 46 },
@@ -391,14 +336,6 @@ export const PROPS: Array<{ type: PropType; tx: number; ty: number; angle?: numb
   { type: 'extinguisher', tx: 36.3, ty: 113 },
 ];
 
-export interface LampDef {
-  tx: number;
-  ty: number;
-  radius: number;
-  intensity: number;
-  flicker: number;
-}
-
 export const LAMPS: LampDef[] = [
   // Hall
   { tx: 52, ty: 38, radius: 210, intensity: 0.72, flicker: 0.1 },
@@ -442,6 +379,66 @@ export const PLATFORM_EDGES: Array<{ x: number; y: number; w: number; down: bool
 ];
 
 /** Unidades de ar-condicionado sobre o teto do trem (decoração). */
-export const TRAIN_ROOF_UNITS: Array<{ tx: number; ty: number }> = [
+export const TRAIN_ROOF_UNITS: TilePos[] = [
   { tx: 30, ty: 6 }, { tx: 40, ty: 6 }, { tx: 48, ty: 6 }, { tx: 78, ty: 6 }, { tx: 88, ty: 6 }, { tx: 97, ty: 6 },
 ];
+
+/** Terminal Central completo, como o jogo o consome. */
+export const TERMINAL_LAYOUT: MapLayout = {
+  id: 'terminal',
+  width: MAP_WIDTH,
+  height: MAP_HEIGHT,
+  startArea: START_AREA,
+  playerStart: PLAYER_START,
+  outsideDarkness: OUTSIDE_DARKNESS,
+  areas: AREAS,
+  pockets: POCKETS,
+  floors: FLOORS,
+  obstacles: OBSTACLES,
+  carves: CARVES,
+  doors: DOORS,
+  windows: WINDOWS,
+  spawns: SPAWNS,
+  stations: STATIONS,
+  machines: MACHINES,
+  boxSpots: BOX_SPOTS,
+  bossSpawns: BOSS_SPAWNS,
+  props: PROPS,
+  lamps: LAMPS,
+  interactions: INTERACTIONS,
+  decalSeed: 'terminal-decals',
+  secrets: {
+    // Ursinhos em cantos escuros: Lojas, Bilheteria e Túneis
+    teddies: [
+      { tx: 115, ty: 58 },
+      { tx: 12, ty: 77 },
+      { tx: 111, ty: 106 },
+    ],
+    // Rádio velho na Manutenção
+    radio: { tx: 37.4, ty: 110.2, holdMs: 900, label: 'SINTONIZAR O RÁDIO' },
+    // Placa perto da entrada da Plataforma
+    creditsSign: { tx: 57.5, ty: 30.5 },
+    loreMessages: [
+      '📻 "...controle da Estação Central. O trem das 23h40 NÃO deve parar. Repito: não parem o trem..."',
+      '📻 "...o maquinista não responde. Alguém viu o Condutor? Ele desceu nos túneis e voltou... diferente."',
+      '📻 "...quarentena decretada. Portas lacradas. Quem ficou lá dentro está por conta própria."',
+      '📻 "...se alguém ouvir isto: tentem sobreviver. O resgate chega ao amanhecer. Talvez."',
+    ],
+  },
+  station: {
+    area: 'platform',
+    lane: { y: 12, h: 4 },
+    span: { from: 16, to: 112 },
+    edges: PLATFORM_EDGES,
+    roofUnits: TRAIN_ROOF_UNITS,
+    tunnels: [
+      { y: 4, h: 5 },
+      { y: 12, h: 4 },
+    ],
+    signals: [
+      { tx: 16.8, ty: 16.4 },
+      { tx: 110.2, ty: 16.4 },
+    ],
+    board: { tx: 72, ty: 17.1 },
+  },
+};

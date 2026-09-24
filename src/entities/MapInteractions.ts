@@ -7,7 +7,7 @@ import { ART_SCALE, DEPTH } from '../config/visual.config';
 import type { EffectsSystem } from '../effects/EffectsSystem';
 import type { LightingSystem } from '../effects/LightingSystem';
 import { emitGameEvent, GameEvents, type InteractionPromptPayload } from '../game/events';
-import { INTERACTIONS, type MapInteractionDef, type Rect } from '../map/terminal/layout';
+import type { MapInteractionDef, Rect } from '../map/types';
 import type { EconomySystem } from '../systems/EconomySystem';
 import type { InteractionSystem, Interactable } from '../systems/InteractionSystem';
 import { audio } from '../audio/AudioSystem';
@@ -187,9 +187,9 @@ class ElectricTrap extends Panel {
 export class MapInteractions {
   private readonly traps: ElectricTrap[] = [];
 
-  constructor(scene: Phaser.Scene, interaction: InteractionSystem, deps: MapInteractionDeps) {
+  constructor(scene: Phaser.Scene, interaction: InteractionSystem, deps: MapInteractionDeps, defs: readonly MapInteractionDef[]) {
     const p = interactionsConfig;
-    for (const def of INTERACTIONS) {
+    for (const def of defs) {
       if (def.type === 'trap') {
         const trap = new ElectricTrap(scene, def, deps);
         this.traps.push(trap);

@@ -35,7 +35,7 @@ export const worldEvents: Record<WorldEventId, WorldEventInfo> = {
   // O trem não entra no sorteio (weight 0): tem agenda própria (trainConfig).
   train: { name: 'TREM PASSANDO', hint: 'Saia dos trilhos da plataforma!', color: 0xffc04a, weight: 0, minWave: 2, cooldownWaves: 0 },
   horde: { name: 'HORDA', hint: 'Muito mais zumbis nesta wave', color: 0xb33a3a, weight: 14, minWave: 5, cooldownWaves: 4 },
-  supply_drop: { name: 'SUPRIMENTOS', hint: 'Uma caixa caiu no terminal — pegue-a', color: 0x7bd67b, weight: 22, minWave: 2, cooldownWaves: 2 },
+  supply_drop: { name: 'SUPRIMENTOS', hint: 'Uma caixa caiu do céu — segure E para abrir', color: 0x7bd67b, weight: 22, minWave: 2, cooldownWaves: 2 },
   gas_leak: { name: 'VAZAMENTO DE GÁS', hint: 'Fique longe da nuvem verde', color: 0x9acd32, weight: 16, minWave: 4, cooldownWaves: 3 },
   golden_zombie: { name: 'ZUMBI DOURADO', hint: 'Mate-o antes que fuja: dinheiro e Golden Drop!', color: 0xffd35a, weight: 14, minWave: 3, cooldownWaves: 3 },
   blood_moon: { name: 'LUA DE SANGUE', hint: 'Zumbis mais rápidos — dinheiro e pontos em dobro', color: 0xd0342c, weight: 12, minWave: 5, cooldownWaves: 4 },
@@ -83,26 +83,10 @@ export const trainConfig = {
   carLength: 320,
   /** Dano ao jogador atropelado (uma vez por passagem). */
   playerDamage: 70,
-  /** Faixa livre dos trilhos por onde o trem passa (tiles). */
-  lane: { y: 12, h: 4 },
-  /** Área necessária aberta. */
-  area: 'platform',
 };
 
-/** Detalhes da estação (Plataforma Norte). Posições em tiles. */
+/** Estação de trem (posições ficam no layout do mapa, em `station`). */
 export const stationConfig = {
-  /** Bocas de túnel nas pontas de cada trilho: y e altura (tiles). */
-  tunnels: [
-    { y: 4, h: 5 },
-    { y: 12, h: 4 },
-  ],
-  /** Semáforos nas pontas do trilho da frente, na borda da plataforma principal. */
-  signals: [
-    { tx: 16.8, ty: 16.4 },
-    { tx: 110.2, ty: 16.4 },
-  ],
-  /** Painel de horários na plataforma principal. */
-  board: { tx: 72, ty: 17.1 },
   /** Aviso com a contagem só aparece quando falta menos que isto (ms). */
   countdownFromMs: 30_000,
   /** Deslocamento de ar: empurra quem está até esta distância (px) da faixa, a esta velocidade (px/s). */

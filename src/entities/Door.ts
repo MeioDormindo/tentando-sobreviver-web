@@ -3,16 +3,16 @@ import { ASSET_KEYS } from '../config/assets.config';
 import { TILE_SIZE } from '../config/game.config';
 import { ART_SCALE } from '../config/visual.config';
 import type { InteractionPromptPayload } from '../game/events';
-import type { TerminalMap } from '../map/TerminalMap';
-import type { AreaId, DoorDef } from '../map/terminal/layout';
+import type { GameMap } from '../map/GameMap';
+import type { DoorDef } from '../map/types';
 import type { EconomySystem } from '../systems/EconomySystem';
 import type { Interactable } from '../systems/InteractionSystem';
 import { audio } from '../audio/AudioSystem';
 
 export interface DoorDeps {
   economy: EconomySystem;
-  map: TerminalMap;
-  isUnlocked: (area: AreaId) => boolean;
+  map: GameMap;
+  isUnlocked: (area: string) => boolean;
   onOpened: (door: Door) => void;
 }
 

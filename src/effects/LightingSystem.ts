@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { FX_KEYS } from '../config/assets.config';
 import { DEPTH, lightingConfig } from '../config/visual.config';
-import type { Lamp } from '../map/TerminalMap';
+import type { Lamp } from '../map/GameMap';
 
 const RADIAL_SIZE = 256;
 const CONE_LENGTH = 512;
