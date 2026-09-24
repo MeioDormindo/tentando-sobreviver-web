@@ -11,6 +11,7 @@ export const POWERUPS = {
   speed_boost: { color: '#35c7c0', dark: '#0f5552' },
   carpenter: { color: '#c8873a', dark: '#5a3510' },
   golden: { color: '#ffd35a', dark: '#8a5a00' },
+  fire_sale: { color: '#e8452c', dark: '#5e1208' },
 };
 
 const INK = '#141414';
@@ -50,6 +51,12 @@ function symbol(id) {
       return `<g transform="rotate(-40 48 48)"><rect x="44" y="38" width="8" height="36" rx="2" fill="${INK}"/>` +
         `<path d="M30 26 L62 26 Q68 26 68 32 L68 38 L30 38 Q26 38 26 34 L26 30 Q26 26 30 26 Z" fill="${INK}"/>` +
         `<path d="M66 28 Q76 24 78 18 L74 30 Z" fill="${INK}"/></g>`;
+    case 'fire_sale':
+      // Etiqueta de preço pegando fogo: "$10".
+      return `<path d="M48 16 C54 26 64 28 60 40 C66 36 68 30 67 26 C74 34 74 44 70 50 L26 50 C22 42 24 34 30 28 C30 34 33 37 36 38 C34 28 40 22 48 16 Z" fill="#ffb347" stroke="${INK}" stroke-width="2"/>` +
+        `<path d="M22 46 L64 46 L76 60 L64 74 L22 74 Z" fill="#f4efe2" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/>` +
+        `<circle cx="66" cy="60" r="3.5" fill="${INK}"/>` +
+        `<text x="41" y="69" font-family="Impact, Arial Black, sans-serif" font-size="20" fill="${INK}" text-anchor="middle">$10</text>`;
     case 'golden':
       return `<path d="M48 22 L55 40 L74 41 L59 53 L64 72 L48 61 L32 72 L37 53 L22 41 L41 40 Z" fill="#fff4c2" stroke="${INK}" stroke-width="2.5"/>`;
     default:

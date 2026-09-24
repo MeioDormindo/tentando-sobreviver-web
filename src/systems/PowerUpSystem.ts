@@ -26,6 +26,8 @@ export interface PowerUpDeps {
   zombies: Phaser.Physics.Arcade.Group;
   /** Carpenter: conserta todas as barricadas; devolve quantas tábuas foram repostas. */
   repairBarricades: () => number;
+  /** Fire Sale: liga/desliga a liquidação da Mystery Box. */
+  fireSale: { start(): void; end(): void };
 }
 
 interface Drop {
@@ -200,6 +202,10 @@ export class PowerUpSystem {
       }
       case 'golden':
         detail = this.golden();
+        break;
+      case 'fire_sale':
+        this.startTimer(id, def, () => this.deps.fireSale.start(), () => this.deps.fireSale.end());
+        detail = 'Mystery Box a $10 em todos os locais!';
         break;
     }
 

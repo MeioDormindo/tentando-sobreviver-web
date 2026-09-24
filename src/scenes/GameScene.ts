@@ -39,6 +39,7 @@ import { EventSystem } from '../systems/EventSystem';
 import { ScoreSystem } from '../systems/ScoreSystem';
 import { StatsSystem } from '../systems/StatsSystem';
 import { AntiCheat } from '../systems/AntiCheat';
+import { FireSale } from '../systems/FireSale';
 import { ProgressSystem } from '../systems/ProgressSystem';
 import { MinimapFeed } from '../systems/MinimapFeed';
 import { DEFAULT_MAP, MAPS, type MapId } from '../config/maps.config';
@@ -168,7 +169,10 @@ export class GameScene extends Phaser.Scene {
       lighting: this.lighting,
       zombies,
       repairBarricades: () => barricades.reduce((n, b) => n + b.repairFully(), 0),
+      // Fire Sale: o controlador é criado junto com a Mystery Box, logo abaixo.
+      fireSale: { start: () => fireSale?.start(), end: () => fireSale?.end() },
     });
+    let fireSale: FireSale | null = null;
     const barricades: Barricade[] = [];
 
     const barricadeBodies = this.physics.add.staticGroup();
@@ -222,18 +226,25 @@ export class GameScene extends Phaser.Scene {
       power,
     };
     let box: MysteryBox | null = null;
+    const boxPlaces = {
+      spots: map.boxSpots,
+      solids: map,
+      // O spawner é criado logo abaixo; só é consultado quando a caixa muda de lugar.
+      isAreaOpen: (area: string) => spawner.isUnlocked(area),
+      areaName: (area: string) => map.areas.find((a) => a.id === area)?.name ?? area,
+      mapId: this.mapId,
+    };
+    fireSale = new FireSale(this, {
+      interaction: this.interaction,
+      spots: map.boxSpots,
+      isAreaOpen: (area) => spawner.isUnlocked(area),
+      mainBox: () => box,
+      isFree: (spot) => MysteryBox.fitsAt(map, spot.x, spot.y),
+      createBox: (spot) => new MysteryBox(this, spot.x, spot.y, machineDeps, boxPlaces),
+    });
     for (const m of map.machines) {
       if (m.type === 'mystery_box') {
-        this.interaction.add(
-          (box = new MysteryBox(this, m.x, m.y, machineDeps, {
-            spots: map.boxSpots,
-            solids: map,
-            // O spawner é criado logo abaixo; só é consultado quando a caixa muda de lugar.
-            isAreaOpen: (area) => spawner.isUnlocked(area),
-            areaName: (area) => map.areas.find((a) => a.id === area)?.name ?? area,
-            mapId: this.mapId,
-          })),
-        );
+        this.interaction.add((box = new MysteryBox(this, m.x, m.y, machineDeps, boxPlaces)));
       } else if (m.type === 'weapon_lab') {
         this.interaction.add(new WeaponLab(this, m.x, m.y, machineDeps));
       } else {

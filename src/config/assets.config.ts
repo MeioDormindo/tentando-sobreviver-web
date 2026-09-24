@@ -146,7 +146,7 @@ export const gunIconKey = (kind: WeaponKind): string => `gun_${kind}`;
 export const PERK_IDS = ['fortify', 'quick_hands', 'sprint', 'deadeye', 'adrenaline', 'overload', 'quick_revive'] as const;
 export const perkIconKey = (id: string): string => `perk_icon_${id}`;
 
-export const POWERUP_IDS = ['max_ammo', 'double_cash', 'insta_kill', 'nuke', 'full_heal', 'armor', 'speed_boost', 'carpenter', 'golden'] as const;
+export const POWERUP_IDS = ['max_ammo', 'double_cash', 'insta_kill', 'nuke', 'full_heal', 'armor', 'speed_boost', 'carpenter', 'golden', 'fire_sale'] as const;
 export const powerUpKey = (id: string): string => `powerup_${id}`;
 
 export const machineKeys = {

@@ -9,7 +9,8 @@ export type PowerUpId =
   | 'armor'
   | 'speed_boost'
   | 'carpenter'
-  | 'golden';
+  | 'golden'
+  | 'fire_sale';
 
 export interface PowerUpDef {
   id: PowerUpId;
@@ -30,6 +31,8 @@ export const powerUps: Record<PowerUpId, PowerUpDef> = {
   speed_boost: { id: 'speed_boost', name: 'Speed Boost', color: 0x35c7c0, durationMs: 15_000 },
   carpenter: { id: 'carpenter', name: 'Carpenter', color: 0xc8873a },
   golden: { id: 'golden', name: 'Golden Drop', color: 0xffd35a },
+  /** Liquidação (CoD Zombies): Mystery Box barata e em todos os locais abertos ao mesmo tempo. */
+  fire_sale: { id: 'fire_sale', name: 'Fire Sale', color: 0xe8452c, durationMs: 30_000 },
 };
 
 export const dropConfig = {
@@ -47,6 +50,7 @@ export const dropConfig = {
     armor: 10,
     speed_boost: 10,
     carpenter: 8,
+    fire_sale: 6,
   } as Record<Exclude<PowerUpId, 'golden'>, number>,
   maxPerWave: 4,
   /** Tempo no chão antes de sumir e quando começa a piscar (ms). */

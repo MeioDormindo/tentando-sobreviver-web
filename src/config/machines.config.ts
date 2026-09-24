@@ -3,6 +3,8 @@ import type { Rarity } from './weapons.config';
 /** Mystery Box (GDD §37). */
 export const mysteryBoxConfig = {
   price: 950,
+  /** Preço durante o Fire Sale. */
+  fireSalePrice: 10,
   /** Duração da "roleta" de armas (ms). */
   rollMs: 3000,
   /** Tempo para pegar a arma sorteada antes de ela sumir (ms). */

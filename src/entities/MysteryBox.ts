@@ -88,7 +88,12 @@ const MIN_RESPAWN_DISTANCE = 160;
  * área aberta (marcada por uma coluna de luz).
  */
 export class MysteryBox<H = unknown> implements Interactable {
+  /** Fire Sale ativo: preço de liquidação e a caixa não muda de lugar. */
+  static fireSale = false;
   readonly radius = 60;
+  /** Caixa extra do Fire Sale: some quando a liquidação acaba. */
+  private dismissPending: (() => void) | null = null;
+  private gone = false;
   x: number;
   y: number;
   private state: BoxState = 'idle';
@@ -132,9 +137,20 @@ export class MysteryBox<H = unknown> implements Interactable {
     this.label = floatingLabel(scene, x, y - 48);
   }
 
+  /** Cabe uma caixa neste lugar (sem sobrepor sólidos)? */
+  static fitsAt<T>(solids: MovableSolids<T>, x: number, y: number): boolean {
+    return solids.isFree(x + BOX_BODY.ox, y + BOX_BODY.oy, BOX_BODY.w, BOX_BODY.h);
+  }
+
+  private get price(): number {
+    return MysteryBox.fireSale ? mysteryBoxConfig.fireSalePrice : mysteryBoxConfig.price;
+  }
+
   getPrompt(): InteractionPromptPayload | null {
-    const price = mysteryBoxConfig.price;
-    if (this.state === 'idle') return { text: `[E] MYSTERY BOX — ${money(price)}`, affordable: this.deps.economy.canAfford(price) };
+    if (this.gone) return null;
+    const price = this.price;
+    const sale = MysteryBox.fireSale ? ' (FIRE SALE!)' : '';
+    if (this.state === 'idle') return { text: `[E] MYSTERY BOX — ${money(price)}${sale}`, affordable: this.deps.economy.canAfford(price) };
     if (this.state === 'ready' && this.result) {
       const owned = this.deps.weapons.owns(this.result.id);
       return { text: `[E] PEGAR ${this.result.name.toUpperCase()}${owned ? ' (MUNIÇÃO)' : ''}`, affordable: true };
@@ -148,8 +164,9 @@ export class MysteryBox<H = unknown> implements Interactable {
   }
 
   interact(): void {
+    if (this.gone) return;
     if (this.state === 'idle') {
-      if (this.deps.economy.spend(mysteryBoxConfig.price)) this.roll();
+      if (this.deps.economy.spend(this.price)) this.roll();
     } else if (this.state === 'ready' && this.result) {
       const { weapons } = this.deps;
       if (weapons.owns(this.result.id)) weapons.refillAmmo(this.result.id);
@@ -160,7 +177,8 @@ export class MysteryBox<H = unknown> implements Interactable {
 
   private roll(): void {
     this.state = 'rolling';
-    this.uses++;
+    // No Fire Sale os usos não contam (a caixa não foge durante a liquidação).
+    if (!MysteryBox.fireSale && !this.dismissPending) this.uses++;
     this.result = rollMysteryWeapon(this.places.mapId);
     audio.playAt('box_music', this.x, this.y, { category: 'ui', volume: 0.9, pitchJitter: 0 });
     this.icon.setVisible(true).setAlpha(1).setY(this.y - 30);
@@ -205,7 +223,38 @@ export class MysteryBox<H = unknown> implements Interactable {
     this.icon.setVisible(false).setTintFill(ICON_GLOW).setAlpha(1).setScale(ART_SCALE).setY(this.y - 30);
     this.label.setText('').setAlpha(1).setY(this.y - 48);
     this.scene.tweens.add({ targets: this.glow, alpha: 0, duration: 400 });
-    if (this.uses >= mysteryBoxConfig.usesBeforeMove) this.moveAway();
+    if (this.dismissPending) this.vanish();
+    else if (this.uses >= mysteryBoxConfig.usesBeforeMove) this.moveAway();
+  }
+
+  /**
+   * Caixa extra do Fire Sale: some quando a liquidação acaba (se estiver sorteando, espera o
+   * jogador pegar a arma ou ela afundar). `onGone` tira a caixa das interações.
+   */
+  dismiss(onGone: () => void): void {
+    this.dismissPending = onGone;
+    if (this.state === 'idle') this.vanish();
+  }
+
+  private vanish(): void {
+    if (this.gone) return;
+    this.gone = true;
+    const { scene } = this;
+    this.places.solids.removeSolid(this.solid);
+    this.deps.lighting.removeDynamicLight(this.light);
+    this.deps.effects.dustBurst(this.x, this.y, 12);
+    audio.playAt('box_move', this.x, this.y, { category: 'ui', volume: 0.6, pitchJitter: 0 });
+    scene.tweens.add({
+      targets: this.image,
+      y: this.y - 30,
+      alpha: 0,
+      duration: 600,
+      ease: 'Quad.easeIn',
+      onComplete: () => {
+        [this.image, this.icon, this.glow, this.label].forEach((o) => o.destroy());
+      },
+    });
+    this.dismissPending?.();
   }
 
   // ───────────── Troca de lugar ─────────────
