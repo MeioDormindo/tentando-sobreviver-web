@@ -178,6 +178,11 @@ export class EventSystem {
   private rollForWave(): void {
     const cfg = eventScheduleConfig;
     this.trainPassesThisWave = 0;
+    // Rodada dos cães: a névoa dela não pode brigar com outro evento.
+    if (this.ctx.waves.isSpecialRound) {
+      this.stop();
+      return;
+    }
     if (this.wave >= worldEvents.train.minWave && !waveConfig.bossWaves.includes(this.wave) && this.events.train.canStart(this.ctx) && Math.random() < trainConfig.chancePerWave) {
       this.scheduleTrain(this.ctx.scene.time.now);
     }

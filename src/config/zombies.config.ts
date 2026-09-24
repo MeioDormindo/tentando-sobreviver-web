@@ -9,6 +9,34 @@ export interface ExplosiveConfig {
   fuseMs: number;
 }
 
+/** Poça ou nuvem que fere o jogador enquanto ele estiver dentro (ácido, gás). */
+export interface HazardPoolConfig {
+  radius: number;
+  durationMs: number;
+  /** Dano por segundo ao jogador. */
+  dps: number;
+}
+
+/** Ataque à distância (Cuspidor): para, prepara e cospe um projétil que vira poça. */
+export interface RangedConfig {
+  minRange: number;
+  maxRange: number;
+  cooldownMs: number;
+  /** Tempo parado "carregando" o cuspe (aviso ao jogador). */
+  windupMs: number;
+  projectileSpeed: number;
+  pool: HazardPoolConfig;
+}
+
+/** Armadura (Blindado): absorve o dano no corpo até quebrar; headshot derruba o capacete na hora. */
+export interface ArmorConfig {
+  hp: number;
+  /** Fração do dano no corpo que passa para a vida enquanto há armadura. */
+  bodyFactor: number;
+  /** Aparência depois que a armadura cai. */
+  brokenSkin: string;
+}
+
 export interface ZombieConfig {
   id: string;
   name: string;
@@ -33,6 +61,12 @@ export interface ZombieConfig {
   pushable: boolean;
   /** Explode ao chegar perto do alvo e ao morrer (Exploder). */
   explosive?: ExplosiveConfig;
+  ranged?: RangedConfig;
+  armor?: ArmorConfig;
+  /** Nuvem de gás deixada ao morrer (Rastejante). */
+  deathCloud?: HazardPoolConfig;
+  /** Pega fogo ao morrer e não deixa corpo (Cão Infernal). */
+  burnsOnDeath?: boolean;
 }
 
 /** Tipos de zumbi (GDD §28). Toda a lógica é a mesma classe Zombie; muda só a config. */
@@ -99,6 +133,79 @@ export const zombies: Record<string, ZombieConfig> = {
     plankDamage: 1,
     pushable: true,
     explosive: { damage: 45, radius: 95, triggerRange: 46, fuseMs: 650 },
+  },
+  // ── Hospital Santa Luzia ──
+  crawler: {
+    id: 'crawler',
+    name: 'Rastejante',
+    health: 70,
+    damage: 8,
+    speed: 45,
+    detectRange: 6000,
+    attackRange: 26,
+    attackCooldown: 900,
+    // Baixo e pequeno: difícil de acertar e de ver no escuro.
+    bodyRadius: 10,
+    reward: 90,
+    skins: ['crawler'],
+    plankDamage: 1,
+    pushable: true,
+    deathCloud: { radius: 70, durationMs: 3500, dps: 12 },
+  },
+  spitter: {
+    id: 'spitter',
+    name: 'Cuspidor',
+    health: 120,
+    damage: 10,
+    speed: 55,
+    detectRange: 6000,
+    attackRange: 30,
+    attackCooldown: 1100,
+    bodyRadius: 12,
+    reward: 130,
+    skins: ['spitter'],
+    plankDamage: 1,
+    pushable: true,
+    ranged: {
+      minRange: 140,
+      maxRange: 300,
+      cooldownMs: 3200,
+      windupMs: 700,
+      projectileSpeed: 260,
+      pool: { radius: 46, durationMs: 4000, dps: 14 },
+    },
+  },
+  armored: {
+    id: 'armored',
+    name: 'Blindado',
+    health: 220,
+    damage: 18,
+    speed: 52,
+    detectRange: 6000,
+    attackRange: 32,
+    attackCooldown: 1200,
+    bodyRadius: 14,
+    reward: 200,
+    skins: ['armored'],
+    plankDamage: 2,
+    pushable: false,
+    armor: { hp: 400, bodyFactor: 0.25, brokenSkin: 'armored_broken' },
+  },
+  hound: {
+    id: 'hound',
+    name: 'Cão Infernal',
+    health: 110,
+    damage: 12,
+    speed: 190,
+    detectRange: 6000,
+    attackRange: 30,
+    attackCooldown: 650,
+    bodyRadius: 13,
+    reward: 150,
+    skins: ['hound'],
+    plankDamage: 1,
+    pushable: true,
+    burnsOnDeath: true,
   },
 };
 

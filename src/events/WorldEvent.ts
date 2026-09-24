@@ -15,6 +15,8 @@ import type { WeaponSystem } from '../weapons/WeaponSystem';
 /** O que os eventos podem controlar nas waves. */
 export interface WaveControl {
   readonly currentWave: number;
+  /** Rodada especial (cães): nenhum evento começa durante ela. */
+  readonly isSpecialRound: boolean;
   setSpawnModifier(id: string, mod: SpawnModifier | null): void;
   addEnemies(count: number): void;
   /** Zumbis criados por eventos entram na conta da wave. */

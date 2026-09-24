@@ -26,7 +26,7 @@ write(`${OUT}/weapons/ammo_crate.svg`, ammoCrate());
 write(`${OUT}/player/player_legs.svg`, playerLegsSheet());
 for (const id of Object.keys(ZOMBIE_VARIANTS)) {
   write(`${OUT}/zombies/zombie_${id}.svg`, zombieSheet(id));
-  write(`${OUT}/zombies/big_head_${id}.svg`, zombieBigHead(id));
+  if (!ZOMBIE_VARIANTS[id].body) write(`${OUT}/zombies/big_head_${id}.svg`, zombieBigHead(id));
 }
 write(`${OUT}/zombies/corpses.svg`, corpseSheet());
 write(`${OUT}/sprites/shadow.svg`, softShadow());

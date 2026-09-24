@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { ASSET_KEYS, FX_KEYS, ZOMBIE_SKINS, zombieAnimKey, zombieBigHeadKey, zombieSheetKey, type ZombieSkin } from '../config/assets.config';
 import { ART_SCALE, DEPTH } from '../config/visual.config';
-import type { ExplosiveConfig, ZombieConfig } from '../config/zombies.config';
+import type { ExplosiveConfig, HazardPoolConfig, RangedConfig, ZombieConfig } from '../config/zombies.config';
 import { emitGameEvent, GameEvents, type KillSource } from '../game/events';
 import { PathFollower, type BarricadeTarget, type NavWorld } from '../systems/pathfinding/PathFollower';
 import type { Damageable } from './Damageable';
@@ -14,6 +14,8 @@ export const ZombieState = {
   BreakBarricade: 'BREAK_BARRICADE',
   /** Ataque especial (Exploder armando a explosão). */
   SpecialAttack: 'SPECIAL_ATTACK',
+  /** Cuspidor parado preparando o cuspe de ácido. */
+  Ranged: 'RANGED',
   Dead: 'DEAD',
 } as const;
 export type ZombieState = (typeof ZombieState)[keyof typeof ZombieState];
@@ -26,6 +28,14 @@ export interface ZombieWorld extends NavWorld {
   speedMultiplier(): number;
   /** Explosão de um Exploder (dano em área ao jogador e a outros zumbis). */
   explode(x: number, y: number, explosive: ExplosiveConfig, source: KillSource, self: Zombie): void;
+  /** Cuspe de ácido (Cuspidor) de (x, y) até o alvo. */
+  spit(x: number, y: number, tx: number, ty: number, ranged: RangedConfig): void;
+  /** Nuvem de gás deixada ao morrer (Rastejante). */
+  deathCloud(x: number, y: number, cloud: HazardPoolConfig): void;
+  /** A armadura do Blindado caiu (pedaços voando). */
+  armorBroken(x: number, y: number, angle: number): void;
+  /** Cão Infernal pegando fogo ao morrer. */
+  burnAway(x: number, y: number): void;
 }
 
 /** Margem para sair do ATTACK e voltar a perseguir (evita alternar a cada frame). */
@@ -41,6 +51,8 @@ const SHADOW_OFFSET = { x: 4, y: 6 };
 const PROGRESS_STEP = 28;
 /** Cor do tremor elétrico enquanto atordoado. */
 const STUN_TINT = 0x9fe8ff;
+/** Garganta do Cuspidor brilhando enquanto prepara o cuspe. */
+const SPIT_TINT = 0xc8ff5a;
 /** Tom azulado enquanto está lento (elemento Gelo). */
 const CHILL_TINT = 0xa8dcff;
 /** Duração do tranco ao levar um tiro (ms). */
@@ -92,6 +104,11 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
   private slowUntil = 0;
   private slowFactor = 1;
   private readonly knock = new Phaser.Math.Vector2();
+  /** Armadura restante (Blindado). */
+  armorHp = 0;
+  /** Próximo cuspe liberado e o instante em que o cuspe em preparo sai (Cuspidor). */
+  private nextSpitAt = 0;
+  private spitAt = 0;
   /** Easter egg "modo cabeção" (ligado pela GameScene conforme o save). */
   static bigHeads = false;
   /** Roupas do mapa atual por tipo (ligado pela GameScene; vazio = as do tipo). */
@@ -178,6 +195,8 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     this.slowUntil = 0;
     this.slowFactor = 1;
     this.goal = null;
+    this.armorHp = config.armor?.hp ?? 0;
+    this.nextSpitAt = this.scene.time.now + Phaser.Math.Between(400, 1200);
     this.nextGroanAt = this.scene.time.now + Phaser.Math.Between(500, 5000);
 
     this.enableBody(true, x, y, true, true);
@@ -193,7 +212,7 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     this.rotation = Phaser.Math.Angle.Between(x, y, target.x, target.y);
     this.play({ key: zombieAnimKey(this.skin, 'walk'), startFrame: Phaser.Math.Between(0, 7) });
     this.shadow.setVisible(true);
-    if (Zombie.bigHeads) {
+    if (Zombie.bigHeads && this.scene.textures.exists(zombieBigHeadKey(this.skin))) {
       this.bigHead ??= this.scene.add.image(x, y, zombieBigHeadKey(this.skin));
       this.bigHead.setTexture(zombieBigHeadKey(this.skin)).setScale(ART_SCALE * (ZOMBIE_SKINS[this.skin].frame / 128)).setVisible(true);
     } else {
@@ -266,6 +285,18 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
         } else if (dist <= this.config.attackRange) {
           this.aiState = ZombieState.Attack;
           this.setVelocity(0, 0);
+        } else if (this.canSpit(time, dist, target)) {
+          this.aiState = ZombieState.Ranged;
+          this.spitAt = time + (this.config.ranged?.windupMs ?? 0);
+          this.setVelocity(0, 0);
+          this.idlePose();
+          audio.playAt('spitter_windup', this.x, this.y, { category: 'zombie', volume: 0.9 });
+        } else if (this.holdsDistance(dist, target)) {
+          // Cuspidor no alcance esperando o próximo cuspe: mantém distância, encarando o alvo.
+          this.setVelocity(0, 0);
+          this.faceTowards(target.x, target.y);
+          this.idlePose();
+          this.resetProgress();
         } else {
           this.navigate(time, target);
           this.playWalk();
@@ -309,6 +340,25 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
         break;
       }
 
+      case ZombieState.Ranged: {
+        // Garganta brilhando enquanto prepara o cuspe; depois volta a perseguir.
+        const ranged = this.config.ranged;
+        this.setVelocity(0, 0);
+        this.resetProgress();
+        this.faceTowards(target.x, target.y);
+        this.setTint(Math.floor(time / 90) % 2 === 0 ? SPIT_TINT : 0xffffff);
+        if (!ranged || dist <= this.config.attackRange) {
+          this.clearTint();
+          this.aiState = ZombieState.Chase;
+        } else if (time >= this.spitAt) {
+          this.clearTint();
+          this.world?.spit(this.x, this.y, target.x, target.y, ranged);
+          this.nextSpitAt = time + ranged.cooldownMs;
+          this.aiState = ZombieState.Chase;
+        }
+        break;
+      }
+
       case ZombieState.BreakBarricade: {
         this.setVelocity(0, 0);
         this.resetProgress();
@@ -338,6 +388,7 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
   takeDamage(amount: number, headshot = false, source: KillSource = 'weapon', flash = true): boolean {
     if (!this.isAlive || !this.config) return false;
 
+    amount = this.absorbArmor(amount, headshot);
     this.hp -= amount;
     if (this.hp <= 0) {
       this.die(headshot, source);
@@ -351,6 +402,41 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
       if (this.isAlive) this.clearTint();
     });
     return false;
+  }
+
+  /** Blindado: o corpo leva só uma fração até a armadura cair; headshot derruba o capacete. */
+  private absorbArmor(amount: number, headshot: boolean): number {
+    const armor = this.config?.armor;
+    if (!armor || this.armorHp <= 0) return amount;
+    if (headshot) {
+      this.armorHp = 0;
+    } else {
+      this.armorHp -= amount * (1 - armor.bodyFactor);
+      amount *= armor.bodyFactor;
+    }
+    if (this.armorHp <= 0) this.breakArmor(armor.brokenSkin);
+    else audio.playAt('armor_hit', this.x, this.y, { category: 'zombie', volume: 0.7 });
+    return amount;
+  }
+
+  private breakArmor(brokenSkin: string): void {
+    this.armorHp = 0;
+    this.world?.armorBroken(this.x, this.y, this.rotation);
+    this.skin = brokenSkin as ZombieSkin;
+    this.setTexture(zombieSheetKey(this.skin), 0);
+    if (this.aiState === ZombieState.Chase) this.play(zombieAnimKey(this.skin, 'walk'));
+  }
+
+  /** Cuspidor: fora do alcance corpo a corpo, dentro do alcance do cuspe, com linha de visão. */
+  private canSpit(time: number, dist: number, target: Damageable): boolean {
+    return time >= this.nextSpitAt && this.holdsDistance(dist, target);
+  }
+
+  /** Cuspidor dentro da faixa de tiro (entre minRange e maxRange) e enxergando o alvo. */
+  private holdsDistance(dist: number, target: Damageable): boolean {
+    const ranged = this.config?.ranged;
+    if (!ranged || !this.world || dist < ranged.minRange || dist > ranged.maxRange) return false;
+    return this.world.nav.lineOfSight(this.x, this.y, target.x, target.y, 0);
   }
 
   // ───────────────────────── Navegação ─────────────────────────
@@ -470,6 +556,8 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
       this.exploded = true;
       this.world?.explode(this.x, this.y, config.explosive, source, this);
     }
+    if (config?.deathCloud) this.world?.deathCloud(this.x, this.y, config.deathCloud);
+    if (config?.burnsOnDeath) this.world?.burnAway(this.x, this.y);
 
     if (config) {
       emitGameEvent(this.scene.game.events, GameEvents.ZombieKilled, {

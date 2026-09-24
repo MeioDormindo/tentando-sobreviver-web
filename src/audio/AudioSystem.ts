@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { ambienceAlias, ambientEvents, audioConfig, type SoundCategory } from '../config/audio.config';
+import { ambienceAlias, ambientEvents, stepAlias, audioConfig, type SoundCategory } from '../config/audio.config';
 import { GameEvents, onGameEvent, type PlayerHpPayload, type WaveStatePayload, type ZombieKilledPayload } from '../game/events';
 import { AMBIENCE_AREAS, soundVariants } from './SoundBank';
 import { save } from '../save/SaveStore';
@@ -196,7 +196,8 @@ export class AudioSystem {
 
   /** Passo do jogador conforme o piso sob ele. */
   footstep(x: number, y: number): void {
-    this.playAt(`step_${this.surfaceAt(x, y)}`, x, y, { category: 'player', volume: 0.55, pitchJitter: 0.08 });
+    const surface = this.surfaceAt(x, y);
+    this.playAt(`step_${stepAlias[surface] ?? surface}`, x, y, { category: 'player', volume: 0.55, pitchJitter: 0.08 });
   }
 
   /** Ambiente da área com transição suave. */

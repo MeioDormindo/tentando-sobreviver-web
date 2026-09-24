@@ -94,3 +94,10 @@ export const ambienceAlias: Record<string, string> = {
   pharmacy: 'reception',
   cafeteria: 'reception',
 };
+
+/** Pisos que usam o som de passo de outro (azulejo e linóleo soam como o piso do terminal). */
+export const stepAlias: Record<string, string> = {
+  hospital: 'terminal',
+  linoleum: 'terminal',
+  morgue: 'terminal',
+};

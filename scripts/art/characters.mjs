@@ -2,6 +2,7 @@
 import { blobPath, f, ik, line, linear, polyline, radial, raggedEllipse, rng, sheet } from './lib.mjs';
 import { drawGun, posesFor } from './weapons.mjs';
 import { head, UNDEAD, undeadCorpse, undeadDefs, undeadFrame, undeadPoses } from './undead.mjs';
+import { crawlerFrames, houndDefs, houndFrames } from './beasts.mjs';
 
 export const CHAR_FRAME = 128;
 const C = 64;
@@ -148,6 +149,12 @@ export const ZOMBIE_VARIANTS = {
   h_runner: { scale: 1 },
   h_tank: { scale: 1.375 },
   h_exploder: { scale: 1, noCorpse: true },
+  // Inimigos novos do Hospital (body = desenho próprio, sem cabeça grande)
+  crawler: { scale: 1, noCorpse: true, body: 'crawler' },
+  spitter: { scale: 1 },
+  armored: { scale: 1.125 },
+  armored_broken: { scale: 1.125 },
+  hound: { scale: 1, noCorpse: true, body: 'hound' },
   exploder: { shirt: '#4f5a36', shirtShade: '#303822', pants: '#3a3a2c', pantsShade: '#23231a', shoes: '#1d1a17', skin: '#7f8c56', skinShade: '#4f5a32', hair: '#1d1a17', seed: 79, bald: true, rx: 19.5, ry: 27, pustules: true, noCorpse: true },
 };
 
@@ -259,7 +266,8 @@ export function zombieBigHead(id) {
 export function zombieSheet(id) {
   const v = ZOMBIE_VARIANTS[id];
   const u = UNDEAD[id];
-  const frames = undeadPoses(u).map((pose) => undeadFrame(u, id, pose));
+  if (v.body === 'hound') return sheet(zombieFrameSize(id), zombieFrameSize(id), houndDefs(), houndFrames());
+  const frames = v.body === 'crawler' ? crawlerFrames(u, id) : undeadPoses(u).map((pose) => undeadFrame(u, id, pose));
   const size = zombieFrameSize(id);
   const scale = v.scale ?? 1;
   const scaled = scale === 1 ? frames : frames.map((fr) => `<g transform="scale(${scale})">${fr}</g>`);

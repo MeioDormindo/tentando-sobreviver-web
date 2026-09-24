@@ -183,6 +183,8 @@ export interface WaveStatePayload {
   total: number;
   /** Tempo até a próxima wave começar (ms), quando phase != 'active'. */
   nextWaveInMs: number;
+  /** Rodada só de cães (muda os textos da HUD). */
+  hounds?: boolean;
 }
 
 export interface GameEventMap {

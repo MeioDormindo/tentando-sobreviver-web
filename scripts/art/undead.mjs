@@ -68,6 +68,15 @@ export const UNDEAD = {
   h_tank: { outfit: 'security', cloth: '#26324a', clothShade: '#161e2e', accent: '#c9a227', pants: '#1f2533', pantsShade: '#141822', shoes: '#111', skin: '#7d8770', skinShade: '#4f5745', skinDark: '#343a2d', hair: '#1d1a17', seed: 163, hairStyle: 'bald', bulk: 1.3 },
   // Paciente inchado ligado ao soro (exploder)
   h_exploder: { outfit: 'bloated', cloth: '#9fb4bf', clothShade: '#6d8290', accent: '#d7e04a', pants: '#96a466', pantsShade: '#63703f', shoes: '#96a466', skin: '#96a466', skinShade: '#63703f', skinDark: '#3f4a27', hair: '#1d1a17', seed: 179, hairStyle: 'bald', bloat: true },
+  // ── Inimigos novos do Hospital ──
+  // Rastejante: paciente sem pernas, camisola rasgada (desenhado por beasts.mjs)
+  crawler: { outfit: 'gown', cloth: '#8ea1ab', clothShade: '#5d707b', accent: '#d8e2e8', pants: '#5d6650', pantsShade: '#3a4031', shoes: '#5d6650', skin: '#737d62', skinShade: '#4a5240', skinDark: '#2f3428', hair: '#15120f', seed: 191, hairStyle: 'long' },
+  // Cuspidor: paciente com bolsas de ácido inchadas na garganta
+  spitter: { outfit: 'gown', cloth: '#a8b39a', clothShade: '#6f7a62', accent: '#c8ff5a', pants: '#7c8a55', pantsShade: '#4f5a32', shoes: '#7c8a55', skin: '#8a9a5a', skinShade: '#5a6838', skinDark: '#394224', hair: '#1d1a17', seed: 203, hairStyle: 'bald', spitter: true },
+  // Blindado: tropa de choque do hospital com colete e capacete com viseira
+  armored: { outfit: 'riot', cloth: '#1f242b', clothShade: '#101317', accent: '#e8e2c8', pants: '#1c2026', pantsShade: '#111418', shoes: '#0b0c0d', skin: '#7d8770', skinShade: '#4f5745', skinDark: '#343a2d', hair: '#1d1a17', seed: 217, hairStyle: 'riot', bulk: 1.15 },
+  // Blindado depois que a armadura caiu: camisa rasgada, sem capacete
+  armored_broken: { outfit: 'security', cloth: '#26324a', clothShade: '#161e2e', accent: '#c9a227', pants: '#1c2026', pantsShade: '#111418', shoes: '#0b0c0d', skin: '#7d8770', skinShade: '#4f5745', skinDark: '#343a2d', hair: '#1d1a17', seed: 229, hairStyle: 'bald', bulk: 1.15 },
   exploder: { outfit: 'bloated', cloth: '#5a6440', clothShade: '#383f27', accent: '#d7e04a', pants: '#3a3a2c', pantsShade: '#23231a', shoes: '#1d1a17', skin: '#96a466', skinShade: '#63703f', skinDark: '#3f4a27', hair: '#1d1a17', seed: 79, hairStyle: 'bald', bloat: true },
 };
 
@@ -212,6 +221,13 @@ function clothingDetails(v, id, cx, cy, w, d, r) {
     s += `<path d="M${f(cx - d * 0.95)} ${f(cy - w * 0.9)} L${f(cx - d * 0.95)} ${f(cy + w * 0.9)}" stroke="#3a2a16" stroke-width="3"/>`;
     // colete à prova de facada
     for (const sgn of [-1, 1]) s += `<path d="M${f(cx - d * 0.6)} ${f(cy + sgn * w * 0.2)} L${f(cx + d * 0.6)} ${f(cy + sgn * w * 0.25)} L${f(cx + d * 0.5)} ${f(cy + sgn * w * 0.8)} L${f(cx - d * 0.4)} ${f(cy + sgn * w * 0.82)} Z" fill="#1a1f29" opacity=".85"/>`;
+  } else if (v.outfit === 'riot') {
+    // colete de choque: placas grossas, ombreiras e a palavra SEGURANÇA nas costas
+    for (const sgn of [-1, 1]) {
+      s += `<path d="M${f(cx - d * 0.75)} ${f(cy + sgn * w * 0.15)} L${f(cx + d * 0.8)} ${f(cy + sgn * w * 0.2)} L${f(cx + d * 0.65)} ${f(cy + sgn * w * 0.9)} L${f(cx - d * 0.6)} ${f(cy + sgn * w * 0.92)} Z" fill="#2a3038" stroke="#07080a" stroke-width="1.4"/>`;
+      s += `<ellipse cx="${f(cx + d * 0.1)}" cy="${f(cy + sgn * w * 0.98)}" rx="${f(d * 0.45)}" ry="${f(w * 0.26)}" fill="#353c45" stroke="#07080a" stroke-width="1.3"/>`;
+    }
+    s += `<rect x="${f(cx - d * 0.85)}" y="${f(cy - 3)}" width="${f(d * 0.5)}" height="6" fill="${v.accent}" opacity=".7"/>`;
   } else if (v.outfit === 'rags') {
     // camiseta em farrapos: costelas aparecendo
     s += `<path d="${blobPath(cx + d * 0.3, cy + w * 0.1, w * 0.45, 0.5, 9, r)}" fill="url(#uk${id})"/>`;
@@ -276,7 +292,13 @@ export function head(v, id, hx, hy, r, opts = {}) {
   // crânio
   s += `<ellipse cx="${f(hx)}" cy="${f(hy)}" rx="${f(R)}" ry="${f(R * 0.94)}" fill="url(#uk${id})" stroke="${OUT}" stroke-width="1.3"/>`;
   // cabelo / capacete / capuz
-  if (v.hairStyle === 'helmet') {
+  if (v.hairStyle === 'riot') {
+    // capacete de choque preto com viseira escura na frente
+    s += `<ellipse cx="${f(hx - 1.5)}" cy="${f(hy)}" rx="${f(R * 1.08)}" ry="${f(R * 1.04)}" fill="#1b1f24" stroke="#050607" stroke-width="1.6"/>`;
+    s += `<path d="M${f(hx + R * 0.35)} ${f(hy - R * 0.85)} Q${f(hx + R * 1.2)} ${f(hy)} ${f(hx + R * 0.35)} ${f(hy + R * 0.85)}" fill="#2c3e4c" stroke="#0a0c0e" stroke-width="1.4" opacity=".92"/>`;
+    s += `<path d="M${f(hx + R * 0.55)} ${f(hy - R * 0.5)} Q${f(hx + R * 0.95)} ${f(hy - R * 0.1)} ${f(hx + R * 0.8)} ${f(hy + R * 0.3)}" stroke="#9fc3d1" stroke-width="1.4" fill="none" opacity=".5"/>`;
+    s += `<path d="M${f(hx - R)} ${f(hy)} L${f(hx + R * 0.3)} ${f(hy)}" stroke="#2c3238" stroke-width="2"/>`;
+  } else if (v.hairStyle === 'helmet') {
     s += `<ellipse cx="${f(hx - 1.5)}" cy="${f(hy)}" rx="${f(R * 1.02)}" ry="${f(R * 1.0)}" fill="#c89f2e" stroke="#1c1608" stroke-width="1.6"/>`;
     s += `<path d="M${f(hx - R)} ${f(hy)} L${f(hx + R * 0.7)} ${f(hy)}" stroke="#8a6d1c" stroke-width="2.2"/>`;
     s += `<path d="M${f(hx - R * 0.7)} ${f(hy - R * 0.62)} A${f(R)} ${f(R)} 0 0 1 ${f(hx + R * 0.5)} ${f(hy - R * 0.75)}" stroke="#ecc860" stroke-width="2" fill="none" opacity=".75"/>`;
@@ -306,6 +328,17 @@ export function head(v, id, hx, hy, r, opts = {}) {
   }
   s += `<path d="M${f(hx + R * 0.85)} ${f(hy - 1.4)} L${f(hx + R * 1.08)} ${f(hy)} L${f(hx + R * 0.85)} ${f(hy + 1.4)} Z" fill="${v.skinShade}" stroke="${OUT}" stroke-width=".8"/>`;
 
+  return s;
+}
+
+/** Cuspidor: bolsas de ácido brilhando nos lados do pescoço e baba escorrendo. */
+function spitterSacs(hx, hy, jaw) {
+  let s = '';
+  for (const sgn of [-1, 1]) {
+    s += `<ellipse cx="${f(hx - 7)}" cy="${f(hy + sgn * 9)}" rx="6.5" ry="5" fill="#9ccf2a" stroke="#3a4a10" stroke-width="1.2" opacity=".95"/>`;
+    s += `<ellipse cx="${f(hx - 8)}" cy="${f(hy + sgn * 8)}" rx="2.4" ry="1.6" fill="#f4ffb0" opacity=".8"/>`;
+  }
+  s += `<path d="M${f(hx + 12)} ${f(hy - 1)} q${f(4 + jaw * 4)} 1 ${f(6 + jaw * 5)} 5" stroke="#c8ff5a" stroke-width="2" fill="none" opacity=".8"/>`;
   return s;
 }
 
@@ -352,6 +385,7 @@ export function undeadFrame(v, id, pose) {
   const hx = cx + d * 0.72 + pose.headFwd;
   s += limb([cx + d * 0.2, cy], [hx - 5, cy], 9.5 * bulk, 8.5 * bulk, `url(#uk${id})`);
   s += head(v, id, hx, cy + (pose.headTilt ?? 0), r, { jaw: pose.jaw ?? 0.4 });
+  if (v.spitter) s += spitterSacs(hx, cy + (pose.headTilt ?? 0), pose.jaw ?? 0.4);
   s += `</g>`;
   return s;
 }

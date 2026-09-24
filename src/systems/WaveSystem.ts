@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
-import { waveConfig } from '../config/waves.config';
+import type { MapId } from '../config/maps.config';
+import { houndRounds, isHoundRound, waveConfig } from '../config/waves.config';
+import type { ZombieConfig } from '../config/zombies.config';
 import { getZombieConfig } from '../config/zombies.config';
 import type { Player } from '../entities/Player';
 import { emitGameEvent, GameEvents, onGameEvent, type WavePhase, type WaveStatePayload } from '../game/events';
@@ -10,6 +12,14 @@ import { bosses, bossForWave } from '../config/bosses.config';
 
 /** Nova tentativa quando nenhum ponto de spawn está livre (ms). */
 const SPAWN_RETRY_MS = 250;
+
+/** Ganchos da rodada dos cães (montados pela GameScene). */
+export interface HoundRoundHooks {
+  /** Cão surgindo num raio perto do jogador; false = sem lugar livre agora. */
+  spawnHound(config: ZombieConfig): boolean;
+  /** Começo (active) e fim da rodada; no fim, (x, y) é onde caiu o último cão. */
+  onHoundRound(active: boolean, x: number, y: number): void;
+}
 
 /** Alteração temporária do ritmo de spawn (eventos como Horda e Alarme). */
 export interface SpawnModifier {
@@ -35,8 +45,17 @@ export class WaveSystem {
   private spawnTimerMs = 0;
   private lastEmittedKey = '';
   private readonly spawnMods = new Map<string, SpawnModifier>();
+  private houndRound = false;
+  private lastKill = { x: 0, y: 0 };
+  hounds: HoundRoundHooks | null = null;
 
-  constructor(scene: Phaser.Scene, spawner: SpawnSystem, player: Player, private readonly boss: BossSystem) {
+  constructor(
+    scene: Phaser.Scene,
+    spawner: SpawnSystem,
+    player: Player,
+    private readonly boss: BossSystem,
+    private readonly mapId: MapId = 'terminal',
+  ) {
     this.scene = scene;
     this.spawner = spawner;
     this.player = player;
@@ -52,6 +71,11 @@ export class WaveSystem {
 
   get currentPhase(): WavePhase {
     return this.phase;
+  }
+
+  /** Rodada dos cães em andamento (os eventos especiais esperam). */
+  get isSpecialRound(): boolean {
+    return this.houndRound;
   }
 
   update(delta: number): void {
@@ -76,7 +100,8 @@ export class WaveSystem {
     }
     if (this.spawnTimerMs <= 0 && this.spawned < this.params.totalEnemies && alive < maxAlive) {
       const config = scaleZombie(getZombieConfig(this.pickType()), this.params);
-      if (this.spawner.spawn(config, this.wave)) {
+      const spawned = this.houndRound && this.hounds ? this.hounds.spawnHound(config) : this.spawner.spawn(config, this.wave) !== null;
+      if (spawned) {
         this.spawned++;
         this.spawnTimerMs = interval;
       } else {
@@ -87,7 +112,9 @@ export class WaveSystem {
 
   /** Sorteia o tipo do próximo zumbi pela composição da wave, respeitando os limites por tipo. */
   private pickType(): string {
-    const stage = [...waveConfig.composition].reverse().find((c) => this.wave >= c.fromWave) ?? waveConfig.composition[0];
+    if (this.houndRound) return 'hound';
+    const composition = waveConfig.compositionByMap[this.mapId] ?? waveConfig.composition;
+    const stage = [...composition].reverse().find((c) => this.wave >= c.fromWave) ?? composition[0];
     const alive = this.spawner.aliveByType();
     const entries = Object.entries(stage.weights).filter(([type]) => {
       const late = waveConfig.lateMaxAlivePerType;
@@ -140,6 +167,15 @@ export class WaveSystem {
       this.params.totalEnemies = Math.max(2, Math.round(this.params.totalEnemies * ratio));
       this.boss.startBossWave(wave);
     }
+    // Rodada dos cães: só cães, ritmo próprio.
+    this.houndRound = isHoundRound(this.mapId, wave);
+    const hound = houndRounds[this.mapId];
+    if (this.houndRound && hound) {
+      this.params.totalEnemies = Math.min(hound.cap, hound.perWave * wave);
+      this.params.maxAlive = hound.maxAlive;
+      this.params.spawnInterval = hound.spawnIntervalMs;
+      this.hounds?.onHoundRound(true, 0, 0);
+    }
     this.phase = 'active';
     this.spawned = 0;
     this.killed = 0;
@@ -147,8 +183,9 @@ export class WaveSystem {
     this.emitState(true);
   }
 
-  private onZombieKilled(): void {
+  private onZombieKilled(kill: { x: number; y: number }): void {
     if (this.phase !== 'active') return;
+    this.lastKill = { x: kill.x, y: kill.y };
     this.killed++;
     this.completeIfDone();
     this.emitState(true);
@@ -159,6 +196,10 @@ export class WaveSystem {
     if (this.phase !== 'active' || this.killed < this.params.totalEnemies || this.boss.isActive) return;
     this.phase = 'intermission';
     this.countdownMs = waveConfig.intermission;
+    if (this.houndRound) {
+      this.houndRound = false;
+      this.hounds?.onHoundRound(false, this.lastKill.x, this.lastKill.y);
+    }
     this.emitState(true);
   }
 
@@ -169,6 +210,7 @@ export class WaveSystem {
       remaining: this.phase === 'active' ? this.params.totalEnemies - this.killed + (this.boss.isActive ? 1 : 0) : 0,
       total: this.params.totalEnemies,
       nextWaveInMs: this.phase === 'active' ? 0 : Math.max(0, this.countdownMs),
+      hounds: this.houndRound,
     };
   }
 

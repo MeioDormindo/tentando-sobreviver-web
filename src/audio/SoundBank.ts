@@ -1,7 +1,10 @@
 import Phaser from 'phaser';
 import { rng, type Rng } from './dsp';
 import { ambience } from './recipes/ambience';
-import { bossSounds, exploderFuse, playerSounds, zombieSounds } from './recipes/creatures';
+import {
+  armorBreak, armorHit, bossSounds, crawlerGas, exploderFuse, hospitalZombieSounds, houndBurn, houndHowl, playerSounds, spitterSpit,
+  spitterSplash, spitterWindup, zombieSounds,
+} from './recipes/creatures';
 import * as ev from './recipes/events';
 import * as music from './recipes/music';
 import * as ui from './recipes/ui';
@@ -28,6 +31,7 @@ const WEAPON_IDS = ['m1911', 'glock', 'mp5', 'vector', 'm4', 'ak', 'pump', 'comb
   'grenade_launcher', 'flamethrower', 'arc_gun', 'energy_cannon'];
 const WEAPON_KINDS = ['pistol', 'smg', 'rifle', 'ak', 'shotgun', 'launcher', 'flamer', 'arc', 'energy'];
 const ZOMBIE_TYPES = ['walker', 'runner', 'tank', 'exploder'] as const;
+const HOSPITAL_TYPES = ['crawler', 'spitter', 'armored', 'hound'] as const;
 const SURFACES: world.Surface[] = ['terminal', 'concrete', 'metal', 'tracks', 'tunnel', 'wagon'];
 export const AMBIENCE_AREAS = Object.keys(ambience);
 
@@ -46,6 +50,19 @@ export const SOUND_DEFS: SoundDef[] = [
     { key: `zombie_${type}_attack`, variants: 3, sr: LO, make: zombieSounds[type].attack, gain: type === 'runner' ? 0.5 : 1 },
     { key: `zombie_${type}_death`, variants: 3, sr: LO, make: zombieSounds[type].death, gain: type === 'runner' ? 0.65 : 1 },
   ]),
+  ...HOSPITAL_TYPES.flatMap((type) => [
+    { key: `zombie_${type}_groan`, variants: 4, sr: LO, make: hospitalZombieSounds[type].groan },
+    { key: `zombie_${type}_attack`, variants: 2, sr: LO, make: hospitalZombieSounds[type].attack },
+    { key: `zombie_${type}_death`, variants: 2, sr: LO, make: hospitalZombieSounds[type].death },
+  ]),
+  { key: 'hound_howl', variants: 1, sr: LO, make: houndHowl },
+  { key: 'hound_burn', variants: 2, sr: LO, make: houndBurn },
+  { key: 'spitter_spit', variants: 2, sr: MID, make: spitterSpit },
+  { key: 'spitter_windup', variants: 1, sr: LO, make: spitterWindup },
+  { key: 'spitter_splash', variants: 2, sr: MID, make: spitterSplash },
+  { key: 'crawler_gas', variants: 2, sr: LO, make: crawlerGas },
+  { key: 'armor_hit', variants: 3, sr: MID, make: armorHit },
+  { key: 'armor_break', variants: 1, sr: MID, make: armorBreak },
   { key: 'exploder_fuse', variants: 1, sr: LO, make: exploderFuse },
   { key: 'boss_roar', variants: 2, sr: LO, make: bossSounds.roar },
   { key: 'boss_charge', variants: 1, sr: LO, make: bossSounds.charge },

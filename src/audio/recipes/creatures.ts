@@ -103,6 +103,111 @@ export const zombieSounds = {
   },
 };
 
+// ───────────────────────── Hospital: os quatro inimigos novos ─────────────────────────
+
+export const hospitalZombieSounds = {
+  crawler: {
+    groan: (sr: number, r: Rng) => voice(sr, r, { dur: range(r, 0.9, 1.4), pitch: range(r, 95, 120), pitchEnd: 80, from: 'u', to: 'e', fry: 0.9, breath: 0.8, drive: 3, attack: 0.15, release: 0.5, room: 0.1 }),
+    attack: (sr: number, r: Rng) => voice(sr, r, { dur: 0.4, pitch: 180, pitchEnd: 140, from: 'e', to: 'a', fry: 0.7, breath: 0.9, drive: 4, attack: 0.02, release: 0.2 }),
+    death: (sr: number, r: Rng) => withBubbles(sr, r, voice(sr, r, { dur: 0.7, pitch: 130, pitchEnd: 60, from: 'e', to: 'u', fry: 0.9, breath: 0.6, drive: 3, attack: 0.02, release: 0.4 }), 30, 0.6),
+  },
+  spitter: {
+    groan: (sr: number, r: Rng) => withBubbles(sr, r, voice(sr, r, { dur: range(r, 1, 1.5), pitch: range(r, 100, 125), pitchEnd: 85, from: 'o', to: 'u', fry: 0.6, breath: 0.5, drive: 2.5, attack: 0.2, release: 0.5 }), 35, 0.7),
+    attack: (sr: number, r: Rng) => withBubbles(sr, r, voice(sr, r, { dur: 0.4, pitch: 150, pitchEnd: 120, from: 'a', to: 'e', fry: 0.6, breath: 0.6, drive: 3, attack: 0.02, release: 0.2 }), 40, 0.6),
+    death: (sr: number, r: Rng) => withBubbles(sr, r, voice(sr, r, { dur: 0.8, pitch: 120, pitchEnd: 55, from: 'o', to: 'u', fry: 0.8, breath: 0.5, drive: 2.5, attack: 0.02, release: 0.4 }), 60, 0.9),
+  },
+  armored: {
+    groan: (sr: number, r: Rng) => voice(sr, r, { dur: range(r, 1.4, 2), pitch: range(r, 60, 75), pitchEnd: 52, from: 'o', to: 'u', fry: 0.8, breath: 0.3, drive: 4, attack: 0.3, release: 0.7, size: 0.8, room: 0.2 }),
+    attack: (sr: number, r: Rng) => voice(sr, r, { dur: 0.6, pitch: 90, pitchEnd: 70, from: 'a', to: 'o', fry: 0.8, breath: 0.5, drive: 5, attack: 0.04, release: 0.3, size: 0.8 }),
+    death: (sr: number, r: Rng) => voice(sr, r, { dur: 1.2, pitch: 80, pitchEnd: 40, from: 'a', to: 'u', fry: 1, breath: 0.4, drive: 4, attack: 0.03, release: 0.7, size: 0.8, room: 0.25 }),
+  },
+  hound: {
+    groan: (sr: number, r: Rng) => voice(sr, r, { dur: range(r, 0.6, 1), pitch: range(r, 70, 90), pitchEnd: 60, from: 'u', to: 'o', fry: 1, breath: 0.7, drive: 6, attack: 0.1, release: 0.3, size: 1.2 }),
+    attack: (sr: number, r: Rng) => voice(sr, r, { dur: 0.25, pitch: range(r, 260, 320), pitchEnd: 200, from: 'a', to: 'a', fry: 0.5, breath: 0.8, drive: 6, attack: 0.01, release: 0.1, size: 1.3 }),
+    death: (sr: number, r: Rng) => voice(sr, r, { dur: 0.7, pitch: 420, pitchEnd: 180, from: 'e', to: 'u', fry: 0.3, breath: 0.6, drive: 3, attack: 0.01, release: 0.4, size: 1.3 }),
+  },
+};
+
+/** Cão Infernal uivando ao longe (anúncio da rodada dos cães). */
+export function houndHowl(sr: number, r: Rng): Float32Array {
+  const a = voice(sr, r, { dur: 2.4, pitch: 330, pitchEnd: 420, from: 'u', to: 'o', fry: 0.2, breath: 0.4, drive: 2, attack: 0.4, release: 1, size: 1.2 });
+  const b = voice(sr, r, { dur: 2.4, pitch: 250, pitchEnd: 300, from: 'o', to: 'u', fry: 0.2, breath: 0.4, drive: 2, attack: 0.5, release: 1, size: 1.2 });
+  mixInto(a, b, sr, 0.3, 0.6);
+  reverb(a, sr, 0.95, 0.5, 0.3);
+  return fadeEdges(normalize(a, 0.85), sr);
+}
+
+/** Cuspe de ácido: pigarro gutural seguido de assobio. */
+export function spitterSpit(sr: number, r: Rng): Float32Array {
+  const out = voice(sr, r, { dur: 0.35, pitch: 140, pitchEnd: 200, from: 'o', to: 'e', fry: 0.5, breath: 1, drive: 4, attack: 0.01, release: 0.15 });
+  const hiss = buffer(sr, 0.35);
+  white(hiss, r, 0.5);
+  highpass(hiss, sr, 3000);
+  envelope(hiss, sr, (t) => Math.max(0, 1 - t / 0.35));
+  mixInto(out, hiss, sr, 0.1, 0.6);
+  return fadeEdges(normalize(out, 0.8), sr);
+}
+
+/** Cuspidor enchendo as bolsas de ácido (borbulhar crescente). */
+export function spitterWindup(sr: number, r: Rng): Float32Array {
+  const out = bubbles(sr, r, 0.7, 70);
+  envelope(out, sr, (t) => t / 0.7);
+  return fadeEdges(normalize(out, 0.7), sr);
+}
+
+/** Ácido respingando e chiando no chão. */
+export function spitterSplash(sr: number, r: Rng): Float32Array {
+  const out = buffer(sr, 0.8);
+  white(out, r, 1);
+  highpass(out, sr, 2500);
+  envelope(out, sr, adExp(0.005, 0.25));
+  mixInto(out, bubbles(sr, r, 0.6, 50), sr, 0.05, 0.5);
+  return fadeEdges(normalize(out, 0.7), sr);
+}
+
+/** Gás escapando do corpo do Rastejante. */
+export function crawlerGas(sr: number, r: Rng): Float32Array {
+  const out = buffer(sr, 1.2);
+  white(out, r, 1);
+  lowpass(out, sr, 1600);
+  envelope(out, sr, (t) => Math.min(1, t / 0.1) * Math.max(0, 1 - t / 1.2));
+  mixInto(out, bubbles(sr, r, 1, 20), sr, 0, 0.5);
+  return fadeEdges(normalize(out, 0.6), sr);
+}
+
+/** Tiro batendo no colete: "tunk" metálico abafado. */
+export function armorHit(sr: number, r: Rng): Float32Array {
+  const out = buffer(sr, 0.25);
+  for (const [f0, g] of [[420, 1], [1130, 0.5], [2600, 0.25]] as const) {
+    const part = buffer(sr, 0.25);
+    osc(part, sr, 'sine', () => f0 * range(r, 0.95, 1.05), 1);
+    envelope(part, sr, adExp(0.001, 0.05));
+    mixInto(out, part, sr, 0, g);
+  }
+  return fadeEdges(normalize(out, 0.6), sr);
+}
+
+/** Armadura se soltando: estalo de fivelas e placas caindo. */
+export function armorBreak(sr: number, r: Rng): Float32Array {
+  const out = buffer(sr, 0.9);
+  for (let i = 0; i < 4; i++) mixInto(out, armorHit(sr, r), sr, 0.08 * i + range(r, 0, 0.05), 1 - i * 0.18);
+  const rattle = buffer(sr, 0.5);
+  white(rattle, r, 0.5);
+  highpass(rattle, sr, 1800);
+  envelope(rattle, sr, adExp(0.003, 0.12));
+  mixInto(out, rattle, sr, 0.3, 0.6);
+  return fadeEdges(normalize(out, 0.8), sr);
+}
+
+/** Cão virando cinzas: labareda grave. */
+export function houndBurn(sr: number, r: Rng): Float32Array {
+  const out = buffer(sr, 1);
+  white(out, r, 1);
+  lowpass(out, sr, (t) => 600 + 2000 * Math.max(0, 1 - t));
+  envelope(out, sr, (t) => Math.min(1, t / 0.05) * Math.max(0, 1 - t));
+  return fadeEdges(normalize(drive(out, 2), 0.75), sr);
+}
+
 /** Exploder armando: chiado crescente e borbulhar acelerado. */
 export function exploderFuse(sr: number, r: Rng): Float32Array {
   const dur = 0.7;

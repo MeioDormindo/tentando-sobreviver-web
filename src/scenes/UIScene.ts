@@ -320,14 +320,14 @@ export class UIScene extends Phaser.Scene {
 
     this.waveText.setText(state.wave > 0 ? `WAVE ${state.wave}` : '');
     const seconds = Math.ceil(state.nextWaveInMs / 1000);
-    if (state.phase === 'active') this.waveSubText.setText(`ZUMBIS RESTANTES  ${state.remaining}`);
+    if (state.phase === 'active') this.waveSubText.setText(`${state.hounds ? 'CÃES' : 'ZUMBIS'} RESTANTES  ${state.remaining}`);
     else if (state.phase === 'waiting') this.waveSubText.setText(`PREPARE-SE  ${seconds}s`);
     else this.waveSubText.setText(`PRÓXIMA WAVE EM  ${seconds}s`);
 
     // Banners só nas transições (não na sincronização inicial da HUD).
     if (!prev) return;
     if (state.phase === 'active' && (prev.phase !== 'active' || prev.wave !== state.wave)) {
-      this.showBanner(`WAVE ${state.wave}`, `${state.total} zumbis`, WAVE_COLOR);
+      this.showBanner(`WAVE ${state.wave}`, `${state.total} ${state.hounds ? 'cães' : 'zumbis'}`, WAVE_COLOR);
     } else if (state.phase === 'intermission' && prev.phase === 'active') {
       this.showBanner(`WAVE ${state.wave} SOBREVIVIDA`, 'hora de gastar', COLORS.accent);
     }

@@ -42,6 +42,12 @@ export const ZOMBIE_SKINS = {
   h_runner: { frame: 128, corpse: true },
   h_tank: { frame: 176, corpse: true },
   h_exploder: { frame: 128, corpse: false },
+  // Inimigos novos do Hospital
+  crawler: { frame: 128, corpse: false, bigHead: false },
+  spitter: { frame: 128, corpse: true },
+  armored: { frame: 144, corpse: true },
+  armored_broken: { frame: 144, corpse: true },
+  hound: { frame: 128, corpse: false, bigHead: false },
 } as const;
 export type ZombieSkin = keyof typeof ZOMBIE_SKINS;
 export const ZOMBIE_SKIN_IDS = Object.keys(ZOMBIE_SKINS) as ZombieSkin[];
@@ -274,7 +280,7 @@ export const IMAGES: ImageAsset[] = [
   { key: ASSET_KEYS.panelTrap, url: 'assets/props/panel_trap.svg' },
   { key: ASSET_KEYS.trapGrate, url: 'assets/props/trap_grate.svg' },
   { key: ASSET_KEYS.teddy, url: 'assets/props/teddy.svg' },
-  ...ZOMBIE_SKIN_IDS.map((skin) => ({ key: zombieBigHeadKey(skin), url: `assets/zombies/big_head_${skin}.svg` })),
+  ...ZOMBIE_SKIN_IDS.filter((skin) => !('bigHead' in ZOMBIE_SKINS[skin])).map((skin) => ({ key: zombieBigHeadKey(skin), url: `assets/zombies/big_head_${skin}.svg` })),
   { key: ASSET_KEYS.radio, url: 'assets/props/radio.svg' },
   { key: ASSET_KEYS.trainHead, url: 'assets/events/train_head.svg' },
   { key: ASSET_KEYS.trainCar, url: 'assets/events/train_car.svg' },
