@@ -13,6 +13,7 @@ import { AmmoStation, WeaponCase } from '../entities/BuyStations';
 import { Door } from '../entities/Door';
 import { PerkMachine, WeaponLab, type MachineDeps } from '../entities/Machines';
 import { MapInteractions } from '../entities/MapInteractions';
+import { StationBoard } from '../entities/StationBoard';
 import { EasterEggs } from '../systems/EasterEggs';
 import { MysteryBox } from '../entities/MysteryBox';
 import type { BarricadeTarget, ZombieWorld } from '../entities/Zombie';
@@ -57,6 +58,7 @@ export class GameScene extends Phaser.Scene {
   private economy!: EconomySystem;
   private interaction!: InteractionSystem;
   private mapInteractions!: MapInteractions;
+  private station!: StationBoard;
   private perks!: PerkSystem;
   private powerUps!: PowerUpSystem;
   private bossSystem!: BossSystem;
@@ -252,6 +254,7 @@ export class GameScene extends Phaser.Scene {
       zombies,
       events: this.eventSystem,
     });
+    this.station = new StationBoard(this, this.lighting, () => this.eventSystem.trainStatus);
     new EasterEggs(this, {
       interaction: this.interaction,
       player: this.player,
@@ -339,6 +342,7 @@ export class GameScene extends Phaser.Scene {
     this.bossSystem.update(time, delta);
     this.eventSystem.update(time, delta);
     this.mapInteractions.update(time);
+    this.station.update(time);
     this.minimap.update(time);
     audio.update(time);
     this.music.update(time, delta);

@@ -25,10 +25,11 @@ interface Running {
  * começa junto com a wave; os demais, após um atraso aleatório.
  */
 export class EventSystem {
+  private readonly trainEvent = new TrainEvent();
   private readonly events: Record<WorldEventId, WorldEvent> = {
     blackout: new BlackoutEvent(),
     emergency_alarm: new AlarmEvent(),
-    train: new TrainEvent(),
+    train: this.trainEvent,
     horde: new HordeEvent(),
     supply_drop: new SupplyDropEvent(),
     gas_leak: new GasLeakEvent(),
@@ -66,6 +67,13 @@ export class EventSystem {
     return e instanceof SupplyDropEvent && e.isWaiting ? { x: e.x, y: e.y } : null;
   }
 
+  /** Situação do trem para o painel de horários da estação. */
+  get trainStatus(): { state: 'none' | 'scheduled' | 'warning' | 'passing'; inMs: number } {
+    if (this.train) return { state: this.trainEvent.isWarning ? 'warning' : 'passing', inMs: 0 };
+    if (this.trainAt !== null) return { state: 'scheduled', inMs: Math.max(0, this.trainAt - this.ctx.scene.time.now) };
+    return { state: 'none', inMs: 0 };
+  }
+
   /** Evento em andamento (para testes/HUD). */
   get activeId(): WorldEventId | null {
     return this.running?.event.id ?? null;
@@ -96,7 +104,7 @@ export class EventSystem {
     this.trainPassesThisWave++;
     const info = worldEvents.train;
     emitGameEvent(this.ctx.scene.game.events, GameEvents.WorldEventStarted, { id: 'train', name: info.name, hint: info.hint, color: info.color });
-    this.lastStateKey = '';
+    this.invalidateHud();
     return true;
   }
 
@@ -105,7 +113,7 @@ export class EventSystem {
     if (this.train && !this.train.event.update(time, delta)) {
       this.train.event.end();
       this.train = null;
-      this.lastStateKey = '';
+      this.invalidateHud();
       if (this.phase === 'active' && this.trainPassesThisWave === 1 && Math.random() < trainConfig.secondPassChance) this.scheduleTrain(time);
     }
     if (this.trainAt !== null && time >= this.trainAt) {
@@ -130,7 +138,7 @@ export class EventSystem {
     this.lastWave.set(id, this.wave);
     const info = worldEvents[id];
     emitGameEvent(this.ctx.scene.game.events, GameEvents.WorldEventStarted, { id, name: info.name, hint: info.hint, color: info.color });
-    this.lastStateKey = '';
+    this.invalidateHud();
     return true;
   }
 
@@ -206,6 +214,11 @@ export class EventSystem {
   }
 
   /** Estado para a HUD, emitido quando o segundo exibido muda. */
+  /** Força o próximo emitState a reenviar o indicador (inclusive para limpá-lo). */
+  private invalidateHud(): void {
+    this.lastStateKey = '#';
+  }
+
   private emitState(time: number): void {
     // Sem evento sorteado, o indicador mostra o trem (se estiver passando).
     const run = this.running ?? this.train;

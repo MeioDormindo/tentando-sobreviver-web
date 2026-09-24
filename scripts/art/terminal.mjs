@@ -253,3 +253,48 @@ export function decalBurst() {
   }
   return svgDoc(192, 192, defs, s);
 }
+
+// ───────────────────────────── Estação (extras) ─────────────────────────────
+
+/**
+ * Boca de túnel (lado esquerdo; a direita é espelhada no jogo). 192x256 = 3x4 tiles no mundo:
+ * moldura de concreto e escuridão que engole o trilho (o trem some nela).
+ */
+export function tunnelMouth() {
+  const defs = linear('tm', [[0, '#000', 1], [0.55, '#000', 0.92], [1, '#000', 0]], '0', '0', '1', '0') + GRAIN;
+  let s = `<rect width="192" height="256" fill="url(#tm)"/>`;
+  // Moldura de concreto em cima e embaixo, com marcas de fuligem
+  for (const y of [0, 238]) {
+    s += `<rect x="0" y="${y}" width="120" height="18" fill="#3a3b37" stroke="#1b1c1a" stroke-width="2"/>`;
+    s += `<rect x="0" y="${y + 2}" width="120" height="4" fill="#565853" opacity=".7"/>`;
+  }
+  s += `<rect x="112" y="0" width="10" height="256" fill="#2b2c29" stroke="#141513" stroke-width="2"/>`;
+  s += `<rect x="114" y="0" width="3" height="256" fill="#5b5d57" opacity=".6"/>`;
+  // Faixas zebradas de advertência na moldura
+  for (let y = 24; y < 232; y += 26) s += `<path d="M112 ${y} l10 10 v8 l-10 -10 Z" fill="#b8962a" opacity=".85"/>`;
+  return svgDoc(192, 256, defs, s);
+}
+
+/** Semáforo de trilho visto de cima: base, poste e duas lentes (acesas pelo jogo com tint/luz). 48x64. */
+export function railSignal() {
+  let s = `<ellipse cx="24" cy="48" rx="14" ry="8" fill="#000" opacity=".35"/>`;
+  s += `<rect x="10" y="8" width="28" height="44" rx="6" fill="#1d1f22" stroke="#0b0c0d" stroke-width="2"/>`;
+  s += `<rect x="13" y="11" width="22" height="38" rx="4" fill="#2b2f33"/>`;
+  for (const [cy, c] of [[21, '#3a1412'], [39, '#123a1a']]) {
+    s += `<circle cx="24" cy="${cy}" r="7.5" fill="#0b0c0d"/><circle cx="24" cy="${cy}" r="5.5" fill="${c}"/>`;
+    s += `<path d="M17 ${cy - 7} h14" stroke="#0b0c0d" stroke-width="3"/>`;
+  }
+  return svgDoc(48, 64, '', s);
+}
+
+/** Painel de horários (LED) visto de cima em ângulo: caixa escura com moldura e suportes. 224x72. */
+export function departureBoard() {
+  const defs = linear('db', [[0, '#1b1d1f'], [1, '#0e0f10']]);
+  let s = `<rect x="6" y="58" width="212" height="10" rx="4" fill="#000" opacity=".35"/>`;
+  for (const x of [30, 194]) s += `<rect x="${x - 3}" y="0" width="6" height="12" fill="#3b3e42"/>`;
+  s += `<rect x="4" y="10" width="216" height="52" rx="5" fill="#44484d" stroke="#16181a" stroke-width="2"/>`;
+  s += `<rect x="10" y="16" width="204" height="40" rx="3" fill="url(#db)"/>`;
+  // Grade de LEDs apagados
+  for (let x = 14; x < 212; x += 4) for (let y = 20; y < 54; y += 4) s += `<rect x="${x}" y="${y}" width="1.6" height="1.6" fill="#2a1a08" opacity=".7"/>`;
+  return svgDoc(224, 72, defs, s);
+}

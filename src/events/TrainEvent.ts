@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { ASSET_KEYS } from '../config/assets.config';
 import { TILE_SIZE } from '../config/game.config';
-import { trainConfig } from '../config/events.config';
+import { stationConfig, trainConfig } from '../config/events.config';
 import { ART_SCALE, DEPTH } from '../config/visual.config';
 import { audio, type SpatialLoop } from '../audio/AudioSystem';
 import { liveZombies, type EventContext, type WorldEvent } from './WorldEvent';
@@ -32,6 +32,7 @@ export class TrainEvent implements WorldEvent {
   private headlight: Light | null = null;
   private rumble: SpatialLoop | null = null;
   private playerHit = false;
+  private runOverCount = 0;
 
   private readonly top = trainConfig.lane.y * TILE_SIZE;
   private readonly bottom = (trainConfig.lane.y + trainConfig.lane.h) * TILE_SIZE;
@@ -46,6 +47,7 @@ export class TrainEvent implements WorldEvent {
     this.startedAt = ctx.scene.time.now;
     this.dir = Math.random() < 0.5 ? 1 : -1;
     this.playerHit = false;
+    this.runOverCount = 0;
     const x0 = PLATFORM_SPAN.from * TILE_SIZE;
     const x1 = PLATFORM_SPAN.to * TILE_SIZE;
     const cy = (this.top + this.bottom) / 2;
@@ -60,6 +62,11 @@ export class TrainEvent implements WorldEvent {
     );
     // A buzina vem do lado de onde o trem chega.
     audio.playAt('evt_train_warning', this.dir > 0 ? x0 : x1, cy, { category: 'world', volume: 1, distance: 2600 });
+  }
+
+  /** Ainda no aviso (buzina) ou já passando? */
+  get isWarning(): boolean {
+    return !this.train;
   }
 
   update(time: number, delta: number): boolean {
@@ -86,11 +93,14 @@ export class TrainEvent implements WorldEvent {
     for (const b of this.beacons) b.intensity = blink ? 0.9 : 0.15;
     this.stripe?.setFillStyle(0xff2a1a, blink ? 0.22 : 0.06);
     this.runOver(ctx, minX, maxX);
+    this.airBlast(ctx, minX, maxX, delta);
     if (Math.abs(ctx.player.y - cy) < 260 && ctx.player.x > minX - 400 && ctx.player.x < maxX + 400) {
       ctx.scene.cameras.main.shake(80, 0.0025);
     }
     // Terminou quando o último vagão saiu do mapa.
-    return this.dir > 0 ? minX < ctx.map.widthPx : maxX > 0;
+    const running = this.dir > 0 ? minX < ctx.map.widthPx : maxX > 0;
+    if (!running && this.runOverCount > 0) ctx.toast(`ATROPELADOS ×${this.runOverCount}`);
+    return running;
   }
 
   end(): void {
@@ -129,13 +139,27 @@ export class TrainEvent implements WorldEvent {
     this.rumble = audio.loopAt('evt_train_pass', ctx.player.x, cy, { category: 'world', volume: 1, distance: 1500 });
   }
 
+  /** Deslocamento de ar: quem está na beira da faixa, ao lado do trem, é empurrado para longe. */
+  private airBlast(ctx: EventContext, minX: number, maxX: number, delta: number): void {
+    const p = ctx.player;
+    const { range, speed } = stationConfig.airBlast;
+    if (!p.isAlive || p.x < minX || p.x > maxX) return;
+    const above = p.y < this.top && p.y > this.top - range;
+    const below = p.y > this.bottom && p.y < this.bottom + range;
+    if (!above && !below) return;
+    p.setPosition(p.x, p.y + (above ? -1 : 1) * speed * (delta / 1000));
+  }
+
   /** Quem estiver na faixa dos trilhos é atropelado. */
   private runOver(ctx: EventContext, minX: number, maxX: number): void {
     const angle = this.dir > 0 ? 0 : Math.PI;
     for (const z of liveZombies(ctx.zombies)) {
       if (z.x < minX || z.x > maxX || z.y < this.top - 10 || z.y > this.bottom + 10) continue;
       const { x, y } = z;
-      if (z.takeDamage(z.hp + 1, false, 'hazard')) ctx.effects.zombieDeath(x, y, angle, z.skin);
+      if (z.takeDamage(z.hp + 1, false, 'hazard')) {
+        this.runOverCount++;
+        ctx.effects.zombieDeath(x, y, angle, z.skin);
+      }
     }
     const p = ctx.player;
     if (!this.playerHit && p.isAlive && p.x >= minX && p.x <= maxX && p.y > this.top - 8 && p.y < this.bottom + 8) {

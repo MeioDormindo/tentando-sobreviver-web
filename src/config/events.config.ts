@@ -89,6 +89,26 @@ export const trainConfig = {
   area: 'platform',
 };
 
+/** Detalhes da estação (Plataforma Norte). Posições em tiles. */
+export const stationConfig = {
+  /** Bocas de túnel nas pontas de cada trilho: y e altura (tiles). */
+  tunnels: [
+    { y: 4, h: 5 },
+    { y: 12, h: 4 },
+  ],
+  /** Semáforos nas pontas do trilho da frente, na borda da plataforma principal. */
+  signals: [
+    { tx: 16.8, ty: 16.4 },
+    { tx: 110.2, ty: 16.4 },
+  ],
+  /** Painel de horários na plataforma principal. */
+  board: { tx: 72, ty: 17.1 },
+  /** Aviso com a contagem só aparece quando falta menos que isto (ms). */
+  countdownFromMs: 30_000,
+  /** Deslocamento de ar: empurra quem está até esta distância (px) da faixa, a esta velocidade (px/s). */
+  airBlast: { range: 36, speed: 70 },
+};
+
 export const supplyDropConfig = {
   /** Tempo para pegar antes de sumir (ms). */
   lifetimeMs: 60_000,
