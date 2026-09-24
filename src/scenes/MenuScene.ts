@@ -6,6 +6,7 @@ import { secretsConfig } from '../config/secrets.config';
 import { audio } from '../audio/AudioSystem';
 import { useTouchControls } from '../input/device';
 import { save } from '../save/SaveStore';
+import { currentUser } from '../online/auth';
 import { MENU_FONT, menuButton, menuTitle, onResize } from '../ui/menuWidgets';
 
 const KEYBOARD_HINT = 'WASD mover · Mouse mirar · Clique atirar · V ou botão direito: faca · R recarregar · E comprar · Q/1/2 trocar arma · M som · N música · ESC pausa';
@@ -32,6 +33,7 @@ export class MenuScene extends Phaser.Scene {
       menuButton(this, '[ JOGAR ]', () => this.scene.start(SCENE_KEYS.mapSelect)),
       menuButton(this, '[ RANKING ]', () => this.scene.start(SCENE_KEYS.ranking)),
       menuButton(this, '[ ARMAS ]', () => this.scene.start(SCENE_KEYS.armory)),
+      menuButton(this, currentUser() ? `[ CONTA: ${currentUser()?.toUpperCase()} ]` : '[ CONTA / SALVAR NA NUVEM ]', () => this.scene.start(SCENE_KEYS.account)),
       menuButton(this, '[ CONFIGURAÇÕES ]', () => this.scene.start(SCENE_KEYS.settings)),
     ];
     const hint = this.add

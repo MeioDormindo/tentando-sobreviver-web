@@ -6,6 +6,7 @@ import type { GameOverStats } from '../game/events';
 import { save } from '../save/SaveStore';
 import { isOnlineConfigured } from '../config/online.config';
 import { submitScore } from '../online/leaderboard';
+import { currentUser } from '../online/auth';
 
 const TITLE_FONT = 'Impact, "Arial Black", sans-serif';
 const FONT = 'monospace';
@@ -109,7 +110,7 @@ function addRankingEntry(scene: Phaser.Scene, root: Phaser.GameObjects.Container
   const input = document.createElement('input');
   input.type = 'text';
   input.maxLength = PLAYER_NAME_MAX;
-  input.value = save.playerName;
+  input.value = currentUser()?.toUpperCase().slice(0, PLAYER_NAME_MAX) ?? save.playerName;
   input.setAttribute('aria-label', 'Nome para o ranking');
   Object.assign(input.style, {
     width: `${Math.round(230 * scale)}px`,

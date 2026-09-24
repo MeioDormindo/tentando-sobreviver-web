@@ -1,7 +1,9 @@
 import Phaser from 'phaser';
 import { gameConfig } from './config/game.config';
+import { startCloudSync } from './online/cloudSync';
 
 const game = new Phaser.Game(gameConfig);
+startCloudSync();
 
 // Acesso para depuração/testes automatizados: em desenvolvimento ou em builds de
 // teste (VITE_TEST_HOOKS=1). O build publicado não expõe o jogo.

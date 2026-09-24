@@ -148,6 +148,7 @@ function migrateLegacy(d: SaveData): SaveData {
  */
 class SaveStore {
   private data: SaveData;
+  private readonly listeners = new Set<() => void>();
 
   constructor() {
     const raw = readJson(SAVE_KEY);
@@ -265,7 +266,57 @@ class SaveStore {
     return list.indexOf(row) + 1;
   }
 
+  // ── Nuvem ──
+  /** Cópia do save para enviar à nuvem. */
+  exportData(): unknown {
+    return JSON.parse(JSON.stringify(this.data)) as unknown;
+  }
+
+  /**
+   * Mescla um save vindo da nuvem (validado pelo mesmo sanitize do localStorage): recordes e totais
+   * ficam com o maior valor, mapas, segredos e ranking somam. As configurações só são trocadas
+   * quando `takeSettings` (ao entrar numa conta).
+   */
+  mergeFrom(raw: unknown, takeSettings = false): void {
+    const other = sanitize(raw);
+    const d = this.data;
+    if (takeSettings) d.settings = other.settings;
+    for (const id of MAP_IDS) {
+      const a = d.records[id];
+      const b = other.records[id];
+      d.records[id] = { bestWave: Math.max(a.bestWave, b.bestWave), bestKills: Math.max(a.bestKills, b.bestKills), bestScore: Math.max(a.bestScore, b.bestScore) };
+      const seen = new Set<string>();
+      d.ranking[id] = [...d.ranking[id], ...other.ranking[id]]
+        .filter((e) => {
+          const key = `${e.name}|${e.score}|${e.date}`;
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        })
+        .sort((x, y) => y.score - x.score)
+        .slice(0, RANKING_SIZE);
+    }
+    for (const id of other.unlockedMaps) if (!d.unlockedMaps.includes(id)) d.unlockedMaps.push(id);
+    const l = d.lifetime;
+    const o = other.lifetime;
+    d.lifetime = {
+      gamesPlayed: Math.max(l.gamesPlayed, o.gamesPlayed),
+      totalKills: Math.max(l.totalKills, o.totalKills),
+      bossesDefeated: Math.max(l.bossesDefeated, o.bossesDefeated),
+      playTimeMs: Math.max(l.playTimeMs, o.playTimeMs),
+    };
+    d.secrets = { teddies: d.secrets.teddies || other.secrets.teddies, konami: d.secrets.konami || other.secrets.konami };
+    this.persist();
+  }
+
+  /** Avisa a cada alteração gravada (sincronização com a nuvem). */
+  onChange(cb: () => void): () => void {
+    this.listeners.add(cb);
+    return () => this.listeners.delete(cb);
+  }
+
   private persist(): void {
+    this.listeners.forEach((cb) => cb());
     try {
       localStorage.setItem(SAVE_KEY, JSON.stringify(this.data));
     } catch {
