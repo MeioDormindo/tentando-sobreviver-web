@@ -6,7 +6,7 @@ var _failed := 0
 
 
 ## Roda tudo e devolve o número de falhas.
-func run() -> int:
+func run(tree: SceneTree) -> int:
 	_test_health()
 	_test_hurtbox()
 	_test_weapon_ammo_and_reload()
@@ -16,6 +16,7 @@ func run() -> int:
 	_test_inventory()
 	_test_spin_up()
 	_test_migrated_data()
+	_test_maps(tree)
 	print("\n%d ok, %d falharam" % [_passed, _failed])
 	return _failed
 
@@ -176,3 +177,19 @@ func _test_migrated_data() -> void:
 		if file.ends_with(".tres") and file != "knife.tres":
 			count += 1
 	check(count == 19, "19 armas migradas (%d)" % count)
+
+
+func _test_maps(tree: SceneTree) -> void:
+	print("Mapas migrados (Terminal e Hospital)")
+	for info in [["res://scenes/maps/terminal.tscn", 128, 121, 7, &"hall"], ["res://scenes/maps/hospital.tscn", 120, 110, 12, &"reception"]]:
+		var map := (load(info[0]) as PackedScene).instantiate() as LayoutMap
+		tree.root.add_child(map)
+		check(map.width == info[1] and map.height == info[2], "%s: %d×%d tiles" % [map.name, map.width, map.height])
+		var doors := tree.get_nodes_in_group(&"interactable").filter(func(n: Node) -> bool: return n is Door and map.is_ancestor_of(n)).size()
+		check(doors == info[3], "%s: %d portas compráveis" % [map.name, doors])
+		check(map.is_area_open(StringName(map.data.start_area)), "%s: começa com a área inicial aberta (%s)" % [map.name, map.data.start_area])
+		var spawns := map.active_spawn_points(1).size()
+		check(spawns > 0 and spawns < map.data.spawns.size(), "%s: só os spawns da área inicial valem (%d de %d)" % [map.name, spawns, map.data.spawns.size()])
+		var nav_polys := map.nav_region.navigation_mesh.get_polygon_count()
+		check(nav_polys > 0, "%s: malha de navegação gerada (%d polígonos)" % [map.name, nav_polys])
+		map.free()

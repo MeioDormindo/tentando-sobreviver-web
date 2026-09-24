@@ -28,6 +28,11 @@ var _melee_hits := 0
 var _knife_swings := 0
 ## Quando começou a esperar a morte do jogador (s de jogo).
 var _die_started := 0.0
+## Compra da porta Hall → Plataforma: 0 = ainda não, 1 = posicionado, 2 = feito.
+var _door_step := 0
+var _door_bought := false
+var _platform_spawns_before := 0
+var _platform_spawns_after := 0
 
 
 func _ready() -> void:
@@ -83,6 +88,9 @@ func _play(main: Node, player: Player, rounds: RoundManager) -> void:
 			nearest = z
 	player.move_input = Vector2.ZERO
 	_use_inventory(player, rounds)
+	if _door_step < 2 and _game_time > 6.0:
+		_buy_door(main, player)
+		return
 	if nearest and not hold_fire:
 		var aim := nearest.get_node("BodyHurtbox" if _body_turn else "HeadHurtbox") as Node3D
 		player.aim_point = aim.global_position
@@ -96,6 +104,24 @@ func _play(main: Node, player: Player, rounds: RoundManager) -> void:
 			_max_hits_one_shot = maxi(_max_hits_one_shot, hits.size())
 	if rounds.round_number >= TARGET_ROUND or _game_time > MAX_GAME_TIME:
 		_end_play(main, player, rounds)
+
+
+## Vai até a porta Hall → Plataforma, compra e volta (confere área, porta e spawns).
+func _buy_door(main: Node, player: Player) -> void:
+	var world := main.get_node("World") as LayoutMap
+	if _door_step == 0:
+		_platform_spawns_before = world.active_spawn_points(99).size()
+		(main.get_node("PointsManager") as PointsManager).add(2000)
+		player.global_position = Vector3(64.0, 0.1, 29.6)
+		player.aim_point = Vector3(64.0, 1.2, 26.0)
+		_door_step = 1
+		return
+	var door := world.find_child("door_hall_platform", true, false)
+	_door_bought = player.interact() and world.is_area_open(&"platform")
+	_platform_spawns_after = world.active_spawn_points(99).size()
+	player.global_position = world.get_player_spawn()
+	_door_step = 2
+	_check(door != null, "porta Hall → Plataforma existe no mapa migrado")
 
 
 ## Troca de arma: pega a Glock no começo e a Pump no round 2 (confere a troca e os chumbos).
@@ -119,6 +145,8 @@ func _end_play(main: Node, player: Player, rounds: RoundManager) -> void:
 	_check(_saw_attack, "zumbis chegaram e atacaram o jogador")
 	_check(_kills >= 21, "abateu os zumbis dos rounds 1 e 2 (%d abates)" % _kills)
 	_check(_headshots > 0 and _body_kills > 0, "abates na cabeça (%d) e no corpo (%d)" % [_headshots, _body_kills])
+	_check(_door_bought, "comprou a porta: Plataforma aberta")
+	_check(_platform_spawns_after > _platform_spawns_before, "spawns da Plataforma ativos (%d → %d)" % [_platform_spawns_before, _platform_spawns_after])
 	_check(_switched, "troca de arma (Glock → M1911)")
 	_check(_max_hits_one_shot > 1, "espingarda: vários chumbos acertam no mesmo tiro (%d)" % _max_hits_one_shot)
 	_check(_melee_hits > 0, "faca acerta zumbis (%d acertos em %d golpes)" % [_melee_hits, _knife_swings])

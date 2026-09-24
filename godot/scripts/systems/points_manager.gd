@@ -10,6 +10,7 @@ var points: int = 0
 
 func _ready() -> void:
 	points = data.start_points
+	add_to_group(&"points_manager")
 	Events.zombie_hit.connect(_on_zombie_hit)
 	Events.zombie_killed.connect(_on_zombie_killed)
 	Events.round_completed.connect(func(round_number: int) -> void: add(data.round_bonus(round_number)))

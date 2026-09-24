@@ -49,8 +49,8 @@ aproveitar e como ele vira algo natural no Godot.
 
 | Item TS | Classificação | No Godot |
 |---|---|---|
-| `MapLayout` (áreas, portas, janelas, spawns, props, luzes em tiles) | ADAPTAR | `MapData` para dados; cenas 3D feitas em blockout e depois com arte do Blender; layout pode vir do Tiled (seção 16) |
-| Portas pagas que abrem áreas e spawns | REAPROVEITAR CONCEITO | Fase 5: `Door.tscn` (custo, animação, som, área liberada) |
+| `MapLayout` (áreas, portas, janelas, spawns, props, luzes em tiles) | ADAPTAR — **feito** | `npm run godot:data` exporta a grade e os dados para `data/maps/*.json`; `LayoutMap` monta o 3D. A arte do Blender entra por cima; o layout pode vir do Tiled no futuro (seção 16) |
+| Portas pagas que abrem áreas e spawns | REAPROVEITAR CONCEITO — **feito** | `Door` (custo, área liberada, navegação refeita) |
 | Barricadas nas janelas | REAPROVEITAR CONCEITO | Fase 5: `Barricade.tscn` |
 | Armas na parede (`wallSnap`, contorno de giz) | ADAPTAR | Fase 5: `WallBuy.tscn` posicionado no editor (sem encaixe automático) |
 | Energia + disjuntor | REAPROVEITAR CONCEITO | Fase 5: `PowerSwitch` + sinal global de energia |

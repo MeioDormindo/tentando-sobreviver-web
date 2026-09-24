@@ -4,7 +4,7 @@ extends Node
 ## Roda mesmo com o jogo pausado (para despausar).
 
 @export var player: Player
-@export var arena: Arena
+@export var arena: GameWorld
 @export var round_manager: RoundManager
 @export var points_manager: PointsManager
 

@@ -4,8 +4,13 @@ Versão em **Godot 4.7 + GDScript** do jogo de sobrevivência por rounds (especi
 projeto). O jogo web em TypeScript (raiz deste repositório) continua no ar e serve de referência
 de conceitos: ver `docs/analise-typescript.md`.
 
-**Estado: MVP jogável + combate migrado do jogo web.** Tem:
-- mapa de teste;
+**Estado: combate e mapas migrados do jogo web.** Tem:
+- **Terminal Central migrado** (a partida começa nele) e o Hospital Santa Luzia pronto para
+  entrar:
+  - o mesmo layout do jogo web: áreas, paredes, trem parado, janelas por onde os zumbis entram,
+    props e luzes;
+  - portas compráveis com E, que abrem a área e os spawns dela;
+  - mapa de teste (`scenes/maps/test_arena.tscn`);
 - jogador com os atributos do jogo web (velocidade, regeneração, invulnerabilidade curta, mais
   lento de lado e de costas);
 - 2 armas com troca, faca com avanço, e as 19 armas do jogo web em dados (chumbos, perfuração,
@@ -40,7 +45,10 @@ reais do jogo web (`src/config`) e gera os `.tres` de `data/`:
 - as 19 armas e a faca;
 - o jogador;
 - as fórmulas dos rounds e a economia;
-- os 8 tipos de zumbi.
+- os 8 tipos de zumbi;
+- os mapas (`data/maps/terminal.json` e `map2.json`): a grade de tiles montada na mesma ordem do
+  jogo web, com áreas, portas, janelas, spawns por área, luzes, props, máquinas e compras na
+  parede.
 
 Conversão: 32 px = 1 m, ms → s. O script é `scripts/godot/export-data.ts`. Enquanto o jogo web
 for a referência, mude os valores lá e rode de novo. Quando o Godot virar a fonte, os `.tres`
@@ -50,12 +58,14 @@ passam a ser editados direto no Godot.
 
 ```sh
 # Sistemas isolados, sem janela (vida, headshot, munição e recarga, fórmulas dos rounds,
-# escolha do ponto de spawn, pontos, inventário, giro da minigun, dados migrados):
+# escolha do ponto de spawn, pontos, inventário, giro da minigun, dados migrados, carregar
+# os dois mapas com portas, spawns e navegação):
 Godot --headless --path godot -s res://tests/run_tests.gd
 
-# Jogado (abre uma janela): um bot joga até o round 3, confere navegação, ataque, abates
-# na cabeça e no corpo, troca de arma, chumbos da espingarda, faca, reabastecimento, pontos,
-# limite de vivos, morte e reinício.
+# Jogado (abre uma janela), no Terminal migrado: um bot joga até o round 3 e confere
+# navegação, ataque, abates na cabeça e no corpo, compra de porta (área e spawns novos),
+# troca de arma, chumbos da espingarda, faca, reabastecimento, pontos, limite de vivos,
+# morte e reinício.
 # Salva prints em tests/output/.
 Godot --path godot -s res://tests/playtest.gd
 ```
@@ -80,7 +90,9 @@ scripts/weapons/                 Weapon (munição, recarga, raycast, chumbos, p
                                  WeaponData, WeaponInventory (2 espaços), Melee + MeleeData (faca)
 scripts/systems/                 RoundManager + RoundData, SpawnManager, PointsManager +
                                  PointsData, GameManager, AudioManager
-scripts/maps/arena.gd            blockout a partir de dados + malha de navegação gerada
+scripts/maps/                    GameWorld (base: spawn do jogador, áreas abertas, spawns ativos),
+                                 LayoutMap (mapa migrado do JSON), Arena (mapa de teste)
+scripts/interactables/door.gd    porta comprável (grupo "interactable", tecla E)
 scripts/ui/hud.gd                HUD (só escuta Events)
 data/                            .tres: m1911, walker, rounds, points, barramentos de áudio
 ```
@@ -92,8 +104,12 @@ Decisões:
 - **Renderizador Compatibility em todas as plataformas:** é o único da exportação Web e roda bem
   no celular.
 - **Dados em Resources:** arma, zumbi, rounds e pontos. Arma ou zumbi novo = novo `.tres`.
-- **Camadas de física:** 1 `world`, 2 `player`, 3 `zombies`, 4 `hurtboxes`
-  (`scripts/utilities/physics_layers.gd`). O tiro acerta paredes e hurtboxes, não o corpo físico.
+- **Camadas de física** (`scripts/utilities/physics_layers.gd`):
+  - 1 `world`, 2 `player`, 3 `zombies`, 4 `hurtboxes`;
+  - 5 `player_only`: janelas, que os zumbis atravessam;
+  - 6 `props`: móveis que bloqueiam a passagem, mas não a bala.
+  - O tiro acerta paredes e hurtboxes, não o corpo físico.
+  - A navegação usa só `world` e `props`.
 - **Máquina de estados simples nos zumbis;** Behavior Tree só quando o comportamento pedir
   (seção 11). O caminho é recalculado a cada 0,25s, espalhado entre os zumbis.
 - **Munição volta a encher ao fim de cada round** (`RoundData.refill_ammo_on_round_end`), porque
@@ -103,6 +119,7 @@ Decisões:
 ## Próximas fases (roadmap da especificação)
 
 - **Fase 4 (rounds):** novos tipos de zumbi e composição por round.
-- **Fase 5 (mapa):** portas e áreas, armas na parede, Mystery Box, perks, energia.
+- **Fase 5 (mapa):** armas na parede, barricadas nas janelas, Mystery Box, perks, energia (os
+  dados das posições já estão nos JSON dos mapas); escolha de mapa no menu.
 - **Fase 7 (polimento):** sons e efeitos, modelos do Blender no lugar das primitivas.
 - **Fase 8 (plataformas):** exportações e controles de toque.

@@ -1,0 +1,2213 @@
+{
+ "id": "terminal",
+ "width": 128,
+ "height": 121,
+ "legend": {
+  "wall": "#",
+  "train": "T",
+  "door": "D",
+  "window": "W",
+  "floors": {
+   "terminal": "t",
+   "concrete": "c",
+   "metal": "m",
+   "tracks": "r",
+   "tunnel": "u",
+   "wagon": "w",
+   "hospital": "h",
+   "linoleum": "l",
+   "morgue": "g"
+  }
+ },
+ "cells": [
+  "################################################################################################################################",
+  "################################################################################################################################",
+  "################################################################################################################################",
+  "################################################################################################################################",
+  "################rrrrrrrrTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTrrrrrrrr################",
+  "################rrrrrrrrTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTwwwwwwwwwwwwTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTrrrrrrrr################",
+  "################rrrrrrrrTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTwwwwwwwwwwwwTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTrrrrrrrr################",
+  "################rrrrrrrrTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTwwwwwwwwwwwwTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTrrrrrrrr################",
+  "################rrrrrrrrTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTwwwTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTrrrrrrrr################",
+  "################cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc################",
+  "################cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc################",
+  "################cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc################",
+  "################rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr################",
+  "################rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr################",
+  "################rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr################",
+  "################rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr################",
+  "################cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc################",
+  "################cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc################",
+  "################cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc################",
+  "################cccccccccccc##cccccccccccccc##cccccccccccccccccccccccccccccccccccc##cccccccccccccc##cccccccccccc################",
+  "################cccccccccccc##cccccccccccccc##cccccccccccccccccccccccccccccccccccc##cccccccccccccc##cccccccccccc################",
+  "################cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc################",
+  "################cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc################",
+  "################cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc################",
+  "################cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc################",
+  "################cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc################",
+  "##############################################################DDDD##############################################################",
+  "##############################################################DDDD##############################################################",
+  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
+  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
+  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
+  "##################################ccccc#tttttttttttttttttttttttttttttttttttttttttttttttt#ccccc##################################",
+  "##################################cccccWttttttttttttttttttttttttttttttttttttttttttttttttWccccc##################################",
+  "##################################cccccWtttttttt##tttttttttttttttttttttttttttt##ttttttttWccccc##################################",
+  "##################################ccccc#tttttttt##tttttttttt########tttttttttt##tttttttt#ccccc##################################",
+  "##################################ccccc#tttttttttttttttttttt########tttttttttttttttttttt#ccccc##################################",
+  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
+  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
+  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
+  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
+  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
+  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
+  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
+  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
+  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
+  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
+  "##################################ccccc#tttttttttttttttttttttttttttttttttttttttttttttttt#ccccc##################################",
+  "##################################cccccWttttttttttttttttttttttttttttttttttttttttttttttttWccccc##################################",
+  "##################################cccccWtttttttt##tttttttttttttttttttttttttttt##ttttttttWccccc##################################",
+  "##################################ccccc#tttttttt##tttttttttttttttttttttttttttt##tttttttt#ccccc##################################",
+  "##################################ccccc#tttttttttttttttttttttttttttttttttttttttttttttttt#ccccc##################################",
+  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
+  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
+  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
+  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
+  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
+  "#########################################DDD########################################DDD#########################################",
+  "#########################################DDD########################################DDD#########################################",
+  "############tttttttttttttttttttttttttttttttt########################################tttttttttt#ttttttttt#ttttttttttt############",
+  "############tttttttttttttttttttttttttttttttt########################################tttttttttt#ttttttttt#ttttttttttt############",
+  "############tttttttttttttttttttttttttttttttt########################################tttttttttttttttttttttttttttttttt############",
+  "######ccccc#tttttttttttttttttttttttttttttttt########################################tttttttttttttttttttttttttttttttt#ccccc######",
+  "######cccccWtttttttttttttttttttttttttttttttt########################################tttttttttt#ttttttttt#tttttttttttWccccc######",
+  "######cccccWtttttttttttttttttttttttttttttttt########################################tttttttttt#ttttttttt#tttttttttttWccccc######",
+  "######ccccc#tttttttttttttttttttttttttttttttt########################################tttttttttt#ttttttttt#ttttttttttt#ccccc######",
+  "######ccccc#tttt######t#######t######ttttttt########################################tttttttttt#ttttttttt#ttttttttttt#ccccc######",
+  "############tttttttttttttttttttttttttttttttt########################################tttttttttt#ttttttttt#ttttttttttt############",
+  "############tttttttttttttttttttttttttttttttt########################################tttttttttt#ttttttttt#ttttttttttt############",
+  "############tttttttttttttttttttttttttttttttt############################################tt########tt########tt##################",
+  "############tttttttttttttttttttttttttttttttt########################################tttttttttttttttttttttttttttttttt############",
+  "######ccccc#tttttttttttttttttttttttttttttttt########################################tttttttttttttttttttttttttttttttt#ccccc######",
+  "######cccccWtttttttttttttttttttttttttttttttt########################################ttttttttttttttttttttttttttttttttWccccc######",
+  "######cccccWtttttttttttttttttttttttttttttttt########################################ttttttttttttttttttttttttttttttttWccccc######",
+  "######ccccc#tttttttttttttttttttttttttttttttt########################################tttttttttttttttttttttttttttttttt#ccccc######",
+  "######ccccc#tttttttttttttttttttttttttttttttt########################################tttttttttttttttttttttttttttttttt#ccccc######",
+  "############tttttttttttttttttttttttttttttttt########################################tttttttttttttttttttttttttttttttt############",
+  "############tttttttttttttttttttttttttttttttt########################################tttttttttttttttttttttttttttttttt############",
+  "############tttttttttttttttttttttttttttttttt########################################tttttttttttttttttttttttttttttttt############",
+  "##############################DDD###############################################################DDD#############################",
+  "##############################DDD###############################################################DDD#############################",
+  "##############################DDD###############################################################DDD#############################",
+  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmm########mmmmmmmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmm#mmm########mmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
+  "##############################################################DDD###############################################################",
+  "##############################################################DDD###############################################################",
+  "##############################################################DDD###############################################################",
+  "################uuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu################",
+  "################uuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu################",
+  "################uuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu################",
+  "################uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu################",
+  "########################uuu#######################uuu#######################uuu#####################uuu#########################",
+  "################uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuu################",
+  "################uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuu################",
+  "################uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuu################",
+  "################uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuu################",
+  "################uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu################",
+  "######################################################################################DDD#######################################",
+  "######################################################################################DDD#######################################",
+  "####################################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm####################################",
+  "####################################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm####################################",
+  "####################################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm####################################",
+  "####################################mmmmmmmmmm##mmmmmmmmmmmm########mmmmmmmmmmmm##mmmmmmmmmm####################################",
+  "####################################mmmmmmmmmm##mmmmmmmmmmmm########mmmmmmmmmmmm##mmmmmmmmmm####################################",
+  "####################################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm####################################",
+  "####################################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm####################################",
+  "####################################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm####################################",
+  "####################################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm####################################",
+  "################################################################################################################################",
+  "################################################################################################################################"
+ ],
+ "start_area": "hall",
+ "player_start": {
+  "x": 64.5,
+  "z": 42.5
+ },
+ "outside_darkness": 0.82,
+ "areas": [
+  {
+   "id": "hall",
+   "name": "Hall Central",
+   "darkness": 0.64,
+   "rects": [
+    {
+     "x": 40,
+     "y": 28,
+     "w": 48,
+     "h": 28
+    }
+   ]
+  },
+  {
+   "id": "platform",
+   "name": "Plataforma Norte",
+   "darkness": 0.68,
+   "rects": [
+    {
+     "x": 16,
+     "y": 4,
+     "w": 96,
+     "h": 22
+    }
+   ]
+  },
+  {
+   "id": "ticket",
+   "name": "Bilheteria",
+   "darkness": 0.72,
+   "rects": [
+    {
+     "x": 12,
+     "y": 58,
+     "w": 32,
+     "h": 20
+    }
+   ]
+  },
+  {
+   "id": "shops",
+   "name": "Lojas",
+   "darkness": 0.8,
+   "rects": [
+    {
+     "x": 84,
+     "y": 58,
+     "w": 32,
+     "h": 20
+    }
+   ]
+  },
+  {
+   "id": "tech",
+   "name": "Área Técnica",
+   "darkness": 0.78,
+   "rects": [
+    {
+     "x": 24,
+     "y": 81,
+     "w": 80,
+     "h": 14
+    }
+   ]
+  },
+  {
+   "id": "tunnels",
+   "name": "Túneis",
+   "darkness": 0.9,
+   "rects": [
+    {
+     "x": 16,
+     "y": 98,
+     "w": 96,
+     "h": 10
+    }
+   ]
+  },
+  {
+   "id": "maintenance",
+   "name": "Manutenção",
+   "darkness": 0.8,
+   "rects": [
+    {
+     "x": 36,
+     "y": 110,
+     "w": 56,
+     "h": 9
+    }
+   ]
+  }
+ ],
+ "doors": [
+  {
+   "id": "door_hall_ticket",
+   "rect": {
+    "x": 41,
+    "y": 56,
+    "w": 3,
+    "h": 2
+   },
+   "cost": 750,
+   "areas": [
+    "hall",
+    "ticket"
+   ]
+  },
+  {
+   "id": "door_hall_shops",
+   "rect": {
+    "x": 84,
+    "y": 56,
+    "w": 3,
+    "h": 2
+   },
+   "cost": 1000,
+   "areas": [
+    "hall",
+    "shops"
+   ]
+  },
+  {
+   "id": "door_hall_platform",
+   "rect": {
+    "x": 62,
+    "y": 26,
+    "w": 4,
+    "h": 2
+   },
+   "cost": 1500,
+   "areas": [
+    "hall",
+    "platform"
+   ]
+  },
+  {
+   "id": "door_ticket_tech",
+   "rect": {
+    "x": 30,
+    "y": 78,
+    "w": 3,
+    "h": 3
+   },
+   "cost": 1500,
+   "areas": [
+    "ticket",
+    "tech"
+   ]
+  },
+  {
+   "id": "door_shops_tech",
+   "rect": {
+    "x": 96,
+    "y": 78,
+    "w": 3,
+    "h": 3
+   },
+   "cost": 2000,
+   "areas": [
+    "shops",
+    "tech"
+   ]
+  },
+  {
+   "id": "door_tech_tunnels",
+   "rect": {
+    "x": 62,
+    "y": 95,
+    "w": 3,
+    "h": 3
+   },
+   "cost": 2500,
+   "areas": [
+    "tech",
+    "tunnels"
+   ]
+  },
+  {
+   "id": "door_tunnels_maint",
+   "rect": {
+    "x": 86,
+    "y": 108,
+    "w": 3,
+    "h": 2
+   },
+   "cost": 3000,
+   "areas": [
+    "tunnels",
+    "maintenance"
+   ]
+  }
+ ],
+ "windows": [
+  {
+   "id": "win_hall_w1",
+   "rect": {
+    "x": 39,
+    "y": 32,
+    "w": 1,
+    "h": 2
+   },
+   "area": "hall"
+  },
+  {
+   "id": "win_hall_w2",
+   "rect": {
+    "x": 39,
+    "y": 47,
+    "w": 1,
+    "h": 2
+   },
+   "area": "hall"
+  },
+  {
+   "id": "win_hall_e1",
+   "rect": {
+    "x": 88,
+    "y": 32,
+    "w": 1,
+    "h": 2
+   },
+   "area": "hall"
+  },
+  {
+   "id": "win_hall_e2",
+   "rect": {
+    "x": 88,
+    "y": 47,
+    "w": 1,
+    "h": 2
+   },
+   "area": "hall"
+  },
+  {
+   "id": "win_ticket_1",
+   "rect": {
+    "x": 11,
+    "y": 62,
+    "w": 1,
+    "h": 2
+   },
+   "area": "ticket"
+  },
+  {
+   "id": "win_ticket_2",
+   "rect": {
+    "x": 11,
+    "y": 71,
+    "w": 1,
+    "h": 2
+   },
+   "area": "ticket"
+  },
+  {
+   "id": "win_shops_1",
+   "rect": {
+    "x": 116,
+    "y": 62,
+    "w": 1,
+    "h": 2
+   },
+   "area": "shops"
+  },
+  {
+   "id": "win_shops_2",
+   "rect": {
+    "x": 116,
+    "y": 71,
+    "w": 1,
+    "h": 2
+   },
+   "area": "shops"
+  }
+ ],
+ "spawns": [
+  {
+   "id": "H1",
+   "x": 36.5,
+   "z": 33.5,
+   "area": "hall",
+   "min_round": 1
+  },
+  {
+   "id": "H2",
+   "x": 36.5,
+   "z": 48.5,
+   "area": "hall",
+   "min_round": 1
+  },
+  {
+   "id": "H3",
+   "x": 91.5,
+   "z": 33.5,
+   "area": "hall",
+   "min_round": 1
+  },
+  {
+   "id": "H4",
+   "x": 91.5,
+   "z": 48.5,
+   "area": "hall",
+   "min_round": 1
+  },
+  {
+   "id": "P1",
+   "x": 17.5,
+   "z": 13.5,
+   "area": "platform",
+   "min_round": 1
+  },
+  {
+   "id": "P2",
+   "x": 110.5,
+   "z": 14.5,
+   "area": "platform",
+   "min_round": 1
+  },
+  {
+   "id": "P3",
+   "x": 18.5,
+   "z": 6.5,
+   "area": "platform",
+   "min_round": 1
+  },
+  {
+   "id": "P4",
+   "x": 109.5,
+   "z": 6.5,
+   "area": "platform",
+   "min_round": 1
+  },
+  {
+   "id": "B1",
+   "x": 8.5,
+   "z": 63.5,
+   "area": "ticket",
+   "min_round": 1
+  },
+  {
+   "id": "B2",
+   "x": 8.5,
+   "z": 72.5,
+   "area": "ticket",
+   "min_round": 1
+  },
+  {
+   "id": "L1",
+   "x": 119.5,
+   "z": 63.5,
+   "area": "shops",
+   "min_round": 1
+  },
+  {
+   "id": "L2",
+   "x": 119.5,
+   "z": 72.5,
+   "area": "shops",
+   "min_round": 1
+  },
+  {
+   "id": "T1",
+   "x": 25.5,
+   "z": 82.5,
+   "area": "tech",
+   "min_round": 1
+  },
+  {
+   "id": "T2",
+   "x": 102.5,
+   "z": 82.5,
+   "area": "tech",
+   "min_round": 1
+  },
+  {
+   "id": "T3",
+   "x": 26.5,
+   "z": 93.5,
+   "area": "tech",
+   "min_round": 1
+  },
+  {
+   "id": "T4",
+   "x": 101.5,
+   "z": 93.5,
+   "area": "tech",
+   "min_round": 1
+  },
+  {
+   "id": "U1",
+   "x": 18.5,
+   "z": 100.5,
+   "area": "tunnels",
+   "min_round": 1
+  },
+  {
+   "id": "U2",
+   "x": 109.5,
+   "z": 100.5,
+   "area": "tunnels",
+   "min_round": 1
+  },
+  {
+   "id": "U3",
+   "x": 18.5,
+   "z": 105.5,
+   "area": "tunnels",
+   "min_round": 1
+  },
+  {
+   "id": "U4",
+   "x": 109.5,
+   "z": 105.5,
+   "area": "tunnels",
+   "min_round": 1
+  },
+  {
+   "id": "U5",
+   "x": 44.5,
+   "z": 100.5,
+   "area": "tunnels",
+   "min_round": 1
+  },
+  {
+   "id": "U6",
+   "x": 84.5,
+   "z": 105.5,
+   "area": "tunnels",
+   "min_round": 1
+  },
+  {
+   "id": "M1",
+   "x": 38.5,
+   "z": 111.5,
+   "area": "maintenance",
+   "min_round": 1
+  },
+  {
+   "id": "M2",
+   "x": 89.5,
+   "z": 117.5,
+   "area": "maintenance",
+   "min_round": 1
+  }
+ ],
+ "stations": [
+  {
+   "type": "weapon",
+   "weaponId": "glock",
+   "tx": 56,
+   "ty": 40,
+   "x": 56.5,
+   "z": 40.5
+  },
+  {
+   "type": "ammo",
+   "tx": 71,
+   "ty": 40,
+   "x": 71.5,
+   "z": 40.5
+  },
+  {
+   "type": "weapon",
+   "weaponId": "mp5",
+   "tx": 26,
+   "ty": 74,
+   "x": 26.5,
+   "z": 74.5
+  },
+  {
+   "type": "weapon",
+   "weaponId": "pump",
+   "tx": 18,
+   "ty": 60,
+   "x": 18.5,
+   "z": 60.5
+  },
+  {
+   "type": "weapon",
+   "weaponId": "vector",
+   "tx": 99,
+   "ty": 62,
+   "x": 99.5,
+   "z": 62.5
+  },
+  {
+   "type": "weapon",
+   "weaponId": "m4",
+   "tx": 110,
+   "ty": 74,
+   "x": 110.5,
+   "z": 74.5
+  },
+  {
+   "type": "ammo",
+   "tx": 90,
+   "ty": 74,
+   "x": 90.5,
+   "z": 74.5
+  },
+  {
+   "type": "weapon",
+   "weaponId": "ak",
+   "tx": 52,
+   "ty": 22,
+   "x": 52.5,
+   "z": 22.5
+  },
+  {
+   "type": "ammo",
+   "tx": 76,
+   "ty": 22,
+   "x": 76.5,
+   "z": 22.5
+  },
+  {
+   "type": "weapon",
+   "weaponId": "combat_shotgun",
+   "tx": 66.5,
+   "ty": 6,
+   "x": 67,
+   "z": 6.5
+  },
+  {
+   "type": "ammo",
+   "tx": 48,
+   "ty": 92,
+   "x": 48.5,
+   "z": 92.5
+  }
+ ],
+ "machines": [
+  {
+   "type": "mystery_box",
+   "tx": 69,
+   "ty": 30,
+   "x": 69.5,
+   "z": 30.5
+  },
+  {
+   "type": "weapon_lab",
+   "tx": 56,
+   "ty": 111,
+   "x": 56.5,
+   "z": 111.5
+  },
+  {
+   "type": "perk",
+   "perkId": "fortify",
+   "tx": 42,
+   "ty": 40,
+   "x": 42.5,
+   "z": 40.5
+  },
+  {
+   "type": "perk",
+   "perkId": "quick_revive",
+   "tx": 85,
+   "ty": 40,
+   "x": 85.5,
+   "z": 40.5
+  },
+  {
+   "type": "perk",
+   "perkId": "quick_hands",
+   "tx": 41,
+   "ty": 69,
+   "x": 41.5,
+   "z": 69.5
+  },
+  {
+   "type": "perk",
+   "perkId": "sprint",
+   "tx": 108,
+   "ty": 59,
+   "x": 108.5,
+   "z": 59.5
+  },
+  {
+   "type": "perk",
+   "perkId": "deadeye",
+   "tx": 18,
+   "ty": 20,
+   "x": 18.5,
+   "z": 20.5
+  },
+  {
+   "type": "perk",
+   "perkId": "adrenaline",
+   "tx": 82,
+   "ty": 82,
+   "x": 82.5,
+   "z": 82.5
+  },
+  {
+   "type": "perk",
+   "perkId": "overload",
+   "tx": 90,
+   "ty": 112,
+   "x": 90.5,
+   "z": 112.5
+  }
+ ],
+ "box_spots": [
+  {
+   "x": 69.5,
+   "z": 30.5,
+   "area": "hall"
+  },
+  {
+   "x": 53.5,
+   "z": 30.1,
+   "area": "hall"
+  },
+  {
+   "x": 85.5,
+   "z": 36.5,
+   "area": "hall"
+  },
+  {
+   "x": 64.5,
+   "z": 54.5,
+   "area": "hall"
+  },
+  {
+   "x": 46.5,
+   "z": 21.5,
+   "area": "platform"
+  },
+  {
+   "x": 35.5,
+   "z": 74.5,
+   "area": "ticket"
+  },
+  {
+   "x": 108.5,
+   "z": 71.5,
+   "area": "shops"
+  },
+  {
+   "x": 80.5,
+   "z": 89,
+   "area": "tech"
+  },
+  {
+   "x": 58.5,
+   "z": 100,
+   "area": "tunnels"
+  },
+  {
+   "x": 64.5,
+   "z": 111.5,
+   "area": "maintenance"
+  }
+ ],
+ "boss_spawns": [
+  {
+   "x": 64.5,
+   "z": 44.5
+  },
+  {
+   "x": 55.5,
+   "z": 42.5
+  },
+  {
+   "x": 73.5,
+   "z": 42.5
+  },
+  {
+   "x": 64.5,
+   "z": 49.5
+  }
+ ],
+ "lamps": [
+  {
+   "x": 52.5,
+   "z": 38.5,
+   "radius": 6.563,
+   "intensity": 0.72,
+   "flicker": 0.1,
+   "color": 16766624
+  },
+  {
+   "x": 76.5,
+   "z": 38.5,
+   "radius": 6.563,
+   "intensity": 0.7,
+   "flicker": 0.2,
+   "color": 16766624
+  },
+  {
+   "x": 64.5,
+   "z": 50.5,
+   "radius": 7.188,
+   "intensity": 0.75,
+   "flicker": 0.05,
+   "color": 16766624
+  },
+  {
+   "x": 64.5,
+   "z": 30.5,
+   "radius": 5,
+   "intensity": 0.5,
+   "flicker": 0.5,
+   "color": 16766624
+  },
+  {
+   "x": 30.5,
+   "z": 21.5,
+   "radius": 6.25,
+   "intensity": 0.65,
+   "flicker": 0.2,
+   "color": 16766624
+  },
+  {
+   "x": 52.5,
+   "z": 21.5,
+   "radius": 6.25,
+   "intensity": 0.6,
+   "flicker": 0.1,
+   "color": 16766624
+  },
+  {
+   "x": 76.5,
+   "z": 21.5,
+   "radius": 6.25,
+   "intensity": 0.6,
+   "flicker": 0.5,
+   "color": 16766624
+  },
+  {
+   "x": 98.5,
+   "z": 21.5,
+   "radius": 6.25,
+   "intensity": 0.65,
+   "flicker": 0.15,
+   "color": 16766624
+  },
+  {
+   "x": 34.5,
+   "z": 10.5,
+   "radius": 5.313,
+   "intensity": 0.5,
+   "flicker": 0.3,
+   "color": 16766624
+  },
+  {
+   "x": 64.5,
+   "z": 10.5,
+   "radius": 5.313,
+   "intensity": 0.55,
+   "flicker": 0.1,
+   "color": 16766624
+  },
+  {
+   "x": 94.5,
+   "z": 10.5,
+   "radius": 5.313,
+   "intensity": 0.5,
+   "flicker": 0.6,
+   "color": 16766624
+  },
+  {
+   "x": 20.5,
+   "z": 61.5,
+   "radius": 5.313,
+   "intensity": 0.55,
+   "flicker": 0.3,
+   "color": 16766624
+  },
+  {
+   "x": 34.5,
+   "z": 72.5,
+   "radius": 5.625,
+   "intensity": 0.6,
+   "flicker": 0.6,
+   "color": 16766624
+  },
+  {
+   "x": 89.5,
+   "z": 62.5,
+   "radius": 4.375,
+   "intensity": 0.5,
+   "flicker": 0.2,
+   "color": 16766624
+  },
+  {
+   "x": 99.5,
+   "z": 62.5,
+   "radius": 4.375,
+   "intensity": 0.45,
+   "flicker": 0.8,
+   "color": 16766624
+  },
+  {
+   "x": 109.5,
+   "z": 62.5,
+   "radius": 4.375,
+   "intensity": 0.5,
+   "flicker": 0.3,
+   "color": 16766624
+  },
+  {
+   "x": 100.5,
+   "z": 73.5,
+   "radius": 5.625,
+   "intensity": 0.5,
+   "flicker": 0.4,
+   "color": 16766624
+  },
+  {
+   "x": 32.5,
+   "z": 84.5,
+   "radius": 4.688,
+   "intensity": 0.55,
+   "flicker": 0.2,
+   "color": 16766624
+  },
+  {
+   "x": 64.5,
+   "z": 88.5,
+   "radius": 5,
+   "intensity": 0.6,
+   "flicker": 0.6,
+   "color": 16766624
+  },
+  {
+   "x": 96.5,
+   "z": 84.5,
+   "radius": 4.688,
+   "intensity": 0.5,
+   "flicker": 0.3,
+   "color": 16766624
+  },
+  {
+   "x": 40.5,
+   "z": 100.5,
+   "radius": 3.75,
+   "intensity": 0.45,
+   "flicker": 0.7,
+   "color": 16766624
+  },
+  {
+   "x": 88.5,
+   "z": 105.5,
+   "radius": 3.75,
+   "intensity": 0.45,
+   "flicker": 0.5,
+   "color": 16766624
+  },
+  {
+   "x": 50.5,
+   "z": 114.5,
+   "radius": 5.625,
+   "intensity": 0.6,
+   "flicker": 0.2,
+   "color": 16766624
+  },
+  {
+   "x": 78.5,
+   "z": 114.5,
+   "radius": 5.625,
+   "intensity": 0.6,
+   "flicker": 0.4,
+   "color": 16766624
+  }
+ ],
+ "interactions": [
+  {
+   "type": "breaker",
+   "tx": 64,
+   "ty": 86.4
+  },
+  {
+   "type": "power",
+   "tx": 32.4,
+   "ty": 86
+  },
+  {
+   "type": "alarm",
+   "tx": 46,
+   "ty": 28.7
+  },
+  {
+   "type": "train",
+   "tx": 55,
+   "ty": 16.4
+  },
+  {
+   "type": "trap",
+   "tx": 60,
+   "ty": 28.7,
+   "zone": {
+    "x": 61,
+    "y": 28,
+    "w": 6,
+    "h": 2
+   }
+  },
+  {
+   "type": "trap",
+   "tx": 41.4,
+   "ty": 103.3,
+   "zone": {
+    "x": 45,
+    "y": 103,
+    "w": 5,
+    "h": 5
+   }
+  }
+ ],
+ "props": [
+  {
+   "type": "bench",
+   "x": 52.5,
+   "z": 46.5,
+   "angle": 0,
+   "body": {
+    "w": 2,
+    "d": 0.75,
+    "ox": -0.031,
+    "oz": -0.047
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bench",
+   "x": 76.5,
+   "z": 46.5,
+   "angle": 0,
+   "body": {
+    "w": 2,
+    "d": 0.75,
+    "ox": -0.031,
+    "oz": -0.047
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bench",
+   "x": 58.5,
+   "z": 52.5,
+   "angle": 0,
+   "body": {
+    "w": 2,
+    "d": 0.75,
+    "ox": -0.031,
+    "oz": -0.047
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bench",
+   "x": 70.5,
+   "z": 52.5,
+   "angle": 0,
+   "body": {
+    "w": 2,
+    "d": 0.75,
+    "ox": -0.031,
+    "oz": -0.047
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 45.5,
+   "z": 30.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 83.5,
+   "z": 30.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 45.5,
+   "z": 54.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 83.5,
+   "z": 54.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "suitcase",
+   "x": 60.5,
+   "z": 45.5,
+   "angle": 25,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bench",
+   "x": 36.5,
+   "z": 23.5,
+   "angle": 0,
+   "body": {
+    "w": 2,
+    "d": 0.75,
+    "ox": -0.031,
+    "oz": -0.047
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bench",
+   "x": 88.5,
+   "z": 23.5,
+   "angle": 0,
+   "body": {
+    "w": 2,
+    "d": 0.75,
+    "ox": -0.031,
+    "oz": -0.047
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bench",
+   "x": 104.5,
+   "z": 23.5,
+   "angle": 0,
+   "body": {
+    "w": 2,
+    "d": 0.75,
+    "ox": -0.031,
+    "oz": -0.047
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 24.5,
+   "z": 24.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 70.5,
+   "z": 24.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "suitcase",
+   "x": 40.5,
+   "z": 20.5,
+   "angle": -30,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "suitcase",
+   "x": 90.5,
+   "z": 21.5,
+   "angle": 60,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "wagon_seat",
+   "x": 60,
+   "z": 5.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "wagon_seat",
+   "x": 60,
+   "z": 7.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "wagon_seat",
+   "x": 69,
+   "z": 7.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 14.5,
+   "z": 76.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 42.5,
+   "z": 76.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "suitcase",
+   "x": 30.5,
+   "z": 70.5,
+   "angle": 10,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "barrel",
+   "x": 38.5,
+   "z": 60.5,
+   "angle": 0,
+   "body": {
+    "w": 0.781,
+    "d": 0.781,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "crate",
+   "x": 86.5,
+   "z": 59.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "crate",
+   "x": 87.7,
+   "z": 60.7,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "crate",
+   "x": 113.5,
+   "z": 59.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 100.5,
+   "z": 76.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "bench",
+   "x": 104.5,
+   "z": 74.5,
+   "angle": 0,
+   "body": {
+    "w": 2,
+    "d": 0.75,
+    "ox": -0.031,
+    "oz": -0.047
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "generator",
+   "x": 30.5,
+   "z": 86.5,
+   "angle": 0,
+   "body": {
+    "w": 1.5,
+    "d": 0.938,
+    "ox": -0.062,
+    "oz": -0.062
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "generator",
+   "x": 62.5,
+   "z": 84.5,
+   "angle": 0,
+   "body": {
+    "w": 1.5,
+    "d": 0.938,
+    "ox": -0.062,
+    "oz": -0.062
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "generator",
+   "x": 94.5,
+   "z": 90.5,
+   "angle": 0,
+   "body": {
+    "w": 1.5,
+    "d": 0.938,
+    "ox": -0.062,
+    "oz": -0.062
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "crate",
+   "x": 48.5,
+   "z": 82.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "crate",
+   "x": 49.7,
+   "z": 83.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "crate",
+   "x": 80.5,
+   "z": 92.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "barrel",
+   "x": 66.5,
+   "z": 92.5,
+   "angle": 0,
+   "body": {
+    "w": 0.781,
+    "d": 0.781,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "barrel",
+   "x": 67.6,
+   "z": 91.5,
+   "angle": 0,
+   "body": {
+    "w": 0.781,
+    "d": 0.781,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "barrel",
+   "x": 100.5,
+   "z": 86.5,
+   "angle": 0,
+   "body": {
+    "w": 0.781,
+    "d": 0.781,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "barrel",
+   "x": 30.5,
+   "z": 100.5,
+   "angle": 0,
+   "body": {
+    "w": 0.781,
+    "d": 0.781,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "barrel",
+   "x": 98.5,
+   "z": 105.5,
+   "angle": 0,
+   "body": {
+    "w": 0.781,
+    "d": 0.781,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "crate",
+   "x": 58.5,
+   "z": 105.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "generator",
+   "x": 54.5,
+   "z": 116.5,
+   "angle": 0,
+   "body": {
+    "w": 1.5,
+    "d": 0.938,
+    "ox": -0.062,
+    "oz": -0.062
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "crate",
+   "x": 70.5,
+   "z": 111.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "crate",
+   "x": 71.7,
+   "z": 112.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "barrel",
+   "x": 86.5,
+   "z": 116.5,
+   "angle": 0,
+   "body": {
+    "w": 0.781,
+    "d": 0.781,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "luggage_cart",
+   "x": 47,
+   "z": 51.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "luggage_cart",
+   "x": 82,
+   "z": 42.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "sign_stand",
+   "x": 58,
+   "z": 31,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 0.375,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 2.188,
+    "intensity": 0.4,
+    "color": 6086794
+   }
+  },
+  {
+   "type": "sign_stand",
+   "x": 83.5,
+   "z": 51,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 0.375,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 2.188,
+    "intensity": 0.4,
+    "color": 6086794
+   }
+  },
+  {
+   "type": "extinguisher",
+   "x": 40.8,
+   "z": 44.5,
+   "angle": 0,
+   "body": {
+    "w": 0.563,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "extinguisher",
+   "x": 87.7,
+   "z": 38.5,
+   "angle": 0,
+   "body": {
+    "w": 0.563,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "cables",
+   "x": 72.5,
+   "z": 54.9,
+   "angle": 4,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "barrier",
+   "x": 20,
+   "z": 17.1,
+   "angle": 0,
+   "body": {
+    "w": 1.875,
+    "d": 0.438,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "barrier",
+   "x": 108,
+   "z": 17.1,
+   "angle": 0,
+   "body": {
+    "w": 1.875,
+    "d": 0.438,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "sign_stand",
+   "x": 36.5,
+   "z": 18,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 0.375,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 2.188,
+    "intensity": 0.4,
+    "color": 6086794
+   }
+  },
+  {
+   "type": "sign_stand",
+   "x": 92.5,
+   "z": 18,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 0.375,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 2.188,
+    "intensity": 0.4,
+    "color": 6086794
+   }
+  },
+  {
+   "type": "bench",
+   "x": 40.5,
+   "z": 10.5,
+   "angle": 0,
+   "body": {
+    "w": 2,
+    "d": 0.75,
+    "ox": -0.031,
+    "oz": -0.047
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bench",
+   "x": 88.5,
+   "z": 10.5,
+   "angle": 0,
+   "body": {
+    "w": 2,
+    "d": 0.75,
+    "ox": -0.031,
+    "oz": -0.047
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 50.5,
+   "z": 10.1,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "suitcase",
+   "x": 78.5,
+   "z": 10.7,
+   "angle": 15,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "extinguisher",
+   "x": 16.8,
+   "z": 24.5,
+   "angle": 0,
+   "body": {
+    "w": 0.563,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "desk_computer",
+   "x": 26,
+   "z": 62.8,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 1.875,
+    "intensity": 0.35,
+    "color": 7323880
+   }
+  },
+  {
+   "type": "desk_computer",
+   "x": 34,
+   "z": 62.8,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 1.875,
+    "intensity": 0.35,
+    "color": 7323880
+   }
+  },
+  {
+   "type": "chair",
+   "x": 26,
+   "z": 60.8,
+   "angle": 180,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "chair",
+   "x": 34,
+   "z": 60.9,
+   "angle": 170,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "chair",
+   "x": 16.5,
+   "z": 70.5,
+   "angle": 40,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "sign_stand",
+   "x": 21.5,
+   "z": 77,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 0.375,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 2.188,
+    "intensity": 0.4,
+    "color": 6086794
+   }
+  },
+  {
+   "type": "vitrine",
+   "x": 89.5,
+   "z": 66.5,
+   "angle": 0,
+   "body": {
+    "w": 1.875,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 2.344,
+    "intensity": 0.4,
+    "color": 16769192
+   }
+  },
+  {
+   "type": "vitrine",
+   "x": 99.5,
+   "z": 66.5,
+   "angle": 0,
+   "body": {
+    "w": 1.875,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 2.344,
+    "intensity": 0.4,
+    "color": 16769192
+   }
+  },
+  {
+   "type": "vitrine",
+   "x": 111.5,
+   "z": 66.5,
+   "angle": 0,
+   "body": {
+    "w": 1.875,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 2.344,
+    "intensity": 0.4,
+    "color": 16769192
+   }
+  },
+  {
+   "type": "extinguisher",
+   "x": 84.8,
+   "z": 71.5,
+   "angle": 0,
+   "body": {
+    "w": 0.563,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "locker",
+   "x": 35,
+   "z": 81.9,
+   "angle": 0,
+   "body": {
+    "w": 1.625,
+    "d": 0.688,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "locker",
+   "x": 67.5,
+   "z": 81.9,
+   "angle": 0,
+   "body": {
+    "w": 1.625,
+    "d": 0.688,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "cables",
+   "x": 50.5,
+   "z": 91.5,
+   "angle": -8,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "cables",
+   "x": 84.5,
+   "z": 89,
+   "angle": 12,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "floor_pipe",
+   "x": 64.5,
+   "z": 94.9,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "floor_pipe",
+   "x": 97.5,
+   "z": 94.9,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "extinguisher",
+   "x": 57.8,
+   "z": 82.5,
+   "angle": 0,
+   "body": {
+    "w": 0.563,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "barrier",
+   "x": 44.5,
+   "z": 106,
+   "angle": 0,
+   "body": {
+    "w": 1.875,
+    "d": 0.438,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "barrier",
+   "x": 86.5,
+   "z": 100,
+   "angle": 0,
+   "body": {
+    "w": 1.875,
+    "d": 0.438,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "cables",
+   "x": 70.5,
+   "z": 101,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "cables",
+   "x": 30.5,
+   "z": 106.5,
+   "angle": 180,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "pallet",
+   "x": 41,
+   "z": 117,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 1.25,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "pallet",
+   "x": 76.5,
+   "z": 117,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 1.25,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "locker",
+   "x": 47,
+   "z": 111.1,
+   "angle": 0,
+   "body": {
+    "w": 1.625,
+    "d": 0.688,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "floor_pipe",
+   "x": 64.5,
+   "z": 118.1,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "extinguisher",
+   "x": 36.8,
+   "z": 113.5,
+   "angle": 0,
+   "body": {
+    "w": 0.563,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  }
+ ]
+}

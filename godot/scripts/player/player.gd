@@ -25,6 +25,9 @@ var _clock := 0.0
 var _invulnerable_until := 0.0
 var _last_hurt_at := -INF
 var _firing := false
+## Interagível mais perto (porta, compra...) e o último texto mostrado na HUD.
+var _interactable: Node3D
+var _last_prompt := ""
 
 @onready var pivot: Node3D = $Pivot
 @onready var inventory: WeaponInventory = $Pivot/Hand
@@ -65,6 +68,7 @@ func _physics_process(delta: float) -> void:
 	if controlled:
 		_read_input()
 	_regenerate(delta)
+	_update_interaction()
 	_move(delta)
 	_face_aim()
 
@@ -81,6 +85,13 @@ func fire() -> Array[DamageInfo]:
 	_firing = true
 	_face_aim()
 	return weapon.shoot(get_world_3d().direct_space_state, muzzle.global_position, aim_point, [get_rid()], self)
+
+
+## Usa o interagível mais perto (tecla E). Devolve true se algo aconteceu.
+func interact() -> bool:
+	if _interactable == null or not is_instance_valid(_interactable):
+		return false
+	return _interactable.call(&"interact", self)
 
 
 ## Golpe de faca na direção da mira.
@@ -109,6 +120,8 @@ func _read_input() -> void:
 		weapon.hold_trigger()  # minigun gira o cano enquanto o gatilho está seguro
 	if Input.is_action_just_pressed(&"reload"):
 		weapon.start_reload()
+	if Input.is_action_just_pressed(&"interact"):
+		interact()
 	if Input.is_action_just_pressed(&"melee"):
 		knife()
 	if Input.is_action_just_pressed(&"switch_weapon") or Input.is_action_just_pressed(&"weapon_next") or Input.is_action_just_pressed(&"weapon_prev"):
@@ -148,6 +161,26 @@ func _speed_factor(direction: Vector3) -> float:
 	if _firing:
 		factor *= weapon.data.move_multiplier_while_firing
 	return factor
+
+
+## Acha o interagível mais perto no alcance dele e atualiza o texto da HUD.
+func _update_interaction() -> void:
+	_interactable = null
+	var best := INF
+	for node in get_tree().get_nodes_in_group(&"interactable"):
+		var target := node as Node3D
+		if target == null:
+			continue
+		var offset := target.global_position - global_position
+		offset.y = 0.0
+		var distance := offset.length()
+		if distance <= float(target.get(&"interaction_radius")) and distance < best:
+			best = distance
+			_interactable = target
+	var prompt: String = _interactable.call(&"get_interaction_prompt", self) if _interactable else ""
+	if prompt != _last_prompt:
+		_last_prompt = prompt
+		Events.interaction_prompt.emit(prompt)
 
 
 func _regenerate(delta: float) -> void:
@@ -201,6 +234,7 @@ func _on_ammo_changed(magazine: int, reserve: int, reloading: bool) -> void:
 
 func _on_health_died(info: DamageInfo) -> void:
 	super(info)
+	Events.interaction_prompt.emit("")
 	# Cai de lado.
 	create_tween().tween_property(pivot, "rotation:z", deg_to_rad(80.0), 0.4)
 	Events.player_died.emit()

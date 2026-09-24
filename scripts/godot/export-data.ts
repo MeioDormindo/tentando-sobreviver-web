@@ -14,6 +14,7 @@ import { headshotConfig, economyConfig } from '../../src/config/economy.config';
 import { playerConfig } from '../../src/config/player.config';
 import { waveConfig } from '../../src/config/waves.config';
 import { zombies as zombieTypes } from '../../src/config/zombies.config';
+import { exportMaps } from './export-maps';
 
 const OUT = 'godot/data';
 const PX = 32;
@@ -182,4 +183,5 @@ exportWeapons();
 exportKnifeAndPlayer();
 exportRoundsAndPoints();
 exportZombies();
+exportMaps();
 console.log('Pronto.');

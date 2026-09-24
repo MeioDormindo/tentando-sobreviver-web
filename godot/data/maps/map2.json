@@ -1,0 +1,2218 @@
+{
+ "id": "map2",
+ "width": 120,
+ "height": 110,
+ "legend": {
+  "wall": "#",
+  "train": "T",
+  "door": "D",
+  "window": "W",
+  "floors": {
+   "terminal": "t",
+   "concrete": "c",
+   "metal": "m",
+   "tracks": "r",
+   "tunnel": "u",
+   "wagon": "w",
+   "hospital": "h",
+   "linoleum": "l",
+   "morgue": "g"
+  }
+ },
+ "cells": [
+  "########################################################################################################################",
+  "########################################################################################################################",
+  "########################################################################################################################",
+  "########################################################################################################################",
+  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh##lllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
+  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh##lllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
+  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh##lllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
+  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh##lllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
+  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh##lllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
+  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh##lllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
+  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh##lllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
+  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh##lllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
+  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhhDDlllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
+  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhhDDlllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
+  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhhDDlllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
+  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh##lllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
+  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh##llllllllllllllllllllllllllllllllllllllllllllllllllll########",
+  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh##llllllllllllllllllllllllllllllllllllllllllllllllllll########",
+  "########hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh##llllllllllllllllllllllllllllllllllllllllllllllllllll########",
+  "########hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh##llllllllllllllllllllllllllllllllllllllllllllllllllll########",
+  "########hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh##llllllllllllllllllllllllllllllllllllllllllllllllllll########",
+  "########hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh##llllllllllllllllllllllllllllllllllllllllllllllllllll########",
+  "########hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh##llllllllllllllllllllllllllllllllllllllllllllllllllll########",
+  "########hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh##llllllllllllllllllllllllllllllllllllllllllllllllllll########",
+  "########hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh##llllllllllllllllllllllllllllllllllllllllllllllllllll########",
+  "########hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh##llllllllllllllllllllllllllllllllllllllllllllllllllll########",
+  "##############################################DDD#######################DDD#############################################",
+  "##############################################DDD#######################DDD#############################################",
+  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
+  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
+  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
+  "################################ccccc#hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh#ccccc################################",
+  "################################cccccWhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhWccccc################################",
+  "################################cccccWhhhhhhhhhhhhhhhh############hhhhhhhhhhhhhhhhWccccc################################",
+  "################################ccccc#hhhhhhhhhhhhhhhh############hhhhhhhhhhhhhhhh#ccccc################################",
+  "################################ccccc#hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh#ccccc################################",
+  "######################################hhhhhh##hhhhhhhhhhhhhhhhhhhhhhhhhhhh##hhhhhh######################################",
+  "######################################hhhhhh##hhhhhhhhhhhhhhhhhhhhhhhhhhhh##hhhhhh######################################",
+  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
+  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
+  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
+  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
+  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
+  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
+  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
+  "################################ccccc#hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh#ccccc################################",
+  "################################cccccWhhhhhh##hhhhhhhhhhhhhhhhhhhhhhhhhhhh##hhhhhhWccccc################################",
+  "################################cccccWhhhhhh##hhhhhhhhhhhhhhhhhhhhhhhhhhhh##hhhhhhWccccc################################",
+  "################################ccccc#hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh#ccccc################################",
+  "################################ccccc#hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh#ccccc################################",
+  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
+  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
+  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
+  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
+  "##########################################################DDDD##########################################################",
+  "##########################################################DDDD##########################################################",
+  "########llllllllllllllllllllllllllllllll##llllllll#lllllllllllllllllll#lllllll##llllllllllllllllllllllllllllllll########",
+  "########llllllllllllllllllllllllllllllll##llllllll#lllllllllllllllllll#lllllll##llllllllllllllllllllllllllllllll########",
+  "########llllllllllllllllllllllllllllllll##llllllll#lllllllllllllllllll#lllllll##llllllllllllllllllllllllllllllll########",
+  "##ccccc#llllllllllllllllllllllllllllllll##llllllll#lllllllllllllllllll#lllllll##llllllllllllllllllllllllllllllll#ccccc##",
+  "##cccccWllllllllllllllllllllllllllllllll##llllllll#lllllllllllllllllll#lllllll##llllllllllllllllllllllllllllllllWccccc##",
+  "##cccccWllllllllllllllllllllllllllllllll##llllllll#lllllllllllllllllll#lllllll##llllllllllllllllllllllllllllllllWccccc##",
+  "##ccccc#llllllllllllllllllllllllllllllll##llllllll#lllllllllllllllllll#lllllll##llllllllllllllllllllllllllllllll#ccccc##",
+  "##ccccc#llllllllllllllllllllllllllllllll##llllllll#lllllllllllllllllll#lllllll##llllllllllllllllllllllllllllllll#ccccc##",
+  "########llllllllllllllllllllllllllllllllDDllllllllllllllllllllllllllllllllllllDDllllllllllllllllllllllllllllllll########",
+  "########llllllllllllllllllllllllllllllllDDllllllllllllllllllllllllllllllllllllDDllllllllllllllllllllllllllllllll########",
+  "########llllllllllllllllllllllllllllllllDDllllllllllllllll####llllllllllllllllDDllll##########llll##########llll########",
+  "########llllllllllllllllllllllllllllllll##llllllllllllllll####llllllllllllllll##llllllllllllllllllllllllllllllll########",
+  "##ccccc#llllllllllllllllllllllllllllllll##llllllllllllllll####llllllllllllllll##llllllllllllllllllllllllllllllll#ccccc##",
+  "##cccccWllllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllllWccccc##",
+  "##cccccWllllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllllWccccc##",
+  "##ccccc#llllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllll#ccccc##",
+  "##ccccc#llllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllll#ccccc##",
+  "########llllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllll########",
+  "########llllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllll########",
+  "########llllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllll########",
+  "####################DDD#################################DDD###################################DDD#######################",
+  "####################DDD#################################DDD###################################DDD#######################",
+  "########llllllllllllllllllllllllllll##gggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
+  "########llllllllllllllllllllllllllll##gggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
+  "########llllllllllllllllllllllllllll##gggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
+  "########llllllllllllllllllllllllllll##gggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
+  "########llllllllllllllllllllllllllll##gggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
+  "########llllllllllllllllllllllllllll##gggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
+  "########llllllllllllllllllllllllllllDDgggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
+  "########llllllllllllllllllllllllllllDDgggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
+  "########llllllllllllllllllllllllllllDDgggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
+  "########llllllllllllllllllllllllllll##gggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
+  "########llllllllllllllllllllllllllll##gggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
+  "########llllllllllllllllllllllllllll##gggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
+  "########llllllllllllllllllllllllllll##gggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
+  "########llllllllllllllllllllllllllll##gggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
+  "##################################################DDD###############################DDD#################################",
+  "##################################################DDD###############################DDD#################################",
+  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
+  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
+  "########################################################################################################################",
+  "########################################################################################################################"
+ ],
+ "start_area": "reception",
+ "player_start": {
+  "x": 60.5,
+  "z": 44.5
+ },
+ "outside_darkness": 0.84,
+ "areas": [
+  {
+   "id": "reception",
+   "name": "Recepção",
+   "darkness": 0.6,
+   "rects": [
+    {
+     "x": 38,
+     "y": 28,
+     "w": 44,
+     "h": 26
+    }
+   ]
+  },
+  {
+   "id": "surgery",
+   "name": "Centro Cirúrgico",
+   "darkness": 0.76,
+   "rects": [
+    {
+     "x": 8,
+     "y": 4,
+     "w": 50,
+     "h": 22
+    }
+   ]
+  },
+  {
+   "id": "icu",
+   "name": "UTI",
+   "darkness": 0.72,
+   "rects": [
+    {
+     "x": 60,
+     "y": 4,
+     "w": 52,
+     "h": 22
+    }
+   ]
+  },
+  {
+   "id": "ward",
+   "name": "Enfermaria",
+   "darkness": 0.7,
+   "rects": [
+    {
+     "x": 8,
+     "y": 56,
+     "w": 32,
+     "h": 20
+    }
+   ]
+  },
+  {
+   "id": "radiology",
+   "name": "Radiologia",
+   "darkness": 0.78,
+   "rects": [
+    {
+     "x": 42,
+     "y": 56,
+     "w": 36,
+     "h": 20
+    }
+   ]
+  },
+  {
+   "id": "pharmacy",
+   "name": "Farmácia",
+   "darkness": 0.72,
+   "rects": [
+    {
+     "x": 80,
+     "y": 56,
+     "w": 32,
+     "h": 20
+    }
+   ]
+  },
+  {
+   "id": "pediatrics",
+   "name": "Pediatria",
+   "darkness": 0.8,
+   "rects": [
+    {
+     "x": 8,
+     "y": 78,
+     "w": 28,
+     "h": 14
+    }
+   ]
+  },
+  {
+   "id": "morgue",
+   "name": "Necrotério",
+   "darkness": 0.88,
+   "rects": [
+    {
+     "x": 38,
+     "y": 78,
+     "w": 36,
+     "h": 14
+    }
+   ]
+  },
+  {
+   "id": "cafeteria",
+   "name": "Refeitório",
+   "darkness": 0.74,
+   "rects": [
+    {
+     "x": 76,
+     "y": 78,
+     "w": 36,
+     "h": 14
+    }
+   ]
+  },
+  {
+   "id": "lab",
+   "name": "Laboratório",
+   "darkness": 0.86,
+   "rects": [
+    {
+     "x": 24,
+     "y": 94,
+     "w": 72,
+     "h": 14
+    }
+   ]
+  }
+ ],
+ "doors": [
+  {
+   "id": "door_reception_radiology",
+   "rect": {
+    "x": 58,
+    "y": 54,
+    "w": 4,
+    "h": 2
+   },
+   "cost": 750,
+   "areas": [
+    "reception",
+    "radiology"
+   ]
+  },
+  {
+   "id": "door_radiology_ward",
+   "rect": {
+    "x": 40,
+    "y": 64,
+    "w": 2,
+    "h": 3
+   },
+   "cost": 1000,
+   "areas": [
+    "radiology",
+    "ward"
+   ]
+  },
+  {
+   "id": "door_radiology_pharmacy",
+   "rect": {
+    "x": 78,
+    "y": 64,
+    "w": 2,
+    "h": 3
+   },
+   "cost": 1000,
+   "areas": [
+    "radiology",
+    "pharmacy"
+   ]
+  },
+  {
+   "id": "door_reception_surgery",
+   "rect": {
+    "x": 46,
+    "y": 26,
+    "w": 3,
+    "h": 2
+   },
+   "cost": 1500,
+   "areas": [
+    "reception",
+    "surgery"
+   ]
+  },
+  {
+   "id": "door_reception_icu",
+   "rect": {
+    "x": 72,
+    "y": 26,
+    "w": 3,
+    "h": 2
+   },
+   "cost": 1500,
+   "areas": [
+    "reception",
+    "icu"
+   ]
+  },
+  {
+   "id": "door_surgery_icu",
+   "rect": {
+    "x": 58,
+    "y": 12,
+    "w": 2,
+    "h": 3
+   },
+   "cost": 1250,
+   "areas": [
+    "surgery",
+    "icu"
+   ]
+  },
+  {
+   "id": "door_ward_pediatrics",
+   "rect": {
+    "x": 20,
+    "y": 76,
+    "w": 3,
+    "h": 2
+   },
+   "cost": 1250,
+   "areas": [
+    "ward",
+    "pediatrics"
+   ]
+  },
+  {
+   "id": "door_radiology_morgue",
+   "rect": {
+    "x": 56,
+    "y": 76,
+    "w": 3,
+    "h": 2
+   },
+   "cost": 2000,
+   "areas": [
+    "radiology",
+    "morgue"
+   ]
+  },
+  {
+   "id": "door_pharmacy_cafeteria",
+   "rect": {
+    "x": 94,
+    "y": 76,
+    "w": 3,
+    "h": 2
+   },
+   "cost": 1500,
+   "areas": [
+    "pharmacy",
+    "cafeteria"
+   ]
+  },
+  {
+   "id": "door_pediatrics_morgue",
+   "rect": {
+    "x": 36,
+    "y": 84,
+    "w": 2,
+    "h": 3
+   },
+   "cost": 1250,
+   "areas": [
+    "pediatrics",
+    "morgue"
+   ]
+  },
+  {
+   "id": "door_morgue_lab",
+   "rect": {
+    "x": 50,
+    "y": 92,
+    "w": 3,
+    "h": 2
+   },
+   "cost": 3000,
+   "areas": [
+    "morgue",
+    "lab"
+   ]
+  },
+  {
+   "id": "door_cafeteria_lab",
+   "rect": {
+    "x": 84,
+    "y": 92,
+    "w": 3,
+    "h": 2
+   },
+   "cost": 2500,
+   "areas": [
+    "cafeteria",
+    "lab"
+   ]
+  }
+ ],
+ "windows": [
+  {
+   "id": "win_reception_w1",
+   "rect": {
+    "x": 37,
+    "y": 32,
+    "w": 1,
+    "h": 2
+   },
+   "area": "reception"
+  },
+  {
+   "id": "win_reception_w2",
+   "rect": {
+    "x": 37,
+    "y": 46,
+    "w": 1,
+    "h": 2
+   },
+   "area": "reception"
+  },
+  {
+   "id": "win_reception_e1",
+   "rect": {
+    "x": 82,
+    "y": 32,
+    "w": 1,
+    "h": 2
+   },
+   "area": "reception"
+  },
+  {
+   "id": "win_reception_e2",
+   "rect": {
+    "x": 82,
+    "y": 46,
+    "w": 1,
+    "h": 2
+   },
+   "area": "reception"
+  },
+  {
+   "id": "win_ward_1",
+   "rect": {
+    "x": 7,
+    "y": 60,
+    "w": 1,
+    "h": 2
+   },
+   "area": "ward"
+  },
+  {
+   "id": "win_ward_2",
+   "rect": {
+    "x": 7,
+    "y": 69,
+    "w": 1,
+    "h": 2
+   },
+   "area": "ward"
+  },
+  {
+   "id": "win_pharmacy_1",
+   "rect": {
+    "x": 112,
+    "y": 60,
+    "w": 1,
+    "h": 2
+   },
+   "area": "pharmacy"
+  },
+  {
+   "id": "win_pharmacy_2",
+   "rect": {
+    "x": 112,
+    "y": 69,
+    "w": 1,
+    "h": 2
+   },
+   "area": "pharmacy"
+  }
+ ],
+ "spawns": [
+  {
+   "id": "R1",
+   "x": 34.5,
+   "z": 33.5,
+   "area": "reception",
+   "min_round": 1
+  },
+  {
+   "id": "R2",
+   "x": 34.5,
+   "z": 47.5,
+   "area": "reception",
+   "min_round": 1
+  },
+  {
+   "id": "R3",
+   "x": 85.5,
+   "z": 33.5,
+   "area": "reception",
+   "min_round": 1
+  },
+  {
+   "id": "R4",
+   "x": 85.5,
+   "z": 47.5,
+   "area": "reception",
+   "min_round": 1
+  },
+  {
+   "id": "W1",
+   "x": 4.5,
+   "z": 61.5,
+   "area": "ward",
+   "min_round": 1
+  },
+  {
+   "id": "W2",
+   "x": 4.5,
+   "z": 70.5,
+   "area": "ward",
+   "min_round": 1
+  },
+  {
+   "id": "F1",
+   "x": 115.5,
+   "z": 61.5,
+   "area": "pharmacy",
+   "min_round": 1
+  },
+  {
+   "id": "F2",
+   "x": 115.5,
+   "z": 70.5,
+   "area": "pharmacy",
+   "min_round": 1
+  },
+  {
+   "id": "S1",
+   "x": 9.5,
+   "z": 5.5,
+   "area": "surgery",
+   "min_round": 1
+  },
+  {
+   "id": "S2",
+   "x": 30.5,
+   "z": 24.5,
+   "area": "surgery",
+   "min_round": 1
+  },
+  {
+   "id": "I1",
+   "x": 110.5,
+   "z": 5.5,
+   "area": "icu",
+   "min_round": 1
+  },
+  {
+   "id": "I2",
+   "x": 90.5,
+   "z": 24.5,
+   "area": "icu",
+   "min_round": 1
+  },
+  {
+   "id": "X1",
+   "x": 43.5,
+   "z": 57.5,
+   "area": "radiology",
+   "min_round": 1
+  },
+  {
+   "id": "X2",
+   "x": 76.5,
+   "z": 57.5,
+   "area": "radiology",
+   "min_round": 1
+  },
+  {
+   "id": "P1",
+   "x": 9.5,
+   "z": 79.5,
+   "area": "pediatrics",
+   "min_round": 1
+  },
+  {
+   "id": "P2",
+   "x": 34.5,
+   "z": 90.5,
+   "area": "pediatrics",
+   "min_round": 1
+  },
+  {
+   "id": "M1",
+   "x": 39.5,
+   "z": 90.5,
+   "area": "morgue",
+   "min_round": 1
+  },
+  {
+   "id": "M2",
+   "x": 72.5,
+   "z": 79.5,
+   "area": "morgue",
+   "min_round": 1
+  },
+  {
+   "id": "C1",
+   "x": 110.5,
+   "z": 90.5,
+   "area": "cafeteria",
+   "min_round": 1
+  },
+  {
+   "id": "C2",
+   "x": 77.5,
+   "z": 79.5,
+   "area": "cafeteria",
+   "min_round": 1
+  },
+  {
+   "id": "L1",
+   "x": 25.5,
+   "z": 95.5,
+   "area": "lab",
+   "min_round": 1
+  },
+  {
+   "id": "L2",
+   "x": 94.5,
+   "z": 106.5,
+   "area": "lab",
+   "min_round": 1
+  },
+  {
+   "id": "L3",
+   "x": 60.5,
+   "z": 106.5,
+   "area": "lab",
+   "min_round": 1
+  }
+ ],
+ "stations": [
+  {
+   "type": "weapon",
+   "weaponId": "glock",
+   "tx": 52,
+   "ty": 30,
+   "x": 52.5,
+   "z": 30.5
+  },
+  {
+   "type": "weapon",
+   "weaponId": "magnum",
+   "tx": 40,
+   "ty": 44,
+   "x": 40.5,
+   "z": 44.5
+  },
+  {
+   "type": "weapon",
+   "weaponId": "barrett",
+   "tx": 104,
+   "ty": 22,
+   "x": 104.5,
+   "z": 22.5
+  },
+  {
+   "type": "weapon",
+   "weaponId": "uzi_dual",
+   "tx": 110,
+   "ty": 66,
+   "x": 110.5,
+   "z": 66.5
+  },
+  {
+   "type": "ammo",
+   "tx": 68,
+   "ty": 30,
+   "x": 68.5,
+   "z": 30.5
+  },
+  {
+   "type": "weapon",
+   "weaponId": "mp5",
+   "tx": 24,
+   "ty": 57,
+   "x": 24.5,
+   "z": 57.5
+  },
+  {
+   "type": "weapon",
+   "weaponId": "pump",
+   "tx": 66,
+   "ty": 74,
+   "x": 66.5,
+   "z": 74.5
+  },
+  {
+   "type": "ammo",
+   "tx": 46,
+   "ty": 74,
+   "x": 46.5,
+   "z": 74.5
+  },
+  {
+   "type": "ammo",
+   "tx": 104,
+   "ty": 57,
+   "x": 104.5,
+   "z": 57.5
+  },
+  {
+   "type": "ammo",
+   "tx": 30,
+   "ty": 90,
+   "x": 30.5,
+   "z": 90.5
+  },
+  {
+   "type": "ammo",
+   "tx": 104,
+   "ty": 90,
+   "x": 104.5,
+   "z": 90.5
+  },
+  {
+   "type": "ammo",
+   "tx": 70,
+   "ty": 106,
+   "x": 70.5,
+   "z": 106.5
+  }
+ ],
+ "machines": [
+  {
+   "type": "mystery_box",
+   "tx": 41,
+   "ty": 30,
+   "x": 41.5,
+   "z": 30.5
+  },
+  {
+   "type": "weapon_lab",
+   "tx": 52,
+   "ty": 106,
+   "x": 52.5,
+   "z": 106.5
+  },
+  {
+   "type": "perk",
+   "perkId": "quick_revive",
+   "tx": 80,
+   "ty": 40,
+   "x": 80.5,
+   "z": 40.5
+  },
+  {
+   "type": "perk",
+   "perkId": "fortify",
+   "tx": 9,
+   "ty": 74,
+   "x": 9.5,
+   "z": 74.5
+  },
+  {
+   "type": "perk",
+   "perkId": "sprint",
+   "tx": 76,
+   "ty": 72,
+   "x": 76.5,
+   "z": 72.5
+  },
+  {
+   "type": "perk",
+   "perkId": "quick_hands",
+   "tx": 110,
+   "ty": 74,
+   "x": 110.5,
+   "z": 74.5
+  },
+  {
+   "type": "perk",
+   "perkId": "adrenaline",
+   "tx": 10,
+   "ty": 24,
+   "x": 10.5,
+   "z": 24.5
+  },
+  {
+   "type": "perk",
+   "perkId": "deadeye",
+   "tx": 110,
+   "ty": 20,
+   "x": 110.5,
+   "z": 20.5
+  },
+  {
+   "type": "perk",
+   "perkId": "overload",
+   "tx": 30,
+   "ty": 106,
+   "x": 30.5,
+   "z": 106.5
+  }
+ ],
+ "box_spots": [
+  {
+   "x": 41.5,
+   "z": 30.5,
+   "area": "reception"
+  },
+  {
+   "x": 79.5,
+   "z": 52.5,
+   "area": "reception"
+  },
+  {
+   "x": 40.5,
+   "z": 52.5,
+   "area": "reception"
+  },
+  {
+   "x": 32.5,
+   "z": 20.5,
+   "area": "surgery"
+  },
+  {
+   "x": 86.5,
+   "z": 20.5,
+   "area": "icu"
+  },
+  {
+   "x": 30.5,
+   "z": 70.5,
+   "area": "ward"
+  },
+  {
+   "x": 66.5,
+   "z": 70.5,
+   "area": "radiology"
+  },
+  {
+   "x": 96.5,
+   "z": 70.5,
+   "area": "pharmacy"
+  },
+  {
+   "x": 20.5,
+   "z": 88.5,
+   "area": "pediatrics"
+  },
+  {
+   "x": 60.5,
+   "z": 88.5,
+   "area": "morgue"
+  },
+  {
+   "x": 96.5,
+   "z": 88.5,
+   "area": "cafeteria"
+  },
+  {
+   "x": 40.5,
+   "z": 106.5,
+   "area": "lab"
+  }
+ ],
+ "boss_spawns": [
+  {
+   "x": 60.5,
+   "z": 42.5
+  },
+  {
+   "x": 50.5,
+   "z": 42.5
+  },
+  {
+   "x": 70.5,
+   "z": 42.5
+  },
+  {
+   "x": 60.5,
+   "z": 48.5
+  }
+ ],
+ "lamps": [
+  {
+   "x": 50.5,
+   "z": 38.5,
+   "radius": 6.875,
+   "intensity": 0.72,
+   "flicker": 0.1,
+   "color": 14216447
+  },
+  {
+   "x": 70.5,
+   "z": 38.5,
+   "radius": 6.875,
+   "intensity": 0.7,
+   "flicker": 0.2,
+   "color": 14216447
+  },
+  {
+   "x": 60.5,
+   "z": 50.5,
+   "radius": 7.188,
+   "intensity": 0.72,
+   "flicker": 0.05,
+   "color": 14216447
+  },
+  {
+   "x": 16.5,
+   "z": 20.5,
+   "radius": 5,
+   "intensity": 0.45,
+   "flicker": 0.4,
+   "color": 14216447
+  },
+  {
+   "x": 40.5,
+   "z": 20.5,
+   "radius": 5,
+   "intensity": 0.45,
+   "flicker": 0.2,
+   "color": 14216447
+  },
+  {
+   "x": 68.5,
+   "z": 14.5,
+   "radius": 5.313,
+   "intensity": 0.5,
+   "flicker": 0.3,
+   "color": 14216447
+  },
+  {
+   "x": 86.5,
+   "z": 14.5,
+   "radius": 5.313,
+   "intensity": 0.55,
+   "flicker": 0.1,
+   "color": 14216447
+  },
+  {
+   "x": 104.5,
+   "z": 14.5,
+   "radius": 5.313,
+   "intensity": 0.5,
+   "flicker": 0.6,
+   "color": 14216447
+  },
+  {
+   "x": 18.5,
+   "z": 62.5,
+   "radius": 5.625,
+   "intensity": 0.55,
+   "flicker": 0.2,
+   "color": 14216447
+  },
+  {
+   "x": 30.5,
+   "z": 70.5,
+   "radius": 5.625,
+   "intensity": 0.5,
+   "flicker": 0.5,
+   "color": 14216447
+  },
+  {
+   "x": 46.5,
+   "z": 66.5,
+   "radius": 4.688,
+   "intensity": 0.45,
+   "flicker": 0.4,
+   "color": 14216447
+  },
+  {
+   "x": 70.5,
+   "z": 70.5,
+   "radius": 4.688,
+   "intensity": 0.5,
+   "flicker": 0.2,
+   "color": 14216447
+  },
+  {
+   "x": 90.5,
+   "z": 62.5,
+   "radius": 5.313,
+   "intensity": 0.55,
+   "flicker": 0.2,
+   "color": 14216447
+  },
+  {
+   "x": 102.5,
+   "z": 70.5,
+   "radius": 5.313,
+   "intensity": 0.5,
+   "flicker": 0.4,
+   "color": 14216447
+  },
+  {
+   "x": 20.5,
+   "z": 84.5,
+   "radius": 5,
+   "intensity": 0.45,
+   "flicker": 0.6,
+   "color": 16766624
+  },
+  {
+   "x": 52.5,
+   "z": 84.5,
+   "radius": 4.375,
+   "intensity": 0.4,
+   "flicker": 0.7,
+   "color": 14216447
+  },
+  {
+   "x": 66.5,
+   "z": 88.5,
+   "radius": 3.75,
+   "intensity": 0.35,
+   "flicker": 0.5,
+   "color": 14216447
+  },
+  {
+   "x": 88.5,
+   "z": 84.5,
+   "radius": 5.625,
+   "intensity": 0.55,
+   "flicker": 0.2,
+   "color": 16766624
+  },
+  {
+   "x": 104.5,
+   "z": 88.5,
+   "radius": 5,
+   "intensity": 0.5,
+   "flicker": 0.3,
+   "color": 16766624
+  },
+  {
+   "x": 34.5,
+   "z": 100.5,
+   "radius": 5,
+   "intensity": 0.5,
+   "flicker": 0.3,
+   "color": 10289112
+  },
+  {
+   "x": 60.5,
+   "z": 104.5,
+   "radius": 5.313,
+   "intensity": 0.55,
+   "flicker": 0.2,
+   "color": 10289112
+  },
+  {
+   "x": 84.5,
+   "z": 100.5,
+   "radius": 5,
+   "intensity": 0.5,
+   "flicker": 0.5,
+   "color": 10289112
+  }
+ ],
+ "interactions": [
+  {
+   "type": "breaker",
+   "tx": 72.6,
+   "ty": 81.5
+  },
+  {
+   "type": "power",
+   "tx": 72.6,
+   "ty": 85
+  },
+  {
+   "type": "alarm",
+   "tx": 38.6,
+   "ty": 40
+  },
+  {
+   "type": "trap",
+   "tx": 55.4,
+   "ty": 56.6,
+   "zone": {
+    "x": 57,
+    "y": 56,
+    "w": 6,
+    "h": 3
+   }
+  },
+  {
+   "type": "trap",
+   "tx": 46.4,
+   "ty": 94.6,
+   "zone": {
+    "x": 48,
+    "y": 94,
+    "w": 7,
+    "h": 2
+   }
+  }
+ ],
+ "props": [
+  {
+   "type": "waiting_chairs",
+   "x": 47.5,
+   "z": 50.5,
+   "angle": 0,
+   "body": {
+    "w": 2.438,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "waiting_chairs",
+   "x": 51.5,
+   "z": 50.5,
+   "angle": 0,
+   "body": {
+    "w": 2.438,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "waiting_chairs",
+   "x": 69.5,
+   "z": 50.5,
+   "angle": 0,
+   "body": {
+    "w": 2.438,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "waiting_chairs",
+   "x": 73.5,
+   "z": 50.5,
+   "angle": 0,
+   "body": {
+    "w": 2.438,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "iv_stand",
+   "x": 57.5,
+   "z": 45.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "gurney",
+   "x": 64.5,
+   "z": 44.5,
+   "angle": 20,
+   "body": {
+    "w": 1.813,
+    "d": 0.688,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "wheelchair",
+   "x": 49.5,
+   "z": 38.5,
+   "angle": -30,
+   "body": {
+    "w": 0.813,
+    "d": 0.813,
+    "ox": 0.031,
+    "oz": 0.031
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "vending",
+   "x": 78.5,
+   "z": 29.5,
+   "angle": 0,
+   "body": {
+    "w": 1.188,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 2.188,
+    "intensity": 0.4,
+    "color": 12575999
+   }
+  },
+  {
+   "type": "sign_stand",
+   "x": 66.5,
+   "z": 52.9,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 0.375,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 2.188,
+    "intensity": 0.4,
+    "color": 6086794
+   }
+  },
+  {
+   "type": "trash",
+   "x": 39.5,
+   "z": 53.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "extinguisher",
+   "x": 81.8,
+   "z": 36.5,
+   "angle": 0,
+   "body": {
+    "w": 0.563,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "surgical_light",
+   "x": 16.5,
+   "z": 10.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": {
+    "radius": 4.688,
+    "intensity": 0.6,
+    "color": 15267583
+   }
+  },
+  {
+   "type": "surgical_light",
+   "x": 32.5,
+   "z": 10.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": {
+    "radius": 4.688,
+    "intensity": 0.6,
+    "color": 15267583
+   }
+  },
+  {
+   "type": "surgical_light",
+   "x": 49.5,
+   "z": 10.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": {
+    "radius": 4.688,
+    "intensity": 0.6,
+    "color": 15267583
+   }
+  },
+  {
+   "type": "gurney",
+   "x": 16.5,
+   "z": 12.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 0.688,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "gurney",
+   "x": 32.5,
+   "z": 12.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 0.688,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "gurney",
+   "x": 49.5,
+   "z": 12.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 0.688,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "med_cabinet",
+   "x": 16.5,
+   "z": 5.1,
+   "angle": 0,
+   "body": {
+    "w": 1.688,
+    "d": 0.625,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "med_cabinet",
+   "x": 32.5,
+   "z": 5.1,
+   "angle": 0,
+   "body": {
+    "w": 1.688,
+    "d": 0.625,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "med_cabinet",
+   "x": 49.5,
+   "z": 5.1,
+   "angle": 0,
+   "body": {
+    "w": 1.688,
+    "d": 0.625,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "iv_stand",
+   "x": 20.5,
+   "z": 12.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "iv_stand",
+   "x": 36.5,
+   "z": 12.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "cables",
+   "x": 28.5,
+   "z": 21.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "hospital_bed",
+   "x": 68.5,
+   "z": 8.5,
+   "angle": 0,
+   "body": {
+    "w": 1.938,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "hospital_bed",
+   "x": 85.5,
+   "z": 8.5,
+   "angle": 0,
+   "body": {
+    "w": 1.938,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "hospital_bed",
+   "x": 102.5,
+   "z": 8.5,
+   "angle": 0,
+   "body": {
+    "w": 1.938,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "iv_stand",
+   "x": 72.5,
+   "z": 10.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "iv_stand",
+   "x": 89.5,
+   "z": 10.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "iv_stand",
+   "x": 106.5,
+   "z": 10.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "desk_computer",
+   "x": 86.5,
+   "z": 22.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 1.875,
+    "intensity": 0.35,
+    "color": 7323880
+   }
+  },
+  {
+   "type": "chair",
+   "x": 86.5,
+   "z": 23.9,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "wheelchair",
+   "x": 66.5,
+   "z": 20.5,
+   "angle": 40,
+   "body": {
+    "w": 0.813,
+    "d": 0.813,
+    "ox": 0.031,
+    "oz": 0.031
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "hospital_bed",
+   "x": 13.5,
+   "z": 60.5,
+   "angle": 0,
+   "body": {
+    "w": 1.938,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "hospital_bed",
+   "x": 13.5,
+   "z": 64.5,
+   "angle": 0,
+   "body": {
+    "w": 1.938,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "hospital_bed",
+   "x": 13.5,
+   "z": 68.5,
+   "angle": 0,
+   "body": {
+    "w": 1.938,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "hospital_bed",
+   "x": 23.5,
+   "z": 61.5,
+   "angle": 0,
+   "body": {
+    "w": 1.938,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "hospital_bed",
+   "x": 23.5,
+   "z": 65.5,
+   "angle": 0,
+   "body": {
+    "w": 1.938,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "hospital_bed",
+   "x": 23.5,
+   "z": 69.5,
+   "angle": 0,
+   "body": {
+    "w": 1.938,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "hospital_bed",
+   "x": 33.5,
+   "z": 60.5,
+   "angle": 0,
+   "body": {
+    "w": 1.938,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "hospital_bed",
+   "x": 33.5,
+   "z": 68.5,
+   "angle": 0,
+   "body": {
+    "w": 1.938,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "iv_stand",
+   "x": 16.5,
+   "z": 60.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "iv_stand",
+   "x": 26.5,
+   "z": 65.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "wheelchair",
+   "x": 18.5,
+   "z": 73.5,
+   "angle": 70,
+   "body": {
+    "w": 0.813,
+    "d": 0.813,
+    "ox": 0.031,
+    "oz": 0.031
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "gurney",
+   "x": 46.5,
+   "z": 62.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 0.688,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "wheelchair",
+   "x": 66.5,
+   "z": 62.5,
+   "angle": -20,
+   "body": {
+    "w": 0.813,
+    "d": 0.813,
+    "ox": 0.031,
+    "oz": 0.031
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "desk_computer",
+   "x": 54.5,
+   "z": 58.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 1.875,
+    "intensity": 0.35,
+    "color": 7323880
+   }
+  },
+  {
+   "type": "cables",
+   "x": 60.5,
+   "z": 70.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "locker",
+   "x": 74.5,
+   "z": 74.9,
+   "angle": 0,
+   "body": {
+    "w": 1.625,
+    "d": 0.688,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "med_cabinet",
+   "x": 84.5,
+   "z": 57.1,
+   "angle": 0,
+   "body": {
+    "w": 1.688,
+    "d": 0.625,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "med_cabinet",
+   "x": 90.5,
+   "z": 57.1,
+   "angle": 0,
+   "body": {
+    "w": 1.688,
+    "d": 0.625,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "med_cabinet",
+   "x": 97.5,
+   "z": 57.1,
+   "angle": 0,
+   "body": {
+    "w": 1.688,
+    "d": 0.625,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "med_cabinet",
+   "x": 88.5,
+   "z": 74.9,
+   "angle": 0,
+   "body": {
+    "w": 1.688,
+    "d": 0.625,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "med_cabinet",
+   "x": 102.5,
+   "z": 74.9,
+   "angle": 0,
+   "body": {
+    "w": 1.688,
+    "d": 0.625,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "chair",
+   "x": 89.5,
+   "z": 68.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 81.5,
+   "z": 74.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "hospital_bed",
+   "x": 14.5,
+   "z": 81.5,
+   "angle": 0,
+   "body": {
+    "w": 1.938,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "hospital_bed",
+   "x": 26.5,
+   "z": 81.5,
+   "angle": 0,
+   "body": {
+    "w": 1.938,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "wheelchair",
+   "x": 16.5,
+   "z": 88.5,
+   "angle": 10,
+   "body": {
+    "w": 0.813,
+    "d": 0.813,
+    "ox": 0.031,
+    "oz": 0.031
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "chair",
+   "x": 24.5,
+   "z": 87.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "morgue_drawers",
+   "x": 44.5,
+   "z": 79.1,
+   "angle": 0,
+   "body": {
+    "w": 2.938,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "morgue_drawers",
+   "x": 64.5,
+   "z": 79.1,
+   "angle": 0,
+   "body": {
+    "w": 2.938,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "gurney",
+   "x": 48.5,
+   "z": 86.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 0.688,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "gurney",
+   "x": 64.5,
+   "z": 86.5,
+   "angle": -10,
+   "body": {
+    "w": 1.813,
+    "d": 0.688,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "iv_stand",
+   "x": 55.5,
+   "z": 89.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bench",
+   "x": 84.5,
+   "z": 82.5,
+   "angle": 0,
+   "body": {
+    "w": 2,
+    "d": 0.75,
+    "ox": -0.031,
+    "oz": -0.047
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bench",
+   "x": 92.5,
+   "z": 82.5,
+   "angle": 0,
+   "body": {
+    "w": 2,
+    "d": 0.75,
+    "ox": -0.031,
+    "oz": -0.047
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bench",
+   "x": 100.5,
+   "z": 82.5,
+   "angle": 0,
+   "body": {
+    "w": 2,
+    "d": 0.75,
+    "ox": -0.031,
+    "oz": -0.047
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bench",
+   "x": 84.5,
+   "z": 87.5,
+   "angle": 0,
+   "body": {
+    "w": 2,
+    "d": 0.75,
+    "ox": -0.031,
+    "oz": -0.047
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bench",
+   "x": 92.5,
+   "z": 87.5,
+   "angle": 0,
+   "body": {
+    "w": 2,
+    "d": 0.75,
+    "ox": -0.031,
+    "oz": -0.047
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "vending",
+   "x": 110.5,
+   "z": 84.5,
+   "angle": 0,
+   "body": {
+    "w": 1.188,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 2.188,
+    "intensity": 0.4,
+    "color": 12575999
+   }
+  },
+  {
+   "type": "vending",
+   "x": 110.5,
+   "z": 86.9,
+   "angle": 0,
+   "body": {
+    "w": 1.188,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 2.188,
+    "intensity": 0.4,
+    "color": 12575999
+   }
+  },
+  {
+   "type": "trash",
+   "x": 77.5,
+   "z": 90.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "lab_bench",
+   "x": 32.5,
+   "z": 97.5,
+   "angle": 0,
+   "body": {
+    "w": 2.438,
+    "d": 0.875,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 2.5,
+    "intensity": 0.4,
+    "color": 7332056
+   }
+  },
+  {
+   "type": "lab_bench",
+   "x": 32.5,
+   "z": 102.5,
+   "angle": 0,
+   "body": {
+    "w": 2.438,
+    "d": 0.875,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 2.5,
+    "intensity": 0.4,
+    "color": 7332056
+   }
+  },
+  {
+   "type": "lab_bench",
+   "x": 70.5,
+   "z": 97.5,
+   "angle": 0,
+   "body": {
+    "w": 2.438,
+    "d": 0.875,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 2.5,
+    "intensity": 0.4,
+    "color": 7332056
+   }
+  },
+  {
+   "type": "lab_bench",
+   "x": 88.5,
+   "z": 99.5,
+   "angle": 0,
+   "body": {
+    "w": 2.438,
+    "d": 0.875,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 2.5,
+    "intensity": 0.4,
+    "color": 7332056
+   }
+  },
+  {
+   "type": "cables",
+   "x": 60.5,
+   "z": 103.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "crate",
+   "x": 94.5,
+   "z": 101.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "barrel",
+   "x": 26.5,
+   "z": 99.5,
+   "angle": 0,
+   "body": {
+    "w": 0.781,
+    "d": 0.781,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  }
+ ]
+}

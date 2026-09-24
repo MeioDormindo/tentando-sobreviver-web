@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="PackedScene" path="res://scenes/maps/test_arena.tscn" id="1_arena"]
+[ext_resource type="PackedScene" path="res://scenes/maps/terminal.tscn" id="1_arena"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="3_hud"]
 [ext_resource type="Script" path="res://scripts/player/top_down_camera.gd" id="4_camera"]
@@ -28,9 +28,10 @@ target = NodePath("../Player")
 
 [node name="Zombies" type="Node3D" parent="."]
 
-[node name="SpawnManager" type="Node" parent="." node_paths=PackedStringArray("container", "target")]
+[node name="SpawnManager" type="Node" parent="." node_paths=PackedStringArray("world", "container", "target")]
 script = ExtResource("5_spawn")
 zombie_data = ExtResource("10_walker")
+world = NodePath("../World")
 container = NodePath("../Zombies")
 target = NodePath("../Player")
 

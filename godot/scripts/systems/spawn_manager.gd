@@ -1,17 +1,18 @@
 class_name SpawnManager
 extends Node
-## Onde e o que nasce (seção 18): escolhe um ponto de spawn (Marker3D no grupo
-## `spawn_group`) longe o bastante do jogador, cria o zumbi pela ZombieFactory e o coloca
-## em `container`. Quantos e quando é decisão do RoundManager.
+## Onde e o que nasce (seção 18): pede ao mapa os pontos de spawn ativos (área aberta e
+## round mínimo), escolhe um longe o bastante do jogador, cria o zumbi pela ZombieFactory e o
+## coloca em `container`. Quantos e quando é decisão do RoundManager.
 
 @export var zombie_data: ZombieData
+## Mapa (dá os pontos de spawn ativos).
+@export var world: GameWorld
 ## Onde os zumbis ficam na árvore.
 @export var container: Node3D
 ## Quem os zumbis perseguem.
 @export var target: CharacterBase
 ## Distância mínima (m) entre o ponto de spawn e o jogador.
 @export var min_player_distance: float = 8.0
-@export var spawn_group: StringName = &"zombie_spawn"
 
 
 ## Zumbis vivos agora.
@@ -24,11 +25,8 @@ func alive_count() -> int:
 
 
 ## Cria um zumbi com os multiplicadores do round; devolve null se não houver onde nascer.
-func spawn_zombie(health_mult: float, damage_mult: float, speed_mult: float) -> ZombieBase:
-	var points: Array[Vector3] = []
-	for node in get_tree().get_nodes_in_group(spawn_group):
-		if node is Node3D:
-			points.append((node as Node3D).global_position)
+func spawn_zombie(health_mult: float, damage_mult: float, speed_mult: float, round_number: int = 1) -> ZombieBase:
+	var points := world.active_spawn_points(round_number)
 	var index := pick_spawn_index(points, target.global_position, min_player_distance)
 	if index < 0:
 		return null

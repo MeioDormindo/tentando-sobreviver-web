@@ -33,6 +33,8 @@ window/stretch/aspect="expand"
 3d_physics/layer_2="player"
 3d_physics/layer_3="zombies"
 3d_physics/layer_4="hurtboxes"
+3d_physics/layer_5="player_only"
+3d_physics/layer_6="props"
 
 [rendering]
 

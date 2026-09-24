@@ -65,7 +65,7 @@ func _try_spawn() -> void:
 		_spawn_timer = 0.25
 		return
 	var zombie := spawn_manager.spawn_zombie(
-		data.health_multiplier(round_number), data.damage_multiplier(round_number), data.speed_multiplier(round_number))
+		data.health_multiplier(round_number), data.damage_multiplier(round_number), data.speed_multiplier(round_number), round_number)
 	if zombie:
 		spawned += 1
 		_spawn_timer = data.spawn_interval(round_number)

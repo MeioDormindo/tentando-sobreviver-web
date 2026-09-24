@@ -1,5 +1,5 @@
 class_name Arena
-extends Node3D
+extends GameWorld
 ## Mapa de teste (seção 39): o blockout vem de uma lista de caixas (chão, paredes,
 ## obstáculos) e vira corpos estáticos dentro do NavigationRegion3D; depois a malha de
 ## navegação é gerada. Quando os modelos do Blender chegarem, as caixas saem e a malha

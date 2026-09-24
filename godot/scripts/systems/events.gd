@@ -26,6 +26,10 @@ signal round_completed(round_number: int)
 signal interaction_prompt(text: String)
 ## Fim de jogo com o resumo da partida.
 signal game_over(summary: Dictionary)
+## Uma área do mapa foi aberta (porta comprada).
+signal area_opened(area_id: StringName, area_name: String)
+## Compra recusada (pontos insuficientes).
+signal purchase_denied()
 ## Pausa ligada/desligada.
 signal pause_changed(paused: bool)
 ## A HUD pediu para jogar de novo.

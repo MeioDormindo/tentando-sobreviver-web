@@ -40,6 +40,8 @@ func _ready() -> void:
 	Events.interaction_prompt.connect(func(text: String) -> void: _prompt_label.text = text)
 	Events.zombie_hit.connect(func(_z: Node3D, _i: DamageInfo) -> void: _flash_hit(TEXT))
 	Events.zombie_killed.connect(func(_z: Node3D, info: DamageInfo) -> void: _flash_hit(RED if info.is_headshot else GOLD))
+	Events.area_opened.connect(func(_id: StringName, area_name: String) -> void: _show_banner(area_name.to_upper() + " ABERTA", GOLD))
+	Events.purchase_denied.connect(func() -> void: _flash_points_denied())
 	Events.pause_changed.connect(func(paused: bool) -> void: _pause_panel.visible = paused)
 	Events.game_over.connect(_on_game_over)
 
@@ -193,6 +195,13 @@ func _show_banner(text: String, color: Color) -> void:
 	tween.tween_property(_banner, "modulate:a", 1.0, 0.3)
 	tween.tween_interval(1.6)
 	tween.tween_property(_banner, "modulate:a", 0.0, 0.6)
+
+
+func _flash_points_denied() -> void:
+	_points_label.add_theme_color_override(&"font_color", RED)
+	var tween := create_tween()
+	tween.tween_interval(0.35)
+	tween.tween_callback(func() -> void: _points_label.add_theme_color_override(&"font_color", GOLD))
 
 
 func _flash_hit(color: Color) -> void:

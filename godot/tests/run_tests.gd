@@ -8,6 +8,8 @@ extends SceneTree
 
 
 func _initialize() -> void:
+	# Espera a árvore ficar ativa (os testes de mapa precisam do _ready dos nós).
+	await process_frame
 	var suite: RefCounted = load("res://tests/system_tests.gd").new()
-	var failures: int = suite.call(&"run")
+	var failures: int = suite.call(&"run", self)
 	quit(1 if failures > 0 else 0)

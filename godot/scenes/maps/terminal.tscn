@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/maps/layout_map.gd" id="1_map"]
+[ext_resource type="PackedScene" path="res://scenes/interactables/door.tscn" id="2_door"]
+
+[sub_resource type="NavigationMesh" id="NavMesh"]
+geometry_parsed_geometry_type = 1
+geometry_collision_mask = 33
+agent_height = 1.75
+agent_radius = 0.5
+agent_max_climb = 0.25
+
+[sub_resource type="Environment" id="Env"]
+background_mode = 1
+background_color = Color(0.02, 0.025, 0.03, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.35, 0.4, 0.48, 1)
+ambient_light_energy = 0.4
+tonemap_mode = 2
+
+[node name="Terminal" type="Node3D"]
+script = ExtResource("1_map")
+map_file = "res://data/maps/terminal.json"
+door_scene = ExtResource("2_door")
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavMesh")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Env")
+
+[node name="Moon" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, -0.354, 0.354, 0, 0.707, 0.707, -0.5, -0.612, 0.612, 0, 10, 0)
+light_color = Color(0.62, 0.7, 0.9, 1)
+light_energy = 0.3
+shadow_enabled = true
