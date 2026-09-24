@@ -5,7 +5,7 @@
  */
 export const waveConfig = {
   baseEnemies: 6,
-  enemiesPerWave: 2,
+  enemiesPerWave: 3,
   /** Acréscimo por wave sobre os atributos base do zumbi. */
   healthMultiplier: 0.12,
   damageMultiplier: 0.08,
@@ -23,7 +23,7 @@ export const waveConfig = {
 
   /** Máximo de zumbis vivos ao mesmo tempo. */
   maxAliveBase: 8,
-  maxAlivePerWave: 1.5,
+  maxAlivePerWave: 1.75,
   maxAliveCap: 30,
 
   /** Espera antes da primeira wave e entre waves (ms). */

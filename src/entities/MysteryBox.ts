@@ -19,6 +19,7 @@ export interface MovableSolids<H> {
 export interface BoxSpots<H> {
   spots: ReadonlyArray<{ x: number; y: number; area: string }>;
   solids: MovableSolids<H>;
+  /** A área já foi aberta (o aviso diz quando a caixa foi para uma área fechada). */
   isAreaOpen(area: string): boolean;
   areaName(area: string): string;
 }
@@ -206,14 +207,16 @@ export class MysteryBox<H = unknown> implements Interactable {
 
   // ───────────── Troca de lugar ─────────────
 
-  /** Próximo local: outra área aberta, livre e longe do jogador (ou null se não houver). */
+  /**
+   * Próximo local: qualquer outro ponto do mapa (inclusive em áreas ainda fechadas — aí é
+   * preciso abrir a porta para alcançá-la), livre e longe do jogador.
+   */
   private pickSpot(): { x: number; y: number; area: string } | null {
-    const { spots, solids, isAreaOpen } = this.places;
+    const { spots, solids } = this.places;
     const player = this.deps.player;
     const options = spots.filter(
       (s) =>
         (s.x !== this.x || s.y !== this.y) &&
-        isAreaOpen(s.area) &&
         Phaser.Math.Distance.Between(s.x, s.y, player.x, player.y) >= MIN_RESPAWN_DISTANCE &&
         solids.isFree(s.x + BOX_BODY.ox, s.y + BOX_BODY.oy, BOX_BODY.w, BOX_BODY.h),
     );
@@ -246,7 +249,8 @@ export class MysteryBox<H = unknown> implements Interactable {
         scene.time.delayedCall(mysteryBoxConfig.moveGapMs, () => this.appearAt(spot));
       },
     });
-    emitGameEvent(scene.game.events, GameEvents.Toast, { text: `A MYSTERY BOX MUDOU DE LUGAR — ${this.places.areaName(spot.area).toUpperCase()}` });
+    const closed = this.places.isAreaOpen(spot.area) ? '' : ' (ÁREA FECHADA)';
+    emitGameEvent(scene.game.events, GameEvents.Toast, { text: `A MYSTERY BOX MUDOU DE LUGAR — ${this.places.areaName(spot.area).toUpperCase()}${closed}` });
   }
 
   private appearAt(spot: { x: number; y: number; area: string }): void {

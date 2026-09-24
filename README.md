@@ -190,8 +190,8 @@ Observações:
 - Escuridão varia por área (túneis quase sem luz).
 - Mystery Box ($950, começa no Hall): sorteia por raridade (22/26/25/19/8% — armas boas saem com
   frequência). Arma repetida vira munição. A cada 3 usos ela treme, some e reaparece em outro
-  local — há 4 pontos no próprio Hall e 1 em cada outra área aberta (aviso na tela e coluna de
-  luz no novo local).
+  local do mapa — 4 pontos no Hall e 1 em cada outra área, inclusive áreas ainda fechadas (aí é
+  preciso abrir a porta para alcançá-la). Aviso na tela, coluna de luz e marcador no minimapa.
   Exclusivas da caixa (não vendidas nas maletas):
   - RPK (épica) e Rail Weapon (lendária, atravessa zumbis);
   - Grenade Launcher (épica): granadas que explodem no impacto (dano em área, não ferem você);
