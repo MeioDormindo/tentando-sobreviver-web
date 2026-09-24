@@ -225,13 +225,15 @@ export const STATIONS: StationPlacement[] = [
 export type MachinePlacement =
   | { type: 'mystery_box'; tx: number; ty: number }
   | { type: 'weapon_lab'; tx: number; ty: number }
-  | { type: 'perk'; perkId: 'fortify' | 'quick_hands' | 'sprint' | 'deadeye' | 'adrenaline' | 'overload'; tx: number; ty: number };
+  | { type: 'perk'; perkId: 'fortify' | 'quick_hands' | 'sprint' | 'deadeye' | 'adrenaline' | 'overload' | 'quick_revive'; tx: number; ty: number };
 
 /** Máquinas (GDD §37–40): a Mystery Box no Hall, o Weapon Lab na Manutenção e um perk por área. */
 export const MACHINES: MachinePlacement[] = [
   { type: 'mystery_box', tx: 69, ty: 30 },
   { type: 'weapon_lab', tx: 56, ty: 111 },
   { type: 'perk', perkId: 'fortify', tx: 42, ty: 40 },
+  // Quick Revive no Hall, perto do início (como no CoD Zombies)
+  { type: 'perk', perkId: 'quick_revive', tx: 85, ty: 40 },
   { type: 'perk', perkId: 'quick_hands', tx: 41, ty: 69 },
   { type: 'perk', perkId: 'sprint', tx: 108, ty: 59 },
   { type: 'perk', perkId: 'deadeye', tx: 18, ty: 20 },

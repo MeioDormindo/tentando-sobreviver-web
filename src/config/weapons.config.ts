@@ -241,3 +241,20 @@ export function getWeaponConfig(id: string): WeaponConfig {
 export const INVENTORY_SLOTS = 2;
 /** Tempo para trocar de arma (ms). */
 export const WEAPON_SWITCH_MS = 350;
+
+/** Faca (V, botão direito do mouse ou botão FACA no celular). */
+export const knifeConfig = {
+  damage: 150,
+  /** Alcance do golpe (px, do centro do jogador) e abertura do arco (graus). */
+  range: 48,
+  arcDeg: 120,
+  cooldownMs: 550,
+  /** Tempo entre o início do golpe e o acerto (ms); as armas ficam paradas por busyMs. */
+  windupMs: 70,
+  busyMs: 380,
+  /** Avanço: se houver um alvo à frente até esta distância, o jogador avança até ele. */
+  lungeRange: 120,
+  lungeSpeed: 560,
+  lungeMs: 130,
+  knockback: 260,
+};

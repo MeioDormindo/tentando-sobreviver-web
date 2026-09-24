@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { headshotConfig } from '../config/economy.config';
 import type { PerkModifiers } from '../config/machines.config';
-import type { WeaponConfig } from '../config/weapons.config';
+import { knifeConfig, type WeaponConfig } from '../config/weapons.config';
 import type { ExplosiveConfig } from '../config/zombies.config';
 import { emitGameEvent, GameEvents, type KillSource } from '../game/events';
 import type { EffectsSystem, ExplosionStyle } from '../effects/EffectsSystem';
@@ -85,6 +85,9 @@ interface Burn {
  * especiais (explosões, fogo, raio elétrico).
  * O ataque corpo a corpo do zumbi é decidido pela própria IA (Zombie.update).
  */
+/** Raio de corpo usado pela faca para os zumbis (px). */
+const KNIFE_ZOMBIE_RADIUS = 14;
+
 export class CombatSystem {
   private readonly burning = new Map<Target, Burn>();
   /** Dano causado pelo jogador neste frame (estatísticas). */
@@ -410,10 +413,39 @@ export class CombatSystem {
   }
 
   /** Aplica dano a um zumbi e contabiliza o que foi realmente tirado de vida. */
+  /** Golpe de faca: acerta os alvos no arco à frente do jogador (sem atravessar paredes). Retorna quantos acertou. */
+  melee(x: number, y: number, angle: number): number {
+    const cfg = knifeConfig;
+    const { buffs, modifiers, effects, nav } = this.deps;
+    const half = Phaser.Math.DegToRad(cfg.arcDeg / 2);
+    const damage = cfg.damage * modifiers.damageMultiplier * buffs.damageMultiplier;
+    let hits = 0;
+    for (const t of this.liveTargets()) {
+      const body = t instanceof Boss ? t.config.bodyRadius : KNIFE_ZOMBIE_RADIUS;
+      const d = Phaser.Math.Distance.Between(x, y, t.x, t.y);
+      if (d > cfg.range + body) continue;
+      const a = Phaser.Math.Angle.Between(x, y, t.x, t.y);
+      // Colado no jogador conta mesmo fora do arco.
+      if (d > body && Math.abs(Phaser.Math.Angle.Wrap(a - angle)) > half) continue;
+      if (!nav.lineOfSight(x, y, t.x, t.y, 0)) continue;
+      hits++;
+      const tx = t.x;
+      const ty = t.y;
+      effects.bloodHit(tx, ty, a);
+      if (t instanceof Boss) {
+        this.hurtBoss(t, damage);
+        continue;
+      }
+      t.knockback(a, cfg.knockback);
+      if (this.hurtZombie(t, buffs.instaKill ? t.hp + 1 : damage, false, 'melee')) effects.zombieDeath(tx, ty, a, t.skin);
+    }
+    return hits;
+  }
+
   private hurtZombie(z: Zombie, amount: number, headshot = false, source: KillSource = 'weapon', flash = true): boolean {
     const before = Math.max(0, z.hp);
     const killed = z.takeDamage(amount, headshot, source, flash);
-    if (source === 'weapon') this.pendingDamage += before - Math.max(0, z.hp);
+    if (source === 'weapon' || source === 'melee') this.pendingDamage += before - Math.max(0, z.hp);
     return killed;
   }
 

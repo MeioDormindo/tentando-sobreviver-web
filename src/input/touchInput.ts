@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 
 /** Ações dos botões de toque. */
-export type TouchAction = 'interact' | 'reload' | 'swap' | 'pause';
+export type TouchAction = 'interact' | 'reload' | 'swap' | 'pause' | 'knife';
 
 /**
  * Estado dos controles de toque (celular), escrito pela HUD (TouchControls) e lido

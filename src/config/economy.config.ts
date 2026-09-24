@@ -2,6 +2,8 @@
 export const economyConfig = {
   startingMoney: 500,
   headshotBonus: 50,
+  /** Abate na faca paga mais (como no CoD Zombies). */
+  knifeKillBonus: 60,
   /** Bônus ao completar a wave: base + perWave × wave. */
   waveBonusBase: 300,
   waveBonusPerWave: 50,

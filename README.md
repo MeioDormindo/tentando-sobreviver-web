@@ -23,6 +23,7 @@ npm run art        # regera a arte SVG em public/assets
 | WASD | mover (de lado 85% e de costas 60% da velocidade, em relação à mira) |
 | Mouse | mirar |
 | Clique esquerdo | atirar (M1911 é semiautomática) |
+| V / botão direito | faca: avança até o zumbi à frente e corta em arco (abate na faca paga +$60) |
 | R | recarregar |
 | M | ligar/desligar o som |
 | N | ligar/desligar só a música |
@@ -39,6 +40,7 @@ npm run art        # regera a arte SVG em public/assets
 | ATIRAR (botão grande) | atira para onde a lanterna aponta, com mira assistida (puxa de leve para o zumbi mais perto dentro do cone da lanterna) |
 | USAR | comprar/usar; segurar = ações de "SEGURE E" |
 | RECARR. / TROCAR | recarregar / trocar de arma |
+| FACA | golpe de faca |
 | II | pausar |
 
 Ao começar uma partida no celular o jogo entra em tela cheia. Não há mira na tela: o tiro sai sempre
@@ -224,8 +226,8 @@ Observações:
     com os outros eventos: com a Plataforma aberta, 65% das waves têm trem (e 40% de chance de
     passar de novo na mesma wave).
   - Horda: +60% de zumbis na wave, chegando mais rápido.
-  - Suprimentos: uma caixa cai de paraquedas (sinalizador vermelho); [E] dá munição cheia,
-    armadura e $750. Some em 60s.
+  - Suprimentos: uma caixa cai de paraquedas (sinalizador vermelho); segure E por 3s para abrir
+    (levar dano zera a barra): munição cheia, armadura e $750. Some em 60s.
   - Vazamento de Gás: nuvem verde perto do jogador que fere quem ficar dentro (jogador e zumbis).
   - Zumbi Dourado: um zumbi brilhante e rápido que foge de você; matá-lo em 20s dá $1.000 e um
     Golden Drop.
@@ -258,9 +260,12 @@ Observações:
   O Weapon Lab também fortalece a mecânica especial (explosão maior, fogo mais forte, +3 saltos).
 - Weapon Lab ($5000, Manutenção): arma em mãos vira "Mk II" (mais dano, pente, recarga).
 - Perks (`src/config/machines.config.ts`): Fortify, Quick Hands, Sprint+, Deadeye,
-  Adrenaline e Overload, uma máquina por área.
+  Adrenaline e Overload, uma máquina por área, e **Quick Revive** ($1500, no Hall): ao cair você
+  fica 3s no chão (sem levar dano) e levanta com a vida cheia empurrando os zumbis em volta. O perk
+  se gasta e pode ser comprado até 3 vezes por partida.
 - Power-ups (`src/config/powerups.config.ts`): 5% de drop por abate (máx. 4 por wave) — Max Ammo,
-  Double Cash, Instant Kill, Nuke, Full Heal, Armor, Speed Boost — e 0,5% de Golden Drop
+  Double Cash, Instant Kill, Nuke, Full Heal, Armor, Speed Boost, Carpenter (conserta todas as
+  barricadas e paga $200) — e 0,5% de Golden Drop
   (arma especial, $2000, perk grátis ou Fúria). Somem após 30s. Armadura absorve dano antes da vida.
 - Inimigos (`src/config/zombies.config.ts`): Walker; Runner (rápido); Tank (600 HP, maior, arranca
   2 tábuas por golpe, não é empurrado); Exploder (arma a explosão perto do jogador e explode ao

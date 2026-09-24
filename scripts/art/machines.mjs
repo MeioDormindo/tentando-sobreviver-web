@@ -13,6 +13,7 @@ export const PERKS = {
   deadeye: { color: '#d4ac0d', dark: '#5f4d05', symbol: 'crosshair' },
   adrenaline: { color: '#e67e22', dark: '#6b3a0e', symbol: 'syringe' },
   overload: { color: '#8e44ad', dark: '#3f1d4d', symbol: 'bolt' },
+  quick_revive: { color: '#5dade2', dark: '#1b4f72', symbol: 'revive' },
 };
 
 function symbol(kind, color = '#f4efe2') {
@@ -34,6 +35,10 @@ function symbol(kind, color = '#f4efe2') {
         `<rect x="31" y="42" width="2" height="12" fill="${color}"/><rect x="28" y="26" width="8" height="10" fill="#0003"/></g>`;
     case 'bolt':
       return `<path d="M36 12 L20 36 L30 36 L26 52 L44 26 L34 26 Z" fill="${color}"/>`;
+    case 'revive':
+      // Cruz com linha de batimento cardíaco.
+      return `<rect x="27" y="14" width="10" height="36" rx="2" fill="${color}"/><rect x="14" y="27" width="36" height="10" rx="2" fill="${color}"/>` +
+        `<path d="M8 50 L22 50 L26 42 L31 56 L35 46 L40 50 L56 50" fill="none" stroke="${color}" stroke-width="3" stroke-linejoin="round"/>`;
     default:
       return '';
   }

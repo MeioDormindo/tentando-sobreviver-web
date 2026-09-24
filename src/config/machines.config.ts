@@ -31,7 +31,7 @@ export const weaponLabConfig = {
   priceMk3: 10000,
 };
 
-export type PerkId = 'fortify' | 'quick_hands' | 'sprint' | 'deadeye' | 'adrenaline' | 'overload';
+export type PerkId = 'fortify' | 'quick_hands' | 'sprint' | 'deadeye' | 'adrenaline' | 'overload' | 'quick_revive';
 
 /** Efeitos que os perks aplicam ao jogador e às armas. */
 export interface PerkModifiers {
@@ -52,6 +52,8 @@ export interface PerkDef {
   /** Cor da máquina/luz. */
   color: number;
   effect: Partial<PerkModifiers>;
+  /** Quantas vezes pode ser comprado na partida (perks que se gastam, como o Quick Revive). */
+  maxPurchases?: number;
 }
 
 /** Perks (GDD §39–40). */
@@ -80,6 +82,10 @@ export const perks: Record<PerkId, PerkDef> = {
     id: 'overload', name: 'Overload', price: 4000, maxLevel: 1, color: 0x8e44ad,
     description: '+25% de dano das armas', effect: { damageMultiplier: 1.25 },
   },
+  quick_revive: {
+    id: 'quick_revive', name: 'Quick Revive', price: 1500, maxLevel: 1, maxPurchases: 3, color: 0x5dade2,
+    description: 'Ao cair, levanta sozinho (gasta o perk; até 3 por partida)', effect: {},
+  },
 };
 
 export const NEUTRAL_MODIFIERS: PerkModifiers = {
@@ -89,4 +95,12 @@ export const NEUTRAL_MODIFIERS: PerkModifiers = {
   headshotBonus: 0,
   regenMultiplier: 1,
   damageMultiplier: 1,
+};
+
+/** Quick Revive: tempo caído e o empurrão nos zumbis ao levantar. */
+export const quickReviveConfig = {
+  downMs: 3000,
+  pushRadius: 170,
+  pushSpeed: 420,
+  stunMs: 1200,
 };

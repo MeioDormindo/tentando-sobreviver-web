@@ -303,3 +303,12 @@ export function shellCasing(sr: number, r: Rng): Float32Array {
   }
   return fadeEdges(normalize(out, 0.35), sr);
 }
+
+/** Faca cortando o ar: chiado que sobe rápido de tom. */
+export function knifeSwing(sr: number, r: Rng): Float32Array {
+  const dur = 0.2;
+  const out = white(buffer(sr, dur), r, 1);
+  bandpass(out, sr, (t: number) => 900 + 5200 * (t / dur), 1.4);
+  envelope(out, sr, (t) => Math.sin(Math.min(1, t / dur) * Math.PI) ** 1.5);
+  return fadeEdges(normalize(out, 0.5), sr);
+}

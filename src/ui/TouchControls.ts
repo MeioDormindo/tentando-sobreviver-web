@@ -54,6 +54,7 @@ export class TouchControls {
       ['interact', 'USAR', 0xc9a45c],
       ['reload', 'RECARR.', 0x8fa3b8],
       ['swap', 'TROCAR', 0x8fa3b8],
+      ['knife', 'FACA', 0xb8b8b8],
       ['pause', 'II', 0x7a7d78],
     ];
     for (const [action, label, color] of defs) {
@@ -100,6 +101,7 @@ export class TouchControls {
       interact: [fx - fireR - br * 1.6, fy + fireR * 0.2, br * 1.1],
       reload: [fx + fireR * 0.25, fy - fireR - br * 1.2, br],
       swap: [fx - fireR * 0.95, fy - fireR - br * 0.6, br],
+      knife: [fx - fireR - br * 2.4, fy - fireR * 1.05, br],
       pause: [width / 2, br * 0.9 + 4, br * 0.7],
     };
     for (const b of this.buttons) {

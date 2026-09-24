@@ -88,6 +88,11 @@ export class WeaponSystem {
   }
 
   /** Ignora o gatilho até o botão ser solto (ex.: o clique que retomou a pausa). */
+  /** Faca: as armas ficam paradas por este tempo (sem atirar nem recarregar). */
+  blockFor(ms: number): void {
+    this.busyUntil = Math.max(this.busyUntil, this.scene.time.now + ms);
+  }
+
   holdTrigger(): void {
     this.triggerConsumed = true;
     this.releaseRequired = true;

@@ -8,11 +8,11 @@ import { useTouchControls } from '../input/device';
 import { save } from '../save/SaveStore';
 import { MENU_FONT, menuButton, menuTitle, onResize } from '../ui/menuWidgets';
 
-const KEYBOARD_HINT = 'WASD mover · Mouse mirar · Clique atirar · R recarregar · E comprar · Q/1/2 trocar arma · M som · N música · ESC pausa';
+const KEYBOARD_HINT = 'WASD mover · Mouse mirar · Clique atirar · V ou botão direito: faca · R recarregar · E comprar · Q/1/2 trocar arma · M som · N música · ESC pausa';
 const KONAMI_KEYS: Record<string, string> = { ArrowUp: 'UP', ArrowDown: 'DOWN', ArrowLeft: 'LEFT', ArrowRight: 'RIGHT', b: 'B', B: 'B', a: 'A', A: 'A' };
 /** No celular: tocar no título este número de vezes libera o mesmo segredo. */
 const TITLE_TAPS = 10;
-const TOUCH_HINT = 'Analógico esquerdo: mover · Analógico direito: girar a lanterna · ATIRAR: atira para onde a lanterna aponta';
+const TOUCH_HINT = 'Analógico esquerdo: mover · Analógico direito: girar a lanterna · ATIRAR: atira para onde a lanterna aponta · FACA: golpe corpo a corpo';
 
 export class MenuScene extends Phaser.Scene {
   constructor() {

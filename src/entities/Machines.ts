@@ -83,7 +83,10 @@ export class PerkMachine implements Interactable {
   getPrompt(): InteractionPromptPayload | null {
     const def = perks[this.perkId];
     const { perks: perkSystem, economy } = this.deps;
-    if (perkSystem.isMaxed(this.perkId)) return { text: `${def.name.toUpperCase()} ✓  ${def.description}`, affordable: false };
+    if (perkSystem.isMaxed(this.perkId)) {
+      const soldOut = perkSystem.level(this.perkId) === 0;
+      return { text: soldOut ? `${def.name.toUpperCase()} — ESGOTADO` : `${def.name.toUpperCase()} ✓  ${def.description}`, affordable: false };
+    }
     const price = perkSystem.priceOf(this.perkId);
     return { text: `[E] ${def.name.toUpperCase()} — ${money(price)}  ·  ${def.description}`, affordable: economy.canAfford(price) };
   }

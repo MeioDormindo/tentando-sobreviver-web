@@ -80,7 +80,8 @@ export interface AmmoPayload {
  * Exploder abatido a tiro contam como 'weapon'; as que ele mesmo detona, como 'explosion'.
  * 'hazard' = perigos do mapa (trem, gás).
  */
-export type KillSource = 'weapon' | 'nuke' | 'explosion' | 'hazard';
+/** 'melee' = faca (conta como abate do jogador, com bônus). */
+export type KillSource = 'weapon' | 'melee' | 'nuke' | 'explosion' | 'hazard';
 
 export interface ZombieKilledPayload {
   type: string;

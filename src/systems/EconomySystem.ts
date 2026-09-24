@@ -73,9 +73,10 @@ export class EconomySystem {
   }
 
   private onZombieKilled(kill: ZombieKilledPayload): void {
-    if (kill.source !== 'weapon') return;
-    const amount = this.earn(kill.reward + (kill.headshot ? economyConfig.headshotBonus : 0));
-    this.effects.floatingText(kill.x, kill.y - 14, `+$${amount}`, kill.headshot ? '#ffd166' : '#d9c89a', kill.headshot);
+    if (kill.source !== 'weapon' && kill.source !== 'melee') return;
+    const knife = kill.source === 'melee';
+    const amount = this.earn(kill.reward + (kill.headshot ? economyConfig.headshotBonus : 0) + (knife ? economyConfig.knifeKillBonus : 0));
+    this.effects.floatingText(kill.x, kill.y - 14, knife ? `FACA +${amount}` : `+${amount}`, kill.headshot || knife ? '#ffd166' : '#d9c89a', kill.headshot || knife);
   }
 
   private onWaveState(state: WaveStatePayload): void {

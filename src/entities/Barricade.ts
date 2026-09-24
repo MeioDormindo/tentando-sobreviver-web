@@ -81,6 +81,21 @@ export class Barricade implements Interactable {
     this.scene.cameras.main.shake(60, 0.0015);
   }
 
+  /** Carpenter: repõe todas as tábuas na hora; devolve quantas foram repostas. */
+  repairFully(): number {
+    let added = 0;
+    while (this.planks < barricadeConfig.maxPlanks) {
+      const plank = this.plankImages[this.planks];
+      this.planks++;
+      this.resetPlank(plank, this.planks - 1);
+      plank.setAlpha(0);
+      this.scene.tweens.add({ targets: plank, alpha: 1, duration: 200, delay: added * 90 });
+      added++;
+    }
+    if (added > 0) audio.playAt('hammer', this.x, this.y, { category: 'world', volume: 0.8 });
+    return added;
+  }
+
   getPrompt(): InteractionPromptPayload | null {
     if (this.planks >= barricadeConfig.maxPlanks) return null;
     return { text: `[E] SEGURE PARA REPARAR  (+$${barricadeConfig.repairReward})`, affordable: true };

@@ -49,8 +49,9 @@ export class ScoreSystem {
     const cfg = scoreConfig;
     const now = this.scene.time.now;
     let points = (cfg.kill[kill.type] ?? cfg.killDefault) * (1 + this.wave * cfg.perWaveMultiplier);
-    if (kill.source === 'weapon') {
+    if (kill.source === 'weapon' || kill.source === 'melee') {
       if (kill.headshot) points += cfg.headshot;
+      if (kill.source === 'melee') points += cfg.knifeKill;
       if (Phaser.Math.Distance.Between(kill.x, kill.y, this.player.x, this.player.y) <= cfg.closeRange.distance) points += cfg.closeRange.bonus;
       // Sequência: abates seguidos dentro da janela rendem um bônus crescente.
       this.streak = now - this.lastKillAt <= cfg.multiKill.windowMs ? this.streak + 1 : 0;

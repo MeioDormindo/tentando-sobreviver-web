@@ -5,7 +5,7 @@ import { bossSounds, exploderFuse, playerSounds, zombieSounds } from './recipes/
 import * as ev from './recipes/events';
 import * as music from './recipes/music';
 import * as ui from './recipes/ui';
-import { dryFire, mk2Layer, plasmaBurst, reload, shellCasing, shot, weaponSwitch } from './recipes/weapons';
+import { dryFire, mk2Layer, plasmaBurst, reload, shellCasing, knifeSwing, shot, weaponSwitch } from './recipes/weapons';
 import * as world from './recipes/world';
 
 type Recipe = (sr: number, r: Rng) => Float32Array;
@@ -38,6 +38,7 @@ export const SOUND_DEFS: SoundDef[] = [
   ...WEAPON_KINDS.map((kind) => ({ key: `reload_${kind}`, variants: 1, sr: MID, make: reload(kind) })),
   { key: 'dry_fire', variants: 1, sr: MID, make: dryFire },
   { key: 'weapon_switch', variants: 1, sr: MID, make: weaponSwitch },
+  { key: 'knife_swing', variants: 3, sr: MID, make: knifeSwing },
   { key: 'shell', variants: 4, sr: MID, make: shellCasing },
   ...SURFACES.map((s) => ({ key: `step_${s}`, variants: 5, sr: MID, make: world.footstep[s], gain: s === 'metal' ? 1.5 : 1 })),
   ...ZOMBIE_TYPES.flatMap((type) => [

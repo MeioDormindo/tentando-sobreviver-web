@@ -6,6 +6,8 @@ export const scoreConfig = {
   /** Cada wave vale mais: pontos de abate × (1 + wave × isto). */
   perWaveMultiplier: 0.1,
   headshot: 5,
+  /** Abate na faca. */
+  knifeKill: 15,
   /** Abate a queima-roupa (px do jogador). */
   closeRange: { distance: 70, bonus: 5 },
   /** Abates em sequência: a cada abate dentro da janela, o bônus cresce. */

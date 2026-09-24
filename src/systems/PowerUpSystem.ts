@@ -24,6 +24,8 @@ export interface PowerUpDeps {
   effects: EffectsSystem;
   lighting: LightingSystem;
   zombies: Phaser.Physics.Arcade.Group;
+  /** Carpenter: conserta todas as barricadas; devolve quantas tábuas foram repostas. */
+  repairBarricades: () => number;
 }
 
 interface Drop {
@@ -129,7 +131,7 @@ export class PowerUpSystem {
   // ───────────────────────── Drops ─────────────────────────
 
   private onZombieKilled(kill: ZombieKilledPayload): void {
-    if (kill.source !== 'weapon' || this.dropsThisWave >= dropConfig.maxPerWave) return;
+    if ((kill.source !== 'weapon' && kill.source !== 'melee') || this.dropsThisWave >= dropConfig.maxPerWave) return;
     const roll = Math.random();
     if (roll < dropConfig.goldenChance) {
       this.dropsThisWave++;
@@ -190,6 +192,12 @@ export class PowerUpSystem {
       case 'speed_boost':
         this.startTimer(id, def, () => (player.speedBuff = powerUpEffects.speedMultiplier), () => (player.speedBuff = 1));
         break;
+      case 'carpenter': {
+        const planks = this.deps.repairBarricades();
+        const paid = economy.earn(powerUpEffects.carpenterReward);
+        detail = `Barricadas consertadas (${planks} tábuas) · +${paid}`;
+        break;
+      }
       case 'golden':
         detail = this.golden();
         break;

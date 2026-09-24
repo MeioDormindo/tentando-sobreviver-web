@@ -14,6 +14,9 @@ import { Door } from '../entities/Door';
 import { PerkMachine, WeaponLab, type MachineDeps } from '../entities/Machines';
 import { MapInteractions } from '../entities/MapInteractions';
 import { StationBoard } from '../entities/StationBoard';
+import { quickReviveConfig } from '../config/machines.config';
+import { liveZombies } from '../events/WorldEvent';
+import { Knife } from '../weapons/Knife';
 import { EasterEggs } from '../systems/EasterEggs';
 import { MysteryBox } from '../entities/MysteryBox';
 import type { BarricadeTarget, ZombieWorld } from '../entities/Zombie';
@@ -128,6 +131,13 @@ export class GameScene extends Phaser.Scene {
     this.player.setModifiers(this.perks.modifiers);
     this.weaponSystem.setModifiers(this.perks.modifiers);
     this.perks.onChange(() => this.player.onPerksChanged());
+    // Quick Revive: ao cair, fica alguns segundos no chão e levanta empurrando os zumbis.
+    this.player.reviveHandler = () => {
+      if (this.perks.level('quick_revive') === 0) return null;
+      emitGameEvent(this.game.events, GameEvents.Toast, { text: 'QUICK REVIVE — AGUENTE!' });
+      return quickReviveConfig.downMs;
+    };
+    this.player.onRevived = () => this.onQuickRevive(effects);
 
     this.economy = new EconomySystem(this, effects);
     this.powerUps = new PowerUpSystem(this, {
@@ -138,7 +148,9 @@ export class GameScene extends Phaser.Scene {
       effects,
       lighting: this.lighting,
       zombies,
+      repairBarricades: () => barricades.reduce((n, b) => n + b.repairFully(), 0),
     });
+    const barricades: Barricade[] = [];
 
     const barricadeBodies = this.physics.add.staticGroup();
     const bossGroup = this.physics.add.group();
@@ -159,6 +171,13 @@ export class GameScene extends Phaser.Scene {
       nav: map.nav,
     });
     this.combat = combat;
+    new Knife(this, {
+      player: this.player,
+      weapons: this.weaponSystem,
+      melee: (x, y, angle) => combat.melee(x, y, angle),
+      targets: () => this.aimTargets(),
+      lineOfSight: (ax, ay, bx, by) => map.nav.lineOfSight(ax, ay, bx, by, 0),
+    });
     this.weaponSystem.setArcCaster(combat);
 
     this.interaction = new InteractionSystem(this, this.player);
@@ -197,6 +216,7 @@ export class GameScene extends Phaser.Scene {
     for (const def of map.windows) {
       const barricade = new Barricade(this, def, { economy: this.economy, player: this.player, bodies: barricadeBodies });
       this.interaction.add(barricade);
+      barricades.push(barricade);
       for (let y = def.rect.y; y < def.rect.y + def.rect.h; y++) {
         for (let x = def.rect.x; x < def.rect.x + def.rect.w; x++) barricadeByTile.set(y * map.nav.width + x, barricade);
       }
@@ -375,6 +395,27 @@ export class GameScene extends Phaser.Scene {
   }
 
   /** Zumbis e boss vivos (alvos da mira assistida). */
+  /** Levantou do Quick Revive: gasta o perk e afasta os zumbis em volta. */
+  private onQuickRevive(effects: EffectsSystem): void {
+    const cfg = quickReviveConfig;
+    const p = this.player;
+    this.perks.consume('quick_revive');
+    for (const z of liveZombies(this.zombies)) {
+      if (Phaser.Math.Distance.Between(p.x, p.y, z.x, z.y) > cfg.pushRadius) continue;
+      z.knockback(Phaser.Math.Angle.Between(p.x, p.y, z.x, z.y), cfg.pushSpeed);
+      z.stun(cfg.stunMs);
+    }
+    effects.shockwave(p.x, p.y, cfg.pushRadius, 0x5dade2);
+    audio.play('powerup', { category: 'ui', volume: 0.9 });
+    const left = this.perks.purchasesLeft('quick_revive') ?? 0;
+    emitGameEvent(this.game.events, GameEvents.PowerUpCollected, {
+      id: 'quick_revive',
+      name: 'Quick Revive',
+      color: 0x5dade2,
+      detail: left > 0 ? `De pé! Pode comprar mais ${left} ${left === 1 ? 'vez' : 'vezes'}` : 'De pé! Não há mais Quick Revive',
+    });
+  }
+
   private *aimTargets(): Generator<{ x: number; y: number }> {
     for (const group of [this.zombies, this.bossGroup]) {
       for (const c of group.getChildren()) {

@@ -5,6 +5,7 @@ import { ART_SCALE, DEPTH } from '../config/visual.config';
 import { emitGameEvent, GameEvents, type InteractionPromptPayload } from '../game/events';
 import type { Interactable } from '../systems/InteractionSystem';
 import { audio } from '../audio/AudioSystem';
+import { HoldProgress } from '../entities/HoldProgress';
 import { pickFloorPoint, type EventContext, type WorldEvent } from './WorldEvent';
 
 type Light = { x: number; y: number; radius: number; intensity: number; color?: number };
@@ -29,6 +30,7 @@ export class SupplyDropEvent implements WorldEvent, Interactable {
   private landedAt = 0;
   private landed = false;
   private opened = false;
+  private readonly opening = new HoldProgress(supplyDropConfig.openHoldMs);
   private crate: Phaser.GameObjects.Image | null = null;
   private chute: Phaser.GameObjects.Image | null = null;
   private shadow: Phaser.GameObjects.Image | null = null;
@@ -103,12 +105,27 @@ export class SupplyDropEvent implements WorldEvent, Interactable {
   }
 
   getPrompt(): InteractionPromptPayload | null {
-    return this.landed && !this.opened ? { text: '[E] ABRIR SUPRIMENTOS', affordable: true } : null;
+    if (!this.landed || this.opened || !this.ctx) return null;
+    return { text: `SEGURE E: ABRIR SUPRIMENTOS${this.opening.bar(this.ctx.scene.time.now)}`, affordable: true };
   }
 
-  interact(): void {
+  /** Tocar E não abre: é preciso segurar (openHoldMs). */
+  interact(): void {}
+
+  onHold(time: number, delta: number): void {
+    if (!this.landed || this.opened || !this.ctx) return;
+    // Levar dano interrompe a abertura.
+    if (this.ctx.player.msSinceDamage(time) < supplyDropConfig.interruptMs) {
+      this.opening.reset();
+      return;
+    }
+    if (!this.opening.hold(time, delta)) return;
+    this.open();
+  }
+
+  private open(): void {
     const ctx = this.ctx;
-    if (!ctx || !this.landed || this.opened) return;
+    if (!ctx) return;
     this.opened = true;
     ctx.weapons.refillAllAmmo();
     ctx.player.refillArmor();

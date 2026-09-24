@@ -110,6 +110,10 @@ export const stationConfig = {
 };
 
 export const supplyDropConfig = {
+  /** Segurar E por este tempo para abrir a caixa (ms). */
+  openHoldMs: 3000,
+  /** Levar dano há menos que isto (ms) zera a abertura. */
+  interruptMs: 500,
   /** Tempo para pegar antes de sumir (ms). */
   lifetimeMs: 60_000,
   fallMs: 2200,

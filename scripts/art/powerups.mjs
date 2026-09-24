@@ -9,6 +9,7 @@ export const POWERUPS = {
   full_heal: { color: '#e9e4d8', dark: '#6d6a60' },
   armor: { color: '#3d8fd6', dark: '#123d63' },
   speed_boost: { color: '#35c7c0', dark: '#0f5552' },
+  carpenter: { color: '#c8873a', dark: '#5a3510' },
   golden: { color: '#ffd35a', dark: '#8a5a00' },
 };
 
@@ -44,6 +45,11 @@ function symbol(id) {
         `<path d="M48 31 L61 36 L60 51 Q57 59 48 64 Z" fill="#3d8fd6" opacity=".6"/>`;
     case 'speed_boost':
       return `<path d="M30 30 L46 48 L30 66 L38 66 L54 48 L38 30 Z" fill="${INK}"/><path d="M46 30 L62 48 L46 66 L54 66 L70 48 L54 30 Z" fill="${INK}"/>`;
+    case 'carpenter':
+      // Martelo: cabo inclinado e cabeça com unha.
+      return `<g transform="rotate(-40 48 48)"><rect x="44" y="38" width="8" height="36" rx="2" fill="${INK}"/>` +
+        `<path d="M30 26 L62 26 Q68 26 68 32 L68 38 L30 38 Q26 38 26 34 L26 30 Q26 26 30 26 Z" fill="${INK}"/>` +
+        `<path d="M66 28 Q76 24 78 18 L74 30 Z" fill="${INK}"/></g>`;
     case 'golden':
       return `<path d="M48 22 L55 40 L74 41 L59 53 L64 72 L48 61 L32 72 L37 53 L22 41 L41 40 Z" fill="#fff4c2" stroke="${INK}" stroke-width="2.5"/>`;
     default:

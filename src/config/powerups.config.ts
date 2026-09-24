@@ -8,6 +8,7 @@ export type PowerUpId =
   | 'full_heal'
   | 'armor'
   | 'speed_boost'
+  | 'carpenter'
   | 'golden';
 
 export interface PowerUpDef {
@@ -27,6 +28,7 @@ export const powerUps: Record<PowerUpId, PowerUpDef> = {
   full_heal: { id: 'full_heal', name: 'Full Heal', color: 0xe9e4d8 },
   armor: { id: 'armor', name: 'Armor', color: 0x3d8fd6 },
   speed_boost: { id: 'speed_boost', name: 'Speed Boost', color: 0x35c7c0, durationMs: 15_000 },
+  carpenter: { id: 'carpenter', name: 'Carpenter', color: 0xc8873a },
   golden: { id: 'golden', name: 'Golden Drop', color: 0xffd35a },
 };
 
@@ -44,6 +46,7 @@ export const dropConfig = {
     full_heal: 15,
     armor: 10,
     speed_boost: 10,
+    carpenter: 8,
   } as Record<Exclude<PowerUpId, 'golden'>, number>,
   maxPerWave: 4,
   /** Tempo no chão antes de sumir e quando começa a piscar (ms). */
@@ -57,6 +60,8 @@ export const powerUpEffects = {
   speedMultiplier: 1.35,
   /** Dinheiro fixo do Nuke (os abates dele não pagam individualmente). */
   nukeReward: 400,
+  /** Carpenter: conserta todas as barricadas e paga isto. */
+  carpenterReward: 200,
 };
 
 /** Resultados do Golden Drop (GDD §43) e seus pesos. */

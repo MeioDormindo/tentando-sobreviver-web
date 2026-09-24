@@ -22,6 +22,11 @@ export class HoldProgress {
     return true;
   }
 
+  /** Zera o progresso (ex.: levou dano). */
+  reset(): void {
+    this.ms = 0;
+  }
+
   /** " [▰▰▱▱▱▱]" enquanto segura; vazio caso contrário. */
   bar(now: number): string {
     if (now - this.lastAt >= RELEASE_MS || this.ms <= 0) return '';

@@ -9,6 +9,7 @@ import { emitGameEvent, GameEvents } from '../game/events';
  */
 export class PerkSystem {
   private readonly levels = new Map<PerkId, number>();
+  private readonly purchases = new Map<PerkId, number>();
   private readonly mods: PerkModifiers = { ...NEUTRAL_MODIFIERS };
   private readonly listeners: Array<() => void> = [];
 
@@ -24,7 +25,24 @@ export class PerkSystem {
   }
 
   isMaxed(id: PerkId): boolean {
-    return this.level(id) >= perks[id].maxLevel;
+    const limit = perks[id].maxPurchases;
+    return this.level(id) >= perks[id].maxLevel || (limit !== undefined && (this.purchases.get(id) ?? 0) >= limit);
+  }
+
+  /** Compras restantes de um perk que se gasta (ou null se não tem limite). */
+  purchasesLeft(id: PerkId): number | null {
+    const limit = perks[id].maxPurchases;
+    return limit === undefined ? null : limit - (this.purchases.get(id) ?? 0);
+  }
+
+  /** Gasta um perk (Quick Revive ao levantar). */
+  consume(id: PerkId): boolean {
+    if (this.level(id) === 0) return false;
+    this.levels.delete(id);
+    this.recompute();
+    this.listeners.forEach((fn) => fn());
+    this.syncHud();
+    return true;
   }
 
   /** Preço do próximo nível. */
@@ -36,6 +54,7 @@ export class PerkSystem {
   grant(id: PerkId): boolean {
     if (this.isMaxed(id)) return false;
     this.levels.set(id, this.level(id) + 1);
+    this.purchases.set(id, (this.purchases.get(id) ?? 0) + 1);
     this.recompute();
     this.listeners.forEach((fn) => fn());
     this.syncHud();

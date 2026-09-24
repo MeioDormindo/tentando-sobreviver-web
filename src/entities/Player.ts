@@ -29,6 +29,9 @@ const SHADOW_OFFSET = { x: 4, y: 6 };
  * Jogador em duas partes: o tronco (este sprite) gira para a mira e as pernas
  * giram para a direção do movimento, como em shooters top-down modernos.
  */
+/** Tom azulado de quem está caído esperando o Quick Revive. */
+const DOWNED_TINT = 0x8fb8e8;
+
 export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
   hp: number;
   armor = 0;
@@ -47,6 +50,19 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
   private mods: Readonly<PerkModifiers> = NEUTRAL_MODIFIERS;
   /** Multiplicador temporário de velocidade (power-up Speed Boost). */
   speedBuff = 1;
+  /** Avanço da faca: direção e fim (ms). */
+  private lungeAngle = 0;
+  private lungeSpeed = 0;
+  private lungeUntil = 0;
+  /** Caído esperando o Quick Revive (ms); 0 = de pé. */
+  private downedUntil = 0;
+  /**
+   * Chamado quando a vida chega a 0: devolve quanto tempo (ms) o jogador fica caído antes de
+   * levantar sozinho (Quick Revive), ou null para morrer de vez.
+   */
+  reviveHandler: (() => number | null) | null = null;
+  /** Chamado ao levantar do Quick Revive. */
+  onRevived: (() => void) | null = null;
   /** Chamado ao levar dano (sangue no ponto do jogador). */
   onHurt: ((x: number, y: number) => void) | null = null;
 
@@ -85,6 +101,19 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
 
   get isAlive(): boolean {
     return this.alive;
+  }
+
+  /** Caído (Quick Revive): não anda nem leva dano até levantar. */
+  get isDowned(): boolean {
+    return this.downedUntil > 0;
+  }
+
+  /** Avanço curto da faca na direção do alvo. */
+  lunge(angle: number, speed: number, ms: number): void {
+    if (!this.alive || this.isDowned) return;
+    this.lungeAngle = angle;
+    this.lungeSpeed = speed;
+    this.lungeUntil = this.scene.time.now + ms;
   }
 
   get maxHp(): number {
@@ -129,6 +158,16 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
   updateMovement(): void {
     if (!this.alive) {
       this.setVelocity(0, 0);
+      return;
+    }
+    const now = this.scene.time.now;
+    if (this.isDowned) {
+      this.setVelocity(0, 0);
+      if (now >= this.downedUntil) this.standUp();
+      return;
+    }
+    if (now < this.lungeUntil) {
+      this.setVelocity(Math.cos(this.lungeAngle) * this.lungeSpeed, Math.sin(this.lungeAngle) * this.lungeSpeed);
       return;
     }
     const { up, down, left, right } = this.keys;
@@ -189,7 +228,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
   }
 
   takeDamage(amount: number, time: number): void {
-    if (!this.alive || time < this.invulnerableUntil) return;
+    if (!this.alive || this.isDowned || time < this.invulnerableUntil) return;
 
     // A armadura absorve o dano primeiro.
     const absorbed = Math.min(this.armor, amount);
@@ -201,7 +240,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
     this.scene.cameras.main.shake(90, 0.005);
 
     if (this.hp === 0) {
-      this.die();
+      const downMs = this.reviveHandler?.() ?? null;
+      if (downMs !== null) this.goDown(time, downMs);
+      else this.die();
       return;
     }
     this.onHurt?.(this.x, this.y);
@@ -253,6 +294,27 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
       this.legs.setFrame(0);
       this.legs.rotation = Phaser.Math.Angle.RotateTo(this.legs.rotation, this.rotation, LEGS_TURN);
     }
+  }
+
+  /** Cai de joelhos (Quick Revive): fica parado e invulnerável até levantar. */
+  private goDown(time: number, ms: number): void {
+    this.downedUntil = time + ms;
+    this.onHurt?.(this.x, this.y);
+    this.scene.tweens.killTweensOf(this);
+    this.scene.tweens.add({ targets: this, scale: ART_SCALE * 0.82, duration: 250, ease: 'Quad.easeOut' });
+    this.setTint(DOWNED_TINT);
+    this.legs.setTint(DOWNED_TINT);
+  }
+
+  private standUp(): void {
+    this.downedUntil = 0;
+    this.hp = this.maxHp;
+    this.invulnerableUntil = this.scene.time.now + this.config.invulnerabilityMs * 4;
+    this.scene.tweens.add({ targets: this, scale: ART_SCALE, duration: 300, ease: 'Back.easeOut' });
+    this.clearTint();
+    this.legs.clearTint();
+    this.emitHp();
+    this.onRevived?.();
   }
 
   private die(): void {
