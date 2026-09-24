@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="BarricadeData" format=3]
+
+[ext_resource type="Script" path="res://scripts/interactables/barricade_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+max_planks = 5
+repair_reward = 10
+repair_time = 1
+repair_interrupt = 0.6

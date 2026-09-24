@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="PowerData" format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/power_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+breaker_hold_time = 2
+lamp_factor_off = 0.55
+restore_flicker_time = 1.4

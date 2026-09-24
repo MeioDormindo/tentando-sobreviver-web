@@ -5,7 +5,7 @@ extends CharacterBase
 ## `repath_interval` em vez de todo frame. Os números vêm do ZombieData × multiplicadores
 ## do round. Behavior Tree fica para quando o comportamento pedir (seção 11).
 
-enum State { CHASE, ATTACK, DEAD }
+enum State { CHASE, ATTACK, BREAK_BARRICADE, DEAD }
 
 ## Tempo (s) até o corpo sumir depois de morrer.
 const CORPSE_TIME := 1.6
@@ -63,8 +63,11 @@ func _physics_process(delta: float) -> void:
 	var to_target := target.global_position - global_position
 	to_target.y = 0.0
 	_attack_cooldown = maxf(0.0, _attack_cooldown - delta)
+	var barricade := _blocking_barricade()
 	if to_target.length() <= data.attack_range:
 		_attack(to_target)
+	elif barricade:
+		_break(barricade)
 	else:
 		_chase(to_target, delta)
 	velocity.x += _knockback.x
@@ -74,7 +77,7 @@ func _physics_process(delta: float) -> void:
 
 
 func _chase(to_target: Vector3, delta: float) -> void:
-	if state == State.ATTACK:
+	if state == State.ATTACK or state == State.BREAK_BARRICADE:
 		state = State.CHASE
 	_repath_left -= delta
 	if _repath_left <= 0.0:
@@ -108,6 +111,33 @@ func _attack(to_target: Vector3) -> void:
 		var tween := create_tween()
 		tween.tween_property(pivot, "position", lunge, 0.08)
 		tween.tween_property(pivot, "position", Vector3.ZERO, 0.15)
+
+
+## Barricada inteira logo à frente, vista de fora (o zumbi precisa arrancar as tábuas).
+func _blocking_barricade() -> Barricade:
+	for node in get_tree().get_nodes_in_group(&"barricades"):
+		var barricade := node as Barricade
+		if barricade == null or not barricade.is_intact() or not barricade.is_outside(global_position):
+			continue
+		var offset := barricade.global_position - global_position
+		offset.y = 0.0
+		if offset.length() <= 1.5:
+			return barricade
+	return null
+
+
+func _break(barricade: Barricade) -> void:
+	if state != State.BREAK_BARRICADE:
+		state = State.BREAK_BARRICADE
+		_attack_cooldown = maxf(_attack_cooldown, 0.35)
+	velocity.x = 0.0
+	velocity.z = 0.0
+	var to_barricade := barricade.global_position - global_position
+	to_barricade.y = 0.0
+	_face(to_barricade)
+	if _attack_cooldown <= 0.0:
+		_attack_cooldown = data.attack_interval
+		barricade.take_hit(data.plank_damage)
 
 
 ## Empurra o zumbi (velocidade em m/s, no plano).

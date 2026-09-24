@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="PerkData" format=3]
+
+[ext_resource type="Script" path="res://scripts/interactables/perk_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"deadeye"
+display_name = "Deadeye"
+description = "Headshots causam +100% de dano"
+price = 1500
+color = Color(0.831, 0.675, 0.051, 1)
+max_purchases = 1
+works_without_power = false
+max_health_bonus = 0
+speed_multiplier = 1
+reload_multiplier = 1
+headshot_bonus = 1
+regen_multiplier = 1
+damage_multiplier = 1
+self_revive = false
+down_time = 0
+revive_push_radius = 0
+revive_push_speed = 0

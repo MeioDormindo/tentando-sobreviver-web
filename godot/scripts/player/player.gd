@@ -94,6 +94,18 @@ func interact() -> bool:
 	return _interactable.call(&"interact", self)
 
 
+## Segurando E (consertar barricada, disjuntor...). Devolve true se algo aconteceu.
+func hold_interact(delta: float) -> bool:
+	if _interactable == null or not is_instance_valid(_interactable) or not _interactable.has_method(&"hold_interact"):
+		return false
+	return _interactable.call(&"hold_interact", self, delta)
+
+
+## Levou dano nos últimos `seconds` segundos?
+func hurt_within(seconds: float) -> bool:
+	return _clock - _last_hurt_at < seconds
+
+
 ## Golpe de faca na direção da mira.
 func knife() -> bool:
 	if not is_alive():
@@ -122,6 +134,8 @@ func _read_input() -> void:
 		weapon.start_reload()
 	if Input.is_action_just_pressed(&"interact"):
 		interact()
+	elif Input.is_action_pressed(&"interact"):
+		hold_interact(get_physics_process_delta_time())
 	if Input.is_action_just_pressed(&"melee"):
 		knife()
 	if Input.is_action_just_pressed(&"switch_weapon") or Input.is_action_just_pressed(&"weapon_next") or Input.is_action_just_pressed(&"weapon_prev"):

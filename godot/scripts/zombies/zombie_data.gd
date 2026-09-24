@@ -17,3 +17,5 @@ extends Resource
 @export var attack_interval: float = 1.0
 ## Pontos ao ser abatido por arma ou faca.
 @export var points_kill: int = 100
+## Tábuas arrancadas por golpe na barricada.
+@export var plank_damage: int = 1

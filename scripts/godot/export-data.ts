@@ -15,6 +15,7 @@ import { playerConfig } from '../../src/config/player.config';
 import { waveConfig } from '../../src/config/waves.config';
 import { zombies as zombieTypes } from '../../src/config/zombies.config';
 import { exportMaps } from './export-maps';
+import { exportMachines } from './export-machines';
 
 const OUT = 'godot/data';
 const PX = 32;
@@ -149,7 +150,8 @@ function exportRoundsAndPoints(): void {
     max_alive_cap: w.maxAliveCap,
     first_round_delay: s(w.firstWaveDelay),
     intermission: s(w.intermission),
-    refill_ammo_on_round_end: true,
+    // O jogo web não reabastece: a munição vem das compras na parede.
+    refill_ammo_on_round_end: false,
   }));
   const e = economyConfig;
   write('configs/points.tres', tres('PointsData', 'res://scripts/systems/points_data.gd', {
@@ -174,6 +176,7 @@ function exportZombies(): void {
       attack_range: round(m(z.attackRange) + 0.2),
       attack_interval: s(z.attackCooldown),
       points_kill: z.reward,
+      plank_damage: z.plankDamage,
     }, '[ext_resource type="PackedScene" path="res://scenes/zombies/zombie_walker.tscn" id="2_scene"]\n'));
   }
 }
@@ -184,4 +187,5 @@ exportKnifeAndPlayer();
 exportRoundsAndPoints();
 exportZombies();
 exportMaps();
+exportMachines(write, tres as never);
 console.log('Pronto.');

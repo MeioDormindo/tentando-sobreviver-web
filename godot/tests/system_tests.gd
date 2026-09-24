@@ -17,6 +17,7 @@ func run(tree: SceneTree) -> int:
 	_test_spin_up()
 	_test_migrated_data()
 	_test_maps(tree)
+	_test_barricade(tree)
 	print("\n%d ok, %d falharam" % [_passed, _failed])
 	return _failed
 
@@ -190,6 +191,33 @@ func _test_maps(tree: SceneTree) -> void:
 		check(map.is_area_open(StringName(map.data.start_area)), "%s: começa com a área inicial aberta (%s)" % [map.name, map.data.start_area])
 		var spawns := map.active_spawn_points(1).size()
 		check(spawns > 0 and spawns < map.data.spawns.size(), "%s: só os spawns da área inicial valem (%d de %d)" % [map.name, spawns, map.data.spawns.size()])
+		var barricades := map.find_children("*", "StaticBody3D", true, false).filter(func(n: Node) -> bool: return n is Barricade)
+		check(barricades.size() == map.data.windows.size(), "%s: uma barricada por janela (%d)" % [map.name, barricades.size()])
+		var buys := map.get_children().filter(func(n: Node) -> bool: return n is WallBuy)
+		check(buys.size() == map.data.stations.size(), "%s: todas as compras na parede (%d)" % [map.name, buys.size()])
+		var on_wall := buys.all(func(b: WallBuy) -> bool:
+			var t := Vector2i(floori(b.position.x), floori(b.position.z))
+			return [Vector2i.UP, Vector2i.LEFT, Vector2i.RIGHT, Vector2i.DOWN].any(func(d: Vector2i) -> bool: return "#T".contains(map.cell(t.x + d.x, t.y + d.y))))
+		check(on_wall, "%s: cada compra fica encostada numa parede" % map.name)
 		var nav_polys := map.nav_region.navigation_mesh.get_polygon_count()
 		check(nav_polys > 0, "%s: malha de navegação gerada (%d polígonos)" % [map.name, nav_polys])
 		map.free()
+
+
+func _test_barricade(tree: SceneTree) -> void:
+	print("Barricada")
+	var barricade := Barricade.new()
+	var data := load("res://data/configs/barricade.tres") as BarricadeData
+	barricade.setup(&"w", Vector2(1, 2), Vector3.RIGHT, data)
+	tree.root.add_child(barricade)
+	check(barricade.planks == 5 and barricade.collision_layer & PhysicsLayers.BARRICADES, "começa com 5 tábuas e bloqueia os zumbis")
+	check(barricade.is_outside(Vector3(-2, 0, 0)) and not barricade.is_outside(Vector3(2, 0, 0)), "sabe o lado de fora")
+	for i in 5:
+		barricade.take_hit(1)
+	check(not barricade.is_intact() and not (barricade.collision_layer & PhysicsLayers.BARRICADES), "sem tábuas: zumbis passam")
+	check(barricade.collision_layer & PhysicsLayers.PLAYER_ONLY, "o jogador nunca passa pela janela")
+	var fake_player := Node3D.new()
+	check(not barricade.hold_interact(fake_player, 0.5) and barricade.hold_interact(fake_player, 0.6), "segurar E por 1s repõe uma tábua")
+	check(barricade.planks == 1 and barricade.collision_layer & PhysicsLayers.BARRICADES, "com tábua volta a bloquear")
+	fake_player.free()
+	barricade.free()

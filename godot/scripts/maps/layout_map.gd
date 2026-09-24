@@ -25,6 +25,11 @@ const PROP_COLOR := Color(0.4, 0.33, 0.24)
 
 @export_file("*.json") var map_file: String = "res://data/maps/terminal.json"
 @export var door_scene: PackedScene
+@export var barricade_scene: PackedScene
+@export var barricade_data: BarricadeData
+@export var wall_buy_scene: PackedScene
+## Pasta dos WeaponData (compras na parede pelo id da arma).
+@export_dir var weapons_dir: String = "res://data/weapons"
 
 var data: Dictionary = {}
 var width: int = 0
@@ -49,8 +54,9 @@ func _ready() -> void:
 	_build_floor()
 	_build_solids("#", WALL_HEIGHT, WALL_COLOR, PhysicsLayers.WORLD, "Wall")
 	_build_solids("T", TRAIN_HEIGHT, TRAIN_COLOR, PhysicsLayers.WORLD, "Train")
-	_build_solids("W", WINDOW_HEIGHT, WINDOW_COLOR, PhysicsLayers.PLAYER_ONLY, "Window")
+	_build_barricades()
 	_build_doors()
+	_build_wall_buys()
 	_build_props()
 	_build_lamps()
 	_build_spawns()
@@ -152,6 +158,95 @@ func _build_doors() -> void:
 		door.setup(StringName(door_data.id), int(door_data.cost), PackedStringArray(door_data.areas), rect.size, self)
 		nav_region.add_child(door)
 		door.position = Vector3(rect.get_center().x, 0.0, rect.get_center().y)
+
+
+func _build_barricades() -> void:
+	if barricade_scene == null or barricade_data == null:
+		return
+	for window: Dictionary in data.windows:
+		var rect := Rect2(window.rect.x, window.rect.y, window.rect.w, window.rect.h)
+		var barricade := barricade_scene.instantiate() as Barricade
+		barricade.setup(StringName(window.id), rect.size, _inside_direction(rect, StringName(window.area)), barricade_data)
+		nav_region.add_child(barricade)
+		barricade.position = Vector3(rect.get_center().x, 0.0, rect.get_center().y)
+
+
+## Para que lado da janela fica a área protegida.
+func _inside_direction(rect: Rect2, area_id: StringName) -> Vector3:
+	var center := rect.get_center()
+	var candidates := [Vector2.RIGHT, Vector2.LEFT] if rect.size.y >= rect.size.x else [Vector2.DOWN, Vector2.UP]
+	for dir: Vector2 in candidates:
+		# Meio tile além da borda da janela, do lado testado.
+		var half := (rect.size.x if dir.x != 0.0 else rect.size.y) * 0.5
+		var probe := center + dir * (half + 0.5)
+		if _area_contains(area_id, probe):
+			return Vector3(dir.x, 0.0, dir.y)
+	return Vector3(candidates[0].x, 0.0, candidates[0].y)
+
+
+func _area_contains(area_id: StringName, point: Vector2) -> bool:
+	for area: Dictionary in data.areas:
+		if StringName(area.id) != area_id:
+			continue
+		for r: Dictionary in area.rects:
+			if Rect2(r.x, r.y, r.w, r.h).has_point(point):
+				return true
+	return false
+
+
+func _build_wall_buys() -> void:
+	if wall_buy_scene == null:
+		return
+	var taken: Array[Vector2i] = []
+	for station: Dictionary in data.stations:
+		var weapon: WeaponData = null
+		if station.type == "weapon":
+			var path := "%s/%s.tres" % [weapons_dir, station.weaponId]
+			if not ResourceLoader.exists(path):
+				push_warning("LayoutMap: arma %s não encontrada" % station.weaponId)
+				continue
+			weapon = load(path)
+		var spot := _wall_spot(Vector2i(int(station.tx), int(station.ty)), taken)
+		taken.append(spot.tile)
+		var buy := wall_buy_scene.instantiate() as WallBuy
+		buy.setup(weapon, spot.normal)
+		add_child(buy)
+		buy.position = Vector3(spot.tile.x + 0.5, 0.0, spot.tile.y + 0.5)
+
+
+## Como no jogo web: a compra vai para o chão livre mais perto, encostado numa parede
+## (de preferência a de cima, que a câmera vê de frente). Devolve o tile e a normal da parede.
+func _wall_spot(start: Vector2i, taken: Array[Vector2i]) -> Dictionary:
+	var sides := [Vector2i.UP, Vector2i.LEFT, Vector2i.RIGHT, Vector2i.DOWN]
+	var best := {"tile": start, "normal": Vector3.BACK, "cost": INF}
+	for dz in range(-8, 9):
+		for dx in range(-8, 9):
+			var tile := start + Vector2i(dx, dz)
+			if not _is_floor(cell(tile.x, tile.y)) or tile in taken or _near_opening(tile):
+				continue
+			for i in sides.size():
+				var side: Vector2i = sides[i]
+				# A parede do vagão parado também serve (a Combat Shotgun fica dentro do trem).
+				if not "#T".contains(cell(tile.x + side.x, tile.y + side.y)):
+					continue
+				var cost := Vector2(dx, dz).length() + (0.0 if i == 0 else 3.0)
+				if cost < best.cost:
+					best = {"tile": tile, "normal": Vector3(-side.x, 0.0, -side.y), "cost": cost}
+	return best
+
+
+func _is_floor(ch: String) -> bool:
+	return FLOOR_COLORS.has(ch)
+
+
+## Tile colado numa porta ou janela (a compra não fica na frente delas).
+func _near_opening(tile: Vector2i) -> bool:
+	for dz in range(-1, 2):
+		for dx in range(-1, 2):
+			var ch := cell(tile.x + dx, tile.y + dz)
+			if ch == "D" or ch == "W":
+				return true
+	return false
 
 
 func _build_props() -> void:

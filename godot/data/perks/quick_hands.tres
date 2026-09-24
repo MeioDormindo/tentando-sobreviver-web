@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="PerkData" format=3]
+
+[ext_resource type="Script" path="res://scripts/interactables/perk_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"quick_hands"
+display_name = "Quick Hands"
+description = "Recarga 40% mais rápida"
+price = 3000
+color = Color(0.180, 0.525, 0.757, 1)
+max_purchases = 1
+works_without_power = false
+max_health_bonus = 0
+speed_multiplier = 1
+reload_multiplier = 0.6
+headshot_bonus = 0
+regen_multiplier = 1
+damage_multiplier = 1
+self_revive = false
+down_time = 0
+revive_push_radius = 0
+revive_push_speed = 0

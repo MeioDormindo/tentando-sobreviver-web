@@ -19,4 +19,4 @@ max_alive_per_round = 1.75
 max_alive_cap = 30
 first_round_delay = 3.5
 intermission = 10
-refill_ammo_on_round_end = true
+refill_ammo_on_round_end = false

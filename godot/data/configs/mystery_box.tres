@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="MysteryBoxData" format=3]
+
+[ext_resource type="Script" path="res://scripts/interactables/mystery_box_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+price = 950
+fire_sale_price = 10
+roll_time = 3
+take_time = 8
+rarity_weights = {
+&"common": 22,
+&"uncommon": 26,
+&"rare": 25,
+&"epic": 19,
+&"legendary": 8
+}
+uses_before_move = 3
+move_out_time = 1.6
+move_gap_time = 1.4

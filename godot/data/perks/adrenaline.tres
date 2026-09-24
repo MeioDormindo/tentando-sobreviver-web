@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="PerkData" format=3]
+
+[ext_resource type="Script" path="res://scripts/interactables/perk_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"adrenaline"
+display_name = "Adrenaline"
+description = "Regenera vida 2,5x mais rápido e mais cedo"
+price = 2000
+color = Color(0.902, 0.494, 0.133, 1)
+max_purchases = 1
+works_without_power = false
+max_health_bonus = 0
+speed_multiplier = 1
+reload_multiplier = 1
+headshot_bonus = 0
+regen_multiplier = 2.5
+damage_multiplier = 1
+self_revive = false
+down_time = 0
+revive_push_radius = 0
+revive_push_speed = 0

@@ -20,6 +20,10 @@ var _shot_mid := false
 var _body_turn := false
 ## Munição cheia ao começar o round 2 (reabastecimento do MVP).
 var _refilled := false
+var _bought_glock := false
+var _bought_ammo := false
+var _saw_break := false
+var _repaired := false
 var _gave_glock := false
 var _gave_pump := false
 var _switched := false
@@ -88,6 +92,7 @@ func _play(main: Node, player: Player, rounds: RoundManager) -> void:
 			nearest = z
 	player.move_input = Vector2.ZERO
 	_use_inventory(player, rounds)
+	_shop_and_barricades(main, player)
 	if _door_step < 2 and _game_time > 6.0:
 		_buy_door(main, player)
 		return
@@ -124,11 +129,45 @@ func _buy_door(main: Node, player: Player) -> void:
 	_check(door != null, "porta Hall → Plataforma existe no mapa migrado")
 
 
+## Compra na parede com esse id (ou a de munição, com id vazio).
+func _wall_buy(player: Player, weapon_id: StringName) -> WallBuy:
+	for node in player.get_tree().get_nodes_in_group(&"interactable"):
+		var buy := node as WallBuy
+		if buy and (buy.weapon_data.id if buy.weapon_data else &"") == weapon_id:
+			return buy
+	return null
+
+
+## Munição na parede quando acaba; confere zumbis quebrando tábuas e o conserto (+pontos).
+func _shop_and_barricades(main: Node, player: Player) -> void:
+	var points := main.get_node("PointsManager") as PointsManager
+	# Uma vez: esvazia a reserva para conferir a compra de munição (não depende da sorte).
+	if not _bought_ammo and _game_time > 20.0 and not player.inventory.is_switching():
+		player.weapon.reserve = 0
+	if player.weapon.reserve == 0 and not player.weapon.reloading:
+		points.add(player.weapon.data.ammo_price)
+		var own := _wall_buy(player, player.weapon.data.id)
+		var buy := own if own else _wall_buy(player, &"")
+		if buy.interact(player):
+			_bought_ammo = true
+	for node in player.get_tree().get_nodes_in_group(&"barricades"):
+		var barricade := node as Barricade
+		if barricade.planks < barricade.data.max_planks:
+			_saw_break = true
+			if not _repaired and barricade.planks > 0:
+				var before := points.points
+				barricade.hold_interact(player, barricade.data.repair_time + 0.01)
+				_repaired = points.points == before + barricade.data.repair_reward
+
+
 ## Troca de arma: pega a Glock no começo e a Pump no round 2 (confere a troca e os chumbos).
 func _use_inventory(player: Player, rounds: RoundManager) -> void:
 	if not _gave_glock:
 		_gave_glock = true
-		player.give_weapon(load("res://data/weapons/glock.tres"))
+		var points := (player.get_parent().get_node("PointsManager") as PointsManager)
+		var before := points.points
+		var glock_buy := _wall_buy(player, &"glock")
+		_bought_glock = glock_buy != null and glock_buy.interact(player) and player.inventory.owns(&"glock") and points.points == before - 500
 	elif not _switched and not player.inventory.is_switching() and _game_time > 3.0:
 		_switched = player.inventory.switch_to(0) and player.weapon.data.id == &"m1911"
 	if rounds.round_number >= 2 and not _gave_pump:
@@ -150,7 +189,10 @@ func _end_play(main: Node, player: Player, rounds: RoundManager) -> void:
 	_check(_switched, "troca de arma (Glock → M1911)")
 	_check(_max_hits_one_shot > 1, "espingarda: vários chumbos acertam no mesmo tiro (%d)" % _max_hits_one_shot)
 	_check(_melee_hits > 0, "faca acerta zumbis (%d acertos em %d golpes)" % [_melee_hits, _knife_swings])
-	_check(_refilled, "munição reabastecida ao fim do round")
+	_check(_bought_glock, "comprou a Glock na parede (-500)")
+	_check(_bought_ammo, "comprou munição na parede quando acabou")
+	_check(_saw_break, "zumbis arrancaram tábuas das barricadas")
+	_check(_repaired, "consertou uma barricada (+pontos)")
 	_check(points > 500, "pontos subiram (%d)" % points)
 	var data := (main.get_node("RoundManager") as RoundManager).data
 	var alive := (main.get_node("SpawnManager") as SpawnManager).alive_count()

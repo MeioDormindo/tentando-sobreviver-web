@@ -35,6 +35,7 @@ window/stretch/aspect="expand"
 3d_physics/layer_4="hurtboxes"
 3d_physics/layer_5="player_only"
 3d_physics/layer_6="props"
+3d_physics/layer_7="barricades"
 
 [rendering]
 

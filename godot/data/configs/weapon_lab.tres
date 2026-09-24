@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="WeaponLabData" format=3]
+
+[ext_resource type="Script" path="res://scripts/interactables/weapon_lab_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+price_mk2 = 5000
+price_mk3 = 10000
+damage_multiplier = 1.8
+magazine_multiplier = 1.5
+reserve_multiplier = 1.5
+reload_multiplier = 0.75
+fire_rate_multiplier = 1.111
+extra_pierce = 1
+tracer_mk2 = Color(0.765, 0.545, 1.000, 1)
+mk3_pellet_multiplier = 2
+mk3_extra_spread = 2.5
+tracer_mk3 = Color(1.000, 0.827, 0.353, 1)

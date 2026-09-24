@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" path="res://scripts/maps/layout_map.gd" id="1_map"]
 [ext_resource type="PackedScene" path="res://scenes/interactables/door.tscn" id="2_door"]
+[ext_resource type="PackedScene" path="res://scenes/interactables/barricade.tscn" id="3_barricade"]
+[ext_resource type="Resource" path="res://data/configs/barricade.tres" id="4_barricade_data"]
+[ext_resource type="PackedScene" path="res://scenes/interactables/wall_buy.tscn" id="5_wall_buy"]
 
 [sub_resource type="NavigationMesh" id="NavMesh"]
 geometry_parsed_geometry_type = 1
@@ -22,6 +25,9 @@ tonemap_mode = 2
 script = ExtResource("1_map")
 map_file = "res://data/maps/map2.json"
 door_scene = ExtResource("2_door")
+barricade_scene = ExtResource("3_barricade")
+barricade_data = ExtResource("4_barricade_data")
+wall_buy_scene = ExtResource("5_wall_buy")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavMesh")

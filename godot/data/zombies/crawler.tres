@@ -14,3 +14,4 @@ damage = 8
 attack_range = 1.013
 attack_interval = 0.9
 points_kill = 90
+plank_damage = 1
