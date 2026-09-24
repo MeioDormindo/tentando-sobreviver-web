@@ -86,6 +86,7 @@ function exportWeapons(): void {
       reload_time: s(cfg.reloadTime),
       spread_degrees: cfg.spread,
       max_range: m(cfg.range),
+      projectile_speed: cfg.special && ["grenade", "plasma"].includes(cfg.special.type) ? m(cfg.projectileSpeed) : 0,
       pellets: cfg.pellets,
       pierce: cfg.pierce ?? 0,
       headshot_multiplier: cfg.headshotMultiplier ?? headshotConfig.damageMultiplier,

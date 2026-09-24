@@ -31,7 +31,8 @@ var _recoil := 0.0
 ## Tempo com o gatilho seguro (giro do cano da minigun).
 var _spin := 0.0
 var _trigger_held := false
-var _tracer_material: StandardMaterial3D
+## Materiais dos rastros por cor (compartilhados).
+static var _tracer_materials: Dictionary = {}
 
 
 func _ready() -> void:
@@ -58,7 +59,6 @@ func reset_ammo() -> void:
 func upgrade_to(upgraded: WeaponData) -> void:
 	data = upgraded
 	level += 1
-	_tracer_material = null
 	reloading = false
 	reset_ammo()
 
@@ -135,15 +135,19 @@ func shoot(space: PhysicsDirectSpaceState3D, origin: Vector3, target: Vector3, e
 	if aim.is_zero_approx():
 		aim = -global_basis.z
 	var deviation := data.spread_degrees + _recoil
+	if data.special_type != &"":
+		# Granada, plasma, chama, raio, vento (special_fire.gd).
+		var special_dir := aim.rotated(Vector3.UP, deg_to_rad(randf_range(-deviation, deviation))) if data.special_type != &"flame" else aim
+		return SpecialFire.fire(self, space, origin, special_dir, exclude, shooter)
 	for pellet in maxi(1, data.pellets):
 		var direction := aim.rotated(Vector3.UP, deg_to_rad(randf_range(-deviation, deviation)))
-		hits.append_array(_trace(space, origin, direction, exclude, shooter))
+		hits.append_array(trace(space, origin, direction, exclude, shooter))
 	_recoil = minf(_recoil + data.recoil_degrees, 10.0)
 	return hits
 
 
-## Um projétil: segue até a parede ou até acertar `1 + pierce` alvos diferentes.
-func _trace(space: PhysicsDirectSpaceState3D, origin: Vector3, direction: Vector3, exclude: Array[RID], shooter: Node) -> Array[DamageInfo]:
+## Um projétil instantâneo: segue até a parede, o alcance ou acertar `1 + pierce` alvos diferentes.
+func trace(space: PhysicsDirectSpaceState3D, origin: Vector3, direction: Vector3, exclude: Array[RID], shooter: Node, color: Color = Color(0, 0, 0, 0)) -> Array[DamageInfo]:
 	var hits: Array[DamageInfo] = []
 	var skip: Array[RID] = exclude.duplicate()
 	var struck: Array[HealthComponent] = []
@@ -168,7 +172,7 @@ func _trace(space: PhysicsDirectSpaceState3D, origin: Vector3, direction: Vector
 		if struck.size() > data.pierce:
 			end = hit.position
 			break
-	_spawn_tracer(origin, end)
+	spawn_tracer(origin, end, color if color.a > 0.0 else data.tracer_color)
 	return hits
 
 
@@ -186,18 +190,20 @@ func _emit_ammo() -> void:
 
 
 ## Rastro rápido do tiro (some em 60 ms).
-func _spawn_tracer(from: Vector3, to: Vector3) -> void:
+func spawn_tracer(from: Vector3, to: Vector3, color: Color) -> void:
 	if not is_inside_tree() or from.distance_to(to) < 0.1:
 		return
-	if _tracer_material == null:
-		_tracer_material = StandardMaterial3D.new()
-		_tracer_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-		_tracer_material.albedo_color = data.tracer_color
+	var key := color.to_html()
+	if not _tracer_materials.has(key):
+		var material := StandardMaterial3D.new()
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		material.albedo_color = color
+		_tracer_materials[key] = material
 	var mesh := BoxMesh.new()
 	mesh.size = Vector3(0.03, 0.03, from.distance_to(to))
 	var tracer := MeshInstance3D.new()
 	tracer.mesh = mesh
-	tracer.material_override = _tracer_material
+	tracer.material_override = _tracer_materials[key]
 	tracer.top_level = true
 	add_child(tracer)
 	tracer.global_position = (from + to) * 0.5

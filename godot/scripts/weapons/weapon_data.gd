@@ -26,6 +26,9 @@ extends Resource
 @export_range(0.0, 10.0) var recoil_degrees: float = 0.0
 ## Alcance do tiro (m).
 @export var max_range: float = 22.0
+## Velocidade do projétil (m/s) das armas especiais que disparam algo visível (granada,
+## plasma). 0 = tiro instantâneo.
+@export var projectile_speed: float = 0.0
 ## Multiplicador do dano na cabeça.
 @export var headshot_multiplier: float = 1.5
 ## Tempo (s) girando o cano com o gatilho seguro antes do primeiro tiro (minigun).

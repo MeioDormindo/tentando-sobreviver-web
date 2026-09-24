@@ -15,6 +15,7 @@ static func compute_damage(base_damage: float, headshot: bool, headshot_multipli
 
 func receive_hit(base_damage: float, headshot_multiplier: float, kind: DamageInfo.Kind, source: Node, hit_position: Vector3) -> DamageInfo:
 	var info := DamageInfo.new(compute_damage(base_damage, is_head, headshot_multiplier), kind, source, is_head, hit_position)
+	info.target = health.get_parent() if health else get_parent()
 	if health:
 		health.apply_damage(info)
 	return info

@@ -33,9 +33,12 @@ func spawn_zombie(health_mult: float, damage_mult: float, speed_mult: float, rou
 	var zombie := ZombieFactory.create(zombie_data, target, health_mult, damage_mult, speed_mult)
 	if zombie == null:
 		return null
-	container.add_child(zombie)
+	# Posição definida antes de entrar na cena: se o zumbi nascesse na origem por um passo de
+	# física, a colisão o empurraria para fora de onde estivesse sobreposto.
 	# Pequeno desvio para não empilhar zumbis no mesmo ponto.
-	zombie.global_position = points[index] + Vector3(randf_range(-0.6, 0.6), 0.0, randf_range(-0.6, 0.6))
+	var spot := points[index] + Vector3(randf_range(-0.6, 0.6), 0.0, randf_range(-0.6, 0.6))
+	zombie.position = container.to_local(spot)
+	container.add_child(zombie)
 	return zombie
 
 

@@ -40,7 +40,7 @@ func _ready() -> void:
 	Events.ammo_changed.connect(_on_ammo_changed)
 	Events.weapon_changed.connect(func(_current: String, other: String) -> void: _other_weapon_label.text = ("[Q] " + other.to_upper()) if other != "" else "")
 	Events.interaction_prompt.connect(func(text: String) -> void: _prompt_label.text = text)
-	Events.zombie_hit.connect(func(_z: Node3D, _i: DamageInfo) -> void: _flash_hit(TEXT))
+	Events.zombie_hit.connect(func(_z: Node3D, info: DamageInfo) -> void: if info.kind != DamageInfo.Kind.BURN: _flash_hit(TEXT))
 	Events.zombie_killed.connect(func(_z: Node3D, info: DamageInfo) -> void: _flash_hit(RED if info.is_headshot else GOLD))
 	Events.area_opened.connect(func(_id: StringName, area_name: String) -> void: _show_banner(area_name.to_upper() + " ABERTA", GOLD))
 	Events.purchase_denied.connect(func() -> void: _flash_points_denied())

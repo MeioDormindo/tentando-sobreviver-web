@@ -16,6 +16,7 @@ reserve_ammo = 48
 reload_time = 2.2
 spread_degrees = 9
 max_range = 10
+projectile_speed = 0
 pellets = 8
 pierce = 0
 headshot_multiplier = 1.5

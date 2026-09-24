@@ -17,4 +17,7 @@ func _initialize() -> void:
 		return
 	var suite: RefCounted = script.new()
 	var failures: int = suite.call(&"run", self)
+	# Testes de cena (armas especiais): precisam de física rodando, então são assíncronos.
+	var scene_tests: RefCounted = (load("res://tests/weapon_scene_tests.gd") as GDScript).new()
+	failures += await scene_tests.call(&"run", self)
 	quit(1 if failures > 0 else 0)

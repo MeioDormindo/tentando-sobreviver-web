@@ -45,7 +45,8 @@ func _on_zombie_hit(_zombie: Node3D, info: DamageInfo) -> void:
 
 
 func _on_zombie_killed(zombie: Node3D, info: DamageInfo) -> void:
-	if info.kind != DamageInfo.Kind.WEAPON and info.kind != DamageInfo.Kind.MELEE:
+	# Abates do jogador pagam (arma, faca e a queima das armas de fogo); o resto não.
+	if not info.kind in [DamageInfo.Kind.WEAPON, DamageInfo.Kind.MELEE, DamageInfo.Kind.BURN]:
 		return
 	var reward := (zombie as ZombieBase).data.points_kill if zombie is ZombieBase else 0
 	if info.is_headshot:

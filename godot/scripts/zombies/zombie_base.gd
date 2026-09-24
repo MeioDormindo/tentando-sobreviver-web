@@ -25,6 +25,12 @@ var _repath_left := 0.0
 ## Empurrão (faca, explosões) que se soma ao movimento e some rápido.
 var _knockback := Vector3.ZERO
 var _attack_cooldown := 0.0
+## Atordoado (raio, plasma): não anda nem ataca.
+var _stun_left := 0.0
+## Queimando (lança-chamas): dano por segundo até acabar o tempo.
+var _burn_dps := 0.0
+var _burn_left := 0.0
+var _burn_source: Node
 
 @onready var agent: NavigationAgent3D = $NavigationAgent3D
 @onready var pivot: Node3D = $Pivot
@@ -53,7 +59,19 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if state == State.DEAD:
 		return
+	if _burn_left > 0.0:
+		_burn_left -= delta
+		take_damage(DamageInfo.new(_burn_dps * delta, DamageInfo.Kind.BURN, _burn_source, false, global_position))
+		if state == State.DEAD:
+			return
 	apply_gravity(delta)
+	if _stun_left > 0.0:
+		_stun_left -= delta
+		velocity.x = _knockback.x
+		velocity.z = _knockback.z
+		_knockback = _knockback.move_toward(Vector3.ZERO, 30.0 * delta)
+		move_and_slide()
+		return
 	if target == null or not target.is_alive():
 		velocity.x = 0.0
 		velocity.z = 0.0
@@ -138,6 +156,18 @@ func _break(barricade: Barricade) -> void:
 	if _attack_cooldown <= 0.0:
 		_attack_cooldown = data.attack_interval
 		barricade.take_hit(data.plank_damage)
+
+
+## Atordoa por `seconds` (não soma: vale o maior).
+func stun(seconds: float) -> void:
+	_stun_left = maxf(_stun_left, seconds)
+
+
+## Põe fogo: `dps` de dano por segundo durante `seconds` (renova com o fogo mais forte).
+func apply_burn(dps: float, seconds: float, source: Node) -> void:
+	_burn_dps = maxf(_burn_dps if _burn_left > 0.0 else 0.0, dps)
+	_burn_left = maxf(_burn_left, seconds)
+	_burn_source = source
 
 
 ## Empurra o zumbi (velocidade em m/s, no plano).
