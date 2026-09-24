@@ -23,7 +23,7 @@ npm run art        # regera a arte SVG em public/assets
 | WASD | mover (de lado 85% e de costas 60% da velocidade, em relação à mira) |
 | Mouse | mirar |
 | Clique esquerdo | atirar (M1911 é semiautomática) |
-| V / botão direito | faca: avança até o zumbi à frente e corta em arco (abate na faca paga +$60) |
+| V / botão direito | faca: avança até o zumbi à frente e corta em arco, 1 golpe por segundo (abate na faca paga +$60) |
 | R | recarregar |
 | M | ligar/desligar o som |
 | N | ligar/desligar só a música |
@@ -62,6 +62,32 @@ na direção da lanterna. Os controles de toque também ligam sozinhos no primei
 | Vector | ⚡ Raio | salta para 2 zumbis próximos |
 | M4 / Pump | 🔥 Fogo | incendeia (dano ao longo do tempo) |
 | AK | 💥 Explosivo | pequena explosão no acerto (não fere você) |
+
+## Mapa 2 — Hospital Santa Luzia
+
+Onde o vírus nasceu. Começa na **Recepção** e se abre para Centro Cirúrgico, UTI, Enfermaria,
+Radiologia, Farmácia, Pediatria, Necrotério, Refeitório e o **Laboratório** no subsolo (Weapon Lab).
+Painel do gerador no Necrotério, alarme na Recepção, duas armadilhas elétricas, três ursinhos e o
+gravador do Dr. Almeida no Laboratório contando a origem do vírus.
+
+- **Zumbis do hospital**: mesmos valores dos do Terminal, com roupas novas (pacientes de camisola,
+  enfermeira, médico de jaleco, segurança, paciente inchado de soro).
+- **Inimigos novos** (`src/config/zombies.config.ts`, só no Hospital):
+  - Rastejante (wave 3+): sem pernas, baixo e difícil de ver; ao morrer solta uma nuvem de gás.
+  - Cuspidor (wave 6+): fica a distância, prepara (garganta brilhando) e cospe ácido que vira poça.
+  - Blindado (wave 8+): colete e capacete absorvem 75% do dano no corpo até quebrarem; headshot
+    derruba o capacete na hora.
+  - Cães Infernais: **rodada dos cães** na wave 5 e a cada 6 waves — só cães, surgindo em raios perto
+    de você, com névoa azulada; o último cão deixa um Max Ammo.
+- **Boss — Paciente Zero** (waves de boss do Hospital): vômito ácido em cone, investida, grito que
+  deixa você lento e chama rastejantes e cuspidores, e chuva de ácido a partir da fase 3.
+- **Armas novas** (maletas no Hospital, e todas também na Mystery Box de qualquer mapa):
+  - Magnum .44 (Recepção, $1500): 6 tiros fortes, headshot 3×, atravessa 1 zumbi.
+  - Barrett .50 (UTI, $3000): 450 de dano, atravessa 5 zumbis.
+  - Uzi Dupla (Farmácia, $2000): uma Uzi em cada mão, tiros alternando os canos.
+  - Minigun (Mystery Box): gira 0,7s antes de atirar e deixa você mais lento enquanto atira.
+  - **Canhão de Vento** (arma-maravilha, só na Mystery Box do Hospital): rajada em cone que
+    arremessa e destrói a horda à frente; no Weapon Lab vira o **Tornado**.
 
 ## Plataforma Norte (estação)
 
@@ -106,8 +132,10 @@ na direção da lanterna. Os controles de toque também ligam sozinhos no primei
 
 ## Mapas, save e ranking
 
-- Menu → JOGAR abre a escolha de mapa. O **Mapa 2** fica trancado até você derrotar o boss da
-  wave 10 no Terminal Central (o conteúdo dele ainda está em desenvolvimento).
+- Menu → JOGAR abre a escolha de mapa. O **Hospital Santa Luzia** (Mapa 2) fica trancado até você
+  derrotar o boss da wave 10 no Terminal Central.
+- Cada mapa é um layout (`src/map/<mapa>/layout.ts`, tipo `MapLayout` em `src/map/types.ts`)
+  registrado em `src/map/registry.ts`; `GameMap` monta qualquer um deles.
 - Save local no navegador (`src/save/SaveStore.ts`, chave `ts-save-v1`): som/música, nome,
   recordes por mapa, mapas liberados, ranking e totais (partidas, abates, bosses, tempo).
   Dados antigos (recordes e som) são migrados automaticamente.
