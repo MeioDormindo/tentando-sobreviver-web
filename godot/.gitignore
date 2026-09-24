@@ -1,0 +1,11 @@
+# Cache e importações do Godot (recriados ao abrir o projeto)
+.godot/
+*.translation
+
+# Exportações e builds
+/export/
+/build/
+export_credentials.cfg
+
+# Saídas dos testes
+/tests/output/

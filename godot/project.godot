@@ -1,0 +1,42 @@
+; Engine configuration file.
+; Projeto Godot do Zombie Survival (Tentando Sobreviver). Ver godot/README.md.
+
+config_version=5
+
+[application]
+
+config/name="Tentando Sobreviver"
+config/description="Sobrevivência por rounds contra hordas de zumbis."
+run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[audio]
+
+buses/default_bus_layout="res://data/configs/default_bus_layout.tres"
+
+[autoload]
+
+Events="*res://scripts/systems/events.gd"
+InputBindings="*res://scripts/systems/input_bindings.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[layer_names]
+
+3d_physics/layer_1="world"
+3d_physics/layer_2="player"
+3d_physics/layer_3="zombies"
+3d_physics/layer_4="hurtboxes"
+
+[rendering]
+
+; Compatibility em todas as plataformas: é o único renderizador da exportação Web e roda
+; bem em celulares. Pode ser trocado por plataforma quando o visual pedir.
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
