@@ -4,6 +4,8 @@ import { COLORS } from '../config/game.config';
 import { MAPS, PLAYER_NAME_MAX } from '../config/maps.config';
 import type { GameOverStats } from '../game/events';
 import { save } from '../save/SaveStore';
+import { isOnlineConfigured } from '../config/online.config';
+import { submitScore } from '../online/leaderboard';
 
 const TITLE_FONT = 'Impact, "Arial Black", sans-serif';
 const FONT = 'monospace';
@@ -84,7 +86,7 @@ export function createGameOverOverlay(scene: Phaser.Scene, stats: GameOverStats,
   box.add(record);
   if (stats.newRecord) scene.tweens.add({ targets: record, scale: 1.12, duration: 500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
 
-  if (stats.rankEligible) addRankingEntry(scene, root, box, scale, stats);
+  if (stats.score > 0 && (stats.rankEligible || isOnlineConfigured())) addRankingEntry(scene, root, box, scale, stats);
 
   box.add(actions.makeButton(0, 150, '[ JOGAR NOVAMENTE ]', actions.retry));
   box.add(actions.makeButton(0, 196, '[ RANKING ]', actions.ranking));
@@ -95,10 +97,13 @@ export function createGameOverOverlay(scene: Phaser.Scene, stats: GameOverStats,
   return root;
 }
 
-/** Campo de nome (elemento HTML: abre o teclado no celular) e botão para gravar no ranking. */
+/**
+ * Campo de nome (elemento HTML: abre o teclado no celular) e botão para gravar no ranking
+ * local (se entrou no top) e no ranking global da temporada.
+ */
 function addRankingEntry(scene: Phaser.Scene, root: Phaser.GameObjects.Container, box: Phaser.GameObjects.Container, scale: number, stats: GameOverStats): void {
   const label = scene.add
-    .text(0, 42, `ENTROU NO TOP DO ${MAPS[stats.mapId].name.toUpperCase()}! SEU NOME:`, { fontFamily: FONT, fontSize: '16px', color: '#e3c77a' })
+    .text(0, 42, stats.rankEligible ? `ENTROU NO TOP DO ${MAPS[stats.mapId].name.toUpperCase()}! SEU NOME:` : 'SEU NOME PARA O RANKING GLOBAL:', { fontFamily: FONT, fontSize: '16px', color: '#e3c77a' })
     .setOrigin(0.5);
   box.add(label);
   const input = document.createElement('input');
@@ -126,11 +131,25 @@ function addRankingEntry(scene: Phaser.Scene, root: Phaser.GameObjects.Container
   saveBtn.on('pointerover', () => saveBtn.setColor(COLORS.accent)).on('pointerout', () => saveBtn.setColor(COLORS.text));
   box.add(saveBtn);
 
+  let sent = false;
   const submit = (): void => {
-    const pos = save.addRanking(stats.mapId, { name: input.value, score: stats.score, wave: stats.wave, kills: stats.kills });
+    if (sent) return;
+    sent = true;
+    const name = input.value.trim().slice(0, PLAYER_NAME_MAX).toUpperCase() || 'SOBREVIVENTE';
+    save.set('playerName', name);
+    const pos = save.addRanking(stats.mapId, { name, score: stats.score, wave: stats.wave, kills: stats.kills });
     dom.destroy();
     saveBtn.destroy();
-    label.setText(pos > 0 ? `${pos}º LUGAR NO RANKING DO ${MAPS[stats.mapId].name.toUpperCase()}!` : 'NÃO ENTROU NO RANKING').setFontSize(20);
+    const local = pos > 0 ? `${pos}º LUGAR NO RANKING DO ${MAPS[stats.mapId].name.toUpperCase()}!` : '';
+    label.setText(local || 'ENVIANDO...').setFontSize(20);
+    if (!isOnlineConfigured()) return;
+    const global = box.scene.add.text(0, 70, 'ENVIANDO AO RANKING GLOBAL...', { fontFamily: FONT, fontSize: '14px', color: COLORS.textDim }).setOrigin(0.5);
+    box.add(global);
+    void submitScore({ map: stats.mapId, name, score: stats.score, wave: stats.wave, kills: stats.kills }).then((err) => {
+      if (!global.active) return;
+      if (!local) label.setText('');
+      global.setText(err ? `RANKING GLOBAL: ${err.toUpperCase()}` : 'ENVIADO AO RANKING GLOBAL DA TEMPORADA!').setColor(err ? '#e05a4a' : '#e3c77a');
+    });
   };
   saveBtn.on('pointerup', submit);
   input.addEventListener('keydown', (e) => {
