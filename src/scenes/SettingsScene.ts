@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { uiView } from '../ui/uiScale';
 import { COLORS, SCENE_KEYS } from '../config/game.config';
 import { audio } from '../audio/AudioSystem';
 import { save, type TouchMode } from '../save/SaveStore';
@@ -33,7 +34,7 @@ export class SettingsScene extends Phaser.Scene {
     const back = menuButton(this, '[ VOLTAR ]', () => this.scene.start(SCENE_KEYS.menu), 22);
     this.input.keyboard?.once('keydown-ESC', () => this.scene.start(SCENE_KEYS.menu));
     onResize(this, () => {
-      const { width, height } = this.scale;
+      const { width, height } = uiView(this);
       title.setScale(Math.min(1, height / 600)).setPosition(width / 2, Math.min(52, height * 0.09));
       back.setPosition(width / 2, height - 30);
       this.redraw();
@@ -85,7 +86,7 @@ export class SettingsScene extends Phaser.Scene {
   private redraw(): void {
     this.objects.forEach((o) => o.destroy());
     this.objects = [];
-    const { width, height } = this.scale;
+    const { width, height } = uiView(this);
     const w = Math.min(560, width - 32);
     const x0 = width / 2 - w / 2;
     const top = Math.min(52, height * 0.09) + 44;

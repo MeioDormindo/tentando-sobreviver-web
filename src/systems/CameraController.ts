@@ -49,7 +49,9 @@ export class CameraController {
   }
 
   private applyZoom(): void {
-    const zoom = Phaser.Math.Clamp(this.scene.scale.height / cameraConfig.viewHeight, cameraConfig.minZoom, cameraConfig.maxZoom);
+    const { width, height } = this.scene.scale;
+    const fit = Math.min(height / cameraConfig.viewHeight, width / cameraConfig.viewWidth);
+    const zoom = Phaser.Math.Clamp(fit, cameraConfig.minZoom, cameraConfig.maxZoom);
     this.cam.setZoom(zoom);
   }
 

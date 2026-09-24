@@ -15,11 +15,20 @@ export const DEPTH = {
   muzzle: 100_003,
 } as const;
 
+/** Escala da HUD e dos menus: 1 até esta altura de janela (px), crescendo acima dela. */
+export const uiConfig = {
+  refHeight: 900,
+  maxScale: 3,
+};
+
 export const cameraConfig = {
   /** Altura do mundo visível (px). O zoom se adapta à altura da janela. */
   viewHeight: 390,
+  /** Largura mínima do mundo visível (px): janelas estreitas afastam o zoom para não cortar os lados. */
+  viewWidth: 640,
   minZoom: 1,
-  maxZoom: 3,
+  /** Alto o bastante para telas 4K verem o mesmo pedaço do mapa que uma de 1080p. */
+  maxZoom: 7,
   followLerp: 0.09,
   /** Quanto a câmera se adianta na direção da mira (fração da distância do cursor ao centro). */
   lookAhead: 0.28,

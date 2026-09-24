@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { uiView } from './uiScale';
 import { COLORS } from '../config/game.config';
 import { MAPS, PLAYER_NAME_MAX } from '../config/maps.config';
 import type { GameOverStats } from '../game/events';
@@ -31,7 +32,7 @@ export interface GameOverActions {
  * (GDD §64), recorde e, se a pontuação entrou no top do mapa, o nome para o ranking.
  */
 export function createGameOverOverlay(scene: Phaser.Scene, stats: GameOverStats, actions: GameOverActions): Phaser.GameObjects.Container {
-  const { width, height } = scene.scale;
+  const { width, height } = uiView(scene);
   const scale = Phaser.Math.Clamp(Math.min(width / DESIGN.w, height / DESIGN.h), 0.45, 1);
   const root = scene.add.container(0, 0).setDepth(200);
   root.add(scene.add.rectangle(0, 0, width, height, 0x000000, 0.8).setOrigin(0));
@@ -115,8 +116,8 @@ function addRankingEntry(scene: Phaser.Scene, root: Phaser.GameObjects.Container
     textTransform: 'uppercase',
     textAlign: 'center',
   });
-  const cx = scene.scale.width / 2;
-  const cy = scene.scale.height / 2;
+  const cx = uiView(scene).width / 2;
+  const cy = uiView(scene).height / 2;
   const dom = scene.add.dom(cx - 70 * scale, cy + 84 * scale, input).setDepth(210);
   const saveBtn = scene.add
     .text(160, 84, '[ SALVAR ]', { fontFamily: FONT, fontSize: '20px', color: COLORS.text, padding: { x: 8, y: 6 } })

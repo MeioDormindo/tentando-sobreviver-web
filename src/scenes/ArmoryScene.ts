@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { uiView } from '../ui/uiScale';
 import { gunIconKey } from '../config/assets.config';
 import { COLORS, SCENE_KEYS } from '../config/game.config';
 import { upgradeWeaponConfig, weapons, type Rarity, type WeaponConfig } from '../config/weapons.config';
@@ -90,7 +91,7 @@ export class ArmoryScene extends Phaser.Scene {
     this.input.keyboard?.on('keydown-UP', () => this.select(this.selected - 1));
     this.input.keyboard?.on('keydown-DOWN', () => this.select(this.selected + 1));
     onResize(this, () => {
-      const { width, height } = this.scale;
+      const { width, height } = uiView(this);
       title.setScale(Math.min(1, height / 600)).setPosition(width / 2, Math.min(56, height * 0.09));
       back.setPosition(width / 2, height - 30);
       this.perPage = Math.max(4, Math.floor((height - 190) / 34));
@@ -109,7 +110,7 @@ export class ArmoryScene extends Phaser.Scene {
     this.detail.forEach((o) => o.destroy());
     this.rows = [];
     this.detail = [];
-    const { width, height } = this.scale;
+    const { width, height } = uiView(this);
     const top = Math.min(56, height * 0.09) + 50;
     const listW = Math.min(300, width * 0.4);
     const x0 = Math.max(16, width / 2 - (listW + 20 + Math.min(520, width * 0.55)) / 2);

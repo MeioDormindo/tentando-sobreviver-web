@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { uiPointer, uiView } from '../ui/uiScale';
 import { perkIconKey, powerUpKey } from '../config/assets.config';
 import { audio } from '../audio/AudioSystem';
 import { DamageOverlay } from '../ui/DamageOverlay';
@@ -221,7 +222,8 @@ export class UIScene extends Phaser.Scene {
   override update(time: number, delta: number): void {
     this.damageOverlay.update(time, delta);
     const pointer = this.input.activePointer;
-    this.crosshair.setPosition(pointer.x, pointer.y);
+    const at = uiPointer(this, pointer);
+    this.crosshair.setPosition(at.x, at.y);
   }
 
   private detectTouch(p: Phaser.Input.Pointer): void {
@@ -233,7 +235,7 @@ export class UIScene extends Phaser.Scene {
   }
 
   private layout(): void {
-    const { width, height } = this.scale;
+    const { width, height } = uiView(this);
     this.hpText.setPosition(MARGIN, height - MARGIN - HP_BAR_HEIGHT - 22);
     // No celular o canto inferior direito é dos botões: arma e munição sobem para o topo.
     const ammoY = this.touch ? MARGIN + 196 : height - MARGIN;
@@ -268,7 +270,7 @@ export class UIScene extends Phaser.Scene {
   }
 
   private drawHpBar(): void {
-    const { height } = this.scale;
+    const { height } = uiView(this);
     const x = MARGIN;
     const y = height - MARGIN - HP_BAR_HEIGHT;
     const ratio = Phaser.Math.Clamp(this.hp.hp / this.hp.maxHp, 0, 1);
@@ -393,7 +395,7 @@ export class UIScene extends Phaser.Scene {
   }
 
   private showPauseOverlay(): void {
-    const { width, height } = this.scale;
+    const { width, height } = uiView(this);
     this.pauseOverlay?.destroy();
     const bg = this.add.rectangle(0, 0, width, height, 0x000000, 0.72).setOrigin(0).setInteractive();
     const title = this.add
@@ -469,7 +471,7 @@ export class UIScene extends Phaser.Scene {
       this.bossName.setText('');
       return;
     }
-    const { width } = this.scale;
+    const { width } = uiView(this);
     const w = Math.min(520, width * 0.5);
     const h = 12;
     const x = width / 2 - w / 2;
@@ -511,7 +513,7 @@ export class UIScene extends Phaser.Scene {
   }
 
   private layoutTimers(): void {
-    const { width, height } = this.scale;
+    const { width, height } = uiView(this);
     const count = this.timerViews.length / 2;
     const spacing = 48;
     const startX = width / 2 - ((count - 1) * spacing) / 2;
@@ -524,7 +526,7 @@ export class UIScene extends Phaser.Scene {
   }
 
   private layoutPerks(): void {
-    const y = this.scale.height - MARGIN - HP_BAR_HEIGHT - 58;
+    const y = uiView(this).height - MARGIN - HP_BAR_HEIGHT - 58;
     this.perkIcons.forEach((icon, i) => icon.setPosition(MARGIN + 14 + i * 32, y));
   }
 
@@ -538,7 +540,7 @@ export class UIScene extends Phaser.Scene {
       .setColor(color)
       .setAlpha(0)
       .setFontSize(long ? 18 : 26)
-      .setWordWrapWidth(long ? Math.min(720, this.scale.width - 48) : null)
+      .setWordWrapWidth(long ? Math.min(720, uiView(this).width - 48) : null)
       .setAlign('center');
     this.tweens.add({ targets: this.areaText, alpha: 1, duration: 300 });
     this.tweens.add({ targets: this.areaText, alpha: 0, delay: long ? 5500 : 2200, duration: 800 });
@@ -560,7 +562,7 @@ export class UIScene extends Phaser.Scene {
 
   /** Sem dinheiro: o prompt e o saldo "tremem" em vermelho. */
   private onPurchaseDenied(): void {
-    const cx = this.scale.width / 2;
+    const cx = uiView(this).width / 2;
     this.tweens.killTweensOf(this.promptText);
     this.promptText.setColor('#e05a4a');
     this.tweens.add({

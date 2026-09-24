@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { uiView } from '../ui/uiScale';
 import { COLORS, SCENE_KEYS } from '../config/game.config';
 import { MAP_IDS, MAPS, RANKING_SIZE, type MapId } from '../config/maps.config';
 import { save } from '../save/SaveStore';
@@ -29,7 +30,7 @@ export class RankingScene extends Phaser.Scene {
     const back = menuButton(this, '[ VOLTAR ]', () => this.scene.start(SCENE_KEYS.menu), 22);
     this.input.keyboard?.once('keydown-ESC', () => this.scene.start(SCENE_KEYS.menu));
     onResize(this, () => {
-      const { width, height } = this.scale;
+      const { width, height } = uiView(this);
       title.setPosition(width / 2, height * 0.1);
       this.tabs.forEach((t, i) => t.text.setPosition(width / 2 + (i - (this.tabs.length - 1) / 2) * 260, height * 0.1 + 58));
       back.setPosition(width / 2, height - 40);
@@ -42,7 +43,7 @@ export class RankingScene extends Phaser.Scene {
     for (const t of this.tabs) t.text.setColor(t.id === id ? COLORS.accent : COLORS.textDim);
     this.rows.forEach((r) => r.destroy());
     this.rows = [];
-    const { width, height } = this.scale;
+    const { width, height } = uiView(this);
     const list = save.ranking(id);
     const top = height * 0.1 + 104;
     const w = Math.min(640, width - 32);

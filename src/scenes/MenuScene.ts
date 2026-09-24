@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { uiView } from '../ui/uiScale';
 import { SCENE_KEYS } from '../config/game.config';
 import { DEFAULT_MAP } from '../config/maps.config';
 import { secretsConfig } from '../config/secrets.config';
@@ -38,7 +39,7 @@ export class MenuScene extends Phaser.Scene {
       .setOrigin(0.5);
 
     onResize(this, () => {
-      const { width, height } = this.scale;
+      const { width, height } = uiView(this);
       // Em telas pequenas (celular) o título encolhe para caber.
       const s = Phaser.Math.Clamp(Math.min(width / 900, height / 620), 0.5, 1);
       title.setScale(s).setPosition(width / 2, height * 0.24);
@@ -76,7 +77,7 @@ export class MenuScene extends Phaser.Scene {
     save.set('bigHeads', true);
     audio.play('secret_song', { category: 'ui', volume: 0.8, rate: 1.25, pitchJitter: 0 });
     this.cameras.main.flash(300, 120, 200, 90);
-    const { width } = this.scale;
+    const { width } = uiView(this);
     const msg = this.add
       .text(width / 2, title.y + title.displayHeight / 2 + 70, first ? 'MODO CABEÇÃO LIBERADO!\n(liga/desliga em Configurações)' : 'MODO CABEÇÃO LIGADO!', {
         fontFamily: MENU_FONT, fontSize: '20px', color: '#b8e04a', align: 'center', stroke: '#000', strokeThickness: 4,

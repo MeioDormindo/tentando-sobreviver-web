@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { uiView } from '../ui/uiScale';
 import { COLORS, SCENE_KEYS } from '../config/game.config';
 import { MAP_IDS, MAPS, type MapId } from '../config/maps.config';
 import { isTouchDevice } from '../input/device';
@@ -22,7 +23,7 @@ export class MapSelectScene extends Phaser.Scene {
     this.input.keyboard?.once('keydown-ESC', () => this.scene.start(SCENE_KEYS.menu));
 
     onResize(this, () => {
-      const { width, height } = this.scale;
+      const { width, height } = uiView(this);
       // Lado a lado na horizontal; empilhados em telas estreitas (celular em pé).
       const wide = width >= CARD_W * 2 + 80;
       const scale = wide

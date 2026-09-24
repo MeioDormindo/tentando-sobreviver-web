@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { uiPointer } from './uiScale';
 import { touchInput, type TouchAction } from '../input/touchInput';
 
 const DEAD_ZONE = 0.12;
@@ -42,7 +43,7 @@ export class TouchControls {
   private height = 0;
   private visible = true;
 
-  constructor(scene: Phaser.Scene) {
+  constructor(private readonly scene: Phaser.Scene) {
     touchInput.enabled = true;
     touchInput.release();
     // Até 4 dedos ao mesmo tempo (2 analógicos + botões).
@@ -123,7 +124,8 @@ export class TouchControls {
 
   private onDown(p: Phaser.Input.Pointer): void {
     if (!this.visible) return;
-    const button = this.buttons.find((b) => b.pointerId === null && Phaser.Math.Distance.Between(p.x, p.y, b.x, b.y) <= b.r * 1.15);
+    const { x, y } = uiPointer(this.scene, p);
+    const button = this.buttons.find((b) => b.pointerId === null && Phaser.Math.Distance.Between(x, y, b.x, b.y) <= b.r * 1.15);
     if (button) {
       button.pointerId = p.id;
       if (button.action === 'fire') touchInput.firing = true;
@@ -135,20 +137,21 @@ export class TouchControls {
       return;
     }
     // Não pega toques no topo da tela (HUD) para não brigar com os botões da interface.
-    if (p.y < this.height * 0.18) return;
-    const stick = p.x < this.width / 2 ? this.move : this.aim;
+    if (y < this.height * 0.18) return;
+    const stick = x < this.width / 2 ? this.move : this.aim;
     if (stick.pointerId !== null) return;
     stick.pointerId = p.id;
-    stick.baseX = stick.x = p.x;
-    stick.baseY = stick.y = p.y;
+    stick.baseX = stick.x = x;
+    stick.baseY = stick.y = y;
     this.apply();
   }
 
   private onMove(p: Phaser.Input.Pointer): void {
     for (const stick of [this.move, this.aim]) {
       if (stick.pointerId !== p.id) continue;
-      stick.x = p.x;
-      stick.y = p.y;
+      const at = uiPointer(this.scene, p);
+      stick.x = at.x;
+      stick.y = at.y;
       this.apply();
     }
   }
