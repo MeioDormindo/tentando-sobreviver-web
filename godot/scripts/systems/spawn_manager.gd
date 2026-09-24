@@ -22,6 +22,8 @@ extends Node
 
 
 var _types: Dictionary = {}
+## Multiplicadores do round atual [vida, dano, velocidade, round] (zumbis invocados pelo boss).
+var round_multipliers: Array = [1.0, 1.0, 1.0, 1]
 var _stuck_check := 0.0
 
 
@@ -75,6 +77,20 @@ func spawn_zombie(health_mult: float, damage_mult: float, speed_mult: float, rou
 	# Pequeno desvio para não empilhar zumbis no mesmo ponto.
 	var spot := points[index] + Vector3(randf_range(-0.6, 0.6), 0.0, randf_range(-0.6, 0.6))
 	zombie.position = container.to_local(spot)
+	container.add_child(zombie)
+	return zombie
+
+
+## Cria um zumbi do tipo num ponto (invocação do boss), com os multiplicadores do round.
+func spawn_at(type: StringName, at: Vector3) -> ZombieBase:
+	var nav_map := target.get_world_3d().navigation_map
+	var spot := NavigationServer3D.map_get_closest_point(nav_map, at)
+	if spot.distance_to(at) > 2.5:
+		return null
+	var zombie := ZombieFactory.create(type_data(type), target, round_multipliers[0], round_multipliers[1], round_multipliers[2])
+	if zombie == null:
+		return null
+	zombie.position = container.to_local(spot + Vector3.UP * 0.1)
 	container.add_child(zombie)
 	return zombie
 

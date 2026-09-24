@@ -49,7 +49,9 @@ extends Resource
 @export var late_max_alive_per_type: Dictionary = {}
 
 @export_group("Rodadas especiais")
-## Rounds de boss (os bosses entram no próximo bloco; a rodada dos cães nunca cai neles).
+## Boss de cada mapa (id do mapa → id do boss).
+@export var boss_by_map: Dictionary = {}
+## Rounds de boss (a rodada dos cães nunca cai neles).
 @export var boss_rounds: PackedInt32Array = PackedInt32Array()
 ## Rodada dos cães por mapa: first_round, every, per_round, cap, max_alive, spawn_interval,
 ## spawn_distance_min/max, fog_darkness, flashlight_factor.

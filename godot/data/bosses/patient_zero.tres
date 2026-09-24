@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="BossData" format=3]
+
+[ext_resource type="Script" path="res://scripts/zombies/boss_data.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/zombies/boss.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"patient_zero"
+display_name = "Paciente Zero"
+scene = ExtResource("2_scene")
+max_health = 6500
+health_per_appearance = 0.6
+move_speed = 2.438
+body_radius = 0.75
+reward = 2500
+phase_thresholds = PackedFloat32Array(0.75, 0.5, 0.25)
+phase_speed = PackedFloat32Array(1, 1.2, 1.3, 1.6)
+phase_cooldown = PackedFloat32Array(1, 0.95, 0.85, 0.6)
+roar_time = 1.2
+melee = { "range": 2.063, "damage": 38, "cooldown_time": 1.3 }
+charge = { "windup_time": 0.8, "speed": 15.625, "max_distance": 19.375, "damage": 45, "cooldown_time": 7.5, "stun_time": 1.3, "min_range": 5.313, "max_range": 16.25 }
+area = { "from_phase": 3, "count": 5, "radius": 1.625, "telegraph_time": 1.1, "damage": 10, "cooldown_time": 8, "spread": 5.938, "pool": { "radius": 1.625, "duration_time": 4.5, "dps": 16 } }
+area_acid = true
+vomit = { "from_phase": 1, "range": 8.125, "arc_deg": 50, "count": 5, "windup_time": 0.65, "cooldown_time": 6.5, "pool": { "radius": 1.313, "duration_time": 5, "dps": 18 } }
+scream = { "from_phase": 2, "radius": 16.25, "slow_time": 2.5, "slow_factor": 0.55, "cooldown_time": 12, "summon_count": 4, "types": [&"crawler", &"crawler", &"spitter"] }
+lantern = false
+escort_ratio = 0.3

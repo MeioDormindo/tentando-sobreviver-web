@@ -23,6 +23,9 @@ var aim_point: Vector3 = Vector3.ZERO
 ## Relógio de jogo (s): para com a pausa e acompanha a velocidade do jogo.
 var _clock := 0.0
 var _invulnerable_until := 0.0
+## Lentidão (grito do Paciente Zero): fator e até quando.
+var _slow_factor := 1.0
+var _slow_until := 0.0
 var _last_hurt_at := -INF
 var _firing := false
 ## Interagível mais perto (porta, compra...) e o último texto mostrado na HUD.
@@ -109,6 +112,12 @@ func hold_interact(delta: float) -> bool:
 	if _interactable == null or not is_instance_valid(_interactable) or not _interactable.has_method(&"hold_interact"):
 		return false
 	return _interactable.call(&"hold_interact", self, delta)
+
+
+## Deixa o jogador mais lento por `seconds` (fator de velocidade).
+func slow(factor: float, seconds: float) -> void:
+	_slow_factor = factor
+	_slow_until = _clock + seconds
 
 
 ## Levou dano nos últimos `seconds` segundos?
@@ -200,7 +209,8 @@ func _read_input() -> void:
 
 func _move(delta: float) -> void:
 	var direction := Vector3(move_input.x, 0.0, move_input.y)
-	var speed := data.move_speed * _speed_factor(direction) * perks.speed_multiplier
+	var slow := _slow_factor if _clock < _slow_until else 1.0
+	var speed := data.move_speed * _speed_factor(direction) * perks.speed_multiplier * slow
 	var target := direction * speed
 	if melee.lunge_left > 0.0:
 		target = melee.lunge_velocity

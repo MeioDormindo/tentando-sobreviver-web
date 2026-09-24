@@ -11,6 +11,11 @@ func get_player_spawn() -> Vector3:
 	return Vector3.ZERO
 
 
+## Onde o boss pode surgir (o BossManager usa o mais longe do jogador).
+func boss_spawn_points() -> Array[Vector3]:
+	return [get_player_spawn() + Vector3(0, 0, -12)]
+
+
 ## Id do mapa (composição de zumbis, armas da Mystery Box). Vazio = genérico.
 func map_id() -> String:
 	return ""

@@ -12,6 +12,7 @@
 [ext_resource type="Resource" path="res://data/zombies/walker.tres" id="10_walker"]
 [ext_resource type="Resource" path="res://data/configs/rounds.tres" id="11_rounds"]
 [ext_resource type="Resource" path="res://data/configs/points.tres" id="12_points"]
+[ext_resource type="Script" path="res://scripts/systems/boss_manager.gd" id="13_boss"]
 
 [node name="Main" type="Node3D"]
 
@@ -35,10 +36,15 @@ world = NodePath("../World")
 container = NodePath("../Zombies")
 target = NodePath("../Player")
 
-[node name="RoundManager" type="Node" parent="." node_paths=PackedStringArray("spawn_manager")]
+[node name="BossManager" type="Node" parent="." node_paths=PackedStringArray("spawn_manager")]
+script = ExtResource("13_boss")
+spawn_manager = NodePath("../SpawnManager")
+
+[node name="RoundManager" type="Node" parent="." node_paths=PackedStringArray("spawn_manager", "boss_manager")]
 script = ExtResource("6_round")
 data = ExtResource("11_rounds")
 spawn_manager = NodePath("../SpawnManager")
+boss_manager = NodePath("../BossManager")
 
 [node name="PointsManager" type="Node" parent="."]
 script = ExtResource("7_points")

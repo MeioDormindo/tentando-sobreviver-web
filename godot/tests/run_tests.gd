@@ -22,4 +22,6 @@ func _initialize() -> void:
 	failures += await scene_tests.call(&"run", self)
 	var zombie_tests: RefCounted = (load("res://tests/zombie_scene_tests.gd") as GDScript).new()
 	failures += await zombie_tests.call(&"run", self)
+	var boss_tests: RefCounted = (load("res://tests/boss_scene_tests.gd") as GDScript).new()
+	failures += await boss_tests.call(&"run", self)
 	quit(1 if failures > 0 else 0)

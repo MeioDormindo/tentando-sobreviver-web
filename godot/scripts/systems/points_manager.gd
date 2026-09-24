@@ -13,6 +13,7 @@ func _ready() -> void:
 	add_to_group(&"points_manager")
 	Events.zombie_hit.connect(_on_zombie_hit)
 	Events.zombie_killed.connect(_on_zombie_killed)
+	Events.boss_defeated.connect(func(_id: StringName, _n: String, reward: int, _at: Vector3) -> void: add(reward))
 	Events.round_completed.connect(func(round_number: int) -> void: add(data.round_bonus(round_number)))
 	# Depois que a cena inteira estiver pronta (a HUD fica pronta por último).
 	call_deferred(&"_emit_initial_state")

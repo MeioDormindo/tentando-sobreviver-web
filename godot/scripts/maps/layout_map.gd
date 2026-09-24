@@ -97,6 +97,13 @@ func map_id() -> String:
 	return String(data.get("id", ""))
 
 
+func boss_spawn_points() -> Array[Vector3]:
+	var points: Array[Vector3] = []
+	for spot: Dictionary in data.get("boss_spawns", []):
+		points.append(Vector3(spot.x, 0.1, spot.z))
+	return points
+
+
 func get_player_spawn() -> Vector3:
 	var start: Dictionary = data.get("player_start", {"x": 0.0, "z": 0.0})
 	return Vector3(start.x, 0.1, start.z)

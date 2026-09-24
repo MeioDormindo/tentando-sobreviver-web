@@ -23,6 +23,8 @@ var _prompt_label: Label
 var _banner: Label
 var _toast: Label
 var _perks_label: Label
+var _boss_bar: ProgressBar
+var _boss_label: Label
 var _hit_marker: Label
 var _pause_panel: Control
 var _game_over_panel: Control
@@ -45,6 +47,13 @@ func _ready() -> void:
 	Events.area_opened.connect(func(_id: StringName, area_name: String) -> void: _show_banner(area_name.to_upper() + " ABERTA", GOLD))
 	Events.purchase_denied.connect(func() -> void: _flash_points_denied())
 	Events.toast.connect(_show_toast)
+	Events.boss_incoming.connect(func(boss_name: String) -> void: _show_banner(boss_name.to_upper() + " SE APROXIMA", RED))
+	Events.boss_state.connect(_on_boss_state)
+	Events.boss_phase.connect(func(_n: String, phase: int) -> void: _show_toast("FASE %d" % phase))
+	Events.boss_defeated.connect(func(_id: StringName, boss_name: String, reward: int, _at: Vector3) -> void:
+		_boss_bar.visible = false
+		_boss_label.text = ""
+		_show_banner("%s DERROTADO  +%d" % [boss_name.to_upper(), reward], GOLD))
 	Events.hound_round_changed.connect(_on_hound_round)
 	Events.max_ammo.connect(func(_at: Vector3) -> void: _show_toast("MAX AMMO"))
 	Events.power_changed.connect(func(on: bool) -> void: if on: _show_banner("ENERGIA LIGADA", GOLD))
@@ -91,6 +100,17 @@ func _build() -> void:
 	_banner = _label(root, "", 56, RED, Control.PRESET_CENTER_TOP, HORIZONTAL_ALIGNMENT_CENTER, 130)
 	_banner.modulate.a = 0.0
 	_toast = _label(root, "", 20, GOLD, Control.PRESET_CENTER_TOP, HORIZONTAL_ALIGNMENT_CENTER, 220)
+	_boss_label = _label(root, "", 18, RED, Control.PRESET_CENTER_TOP, HORIZONTAL_ALIGNMENT_CENTER, 4)
+	_boss_bar = ProgressBar.new()
+	_boss_bar.show_percentage = false
+	_boss_bar.custom_minimum_size = Vector2(420, 12)
+	_boss_bar.add_theme_stylebox_override(&"fill", _flat(RED))
+	_boss_bar.add_theme_stylebox_override(&"background", _flat(Color(0.1, 0.1, 0.1, 0.8)))
+	root.add_child(_boss_bar)
+	_boss_bar.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP, Control.PRESET_MODE_KEEP_SIZE, MARGIN)
+	_boss_bar.offset_top += 28
+	_boss_bar.offset_bottom += 28
+	_boss_bar.visible = false
 	_toast.modulate.a = 0.0
 
 	_hit_marker = _label(root, "✕", 26, TEXT, Control.PRESET_TOP_LEFT, HORIZONTAL_ALIGNMENT_CENTER)
@@ -166,6 +186,13 @@ func _on_round_started(round_number: int, total: int) -> void:
 	_round_label.text = "ROUND %d" % round_number
 	_remaining_label.text = "ZUMBIS RESTANTES  %d" % total
 	_show_banner("ROUND %d" % round_number, RED)
+
+
+func _on_boss_state(boss_name: String, current: float, maximum: float, phase: int) -> void:
+	_boss_bar.visible = current > 0.0
+	_boss_bar.max_value = maximum
+	_boss_bar.value = current
+	_boss_label.text = "%s  ·  FASE %d" % [boss_name.to_upper(), phase] if current > 0.0 else ""
 
 
 func _on_hound_round(active: bool, _config: Dictionary) -> void:

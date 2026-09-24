@@ -16,6 +16,7 @@ import { waveConfig, houndRounds } from '../../src/config/waves.config';
 import { zombies as zombieTypes } from '../../src/config/zombies.config';
 import { exportMaps } from './export-maps';
 import { exportMachines } from './export-machines';
+import { bosses } from '../../src/config/bosses.config';
 
 const OUT = 'godot/data';
 const PX = 32;
@@ -178,6 +179,7 @@ function exportRoundsAndPoints(): void {
     composition_by_map: raw(`{\n${Object.entries(w.compositionByMap).map(([id, list]) => `"${id}": ${composition(list!).raw}`).join(',\n')}\n}`),
     max_alive_per_type: raw(`{ ${Object.entries(w.maxAlivePerType).map(([k, v]) => `&"${k}": ${v}`).join(', ')} }`),
     late_caps_from_round: w.lateMaxAlivePerType.fromWave,
+    boss_by_map: raw('{ "terminal": &"conductor", "map2": &"patient_zero" }'),
     boss_rounds: raw(`PackedInt32Array(${w.bossWaves.join(', ')})`),
     hound_rounds: raw(`{\n${Object.entries(houndRounds).map(([id, h]) => `"${id}": { "first_round": ${h!.firstWave}, "every": ${h!.every}, "per_round": ${h!.perWave}, "cap": ${h!.cap}, "max_alive": ${h!.maxAlive}, "spawn_interval": ${s(h!.spawnIntervalMs)}, "spawn_distance_min": ${m(h!.spawnDistance[0])}, "spawn_distance_max": ${m(h!.spawnDistance[1])}, "fog_darkness": ${h!.fog.extraDarkness}, "flashlight_factor": ${h!.fog.flashlightFactor} }`).join(',\n')}\n}`),
     late_max_alive_per_type: raw(`{ ${Object.entries(w.lateMaxAlivePerType.caps).map(([k, v]) => `&"${k}": ${v}`).join(', ')} }`),
@@ -199,7 +201,7 @@ function dict(obj: Record<string, unknown> | undefined): { raw: string } | undef
     if (typeof v === 'object' && v !== null) return [`"${snake(k)}": ${dict(v as Record<string, unknown>)!.raw}`];
     if (typeof v !== 'number') return [];
     const key = snake(k.replace(/Ms$/, '_time'));
-    const value = /Ms$/.test(k) ? s(v) : /range|radius|speed/i.test(k) ? m(v) : v;
+    const value = /Ms$/.test(k) ? s(v) : /range|radius|speed|distance|spread/i.test(k) ? m(v) : v;
     return [`"${key}": ${value}`];
   });
   return raw(`{ ${entries.join(', ')} }`);
@@ -220,6 +222,36 @@ const LOOKS: Record<string, { scene?: string; shirt: number; skin: number; scale
   armored: { shirt: 0x2c3140, skin: 0x5a6150, scale: 1.1 },
   hound: { scene: 'res://scenes/zombies/hound.tscn', shirt: 0x3a1a14, skin: 0x5a241a, scale: 1 },
 };
+
+/** Bosses: vida por aparição, fases e cada ataque (distâncias em m, tempos em s). */
+function exportBosses(): void {
+  for (const b of Object.values(bosses)) {
+    write(`bosses/${b.id}.tres`, tres('BossData', 'res://scripts/zombies/boss_data.gd', {
+      id: name(b.id),
+      display_name: b.name,
+      scene: raw('ExtResource("2_scene")'),
+      max_health: b.health,
+      health_per_appearance: b.healthPerAppearance,
+      move_speed: m(b.speed),
+      body_radius: m(b.bodyRadius),
+      reward: b.reward,
+      phase_thresholds: raw(`PackedFloat32Array(${b.phaseThresholds.join(', ')})`),
+      phase_speed: raw(`PackedFloat32Array(${b.phaseSpeed.join(', ')})`),
+      phase_cooldown: raw(`PackedFloat32Array(${b.phaseCooldown.join(', ')})`),
+      roar_time: s(b.roarMs),
+      melee: dict(b.melee as unknown as Record<string, unknown>),
+      charge: dict(b.charge as unknown as Record<string, unknown>),
+      shockwave: dict(b.shockwave as unknown as Record<string, unknown>),
+      summon: b.summon ? raw(`{ "from_phase": ${b.summon.fromPhase}, "count": ${b.summon.count}, "types": [${b.summon.types.map((t) => `&"${t}"`).join(', ')}], "cooldown_time": ${s(b.summon.cooldownMs)} }`) : undefined,
+      area: dict(b.area as unknown as Record<string, unknown>),
+      area_acid: b.area?.style === 'acid',
+      vomit: dict(b.vomit as unknown as Record<string, unknown>),
+      scream: b.scream ? raw(`{ "from_phase": ${b.scream.fromPhase}, "radius": ${m(b.scream.radius)}, "slow_time": ${s(b.scream.slowMs)}, "slow_factor": ${b.scream.slowFactor}, "cooldown_time": ${s(b.scream.cooldownMs)}, "summon_count": ${b.scream.summonCount}, "types": [${b.scream.types.map((t) => `&"${t}"`).join(', ')}] }`) : undefined,
+      lantern: b.lantern ?? false,
+      escort_ratio: b.escortRatio,
+    }, '[ext_resource type="PackedScene" path="res://scenes/zombies/boss.tscn" id="2_scene"]\n'));
+  }
+}
 
 function exportZombies(): void {
   for (const z of Object.values(zombieTypes)) {
@@ -256,6 +288,7 @@ exportCatalog();
 exportKnifeAndPlayer();
 exportRoundsAndPoints();
 exportZombies();
+exportBosses();
 exportMaps();
 exportMachines(write, tres as never);
 console.log('Pronto.');

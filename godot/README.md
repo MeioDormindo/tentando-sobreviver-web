@@ -4,7 +4,7 @@ Versão em **Godot 4.7 + GDScript** do jogo de sobrevivência por rounds (especi
 projeto). O jogo web em TypeScript (raiz deste repositório) continua no ar e serve de referência
 de conceitos: ver `docs/analise-typescript.md`.
 
-**Estado: combate, mapas, loja e máquinas migrados do jogo web.** Tem:
+**Estado: combate, mapas, loja, máquinas e inimigos migrados do jogo web.** Tem:
 - **Terminal Central migrado** (a partida começa nele) e o Hospital Santa Luzia pronto para
   entrar:
   - o mesmo layout do jogo web: áreas, paredes, trem parado, janelas por onde os zumbis entram,
@@ -24,7 +24,23 @@ de conceitos: ver `docs/analise-typescript.md`.
 - 2 armas com troca, faca com avanço e as 19 armas do jogo web:
   - chumbos, perfuração e o giro da minigun;
   - as especiais: granada, plasma, lança-chamas, raio e Canhão de Vento;
-- zumbi Walker com navegação e ataque;
+- os 8 inimigos do jogo web, com comportamento e aparência próprios (provisória, em blocos):
+  - Walker e Runner;
+  - Tank: grande e não é empurrado;
+  - Exploder: arma e explode perto do jogador e ao morrer;
+  - Rastejante: baixo, deixa gás ao morrer;
+  - Cuspidor: cospe ácido de longe, que vira poça;
+  - Blindado: a armadura absorve 75% no corpo, e o headshot derruba o capacete;
+  - Cão Infernal: não deixa corpo.
+- composição por round e por mapa, com limite de vivos por tipo; zumbi preso é realocado;
+- rodada dos cães no Hospital: rounds 5, 11, 17…, raios perto do jogador, névoa, munição cheia
+  no último cão;
+- bosses no round 10, 20, 30: The Conductor (Terminal) e Paciente Zero (Hospital):
+  - 4 fases com rugido invulnerável;
+  - golpe e investida (atordoado se bater na parede);
+  - The Conductor: onda de choque, invocação e círculos que explodem;
+  - Paciente Zero: vômito ácido, grito que deixa lento e chuva de ácido;
+  - escolta reduzida; barra de vida na HUD;
 - rounds cada vez mais difíceis, pontos, HUD, pausa, fim de jogo e reinício.
 
 ## Como abrir e jogar
@@ -55,7 +71,8 @@ reais do jogo web (`src/config`) e gera os `.tres` de `data/`:
 - as 19 armas e a faca;
 - o jogador;
 - as fórmulas dos rounds e a economia;
-- os 8 tipos de zumbi;
+- os 8 tipos de zumbi e as habilidades deles, a composição por round e a rodada dos cães;
+- os 2 bosses, com cada ataque;
 - barricadas, Mystery Box, Weapon Lab, os 7 perks, energia e o catálogo de armas;
 - os mapas (`data/maps/terminal.json` e `map2.json`): a grade de tiles montada na mesma ordem do
   jogo web, com áreas, portas, janelas, spawns por área, luzes, props, máquinas e compras na
@@ -71,7 +88,8 @@ passam a ser editados direto no Godot.
 # Sistemas isolados, sem janela (vida, headshot, munição e recarga, fórmulas dos rounds,
 # escolha do ponto de spawn, pontos, inventário, giro da minigun, dados migrados, os dois
 # mapas com portas, barricadas, compras, máquinas e navegação, sorteio da caixa, Weapon Lab,
-# perks) e, na mesma execução, testes de cena das 5 armas especiais:
+# perks, composição por round, rodada dos cães) e, na mesma execução, os testes de cena: as
+# 5 armas especiais, cada tipo de zumbi, a rodada dos cães e os dois bosses nos mapas migrados:
 Godot --headless --path godot -s res://tests/run_tests.gd
 
 # Jogado (abre uma janela), no Terminal migrado: um bot joga até o round 3 e confere
@@ -97,12 +115,15 @@ scripts/characters/              CharacterBase (CharacterBody3D + vida por compo
 scripts/player/                  Player + PlayerData (movimento, mira, tiro, faca, regeneração),
                                  TopDownCamera
 scripts/zombies/                 ZombieBase (perseguir → atacar → morto, NavigationAgent3D),
-                                 ZombieData, ZombieFactory
+                                 ZombieData, ZombieFactory, ZombieAbilities (explosão, cuspe,
+                                 armadura, gás), HazardPool (poças/nuvens), Boss + BossData +
+                                 BossAttacks
 scripts/weapons/                 Weapon (munição, recarga, raycast, chumbos, perfuração, giro),
                                  WeaponData, WeaponInventory (2 espaços), Melee + MeleeData (faca),
                                  WeaponUpgrade (Mk II/III), WeaponCatalog, SpecialFire +
                                  WeaponProjectile (granada, plasma, chama, raio, vento)
 scripts/systems/                 PerkSystem (modificadores dos perks), PowerSystem (energia),
+                                 BossManager (round de boss),
                                  RoundManager + RoundData, SpawnManager, PointsManager +
                                  PointsData, GameManager, AudioManager
 scripts/maps/                    GameWorld (base: spawn do jogador, áreas abertas, spawns ativos),
@@ -137,8 +158,6 @@ Decisões:
 ## Próximas fases (roadmap da especificação)
 
 - **Fase 4 (rounds):** novos tipos de zumbi e composição por round.
-- **Inimigos:** tipos de zumbi com corpo e comportamento próprios, composição por round, rodada
-  dos cães, bosses (The Conductor, Paciente Zero).
 - **Menu e progressão:** escolha de mapa, save, ranking online, conquistas, visuais.
 - **Eventos e extras:** power-ups (incluindo o Fire Sale), eventos do mapa (trem, apagão...),
   missão do Hospital, arma caída ao trocar.

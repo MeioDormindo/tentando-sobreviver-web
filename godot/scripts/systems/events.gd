@@ -40,6 +40,13 @@ signal perks_changed(names: Array[String])
 signal hound_round_changed(active: bool, config: Dictionary)
 ## Munição cheia para todas as armas (último cão, power-up Max Ammo).
 signal max_ammo(at: Vector3)
+## Boss chegando (aviso), estado da vida (barra da HUD), troca de fase e derrota.
+signal boss_incoming(boss_name: String)
+signal boss_state(boss_name: String, current: float, maximum: float, phase: int)
+signal boss_phase(boss_name: String, phase: int)
+signal boss_defeated(boss_id: StringName, boss_name: String, reward: int, at: Vector3)
+## O boss invocou zumbis (entram na contagem do round).
+signal zombies_summoned(count: int)
 ## Pausa ligada/desligada.
 signal pause_changed(paused: bool)
 ## A HUD pediu para jogar de novo.

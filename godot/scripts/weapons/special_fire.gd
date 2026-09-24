@@ -29,9 +29,9 @@ static func fire(weapon: Weapon, space: PhysicsDirectSpaceState3D, origin: Vecto
 				var dir := direction.rotated(Vector3.UP, deg_to_rad(randf_range(-data.spread_degrees, data.spread_degrees)))
 				hits.append_array(weapon.trace(space, origin, dir, exclude, shooter))
 			for info in hits:
-				var zombie := info.target as ZombieBase
-				if zombie and zombie.is_alive():
-					zombie.apply_burn(float(params.get("burn_dps", 0)) * weapon.damage_multiplier, float(params.get("burn_time", 0)), shooter)
+				var zombie := info.target as CharacterBase
+				if zombie and zombie.is_alive() and zombie.has_method(&"apply_burn"):
+					zombie.call(&"apply_burn", float(params.get("burn_dps", 0)) * weapon.damage_multiplier, float(params.get("burn_time", 0)), shooter)
 			return hits
 		&"arc":
 			return _arc(weapon, space, origin, direction, exclude, shooter)
@@ -49,7 +49,7 @@ static func world_root(tree: SceneTree) -> Node:
 static func blast(tree: SceneTree, at: Vector3, radius: float, damage: float, stun_time: float, shooter: Node, color: Color) -> Array[DamageInfo]:
 	var hits: Array[DamageInfo] = []
 	for node in tree.get_nodes_in_group(&"zombies"):
-		var zombie := node as ZombieBase
+		var zombie := node as CharacterBase
 		if zombie == null or not zombie.is_alive():
 			continue
 		var offset := zombie.global_position - at
@@ -61,8 +61,8 @@ static func blast(tree: SceneTree, at: Vector3, radius: float, damage: float, st
 			hits.append(hurtbox.receive_hit(damage, 1.0, DamageInfo.Kind.WEAPON, shooter, zombie.global_position))
 		if zombie.is_alive():
 			if stun_time > 0.0:
-				zombie.stun(stun_time)
-			zombie.apply_knockback(offset.normalized() * 4.0)
+				zombie.call(&"stun", stun_time)
+			zombie.call(&"apply_knockback", offset.normalized() * 4.0)
 	flash(tree, at, radius, color)
 	return hits
 
@@ -106,10 +106,10 @@ static func _arc(weapon: Weapon, space: PhysicsDirectSpaceState3D, origin: Vecto
 	var stun_time := float(params.get("stun_time", 0))
 	var chain_range := float(params.get("chain_range", 0))
 	var falloff := float(params.get("chain_falloff", 1))
-	var current := hits[0].target as ZombieBase
+	var current := hits[0].target as CharacterBase
 	var struck: Array[Node] = [current]
-	if current and current.is_alive():
-		current.stun(stun_time)
+	if current and current.is_alive() and current.has_method(&"stun"):
+		current.call(&"stun", stun_time)
 	var damage := weapon.data.damage * weapon.damage_multiplier
 	for i in int(params.get("chains", 0)):
 		if current == null:
@@ -123,7 +123,7 @@ static func _arc(weapon: Weapon, space: PhysicsDirectSpaceState3D, origin: Vecto
 		if hurtbox:
 			hits.append(hurtbox.receive_hit(damage, 1.0, DamageInfo.Kind.WEAPON, shooter, next.global_position))
 		if next.is_alive():
-			next.stun(stun_time)
+			next.call(&"stun", stun_time)
 		struck.append(next)
 		current = next
 	return hits
@@ -137,7 +137,7 @@ static func _gust(weapon: Weapon, origin: Vector3, direction: Vector3, shooter: 
 	var flat := Vector3(direction.x, 0.0, direction.z).normalized()
 	var hits: Array[DamageInfo] = []
 	for node in weapon.get_tree().get_nodes_in_group(&"zombies"):
-		var zombie := node as ZombieBase
+		var zombie := node as CharacterBase
 		if zombie == null or not zombie.is_alive():
 			continue
 		var offset := zombie.global_position - origin
@@ -148,7 +148,7 @@ static func _gust(weapon: Weapon, origin: Vector3, direction: Vector3, shooter: 
 		if hurtbox:
 			hits.append(hurtbox.receive_hit(float(params.get("damage", 0)) * weapon.damage_multiplier, 1.0, DamageInfo.Kind.WEAPON, shooter, zombie.global_position))
 		if zombie.is_alive():
-			zombie.apply_knockback(offset.normalized() * float(params.get("knockback", 0)))
+			zombie.call(&"apply_knockback", offset.normalized() * float(params.get("knockback", 0)))
 	# Rastro das bordas e do meio do cone.
 	for angle in [-0.5, 0.0, 0.5]:
 		var edge := flat.rotated(Vector3.UP, acos(cos_half) * 2.0 * angle)
@@ -156,11 +156,11 @@ static func _gust(weapon: Weapon, origin: Vector3, direction: Vector3, shooter: 
 	return hits
 
 
-static func _nearest_zombie(tree: SceneTree, from: Vector3, max_distance: float, skip: Array[Node]) -> ZombieBase:
-	var best: ZombieBase = null
+static func _nearest_zombie(tree: SceneTree, from: Vector3, max_distance: float, skip: Array[Node]) -> CharacterBase:
+	var best: CharacterBase = null
 	var best_distance := max_distance
 	for node in tree.get_nodes_in_group(&"zombies"):
-		var zombie := node as ZombieBase
+		var zombie := node as CharacterBase
 		if zombie == null or not zombie.is_alive() or zombie in skip:
 			continue
 		var distance := zombie.global_position.distance_to(from)

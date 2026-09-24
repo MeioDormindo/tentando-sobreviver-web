@@ -7,6 +7,8 @@ enum Phase { WAITING, ACTIVE, INTERMISSION, STOPPED }
 
 @export var data: RoundData
 @export var spawn_manager: SpawnManager
+## Rounds de boss (opcional: sem ele, não há boss).
+@export var boss_manager: BossManager
 
 var round_number: int = 0
 var phase: Phase = Phase.WAITING
@@ -15,6 +17,8 @@ var spawned: int = 0
 var killed: int = 0
 ## Rodada só de cães (Hospital).
 var is_hound_round: bool = false
+## Round de boss (o round só termina com o boss derrotado).
+var is_boss_round: bool = false
 
 var _timer := 0.0
 var _rng := RandomNumberGenerator.new()
@@ -24,6 +28,11 @@ var _spawn_timer := 0.0
 func _ready() -> void:
 	_rng.randomize()
 	Events.zombie_killed.connect(_on_zombie_killed)
+	Events.zombies_summoned.connect(func(count: int) -> void:
+		total += count
+		spawned += count
+		Events.round_remaining_changed.emit(total - killed))
+	Events.boss_defeated.connect(func(_id: StringName, _n: String, _r: int, _at: Vector3) -> void: _check_complete.call_deferred())
 	Events.player_died.connect(stop)
 	_timer = data.first_round_delay
 
@@ -50,6 +59,13 @@ func start_round(number: int) -> void:
 	is_hound_round = data.is_hound_round(number, map_id)
 	total = data.hound_total(number, map_id) if is_hound_round else data.total_zombies(number)
 	Events.hound_round_changed.emit(is_hound_round, data.hound_rounds.get(map_id, {}))
+	var boss_id: StringName = data.boss_by_map.get(map_id, &"")
+	is_boss_round = boss_manager != null and boss_id != &"" and data.boss_rounds.has(number)
+	if is_boss_round:
+		# O boss vem com uma horda reduzida de escolta.
+		total = maxi(2, roundi(total * boss_manager.escort_ratio(boss_id)))
+		boss_manager.start(boss_id)
+	spawn_manager.round_multipliers = [data.health_multiplier(number), data.damage_multiplier(number), data.speed_multiplier(number), number]
 	spawned = 0
 	killed = 0
 	phase = Phase.ACTIVE
@@ -117,7 +133,17 @@ func _on_zombie_killed(zombie: Node3D, _info: DamageInfo) -> void:
 		Events.max_ammo.emit(zombie.global_position)
 		is_hound_round = false
 		Events.hound_round_changed.emit(false, {})
-	if killed >= total:
-		phase = Phase.INTERMISSION
-		_timer = data.intermission
-		Events.round_completed.emit(round_number)
+	_check_complete()
+
+
+## O round termina quando todos os zumbis morreram e não há boss vivo.
+func _check_complete() -> void:
+	if phase != Phase.ACTIVE or killed < total:
+		return
+	if boss_manager and boss_manager.is_active():
+		return
+	if is_hound_round:
+		return  # o último cão ainda vai disparar a munição cheia
+	phase = Phase.INTERMISSION
+	_timer = data.intermission
+	Events.round_completed.emit(round_number)
