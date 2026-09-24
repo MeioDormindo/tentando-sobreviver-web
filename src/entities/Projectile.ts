@@ -33,11 +33,15 @@ export interface ProjectileShot {
   element?: ElementId | null;
   /** Chance de o efeito do elemento ocorrer neste projétil (espingardas dividem). */
   elementChance?: number;
+  /** Multiplicador de headshot da arma (null = o padrão). */
+  headshotMultiplier?: number;
 }
 
 /** Projétil reutilizável (pool via Physics Group): traçante, granada, chama ou plasma. */
 export class Projectile extends Phaser.Physics.Arcade.Image {
   damage = 0;
+  /** Multiplicador de headshot da arma que disparou (null = o padrão). */
+  headshotMultiplier: number | null = null;
   /** Zumbis que ainda pode atravessar. */
   pierceLeft = 0;
   special: ProjectileSpecial | null = null;
@@ -75,6 +79,7 @@ export class Projectile extends Phaser.Physics.Arcade.Image {
     this.scored = false;
     this.element = shot.element ?? null;
     this.elementChance = shot.elementChance ?? 1;
+    this.headshotMultiplier = shot.headshotMultiplier ?? null;
     this.setAppearance(shot.tint ?? 0xffffff);
     this.enableBody(true, shot.x, shot.y, true, true);
     if (this.special) {

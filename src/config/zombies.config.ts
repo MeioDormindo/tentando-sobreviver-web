@@ -195,7 +195,7 @@ export const zombies: Record<string, ZombieConfig> = {
     id: 'hound',
     name: 'Cão Infernal',
     health: 110,
-    damage: 12,
+    damage: 10,
     speed: 190,
     detectRange: 6000,
     attackRange: 30,

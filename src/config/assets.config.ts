@@ -129,7 +129,9 @@ export const ASSET_KEYS = {
   gasPipe: 'event_gas_pipe',
 } as const;
 
-export const WEAPON_KINDS: WeaponKind[] = ['pistol', 'smg', 'rifle', 'ak', 'shotgun', 'launcher', 'flamer', 'arc', 'energy'];
+export const WEAPON_KINDS: WeaponKind[] = [
+  'pistol', 'smg', 'rifle', 'ak', 'shotgun', 'launcher', 'flamer', 'arc', 'energy', 'revolver', 'sniper', 'akimbo', 'lmg', 'wind',
+];
 
 /** Tronco do jogador por tipo de arma (mesma ordem de frames em todas). */
 export const playerTorsoKey = (kind: WeaponKind): string => `player_torso_${kind}`;
@@ -163,6 +165,12 @@ export const WEAPON_MUZZLE: Record<WeaponKind, { forward: number; side: number }
   flamer: { forward: 31, side: 3 },
   arc: { forward: 30, side: 3 },
   energy: { forward: 31, side: 3 },
+  revolver: { forward: 27, side: 0 },
+  sniper: { forward: 36, side: 3 },
+  // Duas Uzis: o cano de cada lado (o sinal alterna a cada tiro)
+  akimbo: { forward: 24, side: 8 },
+  lmg: { forward: 32, side: 4 },
+  wind: { forward: 30, side: 3 },
 };
 
 export const zombieSheetKey = (skin: string): string => `zombie_${skin}`;

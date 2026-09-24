@@ -1,7 +1,8 @@
 import Phaser from 'phaser';
 import { headshotConfig } from '../config/economy.config';
+import { DEPTH } from '../config/visual.config';
 import type { PerkModifiers } from '../config/machines.config';
-import { knifeConfig, type WeaponConfig } from '../config/weapons.config';
+import { knifeConfig, type SpecialFire, type WeaponConfig } from '../config/weapons.config';
 import type { ExplosiveConfig } from '../config/zombies.config';
 import { emitGameEvent, GameEvents, type KillSource } from '../game/events';
 import type { EffectsSystem, ExplosionStyle } from '../effects/EffectsSystem';
@@ -87,6 +88,7 @@ interface Burn {
  */
 /** Raio de corpo usado pela faca para os zumbis (px). */
 const KNIFE_ZOMBIE_RADIUS = 14;
+
 
 export class CombatSystem {
   private readonly burning = new Map<Target, Burn>();
@@ -193,7 +195,7 @@ export class CombatSystem {
         }
         const angle = projectile.angleOfTravel;
         const headshot = CombatSystem.isHeadshot(projectile, zombie, angle);
-        const headshotMult = headshotConfig.damageMultiplier + modifiers.headshotBonus;
+        const headshotMult = (projectile.headshotMultiplier ?? headshotConfig.damageMultiplier) + modifiers.headshotBonus;
         const damage = buffs.instaKill
           ? zombie.hp
           : projectile.damage * (headshot ? headshotMult : 1) * buffs.damageMultiplier;
@@ -413,6 +415,62 @@ export class CombatSystem {
   }
 
   /** Aplica dano a um zumbi e contabiliza o que foi realmente tirado de vida. */
+  /**
+   * Canhão de Vento: rajada em cone que arremessa e fere tudo à frente (sem atravessar
+   * paredes). O dano cai até metade na borda do alcance.
+   */
+  fireGust(x: number, y: number, aim: number, sp: Extract<SpecialFire, { type: 'gust' }>, damageScale: number): void {
+    const { buffs, effects, nav } = this.deps;
+    const half = Phaser.Math.DegToRad(sp.arcDeg / 2);
+    this.drawGust(x, y, aim, sp.range, half);
+    for (const t of this.liveTargets()) {
+      const d = Phaser.Math.Distance.Between(x, y, t.x, t.y);
+      if (d > sp.range) continue;
+      const a = Phaser.Math.Angle.Between(x, y, t.x, t.y);
+      if (Math.abs(Phaser.Math.Angle.Wrap(a - aim)) > half) continue;
+      if (!nav.lineOfSight(x, y, t.x, t.y, 0)) continue;
+      const damage = sp.damage * damageScale * buffs.damageMultiplier * (1 - 0.5 * (d / sp.range));
+      const tx = t.x;
+      const ty = t.y;
+      if (t instanceof Boss) {
+        this.hurtBoss(t, damage);
+        continue;
+      }
+      t.knockback(a, sp.knockback);
+      if (this.hurtZombie(t, buffs.instaKill ? t.hp + 1 : damage)) effects.zombieDeath(tx, ty, a, t.skin);
+    }
+  }
+
+  /** Anéis de vento abrindo em leque na frente da arma. */
+  private drawGust(x: number, y: number, aim: number, range: number, half: number): void {
+    const { effects } = this.deps;
+    const g = this.scene.add.graphics().setDepth(DEPTH.glow).setBlendMode(Phaser.BlendModes.ADD);
+    const state = { t: 0 };
+    this.scene.tweens.add({
+      targets: state,
+      t: 1,
+      duration: 320,
+      ease: 'Cubic.easeOut',
+      onUpdate: () => {
+        g.clear();
+        for (let i = 0; i < 3; i++) {
+          const r = range * Math.max(0.1, state.t - i * 0.12);
+          g.lineStyle(10 - i * 3, 0xbfeaff, 0.5 * (1 - state.t));
+          g.beginPath();
+          g.arc(x, y, r, aim - half, aim + half, false);
+          g.strokePath();
+        }
+      },
+      onComplete: () => g.destroy(),
+    });
+    for (let i = 0; i < 10; i++) {
+      const a = aim + Phaser.Math.FloatBetween(-half, half);
+      const d = Phaser.Math.FloatBetween(0.3, 1) * range;
+      effects.gasPuff(x + Math.cos(a) * d, y + Math.sin(a) * d, 12, 0xdff4ff);
+    }
+    this.scene.cameras.main.shake(160, 0.006);
+  }
+
   /** Golpe de faca: acerta os alvos no arco à frente do jogador (sem atravessar paredes). Retorna quantos acertou. */
   melee(x: number, y: number, angle: number): number {
     const cfg = knifeConfig;

@@ -171,7 +171,7 @@ export class WaveSystem {
     this.houndRound = isHoundRound(this.mapId, wave);
     const hound = houndRounds[this.mapId];
     if (this.houndRound && hound) {
-      this.params.totalEnemies = Math.min(hound.cap, hound.perWave * wave);
+      this.params.totalEnemies = Math.min(hound.cap, Math.floor(hound.perWave * wave));
       this.params.maxAlive = hound.maxAlive;
       this.params.spawnInterval = hound.spawnIntervalMs;
       this.hounds?.onHoundRound(true, 0, 0);

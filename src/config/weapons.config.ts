@@ -1,9 +1,13 @@
 import type { ElementId } from './elements.config';
+import type { MapId } from './maps.config';
 
 export type Rarity = 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
 
 /** Tipo visual: define a pose do jogador, a maleta de compra e a posição do cano. */
-export type WeaponKind = 'pistol' | 'smg' | 'rifle' | 'ak' | 'shotgun' | 'launcher' | 'flamer' | 'arc' | 'energy';
+export type WeaponKind =
+  | 'pistol' | 'smg' | 'rifle' | 'ak' | 'shotgun' | 'launcher' | 'flamer' | 'arc' | 'energy'
+  // Hospital: revólver, sniper, duas Uzis, metralhadora giratória e o Canhão de Vento
+  | 'revolver' | 'sniper' | 'akimbo' | 'lmg' | 'wind';
 
 /**
  * Disparo especial (armas exclusivas da Mystery Box, GDD §44). Sem isto, a arma
@@ -17,7 +21,9 @@ export type SpecialFire =
   /** Raio elétrico instantâneo que salta entre alvos próximos e os atordoa. */
   | { type: 'arc'; chains: number; chainRange: number; chainFalloff: number; stunMs: number }
   /** Esfera de plasma: atravessa tudo e explode numa descarga ao bater na parede. */
-  | { type: 'plasma'; blastRadius: number; blastDamage: number; stunMs: number };
+  | { type: 'plasma'; blastRadius: number; blastDamage: number; stunMs: number }
+  /** Rajada de vento em cone (arma-maravilha): arremessa e fere tudo à frente, sem projétil. */
+  | { type: 'gust'; range: number; arcDeg: number; damage: number; knockback: number };
 
 export interface WeaponConfig {
   id: string;
@@ -58,6 +64,18 @@ export interface WeaponConfig {
   /** Elemento vendido na maleta desta arma (comprado à parte). */
   element?: ElementId;
   special?: SpecialFire;
+  /** Multiplicador do headshot desta arma (padrão: o global de headshotConfig). */
+  headshotMultiplier?: number;
+  /** Tempo girando o cano antes do primeiro tiro, com o gatilho seguro (ms). */
+  spinUpMs?: number;
+  /** Fração da velocidade do jogador enquanto atira. */
+  moveSlowWhileFiring?: number;
+  /** Duas armas: os tiros alternam entre o cano da esquerda e o da direita. */
+  akimbo?: boolean;
+  /** Só aparece na Mystery Box destes mapas (ausente = todos). */
+  maps?: MapId[];
+  /** Nome da versão Mk II, quando é especial (Canhão de Vento → Tornado). */
+  upgradeName?: string;
 }
 
 /**
@@ -155,6 +173,40 @@ export const weapons: Record<string, WeaponConfig> = {
     price: 0, ammoPrice: 3000, rarity: 'legendary', boxOnly: true, pierce: 999, tracerTint: 0x6ff0ff,
     special: { type: 'plasma', blastRadius: 130, blastDamage: 280, stunMs: 600 },
   },
+  // ── Hospital Santa Luzia ──
+  magnum: {
+    id: 'magnum', name: 'Magnum .44', kind: 'revolver',
+    damage: 140, fireRate: 420, magazineSize: 6, reserveAmmo: 48, reloadTime: 2100,
+    spread: 1, range: 900, projectileSpeed: 1400, pellets: 1, automatic: false,
+    price: 1500, ammoPrice: 750, rarity: 'rare', pierce: 1, headshotMultiplier: 3, element: 'lightning',
+  },
+  barrett: {
+    id: 'barrett', name: 'Barrett .50', kind: 'sniper',
+    damage: 450, fireRate: 1200, magazineSize: 5, reserveAmmo: 30, reloadTime: 2800,
+    spread: 0.3, range: 1500, projectileSpeed: 2200, pellets: 1, automatic: false,
+    price: 3000, ammoPrice: 1500, rarity: 'epic', pierce: 5, tracerTint: 0xfff2c0, element: 'explosive',
+  },
+  uzi_dual: {
+    id: 'uzi_dual', name: 'Uzi Dupla', kind: 'akimbo',
+    damage: 26, fireRate: 55, magazineSize: 64, reserveAmmo: 320, reloadTime: 2300,
+    spread: 5, range: 520, projectileSpeed: 1000, pellets: 1, automatic: true,
+    price: 2000, ammoPrice: 1000, rarity: 'rare', akimbo: true, element: 'shadow',
+  },
+  minigun: {
+    id: 'minigun', name: 'Minigun', kind: 'lmg',
+    damage: 32, fireRate: 45, magazineSize: 150, reserveAmmo: 450, reloadTime: 4000,
+    spread: 4, range: 750, projectileSpeed: 1300, pellets: 1, automatic: true,
+    price: 0, ammoPrice: 3000, rarity: 'epic', boxOnly: true, tracerTint: 0xffd070,
+    spinUpMs: 700, moveSlowWhileFiring: 0.55,
+  },
+  wind_cannon: {
+    id: 'wind_cannon', name: 'Canhão de Vento', kind: 'wind',
+    damage: 0, fireRate: 900, magazineSize: 2, reserveAmmo: 12, reloadTime: 2600,
+    spread: 0, range: 340, projectileSpeed: 0, pellets: 1, automatic: false,
+    price: 0, ammoPrice: 4000, rarity: 'legendary', boxOnly: true, maps: ['map2'], tracerTint: 0x9fe8ff,
+    upgradeName: 'Tornado',
+    special: { type: 'gust', range: 340, arcDeg: 70, damage: 1500, knockback: 900 },
+  },
 };
 
 /** Nível máximo no Weapon Lab (2 = Mk III). */
@@ -190,7 +242,7 @@ function toMk3(cfg: WeaponConfig): WeaponConfig {
   const u = weaponUpgradeMk3;
   return {
     ...cfg,
-    name: cfg.name.replace(/ Mk II$/, ' Mk III'),
+    name: / Mk II$/.test(cfg.name) ? cfg.name.replace(/ Mk II$/, ' Mk III') : `${cfg.name} Mk III`,
     pellets: cfg.pellets * u.pelletMultiplier,
     spread: cfg.spread + u.extraSpread,
     tracerTint: u.tracerTint,
@@ -204,7 +256,7 @@ function toMk2(cfg: WeaponConfig): WeaponConfig {
   return {
     ...cfg,
     special: cfg.special && upgradeSpecial(cfg.special),
-    name: `${cfg.name} Mk II`,
+    name: cfg.upgradeName ?? `${cfg.name} Mk II`,
     damage: Math.round(cfg.damage * u.damage),
     magazineSize: Math.round(cfg.magazineSize * u.magazine),
     reserveAmmo: Math.round(cfg.reserveAmmo * u.reserve),
@@ -228,6 +280,9 @@ function upgradeSpecial(sp: SpecialFire): SpecialFire {
       return { ...sp, burnDps: Math.round(sp.burnDps * d) };
     case 'arc':
       return { ...sp, chains: sp.chains + 3 };
+    case 'gust':
+      // Tornado: cone maior e mais longo.
+      return { ...sp, damage: Math.round(sp.damage * d), range: Math.round(sp.range * 1.25), arcDeg: sp.arcDeg + 15 };
   }
 }
 

@@ -99,10 +99,10 @@ export const houndRounds: Partial<Record<MapId, HoundRoundConfig>> = {
   map2: {
     firstWave: 5,
     every: 6,
-    perWave: 2,
+    perWave: 1.4,
     cap: 24,
-    maxAlive: 8,
-    spawnIntervalMs: 900,
+    maxAlive: 5,
+    spawnIntervalMs: 1400,
     spawnDistance: [220, 420],
     fog: { extraDarkness: 0.1, flashlightFactor: 0.85, tint: 0x0a1430 },
   },

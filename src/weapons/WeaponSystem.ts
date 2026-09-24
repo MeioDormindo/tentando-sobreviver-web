@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { WEAPON_MUZZLE } from '../config/assets.config';
 import { NEUTRAL_MODIFIERS, type PerkModifiers } from '../config/machines.config';
-import { getWeaponConfig, INVENTORY_SLOTS, WEAPON_SWITCH_MS, type WeaponConfig } from '../config/weapons.config';
+import { getWeaponConfig, INVENTORY_SLOTS, WEAPON_SWITCH_MS, type WeaponConfig, type SpecialFire } from '../config/weapons.config';
 import type { EffectsSystem } from '../effects/EffectsSystem';
 import type { Player } from '../entities/Player';
 import { Projectile } from '../entities/Projectile';
@@ -23,6 +23,8 @@ const isPerShot = (id: ElementId): boolean => 'perShot' in elementParams[id];
 /** Quem resolve o raio instantâneo da Arc Gun (CombatSystem). */
 export interface ArcCaster {
   fireArc(x: number, y: number, aim: number, cfg: WeaponConfig, damageScale: number): void;
+  /** Rajada de vento em cone (Canhão de Vento). */
+  fireGust(x: number, y: number, aim: number, sp: Extract<SpecialFire, { type: 'gust' }>, damageScale: number): void;
 }
 
 /**
@@ -42,6 +44,10 @@ export class WeaponSystem {
   private triggerConsumed = false;
   private lastSnapshotKey = '';
   private releaseRequired = false;
+  /** Instante em que o cano da minigun começou a girar (0 = parado). */
+  private spinStartedAt = 0;
+  /** Lado do próximo tiro das armas duplas (1 = direita, -1 = esquerda). */
+  private akimboSide = 1;
   private mods: Readonly<PerkModifiers> = NEUTRAL_MODIFIERS;
   private arcCaster: ArcCaster | null = null;
   private nextFlameSoundAt = 0;
@@ -168,15 +174,30 @@ export class WeaponSystem {
       // No celular atira-se empurrando o analógico direito (semiautomáticas repetem sozinhas).
       const touch = touchInput.enabled;
       const triggerDown = touch ? touchInput.firing : this.scene.input.activePointer.leftButtonDown();
+      const cfg = this.current.config;
       if (!triggerDown) {
         this.triggerConsumed = false;
         this.releaseRequired = false;
-      } else if (!this.releaseRequired && (this.current.config.automatic || touch || !this.triggerConsumed)) {
+        this.spinStartedAt = 0;
+      } else if (!this.releaseRequired && (cfg.automatic || touch || !this.triggerConsumed) && this.spunUp(time)) {
         this.tryFire(time);
       }
+      // Minigun e afins: o jogador anda mais devagar enquanto atira.
+      this.owner.fireSlow = triggerDown && cfg.moveSlowWhileFiring ? cfg.moveSlowWhileFiring : 1;
     }
 
     this.emitIfChanged();
+  }
+
+  /** Armas com giro (minigun) só atiram depois de o cano girar com o gatilho seguro. */
+  private spunUp(time: number): boolean {
+    const spin = this.current.config.spinUpMs;
+    if (!spin) return true;
+    if (this.spinStartedAt === 0) {
+      this.spinStartedAt = time;
+      audio.play('minigun_spin', { category: 'weapon', volume: 0.8, pitchJitter: 0 });
+    }
+    return time - this.spinStartedAt >= spin;
   }
 
   /** Reenvia o estado atual para a HUD. */
@@ -248,12 +269,17 @@ export class WeaponSystem {
     const muzzle = WEAPON_MUZZLE[cfg.kind];
     const cos = Math.cos(aim);
     const sin = Math.sin(aim);
-    const tipX = this.owner.x + cos * muzzle.forward - sin * muzzle.side;
-    const tipY = this.owner.y + sin * muzzle.forward + cos * muzzle.side;
+    // Armas duplas: cada tiro sai de um cano (direita, esquerda...).
+    const side = cfg.akimbo ? muzzle.side * (this.akimboSide = -this.akimboSide) : muzzle.side;
+    const tipX = this.owner.x + cos * muzzle.forward - sin * side;
+    const tipY = this.owner.y + sin * muzzle.forward + cos * side;
 
     const special = cfg.special;
     let fired = 1;
-    if (special?.type === 'arc') {
+    if (special?.type === 'gust') {
+      for (let i = 0; i < cfg.pellets; i++) this.arcCaster?.fireGust(tipX, tipY, aim, special, this.mods.damageMultiplier);
+      fired = 0;
+    } else if (special?.type === 'arc') {
       for (let i = 0; i < cfg.pellets; i++) {
         const offset = cfg.pellets > 1 ? Phaser.Math.DegToRad((i - (cfg.pellets - 1) / 2) * 16) : 0;
         this.arcCaster?.fireArc(tipX, tipY, aim + offset, cfg, this.mods.damageMultiplier);
@@ -270,7 +296,7 @@ export class WeaponSystem {
           x: tipX, y: tipY, angle: aim + spread, speed: cfg.projectileSpeed, range: cfg.range,
           damage: cfg.damage * this.mods.damageMultiplier, pierce: cfg.pierce,
           tint: element ? elements[element].color : cfg.tracerTint,
-          special, damageScale: this.mods.damageMultiplier,
+          special, damageScale: this.mods.damageMultiplier, headshotMultiplier: cfg.headshotMultiplier,
           element,
           // Efeitos "por disparo" (explosão, raio) se dividem entre os chumbos da espingarda.
           elementChance: element && isPerShot(element) ? 1 / cfg.pellets : 1,

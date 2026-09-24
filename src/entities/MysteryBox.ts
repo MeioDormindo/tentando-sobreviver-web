@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import type { MapId } from '../config/maps.config';
 import { FX_KEYS, gunIconKey, machineKeys, WEAPON_KINDS } from '../config/assets.config';
 import { mysteryBoxConfig } from '../config/machines.config';
 import { ART_SCALE, DEPTH } from '../config/visual.config';
@@ -22,6 +23,8 @@ export interface BoxSpots<H> {
   /** A área já foi aberta (o aviso diz quando a caixa foi para uma área fechada). */
   isAreaOpen(area: string): boolean;
   areaName(area: string): string;
+  /** Mapa atual (armas-maravilha só saem no mapa delas). */
+  mapId: MapId;
 }
 
 export const RARITY_COLORS: Record<Rarity, string> = {
@@ -37,7 +40,7 @@ const RARITY_ORDER: Rarity[] = ['common', 'uncommon', 'rare', 'epic', 'legendary
 const ICON_GLOW = 0xfff0c8;
 
 /** Sorteio da Mystery Box: primeiro a raridade (pelos pesos), depois uma arma dela. */
-export function rollMysteryWeapon(random: () => number = Math.random): WeaponConfig {
+export function rollMysteryWeapon(map: MapId, random: () => number = Math.random): WeaponConfig {
   const weights = mysteryBoxConfig.rarityWeights;
   const total = RARITY_ORDER.reduce((sum, r) => sum + weights[r], 0);
   let pick = random() * total;
@@ -51,7 +54,7 @@ export function rollMysteryWeapon(random: () => number = Math.random): WeaponCon
   }
   // Se a raridade não tiver armas, desce até achar uma que tenha.
   for (let i = RARITY_ORDER.indexOf(rarity); i >= 0; i--) {
-    const pool = Object.values(weapons).filter((w) => w.rarity === RARITY_ORDER[i]);
+    const pool = Object.values(weapons).filter((w) => w.rarity === RARITY_ORDER[i] && (!w.maps || w.maps.includes(map)));
     if (pool.length > 0) return pool[Math.floor(random() * pool.length)];
   }
   return weapons.m1911;
@@ -158,7 +161,7 @@ export class MysteryBox<H = unknown> implements Interactable {
   private roll(): void {
     this.state = 'rolling';
     this.uses++;
-    this.result = rollMysteryWeapon();
+    this.result = rollMysteryWeapon(this.places.mapId);
     audio.playAt('box_music', this.x, this.y, { category: 'ui', volume: 0.9, pitchJitter: 0 });
     this.icon.setVisible(true).setAlpha(1).setY(this.y - 30);
     this.label.setText('').setAlpha(1);

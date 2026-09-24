@@ -78,6 +78,8 @@ function playerTorso(pose, kind) {
 
   // Arma entre os braços e as luvas
   s += drawGun(kind, pose.gun[0], pose.gun[1], pose.gun[2]);
+  // Armas duplas: a segunda na mão esquerda
+  if (pose.gun2) s += drawGun(kind, pose.gun2[0], pose.gun2[1], pose.gun2[2]);
 
   // Carregador na mão (recarga)
   if (pose.mag) {
@@ -141,7 +143,6 @@ export const ZOMBIE_VARIANTS = {
   runner: { shirt: '#5a2e2a', shirtShade: '#35191a', pants: '#2c2e33', pantsShade: '#1b1c20', shoes: '#1a1614', skin: '#5f6953', skinShade: '#394032', hair: '#15120f', seed: 53, bald: false, rx: 13.5, ry: 23, gait: 'run', bloody: true },
   // Tank: corpo maior com proteção improvisada e capacete (GDD §55)
   tank: { shirt: '#3d4238', shirtShade: '#262a22', pants: '#33372f', pantsShade: '#20231d', shoes: '#191714', skin: '#6c7560', skinShade: '#444c3b', hair: '#1d1a17', seed: 67, bald: true, rx: 19, ry: 28, armor: true, helmet: true, scale: 1.375 },
-  // Exploder: inchado, com pústulas brilhantes — sinal claro de infecção (GDD §55)
   // Hospital: as mesmas proporções dos tipos originais
   h_a: { scale: 1 },
   h_b: { scale: 1 },
@@ -155,6 +156,7 @@ export const ZOMBIE_VARIANTS = {
   armored: { scale: 1.125 },
   armored_broken: { scale: 1.125 },
   hound: { scale: 1, noCorpse: true, body: 'hound' },
+  // Exploder: inchado, com pústulas brilhantes — sinal claro de infecção (GDD §55)
   exploder: { shirt: '#4f5a36', shirtShade: '#303822', pants: '#3a3a2c', pantsShade: '#23231a', shoes: '#1d1a17', skin: '#7f8c56', skinShade: '#4f5a32', hair: '#1d1a17', seed: 79, bald: true, rx: 19.5, ry: 27, pustules: true, noCorpse: true },
 };
 

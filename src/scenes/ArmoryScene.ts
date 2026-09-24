@@ -33,12 +33,14 @@ function specialText(cfg: WeaponConfig): string {
       return `Raio instantâneo que salta entre até ${sp.chains} zumbis e os atordoa.`;
     case 'plasma':
       return `Esfera que atravessa a horda e explode numa descarga elétrica (${sp.blastDamage} em área).`;
+    case 'gust':
+      return `Rajada de vento em cone (${sp.arcDeg}°, alcance ${sp.range}) que arremessa e destrói a horda à frente.`;
   }
 }
 
 /** Onde conseguir a arma: arma inicial, maleta (preço e área) ou só na Mystery Box. */
 function sourceText(cfg: WeaponConfig): string {
-  if (cfg.boxOnly) return 'Só na Mystery Box';
+  if (cfg.boxOnly) return cfg.maps ? `Só na Mystery Box do ${cfg.maps.map((m) => MAPS[m].name).join(' / ')}` : 'Só na Mystery Box';
   if (cfg.price === 0) return 'Arma inicial';
   // Maletas em todos os mapas: "Mapa · Área".
   const places: string[] = [];

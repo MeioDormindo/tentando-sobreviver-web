@@ -8,7 +8,7 @@ import {
 import * as ev from './recipes/events';
 import * as music from './recipes/music';
 import * as ui from './recipes/ui';
-import { dryFire, mk2Layer, plasmaBurst, reload, shellCasing, knifeSwing, shot, weaponSwitch } from './recipes/weapons';
+import { dryFire, mk2Layer, plasmaBurst, reload, shellCasing, knifeSwing, minigunSpin, shot, weaponSwitch } from './recipes/weapons';
 import * as world from './recipes/world';
 
 type Recipe = (sr: number, r: Rng) => Float32Array;
@@ -28,8 +28,8 @@ const MID = 32000;
 const LO = 22050;
 
 const WEAPON_IDS = ['m1911', 'glock', 'mp5', 'vector', 'm4', 'ak', 'pump', 'combat_shotgun', 'rpk', 'rail',
-  'grenade_launcher', 'flamethrower', 'arc_gun', 'energy_cannon'];
-const WEAPON_KINDS = ['pistol', 'smg', 'rifle', 'ak', 'shotgun', 'launcher', 'flamer', 'arc', 'energy'];
+  'grenade_launcher', 'flamethrower', 'arc_gun', 'energy_cannon', 'magnum', 'barrett', 'uzi_dual', 'minigun', 'wind_cannon'];
+const WEAPON_KINDS = ['pistol', 'smg', 'rifle', 'ak', 'shotgun', 'launcher', 'flamer', 'arc', 'energy', 'revolver', 'sniper', 'akimbo', 'lmg', 'wind'];
 const ZOMBIE_TYPES = ['walker', 'runner', 'tank', 'exploder'] as const;
 const HOSPITAL_TYPES = ['crawler', 'spitter', 'armored', 'hound'] as const;
 const SURFACES: world.Surface[] = ['terminal', 'concrete', 'metal', 'tracks', 'tunnel', 'wagon'];
@@ -43,6 +43,7 @@ export const SOUND_DEFS: SoundDef[] = [
   { key: 'dry_fire', variants: 1, sr: MID, make: dryFire },
   { key: 'weapon_switch', variants: 1, sr: MID, make: weaponSwitch },
   { key: 'knife_swing', variants: 3, sr: MID, make: knifeSwing },
+  { key: 'minigun_spin', variants: 1, sr: MID, make: minigunSpin },
   { key: 'shell', variants: 4, sr: MID, make: shellCasing },
   ...SURFACES.map((s) => ({ key: `step_${s}`, variants: 5, sr: MID, make: world.footstep[s], gain: s === 'metal' ? 1.5 : 1 })),
   ...ZOMBIE_TYPES.flatMap((type) => [

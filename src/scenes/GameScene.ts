@@ -208,6 +208,7 @@ export class GameScene extends Phaser.Scene {
             // O spawner é criado logo abaixo; só é consultado quando a caixa muda de lugar.
             isAreaOpen: (area) => spawner.isUnlocked(area),
             areaName: (area) => map.areas.find((a) => a.id === area)?.name ?? area,
+            mapId: this.mapId,
           })),
         );
       } else if (m.type === 'weapon_lab') {

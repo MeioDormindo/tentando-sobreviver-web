@@ -30,6 +30,11 @@ export const SHOT_SPECS: Record<string, ShotSpec> = {
   pump: { body: 480, bodyQ: 0.7, tau: 0.065, thump: 48, thumpGain: 1.3, tail: 0.32, bright: 0.8, crack: 0.7, drive: 3 },
   combat_shotgun: { body: 580, bodyQ: 0.8, tau: 0.05, thump: 54, thumpGain: 1.1, tail: 0.24, bright: 0.9, crack: 0.8, drive: 3 },
   rpk: { body: 680, bodyQ: 0.9, tau: 0.04, thump: 55, thumpGain: 1.1, tail: 0.21, bright: 1.1, crack: 1, drive: 3.5 },
+  // Hospital
+  magnum: { body: 560, bodyQ: 0.8, tau: 0.05, thump: 52, thumpGain: 1.4, tail: 0.3, bright: 0.9, crack: 1.2, drive: 4 },
+  barrett: { body: 420, bodyQ: 0.7, tau: 0.07, thump: 40, thumpGain: 1.6, tail: 0.45, bright: 1.2, crack: 1.6, drive: 4.5 },
+  uzi_dual: { body: 1900, bodyQ: 1.4, tau: 0.013, thump: 110, thumpGain: 0.35, tail: 0.05, bright: 1.4, crack: 0.8, drive: 2 },
+  minigun: { body: 1200, bodyQ: 1, tau: 0.018, thump: 80, thumpGain: 0.6, tail: 0.08, bright: 1.3, crack: 0.9, drive: 3 },
 };
 
 function gunshot(sr: number, r: Rng, spec: ShotSpec): Float32Array {
@@ -98,6 +103,41 @@ export function shot(id: string) {
     }
     return out;
   };
+}
+
+/** Canhão de Vento: sopro grave que "suga" e explode num rugido de ar. */
+function windBlast(sr: number, r: Rng): Float32Array {
+  const out = buffer(sr, 1.3);
+  const suck = buffer(sr, 0.3);
+  white(suck, r, 1);
+  bandpass(suck, sr, (t) => 300 + t * 3000, 1.2);
+  envelope(suck, sr, (t) => t / 0.3);
+  mixInto(out, suck, sr, 0, 0.5);
+  const blast = buffer(sr, 1);
+  pink(blast, r);
+  lowpass(blast, sr, (t) => 3000 * Math.exp(-t * 2.5) + 200);
+  envelope(blast, sr, adExp(0.004, 0.25));
+  mixInto(out, blast, sr, 0.28, 1.4);
+  const boom = buffer(sr, 0.5);
+  osc(boom, sr, 'sine', (t) => 50 * (1 + 2 * Math.exp(-t / 0.03)));
+  envelope(boom, sr, adExp(0.002, 0.12));
+  mixInto(out, boom, sr, 0.28, 1);
+  reverb(out, sr, 0.7, 0.3, 0.4);
+  return fadeEdges(normalize(out, 0.95), sr);
+}
+
+/** Minigun girando o cano antes de atirar (zumbido que acelera). */
+export function minigunSpin(sr: number, r: Rng): Float32Array {
+  const dur = 0.75;
+  const out = buffer(sr, dur);
+  osc(out, sr, 'saw', (t) => 40 + 260 * (t / dur), 0.5);
+  lowpass(out, sr, 1400);
+  const whir = buffer(sr, dur);
+  white(whir, r, 0.4);
+  bandpass(whir, sr, (t) => 600 + 2400 * (t / dur), 2);
+  mixInto(out, whir, sr, 0, 0.6);
+  envelope(out, sr, (t) => Math.min(1, t / 0.1));
+  return fadeEdges(normalize(out, 0.6), sr);
 }
 
 /** Rail Weapon: descarga elétrica — varredura aguda, estalos e estrondo grave. */
@@ -206,6 +246,7 @@ function plasmaShot(sr: number, r: Rng): Float32Array {
 }
 
 const SPECIAL_SHOTS: Record<string, (sr: number, r: Rng) => Float32Array> = {
+  wind_cannon: windBlast,
   grenade_launcher: grenadeThunk,
   flamethrower: flameWhoosh,
   arc_gun: arcZap,
@@ -263,7 +304,7 @@ export function reload(kind: string) {
       mixInto(out, pumpAction(sr, r), sr, 0.95, 0.9);
       return fadeEdges(normalize(out, 0.7), sr);
     }
-    const heavy = kind === 'rifle' || kind === 'ak' || kind === 'launcher' || kind === 'flamer' || kind === 'energy';
+    const heavy = ['rifle', 'ak', 'launcher', 'flamer', 'energy', 'sniper', 'lmg', 'wind'].includes(kind);
     // Solta o carregador, encaixa o novo, puxa o ferrolho
     mixInto(out, click(sr, r, heavy ? 1400 : 2200), sr, 0.05, 1);
     const cloth = buffer(sr, 0.25);

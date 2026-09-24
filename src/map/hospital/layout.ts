@@ -138,6 +138,9 @@ const SPAWNS: SpawnDef[] = [
 
 const STATIONS: StationPlacement[] = [
   { type: 'weapon', weaponId: 'glock', tx: 52, ty: 30 },
+  { type: 'weapon', weaponId: 'magnum', tx: 40, ty: 44 },
+  { type: 'weapon', weaponId: 'barrett', tx: 104, ty: 22 },
+  { type: 'weapon', weaponId: 'uzi_dual', tx: 110, ty: 66 },
   { type: 'ammo', tx: 68, ty: 30 },
   { type: 'weapon', weaponId: 'mp5', tx: 24, ty: 57 },
   { type: 'weapon', weaponId: 'pump', tx: 66, ty: 74 },

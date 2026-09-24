@@ -50,6 +50,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
   private mods: Readonly<PerkModifiers> = NEUTRAL_MODIFIERS;
   /** Multiplicador temporário de velocidade (power-up Speed Boost). */
   speedBuff = 1;
+  /** Lentidão enquanto atira com armas pesadas (Minigun); escrito pelo WeaponSystem. */
+  fireSlow = 1;
   /** Avanço da faca: direção e fim (ms). */
   private lungeAngle = 0;
   private lungeSpeed = 0;
@@ -199,7 +201,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
       else if (diff > Phaser.Math.DegToRad(60)) facing = this.config.strafeMultiplier;
     }
     const slowed = now < this.slowUntil ? this.slowFactor : 1;
-    this.moveDir.normalize().scale(this.config.speed * this.mods.speedMultiplier * this.speedBuff * facing * analog * slowed);
+    this.moveDir.normalize().scale(this.config.speed * this.mods.speedMultiplier * this.speedBuff * facing * analog * slowed * this.fireSlow);
     this.setVelocity(this.moveDir.x, this.moveDir.y);
   }
 
