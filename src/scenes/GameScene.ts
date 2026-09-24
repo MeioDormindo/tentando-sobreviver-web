@@ -5,6 +5,7 @@ import { getWeaponConfig } from '../config/weapons.config';
 import { Player } from '../entities/Player';
 import { Projectile } from '../entities/Projectile';
 import { Zombie } from '../entities/Zombie';
+import { save } from '../save/SaveStore';
 import { EffectsSystem } from '../effects/EffectsSystem';
 import { LightingSystem } from '../effects/LightingSystem';
 import { Barricade } from '../entities/Barricade';
@@ -12,6 +13,7 @@ import { AmmoStation, WeaponCase } from '../entities/BuyStations';
 import { Door } from '../entities/Door';
 import { PerkMachine, WeaponLab, type MachineDeps } from '../entities/Machines';
 import { MapInteractions } from '../entities/MapInteractions';
+import { EasterEggs } from '../systems/EasterEggs';
 import { MysteryBox } from '../entities/MysteryBox';
 import type { BarricadeTarget, ZombieWorld } from '../entities/Zombie';
 import { emitGameEvent, GameEvents, onGameEvent } from '../game/events';
@@ -85,6 +87,7 @@ export class GameScene extends Phaser.Scene {
 
   create(): void {
     const map = new TerminalMap(this);
+    Zombie.bigHeads = save.secret('konami') && save.setting('bigHeads');
     this.map = map;
     this.currentArea = '';
     this.physics.world.setBounds(0, 0, map.widthPx, map.heightPx);
@@ -248,6 +251,11 @@ export class GameScene extends Phaser.Scene {
       solids: map,
       zombies,
       events: this.eventSystem,
+    });
+    new EasterEggs(this, {
+      interaction: this.interaction,
+      player: this.player,
+      spawnGoldenDrop: (x, y) => this.powerUps.spawnDrop('golden', x, y),
     });
     this.minimap = new MinimapFeed(this, {
       map,

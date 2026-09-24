@@ -223,7 +223,7 @@ function bloat(v, id, cx, cy, w, d, r) {
  * Cabeça caída para a frente: crânio/cabelo por cima, orelhas nos lados e, na borda
  * da frente, sobrancelha, olhos opacos, nariz e mandíbula aberta com dentes.
  */
-function head(v, id, hx, hy, r, opts = {}) {
+export function head(v, id, hx, hy, r, opts = {}) {
   const R = (v.bulk ? 12.2 : 11) * (opts.scale ?? 1);
   const jaw = opts.jaw ?? 0.4;
   let s = '';

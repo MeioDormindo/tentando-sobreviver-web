@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { ASSET_KEYS, FX_KEYS, ZOMBIE_SKINS, zombieAnimKey, zombieSheetKey, type ZombieSkin } from '../config/assets.config';
+import { ASSET_KEYS, FX_KEYS, ZOMBIE_SKINS, zombieAnimKey, zombieBigHeadKey, zombieSheetKey, type ZombieSkin } from '../config/assets.config';
 import { ART_SCALE, DEPTH } from '../config/visual.config';
 import type { ExplosiveConfig, ZombieConfig } from '../config/zombies.config';
 import { emitGameEvent, GameEvents, type KillSource } from '../game/events';
@@ -53,6 +53,9 @@ const HEAVY_KNOCKBACK = 0.25;
  * IA: IDLE → CHASE → ATTACK, com BREAK_BARRICADE nas janelas (GDD §29).
  * Navegação: perseguição direta quando enxerga o alvo; caso contrário, segue o caminho do A*.
  */
+/** Distância (px) da cabeça grande à frente do centro do zumbi. */
+const BIG_HEAD_FORWARD = 6;
+
 export class Zombie extends Phaser.Physics.Arcade.Sprite {
   aiState: ZombieState = ZombieState.Dead;
   hp = 0;
@@ -89,6 +92,9 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
   private slowUntil = 0;
   private slowFactor = 1;
   private readonly knock = new Phaser.Math.Vector2();
+  /** Easter egg "modo cabeção" (ligado pela GameScene conforme o save). */
+  static bigHeads = false;
+  private bigHead: Phaser.GameObjects.Image | null = null;
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, zombieSheetKey('a'), 0);
@@ -110,6 +116,7 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     this.once(Phaser.GameObjects.Events.DESTROY, () => {
       scene.events.off(Phaser.Scenes.Events.POST_UPDATE, this.syncParts, this);
       this.shadow.destroy();
+      this.bigHead?.destroy();
       this.aura.destroy();
     });
   }
@@ -184,6 +191,12 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     this.rotation = Phaser.Math.Angle.Between(x, y, target.x, target.y);
     this.play({ key: zombieAnimKey(this.skin, 'walk'), startFrame: Phaser.Math.Between(0, 7) });
     this.shadow.setVisible(true);
+    if (Zombie.bigHeads) {
+      this.bigHead ??= this.scene.add.image(x, y, zombieBigHeadKey(this.skin));
+      this.bigHead.setTexture(zombieBigHeadKey(this.skin)).setScale(ART_SCALE * (ZOMBIE_SKINS[this.skin].frame / 128)).setVisible(true);
+    } else {
+      this.bigHead?.setVisible(false);
+    }
   }
 
   /** Move o zumbi para outro ponto (quando fica preso), mantendo vida e estado. */
@@ -409,12 +422,25 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
   }
 
   private syncParts(): void {
-    if (!this.active) return;
+    if (!this.active) {
+      this.bigHead?.setVisible(false);
+      return;
+    }
     this.setDepth(this.y);
     this.shadow.setPosition(this.x + SHADOW_OFFSET.x, this.y + SHADOW_OFFSET.y);
     if (this.aura.visible) {
       this.aura.setPosition(this.x, this.y);
       if (this.aiState !== ZombieState.SpecialAttack) this.aura.setAlpha(0.35 + 0.2 * Math.sin(this.scene.time.now / 180));
+    }
+    if (this.bigHead?.visible) {
+      const fwd = BIG_HEAD_FORWARD * (ZOMBIE_SKINS[this.skin].frame / 128);
+      this.bigHead
+        .setPosition(this.x + Math.cos(this.rotation) * fwd, this.y + Math.sin(this.rotation) * fwd)
+        .setRotation(this.rotation)
+        .setDepth(this.depth + 0.1)
+        .setAlpha(this.alpha);
+      if (this.isTinted) this.bigHead.setTint(this.tintTopLeft);
+      else this.bigHead.clearTint();
     }
   }
 
@@ -435,6 +461,7 @@ export class Zombie extends Phaser.Physics.Arcade.Sprite {
     this.clearTint();
     this.shadow.setVisible(false);
     this.aura.setVisible(false);
+    this.bigHead?.setVisible(false);
     this.disableBody(true, true);
     // Exploder abatido também explode (e o crédito dos abates vai para quem o matou).
     if (config?.explosive && !this.exploded) {

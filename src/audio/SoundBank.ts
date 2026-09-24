@@ -67,6 +67,8 @@ export const SOUND_DEFS: SoundDef[] = [
   { key: 'purchase', variants: 1, sr: MID, make: ui.purchase },
   { key: 'denied', variants: 1, sr: MID, make: ui.denied },
   { key: 'box_music', variants: 1, sr: MID, make: ui.boxMusic },
+  { key: 'secret_song', variants: 1, sr: MID, make: ui.secretSong },
+  { key: 'radio_static', variants: 1, sr: MID, make: ui.radioStatic },
   { key: 'box_reveal', variants: 1, sr: MID, make: ui.boxReveal },
   { key: 'box_move', variants: 1, sr: MID, make: ui.boxMove },
   { key: 'lab_upgrade', variants: 1, sr: MID, make: ui.labUpgrade },

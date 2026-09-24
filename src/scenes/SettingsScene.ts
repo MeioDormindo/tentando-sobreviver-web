@@ -41,7 +41,7 @@ export class SettingsScene extends Phaser.Scene {
   }
 
   private rows(): Row[] {
-    const toggle = (key: 'minimap' | 'screenShake') => () => save.set(key, !save.setting(key));
+    const toggle = (key: 'minimap' | 'screenShake' | 'bigHeads') => () => save.set(key, !save.setting(key));
     return [
       {
         label: 'VOLUME GERAL',
@@ -63,6 +63,7 @@ export class SettingsScene extends Phaser.Scene {
         value: () => TOUCH_LABELS[save.setting('touchMode')],
         change: () => save.set('touchMode', TOUCH_ORDER[(TOUCH_ORDER.indexOf(save.setting('touchMode')) + 1) % TOUCH_ORDER.length]),
       },
+      ...(save.secret('konami') ? [{ label: 'MODO CABEÇÃO', value: () => (save.setting('bigHeads') ? 'SIM' : 'NÃO'), change: toggle('bigHeads') }] : []),
       { label: 'TELA CHEIA', value: () => (this.scale.isFullscreen ? 'SIM' : 'NÃO'), change: () => this.scale.toggleFullscreen() },
       {
         label: 'APAGAR PROGRESSO',
@@ -88,9 +89,10 @@ export class SettingsScene extends Phaser.Scene {
     const w = Math.min(560, width - 32);
     const x0 = width / 2 - w / 2;
     const top = Math.min(52, height * 0.09) + 44;
-    const rowH = Math.min(40, (height - top - 140) / 8);
+    const rows = this.rows();
+    const rowH = Math.min(40, (height - top - 140) / rows.length);
     const size = rowH < 32 ? 14 : 17;
-    this.rows().forEach((row, i) => {
+    rows.forEach((row, i) => {
       const y = top + i * rowH;
       this.objects.push(this.add.text(x0, y, row.label, { fontFamily: MENU_FONT, fontSize: `${size}px`, color: COLORS.textDim }));
       const refresh = (dir: 1 | -1) => {
@@ -115,7 +117,7 @@ export class SettingsScene extends Phaser.Scene {
     const l = save.lifetime;
     const hours = Math.floor(l.playTimeMs / 3_600_000);
     const mins = Math.floor((l.playTimeMs % 3_600_000) / 60_000);
-    const stats = `PARTIDAS ${l.gamesPlayed} · ABATES ${l.totalKills.toLocaleString('pt-BR')} · BOSSES ${l.bossesDefeated} · TEMPO ${hours}h${mins.toString().padStart(2, '0')}`;
-    this.objects.push(this.add.text(width / 2, top + 8 * rowH + 14, stats, { fontFamily: MENU_FONT, fontSize: '13px', color: '#e3c77a', align: 'center', wordWrap: { width: w } }).setOrigin(0.5, 0));
+    const stats = `PARTIDAS ${l.gamesPlayed} · ABATES ${l.totalKills.toLocaleString('pt-BR')} · BOSSES ${l.bossesDefeated} · TEMPO ${hours}h${mins.toString().padStart(2, '0')}${save.secret('teddies') ? ' · 🧸 URSINHOS ✓' : ''}`;
+    this.objects.push(this.add.text(width / 2, top + rows.length * rowH + 14, stats, { fontFamily: MENU_FONT, fontSize: '13px', color: '#e3c77a', align: 'center', wordWrap: { width: w } }).setOrigin(0.5, 0));
   }
 }

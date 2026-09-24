@@ -40,6 +40,14 @@ export interface Settings {
   touchMode: TouchMode;
   /** Tremor de câmera (explosões, dano). */
   screenShake: boolean;
+  /** Easter egg: zumbis cabeçudos (liberado pelo código Konami). */
+  bigHeads: boolean;
+}
+
+/** Segredos descobertos (easter eggs). */
+export interface Secrets {
+  teddies: boolean;
+  konami: boolean;
 }
 
 interface SaveData {
@@ -49,6 +57,7 @@ interface SaveData {
   unlockedMaps: MapId[];
   ranking: Record<MapId, RankEntry[]>;
   lifetime: LifetimeStats;
+  secrets: Secrets;
 }
 
 const emptyRecords = (): MapRecords => ({ bestWave: 0, bestKills: 0, bestScore: 0 });
@@ -56,11 +65,12 @@ const emptyRecords = (): MapRecords => ({ bestWave: 0, bestKills: 0, bestScore: 
 function defaults(): SaveData {
   return {
     version: SAVE_VERSION,
-    settings: { muted: false, musicOn: true, playerName: 'SOBREVIVENTE', volume: 1, minimap: true, touchMode: 'auto', screenShake: true },
+    settings: { muted: false, musicOn: true, playerName: 'SOBREVIVENTE', volume: 1, minimap: true, touchMode: 'auto', screenShake: true, bigHeads: false },
     records: Object.fromEntries(MAP_IDS.map((id) => [id, emptyRecords()])) as Record<MapId, MapRecords>,
     unlockedMaps: MAP_IDS.filter((id) => MAPS[id].unlock === null),
     ranking: Object.fromEntries(MAP_IDS.map((id) => [id, []])) as unknown as Record<MapId, RankEntry[]>,
     lifetime: { gamesPlayed: 0, totalKills: 0, bossesDefeated: 0, playTimeMs: 0 },
+    secrets: { teddies: false, konami: false },
   };
 }
 
@@ -88,6 +98,7 @@ function sanitize(raw: unknown): SaveData {
   if (typeof s.volume === 'number' && Number.isFinite(s.volume)) d.settings.volume = Math.min(1, Math.max(0, s.volume));
   d.settings.minimap = s.minimap !== false;
   d.settings.screenShake = s.screenShake !== false;
+  d.settings.bigHeads = s.bigHeads === true;
   if (s.touchMode === 'on' || s.touchMode === 'off') d.settings.touchMode = s.touchMode;
   const recs = (r.records ?? {}) as Partial<Record<MapId, Partial<MapRecords>>>;
   for (const id of MAP_IDS) {
@@ -108,6 +119,8 @@ function sanitize(raw: unknown): SaveData {
   }
   const l = (r.lifetime ?? {}) as Partial<LifetimeStats>;
   d.lifetime = { gamesPlayed: num(l.gamesPlayed), totalKills: num(l.totalKills), bossesDefeated: num(l.bossesDefeated), playTimeMs: num(l.playTimeMs) };
+  const sec = (r.secrets ?? {}) as Partial<Secrets>;
+  d.secrets = { teddies: sec.teddies === true, konami: sec.konami === true };
   return d;
 }
 
@@ -209,6 +222,19 @@ class SaveStore {
     l.playTimeMs += run.timeMs;
     this.persist();
     return prev;
+  }
+
+  // ── Segredos ──
+  secret(key: keyof Secrets): boolean {
+    return this.data.secrets[key];
+  }
+
+  /** Marca um segredo como descoberto; retorna true se era novidade. */
+  discover(key: keyof Secrets): boolean {
+    if (this.data.secrets[key]) return false;
+    this.data.secrets[key] = true;
+    this.persist();
+    return true;
   }
 
   // ── Ranking ──

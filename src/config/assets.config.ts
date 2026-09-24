@@ -140,6 +140,8 @@ export const zombieSheetKey = (skin: string): string => `zombie_${skin}`;
 export const bossSheetKey = (id: string): string => `boss_${id}`;
 export const bossCorpseKey = (id: string): string => `boss_${id}_corpse`;
 export const bossAnimKey = (id: string, anim: 'walk' | 'swipe' | 'charge' | 'slam' | 'roar'): string => `boss_${id}_${anim}`;
+/** Cabeça grande do easter egg "modo cabeção". */
+export const zombieBigHeadKey = (skin: string): string => `big_head_${skin}`;
 export const zombieAnimKey = (skin: string, anim: 'walk' | 'attack'): string => `zombie_${skin}_${anim}`;
 
 export const PLAYER_FRAMES = {
@@ -233,6 +235,7 @@ export const IMAGES: ImageAsset[] = [
   { key: ASSET_KEYS.panelTrap, url: 'assets/props/panel_trap.svg' },
   { key: ASSET_KEYS.trapGrate, url: 'assets/props/trap_grate.svg' },
   { key: ASSET_KEYS.teddy, url: 'assets/props/teddy.svg' },
+  ...ZOMBIE_SKIN_IDS.map((skin) => ({ key: zombieBigHeadKey(skin), url: `assets/zombies/big_head_${skin}.svg` })),
   { key: ASSET_KEYS.radio, url: 'assets/props/radio.svg' },
   { key: ASSET_KEYS.trainHead, url: 'assets/events/train_head.svg' },
   { key: ASSET_KEYS.trainCar, url: 'assets/events/train_car.svg' },

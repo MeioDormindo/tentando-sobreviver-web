@@ -36,6 +36,9 @@ const GAME_OVER_DELAY_MS = 1400;
 const formatMoney = (n: number): string => `$ ${n.toLocaleString('pt-BR')}`;
 
 /** HUD sobreposta à GameScene. Apenas escuta eventos; não contém regra de jogo. */
+/** Acima disto (caracteres) o aviso vira mensagem longa. */
+const LONG_TOAST = 48;
+
 export class UIScene extends Phaser.Scene {
   private hpBar!: Phaser.GameObjects.Graphics;
   private hpText!: Phaser.GameObjects.Text;
@@ -528,9 +531,17 @@ export class UIScene extends Phaser.Scene {
   /** Nome da área ao entrar / aviso de área liberada, no topo da tela. */
   private showAreaText(text: string, color: string): void {
     this.tweens.killTweensOf(this.areaText);
-    this.areaText.setText(text).setColor(color).setAlpha(0);
+    // Mensagens longas (rádio, créditos): letra menor, quebra de linha e mais tempo na tela.
+    const long = text.length > LONG_TOAST;
+    this.areaText
+      .setText(text)
+      .setColor(color)
+      .setAlpha(0)
+      .setFontSize(long ? 18 : 26)
+      .setWordWrapWidth(long ? Math.min(720, this.scale.width - 48) : null)
+      .setAlign('center');
     this.tweens.add({ targets: this.areaText, alpha: 1, duration: 300 });
-    this.tweens.add({ targets: this.areaText, alpha: 0, delay: 2200, duration: 800 });
+    this.tweens.add({ targets: this.areaText, alpha: 0, delay: long ? 5500 : 2200, duration: 800 });
   }
 
   private onPrompt(prompt: InteractionPromptPayload | null): void {

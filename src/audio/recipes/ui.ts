@@ -1,5 +1,5 @@
 import {
-  adExp, buffer, envelope, fadeEdges, lowpass, mixInto, normalize, osc, range, resonantHit, reverb, white, type Rng,
+  adExp, biquad, buffer, envelope, fadeEdges, lowpass, mixInto, normalize, osc, range, resonantHit, reverb, white, type Rng,
 } from '../dsp';
 
 /** Nota de sino/caixinha de música (parciais inarmônicas). */
@@ -150,4 +150,29 @@ export function uiBeep(sr: number, _r: Rng): Float32Array {
   osc(out, sr, 'sine', () => 880, 0.6);
   envelope(out, sr, adExp(0.003, 0.03));
   return fadeEdges(normalize(out, 0.4), sr);
+}
+
+/** Easter egg dos ursinhos: canção de ninar de caixinha de música, meio desafinada. */
+export function secretSong(sr: number, r: Rng): Float32Array {
+  // Brilha, brilha, estrelinha (Dó maior), notas em semínimas
+  const melody = [60, 60, 67, 67, 69, 69, 67, -1, 65, 65, 64, 64, 62, 62, 60];
+  const beat = 0.32;
+  const out = buffer(sr, melody.length * beat + 1.6);
+  melody.forEach((m, i) => {
+    if (m < 0) return;
+    const detune = 1 + range(r, -0.012, 0.012);
+    mixInto(out, bell(sr, note(m + 12) * detune, 1.2, 0.8), sr, i * beat, 0.7);
+  });
+  return fadeEdges(normalize(reverb(out, sr, 0.7, 0.35), 0.6), sr);
+}
+
+/** Rádio: estática com chiado sintonizando. */
+export function radioStatic(sr: number, r: Rng): Float32Array {
+  const out = white(buffer(sr, 1.4), r, 1);
+  biquad(out, sr, 'bandpass', (t) => 1400 + 900 * Math.sin(t * 9), 1.2);
+  envelope(out, sr, (t) => (t < 0.05 ? t / 0.05 : 1) * (0.55 + 0.45 * Math.abs(Math.sin(t * 23))) * (t > 1.2 ? (1.4 - t) / 0.2 : 1));
+  const tone = buffer(sr, 1.4);
+  osc(tone, sr, 'sine', (t) => 900 + 300 * Math.sin(t * 5), 0.15);
+  mixInto(out, tone, sr, 0, 1);
+  return fadeEdges(normalize(out, 0.45), sr);
 }

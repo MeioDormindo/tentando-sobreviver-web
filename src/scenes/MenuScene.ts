@@ -1,11 +1,16 @@
 import Phaser from 'phaser';
 import { SCENE_KEYS } from '../config/game.config';
 import { DEFAULT_MAP } from '../config/maps.config';
+import { secretsConfig } from '../config/secrets.config';
+import { audio } from '../audio/AudioSystem';
 import { useTouchControls } from '../input/device';
 import { save } from '../save/SaveStore';
 import { MENU_FONT, menuButton, menuTitle, onResize } from '../ui/menuWidgets';
 
 const KEYBOARD_HINT = 'WASD mover · Mouse mirar · Clique atirar · R recarregar · E comprar · Q/1/2 trocar arma · M som · N música · ESC pausa';
+const KONAMI_KEYS: Record<string, string> = { ArrowUp: 'UP', ArrowDown: 'DOWN', ArrowLeft: 'LEFT', ArrowRight: 'RIGHT', b: 'B', B: 'B', a: 'A', A: 'A' };
+/** No celular: tocar no título este número de vezes libera o mesmo segredo. */
+const TITLE_TAPS = 10;
 const TOUCH_HINT = 'Analógico esquerdo: mover · Analógico direito: girar a lanterna · ATIRAR: atira para onde a lanterna aponta';
 
 export class MenuScene extends Phaser.Scene {
@@ -42,7 +47,41 @@ export class MenuScene extends Phaser.Scene {
       hint.setWordWrapWidth(width - 32).setPosition(width / 2, height - 30);
     });
 
+    this.listenForKonami(title);
+
     // Enter pula direto para o Terminal Central.
     this.input.keyboard?.once('keydown-ENTER', () => this.scene.start(SCENE_KEYS.game, { map: DEFAULT_MAP }));
+  }
+
+  /** Easter egg: código Konami (ou tocar muito no título) libera o "modo cabeção". */
+  private listenForKonami(title: Phaser.GameObjects.Text): void {
+    const code = secretsConfig.konami;
+    let pos = 0;
+    this.input.keyboard?.on('keydown', (e: KeyboardEvent) => {
+      const k = KONAMI_KEYS[e.key];
+      pos = k === code[pos] ? pos + 1 : k === code[0] ? 1 : 0;
+      if (pos === code.length) {
+        pos = 0;
+        this.unlockBigHeads(title);
+      }
+    });
+    let taps = 0;
+    title.setInteractive().on('pointerdown', () => {
+      if (++taps === TITLE_TAPS) this.unlockBigHeads(title);
+    });
+  }
+
+  private unlockBigHeads(title: Phaser.GameObjects.Text): void {
+    const first = save.discover('konami');
+    save.set('bigHeads', true);
+    audio.play('secret_song', { category: 'ui', volume: 0.8, rate: 1.25, pitchJitter: 0 });
+    this.cameras.main.flash(300, 120, 200, 90);
+    const { width } = this.scale;
+    const msg = this.add
+      .text(width / 2, title.y + title.displayHeight / 2 + 70, first ? 'MODO CABEÇÃO LIBERADO!\n(liga/desliga em Configurações)' : 'MODO CABEÇÃO LIGADO!', {
+        fontFamily: MENU_FONT, fontSize: '20px', color: '#b8e04a', align: 'center', stroke: '#000', strokeThickness: 4,
+      })
+      .setOrigin(0.5);
+    this.tweens.add({ targets: msg, alpha: 0, delay: 2600, duration: 700, onComplete: () => msg.destroy() });
   }
 }

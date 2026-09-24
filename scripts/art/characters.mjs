@@ -1,7 +1,7 @@
 // Personagens vistos de cima, virados para +X (direita). Frames de 128x128 (escala 2x do mundo).
 import { blobPath, f, ik, line, linear, polyline, radial, raggedEllipse, rng, sheet } from './lib.mjs';
 import { drawGun, posesFor } from './weapons.mjs';
-import { UNDEAD, undeadCorpse, undeadDefs, undeadFrame, undeadPoses } from './undead.mjs';
+import { head, UNDEAD, undeadCorpse, undeadDefs, undeadFrame, undeadPoses } from './undead.mjs';
 
 export const CHAR_FRAME = 128;
 const C = 64;
@@ -243,6 +243,12 @@ function zombieFrame(v, id, pose) {
 export const zombieFrameSize = (id) => Math.round(CHAR_FRAME * (ZOMBIE_VARIANTS[id].scale ?? 1));
 
 /** Frames 0-7: andar (arrastado ou correndo) · 8-12: ataque. Arte em undead.mjs. */
+/** Easter egg "modo cabeção": só a cabeça da variante, bem grande (72x72, virada para +X). */
+export function zombieBigHead(id) {
+  const u = UNDEAD[id];
+  return sheet(72, 72, undeadDefs(u, id), [head(u, id, 34, 36, rng(u.seed + 5), { scale: 2.2, jaw: 0.7 })]);
+}
+
 export function zombieSheet(id) {
   const v = ZOMBIE_VARIANTS[id];
   const u = UNDEAD[id];
