@@ -248,7 +248,8 @@ export const knifeConfig = {
   /** Alcance do golpe (px, do centro do jogador) e abertura do arco (graus). */
   range: 48,
   arcDeg: 120,
-  cooldownMs: 550,
+  /** Tempo mínimo entre golpes (ms). */
+  cooldownMs: 1000,
   /** Tempo entre o início do golpe e o acerto (ms); as armas ficam paradas por busyMs. */
   windupMs: 70,
   busyMs: 380,
