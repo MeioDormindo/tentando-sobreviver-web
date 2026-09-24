@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ZombieData" format=3]
+
+[ext_resource type="Script" path="res://scripts/zombies/zombie_data.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/zombies/zombie_walker.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"walker"
+display_name = "Walker"
+scene = ExtResource("2_scene")
+max_health = 100.0
+move_speed = 1.9
+damage = 10.0
+attack_range = 1.1
+attack_interval = 1.0
+points_kill = 100

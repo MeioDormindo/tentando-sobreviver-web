@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="RoundData" format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/round_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+base_zombies = 6
+zombies_per_round = 3
+health_per_round = 0.12
+late_from_round = 10
+late_health_per_round = 0.06
+damage_per_round = 0.08
+speed_per_round = 0.015
+spawn_interval_base = 1.8
+spawn_interval_per_round = -0.12
+spawn_interval_min = 0.4
+max_alive_base = 8.0
+max_alive_per_round = 1.75
+max_alive_cap = 30
+first_round_delay = 3.5
+intermission = 10.0
+refill_ammo_on_round_end = true

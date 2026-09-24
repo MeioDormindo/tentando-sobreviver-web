@@ -24,3 +24,7 @@ signal round_completed(round_number: int)
 signal interaction_prompt(text: String)
 ## Fim de jogo com o resumo da partida.
 signal game_over(summary: Dictionary)
+## Pausa ligada/desligada.
+signal pause_changed(paused: bool)
+## A HUD pediu para jogar de novo.
+signal restart_requested()

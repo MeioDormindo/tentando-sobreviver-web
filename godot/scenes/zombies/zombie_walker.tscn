@@ -1,0 +1,115 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/zombies/zombie_base.gd" id="1_zombie"]
+[ext_resource type="Script" path="res://scripts/components/health_component.gd" id="2_health"]
+[ext_resource type="Script" path="res://scripts/components/hurtbox.gd" id="3_hurtbox"]
+
+[sub_resource type="CapsuleShape3D" id="Shape_body"]
+radius = 0.35
+height = 1.75
+
+[sub_resource type="CapsuleShape3D" id="Shape_hurt_body"]
+radius = 0.42
+height = 1.35
+
+[sub_resource type="SphereShape3D" id="Shape_hurt_head"]
+radius = 0.25
+
+[sub_resource type="StandardMaterial3D" id="Mat_shirt"]
+albedo_color = Color(0.37, 0.33, 0.26, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="Mat_skin"]
+albedo_color = Color(0.42, 0.46, 0.37, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_eyes"]
+shading_mode = 0
+albedo_color = Color(0.9, 0.2, 0.15, 1)
+
+[sub_resource type="CapsuleMesh" id="Mesh_body"]
+material = SubResource("Mat_shirt")
+radius = 0.33
+height = 1.4
+
+[sub_resource type="SphereMesh" id="Mesh_head"]
+material = SubResource("Mat_skin")
+radius = 0.2
+height = 0.4
+
+[sub_resource type="CapsuleMesh" id="Mesh_arm"]
+material = SubResource("Mat_skin")
+radius = 0.07
+height = 0.7
+
+[sub_resource type="SphereMesh" id="Mesh_eye"]
+material = SubResource("Mat_eyes")
+radius = 0.035
+height = 0.07
+
+[node name="ZombieWalker" type="CharacterBody3D"]
+collision_layer = 4
+collision_mask = 7
+script = ExtResource("1_zombie")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("2_health")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.875, 0)
+shape = SubResource("Shape_body")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 0.6
+target_desired_distance = 0.9
+radius = 0.4
+height = 1.75
+
+[node name="BodyHurtbox" type="Area3D" parent="." node_paths=PackedStringArray("health")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0)
+collision_layer = 8
+collision_mask = 0
+monitoring = false
+script = ExtResource("3_hurtbox")
+health = NodePath("../HealthComponent")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BodyHurtbox"]
+shape = SubResource("Shape_hurt_body")
+
+[node name="HeadHurtbox" type="Area3D" parent="." node_paths=PackedStringArray("health")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+collision_layer = 8
+collision_mask = 0
+monitoring = false
+script = ExtResource("3_hurtbox")
+health = NodePath("../HealthComponent")
+is_head = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HeadHurtbox"]
+shape = SubResource("Shape_hurt_head")
+
+[node name="Pivot" type="Node3D" parent="."]
+
+[node name="Body" type="MeshInstance3D" parent="Pivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0)
+mesh = SubResource("Mesh_body")
+
+[node name="Head" type="MeshInstance3D" parent="Pivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+mesh = SubResource("Mesh_head")
+
+[node name="EyeL" type="MeshInstance3D" parent="Pivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, 1.64, -0.17)
+mesh = SubResource("Mesh_eye")
+
+[node name="EyeR" type="MeshInstance3D" parent="Pivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 1.64, -0.17)
+mesh = SubResource("Mesh_eye")
+
+[node name="ArmL" type="MeshInstance3D" parent="Pivot"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -0.3, 1.2, -0.3)
+mesh = SubResource("Mesh_arm")
+
+[node name="ArmR" type="MeshInstance3D" parent="Pivot"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.3, 1.2, -0.3)
+mesh = SubResource("Mesh_arm")

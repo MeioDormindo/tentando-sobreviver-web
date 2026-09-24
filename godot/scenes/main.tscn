@@ -1,0 +1,56 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/maps/test_arena.tscn" id="1_arena"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="3_hud"]
+[ext_resource type="Script" path="res://scripts/player/top_down_camera.gd" id="4_camera"]
+[ext_resource type="Script" path="res://scripts/systems/spawn_manager.gd" id="5_spawn"]
+[ext_resource type="Script" path="res://scripts/systems/round_manager.gd" id="6_round"]
+[ext_resource type="Script" path="res://scripts/systems/points_manager.gd" id="7_points"]
+[ext_resource type="Script" path="res://scripts/systems/game_manager.gd" id="8_game"]
+[ext_resource type="Script" path="res://scripts/systems/audio_manager.gd" id="9_audio"]
+[ext_resource type="Resource" path="res://data/zombies/walker.tres" id="10_walker"]
+[ext_resource type="Resource" path="res://data/configs/rounds.tres" id="11_rounds"]
+[ext_resource type="Resource" path="res://data/configs/points.tres" id="12_points"]
+
+[node name="Main" type="Node3D"]
+
+[node name="World" parent="." instance=ExtResource("1_arena")]
+
+[node name="Player" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("2_player")]
+camera = NodePath("../Camera")
+
+[node name="Camera" type="Camera3D" parent="." node_paths=PackedStringArray("target")]
+current = true
+fov = 50.0
+script = ExtResource("4_camera")
+target = NodePath("../Player")
+
+[node name="Zombies" type="Node3D" parent="."]
+
+[node name="SpawnManager" type="Node" parent="." node_paths=PackedStringArray("container", "target")]
+script = ExtResource("5_spawn")
+zombie_data = ExtResource("10_walker")
+container = NodePath("../Zombies")
+target = NodePath("../Player")
+
+[node name="RoundManager" type="Node" parent="." node_paths=PackedStringArray("spawn_manager")]
+script = ExtResource("6_round")
+data = ExtResource("11_rounds")
+spawn_manager = NodePath("../SpawnManager")
+
+[node name="PointsManager" type="Node" parent="."]
+script = ExtResource("7_points")
+data = ExtResource("12_points")
+
+[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("player", "arena", "round_manager", "points_manager")]
+script = ExtResource("8_game")
+player = NodePath("../Player")
+arena = NodePath("../World")
+round_manager = NodePath("../RoundManager")
+points_manager = NodePath("../PointsManager")
+
+[node name="AudioManager" type="Node" parent="."]
+script = ExtResource("9_audio")
+
+[node name="HUD" parent="." instance=ExtResource("3_hud")]

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PointsData" format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/points_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+start_points = 500
+headshot_kill_bonus = 50
+melee_kill_bonus = 60
+round_bonus_base = 300
+round_bonus_per_round = 50
