@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { ambientEvents, audioConfig, type SoundCategory } from '../config/audio.config';
+import { ambienceAlias, ambientEvents, audioConfig, type SoundCategory } from '../config/audio.config';
 import { GameEvents, onGameEvent, type PlayerHpPayload, type WaveStatePayload, type ZombieKilledPayload } from '../game/events';
 import { AMBIENCE_AREAS, soundVariants } from './SoundBank';
 import { save } from '../save/SaveStore';
@@ -52,7 +52,7 @@ export class AudioSystem {
   private listener: Listener | null = null;
   private surfaceAt: (x: number, y: number) => string = () => 'terminal';
   private readonly voices = new Map<SoundCategory, number>();
-  private ambience: { area: string; sound: Phaser.Sound.BaseSound } | null = null;
+  private ambience: { area: string; loop: string; sound: Phaser.Sound.BaseSound } | null = null;
   private nextAmbientEventAt = 0;
   private heartbeat: Phaser.Sound.BaseSound | null = null;
   private lastHp = -1;
@@ -202,16 +202,22 @@ export class AudioSystem {
   /** Ambiente da área com transição suave. */
   setArea(area: string): void {
     const scene = this.scene;
-    if (!scene || this.ambience?.area === area || !AMBIENCE_AREAS.includes(area)) return;
+    const loop = ambienceAlias[area] ?? area;
+    if (!scene || !AMBIENCE_AREAS.includes(loop)) return;
+    if (this.ambience && this.ambience.loop === loop) {
+      // Mesmo loop (área apelidada): só troca os sons pontuais.
+      this.ambience.area = area;
+      return;
+    }
     const old = this.ambience;
-    const sound = this.play(`amb_${area}`, { category: 'ambience', loop: true, volume: 0, pitchJitter: 0 });
+    const sound = this.play(`amb_${loop}`, { category: 'ambience', loop: true, volume: 0, pitchJitter: 0 });
     if (!sound) return;
     const target = audioConfig.categories.ambience * audioConfig.master;
     scene.tweens.add({ targets: sound, volume: target, duration: audioConfig.ambienceCrossfadeMs });
     if (old) {
       scene.tweens.add({ targets: old.sound, volume: 0, duration: audioConfig.ambienceCrossfadeMs, onComplete: () => old.sound.destroy() });
     }
-    this.ambience = { area, sound };
+    this.ambience = { area, loop, sound };
   }
 
   /** Sons ambientes aleatórios em volta do jogador (estrondos, gemidos, gotas, trem distante). */

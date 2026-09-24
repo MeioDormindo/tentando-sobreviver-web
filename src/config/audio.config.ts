@@ -72,4 +72,25 @@ export const ambientEvents: Record<string, string[]> = {
   tech: ['amb_steam', 'amb_bang', 'amb_creak'],
   tunnels: ['amb_drip', 'amb_drip', 'amb_moan', 'amb_bang'],
   maintenance: ['amb_steam', 'amb_steam', 'amb_bang'],
+  // Hospital
+  reception: ['amb_drip', 'amb_bang', 'amb_moan'],
+  surgery: ['amb_creak', 'amb_moan', 'amb_drip'],
+  icu: ['amb_moan', 'amb_creak'],
+  ward: ['amb_moan', 'amb_creak', 'amb_bang'],
+  radiology: ['amb_bang', 'amb_creak', 'amb_steam'],
+  pharmacy: ['amb_bang', 'amb_moan'],
+  pediatrics: ['amb_creak', 'amb_moan'],
+  morgue: ['amb_drip', 'amb_drip', 'amb_moan'],
+  cafeteria: ['amb_bang', 'amb_creak'],
+  lab: ['amb_steam', 'amb_drip', 'amb_bang'],
+};
+
+/** Áreas que usam o loop de ambiente de outra (evita gerar um loop por área). */
+export const ambienceAlias: Record<string, string> = {
+  surgery: 'ward',
+  icu: 'ward',
+  pediatrics: 'ward',
+  radiology: 'reception',
+  pharmacy: 'reception',
+  cafeteria: 'reception',
 };

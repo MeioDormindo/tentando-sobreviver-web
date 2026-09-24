@@ -98,6 +98,8 @@ export interface LampDef {
   radius: number;
   intensity: number;
   flicker: number;
+  /** Cor da luz (padrão: lâmpada quente). */
+  color?: number;
 }
 
 /** Painéis e armadilhas interativos (posição do painel; zona da armadilha em tiles). */

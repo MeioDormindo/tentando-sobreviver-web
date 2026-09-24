@@ -13,6 +13,7 @@ import { POWERUPS, powerUpIcon } from './art/powerups.mjs';
 import { bossCorpse, bossSheet } from './art/boss.mjs';
 import * as E from './art/events.mjs';
 import * as P from './art/props.mjs';
+import * as H from './art/hospital.mjs';
 
 const OUT = 'public/assets';
 
@@ -90,4 +91,18 @@ for (const [name, color] of Object.entries({ power: '#e8c14a', alarm: '#e0412f',
 write(`${OUT}/props/trap_grate.svg`, P.trapGrate());
 write(`${OUT}/props/teddy.svg`, P.teddyBear());
 write(`${OUT}/props/radio.svg`, P.radio());
+// Hospital Santa Luzia (Mapa 2)
+write(`${OUT}/map/floor_hospital.svg`, H.floorHospital());
+write(`${OUT}/map/floor_linoleum.svg`, H.floorLinoleum());
+write(`${OUT}/map/floor_morgue.svg`, H.floorMorgue());
+write(`${OUT}/props/hospital_bed.svg`, H.hospitalBed());
+write(`${OUT}/props/wheelchair.svg`, H.wheelchair());
+write(`${OUT}/props/iv_stand.svg`, H.ivStand());
+write(`${OUT}/props/gurney.svg`, H.gurney());
+write(`${OUT}/props/med_cabinet.svg`, H.medCabinet());
+write(`${OUT}/props/morgue_drawers.svg`, H.morgueDrawers());
+write(`${OUT}/props/lab_bench.svg`, H.labBench());
+write(`${OUT}/props/vending.svg`, H.vending());
+write(`${OUT}/props/surgical_light.svg`, H.surgicalLight());
+write(`${OUT}/props/waiting_chairs.svg`, H.waitingChairs());
 console.log('Pronto.');

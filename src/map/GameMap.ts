@@ -31,9 +31,9 @@ const FLOOR_TEXTURES: Record<FloorKind, string> = {
   tracks: ASSET_KEYS.floorTracks,
   tunnel: ASSET_KEYS.floorTunnel,
   wagon: ASSET_KEYS.floorWagon,
-  hospital: ASSET_KEYS.floor,
-  linoleum: ASSET_KEYS.floor,
-  morgue: ASSET_KEYS.floor,
+  hospital: ASSET_KEYS.floorHospital,
+  linoleum: ASSET_KEYS.floorLinoleum,
+  morgue: ASSET_KEYS.floorMorgue,
 };
 
 export interface Lamp {
@@ -156,7 +156,7 @@ export class GameMap {
       const p = center(s.tx, s.ty);
       return s.type === 'weapon' ? { type: 'weapon', weaponId: s.weaponId, x: p.x, y: p.y } : { type: 'ammo', x: p.x, y: p.y };
     });
-    this.lamps = layout.lamps.map((l) => ({ ...center(l.tx, l.ty), radius: l.radius, intensity: l.intensity, flicker: l.flicker }));
+    this.lamps = layout.lamps.map((l) => ({ ...center(l.tx, l.ty), radius: l.radius, intensity: l.intensity, flicker: l.flicker, color: l.color }));
     this.lamps.push(...this.propLights);
     // Luz fraca sobre cada ponto de compra, para ser encontrado no escuro.
     for (const s of this.stations) this.lamps.push({ x: s.x, y: s.y, radius: 70, intensity: 0.45, flicker: 0, emergency: true });

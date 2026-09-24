@@ -21,9 +21,9 @@ export const MAPS: Record<MapId, MapInfo> = {
   },
   map2: {
     id: 'map2',
-    name: 'Mapa 2',
-    description: 'Um novo lugar para sobreviver. Em desenvolvimento.',
-    playable: false,
+    name: 'Hospital Santa Luzia',
+    description: 'Onde o vírus nasceu: recepção, UTI, centro cirúrgico, necrotério e o laboratório no subsolo.',
+    playable: true,
     unlock: { bossWave: 10, onMap: 'terminal' },
   },
 };

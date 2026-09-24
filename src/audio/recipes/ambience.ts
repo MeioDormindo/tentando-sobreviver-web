@@ -149,4 +149,79 @@ export const ambience: Record<string, (sr: number, r: Rng) => Float32Array> = {
     mixInto(out, steam, sr, 0, 0.12);
     return finish(out, sr, 0.5, 0.25);
   },
+
+  // ── Hospital Santa Luzia ──
+  // Recepção: fluorescentes zumbindo, sistema de chamada com "bip-bip" distante
+  reception: (sr, r) => {
+    const out = buffer(sr, total);
+    rumble(out, sr, r, 0.35, 120);
+    hum(out, sr, 120, 0.07, 0.8);
+    for (let t = 2; t < LOOP; t += 6) {
+      for (const [dt, f0] of [[0, 880], [0.35, 660]] as const) {
+        const b = buffer(sr, 0.3);
+        osc(b, sr, 'sine', () => f0, 1);
+        envelope(b, sr, adExp(0.005, 0.12));
+        bandpass(b, sr, 1200, 0.8);
+        mixInto(out, b, sr, t + dt, 0.1);
+      }
+    }
+    drips(out, sr, r, 3, 0.15);
+    return finish(out, sr, 0.45, 0.35);
+  },
+  // Enfermaria/UTI: monitor cardíaco bipando (às vezes some) e respirador
+  ward: (sr, r) => {
+    const out = buffer(sr, total);
+    rumble(out, sr, r, 0.3, 110);
+    hum(out, sr, 60, 0.05, 0.2);
+    for (let t = 0.5; t < LOOP - 3; t += 0.9) {
+      const b = buffer(sr, 0.12);
+      osc(b, sr, 'sine', () => 1050, 1);
+      envelope(b, sr, adExp(0.002, 0.04));
+      mixInto(out, b, sr, t, 0.12);
+    }
+    const flat = buffer(sr, 2.4);
+    osc(flat, sr, 'sine', () => 1050, 1);
+    envelope(flat, sr, (t) => (t < 2.2 ? 1 : (2.4 - t) / 0.2));
+    mixInto(out, flat, sr, LOOP - 2.6, 0.06);
+    const vent = buffer(sr, total);
+    pink(vent, r);
+    bandpass(vent, sr, 700, 1);
+    envelope(vent, sr, (t) => Math.pow(Math.max(0, Math.sin(t * 1.1)), 3));
+    mixInto(out, vent, sr, 0, 0.1);
+    return finish(out, sr, 0.45, 0.25);
+  },
+  // Necrotério: compressor das geladeiras, gotas e silêncio pesado
+  morgue: (sr, r) => {
+    const out = buffer(sr, total);
+    rumble(out, sr, r, 0.5, 80);
+    const comp = buffer(sr, total);
+    for (const [k, g] of [[1, 1], [2, 0.5], [3, 0.2]] as const) osc(comp, sr, 'saw', () => 47 * k, g);
+    lowpass(comp, sr, 300);
+    envelope(comp, sr, (t) => (t % 7 < 4.5 ? 1 : 0.15));
+    mixInto(out, comp, sr, 0, 0.18);
+    const d = buffer(sr, total);
+    drips(d, sr, r, 6, 0.4);
+    echo(d, sr, 0.18, 0.45, 0.6);
+    mixInto(out, d, sr, 0, 1);
+    return finish(out, sr, 0.5, 0.4);
+  },
+  // Laboratório: líquido borbulhando nas câmaras, zumbido elétrico e alarme fraco
+  lab: (sr, r) => {
+    const out = buffer(sr, total);
+    rumble(out, sr, r, 0.4, 90);
+    hum(out, sr, 100, 0.07, 0.3);
+    for (let i = 0; i < 60; i++) {
+      const b = buffer(sr, 0.08);
+      const f0 = range(r, 300, 700);
+      osc(b, sr, 'sine', (t) => f0 * (1 + t * 8), 1);
+      envelope(b, sr, adExp(0.002, 0.02));
+      mixInto(out, b, sr, range(r, 0, LOOP), range(r, 0.05, 0.14));
+    }
+    const alarm = buffer(sr, total);
+    osc(alarm, sr, 'triangle', (t) => 520 + 120 * Math.sin(t * 2.5), 1);
+    envelope(alarm, sr, (t) => 0.5 + 0.5 * Math.sin(t * 2.5));
+    lowpass(alarm, sr, 1400);
+    mixInto(out, alarm, sr, 0, 0.025);
+    return finish(out, sr, 0.5, 0.35);
+  },
 };
