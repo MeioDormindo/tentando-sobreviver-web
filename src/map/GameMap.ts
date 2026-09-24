@@ -8,6 +8,8 @@ import type { AreaDef, DoorDef, FloorKind, MachinePlacement, MapLayout, Rect, Wi
 import { perks } from '../config/machines.config';
 import { powerConfig } from '../config/power.config';
 import { PROP_DEFS } from './props';
+import { snapToWall } from './wallSnap';
+import { wallBuyConfig } from '../config/weapons.config';
 
 /** Conteúdo de cada tile. */
 export const Cell = {
@@ -60,7 +62,16 @@ export interface SolidHandle {
 
 export type MachineDef = MachinePlacement & { x: number; y: number };
 
-export type StationDef = { type: 'weapon'; weaponId: string; x: number; y: number } | { type: 'ammo'; x: number; y: number };
+/** Onde o desenho de giz fica na parede (centro, rotação e profundidade). */
+export interface WallDrawing {
+  x: number;
+  y: number;
+  rotation: number;
+  depth: number;
+}
+
+/** Ponto de compra na parede: (x, y) é o chão em frente, onde o jogador interage. */
+export type StationDef = ({ type: 'weapon'; weaponId: string } | { type: 'ammo' }) & { x: number; y: number; wall: WallDrawing };
 
 export type DecalStamper = (key: string, frame: number | undefined, x: number, y: number, rotation: number, alpha: number) => void;
 
@@ -155,14 +166,11 @@ export class GameMap {
       const p = center(s.tx, s.ty);
       return { id: s.id, x: p.x, y: p.y, sector: s.area, minWave: s.minWave, enabled: this.cell(s.tx, s.ty) === Cell.Floor };
     });
-    this.stations = layout.stations.map((s) => {
-      const p = center(s.tx, s.ty);
-      return s.type === 'weapon' ? { type: 'weapon', weaponId: s.weaponId, x: p.x, y: p.y } : { type: 'ammo', x: p.x, y: p.y };
-    });
+    this.stations = this.placeWallBuys(layout);
     this.lamps = layout.lamps.map((l) => ({ ...center(l.tx, l.ty), radius: l.radius, intensity: l.intensity, flicker: l.flicker, color: l.color }));
     this.lamps.push(...this.propLights);
     // Luz fraca sobre cada ponto de compra, para ser encontrado no escuro.
-    for (const s of this.stations) this.lamps.push({ x: s.x, y: s.y, radius: 70, intensity: 0.45, flicker: 0, emergency: true });
+    for (const s of this.stations) this.lamps.push({ x: s.wall.x, y: s.wall.y + 8, radius: 70, intensity: 0.45, flicker: 0, emergency: true });
     this.machines = layout.machines.map((m) => ({ ...m, ...center(m.tx, m.ty) }));
     this.bossSpawns = layout.bossSpawns.map((s) => center(s.tx, s.ty));
     this.boxSpots = layout.boxSpots.map((s) => ({ x: s.tx * TILE_SIZE + TILE_SIZE / 2, y: s.ty * TILE_SIZE + TILE_SIZE / 2, area: s.area }));
@@ -174,6 +182,49 @@ export class GameMap {
       const needsPower = !(m.type === 'perk' && powerConfig.worksWithoutPower.includes(m.perkId));
       this.lamps.push({ x: m.x, y: m.y, radius: 95, intensity: 0.6, flicker: 0.05, color, emergency: true, needsPower });
     }
+  }
+
+  /** Leva cada ponto de compra para a parede mais próxima (compra na parede, como no CoD). */
+  private placeWallBuys(layout: MapLayout): StationDef[] {
+    const pad = wallBuyConfig.clearance;
+    const propPad = wallBuyConfig.propClearance;
+    const blocked: Array<{ tx: number; ty: number }> = layout.machines.map((m) => ({ tx: Math.floor(m.tx), ty: Math.floor(m.ty) }));
+    const props = layout.props.map((pr) => ({ tx: Math.floor(pr.tx), ty: Math.floor(pr.ty) }));
+    const near = (list: Array<{ tx: number; ty: number }>, tx: number, ty: number, r: number): boolean =>
+      list.some((b) => Math.abs(b.tx - tx) <= r && Math.abs(b.ty - ty) <= r);
+    const nearBlocked = (tx: number, ty: number): boolean => {
+      if (near(blocked, tx, ty, pad) || near(props, tx, ty, propPad)) return true;
+      for (let dy = -propPad - 1; dy <= propPad + 1; dy++) {
+        for (let dx = -propPad - 1; dx <= propPad + 1; dx++) {
+          const c = this.cell(tx + dx, ty + dy);
+          if (c === Cell.Door || c === Cell.Window) return true;
+        }
+      }
+      return false;
+    };
+    const q = {
+      isFloor: (tx: number, ty: number) => this.cell(tx, ty) === Cell.Floor,
+      // A parede do vagão parado também serve (a Combat Shotgun fica dentro do trem).
+      isWall: (tx: number, ty: number) => this.cell(tx, ty) === Cell.Wall || this.cell(tx, ty) === Cell.Train,
+    };
+    return layout.stations.map((s) => {
+      const spot = snapToWall(s, q, nearBlocked);
+      const tx = spot?.tx ?? s.tx;
+      const ty = spot?.ty ?? s.ty;
+      blocked.push({ tx: Math.floor(tx), ty: Math.floor(ty) });
+      const x = tx * TILE_SIZE + TILE_SIZE / 2;
+      const y = ty * TILE_SIZE + TILE_SIZE / 2;
+      const top = ty * TILE_SIZE;
+      // Face da parede de cima; nas outras, o topo da parede (desenho girado junto com ela).
+      const wall: WallDrawing =
+        spot?.side === 'south' ? { x, y: top + TILE_SIZE, rotation: 0, depth: top + 2 * TILE_SIZE + 1 }
+        : spot?.side === 'west' ? { x: x - TILE_SIZE, y: top + TILE_SIZE / 2 - WALL_RISE, rotation: -Math.PI / 2, depth: top + TILE_SIZE + 1 }
+        : spot?.side === 'east' ? { x: x + TILE_SIZE, y: top + TILE_SIZE / 2 - WALL_RISE, rotation: Math.PI / 2, depth: top + TILE_SIZE + 1 }
+        : spot ? { x, y: top - WALL_RISE / 2, rotation: 0, depth: top + 1 }
+        // Sem parede livre por perto: desenho no chão (não deveria acontecer).
+        : { x, y, rotation: 0, depth: y };
+      return s.type === 'weapon' ? { type: 'weapon', weaponId: s.weaponId, x, y, wall } : { type: 'ammo', x, y, wall };
+    });
   }
 
   // ───────────────────────── Consultas ─────────────────────────

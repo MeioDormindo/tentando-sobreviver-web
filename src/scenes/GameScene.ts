@@ -371,10 +371,10 @@ export class GameScene extends Phaser.Scene {
         }),
       );
     }
-    const stationDeps = { economy: this.economy, weapons: this.weaponSystem, solids: map };
+    const stationDeps = { economy: this.economy, weapons: this.weaponSystem };
     for (const s of map.stations) {
       this.interaction.add(
-        s.type === 'weapon' ? new WeaponCase(this, s.x, s.y, s.weaponId, stationDeps) : new AmmoStation(this, s.x, s.y, stationDeps),
+        s.type === 'weapon' ? new WeaponCase(this, s.x, s.y, s.wall, s.weaponId, stationDeps) : new AmmoStation(this, s.x, s.y, s.wall, stationDeps),
       );
     }
 

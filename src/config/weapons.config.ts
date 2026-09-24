@@ -292,6 +292,27 @@ export function getWeaponConfig(id: string): WeaponConfig {
   return cfg;
 }
 
+/** Compras na parede (desenho de giz, como no CoD Zombies). */
+export const wallBuyConfig = {
+  /** Até quantos tiles a partir da posição planejada procurar uma parede livre. */
+  searchRadius: 16,
+  /** Custo extra (em tiles) de usar uma parede lateral/de baixo em vez da de cima (face visível). */
+  sidePenalty: 3,
+  /** Espaço livre (tiles) em volta de máquinas e outros pontos de compra. */
+  clearance: 2,
+  /** Espaço livre (tiles) em volta de props, portas e janelas. */
+  propClearance: 1,
+  /** Cor e opacidade do giz. */
+  chalkColor: 0xece6d2,
+  chalkAlpha: 0.82,
+  /** Largura máxima do desenho da arma (px). */
+  drawingWidth: 64,
+  /** Altura máxima do desenho (px). */
+  drawingHeight: 24,
+  /** Brilho ao comprar (ms). */
+  purchaseFlashMs: 700,
+};
+
 /** Arma largada no chão ao pegar outra: some depois disto (ms) e pisca a partir de blinkAtMs. */
 export const weaponDropConfig = {
   lifetimeMs: 60_000,

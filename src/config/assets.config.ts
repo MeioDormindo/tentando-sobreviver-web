@@ -141,7 +141,6 @@ export const WEAPON_KINDS: WeaponKind[] = [
 /** Tronco do jogador por tipo de arma (mesma ordem de frames em todas). */
 export const playerTorsoKey = (kind: WeaponKind): string => `player_torso_${kind}`;
 export const playerAnimKey = (kind: WeaponKind, anim: 'shoot' | 'reload'): string => `player_${anim}_${kind}`;
-export const weaponCaseKey = (kind: WeaponKind): string => `case_${kind}`;
 export const gunIconKey = (kind: WeaponKind): string => `gun_${kind}`;
 
 export const PERK_IDS = ['fortify', 'quick_hands', 'sprint', 'deadeye', 'adrenaline', 'overload', 'quick_revive'] as const;
@@ -271,7 +270,6 @@ export const IMAGES: ImageAsset[] = [
   { key: ASSET_KEYS.hazard, url: 'assets/map/hazard_stripe.svg' },
   { key: ASSET_KEYS.plank, url: 'assets/map/plank.svg' },
   { key: ASSET_KEYS.windowSill, url: 'assets/map/window_sill.svg' },
-  ...WEAPON_KINDS.map((kind) => ({ key: weaponCaseKey(kind), url: `assets/weapons/case_${kind}.svg` })),
   ...WEAPON_KINDS.map((kind) => ({ key: gunIconKey(kind), url: `assets/weapons/gun_${kind}.svg` })),
   { key: machineKeys.mysteryBox, url: 'assets/machines/mystery_box.svg' },
   { key: machineKeys.weaponLab, url: 'assets/machines/weapon_lab.svg' },

@@ -1,18 +1,16 @@
 import Phaser from 'phaser';
-import { ASSET_KEYS, weaponCaseKey } from '../config/assets.config';
-import { ART_SCALE } from '../config/visual.config';
-import { getWeaponConfig, type WeaponConfig } from '../config/weapons.config';
+import { ASSET_KEYS, gunIconKey } from '../config/assets.config';
+import { getWeaponConfig, wallBuyConfig, type WeaponConfig } from '../config/weapons.config';
 import type { InteractionPromptPayload } from '../game/events';
 import type { EconomySystem } from '../systems/EconomySystem';
-import type { SolidPlacer } from './Machines';
 import type { Interactable } from '../systems/InteractionSystem';
 import type { WeaponSystem } from '../weapons/WeaponSystem';
 import { ElementCounter } from './ElementCounter';
+import type { WallDrawing } from '../map/GameMap';
 
 export interface StationDeps {
   economy: EconomySystem;
   weapons: WeaponSystem;
-  solids: SolidPlacer;
 }
 
 /** Arma inicial (sem maleta): o elemento dela sai na caixa de munição. */
@@ -20,24 +18,53 @@ const STARTING_ELEMENT_WEAPON = 'm1911';
 
 const money = (n: number): string => `$${n.toLocaleString('pt-BR')}`;
 
-/** Cria a imagem do ponto de compra com um corpo sólido (o jogador não o atravessa). */
-function createProp(scene: Phaser.Scene, x: number, y: number, texture: string, body: { w: number; h: number }, solids: SolidPlacer): void {
-  scene.add.image(x, y, texture).setScale(ART_SCALE).setDepth(y + body.h / 2);
-  solids.addSolid(x - 1, y - 1, body.w, body.h);
+/**
+ * Desenho de giz na face da parede (compra na parede, como no CoD Zombies): a silhueta da
+ * arma e o preço. Não bloqueia a passagem. Devolve o desenho, para brilhar ao comprar.
+ */
+function drawChalk(scene: Phaser.Scene, wall: WallDrawing, texture: string, price: string): Phaser.GameObjects.Image {
+  const cfg = wallBuyConfig;
+  const img = scene.add.image(wall.x, wall.y, texture).setRotation(wall.rotation).setDepth(wall.depth);
+  img.setScale(Math.min(cfg.drawingWidth / img.width, cfg.drawingHeight / img.height)).setTint(cfg.chalkColor).setAlpha(cfg.chalkAlpha);
+  // Contorno de giz (brilho claro em volta da arma; só no WebGL).
+  img.preFX?.addGlow(cfg.chalkColor, 2.5, 0, false, 0.1, 6);
+  // Preço escrito a giz logo abaixo do desenho (do lado do chão).
+  const off = cfg.drawingHeight / 2 + 5;
+  scene.add
+    .text(wall.x - Math.sin(wall.rotation) * off, wall.y + Math.cos(wall.rotation) * off, price, { fontFamily: 'monospace', fontSize: '8px', color: '#ece6d2' })
+    .setOrigin(0.5)
+    .setRotation(wall.rotation)
+    .setAlpha(0.9)
+    .setResolution(2)
+    .setDepth(wall.depth);
+  return img;
+}
+
+/** Brilho rápido no giz ao comprar (a arma "sai" da parede). */
+function flash(scene: Phaser.Scene, img: Phaser.GameObjects.Image): void {
+  scene.tweens.killTweensOf(img);
+  img.setAlpha(1).setTintFill(0xfff3b0);
+  scene.tweens.add({
+    targets: img,
+    alpha: wallBuyConfig.chalkAlpha,
+    duration: wallBuyConfig.purchaseFlashMs,
+    onComplete: () => img.setTint(wallBuyConfig.chalkColor),
+  });
 }
 
 /**
- * Maleta com arma (GDD §60): compra a arma; se o jogador já a possui, vende munição dela
- * (tocar E) e o elemento especial daquela arma (segurar E).
+ * Arma na parede (GDD §60, no estilo do CoD Zombies): compra a arma; se o jogador já a possui,
+ * vende munição dela (tocar E) e o elemento especial daquela arma (segurar E).
  */
 export class WeaponCase implements Interactable {
   private readonly config: WeaponConfig;
   private readonly element: ElementCounter;
+  private readonly chalk: Phaser.GameObjects.Image;
 
-  constructor(scene: Phaser.Scene, readonly x: number, readonly y: number, weaponId: string, private readonly deps: StationDeps) {
+  constructor(private readonly scene: Phaser.Scene, readonly x: number, readonly y: number, wall: WallDrawing, weaponId: string, private readonly deps: StationDeps) {
     this.config = getWeaponConfig(weaponId);
     this.element = new ElementCounter(scene, deps);
-    createProp(scene, x, y, weaponCaseKey(this.config.kind), { w: 54, h: 26 }, deps.solids);
+    this.chalk = drawChalk(scene, wall, gunIconKey(this.config.kind), money(this.config.price));
   }
 
   getPrompt(): InteractionPromptPayload | null {
@@ -58,7 +85,10 @@ export class WeaponCase implements Interactable {
       if (!weapons.isAmmoFull(cfg.id) && economy.spend(cfg.ammoPrice)) weapons.refillAmmo(cfg.id);
       return;
     }
-    if (economy.spend(cfg.price)) weapons.give(cfg.id);
+    if (economy.spend(cfg.price)) {
+      weapons.give(cfg.id);
+      flash(this.scene, this.chalk);
+    }
   }
 
   onHold(time: number, delta: number): void {
@@ -66,13 +96,13 @@ export class WeaponCase implements Interactable {
   }
 }
 
-/** Caixa de munição (GDD §36): reabastece a arma em mãos pelo preço de munição dela. */
+/** Munição na parede (GDD §36): reabastece a arma em mãos pelo preço de munição dela. */
 export class AmmoStation implements Interactable {
   private readonly element: ElementCounter;
 
-  constructor(scene: Phaser.Scene, readonly x: number, readonly y: number, private readonly deps: StationDeps) {
+  constructor(scene: Phaser.Scene, readonly x: number, readonly y: number, wall: WallDrawing, private readonly deps: StationDeps) {
     this.element = new ElementCounter(scene, deps);
-    createProp(scene, x, y, ASSET_KEYS.ammoCrate, { w: 32, h: 24 }, deps.solids);
+    drawChalk(scene, wall, ASSET_KEYS.ammoCrate, 'MUNIÇÃO');
   }
 
   /** A M1911 não tem maleta: o elemento dela é vendido na caixa de munição. */
