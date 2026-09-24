@@ -199,7 +199,7 @@ function bossFrame(pose) {
 }
 
 /** Poses: 0-7 andar · 8-11 golpe · 12-13 investida · 14-17 pancada no chão · 18-19 rugido */
-function poses() {
+export function poses() {
   const list = [];
   for (let i = 0; i < 8; i++) {
     const p = (i / 8) * Math.PI * 2;

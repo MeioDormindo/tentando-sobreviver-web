@@ -12,12 +12,16 @@ export interface BossWorld extends NavWorld {
   shockwave(x: number, y: number): void;
   summon(x: number, y: number): void;
   areaAttack(targetX: number, targetY: number): void;
+  /** Vômito ácido em cone na direção `angle`. */
+  vomit(x: number, y: number, angle: number): void;
+  /** Grito: jogador lento + inimigos invocados. */
+  scream(x: number, y: number): void;
   onPhaseChange(phase: number): void;
   onDefeated(boss: Boss): void;
 }
 
-type BossState = 'roar' | 'chase' | 'melee' | 'chargeWindup' | 'charging' | 'stunned' | 'slam' | 'summon' | 'area' | 'dead';
-type AttackId = 'melee' | 'charge' | 'shockwave' | 'summon' | 'area';
+type BossState = 'roar' | 'chase' | 'melee' | 'chargeWindup' | 'charging' | 'stunned' | 'slam' | 'summon' | 'area' | 'vomit' | 'scream' | 'dead';
+type AttackId = 'melee' | 'charge' | 'shockwave' | 'summon' | 'area' | 'vomit' | 'scream';
 
 const TURN_SPEED = 0.09;
 const MELEE_HIT_DELAY = 230;
@@ -38,7 +42,7 @@ export class Boss extends Phaser.Physics.Arcade.Sprite {
 
   private mode: BossState = 'roar';
   private stateUntil = 0;
-  private readonly nextAttackAt: Record<AttackId, number> = { melee: 0, charge: 0, shockwave: 0, summon: 0, area: 0 };
+  private readonly nextAttackAt: Record<AttackId, number> = { melee: 0, charge: 0, shockwave: 0, summon: 0, area: 0, vomit: 0, scream: 0 };
   private readonly follower = new PathFollower(this);
   private readonly shadow: Phaser.GameObjects.Image;
   private readonly telegraph: Phaser.GameObjects.Graphics;
@@ -105,7 +109,9 @@ export class Boss extends Phaser.Physics.Arcade.Sprite {
       case 'roar':
       case 'summon':
       case 'area':
+      case 'scream':
       case 'slam':
+      case 'vomit':
         this.setVelocity(0, 0);
         this.resolvePendingHit(time);
         if (time >= this.stateUntil) this.toChase();
@@ -236,26 +242,47 @@ export class Boss extends Phaser.Physics.Arcade.Sprite {
       this.playOnce('swipe');
       return true;
     }
-    if (this.phase >= cfg.area.fromPhase && this.ready('area', time)) {
+    const { area, shockwave, summon, vomit, scream } = cfg;
+    if (area && this.phase >= area.fromPhase && this.ready('area', time)) {
       this.mode = 'area';
       this.stateUntil = time + 650;
-      this.cooldown('area', time, cfg.area.cooldownMs);
+      this.cooldown('area', time, area.cooldownMs);
       this.playLoop('roar', 1);
       this.world.areaAttack(player.x, player.y);
       return true;
     }
-    if (this.phase >= cfg.shockwave.fromPhase && dist <= cfg.shockwave.radius * 0.8 && this.ready('shockwave', time)) {
+    if (scream && this.phase >= scream.fromPhase && dist <= scream.radius && this.ready('scream', time)) {
+      this.mode = 'scream';
+      this.stateUntil = time + 1000;
+      this.cooldown('scream', time, scream.cooldownMs);
+      this.playLoop('roar', 1.6);
+      this.world.scream(this.x, this.y);
+      return true;
+    }
+    if (vomit && this.phase >= vomit.fromPhase && dist <= vomit.range && this.ready('vomit', time) &&
+        this.world.nav.lineOfSight(this.x, this.y, player.x, player.y, 0)) {
+      // Para, encara o jogador e vomita no fim da preparação.
+      this.mode = 'vomit';
+      this.stateUntil = time + vomit.windupMs + 300;
+      this.pendingHitAt = time + vomit.windupMs;
+      this.rotation = Phaser.Math.Angle.Between(this.x, this.y, player.x, player.y);
+      this.cooldown('vomit', time, vomit.cooldownMs);
+      this.playOnce('swipe');
+      this.setTint(0xc8ff5a);
+      return true;
+    }
+    if (shockwave && this.phase >= shockwave.fromPhase && dist <= shockwave.radius * 0.8 && this.ready('shockwave', time)) {
       this.mode = 'slam';
-      this.stateUntil = time + cfg.shockwave.windupMs + 380;
-      this.pendingHitAt = time + cfg.shockwave.windupMs;
-      this.cooldown('shockwave', time, cfg.shockwave.cooldownMs);
+      this.stateUntil = time + shockwave.windupMs + 380;
+      this.pendingHitAt = time + shockwave.windupMs;
+      this.cooldown('shockwave', time, shockwave.cooldownMs);
       this.playOnce('slam');
       return true;
     }
-    if (this.phase >= cfg.summon.fromPhase && this.ready('summon', time)) {
+    if (summon && this.phase >= summon.fromPhase && this.ready('summon', time)) {
       this.mode = 'summon';
       this.stateUntil = time + 900;
-      this.cooldown('summon', time, cfg.summon.cooldownMs);
+      this.cooldown('summon', time, summon.cooldownMs);
       this.playLoop('roar', 1.4);
       this.world.summon(this.x, this.y);
       return true;
@@ -276,9 +303,12 @@ export class Boss extends Phaser.Physics.Arcade.Sprite {
 
   /** O golpe no chão resolve a onda de choque no meio da animação. */
   private resolvePendingHit(time: number): void {
-    if (this.mode === 'slam' && this.pendingHitAt && time >= this.pendingHitAt) {
-      this.pendingHitAt = 0;
-      this.world.shockwave(this.x, this.y);
+    if (!this.pendingHitAt || time < this.pendingHitAt) return;
+    this.pendingHitAt = 0;
+    if (this.mode === 'slam') this.world.shockwave(this.x, this.y);
+    if (this.mode === 'vomit') {
+      this.applyPhaseTint();
+      this.world.vomit(this.x, this.y, this.rotation);
     }
   }
 

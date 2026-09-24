@@ -12,6 +12,8 @@ import type { NavWorld } from './pathfinding/PathFollower';
 import type { EconomySystem } from './EconomySystem';
 import type { PowerUpSystem } from './PowerUpSystem';
 import type { SpawnSystem } from './SpawnSystem';
+import type { HazardSystem } from './HazardSystem';
+import type { MapId } from '../config/maps.config';
 import { getWaveParams, scaleZombie } from './difficulty';
 import { audio } from '../audio/AudioSystem';
 
@@ -26,6 +28,9 @@ export interface BossSystemDeps {
   lighting: LightingSystem;
   economy: EconomySystem;
   powerUps: PowerUpSystem;
+  hazards: HazardSystem;
+  /** Mapa atual (cada mapa tem o seu boss). */
+  mapId: MapId;
 }
 
 /** Aviso "BOSS INCOMING" antes de o boss surgir (ms). */
@@ -34,6 +39,7 @@ const WARNING_MS = 3200;
 const STUCK_TIMEOUT_MS = 7000;
 
 interface Shockwave {
+  cfg: NonNullable<BossConfig['shockwave']>;
   x: number;
   y: number;
   start: number;
@@ -75,7 +81,7 @@ export class BossSystem {
 
   /** Inicia a wave de boss: aviso e, depois, o boss surge num ponto de spawn. */
   startBossWave(wave: number): void {
-    const config = bosses[bossForWave(wave)];
+    const config = bosses[bossForWave(this.deps.mapId, wave)];
     this.wave = wave;
     this.pending = true;
     emitGameEvent(this.scene.game.events, GameEvents.BossIncoming, { name: config.name });
@@ -113,7 +119,7 @@ export class BossSystem {
     this.pending = false;
     boss.setAlpha(0);
     this.scene.tweens.add({ targets: boss, alpha: 1, duration: 600 });
-    this.lantern = this.deps.lighting.addDynamicLight({ x, y, radius: 120, intensity: 0.7, color: 0xffb04a });
+    if (config.lantern) this.lantern = this.deps.lighting.addDynamicLight({ x, y, radius: 120, intensity: 0.7, color: 0xffb04a });
     this.deps.effects.explosion(x, y, 60);
   }
 
@@ -123,7 +129,9 @@ export class BossSystem {
       nav: world.nav,
       barricadeAt: (tx, ty) => world.barricadeAt(tx, ty),
       player,
-      shockwave: (x, y) => this.startShockwave(x, y),
+      shockwave: (x, y) => this.startShockwave(config, x, y),
+      vomit: (x, y, angle) => this.vomit(config, x, y, angle),
+      scream: (x, y) => this.scream(config, x, y),
       summon: (x, y) => this.summon(config, x, y),
       areaAttack: (tx, ty) => this.areaAttack(config, tx, ty),
       onPhaseChange: (phase) => this.onPhaseChange(config, phase),
@@ -157,9 +165,11 @@ export class BossSystem {
 
   // ───────────────────────── Ataques em área ─────────────────────────
 
-  private startShockwave(x: number, y: number): void {
+  private startShockwave(config: BossConfig, x: number, y: number): void {
+    const cfg = config.shockwave;
+    if (!cfg) return;
     const ring = this.scene.add.graphics().setDepth(DEPTH.glow).setBlendMode(Phaser.BlendModes.ADD);
-    this.shockwaves.push({ x, y, start: this.scene.time.now, hit: false, ring });
+    this.shockwaves.push({ cfg, x, y, start: this.scene.time.now, hit: false, ring });
     audio.playAt('boss_slam', x, y, { category: 'world', volume: 1, distance: 1500 });
     this.deps.effects.surfaceImpact(x, y, 0);
     this.deps.effects.dustBurst(x, y, 30);
@@ -169,10 +179,10 @@ export class BossSystem {
 
   /** Anel que se expande; fere o jogador quando a frente do anel passa por ele. */
   private updateShockwaves(time: number): void {
-    const cfg = this.boss?.config.shockwave ?? bosses.conductor.shockwave;
     const player = this.deps.player;
     for (let i = this.shockwaves.length - 1; i >= 0; i--) {
       const w = this.shockwaves[i];
+      const cfg = w.cfg;
       const t = (time - w.start) / cfg.expandMs;
       if (t >= 1) {
         w.ring.destroy();
@@ -196,6 +206,10 @@ export class BossSystem {
   /** Círculos marcados no chão perto do jogador que explodem após o aviso. */
   private areaAttack(config: BossConfig, tx: number, ty: number): void {
     const cfg = config.area;
+    if (!cfg) return;
+    const acid = cfg.style === 'acid' && cfg.pool;
+    const color = acid ? 0x9ccf2a : 0xd63a2a;
+    const edge = acid ? 0xc8ff5a : 0xff5a40;
     audio.play('boss_area', { category: 'world', volume: 0.8 });
     const targets = [{ x: tx, y: ty }];
     for (let i = 1; i < cfg.count; i++) {
@@ -210,18 +224,24 @@ export class BossSystem {
         callback: () => {
           const t = Math.min(1, (this.scene.time.now - start) / cfg.telegraphMs);
           mark.clear();
-          mark.fillStyle(0xd63a2a, 0.12 + 0.18 * t);
+          mark.fillStyle(color, 0.12 + 0.18 * t);
           mark.fillCircle(p.x, p.y, cfg.radius);
-          mark.lineStyle(3, 0xff5a40, 0.9);
+          mark.lineStyle(3, edge, 0.9);
           mark.strokeCircle(p.x, p.y, cfg.radius);
-          mark.fillStyle(0xff5a40, 0.35);
+          mark.fillStyle(edge, 0.35);
           mark.fillCircle(p.x, p.y, cfg.radius * t);
         },
       });
       this.scene.time.delayedCall(cfg.telegraphMs, () => {
         timer.remove();
         mark.destroy();
-        this.deps.effects.explosion(p.x, p.y, cfg.radius);
+        // Chuva de ácido: a gota vira poça; o normal é explodir.
+        if (acid && cfg.pool) {
+          this.deps.hazards.addPool('acid', p.x, p.y, cfg.pool);
+          audio.playAt('spitter_splash', p.x, p.y, { category: 'world', volume: 0.8 });
+        } else {
+          this.deps.effects.explosion(p.x, p.y, cfg.radius);
+        }
         const player = this.deps.player;
         if (player.isAlive && Phaser.Math.Distance.Between(player.x, player.y, p.x, p.y) <= cfg.radius + 10) {
           player.takeDamage(cfg.damage, this.scene.time.now);
@@ -232,20 +252,52 @@ export class BossSystem {
 
   /** Invoca zumbis em volta do boss (entram na contagem da wave). */
   private summon(config: BossConfig, x: number, y: number): void {
+    if (config.summon) this.summonAround(x, y, config.summon.count, config.summon.types);
+  }
+
+  /** Invoca `count` inimigos em volta do ponto (entram na contagem da wave). */
+  private summonAround(x: number, y: number, count: number, types: readonly string[]): void {
     const params = getWaveParams(this.wave);
     audio.playAt('boss_summon', x, y, { category: 'world', volume: 1, distance: 1400 });
     let spawned = 0;
-    for (let i = 0; i < config.summon.count; i++) {
-      const angle = (i / config.summon.count) * Math.PI * 2 + Math.random() * 0.5;
+    for (let i = 0; i < count; i++) {
+      const angle = (i / count) * Math.PI * 2 + Math.random() * 0.5;
       const sx = x + Math.cos(angle) * 72;
       const sy = y + Math.sin(angle) * 72;
-      const type = Phaser.Utils.Array.GetRandom(config.summon.types);
+      const type = Phaser.Utils.Array.GetRandom([...types]);
       if (this.deps.spawner.spawnAt(scaleZombie(getZombieConfig(type), params), sx, sy)) {
         spawned++;
         this.deps.effects.surfaceImpact(sx, sy, angle);
       }
     }
     if (spawned > 0) this.onSummoned(spawned);
+  }
+
+  /** Vômito ácido: poças em leque na frente do boss, da mais perto à mais longe. */
+  private vomit(config: BossConfig, x: number, y: number, angle: number): void {
+    const cfg = config.vomit;
+    if (!cfg) return;
+    const half = Phaser.Math.DegToRad(cfg.arcDeg / 2);
+    audio.playAt('spitter_spit', x, y, { category: 'world', volume: 1, rate: 0.55, distance: 1400 });
+    for (let i = 0; i < cfg.count; i++) {
+      const a = angle - half + (i / Math.max(1, cfg.count - 1)) * half * 2;
+      const d = cfg.range * (0.45 + 0.55 * ((i % 2) * 0.5 + 0.5));
+      const tx = x + Math.cos(a) * d;
+      const ty = y + Math.sin(a) * d;
+      this.deps.hazards.spit(x + Math.cos(angle) * 30, y + Math.sin(angle) * 30, tx, ty, 420, cfg.pool);
+    }
+  }
+
+  /** Grito: tela treme, jogador fica lento (se perto) e inimigos surgem em volta. */
+  private scream(config: BossConfig, x: number, y: number): void {
+    const cfg = config.scream;
+    if (!cfg) return;
+    const player = this.deps.player;
+    audio.playAt('boss_roar', x, y, { category: 'world', volume: 1, rate: 1.35, distance: 1800 });
+    this.deps.effects.shockwave(x, y, cfg.radius, 0x9ccf2a, 700);
+    this.scene.cameras.main.shake(700, 0.007);
+    if (player.isAlive && Phaser.Math.Distance.Between(x, y, player.x, player.y) <= cfg.radius) player.slow(cfg.slowMs, cfg.slowFactor);
+    this.summonAround(x, y, cfg.summonCount, cfg.types);
   }
 
   // ───────────────────────── Fases e fim ─────────────────────────

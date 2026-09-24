@@ -166,6 +166,8 @@ export const WEAPON_MUZZLE: Record<WeaponKind, { forward: number; side: number }
 };
 
 export const zombieSheetKey = (skin: string): string => `zombie_${skin}`;
+/** Bosses com arte (um sheet 10x2 de 224 px + corpo caído cada). */
+export const BOSS_IDS = ['conductor', 'patient_zero'] as const;
 export const bossSheetKey = (id: string): string => `boss_${id}`;
 export const bossCorpseKey = (id: string): string => `boss_${id}_corpse`;
 export const bossAnimKey = (id: string, anim: 'walk' | 'swipe' | 'charge' | 'slam' | 'roar'): string => `boss_${id}_${anim}`;
@@ -205,7 +207,7 @@ export const SHEETS: SheetAsset[] = [
   { key: ASSET_KEYS.corpses, url: 'assets/zombies/corpses.svg', frameWidth: 176, frameHeight: 144, frames: CORPSE_SKINS.length },
   { key: ASSET_KEYS.bloodSplats, url: 'assets/particles/blood_splats.svg', frameWidth: 96, frameHeight: 96, frames: 3 },
   // The Conductor: 20 frames em grade 10x2 (andar, golpe, investida, pancada, rugido)
-  { key: bossSheetKey('conductor'), url: 'assets/bosses/conductor.svg', frameWidth: 224, frameHeight: 224, frames: 20, columns: 10 },
+  ...BOSS_IDS.map((id) => ({ key: bossSheetKey(id), url: `assets/bosses/${id}.svg`, frameWidth: 224, frameHeight: 224, frames: 20, columns: 10 })),
 ];
 
 export const IMAGES: ImageAsset[] = [
@@ -262,7 +264,7 @@ export const IMAGES: ImageAsset[] = [
   { key: ASSET_KEYS.debris, url: 'assets/particles/debris.svg' },
   { key: ASSET_KEYS.bloodPool, url: 'assets/particles/blood_pool.svg' },
   { key: ASSET_KEYS.burst, url: 'assets/particles/burst.svg' },
-  { key: bossCorpseKey('conductor'), url: 'assets/bosses/conductor_corpse.svg' },
+  ...BOSS_IDS.map((id) => ({ key: bossCorpseKey(id), url: `assets/bosses/${id}_corpse.svg` })),
   { key: ASSET_KEYS.extinguisher, url: 'assets/props/extinguisher.svg' },
   { key: ASSET_KEYS.luggageCart, url: 'assets/props/luggage_cart.svg' },
   { key: ASSET_KEYS.pallet, url: 'assets/props/pallet.svg' },
@@ -310,11 +312,13 @@ export const ANIMS: AnimAsset[] = [
       repeat: 0,
     },
   ]),
-  { key: bossAnimKey('conductor', 'walk'), sheet: bossSheetKey('conductor'), frames: range(0, 7), frameRate: 8, repeat: -1 },
-  { key: bossAnimKey('conductor', 'swipe'), sheet: bossSheetKey('conductor'), frames: range(8, 11), frameRate: 10, repeat: 0 },
-  { key: bossAnimKey('conductor', 'charge'), sheet: bossSheetKey('conductor'), frames: range(12, 13), frameRate: 10, repeat: -1 },
-  { key: bossAnimKey('conductor', 'slam'), sheet: bossSheetKey('conductor'), frames: range(14, 17), frameRate: 8, repeat: 0 },
-  { key: bossAnimKey('conductor', 'roar'), sheet: bossSheetKey('conductor'), frames: range(18, 19), frameRate: 6, repeat: -1 },
+  ...BOSS_IDS.flatMap((id) => [
+    { key: bossAnimKey(id, 'walk'), sheet: bossSheetKey(id), frames: range(0, 7), frameRate: 8, repeat: -1 },
+    { key: bossAnimKey(id, 'swipe'), sheet: bossSheetKey(id), frames: range(8, 11), frameRate: 10, repeat: 0 },
+    { key: bossAnimKey(id, 'charge'), sheet: bossSheetKey(id), frames: range(12, 13), frameRate: 10, repeat: -1 },
+    { key: bossAnimKey(id, 'slam'), sheet: bossSheetKey(id), frames: range(14, 17), frameRate: 8, repeat: 0 },
+    { key: bossAnimKey(id, 'roar'), sheet: bossSheetKey(id), frames: range(18, 19), frameRate: 6, repeat: -1 },
+  ]),
   ...ZOMBIE_SKIN_IDS.flatMap((skin) => [
     { key: zombieAnimKey(skin, 'walk'), sheet: zombieSheetKey(skin), frames: range(0, 7), frameRate: 7, repeat: -1 },
     { key: zombieAnimKey(skin, 'attack'), sheet: zombieSheetKey(skin), frames: range(8, 12), frameRate: 14, repeat: 0 },

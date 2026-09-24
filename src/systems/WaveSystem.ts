@@ -163,7 +163,7 @@ export class WaveSystem {
     this.params = getWaveParams(wave);
     // Wave de boss: o boss vem com uma horda reduzida de escolta.
     if (this.isBossWave) {
-      const ratio = bosses[bossForWave(wave)].escortRatio;
+      const ratio = bosses[bossForWave(this.mapId, wave)].escortRatio;
       this.params.totalEnemies = Math.max(2, Math.round(this.params.totalEnemies * ratio));
       this.boss.startBossWave(wave);
     }

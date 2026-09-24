@@ -11,6 +11,7 @@ import * as T from './art/terminal.mjs';
 import * as M from './art/machines.mjs';
 import { POWERUPS, powerUpIcon } from './art/powerups.mjs';
 import { bossCorpse, bossSheet } from './art/boss.mjs';
+import { patientZeroCorpse, patientZeroSheet } from './art/patientZero.mjs';
 import * as E from './art/events.mjs';
 import * as P from './art/props.mjs';
 import * as H from './art/hospital.mjs';
@@ -75,6 +76,8 @@ for (const kind of WEAPON_KINDS) write(`${OUT}/weapons/gun_${kind}.svg`, M.gunIc
 for (const id of Object.keys(POWERUPS)) write(`${OUT}/powerups/${id}.svg`, powerUpIcon(id));
 write(`${OUT}/bosses/conductor.svg`, bossSheet());
 write(`${OUT}/bosses/conductor_corpse.svg`, bossCorpse());
+write(`${OUT}/bosses/patient_zero.svg`, patientZeroSheet());
+write(`${OUT}/bosses/patient_zero_corpse.svg`, patientZeroCorpse());
 write(`${OUT}/events/train_head.svg`, E.trainHead());
 write(`${OUT}/events/train_car.svg`, E.trainCar());
 write(`${OUT}/events/supply_crate.svg`, E.supplyCrate());

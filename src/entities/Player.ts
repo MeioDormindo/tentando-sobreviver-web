@@ -103,6 +103,16 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
     return this.alive;
   }
 
+  /** Lento (grito do boss) até este instante. */
+  private slowUntil = 0;
+  private slowFactor = 1;
+
+  /** Deixa o jogador lento por um tempo (grito do Paciente Zero). */
+  slow(ms: number, factor: number): void {
+    this.slowUntil = this.scene.time.now + ms;
+    this.slowFactor = factor;
+  }
+
   /** Caído (Quick Revive): não anda nem leva dano até levantar. */
   get isDowned(): boolean {
     return this.downedUntil > 0;
@@ -188,7 +198,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite implements Damageable {
       if (diff > Phaser.Math.DegToRad(120)) facing = this.config.backpedalMultiplier;
       else if (diff > Phaser.Math.DegToRad(60)) facing = this.config.strafeMultiplier;
     }
-    this.moveDir.normalize().scale(this.config.speed * this.mods.speedMultiplier * this.speedBuff * facing * analog);
+    const slowed = now < this.slowUntil ? this.slowFactor : 1;
+    this.moveDir.normalize().scale(this.config.speed * this.mods.speedMultiplier * this.speedBuff * facing * analog * slowed);
     this.setVelocity(this.moveDir.x, this.moveDir.y);
   }
 

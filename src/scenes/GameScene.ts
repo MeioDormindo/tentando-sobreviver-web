@@ -264,6 +264,8 @@ export class GameScene extends Phaser.Scene {
       lighting: this.lighting,
       economy: this.economy,
       powerUps: this.powerUps,
+      hazards,
+      mapId: this.mapId,
     });
     this.waveSystem = new WaveSystem(this, spawner, this.player, this.bossSystem, this.mapId);
     this.waveSystem.hounds = {
