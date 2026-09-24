@@ -12,6 +12,8 @@ export class StatsSystem {
   private wave = 0;
   private kills = 0;
   private headshots = 0;
+  private knifeKills = 0;
+  private headshotKills = 0;
   private moneyEarned = 0;
   private bosses = 0;
   private shotsFired = 0;
@@ -31,6 +33,8 @@ export class StatsSystem {
       onGameEvent(ev, GameEvents.ZombieKilled, (k) => {
         this.kills++;
         if (k.headshot) this.headshots++;
+        if (k.source === 'melee') this.knifeKills++;
+        if (k.headshot && k.source === 'weapon') this.headshotKills++;
       }),
       onGameEvent(ev, GameEvents.MoneyChanged, (m) => { this.moneyEarned = m.earned; }),
       onGameEvent(ev, GameEvents.BossDefeated, () => { this.bosses++; }),
@@ -49,7 +53,7 @@ export class StatsSystem {
     const timeMs = this.scene.time.now - this.startedAt;
     // Partida invalidada pelo anti-trapaça não entra em recordes, totais nem ranking.
     const flagged = this.cheatTaunt !== null;
-    const prev = flagged ? { ...save.records(this.mapId) } : save.finishRun(this.mapId, { wave: this.wave, kills: this.kills, score: this.score, bosses: this.bosses, timeMs });
+    const prev = flagged ? { ...save.records(this.mapId) } : save.finishRun(this.mapId, { wave: this.wave, kills: this.kills, score: this.score, bosses: this.bosses, timeMs, knifeKills: this.knifeKills, headshots: this.headshotKills });
     const records = save.records(this.mapId);
     const stats: GameOverStats = {
       wave: this.wave,

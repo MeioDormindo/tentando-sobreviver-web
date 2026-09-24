@@ -5,6 +5,7 @@ import { stationConfig, trainConfig } from '../config/events.config';
 import { ART_SCALE, DEPTH } from '../config/visual.config';
 import { audio, type SpatialLoop } from '../audio/AudioSystem';
 import { liveZombies, type EventContext, type WorldEvent } from './WorldEvent';
+import { emitGameEvent, GameEvents } from '../game/events';
 
 type Light = { x: number; y: number; radius: number; intensity: number; color?: number };
 
@@ -107,7 +108,10 @@ export class TrainEvent implements WorldEvent {
     }
     // Terminou quando o último vagão saiu do mapa.
     const running = this.dir > 0 ? minX < ctx.map.widthPx : maxX > 0;
-    if (!running && this.runOverCount > 0) ctx.toast(`ATROPELADOS ×${this.runOverCount}`);
+    if (!running && this.runOverCount > 0) {
+      ctx.toast(`ATROPELADOS ×${this.runOverCount}`);
+      emitGameEvent(ctx.scene.game.events, GameEvents.TrainRunOver, { count: this.runOverCount });
+    }
     return running;
   }
 

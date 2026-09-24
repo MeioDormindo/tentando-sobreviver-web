@@ -33,6 +33,7 @@ export class MenuScene extends Phaser.Scene {
       menuButton(this, '[ JOGAR ]', () => this.scene.start(SCENE_KEYS.mapSelect)),
       menuButton(this, '[ RANKING ]', () => this.scene.start(SCENE_KEYS.ranking)),
       menuButton(this, '[ ARMAS ]', () => this.scene.start(SCENE_KEYS.armory)),
+      menuButton(this, '[ CONQUISTAS ]', () => this.scene.start(SCENE_KEYS.achievements)),
       menuButton(this, currentUser() ? `[ CONTA: ${currentUser()?.toUpperCase()} ]` : '[ CONTA / SALVAR NA NUVEM ]', () => this.scene.start(SCENE_KEYS.account)),
       menuButton(this, '[ CONFIGURAÇÕES ]', () => this.scene.start(SCENE_KEYS.settings)),
     ];
@@ -46,8 +47,13 @@ export class MenuScene extends Phaser.Scene {
       const s = Phaser.Math.Clamp(Math.min(width / 900, height / 620), 0.5, 1);
       title.setScale(s).setPosition(width / 2, height * 0.24);
       record.setScale(Math.max(0.8, s)).setPosition(width / 2, height * 0.24 + 106 * s);
-      buttons.forEach((b, i) => b.setScale(Math.max(0.8, s)).setPosition(width / 2, height * 0.5 + i * 46 * Math.max(0.8, s)));
+      // Botões entre o recorde e a dica; em telas baixas (celular deitado) ficam mais juntos.
+      const top = record.y + 24;
       hint.setWordWrapWidth(width - 32).setPosition(width / 2, height - 30);
+      const bottom = hint.y - hint.displayHeight / 2 - 8;
+      const step = Math.min(46 * Math.max(0.8, s), (bottom - top) / buttons.length);
+      const bs = Math.min(Math.max(0.8, s), step / 40);
+      buttons.forEach((b, i) => b.setScale(bs).setPosition(width / 2, top + step * (i + 0.5)));
     });
 
     this.listenForKonami(title);

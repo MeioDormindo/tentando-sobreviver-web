@@ -65,6 +65,12 @@ export const GameEvents = {
   HudRequest: 'hud-request',
   /** Anti-trapaça: ganho impossível ou valor alterado por fora (a partida deixa de valer). */
   CheatDetected: 'cheat-detected',
+  /** Conquista liberada (aviso na HUD). */
+  AchievementUnlocked: 'achievement-unlocked',
+  /** Fim de uma passagem do trem, com quantos zumbis atropelou. */
+  TrainRunOver: 'train-run-over',
+  /** A Mystery Box começou a sortear. */
+  MysteryBoxRolled: 'mystery-box-rolled',
 } as const;
 
 export interface PlayerHpPayload {
@@ -238,6 +244,9 @@ export interface GameEventMap {
   [GameEvents.GameOver]: GameOverStats;
   [GameEvents.HudRequest]: undefined;
   [GameEvents.CheatDetected]: { taunt: string };
+  [GameEvents.AchievementUnlocked]: { id: string; name: string; description: string; icon: string };
+  [GameEvents.TrainRunOver]: { count: number };
+  [GameEvents.MysteryBoxRolled]: { fireSale: boolean };
 }
 
 export type GameEventName = keyof GameEventMap;

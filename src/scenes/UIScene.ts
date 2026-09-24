@@ -11,6 +11,7 @@ import { MiniMap } from '../ui/MiniMap';
 import { save } from '../save/SaveStore';
 import { antiCheatConfig } from '../config/anticheat.config';
 import { audio } from '../audio/AudioSystem';
+import { AchievementToast } from '../ui/AchievementToast';
 import { useTouchControls } from '../input/device';
 import { touchInput } from '../input/touchInput';
 import { createGameOverOverlay } from '../ui/GameOverOverlay';
@@ -66,6 +67,7 @@ export class UIScene extends Phaser.Scene {
   private killsText!: Phaser.GameObjects.Text;
   /** Aviso fixo quando o anti-trapaça invalida a partida. */
   private invalidText: Phaser.GameObjects.Text | null = null;
+  private achievementToast!: AchievementToast;
   private scoreText!: Phaser.GameObjects.Text;
   private crosshair!: Phaser.GameObjects.Graphics;
   private waveText!: Phaser.GameObjects.Text;
@@ -104,6 +106,7 @@ export class UIScene extends Phaser.Scene {
     this.pauseOverlay = null;
     this.gameOverStats = null;
     this.invalidText = null;
+    this.achievementToast = new AchievementToast(this);
     this.playerDead = false;
 
     this.hpBar = this.add.graphics();
@@ -197,6 +200,7 @@ export class UIScene extends Phaser.Scene {
       onGameEvent(this.game.events, GameEvents.ZombieKilled, this.onZombieKilled, this),
       onGameEvent(this.game.events, GameEvents.PlayerDied, this.onPlayerDied, this),
       onGameEvent(this.game.events, GameEvents.GameOver, this.onGameOver, this),
+      onGameEvent(this.game.events, GameEvents.AchievementUnlocked, (a) => this.achievementToast.push(a), this),
       onGameEvent(this.game.events, GameEvents.CheatDetected, (c) => this.onCheatDetected(c.taunt), this),
       onGameEvent(this.game.events, GameEvents.MapUnlocked, (m) => this.showBanner(`${m.name.toUpperCase()} DESBLOQUEADO!`, 'disponível na escolha de mapa', COLORS.accent), this),
       onGameEvent(this.game.events, GameEvents.ScoreChanged, (s) => {

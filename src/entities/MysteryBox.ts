@@ -180,6 +180,7 @@ export class MysteryBox<H = unknown> implements Interactable {
     // No Fire Sale os usos não contam (a caixa não foge durante a liquidação).
     if (!MysteryBox.fireSale && !this.dismissPending) this.uses++;
     this.result = rollMysteryWeapon(this.places.mapId);
+    emitGameEvent(this.scene.game.events, GameEvents.MysteryBoxRolled, { fireSale: MysteryBox.fireSale });
     audio.playAt('box_music', this.x, this.y, { category: 'ui', volume: 0.9, pitchJitter: 0 });
     this.icon.setVisible(true).setAlpha(1).setY(this.y - 30);
     this.label.setText('').setAlpha(1);

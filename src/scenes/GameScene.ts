@@ -39,6 +39,7 @@ import { EventSystem } from '../systems/EventSystem';
 import { ScoreSystem } from '../systems/ScoreSystem';
 import { StatsSystem } from '../systems/StatsSystem';
 import { AntiCheat } from '../systems/AntiCheat';
+import { AchievementSystem } from '../systems/AchievementSystem';
 import { FireSale } from '../systems/FireSale';
 import { ProgressSystem } from '../systems/ProgressSystem';
 import { MinimapFeed } from '../systems/MinimapFeed';
@@ -160,6 +161,7 @@ export class GameScene extends Phaser.Scene {
 
     this.economy = new EconomySystem(this, effects);
     new AntiCheat(this, [this.economy, this.score]);
+    new AchievementSystem(this);
     this.powerUps = new PowerUpSystem(this, {
       player: this.player,
       economy: this.economy,

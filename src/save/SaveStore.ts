@@ -1,4 +1,5 @@
 import { DEFAULT_MAP, MAP_IDS, MAPS, PLAYER_NAME_MAX, RANKING_SIZE, type MapId } from '../config/maps.config';
+import { achievementById, type AchievementId, type TotalKey } from '../config/achievements.config';
 
 /** Save local (GDD §65): configurações, recordes, desbloqueios, ranking e totais. */
 
@@ -25,6 +26,8 @@ export interface LifetimeStats {
   totalKills: number;
   bossesDefeated: number;
   playTimeMs: number;
+  knifeKills: number;
+  headshots: number;
 }
 
 /** Tamanho do minimapa no canto da HUD. */
@@ -62,6 +65,8 @@ interface SaveData {
   ranking: Record<MapId, RankEntry[]>;
   lifetime: LifetimeStats;
   secrets: Secrets;
+  /** Conquistas liberadas: id → data (ISO). */
+  achievements: Record<string, string>;
 }
 
 const emptyRecords = (): MapRecords => ({ bestWave: 0, bestKills: 0, bestScore: 0 });
@@ -73,8 +78,9 @@ function defaults(): SaveData {
     records: Object.fromEntries(MAP_IDS.map((id) => [id, emptyRecords()])) as Record<MapId, MapRecords>,
     unlockedMaps: MAP_IDS.filter((id) => MAPS[id].unlock === null),
     ranking: Object.fromEntries(MAP_IDS.map((id) => [id, []])) as unknown as Record<MapId, RankEntry[]>,
-    lifetime: { gamesPlayed: 0, totalKills: 0, bossesDefeated: 0, playTimeMs: 0 },
+    lifetime: { gamesPlayed: 0, totalKills: 0, bossesDefeated: 0, playTimeMs: 0, knifeKills: 0, headshots: 0 },
     secrets: { teddies: false, konami: false },
+    achievements: {},
   };
 }
 
@@ -123,7 +129,18 @@ function sanitize(raw: unknown): SaveData {
       .slice(0, RANKING_SIZE);
   }
   const l = (r.lifetime ?? {}) as Partial<LifetimeStats>;
-  d.lifetime = { gamesPlayed: num(l.gamesPlayed), totalKills: num(l.totalKills), bossesDefeated: num(l.bossesDefeated), playTimeMs: num(l.playTimeMs) };
+  d.lifetime = {
+    gamesPlayed: num(l.gamesPlayed),
+    totalKills: num(l.totalKills),
+    bossesDefeated: num(l.bossesDefeated),
+    playTimeMs: num(l.playTimeMs),
+    knifeKills: num(l.knifeKills),
+    headshots: num(l.headshots),
+  };
+  const ach = (r.achievements ?? {}) as Record<string, unknown>;
+  if (ach && typeof ach === 'object' && !Array.isArray(ach)) {
+    for (const [id, date] of Object.entries(ach)) if (achievementById(id) && typeof date === 'string') d.achievements[id] = date.slice(0, 40);
+  }
   const sec = (r.secrets ?? {}) as Partial<Secrets>;
   d.secrets = { teddies: sec.teddies === true, konami: sec.konami === true };
   return d;
@@ -214,7 +231,7 @@ class SaveStore {
   }
 
   /** Fim de partida: atualiza recordes e totais; retorna os recordes anteriores. */
-  finishRun(map: MapId, run: { wave: number; kills: number; score: number; bosses: number; timeMs: number }): MapRecords {
+  finishRun(map: MapId, run: { wave: number; kills: number; score: number; bosses: number; timeMs: number; knifeKills: number; headshots: number }): MapRecords {
     const prev = { ...this.data.records[map] };
     this.data.records[map] = {
       bestWave: Math.max(prev.bestWave, run.wave),
@@ -226,6 +243,8 @@ class SaveStore {
     l.totalKills += run.kills;
     l.bossesDefeated += run.bosses;
     l.playTimeMs += run.timeMs;
+    l.knifeKills += run.knifeKills;
+    l.headshots += run.headshots;
     this.persist();
     return prev;
   }
@@ -237,10 +256,35 @@ class SaveStore {
 
   /** Marca um segredo como descoberto; retorna true se era novidade. */
   discover(key: keyof Secrets): boolean {
+    this.unlockAchievement(key);
     if (this.data.secrets[key]) return false;
     this.data.secrets[key] = true;
     this.persist();
     return true;
+  }
+
+  // ── Conquistas ──
+  hasAchievement(id: AchievementId): boolean {
+    return id in this.data.achievements;
+  }
+
+  /** Data (ISO) em que a conquista foi liberada, ou null. */
+  achievementDate(id: AchievementId): string | null {
+    return this.data.achievements[id] ?? null;
+  }
+
+  /** Libera a conquista; retorna true se era novidade. */
+  unlockAchievement(id: AchievementId): boolean {
+    if (this.hasAchievement(id)) return false;
+    this.data.achievements[id] = new Date().toISOString();
+    this.persist();
+    return true;
+  }
+
+  /** Total acumulado (partidas já terminadas) usado pelas conquistas de progresso. */
+  total(key: TotalKey): number {
+    const l = this.data.lifetime;
+    return key === 'kills' ? l.totalKills : l[key];
   }
 
   // ── Ranking ──
@@ -304,7 +348,14 @@ class SaveStore {
       totalKills: Math.max(l.totalKills, o.totalKills),
       bossesDefeated: Math.max(l.bossesDefeated, o.bossesDefeated),
       playTimeMs: Math.max(l.playTimeMs, o.playTimeMs),
+      knifeKills: Math.max(l.knifeKills, o.knifeKills),
+      headshots: Math.max(l.headshots, o.headshots),
     };
+    // Conquistas: a união, ficando com a data mais antiga.
+    for (const [id, date] of Object.entries(other.achievements)) {
+      const mine = d.achievements[id];
+      if (!mine || date < mine) d.achievements[id] = date;
+    }
     d.secrets = { teddies: d.secrets.teddies || other.secrets.teddies, konami: d.secrets.konami || other.secrets.konami };
     this.persist();
   }
