@@ -28,6 +28,7 @@ func run(tree: SceneTree) -> int:
 	await _crawler()
 	await _hound()
 	await _tank()
+	await _hound_round()
 
 	_player.queue_free()
 	_arena.queue_free()
@@ -111,6 +112,57 @@ func _tank() -> void:
 	check(zombie.global_position.distance_to(start) < 0.2, "Tank: não é empurrado")
 	check(zombie.pivot.scale.x > 1.3, "Tank: maior que os outros")
 	zombie.queue_free()
+
+
+## Rodada dos cães no Hospital migrado: só cães, perto do jogador, névoa; o último deixa munição.
+func _hound_round() -> void:
+	var map := (load("res://scenes/maps/hospital.tscn") as PackedScene).instantiate() as LayoutMap
+	_tree.root.add_child(map)
+	var player := (load("res://scenes/player/player.tscn") as PackedScene).instantiate() as Player
+	player.position = map.get_player_spawn()
+	_tree.root.add_child(player)
+	player.controlled = false
+	player.health.invulnerable = true
+	var container := Node3D.new()
+	_tree.root.add_child(container)
+	var spawner := SpawnManager.new()
+	spawner.world = map
+	spawner.container = container
+	spawner.target = player
+	spawner.zombie_data = load("res://data/zombies/walker.tres")
+	_tree.root.add_child(spawner)
+	var rounds := RoundManager.new()
+	rounds.data = load("res://data/configs/rounds.tres")
+	rounds.spawn_manager = spawner
+	_tree.root.add_child(rounds)
+	await _tree.create_timer(0.5).timeout
+	var max_ammo := [false]
+	Events.max_ammo.connect(func(_at: Vector3) -> void: max_ammo[0] = true, CONNECT_ONE_SHOT)
+	rounds.start_round(5)
+	var env := (map.get_node("WorldEnvironment") as WorldEnvironment).environment
+	check(rounds.is_hound_round and rounds.total == 7, "round 5 no Hospital é rodada dos cães (%d cães)" % rounds.total)
+	check(env.fog_enabled, "névoa na rodada dos cães")
+	await _tree.create_timer(4.0).timeout
+	var alive := container.get_children().filter(func(z: Node) -> bool: return z is ZombieBase and (z as ZombieBase).is_alive())
+	var all_hounds := alive.all(func(z: ZombieBase) -> bool: return z.data.id == &"hound")
+	check(alive.size() > 0 and all_hounds, "só cães (%d vivos)" % alive.size())
+	check(alive.size() <= 5, "no máximo 5 cães vivos")
+	player.weapon.magazine = 0
+	player.weapon.reserve = 0
+	for i in 60:
+		for z in container.get_children():
+			var hound := z as ZombieBase
+			if hound and hound.is_alive():
+				hound.take_damage(DamageInfo.new(99999.0, DamageInfo.Kind.WEAPON, player))
+		if rounds.phase != RoundManager.Phase.ACTIVE:
+			break
+		await _tree.create_timer(0.5).timeout
+	check(rounds.phase == RoundManager.Phase.INTERMISSION, "matou os 7 cães: fim do round")
+	check(max_ammo[0] and player.weapon.reserve == player.weapon.data.reserve_ammo, "o último cão deixa munição cheia")
+	check(not env.fog_enabled, "a névoa vai embora")
+	for node in [rounds, spawner, container, player, map]:
+		node.queue_free()
+	await _tree.physics_frame
 
 
 func _spawn(type: StringName, offset: Vector3, speed_mult: float) -> ZombieBase:

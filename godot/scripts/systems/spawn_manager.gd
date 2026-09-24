@@ -79,6 +79,27 @@ func spawn_zombie(health_mult: float, damage_mult: float, speed_mult: float, rou
 	return zombie
 
 
+## Cria um zumbi a uma distância aleatória do jogador, num ponto alcançável da navegação,
+## com um raio caindo (rodada dos cães). Devolve null se não achar lugar.
+func spawn_near_player(type: StringName, min_distance: float, max_distance: float, health_mult: float, damage_mult: float, speed_mult: float) -> ZombieBase:
+	var nav_map := target.get_world_3d().navigation_map
+	for attempt in 12:
+		var angle := randf() * TAU
+		var candidate := target.global_position + Vector3(cos(angle), 0.0, sin(angle)) * randf_range(min_distance, max_distance)
+		var spot := NavigationServer3D.map_get_closest_point(nav_map, candidate)
+		var distance := spot.distance_to(target.global_position)
+		if spot.distance_to(candidate) > 1.5 or distance < min_distance * 0.8:
+			continue
+		var zombie := ZombieFactory.create(type_data(type), target, health_mult, damage_mult, speed_mult)
+		if zombie == null:
+			return null
+		zombie.position = container.to_local(spot + Vector3.UP * 0.1)
+		container.add_child(zombie)
+		SpecialFire.flash(get_tree(), spot, 2.0, Color(0.55, 0.75, 1.0))
+		return zombie
+	return null
+
+
 ## Leva para um ponto de spawn ativo os zumbis presos longe do jogador (a parede no caminho,
 ## um canto sem saída): assim o round sempre termina.
 func _relocate_stuck() -> void:

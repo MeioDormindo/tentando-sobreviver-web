@@ -314,3 +314,7 @@ func _test_composition() -> void:
 	check(not seen.call(8, "terminal", {}).has(&"crawler") and seen.call(8, "map2", {}).has(&"armored"), "inimigos do Hospital só no Hospital")
 	check(not seen.call(6, "terminal", {&"tank": 2}).has(&"tank"), "no máximo 2 Tanks vivos")
 	check(data.type_cap(&"tank", 16) == 3, "a partir do round 16: até 3 Tanks")
+	var hound_rounds := range(1, 30).filter(func(r: int) -> bool: return data.is_hound_round(r, "map2"))
+	check(hound_rounds == [5, 11, 17, 23, 29], "cães no Hospital: rounds 5, 11, 17... (%s)" % [hound_rounds])
+	check(range(1, 30).all(func(r: int) -> bool: return not data.is_hound_round(r, "terminal")), "sem rodada dos cães no Terminal")
+	check(data.hound_total(5, "map2") == 7, "round 5: 7 cães")

@@ -48,6 +48,13 @@ extends Resource
 @export var late_caps_from_round: int = 16
 @export var late_max_alive_per_type: Dictionary = {}
 
+@export_group("Rodadas especiais")
+## Rounds de boss (os bosses entram no próximo bloco; a rodada dos cães nunca cai neles).
+@export var boss_rounds: PackedInt32Array = PackedInt32Array()
+## Rodada dos cães por mapa: first_round, every, per_round, cap, max_alive, spawn_interval,
+## spawn_distance_min/max, fog_darkness, flashlight_factor.
+@export var hound_rounds: Dictionary = {}
+
 
 func total_zombies(round_number: int) -> int:
 	return base_zombies + _r(round_number) * zombies_per_round
@@ -107,3 +114,17 @@ func type_cap(type: StringName, round_number: int) -> int:
 	if _r(round_number) >= late_caps_from_round and late_max_alive_per_type.has(type):
 		return int(late_max_alive_per_type[type])
 	return int(max_alive_per_type.get(type, 999))
+
+
+## Este round é uma rodada dos cães neste mapa? (nunca em round de boss)
+func is_hound_round(round_number: int, map_id: String) -> bool:
+	var cfg: Dictionary = hound_rounds.get(map_id, {})
+	if cfg.is_empty() or round_number < int(cfg.first_round) or boss_rounds.has(round_number):
+		return false
+	return (round_number - int(cfg.first_round)) % int(cfg.every) == 0
+
+
+## Quantos cães na rodada.
+func hound_total(round_number: int, map_id: String) -> int:
+	var cfg: Dictionary = hound_rounds.get(map_id, {})
+	return mini(int(cfg.get("cap", 0)), roundi(float(cfg.get("per_round", 0)) * round_number))

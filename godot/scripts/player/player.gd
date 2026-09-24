@@ -53,6 +53,10 @@ func _ready() -> void:
 	melee.data = data.knife
 	inventory.weapon_changed.connect(_on_weapon_changed)
 	perks.perks_changed.connect(_on_perks_changed)
+	Events.max_ammo.connect(func(_at: Vector3) -> void:
+		for w in inventory.weapons:
+			w.reset_ammo())
+	Events.hound_round_changed.connect(_on_hound_round)
 	inventory.give(data.starting_weapon)
 	health.health_changed.connect(func(current: float, maximum: float) -> void: Events.player_health_changed.emit(current, maximum))
 	aim_point = global_position - global_basis.z * 3.0
@@ -130,6 +134,17 @@ func take_damage(info: DamageInfo) -> float:
 			_invulnerable_until = _clock + data.invulnerability_time
 		_last_hurt_at = _clock
 	return applied
+
+
+## Névoa da rodada dos cães: a lanterna fica mais fraca.
+func _on_hound_round(active: bool, config: Dictionary) -> void:
+	var flashlight := pivot.get_node_or_null("Flashlight") as SpotLight3D
+	if flashlight == null:
+		return
+	if not flashlight.has_meta(&"base_energy"):
+		flashlight.set_meta(&"base_energy", flashlight.light_energy)
+	var base: float = flashlight.get_meta(&"base_energy")
+	flashlight.light_energy = base * (float(config.get("flashlight_factor", 1.0)) if active else 1.0)
 
 
 func _go_down(revive: PerkData) -> void:

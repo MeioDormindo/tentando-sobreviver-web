@@ -13,6 +13,8 @@ var phase: Phase = Phase.WAITING
 var total: int = 0
 var spawned: int = 0
 var killed: int = 0
+## Rodada só de cães (Hospital).
+var is_hound_round: bool = false
 
 var _timer := 0.0
 var _rng := RandomNumberGenerator.new()
@@ -44,7 +46,10 @@ func tick(delta: float) -> void:
 
 func start_round(number: int) -> void:
 	round_number = number
-	total = data.total_zombies(number)
+	var map_id := _map_id()
+	is_hound_round = data.is_hound_round(number, map_id)
+	total = data.hound_total(number, map_id) if is_hound_round else data.total_zombies(number)
+	Events.hound_round_changed.emit(is_hound_round, data.hound_rounds.get(map_id, {}))
 	spawned = 0
 	killed = 0
 	phase = Phase.ACTIVE
@@ -62,11 +67,18 @@ func stop() -> void:
 	phase = Phase.STOPPED
 
 
+func _map_id() -> String:
+	return spawn_manager.world.map_id() if spawn_manager and spawn_manager.world else ""
+
+
 func _try_spawn() -> void:
+	if is_hound_round:
+		_try_spawn_hound()
+		return
 	if spawn_manager.alive_count() >= data.max_alive(round_number):
 		_spawn_timer = 0.25
 		return
-	var map_id := spawn_manager.world.map_id() if spawn_manager.world else ""
+	var map_id := _map_id()
 	var type := data.pick_type(round_number, map_id, spawn_manager.alive_by_type(), _rng)
 	if type == &"":
 		_spawn_timer = 0.25  # todos os tipos no limite de vivos
@@ -80,11 +92,31 @@ func _try_spawn() -> void:
 		_spawn_timer = 0.5
 
 
-func _on_zombie_killed(_zombie: Node3D, _info: DamageInfo) -> void:
+## Cães: surgem com um raio perto do jogador, poucos vivos de cada vez.
+func _try_spawn_hound() -> void:
+	var cfg: Dictionary = data.hound_rounds.get(_map_id(), {})
+	if spawn_manager.alive_count() >= int(cfg.get("max_alive", 5)):
+		_spawn_timer = 0.25
+		return
+	var hound := spawn_manager.spawn_near_player(&"hound", float(cfg.spawn_distance_min), float(cfg.spawn_distance_max),
+		data.health_multiplier(round_number), data.damage_multiplier(round_number), data.speed_multiplier(round_number))
+	if hound:
+		spawned += 1
+		_spawn_timer = float(cfg.get("spawn_interval", 1.4))
+	else:
+		_spawn_timer = 0.3
+
+
+func _on_zombie_killed(zombie: Node3D, _info: DamageInfo) -> void:
 	if phase != Phase.ACTIVE:
 		return
 	killed += 1
 	Events.round_remaining_changed.emit(total - killed)
+	if killed >= total and is_hound_round:
+		# O último cão deixa munição cheia (como o Max Ammo do jogo web).
+		Events.max_ammo.emit(zombie.global_position)
+		is_hound_round = false
+		Events.hound_round_changed.emit(false, {})
 	if killed >= total:
 		phase = Phase.INTERMISSION
 		_timer = data.intermission

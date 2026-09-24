@@ -12,7 +12,7 @@ import { dirname, join } from 'node:path';
 import { weapons, knifeConfig, INVENTORY_SLOTS, WEAPON_SWITCH_MS, type WeaponConfig } from '../../src/config/weapons.config';
 import { headshotConfig, economyConfig } from '../../src/config/economy.config';
 import { playerConfig } from '../../src/config/player.config';
-import { waveConfig } from '../../src/config/waves.config';
+import { waveConfig, houndRounds } from '../../src/config/waves.config';
 import { zombies as zombieTypes } from '../../src/config/zombies.config';
 import { exportMaps } from './export-maps';
 import { exportMachines } from './export-machines';
@@ -178,6 +178,8 @@ function exportRoundsAndPoints(): void {
     composition_by_map: raw(`{\n${Object.entries(w.compositionByMap).map(([id, list]) => `"${id}": ${composition(list!).raw}`).join(',\n')}\n}`),
     max_alive_per_type: raw(`{ ${Object.entries(w.maxAlivePerType).map(([k, v]) => `&"${k}": ${v}`).join(', ')} }`),
     late_caps_from_round: w.lateMaxAlivePerType.fromWave,
+    boss_rounds: raw(`PackedInt32Array(${w.bossWaves.join(', ')})`),
+    hound_rounds: raw(`{\n${Object.entries(houndRounds).map(([id, h]) => `"${id}": { "first_round": ${h!.firstWave}, "every": ${h!.every}, "per_round": ${h!.perWave}, "cap": ${h!.cap}, "max_alive": ${h!.maxAlive}, "spawn_interval": ${s(h!.spawnIntervalMs)}, "spawn_distance_min": ${m(h!.spawnDistance[0])}, "spawn_distance_max": ${m(h!.spawnDistance[1])}, "fog_darkness": ${h!.fog.extraDarkness}, "flashlight_factor": ${h!.fog.flashlightFactor} }`).join(',\n')}\n}`),
     late_max_alive_per_type: raw(`{ ${Object.entries(w.lateMaxAlivePerType.caps).map(([k, v]) => `&"${k}": ${v}`).join(', ')} }`),
   }));
   const e = economyConfig;

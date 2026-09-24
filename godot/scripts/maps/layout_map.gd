@@ -73,7 +73,24 @@ func _ready() -> void:
 	_build_lamps()
 	_build_spawns()
 	open_area(StringName(data.start_area))
+	Events.hound_round_changed.connect(_on_hound_round)
 	nav_region.bake_navigation_mesh(false)
+
+
+## Névoa azulada e mais escuro durante a rodada dos cães.
+func _on_hound_round(active: bool, config: Dictionary) -> void:
+	var environment := get_node_or_null("WorldEnvironment") as WorldEnvironment
+	if environment == null:
+		return
+	var env := environment.environment
+	if not has_meta(&"base_ambient"):
+		set_meta(&"base_ambient", env.ambient_light_energy)
+	var base: float = get_meta(&"base_ambient")
+	env.fog_enabled = active
+	if active:
+		env.fog_light_color = Color(0.1, 0.16, 0.3)
+		env.fog_density = 0.035
+	env.ambient_light_energy = base * (1.0 - float(config.get("fog_darkness", 0.0)) * 3.0 if active else 1.0)
 
 
 func map_id() -> String:

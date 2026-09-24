@@ -45,6 +45,8 @@ func _ready() -> void:
 	Events.area_opened.connect(func(_id: StringName, area_name: String) -> void: _show_banner(area_name.to_upper() + " ABERTA", GOLD))
 	Events.purchase_denied.connect(func() -> void: _flash_points_denied())
 	Events.toast.connect(_show_toast)
+	Events.hound_round_changed.connect(_on_hound_round)
+	Events.max_ammo.connect(func(_at: Vector3) -> void: _show_toast("MAX AMMO"))
 	Events.power_changed.connect(func(on: bool) -> void: if on: _show_banner("ENERGIA LIGADA", GOLD))
 	Events.perks_changed.connect(func(names: Array[String]) -> void: _perks_label.text = "  ·  ".join(names).to_upper())
 	Events.pause_changed.connect(func(paused: bool) -> void: _pause_panel.visible = paused)
@@ -164,6 +166,11 @@ func _on_round_started(round_number: int, total: int) -> void:
 	_round_label.text = "ROUND %d" % round_number
 	_remaining_label.text = "ZUMBIS RESTANTES  %d" % total
 	_show_banner("ROUND %d" % round_number, RED)
+
+
+func _on_hound_round(active: bool, _config: Dictionary) -> void:
+	if active:
+		_show_banner("RODADA DOS CÃES", Color(0.55, 0.75, 1.0))
 
 
 func _on_points_changed(total: int, delta: int) -> void:
