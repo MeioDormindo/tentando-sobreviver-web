@@ -61,6 +61,23 @@ na direção da lanterna. Os controles de toque também ligam sozinhos no primei
 | M4 / Pump | 🔥 Fogo | incendeia (dano ao longo do tempo) |
 | AK | 💥 Explosivo | pequena explosão no acerto (não fere você) |
 
+## Plataforma Norte (estação)
+
+- De cima para baixo: trilho de trás com o trem parado (um vagão aberto com a Combat Shotgun),
+  a **ilha** entre os trilhos, o **trilho da frente** — por onde o trem passa, bem à vista de quem
+  está na plataforma — e a plataforma principal, ligada ao Hall.
+- Os zumbis da Plataforma saem das bocas de túnel nas pontas dos trilhos (e podem ser atropelados).
+- **Painel de horários**: contagem do próximo trem, "TREM CHEGANDO" e "TREM PASSANDO".
+- **Semáforos** nas pontas: verdes; vermelho piscando no aviso e vermelho fixo na passagem.
+- Ao passar, o trem mostra quantos zumbis atropelou e o deslocamento de ar empurra quem está
+  na beira da plataforma (sem dano). Parado nos trilhos, o jogador é atropelado.
+
+## Tela e resolução
+
+- O zoom da câmera se ajusta à janela (largura e altura): qualquer resolução, de 720p a 4K ou
+  ultrawide, mostra o mesmo pedaço do mapa. HUD e menus crescem junto em telas com mais de 900 px
+  de altura (`uiConfig` em `src/config/visual.config.ts`).
+
 ## Interações e segredos no mapa
 
 - **Painel de energia** (Área Técnica): durante um Apagão, segure E ($500) para religar a luz.
@@ -222,7 +239,7 @@ Observações:
   (1,5× de dano), bônus de wave $300 + $50 × wave. Armas e preços em `weapons.config.ts`.
 - Comprar numa maleta de arma que você já tem compra munição dela (metade do preço).
 - Vida regenera devagar após 5s sem levar dano.
-- Mapa: Hall Central (início), Plataforma Norte com trem (um vagão aberto), Bilheteria, Lojas,
+- Mapa: Hall Central (início), Plataforma Norte (dois trilhos, ilha e trem parado com um vagão aberto), Bilheteria, Lojas,
   Área Técnica, Túneis e Manutenção. Portas pagas liberam as áreas e os spawns delas.
 - Zumbis do Hall, Bilheteria e Lojas surgem do lado de fora e entram quebrando as barricadas.
 - Navegação: perseguição direta quando o zumbi enxerga o jogador; senão, caminho A* (portas e
