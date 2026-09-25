@@ -22,6 +22,7 @@
 [ext_resource type="Resource" path="res://data/configs/achievements.tres" id="20_achievement_data"]
 [ext_resource type="Script" path="res://scripts/systems/power_up_system.gd" id="21_powerups"]
 [ext_resource type="Script" path="res://scripts/systems/minimap_feed.gd" id="24_minimap"]
+[ext_resource type="Script" path="res://scripts/player/camera_occlusion.gd" id="30_occlusion"]
 [ext_resource type="Script" path="res://scripts/events/world_event_system.gd" id="25_events"]
 [ext_resource type="Resource" path="res://data/configs/world_events.tres" id="26_event_data"]
 [ext_resource type="Script" path="res://scripts/quests/serum_quest.gd" id="27_serum"]
@@ -40,9 +41,13 @@ camera = NodePath("../Camera")
 
 [node name="Camera" type="Camera3D" parent="." node_paths=PackedStringArray("target")]
 current = true
-fov = 50.0
+fov = 35.0
 script = ExtResource("4_camera")
 target = NodePath("../Player")
+
+[node name="Occlusion" type="Node" parent="Camera" node_paths=PackedStringArray("target")]
+script = ExtResource("30_occlusion")
+target = NodePath("../../Player")
 
 [node name="Zombies" type="Node3D" parent="."]
 

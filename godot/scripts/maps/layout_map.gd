@@ -19,6 +19,14 @@ const FLOOR_COLORS := {
 	"h": Color(0.62, 0.64, 0.6), "l": Color(0.45, 0.5, 0.48), "g": Color(0.5, 0.55, 0.58),
 }
 const WALL_COLOR := Color(0.16, 0.16, 0.15)
+## Arte do jogo web (npm run godot:data → assets/web): textura de cada piso e das paredes.
+## 32 px = 1 m, como no jogo web.
+const FLOOR_ART := {
+	"t": "floor_terminal", "c": "floor_concrete", "m": "floor_metal", "r": "floor_tracks", "u": "floor_tunnel",
+	"w": "floor_wagon", "h": "floor_hospital", "l": "floor_linoleum", "g": "floor_morgue",
+}
+const WEB_ART := "res://assets/web/map/%s.png"
+const PIXELS_PER_METER := 32.0
 const TRAIN_COLOR := Color(0.23, 0.33, 0.4)
 const WINDOW_COLOR := Color(0.55, 0.7, 0.8, 0.35)
 const PROP_COLOR := Color(0.4, 0.33, 0.24)
@@ -312,14 +320,14 @@ func _build_floor() -> void:
 	for ch: String in FLOOR_COLORS:
 		var match_chars := ch + ("DW" if ch == "c" else "")
 		for rect in _merge(func(c: String) -> bool: return match_chars.contains(c)):
-			visuals.add_child(_box_mesh(rect, -0.05, 0.05, _material(FLOOR_COLORS[ch])))
+			visuals.add_child(_box_mesh(rect, -0.05, 0.05, _art_material(FLOOR_ART.get(ch, ""), FLOOR_COLORS[ch])))
 
 
 func _build_solids(ch: String, box_height: float, color: Color, layer: int, label: String) -> void:
 	var group := Node3D.new()
 	group.name = label + "s"
 	nav_region.add_child(group)
-	var material := _material(color)
+	var material: Material = _wall_material(color) if ch == "#" else _material(color)
 	for rect in _merge(func(c: String) -> bool: return c == ch):
 		var body := StaticBody3D.new()
 		body.collision_layer = layer
@@ -628,6 +636,7 @@ func _row_free(x: int, z: int, w: int, accept: Callable, used: PackedByteArray) 
 
 ## Malha de caixa cobrindo o retângulo (no plano XZ) entre as alturas `bottom` e `top`.
 func _box_mesh(rect: Rect2, bottom: float, top: float, material: Material, centered := false) -> MeshInstance3D:
+	# (material pode ser um StandardMaterial3D ou o shader das paredes)
 	var mesh := BoxMesh.new()
 	mesh.size = Vector3(rect.size.x, top - bottom, rect.size.y)
 	var instance := MeshInstance3D.new()
@@ -638,6 +647,44 @@ func _box_mesh(rect: Rect2, bottom: float, top: float, material: Material, cente
 	else:
 		instance.position = Vector3(rect.get_center().x, (top + bottom) * 0.5, rect.get_center().y)
 	return instance
+
+
+## Paredes: arte do web (lateral e topo) e oclusão em volta do jogador (shaders/wall.gdshader).
+func _wall_material(fallback: Color) -> Material:
+	var side := WEB_ART % "wall_full"
+	var top := WEB_ART % "wall_cap"
+	if not ResourceLoader.exists(side) or not ResourceLoader.exists(top):
+		return _material(fallback)
+	var material := ShaderMaterial.new()
+	material.shader = load("res://shaders/wall.gdshader")
+	var side_texture := load(side) as Texture2D
+	var top_texture := load(top) as Texture2D
+	material.set_shader_parameter(&"side_texture", side_texture)
+	material.set_shader_parameter(&"top_texture", top_texture)
+	material.set_shader_parameter(&"side_size", side_texture.get_size() / PIXELS_PER_METER)
+	material.set_shader_parameter(&"top_size", top_texture.get_size() / PIXELS_PER_METER)
+	return material
+
+
+## Material com uma imagem da arte do web, repetindo em coordenadas do mundo (a imagem cobre
+## largura/32 × altura/32 metros) com pixels nítidos. Sem a imagem, cai na cor lisa.
+func _art_material(art: String, fallback: Color) -> StandardMaterial3D:
+	var path := WEB_ART % art
+	if art == "" or not ResourceLoader.exists(path):
+		return _material(fallback)
+	if _materials.has(path):
+		return _materials[path]
+	var texture := load(path) as Texture2D
+	var material := StandardMaterial3D.new()
+	material.albedo_texture = texture
+	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST_WITH_MIPMAPS
+	material.roughness = 0.95
+	material.uv1_triplanar = true
+	material.uv1_world_triplanar = true
+	var size := texture.get_size() / PIXELS_PER_METER
+	material.uv1_scale = Vector3(1.0 / size.x, 1.0 / size.y, 1.0 / size.x)
+	_materials[path] = material
+	return material
 
 
 func _material(color: Color) -> StandardMaterial3D:
