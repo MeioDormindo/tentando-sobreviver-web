@@ -13,6 +13,7 @@ var _tick := 0.0
 var _node: Node3D
 var _cloud: MeshInstance3D
 var _light: OmniLight3D
+var _hiss: Dictionary = {}
 
 
 func _init() -> void:
@@ -46,6 +47,7 @@ func start() -> void:
 	_light = EventFx.light(GAS, 1.2, sphere.radius * 1.4)
 	_light.position.y = 1.0
 	_node.add_child(_light)
+	_hiss = Audio.loop_at("evt_gas", center, "world", 0.9, 25.0)
 	valve = GasValve.new()
 	valve.hold_time = float(WorldEventData.shared().interactions.get("valve", {}).get("hold_time", 1.5))
 	_node.add_child(valve)
@@ -57,6 +59,7 @@ func start() -> void:
 
 func update(delta: float) -> bool:
 	if valve.closed:
+		Audio.play_at("lab_upgrade", center, "world", 0.6, -1.0, 0.0, 0.7)
 		return false
 	_elapsed += delta
 	_light.light_energy = 1.0 + 0.3 * sin(_elapsed * 3.0)
@@ -68,6 +71,8 @@ func update(delta: float) -> bool:
 
 
 func end() -> void:
+	Audio.stop_loop(_hiss, 1.5)
+	_hiss = {}
 	if is_instance_valid(_node):
 		valve.remove_from_group(&"interactable")
 		var tween := _node.create_tween()

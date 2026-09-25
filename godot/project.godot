@@ -23,6 +23,7 @@ Save="*res://scripts/systems/save_store.gd"
 Session="*res://scripts/systems/session.gd"
 Online="*res://scripts/online/online_client.gd"
 Account="*res://scripts/online/account.gd"
+Audio="*res://scripts/audio/audio_service.gd"
 
 [display]
 

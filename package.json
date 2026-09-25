@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "art": "node scripts/generate-art.mjs",
-    "godot:data": "esbuild scripts/godot/export-data.ts --bundle --platform=node --format=esm --log-level=warning --outfile=node_modules/.cache/godot-export.mjs && node node_modules/.cache/godot-export.mjs"
+    "godot:data": "esbuild scripts/godot/export-data.ts --bundle --platform=node --format=esm --log-level=warning --outfile=node_modules/.cache/godot-export.mjs && node node_modules/.cache/godot-export.mjs",
+    "godot:audio": "esbuild scripts/godot/export-audio.ts --bundle --platform=node --format=esm --log-level=warning --alias:phaser=./scripts/godot/phaser-stub.ts --outfile=node_modules/.cache/godot-audio.mjs && node node_modules/.cache/godot-audio.mjs"
   },
   "dependencies": {
     "phaser": "^3.90.0"

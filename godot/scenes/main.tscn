@@ -122,7 +122,9 @@ round_manager = NodePath("../RoundManager")
 points_manager = NodePath("../PointsManager")
 score_manager = NodePath("../ScoreManager")
 
-[node name="AudioManager" type="Node" parent="."]
+[node name="AudioManager" type="Node" parent="." node_paths=PackedStringArray("player", "world")]
 script = ExtResource("9_audio")
+player = NodePath("../Player")
+world = NodePath("../World")
 
 [node name="HUD" parent="." instance=ExtResource("3_hud")]

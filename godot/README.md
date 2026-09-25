@@ -42,6 +42,15 @@ de conceitos: ver `docs/analise-typescript.md`.
   e o Canhão de Vento. Objetivo na HUD e no minimapa;
 - **segredos**: ursinhos escondidos (todos = Golden Drop e conquista), rádio/gravador com a
   história do mapa e a placa de créditos;
+- **sons e música do jogo web**: os 142 sons (293 variações) são os mesmos, sintetizados pelo
+  código do jogo web e exportados para WAV (`npm run godot:audio`, na raiz do repositório;
+  o Godot comprime em QOA na importação). Tiros, recargas, faca, passos pelo tipo de piso,
+  zumbis (gemidos, golpes, mortes, armadura, cuspe), boss, barricadas, máquinas, eventos
+  (sirene, gás, trem, avião, caixa), ambiente por área com transição e sons em volta,
+  batimento com pouca vida e a música adaptativa em camadas (exploração, round, alta
+  intensidade, boss) com vinhetas de vitória e de fim de jogo. Som posicional como no jogo
+  web (volume pela distância, pan pela tela) e limite de vozes por categoria, cada uma no
+  seu barramento;
 - **menu de pausa** com CONTINUAR, REINICIAR, MENU e as configurações que valem na hora;
 - **visuais do personagem** (tela PERSONAGEM): Sobrevivente, Enfermeiro, Maquinista e Agente,
   liberados por conquistas, com as cores da paleta do jogo web;
@@ -140,11 +149,11 @@ passam a ser editados direto no Godot.
 # perks, composição por round, rodada dos cães) e, na mesma execução, os testes de cena: as
 # 5 armas especiais, cada tipo de zumbi, a rodada dos cães, os dois bosses nos mapas migrados
 # as telas de menu, os power-ups, a arma caída, o minimapa, a pausa e os eventos, painéis,
-# armadilhas e segredos, e a missão do Soro de ponta a ponta; e o online contra o servidor real, só com operações que não gravam
+# armadilhas e segredos, a missão do Soro de ponta a ponta e o áudio; e o online contra o servidor real, só com operações que não gravam
 # (ler o ranking, envio recusado, login errado). Os testes usam um save de teste (o do
 # jogador não muda) e o bot joga offline (não envia nada ao ranking global):
 Godot --headless --path godot -s res://tests/run_tests.gd
-# Uma suíte só (unit, weapons, zombies, bosses, menus, powerups, match, events, quest, online):
+# Uma suíte só (unit, weapons, zombies, bosses, menus, powerups, match, events, quest, audio, online):
 Godot --headless --path godot -s res://tests/run_tests.gd -- --only=events
 
 # Jogado (abre uma janela), no Terminal migrado: um bot joga até o round 3 e confere
@@ -190,10 +199,11 @@ scripts/systems/                 PerkSystem (modificadores dos perks), PowerSyst
                                  AchievementSystem (conquistas), PowerUpSystem +
                                  PowerUpData (power-ups), MinimapFeed (minimapa),
                                  RoundManager + RoundData, SpawnManager, PointsManager +
-                                 PointsData, GameManager, AudioManager
+                                 PointsData, GameManager, AudioManager (sons da partida e música adaptativa)
 scripts/maps/                    GameWorld (base: spawn do jogador, áreas abertas, spawns ativos),
                                  LayoutMap (mapa migrado do JSON), Arena (mapa de teste),
                                  StationBoard (túneis, semáforos, horários do trem)
+scripts/audio/audio_service.gd   autoload Audio: catálogo, play/play_at/loop_at, vozes, barramentos
 scripts/quests/                  QuestSystem (etapas, HUD, minimapa), QuestStep, QuestSpot,
                                  SerumQuest (missão do Hospital), QuestData
 scripts/events/                  WorldEventSystem (agenda), WorldEvent + um arquivo por evento
@@ -229,6 +239,5 @@ Decisões:
 
 ## Próximas fases (roadmap da especificação)
 
-- **Fase 4 (rounds):** novos tipos de zumbi e composição por round.
-- **Fase 7 (polimento):** sons e efeitos, modelos do Blender no lugar das primitivas.
+- **Fase 7 (polimento):** modelos do Blender no lugar das primitivas.
 - **Fase 8 (plataformas):** exportações e controles de toque.

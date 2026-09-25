@@ -68,6 +68,11 @@ func is_open_floor(_point: Vector3) -> bool:
 	return true
 
 
+## Tipo de piso no ponto (som dos passos): terminal, concrete, metal, tracks, tunnel, wagon...
+func surface_at(_point: Vector3) -> String:
+	return "concrete"
+
+
 ## Estação de trem (faixa dos trilhos, trecho, semáforos...) ou {} se o mapa não tiver.
 func station() -> Dictionary:
 	return {}

@@ -24,6 +24,9 @@ var _player_hit := false
 var _node: Node3D
 var _stripe: MeshInstance3D
 var _train: Node3D
+## Ponto do ronco do trem (na faixa, o mais perto do jogador dentro do trem).
+var _rumble_point: Node3D
+var _rumble: Dictionary = {}
 
 
 func _init() -> void:
@@ -58,6 +61,8 @@ func start() -> void:
 	_stripe = EventFx.box(Vector3(_to - _from, 0.04, _bottom - _top), EventFx.glow(RED, 0.0, 1.0))
 	_node.add_child(_stripe)
 	_stripe.global_position = Vector3((_from + _to) * 0.5, 0.04, (_top + _bottom) * 0.5)
+	# A buzina vem do lado de onde o trem chega.
+	Audio.play_at("evt_train_warning", Vector3(_from if direction > 0 else _to, 0.0, (_top + _bottom) * 0.5), "world", 1.0, 81.0, 0.0)
 
 
 func update(delta: float) -> bool:
@@ -73,6 +78,8 @@ func update(delta: float) -> bool:
 	_train.global_position.x = head_x
 	var min_x := minf(head_x, head_x - direction * _length)
 	var max_x := maxf(head_x, head_x - direction * _length)
+	if _rumble_point:
+		_rumble_point.global_position = Vector3(clampf(system.player.global_position.x, min_x, max_x), 1.0, (_top + _bottom) * 0.5)
 	_run_over(min_x, max_x)
 	_air_blast(min_x, max_x, delta)
 	var player := system.player
@@ -87,6 +94,9 @@ func update(delta: float) -> bool:
 
 
 func end() -> void:
+	Audio.stop_loop(_rumble, 0.6)
+	_rumble = {}
+	_rumble_point = null
 	if _node and is_instance_valid(_node):
 		_node.queue_free()
 	_node = null
@@ -111,6 +121,9 @@ func _spawn_train() -> void:
 	headlight.position = Vector3(direction * 2.0, 1.5, 0.0)
 	_train.add_child(headlight)
 	head_x = -2.0 if direction > 0 else _map_width + 2.0
+	_rumble_point = Node3D.new()
+	_node.add_child(_rumble_point)
+	_rumble = Audio.loop_at("evt_train_pass", _rumble_point, "world", 1.0, 47.0)
 	_train.global_position = Vector3(head_x, 0.0, (_top + _bottom) * 0.5)
 
 

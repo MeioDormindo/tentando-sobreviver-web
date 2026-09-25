@@ -175,6 +175,7 @@ func _make_lock(cabinet: Node3D) -> Node3D:
 	padlock.add_child(hurtbox)
 	health.died.connect(func(_info: DamageInfo) -> void:
 		lock = null
+		Audio.play_at("armor_hit", padlock.global_position, "world", 1.0)
 		SpecialFire.flash(get_tree(), padlock.global_position, 1.0, Color(1.0, 0.85, 0.4))
 		Events.toast.emit("CADEADO ABERTO")
 		padlock.queue_free())

@@ -83,6 +83,9 @@ func _filter_armor(info: DamageInfo) -> float:
 	armor_hp -= info.amount
 	if armor_hp <= 0.0:
 		zombie.break_armor()
+		Audio.play_at("armor_break", zombie.global_position, "zombie", 1.0)
+	else:
+		Audio.play_at("armor_hit", zombie.global_position, "zombie", 0.8)
 	return info.amount * factor
 
 
@@ -111,6 +114,7 @@ func _explode() -> void:
 
 ## Cuspe: um projétil em arco até onde o alvo está agora; ao cair, vira poça de ácido.
 func _spit(to_target: Vector3) -> void:
+	Audio.play_at("spitter_spit", zombie.global_position, "zombie", 0.9)
 	var params := zombie.data.ranged
 	var from := zombie.global_position + Vector3.UP * 1.5
 	var land := zombie.global_position + to_target

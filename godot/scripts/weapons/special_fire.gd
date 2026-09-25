@@ -47,6 +47,7 @@ static func world_root(tree: SceneTree) -> Node:
 
 ## Explosão (granada, plasma): fere os zumbis no raio, com atordoamento opcional. Nunca o jogador.
 static func blast(tree: SceneTree, at: Vector3, radius: float, damage: float, stun_time: float, shooter: Node, color: Color) -> Array[DamageInfo]:
+	Events.explosion.emit(at, radius)
 	var hits: Array[DamageInfo] = []
 	for node in tree.get_nodes_in_group(&"zombies"):
 		var zombie := node as CharacterBase

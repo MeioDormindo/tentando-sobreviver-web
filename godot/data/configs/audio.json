@@ -1,0 +1,314 @@
+{
+ "sounds": {
+  "shot_m1911": 3,
+  "shot_glock": 3,
+  "shot_mp5": 3,
+  "shot_vector": 3,
+  "shot_m4": 3,
+  "shot_ak": 3,
+  "shot_pump": 3,
+  "shot_combat_shotgun": 3,
+  "shot_rpk": 3,
+  "shot_rail": 3,
+  "shot_grenade_launcher": 3,
+  "shot_flamethrower": 3,
+  "shot_arc_gun": 3,
+  "shot_energy_cannon": 3,
+  "shot_magnum": 3,
+  "shot_barrett": 3,
+  "shot_uzi_dual": 3,
+  "shot_minigun": 3,
+  "shot_wind_cannon": 3,
+  "mk2_layer": 2,
+  "reload_pistol": 1,
+  "reload_smg": 1,
+  "reload_rifle": 1,
+  "reload_ak": 1,
+  "reload_shotgun": 1,
+  "reload_launcher": 1,
+  "reload_flamer": 1,
+  "reload_arc": 1,
+  "reload_energy": 1,
+  "reload_revolver": 1,
+  "reload_sniper": 1,
+  "reload_akimbo": 1,
+  "reload_lmg": 1,
+  "reload_wind": 1,
+  "dry_fire": 1,
+  "weapon_switch": 1,
+  "knife_swing": 3,
+  "minigun_spin": 1,
+  "shell": 4,
+  "step_terminal": 5,
+  "step_concrete": 5,
+  "step_metal": 5,
+  "step_tracks": 5,
+  "step_tunnel": 5,
+  "step_wagon": 5,
+  "zombie_walker_groan": 5,
+  "zombie_walker_attack": 3,
+  "zombie_walker_death": 3,
+  "zombie_runner_groan": 5,
+  "zombie_runner_attack": 3,
+  "zombie_runner_death": 3,
+  "zombie_tank_groan": 5,
+  "zombie_tank_attack": 3,
+  "zombie_tank_death": 3,
+  "zombie_exploder_groan": 5,
+  "zombie_exploder_attack": 3,
+  "zombie_exploder_death": 3,
+  "zombie_crawler_groan": 4,
+  "zombie_crawler_attack": 2,
+  "zombie_crawler_death": 2,
+  "zombie_spitter_groan": 4,
+  "zombie_spitter_attack": 2,
+  "zombie_spitter_death": 2,
+  "zombie_armored_groan": 4,
+  "zombie_armored_attack": 2,
+  "zombie_armored_death": 2,
+  "zombie_hound_groan": 4,
+  "zombie_hound_attack": 2,
+  "zombie_hound_death": 2,
+  "hound_howl": 1,
+  "hound_burn": 2,
+  "spitter_spit": 2,
+  "spitter_windup": 1,
+  "spitter_splash": 2,
+  "crawler_gas": 2,
+  "armor_hit": 3,
+  "armor_break": 1,
+  "exploder_fuse": 1,
+  "boss_roar": 2,
+  "boss_charge": 1,
+  "boss_step": 3,
+  "boss_slam": 1,
+  "boss_stun": 1,
+  "boss_summon": 1,
+  "boss_area": 1,
+  "boss_death": 1,
+  "player_hurt": 3,
+  "player_death": 1,
+  "heartbeat": 1,
+  "impact_hard": 4,
+  "impact_flesh": 4,
+  "explosion": 2,
+  "plasma_burst": 1,
+  "wood_break": 3,
+  "hammer": 3,
+  "door_open": 1,
+  "purchase": 1,
+  "denied": 1,
+  "box_music": 1,
+  "secret_song": 1,
+  "radio_static": 1,
+  "box_reveal": 1,
+  "box_move": 1,
+  "lab_upgrade": 1,
+  "perk": 1,
+  "powerup": 1,
+  "wave_start": 1,
+  "wave_end": 1,
+  "boss_warning": 1,
+  "ui_beep": 1,
+  "amb_hall": 1,
+  "amb_platform": 1,
+  "amb_ticket": 1,
+  "amb_shops": 1,
+  "amb_tech": 1,
+  "amb_tunnels": 1,
+  "amb_maintenance": 1,
+  "amb_reception": 1,
+  "amb_ward": 1,
+  "amb_morgue": 1,
+  "amb_lab": 1,
+  "amb_bang": 3,
+  "amb_drip": 3,
+  "amb_horn": 1,
+  "amb_creak": 3,
+  "amb_moan": 3,
+  "amb_steam": 2,
+  "evt_siren": 1,
+  "evt_power_down": 1,
+  "evt_power_up": 1,
+  "evt_train_pass": 1,
+  "evt_train_warning": 1,
+  "evt_plane": 1,
+  "evt_crate_land": 1,
+  "evt_gas": 1,
+  "evt_horde": 1,
+  "mus_pad": 1,
+  "mus_pulse": 1,
+  "mus_drive": 1,
+  "mus_boss": 1,
+  "mus_victory": 1,
+  "mus_gameover": 1
+ },
+ "master": 0.8,
+ "categories": {
+  "weapon": 0.75,
+  "zombie": 0.8,
+  "world": 0.8,
+  "player": 0.8,
+  "ui": 0.7,
+  "ambience": 0.55,
+  "music": 0.42
+ },
+ "max_voices": {
+  "weapon": 24,
+  "zombie": 6,
+  "world": 16,
+  "player": 4,
+  "ui": 6,
+  "ambience": 4,
+  "music": 8
+ },
+ "hearing_distance": 28.125,
+ "step_distance": 1.375,
+ "ambient_event_time": [
+  6,
+  14
+ ],
+ "ambience_crossfade": 2.5,
+ "heartbeat_below": 0.3,
+ "ambient_events": {
+  "hall": [
+   "amb_drip",
+   "amb_bang",
+   "amb_moan"
+  ],
+  "platform": [
+   "amb_horn",
+   "amb_creak",
+   "amb_bang",
+   "amb_moan"
+  ],
+  "ticket": [
+   "amb_creak",
+   "amb_bang",
+   "amb_moan"
+  ],
+  "shops": [
+   "amb_bang",
+   "amb_moan",
+   "amb_creak"
+  ],
+  "tech": [
+   "amb_steam",
+   "amb_bang",
+   "amb_creak"
+  ],
+  "tunnels": [
+   "amb_drip",
+   "amb_drip",
+   "amb_moan",
+   "amb_bang"
+  ],
+  "maintenance": [
+   "amb_steam",
+   "amb_steam",
+   "amb_bang"
+  ],
+  "reception": [
+   "amb_drip",
+   "amb_bang",
+   "amb_moan"
+  ],
+  "surgery": [
+   "amb_creak",
+   "amb_moan",
+   "amb_drip"
+  ],
+  "icu": [
+   "amb_moan",
+   "amb_creak"
+  ],
+  "ward": [
+   "amb_moan",
+   "amb_creak",
+   "amb_bang"
+  ],
+  "radiology": [
+   "amb_bang",
+   "amb_creak",
+   "amb_steam"
+  ],
+  "pharmacy": [
+   "amb_bang",
+   "amb_moan"
+  ],
+  "pediatrics": [
+   "amb_creak",
+   "amb_moan"
+  ],
+  "morgue": [
+   "amb_drip",
+   "amb_drip",
+   "amb_moan"
+  ],
+  "cafeteria": [
+   "amb_bang",
+   "amb_creak"
+  ],
+  "lab": [
+   "amb_steam",
+   "amb_drip",
+   "amb_bang"
+  ]
+ },
+ "ambience_alias": {
+  "surgery": "ward",
+  "icu": "ward",
+  "pediatrics": "ward",
+  "radiology": "reception",
+  "pharmacy": "reception",
+  "cafeteria": "reception"
+ },
+ "step_alias": {
+  "hospital": "terminal",
+  "linoleum": "terminal",
+  "morgue": "terminal"
+ },
+ "music": {
+  "fade_per_second": 0.6,
+  "high_alive": 12,
+  "high_hp": 0.35,
+  "high_events": [
+   "horde",
+   "emergency_alarm"
+  ],
+  "mix": {
+   "exploration": {
+    "pad": 1,
+    "pulse": 0,
+    "drive": 0,
+    "boss": 0
+   },
+   "normal": {
+    "pad": 0.7,
+    "pulse": 1,
+    "drive": 0,
+    "boss": 0
+   },
+   "high": {
+    "pad": 0.5,
+    "pulse": 1,
+    "drive": 1,
+    "boss": 0
+   },
+   "boss": {
+    "pad": 0,
+    "pulse": 0,
+    "drive": 0,
+    "boss": 1
+   },
+   "silent": {
+    "pad": 0,
+    "pulse": 0,
+    "drive": 0,
+    "boss": 0
+   }
+  },
+  "sting_duck": 0.35,
+  "sting_duck_time": 3.5
+ }
+}

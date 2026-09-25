@@ -71,6 +71,7 @@ func interact(player: Node3D) -> bool:
 		Events.purchase_denied.emit()
 		return false
 	weapon.upgrade_to(upgraded)
+	Audio.play("lab_upgrade", "ui", 0.9, 0.0)
 	Events.toast.emit("%s!" % upgraded.display_name.to_upper())
 	return true
 

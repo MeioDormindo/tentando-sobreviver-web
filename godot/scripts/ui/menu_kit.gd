@@ -57,6 +57,7 @@ static func button(parent: Control, text: String, on_press: Callable, size: int 
 	b.add_theme_color_override(&"font_hover_color", GOLD)
 	b.add_theme_color_override(&"font_focus_color", GOLD)
 	b.add_theme_color_override(&"font_disabled_color", DIM)
+	b.pressed.connect(func() -> void: Audio.play("ui_beep", "ui", 0.8, 0.0))
 	b.pressed.connect(on_press)
 	parent.add_child(b)
 	return b

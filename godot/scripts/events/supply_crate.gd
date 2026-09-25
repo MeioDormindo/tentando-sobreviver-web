@@ -48,6 +48,7 @@ func land() -> void:
 	position.y = 0.0
 	add_to_group(&"interactable")
 	add_to_group(&"minimap_supply")
+	Audio.play_at("evt_crate_land", global_position, "world", 1.0)
 	Events.screen_shake.emit(0.15, 0.1)
 	var tween := _chute.create_tween()
 	tween.tween_property(_chute, "scale", Vector3(1.4, 0.1, 1.4), 0.8)

@@ -36,6 +36,7 @@ var fury_multiplier: float = 1.0:
 var _slow_factor := 1.0
 var _slow_until := 0.0
 var _last_hurt_at := -INF
+var _was_reloading := false
 var _firing := false
 ## Interagível mais perto (porta, compra...) e o último texto mostrado na HUD.
 var _interactable: Node3D
@@ -65,6 +66,7 @@ func _ready() -> void:
 	inventory.switch_time = data.switch_time
 	melee.data = data.knife
 	inventory.weapon_changed.connect(_on_weapon_changed)
+	melee.swung.connect(func() -> void: Events.knife_swung.emit())
 	perks.perks_changed.connect(_on_perks_changed)
 	Events.max_ammo.connect(func(_at: Vector3) -> void:
 		for w in inventory.weapons:
@@ -254,6 +256,8 @@ func _stand_up(revive: PerkData) -> void:
 func _read_input() -> void:
 	move_input = Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down")
 	_update_aim_from_input()
+	if Input.is_action_just_pressed(&"fire") and weapon.magazine <= 0 and not weapon.reloading:
+		Events.dry_fire.emit()
 	if (weapon.data.automatic and Input.is_action_pressed(&"fire")) or Input.is_action_just_pressed(&"fire"):
 		fire()
 	elif Input.is_action_pressed(&"fire"):
@@ -400,9 +404,13 @@ func _on_weapon_changed(current: Weapon, other: Weapon) -> void:
 
 func _on_fired() -> void:
 	Events.shot_fired.emit()
+	Events.weapon_fired.emit(weapon.data.id, weapon.level)
 
 
 func _on_ammo_changed(magazine: int, reserve: int, reloading: bool) -> void:
+	if reloading and not _was_reloading:
+		Events.weapon_reload_started.emit(weapon.data.kind)
+	_was_reloading = reloading
 	Events.ammo_changed.emit(weapon.data.display_name, magazine, reserve, reloading)
 
 

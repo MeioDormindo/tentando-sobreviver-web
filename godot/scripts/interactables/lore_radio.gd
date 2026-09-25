@@ -63,6 +63,7 @@ func hold_interact(_player: Node3D, delta: float) -> bool:
 		return false
 	_progress = 0.0
 	_busy = BUSY_TIME
+	Audio.play_at("radio_static", global_position, "world", 0.9, -1.0, 0.0)
 	Events.toast.emit(messages[_next % messages.size()])
 	_next += 1
 	return true

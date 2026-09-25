@@ -21,3 +21,4 @@ func start() -> void:
 
 func end() -> void:
 	system.world.set_event_mood(id, false, config)
+	Audio.play("evt_power_up", "world", 0.9, 0.0)

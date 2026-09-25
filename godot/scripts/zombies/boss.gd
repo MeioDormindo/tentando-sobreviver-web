@@ -216,6 +216,7 @@ func _try_attack(distance: float, to_target: Vector3) -> bool:
 		_charge_dir = to_target.normalized()
 		_face(_charge_dir)
 		_cooldown(&"charge", float(data.charge.cooldown_time))
+		Audio.play_at("boss_charge", global_position, "world", 1.0, 60.0)
 		_show_telegraph()
 		return true
 	return false
@@ -225,7 +226,13 @@ func _can(attack: Dictionary, id: StringName) -> bool:
 	return not attack.is_empty() and phase >= int(attack.get("from_phase", 1)) and _is_ready(id)
 
 
+## Som de cada ação do boss (como no jogo web).
+const ACTION_SOUNDS := {&"scream": "boss_roar", &"shockwave": "boss_slam", &"summon": "boss_summon", &"vomit": "boss_area"}
+
+
 func _start_action(duration: float, cooldown: float, id: StringName) -> void:
+	if ACTION_SOUNDS.has(id):
+		Audio.play_at(ACTION_SOUNDS[id], global_position, "world", 1.0, 60.0)
 	mode = Mode.ACTION
 	_mode_until = _clock + duration
 	_cooldown(id, cooldown)
@@ -277,6 +284,7 @@ func _on_damaged(info: DamageInfo, current: float) -> void:
 
 
 func _enter_roar() -> void:
+	Audio.play_at("boss_roar", global_position, "world", 1.0, 80.0)
 	mode = Mode.ROAR
 	_mode_until = _clock + data.roar_time
 	health.invulnerable = true

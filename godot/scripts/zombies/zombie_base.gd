@@ -148,6 +148,7 @@ func _attack(to_target: Vector3) -> void:
 	_face(to_target)
 	if _attack_cooldown <= 0.0:
 		_attack_cooldown = data.attack_interval
+		Events.zombie_attacked.emit(self)
 		target.take_damage(DamageInfo.new(attack_damage, DamageInfo.Kind.ZOMBIE, self, false, global_position))
 		# Investida curta do golpe.
 		var lunge := -pivot.basis.z * 0.25

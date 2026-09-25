@@ -165,6 +165,7 @@ func _roll() -> void:
 
 
 func _reveal() -> void:
+	Audio.play_at("box_reveal", global_position, "ui", 1.0)
 	state = State.READY
 	_timer = data.take_time
 	_label.text = result.display_name.to_upper()
@@ -197,6 +198,7 @@ func _move_away() -> void:
 	if options.is_empty():
 		return
 	var spot: Vector3 = options.pick_random()
+	Audio.play_at("box_move", global_position, "world", 1.0)
 	state = State.MOVING
 	remove_from_group(&"interactable")
 	var tween := create_tween()

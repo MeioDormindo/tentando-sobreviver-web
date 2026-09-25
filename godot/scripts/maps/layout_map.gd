@@ -53,6 +53,8 @@ var _moods: Dictionary = {}
 var _clock := 0.0
 ## Área de cada tile (índice em data.areas, -1 = nenhuma), calculada uma vez para o minimapa.
 var _tile_areas := PackedInt32Array()
+## Letra do piso → tipo (legenda do mapa), para os passos.
+var _surfaces: Dictionary = {}
 
 @onready var nav_region: NavigationRegion3D = $NavigationRegion3D
 ## Energia do mapa (luzes fracas e máquinas desligadas até o disjuntor).
@@ -160,6 +162,14 @@ func is_open_floor(point: Vector3) -> bool:
 				return false
 	var area := area_of(point)
 	return area != &"" and is_area_open(area)
+
+
+func surface_at(point: Vector3) -> String:
+	if _surfaces.is_empty():
+		var floors: Dictionary = data.get("legend", {}).get("floors", {})
+		for surface: String in floors:
+			_surfaces[String(floors[surface])] = surface
+	return String(_surfaces.get(cell(floori(point.x), floori(point.z)), "concrete"))
 
 
 func station() -> Dictionary:

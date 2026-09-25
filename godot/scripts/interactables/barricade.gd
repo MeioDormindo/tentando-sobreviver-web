@@ -69,6 +69,8 @@ func take_hit(amount: int) -> void:
 	if planks <= 0:
 		return
 	planks = maxi(0, planks - amount)
+	if amount > 0:
+		Audio.play_at("wood_break", global_position, "world", 0.9)
 	_update()
 
 
@@ -94,6 +96,7 @@ func hold_interact(player: Node3D, delta: float) -> bool:
 		return false
 	_repair_progress = 0.0
 	planks += 1
+	Audio.play_at("hammer", global_position, "world", 0.9)
 	_update()
 	var points := get_tree().get_first_node_in_group(&"points_manager") as PointsManager
 	if points:

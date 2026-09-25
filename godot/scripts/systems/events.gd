@@ -87,6 +87,15 @@ signal screen_shake(duration: float, strength: float)
 ## Missão principal: objetivo atual para a HUD (vazio = nenhuma) e missão concluída.
 signal quest_state(state: Dictionary)
 signal quest_completed(id: StringName, title: String, subtitle: String)
+## Sons das armas do jogador: tiro (id e nível Mk), recarga (tipo), gatilho sem munição e faca.
+signal weapon_fired(weapon_id: StringName, level: int)
+signal weapon_reload_started(kind: StringName)
+signal dry_fire()
+signal knife_swung()
+## Um zumbi golpeou (som do ataque).
+signal zombie_attacked(zombie: Node3D)
+## Explosão (granada, explodidor, foguete): som e tremor.
+signal explosion(at: Vector3, radius: float)
 ## Pausa ligada/desligada.
 signal pause_changed(paused: bool)
 ## A HUD pediu para jogar de novo.
