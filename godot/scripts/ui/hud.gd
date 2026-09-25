@@ -50,6 +50,8 @@ func _ready() -> void:
 	Events.purchase_denied.connect(func() -> void: _flash_points_denied())
 	Events.toast.connect(_show_toast)
 	Events.cheat_detected.connect(_on_cheat_detected)
+	Events.achievement_unlocked.connect(func(_id: String, achievement_name: String, _d: String) -> void:
+		_show_toast("CONQUISTA DESBLOQUEADA: " + achievement_name.to_upper()))
 	Events.score_changed.connect(func(total: int, _delta: int) -> void: _score_label.text = "SCORE %d" % total)
 	Events.map_unlocked.connect(func(_id: String, map_name: String) -> void: _show_banner(map_name.to_upper() + " DESBLOQUEADO!", GOLD))
 	Events.boss_incoming.connect(func(boss_name: String) -> void: _show_banner(boss_name.to_upper() + " SE APROXIMA", RED))

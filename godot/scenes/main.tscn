@@ -18,6 +18,8 @@
 [ext_resource type="Resource" path="res://data/configs/score.tres" id="16_score_data"]
 [ext_resource type="Script" path="res://scripts/online/anti_cheat.gd" id="17_cheat"]
 [ext_resource type="Resource" path="res://data/configs/anticheat.tres" id="18_cheat_data"]
+[ext_resource type="Script" path="res://scripts/systems/achievement_system.gd" id="19_achievements"]
+[ext_resource type="Resource" path="res://data/configs/achievements.tres" id="20_achievement_data"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("14_main")
@@ -66,6 +68,11 @@ script = ExtResource("17_cheat")
 data = ExtResource("18_cheat_data")
 points_manager = NodePath("../PointsManager")
 score_manager = NodePath("../ScoreManager")
+anti_cheat = NodePath("../AntiCheat")
+
+[node name="AchievementSystem" type="Node" parent="." node_paths=PackedStringArray("anti_cheat")]
+script = ExtResource("19_achievements")
+catalog = ExtResource("20_achievement_data")
 anti_cheat = NodePath("../AntiCheat")
 
 [node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("player", "arena", "round_manager", "points_manager", "score_manager", "anti_cheat")]

@@ -8,7 +8,8 @@ var _failed := 0
 func run(tree: SceneTree) -> int:
 	print("Menus (cena)")
 	Save.reset()
-	for path in ["res://scenes/ui/main_menu.tscn", "res://scenes/ui/map_select.tscn", "res://scenes/ui/ranking.tscn", "res://scenes/ui/settings.tscn"]:
+	for path in ["res://scenes/ui/main_menu.tscn", "res://scenes/ui/map_select.tscn", "res://scenes/ui/ranking.tscn", "res://scenes/ui/settings.tscn",
+			"res://scenes/ui/account.tscn", "res://scenes/ui/achievements.tscn", "res://scenes/ui/character.tscn"]:
 		var screen := (load(path) as PackedScene).instantiate()
 		tree.root.add_child(screen)
 		await tree.process_frame

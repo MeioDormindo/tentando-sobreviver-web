@@ -243,6 +243,11 @@ func _apply_look() -> void:
 		if mesh == null or part.name.begins_with("Eye"):
 			continue
 		mesh.material_override = shirt if part.name == "Body" else skin
+	# Modo cabeção (segredo do código Konami).
+	if Save.data.secrets.get("konami", false) and bool(Save.get_setting("bigHeads")):
+		var head := pivot.get_node_or_null("Head") as Node3D
+		if head:
+			head.scale = Vector3.ONE * 1.9
 	var scale_xz := data.model_scale
 	var scale_y := data.model_scale * (0.45 if data.crawls else 1.0)
 	pivot.scale = Vector3(scale_xz, scale_y, scale_xz)

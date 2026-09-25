@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="AchievementCatalog" format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/achievement_catalog.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+achievements = [
+{ "id": "first_blood", "name": "Primeiro Sangue", "description": "Abata o primeiro zumbi", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "survivor", "name": "Sobrevivente", "description": "Chegue à wave 10", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "veteran", "name": "Veterano", "description": "Chegue à wave 20", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "power_on", "name": "Energia!", "description": "Ligue o disjuntor principal", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "conductor", "name": "Maquinista", "description": "Derrote o boss The Conductor", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "patient_zero", "name": "Paciente Curado", "description": "Derrote o Paciente Zero", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "serum", "name": "O Soro", "description": "Complete a missão do Dr. Almeida", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "dog_trainer", "name": "Adestrador", "description": "Vença uma rodada de cães sem levar dano", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "train_wreck", "name": "Atropelador", "description": "Atropele 10 zumbis com uma passagem do trem", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "collector", "name": "Colecionador", "description": "Tenha todos os perks na mesma partida", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "tornado", "name": "Olho do Furacão", "description": "Transforme o Canhão de Vento no Tornado", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "fire_sale", "name": "Liquidação", "description": "Use a Mystery Box durante um Fire Sale", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "butcher", "name": "Açougueiro", "description": "Abata 1.000 zumbis", "total_key": "kills", "total_target": 1000, "secret": false },
+{ "id": "knife_master", "name": "Faca na Caveira", "description": "Abata 50 zumbis na faca", "total_key": "knifeKills", "total_target": 50, "secret": false },
+{ "id": "golden_aim", "name": "Mira de Ouro", "description": "Acerte 100 headshots fatais", "total_key": "headshots", "total_target": 100, "secret": false },
+{ "id": "teddies", "name": "Ursinhos", "description": "Encontre todos os ursinhos escondidos", "total_key": "", "total_target": 0, "secret": true },
+{ "id": "konami", "name": "Cabeção", "description": "Descubra o código secreto do menu", "total_key": "", "total_target": 0, "secret": true }
+]
+survivor_round = 10
+veteran_round = 20
+train_kills = 10

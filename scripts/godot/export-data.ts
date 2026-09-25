@@ -21,6 +21,10 @@ import { scoreConfig } from '../../src/config/score.config';
 import { MAPS, RANKING_SIZE, PLAYER_NAME_MAX, DEFAULT_MAP } from '../../src/config/maps.config';
 import { onlineConfig, accountConfig } from '../../src/config/online.config';
 import { antiCheatConfig } from '../../src/config/anticheat.config';
+import { ACHIEVEMENTS, achievementConfig } from '../../src/config/achievements.config';
+import { SKINS } from '../../src/config/skins.config';
+// @ts-expect-error módulo de arte em JS puro (paleta dos visuais do jogador)
+import { PLAYER_SKINS } from '../art/characters.mjs';
 
 const OUT = 'godot/data';
 const PX = 32;
@@ -318,6 +322,26 @@ function exportOnline(): void {
   }));
 }
 
+/** Conquistas (textos, metas e segredos) e visuais do personagem (cores da paleta do jogo web). */
+function exportAchievements(): void {
+  const list = ACHIEVEMENTS.map((a) => `{ "id": "${a.id}", "name": ${JSON.stringify(a.name)}, "description": ${JSON.stringify(a.description)}, "total_key": "${a.total?.key ?? ''}", "total_target": ${a.total?.target ?? 0}, "secret": ${a.secret ?? false} }`);
+  write('configs/achievements.tres', tres('AchievementCatalog', 'res://scripts/systems/achievement_catalog.gd', {
+    achievements: raw(`[\n${list.join(',\n')}\n]`),
+    survivor_round: achievementConfig.survivorWave,
+    veteran_round: achievementConfig.veteranWave,
+    train_kills: achievementConfig.trainKills,
+  }));
+  const palette = (hex: string): { raw: string } => color(parseInt(hex.slice(1), 16));
+  const looks: Record<string, { jacket: string; pack: string; hair: string }> = {
+    default: { jacket: '#4b5140', pack: '#5d4731', hair: '#35271b' },
+    ...(PLAYER_SKINS as Record<string, { jacket: string; pack: string; hair: string }>),
+  };
+  const skins = SKINS.map((k) => `{ "id": "${k.id}", "name": ${JSON.stringify(k.name)}, "unlock": "${k.unlock ?? ''}", "jacket": ${palette(looks[k.id].jacket).raw}, "pack": ${palette(looks[k.id].pack).raw}, "hair": ${palette(looks[k.id].hair).raw} }`);
+  write('configs/skins.tres', tres('SkinCatalog', 'res://scripts/player/skin_catalog.gd', {
+    skins: raw(`[\n${skins.join(',\n')}\n]`),
+  }));
+}
+
 function exportZombies(): void {
   for (const z of Object.values(zombieTypes)) {
     const look = LOOKS[z.id] ?? LOOKS.walker;
@@ -356,6 +380,7 @@ exportZombies();
 exportBosses();
 exportProgression();
 exportOnline();
+exportAchievements();
 exportMaps();
 exportMachines(write, tres as never);
 console.log('Pronto.');

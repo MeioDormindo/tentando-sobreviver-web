@@ -17,6 +17,12 @@ de conceitos: ver `docs/analise-typescript.md`.
   - conta com usuário e senha (tela CONTA): a senha fica só como hash no servidor, e no
     aparelho fica apenas a sessão (`user://session.json`);
   - save na nuvem mesclado ao entrar e enviado a cada mudança, **compartilhado com a versão web**;
+- **conquistas** (as 17 do jogo web), com aviso na HUD e tela CONQUISTAS (progresso, datas,
+  estatísticas por mapa e da carreira). Trem, Fire Sale, ursinhos e a missão do Soro ainda não
+  foram migrados, então essas conquistas ainda não têm gatilho;
+- **visuais do personagem** (tela PERSONAGEM): Sobrevivente, Enfermeiro, Maquinista e Agente,
+  liberados por conquistas, com as cores da paleta do jogo web;
+- **código Konami** no menu (↑↑↓↓←→←→BA): libera o modo cabeção;
 - **anti-trapaça**: ganho impossível para o round ou pontos/score alterados por fora invalidam a
   partida, com zoeira na tela, e ela não vale save nem ranking;
 - **tela de fim**: estatísticas, recorde, nome no ranking e botões de jogar de novo, ranking e
@@ -93,6 +99,7 @@ reais do jogo web (`src/config`) e gera os `.tres` de `data/`:
 - barricadas, Mystery Box, Weapon Lab, os 7 perks, energia e o catálogo de armas;
 - a pontuação do ranking e o catálogo de mapas (nomes, descrições, desbloqueio);
 - online (servidor, temporada, regras de usuário e senha) e anti-trapaça;
+- conquistas e visuais (as cores saem de `scripts/art/characters.mjs`);
 - os mapas (`data/maps/terminal.json` e `map2.json`): a grade de tiles montada na mesma ordem do
   jogo web, com áreas, portas, janelas, spawns por área, luzes, props, máquinas e compras na
   parede.
@@ -153,6 +160,7 @@ scripts/weapons/                 Weapon (munição, recarga, raycast, chumbos, p
                                  WeaponProjectile (granada, plasma, chama, raio, vento)
 scripts/systems/                 PerkSystem (modificadores dos perks), PowerSystem (energia),
                                  BossManager (round de boss), ScoreManager (score do ranking),
+                                 AchievementSystem (conquistas),
                                  RoundManager + RoundData, SpawnManager, PointsManager +
                                  PointsData, GameManager, AudioManager
 scripts/maps/                    GameWorld (base: spawn do jogador, áreas abertas, spawns ativos),
@@ -187,7 +195,6 @@ Decisões:
 ## Próximas fases (roadmap da especificação)
 
 - **Fase 4 (rounds):** novos tipos de zumbi e composição por round.
-- **Conquistas e visuais do personagem.**
 - **Minimapa, pausa com configurações.**
 - **Eventos e extras:** power-ups (incluindo o Fire Sale), eventos do mapa (trem, apagão...),
   missão do Hospital, arma caída ao trocar.

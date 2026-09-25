@@ -32,6 +32,8 @@ func _build() -> void:
 	_toggle("MÚSICA", "musicOn")
 	_toggle("TREMOR DE TELA", "screenShake")
 	_toggle("TELA CHEIA", "fullscreen")
+	if Save.data.secrets.get("konami", false):
+		_toggle("MODO CABEÇÃO", "bigHeads")
 	MenuKit.label(_column, "NOME NO RANKING", 16, MenuKit.DIM)
 	var name_edit := LineEdit.new()
 	name_edit.text = Save.player_name

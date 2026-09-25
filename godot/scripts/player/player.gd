@@ -50,6 +50,7 @@ var weapon: Weapon:
 func _ready() -> void:
 	super()
 	add_to_group(&"player")
+	_apply_skin()
 	health.reset(data.max_health)
 	inventory.slots = data.inventory_slots
 	inventory.switch_time = data.switch_time
@@ -65,6 +66,41 @@ func _ready() -> void:
 	aim_point = global_position - global_basis.z * 3.0
 	# Depois que a cena inteira estiver pronta (a HUD fica pronta por último).
 	call_deferred(&"_emit_initial_state")
+
+
+## Visual escolhido (cores da jaqueta, mochila e cabelo); trancado volta ao padrão.
+func _apply_skin() -> void:
+	var catalog := load("res://data/configs/skins.tres") as SkinCatalog
+	var skin := catalog.find(String(Save.get_setting("skin")))
+	if String(skin.get("unlock", "")) != "" and not Save.has_achievement(skin.unlock):
+		skin = catalog.find("default")
+	if skin.is_empty():
+		return
+	var jacket := StandardMaterial3D.new()
+	jacket.albedo_color = skin.jacket
+	jacket.roughness = 0.85
+	($Pivot/Body as MeshInstance3D).material_override = jacket
+	var pack := MeshInstance3D.new()
+	pack.name = "Pack"
+	var pack_mesh := BoxMesh.new()
+	pack_mesh.size = Vector3(0.42, 0.5, 0.2)
+	pack.mesh = pack_mesh
+	var pack_material := StandardMaterial3D.new()
+	pack_material.albedo_color = skin.pack
+	pack.material_override = pack_material
+	pack.position = Vector3(0, 1.05, 0.33)
+	pivot.add_child(pack)
+	var hair := MeshInstance3D.new()
+	hair.name = "Hair"
+	var hair_mesh := SphereMesh.new()
+	hair_mesh.radius = 0.2
+	hair_mesh.height = 0.22
+	hair.mesh = hair_mesh
+	var hair_material := StandardMaterial3D.new()
+	hair_material.albedo_color = skin.hair
+	hair.material_override = hair_material
+	hair.position = Vector3(0, 1.74, 0.03)
+	pivot.add_child(hair)
 
 
 func _emit_initial_state() -> void:

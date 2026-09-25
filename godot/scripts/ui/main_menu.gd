@@ -6,6 +6,13 @@ const MAP_SELECT := "res://scenes/ui/map_select.tscn"
 const RANKING := "res://scenes/ui/ranking.tscn"
 const SETTINGS := "res://scenes/ui/settings.tscn"
 const ACCOUNT := "res://scenes/ui/account.tscn"
+const ACHIEVEMENTS := "res://scenes/ui/achievements.tscn"
+const CHARACTER := "res://scenes/ui/character.tscn"
+## Código Konami (↑↑↓↓←→←→BA): libera o "modo cabeção", como no jogo web.
+const KONAMI := [KEY_UP, KEY_UP, KEY_DOWN, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_LEFT, KEY_RIGHT, KEY_B, KEY_A]
+
+var _konami_step := 0
+var _secret_label: Label
 const GAME := "res://scenes/main.tscn"
 
 
@@ -19,6 +26,8 @@ func _ready() -> void:
 	MenuKit.spacer(column, 24)
 	var play := MenuKit.button(column, "JOGAR", func() -> void: MenuKit.go(self, MAP_SELECT))
 	MenuKit.button(column, "RANKING", func() -> void: MenuKit.go(self, RANKING))
+	MenuKit.button(column, "CONQUISTAS", func() -> void: MenuKit.go(self, ACHIEVEMENTS))
+	MenuKit.button(column, "PERSONAGEM", func() -> void: MenuKit.go(self, CHARACTER))
 	var user := Account.current_user()
 	MenuKit.button(column, ("CONTA: " + user.to_upper()) if user != "" else "CONTA / SALVAR NA NUVEM", func() -> void: MenuKit.go(self, ACCOUNT))
 	MenuKit.button(column, "CONFIGURAÇÕES", func() -> void: MenuKit.go(self, SETTINGS))
@@ -27,7 +36,20 @@ func _ready() -> void:
 	MenuKit.spacer(column, 30)
 	MenuKit.label(column, "WASD mover · mouse mirar · clique atirar · R recarregar · Q trocar arma · V faca · E usar · ESC pausa",
 		13, MenuKit.DIM, HORIZONTAL_ALIGNMENT_CENTER)
+	_secret_label = MenuKit.label(column, "", 18, Color(0.72, 0.88, 0.29), HORIZONTAL_ALIGNMENT_CENTER)
 	play.grab_focus()
+
+
+func _input(event: InputEvent) -> void:
+	if not (event is InputEventKey and event.pressed and not event.is_echo()):
+		return
+	var key := (event as InputEventKey).keycode
+	_konami_step = _konami_step + 1 if key == KONAMI[_konami_step] else (1 if key == KONAMI[0] else 0)
+	if _konami_step == KONAMI.size():
+		_konami_step = 0
+		var first := Save.discover("konami")
+		Save.set_setting("bigHeads", true)
+		_secret_label.text = "MODO CABEÇÃO LIBERADO! (liga/desliga em Configurações)" if first else "MODO CABEÇÃO LIGADO!"
 
 
 func _unhandled_input(event: InputEvent) -> void:

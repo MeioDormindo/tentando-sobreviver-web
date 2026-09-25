@@ -62,7 +62,11 @@ func _login_form() -> void:
 			return
 		_busy = true
 		_message.text = "Conectando..."
-		var error_text: String = await (Account.sign_up(user.text, password.text) if create else Account.sign_in(user.text, password.text))
+		var error_text: String
+		if create:
+			error_text = await Account.sign_up(user.text, password.text)
+		else:
+			error_text = await Account.sign_in(user.text, password.text)
 		password.text = ""
 		_busy = false
 		if error_text != "":

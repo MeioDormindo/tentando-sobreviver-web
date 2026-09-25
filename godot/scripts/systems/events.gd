@@ -55,6 +55,8 @@ signal shot_fired()
 signal map_unlocked(map_id: String, map_name: String)
 ## Anti-trapaça: a partida foi invalidada (zoeira e aviso).
 signal cheat_detected(taunt: String, subtitle: String)
+## Conquista liberada (aviso na HUD).
+signal achievement_unlocked(id: String, achievement_name: String, description: String)
 ## Pausa ligada/desligada.
 signal pause_changed(paused: bool)
 ## A HUD pediu para jogar de novo.

@@ -29,6 +29,7 @@ func run(tree: SceneTree) -> int:
 	_test_save()
 	_test_score()
 	_test_anti_cheat()
+	_test_achievements()
 	print("\n%d ok, %d falharam" % [_passed, _failed])
 	return _failed
 
@@ -428,3 +429,36 @@ func _test_anti_cheat() -> void:
 	check(Save.lifetime.gamesPlayed == 0 and Save.records(Session.map_id).bestScore == 0, "fim de jogo invalidado: save intacto")
 	for node in honest + greedy + editor + [rounds, game]:
 		node.queue_free()
+
+
+func _test_achievements() -> void:
+	print("Conquistas e visuais (jogo web)")
+	Save.reset()
+	var catalog := load("res://data/configs/achievements.tres") as AchievementCatalog
+	check(catalog.achievements.size() == 17, "17 conquistas migradas")
+	var system := AchievementSystem.new()
+	system.catalog = catalog
+	_tree_root.add_child(system)
+	var got: Array[String] = []
+	var capture := func(id: String, _n: String, _d: String) -> void: got.append(id)
+	Events.achievement_unlocked.connect(capture)
+	var walker := ZombieFactory.create(load("res://data/zombies/walker.tres"), null, 1, 1, 1)
+	Events.zombie_killed.emit(walker, DamageInfo.new(100, DamageInfo.Kind.MELEE))
+	Events.round_started.emit(10, 9)
+	Events.boss_defeated.emit(&"conductor", "The Conductor", 2000, Vector3.ZERO)
+	Events.zombie_killed.emit(walker, DamageInfo.new(100, DamageInfo.Kind.WEAPON))
+	check(got.has("first_blood") and got.count("first_blood") == 1, "Primeiro Sangue (uma vez só)")
+	check(got.has("survivor") and got.has("conductor") and not got.has("veteran"), "Sobrevivente (round 10) e Maquinista (boss)")
+	Save.data.lifetime.knifeKills = 49
+	Events.zombie_killed.emit(walker, DamageInfo.new(100, DamageInfo.Kind.MELEE))
+	check(Save.has_achievement("knife_master"), "Faca na Caveira: 50 abates na faca (total + partida)")
+	Events.hound_round_changed.emit(true, {})
+	Events.hound_round_changed.emit(false, {})
+	check(Save.has_achievement("dog_trainer"), "Adestrador: rodada dos cães sem levar dano")
+	Events.achievement_unlocked.disconnect(capture)
+	var skins := load("res://data/configs/skins.tres") as SkinCatalog
+	check(skins.skins.size() == 4 and CharacterScreenCheck.unlocked(skins.find("conductor")) and not CharacterScreenCheck.unlocked(skins.find("agent")),
+		"visual Maquinista liberado pelo boss; Agente ainda trancado")
+	walker.free()
+	system.queue_free()
+	Save.reset()
