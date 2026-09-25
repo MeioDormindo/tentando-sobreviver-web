@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/zombies/boss_data.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://scenes/zombies/boss.tscn" id="2_scene"]
+[ext_resource type="PackedScene" path="res://assets/characters/boss_conductor.glb" id="3_model"]
 
 [resource]
 script = ExtResource("1_script")
@@ -25,3 +26,4 @@ area = { "from_phase": 4, "count": 3, "radius": 2, "telegraph_time": 1, "damage"
 area_acid = false
 lantern = true
 escort_ratio = 0.3
+model = ExtResource("3_model")

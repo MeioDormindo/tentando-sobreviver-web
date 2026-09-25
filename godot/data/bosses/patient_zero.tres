@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/zombies/boss_data.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://scenes/zombies/boss.tscn" id="2_scene"]
+[ext_resource type="PackedScene" path="res://assets/characters/boss_patient_zero.glb" id="3_model"]
 
 [resource]
 script = ExtResource("1_script")
@@ -25,3 +26,4 @@ vomit = { "from_phase": 1, "range": 8.125, "arc_deg": 50, "count": 5, "windup_ti
 scream = { "from_phase": 2, "radius": 16.25, "slow_time": 2.5, "slow_factor": 0.55, "cooldown_time": 12, "summon_count": 4, "types": [&"crawler", &"crawler", &"spitter"] }
 lantern = false
 escort_ratio = 0.3
+model = ExtResource("3_model")

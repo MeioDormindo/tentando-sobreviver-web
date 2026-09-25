@@ -29,10 +29,16 @@ func setup(p_perk: PerkData) -> void:
 	material.emission_enabled = true
 	material.emission = perk.color * 0.3
 	box.material = material
-	var mesh := MeshInstance3D.new()
-	mesh.mesh = box
-	mesh.position.y = SIZE.y * 0.5
-	add_child(mesh)
+	var model := CharacterModel.prop("res://assets/props/perk_machine.glb", Vector3(1.15, 0.95, 1.2))
+	if model:
+		add_child(model)
+		model.recolor({"Body": perk.color.darkened(0.35)})
+		model.glow("Glow", perk.color.lightened(0.2), 0.7)
+	else:
+		var mesh := MeshInstance3D.new()
+		mesh.mesh = box
+		mesh.position.y = SIZE.y * 0.5
+		add_child(mesh)
 	var label := Label3D.new()
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	label.pixel_size = 0.005

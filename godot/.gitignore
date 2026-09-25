@@ -9,3 +9,6 @@ export_credentials.cfg
 
 # Saídas dos testes
 /tests/output/
+
+# Cache do Python (scripts do Blender)
+__pycache__/

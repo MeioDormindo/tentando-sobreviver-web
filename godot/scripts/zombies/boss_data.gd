@@ -43,4 +43,6 @@ extends Resource
 ## Lanterna acesa na mão (The Conductor).
 @export var lantern: bool = false
 ## Fração da horda normal que acompanha o boss.
+## Modelo 3D (glb do Blender); sem ele ficam as formas simples da cena.
+@export var model: PackedScene
 @export var escort_ratio: float = 0.3

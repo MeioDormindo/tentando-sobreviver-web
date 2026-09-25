@@ -31,6 +31,8 @@ var _dismiss_pending := false
 
 var _label: Label3D
 var _mesh: MeshInstance3D
+## Baú do Blender (tampa que abre no sorteio); fica dentro de _mesh, que sobe e some ao mudar.
+var _model: CharacterModel
 var _timer := 0.0
 var _cycle := 0.0
 
@@ -62,6 +64,12 @@ func setup(p_data: MysteryBoxData, p_catalog: WeaponCatalog, p_map_id: String, p
 	_mesh.mesh = box
 	_mesh.position.y = SIZE.y * 0.5
 	add_child(_mesh)
+	_model = CharacterModel.prop("res://assets/props/mystery_box.glb", Vector3(1.0, 0.92, 0.95))
+	if _model:
+		_mesh.mesh = null
+		_mesh.add_child(_model)
+		_model.position.y = -SIZE.y * 0.5
+		_model.play(&"Closed", 0.0)
 	_label = Label3D.new()
 	_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	_label.pixel_size = 0.006
@@ -159,6 +167,8 @@ func _roll() -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.randomize()
 	result = roll_weapon(catalog, data.rarity_weights, map_id, rng)
+	if _model:
+		_model.play_once(&"Open")
 	Events.mystery_box_rolled.emit(price < data.price)
 	_timer = data.roll_time
 	_cycle = 0.0
@@ -173,6 +183,8 @@ func _reveal() -> void:
 
 
 func _reset() -> void:
+	if _model:
+		_model.play(&"Closed", 0.3)
 	state = State.IDLE
 	result = null
 	_label.text = "?"
@@ -214,6 +226,8 @@ func _move_away() -> void:
 
 func _appear_at(spot: Vector3) -> void:
 	global_position = spot
+	if world:
+		rotation.y = world.facing_toward_open(spot)
 	_mesh.position.y = SIZE.y * 0.5
 	visible = true
 	collision_layer = PhysicsLayers.WORLD

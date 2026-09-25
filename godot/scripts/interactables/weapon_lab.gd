@@ -28,10 +28,14 @@ func setup(p_data: WeaponLabData) -> void:
 	material.emission_enabled = true
 	material.emission = COLOR * 0.35
 	box.material = material
-	var mesh := MeshInstance3D.new()
-	mesh.mesh = box
-	mesh.position.y = SIZE.y * 0.5
-	add_child(mesh)
+	var model := CharacterModel.prop("res://assets/props/weapon_lab.glb", Vector3(0.89, 0.91, 1.25))
+	if model:
+		add_child(model)
+	else:
+		var mesh := MeshInstance3D.new()
+		mesh.mesh = box
+		mesh.position.y = SIZE.y * 0.5
+		add_child(mesh)
 	var light := OmniLight3D.new()
 	light.light_color = COLOR
 	light.light_energy = 1.5

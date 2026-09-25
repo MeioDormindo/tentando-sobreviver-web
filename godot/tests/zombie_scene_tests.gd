@@ -87,7 +87,9 @@ func _armored() -> void:
 func _crawler() -> void:
 	var zombie := _spawn(&"crawler", Vector3(-3, 0, -8), 0.0)
 	await _tree.physics_frame
-	check(zombie.pivot.scale.y < 0.6, "Rastejante: corpo baixo")
+	var head := zombie.get_node("HeadHurtbox") as Node3D
+	var low_body: bool = zombie.pivot.scale.y < 0.6 or (zombie.model != null and zombie.model.current == &"Crawl")
+	check(low_body and head.position.y < 1.0, "Rastejante: corpo baixo (animação rastejando, cabeça a %.2f m)" % head.position.y)
 	zombie.take_damage(DamageInfo.new(9999.0, DamageInfo.Kind.WEAPON, _player))
 	await _tree.physics_frame
 	check(_tree.get_nodes_in_group(&"hazards").size() > 0, "Rastejante: deixa nuvem de gás ao morrer")

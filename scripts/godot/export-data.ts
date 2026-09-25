@@ -222,10 +222,12 @@ function dict(obj: Record<string, unknown> | undefined): { raw: string } | undef
 const snake = (k: string): string => k.replace(/([A-Z])/g, '_$1').toLowerCase();
 
 /**
- * Aparência provisória de cada tipo (blockout, até os modelos do Blender): cores, escala e
- * se anda rastejando. Não existe no jogo web (lá são sprites).
+ * Aparência de cada tipo no Godot: modelo do Blender (godot/tools/blender/build_models.py),
+ * cores (o modelo troca a cor pelo nome do material), escala e se anda rastejando. Não existe
+ * no jogo web (lá são sprites).
  */
-const LOOKS: Record<string, { scene?: string; shirt: number; skin: number; scale: number; low?: boolean }> = {
+const ZOMBIE_MODEL = 'res://assets/characters/zombie.glb';
+const LOOKS: Record<string, { scene?: string; model?: string; shirt: number; skin: number; scale: number; low?: boolean }> = {
   walker: { shirt: 0x5e5343, skin: 0x6c765f, scale: 1 },
   runner: { shirt: 0x3d4a58, skin: 0x77806b, scale: 0.92 },
   tank: { shirt: 0x6b4a3a, skin: 0x5d6752, scale: 1.4 },
@@ -233,7 +235,7 @@ const LOOKS: Record<string, { scene?: string; shirt: number; skin: number; scale
   crawler: { shirt: 0x6a6f74, skin: 0x7b8570, scale: 0.9, low: true },
   spitter: { shirt: 0x4f6a3a, skin: 0x8fb04a, scale: 1 },
   armored: { shirt: 0x2c3140, skin: 0x5a6150, scale: 1.1 },
-  hound: { scene: 'res://scenes/zombies/hound.tscn', shirt: 0x3a1a14, skin: 0x5a241a, scale: 1 },
+  hound: { scene: 'res://scenes/zombies/hound.tscn', model: 'res://assets/characters/hound.glb', shirt: 0x3a1a14, skin: 0x5a241a, scale: 1 },
 };
 
 /** Bosses: vida por aparição, fases e cada ataque (distâncias em m, tempos em s). */
@@ -262,7 +264,9 @@ function exportBosses(): void {
       scream: b.scream ? raw(`{ "from_phase": ${b.scream.fromPhase}, "radius": ${m(b.scream.radius)}, "slow_time": ${s(b.scream.slowMs)}, "slow_factor": ${b.scream.slowFactor}, "cooldown_time": ${s(b.scream.cooldownMs)}, "summon_count": ${b.scream.summonCount}, "types": [${b.scream.types.map((t) => `&"${t}"`).join(', ')}] }`) : undefined,
       lantern: b.lantern ?? false,
       escort_ratio: b.escortRatio,
-    }, '[ext_resource type="PackedScene" path="res://scenes/zombies/boss.tscn" id="2_scene"]\n'));
+      model: raw('ExtResource("3_model")'),
+    }, '[ext_resource type="PackedScene" path="res://scenes/zombies/boss.tscn" id="2_scene"]\n' +
+      `[ext_resource type="PackedScene" path="res://assets/characters/boss_${b.id}.glb" id="3_model"]\n`));
   }
 }
 
@@ -441,7 +445,9 @@ function exportZombies(): void {
       skin_color: color(look.skin),
       model_scale: look.scale,
       crawls: look.low ?? false,
-    }, `[ext_resource type="PackedScene" path="${look.scene ?? 'res://scenes/zombies/zombie_walker.tscn'}" id="2_scene"]\n`));
+      model: raw('ExtResource("3_model")'),
+    }, `[ext_resource type="PackedScene" path="${look.scene ?? 'res://scenes/zombies/zombie_walker.tscn'}" id="2_scene"]\n` +
+      `[ext_resource type="PackedScene" path="${look.model ?? ZOMBIE_MODEL}" id="3_model"]\n`));
   }
 }
 

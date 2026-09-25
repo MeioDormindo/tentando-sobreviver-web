@@ -51,6 +51,12 @@ de conceitos: ver `docs/analise-typescript.md`.
   intensidade, boss) com vinhetas de vitória e de fim de jogo. Som posicional como no jogo
   web (volume pela distância, pan pela tela) e limite de vozes por categoria, cada uma no
   seu barramento;
+- **modelos 3D do Blender** (low-poly, gerados só com código em `tools/blender/build_models.py`):
+  sobrevivente (cores do visual escolhido), zumbi (as cores de cada tipo, maior no tanque,
+  rastejando no rastejante, capacete e colete no blindado), cão, os dois bosses, uma arma por
+  tipo (14) e as máquinas (Mystery Box com tampa que abre, máquina de perk na cor do perk,
+  Weapon Lab). Animações: parado, andar, correr, golpe, morte, rastejar e, nos bosses, rugido,
+  murro no chão e investida. As máquinas ficam de frente para o chão livre;
 - **menu de pausa** com CONTINUAR, REINICIAR, MENU e as configurações que valem na hora;
 - **visuais do personagem** (tela PERSONAGEM): Sobrevivente, Enfermeiro, Maquinista e Agente,
   liberados por conquistas, com as cores da paleta do jogo web;
@@ -115,11 +121,17 @@ de conceitos: ver `docs/analise-typescript.md`.
 | Faca | V / botão direito | RB |
 | Comprar / abrir porta | E | A |
 | Consertar barricada, ligar o disjuntor | segurar E | segurar A |
+| Mapa grande | segurar Tab | Back |
 | Pausar | ESC / P | Start |
 
 Já mapeado para as próximas fases: pular (Espaço / B).
 
 ## Migração do jogo web
+
+Sons: `npm run godot:audio` gera os WAV de `assets/audio/` com o mesmo código de síntese do
+jogo web. Modelos: `E:ToolsBlenderlender-5.2.2-windows-x64lender.exe -b --factory-startup
+-P godot/tools/blender/build_models.py -- --preview` gera os `.glb` de `assets/` (e prévias em
+`tests/output/models/`); o Blender portátil (5.2.2 LTS) veio do site oficial.
 
 Os dados não são copiados à mão: `npm run godot:data` (na raiz do repositório) lê as configs
 reais do jogo web (`src/config`) e gera os `.tres` de `data/`:
@@ -132,6 +144,7 @@ reais do jogo web (`src/config`) e gera os `.tres` de `data/`:
 - a pontuação do ranking e o catálogo de mapas (nomes, descrições, desbloqueio);
 - online (servidor, temporada, regras de usuário e senha) e anti-trapaça;
 - conquistas e visuais (as cores saem de `scripts/art/characters.mjs`);
+- power-ups, eventos do mapa, painéis e armadilhas, segredos e a missão do Soro;
 - os mapas (`data/maps/terminal.json` e `map2.json`): a grade de tiles montada na mesma ordem do
   jogo web, com áreas, portas, janelas, spawns por área, luzes, props, máquinas e compras na
   parede.
@@ -149,11 +162,11 @@ passam a ser editados direto no Godot.
 # perks, composição por round, rodada dos cães) e, na mesma execução, os testes de cena: as
 # 5 armas especiais, cada tipo de zumbi, a rodada dos cães, os dois bosses nos mapas migrados
 # as telas de menu, os power-ups, a arma caída, o minimapa, a pausa e os eventos, painéis,
-# armadilhas e segredos, a missão do Soro de ponta a ponta e o áudio; e o online contra o servidor real, só com operações que não gravam
+# armadilhas e segredos, a missão do Soro de ponta a ponta, o áudio e os modelos; e o online contra o servidor real, só com operações que não gravam
 # (ler o ranking, envio recusado, login errado). Os testes usam um save de teste (o do
 # jogador não muda) e o bot joga offline (não envia nada ao ranking global):
 Godot --headless --path godot -s res://tests/run_tests.gd
-# Uma suíte só (unit, weapons, zombies, bosses, menus, powerups, match, events, quest, audio, online):
+# Uma suíte só (unit, weapons, zombies, bosses, menus, powerups, match, events, quest, audio, models, online):
 Godot --headless --path godot -s res://tests/run_tests.gd -- --only=events
 
 # Jogado (abre uma janela), no Terminal migrado: um bot joga até o round 3 e confere
@@ -203,6 +216,8 @@ scripts/systems/                 PerkSystem (modificadores dos perks), PowerSyst
 scripts/maps/                    GameWorld (base: spawn do jogador, áreas abertas, spawns ativos),
                                  LayoutMap (mapa migrado do JSON), Arena (mapa de teste),
                                  StationBoard (túneis, semáforos, horários do trem)
+scripts/characters/character_model.gd CharacterModel: instancia o glb, animações, cores por material
+tools/blender/build_models.py    gera os .glb (personagens, armas, máquinas) no Blender 5.2
 scripts/audio/audio_service.gd   autoload Audio: catálogo, play/play_at/loop_at, vozes, barramentos
 scripts/quests/                  QuestSystem (etapas, HUD, minimapa), QuestStep, QuestSpot,
                                  SerumQuest (missão do Hospital), QuestData
@@ -239,5 +254,6 @@ Decisões:
 
 ## Próximas fases (roadmap da especificação)
 
-- **Fase 7 (polimento):** modelos do Blender no lugar das primitivas.
+- **Fase 7 (polimento):** texturas e mais detalhes nos modelos, cenário (paredes, trem, props)
+  do Blender.
 - **Fase 8 (plataformas):** exportações e controles de toque.

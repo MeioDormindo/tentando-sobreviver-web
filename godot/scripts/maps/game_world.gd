@@ -73,6 +73,11 @@ func surface_at(_point: Vector3) -> String:
 	return "concrete"
 
 
+## Rotação (em y) para um objeto encostado na parede olhar para o chão livre.
+func facing_toward_open(_point: Vector3) -> float:
+	return 0.0
+
+
 ## Estação de trem (faixa dos trilhos, trecho, semáforos...) ou {} se o mapa não tiver.
 func station() -> Dictionary:
 	return {}

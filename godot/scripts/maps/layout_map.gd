@@ -172,6 +172,26 @@ func surface_at(point: Vector3) -> String:
 	return String(_surfaces.get(cell(floori(point.x), floori(point.z)), "concrete"))
 
 
+func facing_toward_open(point: Vector3) -> float:
+	var tx := floori(point.x)
+	var tz := floori(point.z)
+	var best := Vector2i(0, 1)
+	var best_score := -1
+	for dir: Vector2i in [Vector2i(0, 1), Vector2i(0, -1), Vector2i(1, 0), Vector2i(-1, 0)]:
+		var score := 0
+		for step in range(1, 4):
+			if _is_floor(cell(tx + dir.x * step, tz + dir.y * step)):
+				score += 1
+		# Parede atrás conta a favor (a máquina fica de costas para ela).
+		if not _is_floor(cell(tx - dir.x * 2, tz - dir.y * 2)):
+			score += 2
+		if score > best_score:
+			best_score = score
+			best = dir
+	# A frente dos modelos é -Z.
+	return atan2(-float(best.x), -float(best.y))
+
+
 func station() -> Dictionary:
 	var value: Variant = data.get("station")
 	return value if value is Dictionary else {}
@@ -429,6 +449,7 @@ func _build_machines() -> void:
 					box.setup(mystery_box_data, weapon_catalog, data.id, spots, self)
 					nav_region.add_child(box)
 					box.position = at
+					box.rotation.y = facing_toward_open(at)
 			"perk":
 				var path := "%s/%s.tres" % [perks_dir, machine.perkId]
 				if perk_machine_scene and ResourceLoader.exists(path):
@@ -436,6 +457,7 @@ func _build_machines() -> void:
 					machine_node.setup(load(path))
 					nav_region.add_child(machine_node)
 					machine_node.position = at
+					machine_node.rotation.y = facing_toward_open(at)
 					if power and not machine_node.perk.works_without_power:
 						power.register_light(machine_node.get_light())
 			"weapon_lab":
@@ -444,6 +466,7 @@ func _build_machines() -> void:
 					lab.setup(weapon_lab_data)
 					nav_region.add_child(lab)
 					lab.position = at
+					lab.rotation.y = facing_toward_open(at)
 
 
 ## Painéis do mapa: disjuntor principal, painéis de energia e do alarme (encerram o evento

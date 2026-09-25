@@ -30,6 +30,14 @@ var _charge_start := Vector3.ZERO
 var _charge_hit := false
 var _telegraph: MeshInstance3D
 var _body_material: StandardMaterial3D
+var _body_color := Color(0.3, 0.26, 0.22)
+## Modelo do Blender (null = formas simples da cena) e a ação em andamento (animação).
+var model: CharacterModel
+var _action_id: StringName = &""
+## Animação de cada ação.
+const ACTION_ANIMS := {&"shockwave": &"Slam", &"scream": &"Roar", &"summon": &"Roar", &"vomit": &"Attack"}
+## Tamanho do modelo (a cabeça na altura da hurtbox da cabeça do boss).
+const MODEL_SCALE := 1.68
 
 @onready var agent: NavigationAgent3D = $NavigationAgent3D
 @onready var pivot: Node3D = $Pivot
@@ -53,6 +61,19 @@ func _ready() -> void:
 	var body := pivot.get_node_or_null("Body") as MeshInstance3D
 	if body:
 		body.material_override = _body_material
+	model = CharacterModel.create(data.model)
+	if model:
+		for part in pivot.get_children():
+			if part is MeshInstance3D:
+				(part as MeshInstance3D).visible = false
+		model.scale = Vector3.ONE * MODEL_SCALE
+		pivot.add_child(model)
+		# O material principal (uniforme ou avental) fica cinza quando atordoado.
+		var main := model.find_material("Uniform") if model.find_material("Uniform") else model.find_material("Gown")
+		if main:
+			_body_material = main
+			_body_color = main.albedo_color
+		model.play(&"Roar", 0.0)
 	if data.lantern:
 		var lantern := OmniLight3D.new()
 		lantern.light_color = Color(1.0, 0.69, 0.29)
@@ -63,6 +84,30 @@ func _ready() -> void:
 	# A investida só depois de uns segundos (como no jogo web).
 	_ready_at[&"charge"] = 3.0
 	_enter_roar()
+
+
+## Animação conforme o modo (visual; a lógica fica no _physics_process).
+func _process(_delta: float) -> void:
+	if model == null:
+		return
+	match mode:
+		Mode.ROAR:
+			model.play(&"Roar", 0.2)
+		Mode.MELEE:
+			model.play(&"Attack", 0.1)
+		Mode.CHARGE_WINDUP:
+			model.play(&"Charge", 0.2, 0.35)
+		Mode.CHARGING:
+			model.play(&"Charge", 0.1, 1.6)
+		Mode.STUNNED:
+			model.play(&"Idle", 0.2)
+		Mode.ACTION:
+			model.play(ACTION_ANIMS.get(_action_id, &"Roar"), 0.15)
+		Mode.DEAD:
+			pass
+		_:
+			var speed := Vector2(velocity.x, velocity.z).length()
+			model.play(&"Walk" if speed > 0.3 else &"Idle", 0.2, clampf(speed / 1.8, 0.6, 1.6))
 
 
 func is_invulnerable() -> bool:
@@ -126,7 +171,7 @@ func _physics_process(delta: float) -> void:
 		Mode.STUNNED:
 			_stop()
 			if _clock >= _mode_until:
-				_body_material.albedo_color = Color(0.3, 0.26, 0.22)
+				_body_material.albedo_color = _body_color
 				_to_chase()
 		Mode.CHASE:
 			if target == null or not target.is_alive():
@@ -231,6 +276,9 @@ const ACTION_SOUNDS := {&"scream": "boss_roar", &"shockwave": "boss_slam", &"sum
 
 
 func _start_action(duration: float, cooldown: float, id: StringName) -> void:
+	_action_id = id
+	if model:
+		model.play_once(ACTION_ANIMS.get(id, &"Roar"), 0.1)
 	if ACTION_SOUNDS.has(id):
 		Audio.play_at(ACTION_SOUNDS[id], global_position, "world", 1.0, 60.0)
 	mode = Mode.ACTION
@@ -344,7 +392,11 @@ func _on_health_died(info: DamageInfo) -> void:
 	SpecialFire.flash(get_tree(), global_position, 4.0, Color(1.0, 0.85, 0.7))
 	Events.boss_defeated.emit(data.id, data.display_name, data.reward, global_position)
 	var tween := create_tween()
-	tween.tween_property(pivot, "rotation:x", deg_to_rad(-85.0), 0.6)
+	if model and model.has_animation(&"Death"):
+		model.play_once(&"Death", 0.05, 0.6)
+		tween.tween_interval(0.6)
+	else:
+		tween.tween_property(pivot, "rotation:x", deg_to_rad(-85.0), 0.6)
 	tween.tween_interval(8.0)
 	tween.tween_property(pivot, "position:y", -2.5, 2.0)
 	tween.tween_callback(queue_free)

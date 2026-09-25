@@ -43,3 +43,5 @@ extends Resource
 @export var model_scale: float = 1.0
 ## Anda rastejando (corpo e cabeça baixos).
 @export var crawls: bool = false
+## Modelo 3D (glb do Blender); sem ele ficam as formas simples da cena.
+@export var model: PackedScene

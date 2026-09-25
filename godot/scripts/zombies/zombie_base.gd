@@ -41,6 +41,9 @@ var stuck_time: float = 0.0
 var _best_distance := INF
 var _abilities: ZombieAbilities
 var _materials: Array[StandardMaterial3D] = []
+## Modelo do Blender (null = formas simples da cena).
+var model: CharacterModel
+var _attack_anim_left := 0.0
 var _armor_meshes: Array[MeshInstance3D] = []
 
 @onready var agent: NavigationAgent3D = $NavigationAgent3D
@@ -149,6 +152,9 @@ func _attack(to_target: Vector3) -> void:
 	if _attack_cooldown <= 0.0:
 		_attack_cooldown = data.attack_interval
 		Events.zombie_attacked.emit(self)
+		if model and not data.crawls:
+			model.play_once(&"Attack")
+			_attack_anim_left = 0.55
 		target.take_damage(DamageInfo.new(attack_damage, DamageInfo.Kind.ZOMBIE, self, false, global_position))
 		# Investida curta do golpe.
 		var lunge := -pivot.basis.z * 0.25
@@ -237,6 +243,10 @@ func break_armor() -> void:
 
 ## Aparência provisória por tipo (cores, tamanho, rastejante, armadura) e raio do corpo.
 func _apply_look() -> void:
+	model = CharacterModel.create(data.model)
+	if model:
+		_apply_model()
+		return
 	var shirt := StandardMaterial3D.new()
 	shirt.albedo_color = data.shirt_color
 	shirt.roughness = 0.95
@@ -288,6 +298,82 @@ func _apply_look() -> void:
 		_armor_meshes = [helmet, vest]
 
 
+## Modelo do Blender: cores do tipo, escala, cabeção e as mesmas hurtboxes da cena.
+func _apply_model() -> void:
+	for part in pivot.get_children():
+		if part is MeshInstance3D:
+			(part as MeshInstance3D).visible = false
+	pivot.add_child(model)
+	model.recolor({"Shirt": data.shirt_color, "Skin": data.skin_color, "Fur": data.shirt_color})
+	# Olhos brilhantes ficam fora do piscar de dano.
+	for material in model.materials:
+		if material.resource_name != "Eyes":
+			_materials.append(material)
+	if Save.data.secrets.get("konami", false) and bool(Save.get_setting("bigHeads")):
+		model.scale_bone("head", 1.9)
+	var scale_xz := data.model_scale
+	var scale_y := data.model_scale * (0.45 if data.crawls else 1.0)
+	pivot.scale = Vector3.ONE * data.model_scale
+	for child in get_children():
+		if child is Hurtbox:
+			var hurtbox := child as Hurtbox
+			hurtbox.position.y *= scale_y
+			hurtbox.scale = Vector3(scale_xz, scale_xz, scale_xz)
+	var body_shape := ($CollisionShape3D as CollisionShape3D).shape.duplicate() as CapsuleShape3D
+	if body_shape:
+		body_shape.radius = data.body_radius
+		($CollisionShape3D as CollisionShape3D).shape = body_shape
+	if not data.armor.is_empty():
+		var metal := StandardMaterial3D.new()
+		metal.albedo_color = Color(0.25, 0.27, 0.3)
+		metal.metallic = 0.6
+		var helmet := MeshInstance3D.new()
+		var helmet_mesh := BoxMesh.new()
+		helmet_mesh.size = Vector3(0.32, 0.14, 0.32)
+		helmet.mesh = helmet_mesh
+		helmet.material_override = metal
+		helmet.position = Vector3(0, 1.82, 0)
+		var vest := MeshInstance3D.new()
+		var vest_mesh := BoxMesh.new()
+		vest_mesh.size = Vector3(0.58, 0.46, 0.36)
+		vest.mesh = vest_mesh
+		vest.material_override = metal
+		vest.position = Vector3(0, 1.25, 0)
+		# Presos ao corpo do modelo (acompanham a animação).
+		var attach := BoneAttachment3D.new()
+		attach.bone_name = "spine"
+		model.skeleton.add_child(attach)
+		var head_attach := BoneAttachment3D.new()
+		head_attach.bone_name = "head"
+		model.skeleton.add_child(head_attach)
+		attach.add_child(vest)
+		head_attach.add_child(helmet)
+		vest.position = Vector3(0, 0.2, 0)
+		helmet.position = Vector3(0, 0.34, 0)
+		_armor_meshes = [helmet, vest]
+	model.play(&"Crawl" if data.crawls else &"Idle", 0.0)
+
+
+## Animação conforme o estado (visual; a lógica fica no _physics_process).
+func _process(delta: float) -> void:
+	if model == null or state == State.DEAD:
+		return
+	_attack_anim_left -= delta
+	if _attack_anim_left > 0.0:
+		return
+	if _stun_left > 0.0:
+		model.play(&"Idle")
+		return
+	var speed := Vector2(velocity.x, velocity.z).length()
+	if data.crawls:
+		model.play(&"Crawl", 0.2, clampf(speed / 1.2, 0.3, 1.6))
+	elif speed > 0.2:
+		var running: bool = speed > 3.2 and model.has_animation(&"Run")
+		model.play(&"Run" if running else &"Walk", 0.2, clampf(speed / (4.5 if running else 1.3), 0.5, 1.8))
+	else:
+		model.play(&"Idle")
+
+
 func _face(direction: Vector3) -> void:
 	if direction.length() > 0.01:
 		pivot.rotation.y = atan2(-direction.x, -direction.z)
@@ -314,7 +400,11 @@ func _on_health_died(info: DamageInfo) -> void:
 		burn.tween_callback(queue_free)
 		return
 	var tween := create_tween()
-	tween.tween_property(pivot, "rotation:x", deg_to_rad(-85.0), 0.35)
+	if model and model.has_animation(&"Death"):
+		model.play_once(&"Death", 0.05)
+		tween.tween_interval(0.35)
+	else:
+		tween.tween_property(pivot, "rotation:x", deg_to_rad(-85.0), 0.35)
 	tween.tween_interval(CORPSE_TIME * 0.5)
 	tween.tween_property(pivot, "position:y", -1.0, CORPSE_TIME * 0.5)
 	tween.tween_callback(queue_free)

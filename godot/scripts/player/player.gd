@@ -37,6 +37,12 @@ var _slow_factor := 1.0
 var _slow_until := 0.0
 var _last_hurt_at := -INF
 var _was_reloading := false
+## Modelo do Blender (null = formas simples da cena) e a arma na mão.
+var model: CharacterModel
+var _gun_model: Node3D
+var _gun_kind: StringName = &""
+const MODEL_PATH := "res://assets/characters/survivor.glb"
+const GUN_MODELS := "res://assets/weapons/gun_%s.glb"
 var _firing := false
 ## Interagível mais perto (porta, compra...) e o último texto mostrado na HUD.
 var _interactable: Node3D
@@ -86,6 +92,19 @@ func _apply_skin() -> void:
 	if String(skin.get("unlock", "")) != "" and not Save.has_achievement(skin.unlock):
 		skin = catalog.find("default")
 	if skin.is_empty():
+		return
+	if ResourceLoader.exists(MODEL_PATH):
+		model = CharacterModel.create(load(MODEL_PATH))
+	if model:
+		($Pivot/Body as MeshInstance3D).visible = false
+		($Pivot/Head as MeshInstance3D).visible = false
+		pivot.add_child(model)
+		model.recolor({"Jacket": skin.jacket, "Pack": skin.pack, "Hair": skin.hair})
+		if Save.data.secrets.get("konami", false) and bool(Save.get_setting("bigHeads")):
+			model.scale_bone("head", 1.9)
+		# A mão do modelo segura a arma um pouco mais à frente.
+		($Pivot/Hand as Node3D).position.z = -0.5
+		model.play(&"Idle", 0.0)
 		return
 	var jacket := StandardMaterial3D.new()
 	jacket.albedo_color = skin.jacket
@@ -206,6 +225,37 @@ func take_damage(info: DamageInfo) -> float:
 			_invulnerable_until = _clock + data.invulnerability_time
 		_last_hurt_at = _clock
 	return applied
+
+
+## Modelo da arma em mãos (um por tipo: pistola, fuzil, espingarda...).
+func _show_gun(kind: StringName) -> void:
+	if kind == _gun_kind:
+		return
+	var path := GUN_MODELS % kind
+	if not ResourceLoader.exists(path):
+		return
+	_gun_kind = kind
+	if _gun_model:
+		_gun_model.queue_free()
+	_gun_model = (load(path) as PackedScene).instantiate() as Node3D
+	_gun_model.name = "GunModel"
+	var hand := $Pivot/Hand as Node3D
+	hand.add_child(_gun_model)
+	(hand.get_node("Mesh") as MeshInstance3D).visible = false
+
+
+## Animação do modelo (parado, correndo, caído).
+func _process(_delta: float) -> void:
+	if model == null:
+		return
+	if not is_alive() or is_down:
+		model.play(&"Death", 0.1)
+		return
+	var speed := Vector2(velocity.x, velocity.z).length()
+	if speed > 0.3:
+		model.play(&"Run", 0.15, clampf(speed / 5.0, 0.6, 1.6))
+	else:
+		model.play(&"Idle", 0.2)
 
 
 ## Névoa da rodada dos cães: a lanterna fica mais fraca.
@@ -391,6 +441,8 @@ func _apply_weapon_modifiers() -> void:
 
 func _on_weapon_changed(current: Weapon, other: Weapon) -> void:
 	_apply_weapon_modifiers()
+	if current:
+		_show_gun(current.data.kind)
 	for w in inventory.weapons:
 		if not w.fired.is_connected(_on_fired):
 			w.fired.connect(_on_fired)
