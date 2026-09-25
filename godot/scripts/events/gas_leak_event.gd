@@ -11,7 +11,7 @@ var valve: GasValve
 var _elapsed := 0.0
 var _tick := 0.0
 var _node: Node3D
-var _cloud: MeshInstance3D
+var _cloud: Node3D
 var _light: OmniLight3D
 var _hiss: Dictionary = {}
 
@@ -36,15 +36,26 @@ func start() -> void:
 	_node.name = "GasLeak"
 	system.world_root().add_child(_node)
 	_node.global_position = center
-	var sphere := SphereMesh.new()
-	sphere.radius = float(config.get("radius", 3.75))
-	sphere.height = sphere.radius * 1.2
-	sphere.material = EventFx.glow(GAS, 0.0, 0.6)
-	_cloud = MeshInstance3D.new()
-	_cloud.mesh = sphere
+	# Nuvem em pixel art: poça tingida no chão e baforadas rolando por cima.
+	var radius := float(config.get("radius", 3.75))
+	_cloud = Node3D.new()
 	_cloud.scale = Vector3.ONE * 0.1
 	_node.add_child(_cloud)
-	_light = EventFx.light(GAS, 1.2, sphere.radius * 1.4)
+	var pool := PixelFx.attach_loop(_cloud, "pool", radius * 2.0)
+	if pool:
+		pool.billboard = BaseMaterial3D.BILLBOARD_DISABLED
+		pool.axis = Vector3.AXIS_Y
+		pool.alpha_cut = SpriteBase3D.ALPHA_CUT_DISABLED
+		pool.position.y = 0.03
+		pool.modulate = Color(GAS, 0.35)
+	for i in 6:
+		var puff := PixelFx.attach_loop(_cloud, "gas", radius * 1.1)
+		if puff:
+			puff.alpha_cut = SpriteBase3D.ALPHA_CUT_DISABLED
+			puff.modulate = Color(GAS.lightened(0.2), 0.55)
+			var angle := i * TAU / 6.0
+			puff.position = Vector3(cos(angle) * radius * 0.5, 0.8 + (i % 2) * 0.5, sin(angle) * radius * 0.5)
+	_light = EventFx.light(GAS, 1.2, radius * 1.4)
 	_light.position.y = 1.0
 	_node.add_child(_light)
 	_hiss = Audio.loop_at("evt_gas", center, "world", 0.9, 25.0)
@@ -54,7 +65,7 @@ func start() -> void:
 	# A nuvem cresce durante o aviso.
 	var tween := _cloud.create_tween().set_parallel()
 	tween.tween_property(_cloud, "scale", Vector3.ONE, _tick)
-	tween.tween_property(_cloud.mesh.material, "albedo_color:a", 0.2, _tick)
+
 
 
 func update(delta: float) -> bool:
@@ -76,6 +87,6 @@ func end() -> void:
 	if is_instance_valid(_node):
 		valve.remove_from_group(&"interactable")
 		var tween := _node.create_tween()
-		tween.tween_property(_cloud.mesh.material, "albedo_color:a", 0.0, 1.5)
+		tween.tween_property(_cloud, "scale", Vector3.ONE * 0.05, 1.5)
 		tween.tween_callback(_node.queue_free)
 	_node = null

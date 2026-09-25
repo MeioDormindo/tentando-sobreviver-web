@@ -35,8 +35,13 @@ func setup(p_id: StringName, size: Vector2, p_inside: Vector3, p_data: Barricade
 	# Tábuas: faixas ao longo da janela, uma ao lado da outra na espessura da parede.
 	var along_x := size.x > size.y
 	var length := maxf(size.x, size.y) + 0.2
+	# Tábua em pixel art (arte do jogo web); sem ela, cor lisa.
 	var material := StandardMaterial3D.new()
 	material.albedo_color = PLANK_COLOR
+	if ResourceLoader.exists("res://assets/web/map/plank.png"):
+		material.albedo_color = Color.WHITE
+		material.albedo_texture = load("res://assets/web/map/plank.png")
+		material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	for i in data.max_planks:
 		var mesh := BoxMesh.new()
 		mesh.size = Vector3(length, 0.08, 0.14) if along_x else Vector3(0.14, 0.08, length)

@@ -166,12 +166,74 @@ const paint = {
     bevel(p, 0, 0, w, h, hex(0xdddddd), hex(0x555555));
     return p;
   },
+  concrete: () => (w, h, r) => { const p = base(w, h, hex(0x7a766c), r, { amount: 0.14 }); for (let i = 0; i < (w * h) / 80; i++) p.set(r.int(0, w - 1), r.int(0, h - 1), hex(0x5a574f)); bevel(p, 0, 0, w, h, hex(0x9a968c), hex(0x45433d)); return p; },
   black: () => (w, h, r) => base(w, h, hex(0x1d1e20), r, { amount: 0.1 }),
+  /** Frente de painel de parede: caixa de aço, faixa da cor do painel, símbolo e botões. */
+  panel: (color, symbol) => (w, h, r) => {
+    const p = paint.metal(hex(0x464b4f), { rust: 0.25 })(w, h, r);
+    rect(p, 3, 3, w - 6, 8, color); hline(p, 3, scale(color, 1.3)); hline(p, 10, scale(color, 0.55));  // faixa
+    const cx = Math.floor(w / 2), cy = Math.floor(h * 0.45);
+    rect(p, cx - 12, cy - 12, 24, 24, hex(0x1b1d1f)); bevel(p, cx - 12, cy - 12, 24, 24, hex(0x0e0f10), hex(0x5a5f63));
+    const glyph = SYMBOLS[symbol] || [];
+    glyph.forEach((row, j) => [...row].forEach((c, i) => { if (c === '#') rect(p, cx - 9 + i * 2, cy - 9 + j * 2, 2, 2, scale(color, 1.2)); }));
+    // Botões e alavanca embaixo.
+    for (let i = 0; i < 3; i++) rect(p, 6 + i * 7, h - 16, 4, 4, [hex(0x3ac25a), hex(0xd2a32a), hex(0xd23a2a)][i]);
+    rect(p, w - 14, h - 22, 4, 14, hex(0x2a2c2e)); rect(p, w - 16, h - 24, 8, 4, hex(0xc23a2a));
+    for (let x = 4; x < w - 4; x += 8) p.set(x, h - 6, hex(0x1a1a1a));  // ventilação
+    return p;
+  },
+  /** Caixa de suprimentos (evento): madeira verde-oliva, cintas amarelas e estêncil. */
+  supply: (stencil = true) => (w, h, r) => {
+    const olive = hex(0x4f5b34);
+    const p = paint.wood(olive, 'h')(w, h, r);
+    bevel(p, 0, 0, w, h, scale(olive, 1.35), scale(olive, 0.45));
+    for (const x of [Math.floor(w * 0.2), Math.floor(w * 0.8) - 4]) { rect(p, x, 0, 4, h, hex(0xd2a32a)); vline(p, x, hex(0xf0c850)); vline(p, x + 3, hex(0x8a6a1a)); }
+    if (stencil && w > 30 && h > 20) {
+      const cx = Math.floor(w / 2), cy = Math.floor(h / 2);
+      rect(p, cx - 6, cy - 2, 12, 4, hex(0xe8e2cc)); rect(p, cx - 2, cy - 6, 4, 12, hex(0xe8e2cc));  // cruz branca
+      for (let x = cx - 10; x < cx + 10; x += 3) p.set(x, cy + 9, hex(0xd8d2bc));  // estêncil
+    }
+    return p;
+  },
+  /** Geladeira de amostras: porta de vidro com frascos coloridos iluminados. */
+  fridge: () => (w, h, r) => {
+    const p = paint.metal(hex(0xd8dcd8), { rust: 0.05 })(w, h, r);
+    rect(p, 4, 6, w - 8, Math.floor(h * 0.62), hex(0x9fd6e0)); bevel(p, 4, 6, w - 8, Math.floor(h * 0.62), hex(0x5a8a94), hex(0xe8fbff));
+    for (let y = 12; y < Math.floor(h * 0.62); y += 10) {
+      hline(p, y + 6, hex(0x6a9aa4), 6, w - 7);
+      for (let x = 8; x < w - 10; x += 5) rect(p, x, y, 3, 6, r.pick([hex(0x9bd02a), hex(0xd24a3a), hex(0x3aa0d2)]));
+    }
+    rect(p, w - 9, Math.floor(h * 0.3), 3, 16, hex(0x7a7e7a));  // puxador
+    rect(p, 6, h - 14, w - 12, 6, hex(0x2a2c2e)); for (let x = 8; x < w - 8; x += 3) p.set(x, h - 11, hex(0x62d7ff));  // visor
+    return p;
+  },
+  /** Disjuntor principal: armário grande com fileiras de chaves e a alavanca. */
+  breaker: () => (w, h, r) => {
+    const p = paint.metal(hex(0x55604a), { rust: 0.4 })(w, h, r);
+    rect(p, 4, 4, w - 8, 10, hex(0xd2a32a));
+    for (let x = 6; x < w - 6; x += 6) rect(p, x, 7, 3, 4, hex(0x1d1d1d));  // "ALTA TENSÃO"
+    for (let row = 0; row < 4; row++) for (let x = 7; x < w - 20; x += 7) {
+      const y = 22 + row * 12;
+      rect(p, x, y, 5, 8, hex(0x1d1e20)); rect(p, x + 1, y + (r() < 0.5 ? 1 : 4), 3, 3, hex(0xd8d4c8));
+    }
+    rect(p, w - 16, 22, 8, 44, hex(0x2a2c2e)); rect(p, w - 19, 24, 14, 6, hex(0xc23a2a));  // alavanca
+    rect(p, 0, h - 8, w, 8, hex(0x1d1d1d));  // faixa zebrada no pé
+    for (let x = 0; x < w; x++) for (let y = h - 8; y < h; y++) if (((x + y) >> 2) % 2) p.set(x, y, hex(0xd2a32a));
+    return p;
+  },
   plastic: (color) => (w, h, r) => { const p = base(w, h, color, r, { amount: 0.05 }); bevel(p, 0, 0, w, h, scale(color, 1.25), scale(color, 0.6)); return p; },
 };
 
 // ───────────────────────── Receitas ─────────────────────────
 // Medidas em metros: size [largura x, altura y, profundidade z], at = centro (y a partir do chão).
+
+/** Símbolos 9×9 dos painéis (# = aceso). */
+const SYMBOLS = {
+  bolt: ['....##...', '...##....', '..##.....', '.#######.', '....##...', '...##....', '..##.....', '.##......', '#........'],
+  bell: ['....#....', '...###...', '..#####..', '..#####..', '..#####..', '.#######.', '#########', '.........', '....#....'],
+  power: ['....#....', '.#..#..#.', '#...#...#', '#...#...#', '#.......#', '#.......#', '.#.....#.', '..#####..', '.........'],
+  train: ['.#######.', '#.......#', '#.##.##.#', '#.##.##.#', '#.......#', '#########', '#.#...#.#', '.#.....#.', '#.......#'],
+};
 
 const box = (size, at, tex, extra = {}) => ({ shape: 'box', size, at, tex, ...extra });
 const cyl = (d, h, at, tex, extra = {}) => ({ shape: 'cyl', size: [d, h, d], at, tex, ...extra });
@@ -226,6 +288,20 @@ export const RECIPES = {
     cyl(0.12, 0.25, [-0.6, 1.07, 0], { top: paint.glass(hex(0x7ad24a)), side: paint.glass(hex(0x7ad24a)) }, { glow: hex(0x7ad24a) }),
     box([0.4, 0.35, 0.3], [0.6, 1.1, 0], { top: paint.black(), front: paint.screen(hex(0x62d7ff)), side: paint.black() }, { glow: hex(0x62d7ff) })],
   centrifuge: [cyl(1.0, 1.0, [0, 0.5, 0], { top: paint.cap(hex(0xb8bdb6)), side: paint.metal(hex(0xb8bdb6), { stripes: 2, rust: 0 }) })],
+  // Painéis de parede (evento, armadilha, trem) e o disjuntor principal.
+  panel_alarm: [box([0.9, 1.5, 0.45], [0, 0.75, 0], { top: paint.metal(hex(0x464b4f)), front: paint.panel(hex(0xd23a2a), 'bell'), side: paint.metal(hex(0x464b4f)) }, { glow: hex(0xff5a4a) })],
+  panel_power: [box([0.9, 1.5, 0.45], [0, 0.75, 0], { top: paint.metal(hex(0x464b4f)), front: paint.panel(hex(0xe0b030), 'power'), side: paint.metal(hex(0x464b4f)) }, { glow: hex(0xffd35a) })],
+  panel_trap: [box([0.9, 1.5, 0.45], [0, 0.75, 0], { top: paint.metal(hex(0x464b4f)), front: paint.panel(hex(0x4ab8f0), 'bolt'), side: paint.metal(hex(0x464b4f)) }, { glow: hex(0x7fd8ff) })],
+  panel_train: [box([0.9, 1.5, 0.45], [0, 0.75, 0], { top: paint.metal(hex(0x464b4f)), front: paint.panel(hex(0xe89a3a), 'train'), side: paint.metal(hex(0x464b4f)) }, { glow: hex(0xffb85a) })],
+  breaker: [box([1.2, 1.8, 0.5], [0, 0.9, 0], { top: paint.metal(hex(0x55604a)), front: paint.breaker(), side: paint.painted(hex(0x55604a)) })],
+  sample_fridge: [box([0.9, 1.7, 0.7], [0, 0.85, 0], { top: paint.metal(hex(0xd8dcd8), { rust: 0 }), front: paint.fridge(), side: paint.painted(hex(0xd8dcd8)) }, { glow: hex(0xbfefff) })],
+  gas_pipe: [cyl(0.3, 1.6, [0, 0.2, 0], { top: paint.cap(hex(0x8a8f5a)), side: paint.metal(hex(0x8a8f5a), { stripes: 2, rust: 0.8 }) }, { rot: [0, 0, 90] }),
+    cyl(0.12, 0.35, [0, 0.45, 0], { top: paint.cap(hex(0x6a6f72)), side: paint.metal(hex(0x6a6f72)) }),
+    cyl(0.5, 0.06, [0, 0.66, 0], { top: paint.cap(hex(0xc2372c)), side: paint.painted(hex(0xc2372c)) })],
+  rubble: [box([0.7, 0.3, 0.5], [0, 0.15, 0], all(paint.concrete())), box([0.45, 0.22, 0.4], [0.35, 0.11, 0.25], all(paint.concrete()), { rot: [0, 35, 0] }),
+    box([0.35, 0.18, 0.3], [-0.35, 0.09, -0.2], all(paint.concrete()), { rot: [0, -20, 0] }), box([0.9, 0.06, 0.08], [0.1, 0.33, 0], all(paint.metal(hex(0x6a3a1e))), { rot: [0, 20, 10] })],
+  supply_crate: [box([1.0, 0.7, 0.8], [0, 0.35, 0], { top: paint.supply(), front: paint.supply(), side: paint.supply(false) }),
+    cyl(0.08, 0.22, [0.38, 0.81, 0.25], { top: paint.cap(hex(0xff4a3a)), side: paint.metal(hex(0xc2372c), { rivets: false }) }, { glow: hex(0xff4a3a) })],
   // Máquinas
   mystery_box: [box([2.0, 0.8, 1.1], [0, 0.4, 0], { top: paint.wood(hex(0x6b4a24)), front: paint.mystery(), side: paint.wood(hex(0x6b4a24)) }, { glow: hex(0xffe08a) }),
     box([2.06, 0.14, 1.16], [0, 0.87, 0], { top: paint.mystery(), front: paint.metal(hex(0xd9a640), { rust: 0 }), side: paint.metal(hex(0xd9a640), { rust: 0 }) }, { name: 'lid' })],

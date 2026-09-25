@@ -353,7 +353,7 @@ func _build_solids(ch: String, box_height: float, color: Color, layer: int, labe
 	var group := Node3D.new()
 	group.name = label + "s"
 	nav_region.add_child(group)
-	var material: Material = _wall_material(color) if ch == "#" else _material(color)
+	var material: Material = _wall_material(color) if ch == "#" else (train_material(false, color) if ch == "T" else _material(color))
 	for rect in _merge(func(c: String) -> bool: return c == ch):
 		var body := StaticBody3D.new()
 		body.collision_layer = layer
@@ -797,6 +797,24 @@ func _box_mesh(rect: Rect2, bottom: float, top: float, material: Material, cente
 
 
 ## Paredes: arte do web (lateral e topo) e oclusão em volta do jogador (shaders/wall.gdshader).
+## Trem em pixel art (npm run godot:scenery): lateral com janelas e faixa, teto com o ar;
+## object_space prende a textura ao vagão (o trem do evento anda).
+static func train_material(object_space: bool, fallback := TRAIN_COLOR) -> Material:
+	var side := WEB_ART % "train_side"
+	var top := WEB_ART % "train_roof"
+	if not ResourceLoader.exists(side) or not ResourceLoader.exists(top):
+		var plain := StandardMaterial3D.new()
+		plain.albedo_color = fallback
+		return plain
+	var material := ShaderMaterial.new()
+	material.shader = load("res://shaders/wall.gdshader")
+	material.set_shader_parameter(&"side_texture", load(side))
+	material.set_shader_parameter(&"top_texture", load(top))
+	material.set_shader_parameter(&"side_size", Vector2(2.0, 2.6))
+	material.set_shader_parameter(&"object_space", object_space)
+	return material
+
+
 func _wall_material(fallback: Color) -> Material:
 	var side := WEB_ART % String(WALL_STYLE.get(map_id(), "wall_concrete"))
 	var top := WEB_ART % "wall_cap"

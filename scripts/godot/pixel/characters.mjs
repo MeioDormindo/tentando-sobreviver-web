@@ -12,6 +12,9 @@ export const HUMAN_BONES = [
   { name: 'head', parent: 'spine', pivot: [0, 0, 1.48] },
   { name: 'arm.R', parent: 'spine', pivot: [0.29, 0, 1.44], side: 1 },
   { name: 'arm.L', parent: 'spine', pivot: [-0.29, 0, 1.44], side: -1 },
+  // Antebraços (cotovelo): sem pose ficam retos, como o braço inteiro de antes.
+  { name: 'fore.R', parent: 'arm.R', pivot: [0.29, 0, 1.14], side: 1 },
+  { name: 'fore.L', parent: 'arm.L', pivot: [-0.29, 0, 1.14], side: -1 },
   { name: 'leg.R', parent: 'hips', pivot: [0.12, 0, 0.92], side: 1 },
   { name: 'leg.L', parent: 'hips', pivot: [-0.12, 0, 0.92], side: -1 },
 ];
@@ -41,11 +44,14 @@ export function humanoid(c, { bulk = 1, extra = null, scale = 1 } = {}) {
   ];
   for (const side of [1, -1]) {
     const arm = side > 0 ? 'arm.R' : 'arm.L';
+    const fore = side > 0 ? 'fore.R' : 'fore.L';
     const leg = side > 0 ? 'leg.R' : 'leg.L';
     const x = side * (0.29 + (w - 0.5) * 0.5);
     parts.push(box(arm, [x, 0, 1.3], [0.13, 0.13, 0.32], c.sleeve));
-    parts.push(box(arm, [x, 0, 0.98], [0.11, 0.11, 0.32], c.skin));
-    parts.push(box(arm, [x, 0.01, 0.8], [0.1, 0.11, 0.1], c.skin, { shape: 'ellipsoid' }));  // mão
+    parts.push(box(arm, [x, 0, 1.16], [0.125, 0.125, 0.1], c.sleeve, { shape: 'ellipsoid' }));  // cotovelo
+    parts.push(box(fore, [x, 0, 0.98], [0.11, 0.11, 0.32], c.forearm || c.skin));
+    if (c.cuff) parts.push(box(fore, [x, 0, 0.87], [0.115, 0.115, 0.04], c.cuff));
+    parts.push(box(fore, [x, 0.01, 0.8], [0.1, 0.11, 0.1], c.skin, { shape: 'ellipsoid' }));  // mão
     parts.push(box(leg, [side * 0.12, 0, 0.68], [0.17, 0.19, 0.48], c.pants));
     parts.push(box(leg, [side * 0.12, 0, 0.28], [0.15, 0.17, 0.36], c.pants));
     parts.push(box(leg, [side * 0.12, 0.04, 0.05], [0.16, 0.26, 0.1], c.shoes));
@@ -119,38 +125,68 @@ function deathAnimation() {
   ] }];
 }
 
-/** Jogador: arma na mão (braço direito estendido, esquerdo apoiando). */
-export function playerAnimations() {
-  const aim = (extra = 0) => ({ 'arm.R': { swing: 1.35 + extra, spread: -0.05 }, 'arm.L': { swing: 1.2 + extra, spread: -0.55 } });
+/**
+ * Posturas do jogador (ângulos achados levando cada mão ao ponto certo):
+ * - fuzil ('rifle'): mão direita no cabo, na frente do peito, cotovelo junto ao corpo; a
+ *   esquerda por baixo do cano;
+ * - pistola ('pistol'): braços para a frente, as duas mãos juntas no cabo, na altura do peito.
+ */
+const STANCES = {
+  rifle: {
+    aim: (k = 0) => ({ 'arm.R': { swing: 0.05 * k, spread: -0.5 }, 'fore.R': { swing: 1.35 + 0.1 * k }, 'arm.L': { swing: 0.75 + 0.05 * k, spread: -0.9 }, 'fore.L': { swing: 0.05 } }),
+    reload: [
+      { 'arm.R': { swing: 0, spread: -0.35 }, 'fore.R': { swing: 0.65 }, 'arm.L': { swing: 0.35, spread: -0.7 }, 'fore.L': { swing: 0.05 }, head: { lean: 0.35 } },
+      { 'arm.R': { swing: 0, spread: -0.35 }, 'fore.R': { swing: 0.65 }, 'arm.L': { swing: 0.2, spread: -0.4 }, 'fore.L': { swing: 0.9 }, head: { lean: 0.3 } },
+    ],
+  },
+  pistol: {
+    aim: (k = 0) => ({ 'arm.R': { swing: 0.6 + 0.12 * k, spread: -0.85 }, 'fore.R': { swing: 0.8 - 0.1 * k }, 'arm.L': { swing: 0.55 + 0.12 * k, spread: -0.9 }, 'fore.L': { swing: 0.55 - 0.1 * k } }),
+    reload: [
+      { 'arm.R': { swing: 0, spread: -0.45 }, 'fore.R': { swing: 1.1 }, 'arm.L': { swing: 0.05, spread: -0.6 }, 'fore.L': { swing: 0.6 }, head: { lean: 0.35 } },
+      { 'arm.R': { swing: 0, spread: -0.45 }, 'fore.R': { swing: 1.1 }, 'arm.L': { swing: 0.1, spread: -0.2 }, 'fore.L': { swing: 1.2 }, head: { lean: 0.3 } },
+    ],
+  },
+};
+
+/** Armas que se seguram como pistola (uma mão no cabo, a outra por cima). */
+export const PISTOLS = ['m1911', 'glock', 'magnum', 'uzi_dual'];
+
+/** Animações que dependem da postura: nomes com o sufixo dela (Idle_pistol...). */
+function stanceAnimations(stance, suffix) {
+  const { aim, reload } = STANCES[stance];
   const run = (phase) => ({
     ...aim(), 'leg.R': { swing: 0.7 * phase }, 'leg.L': { swing: -0.7 * phase },
     spine: { lean: 0.12, twist: 0.05 * phase }, hips: { loc: [0, 0, 0.03 * Math.abs(phase)] },
   });
   const walk = (phase) => ({ ...aim(), 'leg.R': { swing: 0.4 * phase }, 'leg.L': { swing: -0.4 * phase }, spine: { lean: 0.05 } });
   return [
-    { name: 'Idle', frames: 4, fps: 3, loop: true, keys: [key(0, { ...aim(), spine: { lean: 0.02 } }), key(0.5, { ...aim(-0.04), spine: { lean: 0.05 }, head: { lean: 0.04 } }), key(1, { ...aim(), spine: { lean: 0.02 } })] },
+    { name: 'Idle', frames: 4, fps: 3, loop: true, keys: [key(0, { ...aim(), spine: { lean: 0.02 } }), key(0.5, { ...aim(-0.3), spine: { lean: 0.05 }, head: { lean: 0.04 } }), key(1, { ...aim(), spine: { lean: 0.02 } })] },
     { name: 'Walk', frames: 8, fps: 8, loop: true, keys: [key(0, walk(1)), key(0.25, walk(0)), key(0.5, walk(-1)), key(0.75, walk(0)), key(1, walk(1))] },
     { name: 'Run', frames: 6, fps: 12, loop: true, keys: [key(0, run(1)), key(0.5, run(-1)), key(1, run(1))] },
-    { name: 'Shoot', frames: 3, fps: 20, loop: false, keys: [key(0, { ...aim(0.12), spine: { lean: -0.06 } }), key(1, { ...aim() })] },
-    { name: 'Reload', frames: 6, fps: 8, loop: false, keys: [
-      key(0, aim()),
-      key(0.3, { 'arm.R': { swing: 0.9, spread: -0.2 }, 'arm.L': { swing: 0.4, spread: -0.2 }, head: { lean: 0.35 } }),
-      key(0.7, { 'arm.R': { swing: 0.9, spread: -0.2 }, 'arm.L': { swing: 1.0, spread: -0.6 }, head: { lean: 0.35 } }),
-      key(1, aim()),
-    ] },
+    { name: 'Shoot', frames: 3, fps: 20, loop: false, keys: [key(0, { ...aim(1), spine: { lean: -0.06 } }), key(1, { ...aim() })] },
+    { name: 'Reload', frames: 6, fps: 8, loop: false, keys: [key(0, aim()), key(0.3, reload[0]), key(0.7, reload[1]), key(1, aim())] },
+    { name: 'Hurt', frames: 2, fps: 10, loop: false, keys: [key(0, { ...aim(-0.5), spine: { lean: -0.25 }, head: { lean: -0.3 } }), key(1, aim())] },
+  ].map((anim) => ({ ...anim, name: anim.name + suffix }));
+}
+
+/** Jogador: postura de fuzil (nomes normais), de pistola (sufixo _pistol), faca e o resto. */
+export function playerAnimations() {
+  const guard = { 'arm.L': { swing: 0.35, spread: -0.25 }, 'fore.L': { swing: 1.1 } };
+  return [
+    ...stanceAnimations('rifle', ''),
     { name: 'Knife', frames: 5, fps: 14, loop: false, keys: [
-      key(0, aim()),
-      key(0.3, { 'arm.R': { swing: 0.5, spread: 0.9 }, 'arm.L': { swing: 0.6, spread: -0.3 }, spine: { twist: 0.4 } }),
-      key(0.65, { 'arm.R': { swing: 1.7, spread: -0.6 }, 'arm.L': { swing: 0.6, spread: -0.3 }, spine: { twist: -0.35, lean: 0.2 } }),
-      key(1, aim()),
+      key(0, { ...guard, 'arm.R': { swing: 0.25, spread: 0.1 }, 'fore.R': { swing: 1.1 } }),
+      key(0.3, { ...guard, 'arm.R': { swing: 0.7, spread: 0.95 }, 'fore.R': { swing: 1.2 }, spine: { twist: 0.45 } }),
+      key(0.65, { ...guard, 'arm.R': { swing: 1.5, spread: -0.7 }, 'fore.R': { swing: 0.1 }, spine: { twist: -0.4, lean: 0.2 } }),
+      key(1, { ...guard, 'arm.R': { swing: 0.9, spread: -0.4 }, 'fore.R': { swing: 0.5 }, spine: { twist: -0.15 } }),
     ] },
-    { name: 'Hurt', frames: 2, fps: 10, loop: false, keys: [key(0, { ...aim(-0.3), spine: { lean: -0.25 }, head: { lean: -0.3 } }), key(1, aim())] },
     { name: 'Interact', frames: 4, fps: 6, loop: true, keys: [
       key(0, { 'arm.R': { swing: 0.6 }, 'arm.L': { swing: 1.1, spread: -0.1 }, spine: { lean: 0.25 }, head: { lean: 0.2 } }),
       key(0.5, { 'arm.R': { swing: 0.6 }, 'arm.L': { swing: 1.3, spread: -0.15 }, spine: { lean: 0.3 }, head: { lean: 0.25 } }),
       key(1, { 'arm.R': { swing: 0.6 }, 'arm.L': { swing: 1.1, spread: -0.1 }, spine: { lean: 0.25 }, head: { lean: 0.2 } }),
     ] },
     ...deathAnimation(),
+    ...stanceAnimations('pistol', '_pistol'),
   ];
 }
 
@@ -208,7 +244,9 @@ export function zombieModel(look) {
 export function playerModel(skin) {
   const pouch = hex(0x4a4a38);
   const belt = hex(0x2a241c);
-  const c = { torso: skin.jacket, sleeve: skin.jacket, skin: hex(0xc79a7a), pants: hex(0x2f3440), shoes: hex(0x231d18), eyes: hex(0x1a1a1a) };
+  // Jaqueta de manga comprida (punho mais escuro); só as mãos à mostra.
+  const cuff = skin.jacket.map((v) => Math.round(v * 0.62));
+  const c = { torso: skin.jacket, sleeve: skin.jacket, forearm: skin.jacket, cuff, skin: hex(0xc79a7a), pants: hex(0x2f3440), shoes: hex(0x231d18), eyes: hex(0x1a1a1a) };
   return humanoid(c, { extra: (parts) => {
     parts.push(box('spine', [0, -0.22, 1.2], [0.4, 0.18, 0.46], skin.pack));  // mochila
     parts.push(box('head', [0, -0.01, 1.81], [0.29, 0.28, 0.08], skin.hair));
@@ -223,15 +261,27 @@ export function playerModel(skin) {
 
 // ───────────────────────── Armas (camada à parte) ─────────────────────────
 
-/** Peças da arma `id` (nível 0–2) presas à mão direita, apontando para a frente (camada 'weapon'). */
+/**
+ * Peças da arma `id` (nível 0–2) presas à mão direita (camada 'weapon'). Armas de fogo
+ * apontam para a frente do tronco, paralelas ao chão; a faca segue o antebraço (lâmina para
+ * a frente da mão).
+ */
 export function weaponParts(id, level = 0) {
-  const hand = [0.29, 0.0, 0.84];
+  const hand = [0.29, 0.0, 0.8];
+  const knife = id === 'knife';
   return weaponShape(id, level).map((part) => ({
     ...part,
     layer: 'weapon',
-    // Na mão (ponta do braço direito), cano paralelo ao chão, na direção do tronco.
     attach: (bones) => {
-      const arm = bones['arm.R'];
+      const arm = bones['fore.R'];
+      if (knife) {
+        const at = [arm[0] * hand[0] + arm[1] * hand[1] + arm[2] * hand[2] + arm[3],
+          arm[4] * hand[0] + arm[5] * hand[1] + arm[6] * hand[2] + arm[7],
+          arm[8] * hand[0] + arm[9] * hand[1] + arm[10] * hand[2] + arm[11]];
+        const turn = [arm[0], arm[1], arm[2], 0, arm[4], arm[5], arm[6], 0, arm[8], arm[9], arm[10], 0, 0, 0, 0, 1];
+        // A lâmina (y da arma) continua o antebraço, um pouco inclinada para a frente.
+        return mul(translate(at[0], at[1], at[2]), mul(turn, rotX(-1.25)));
+      }
       const spine = bones.spine;
       const tip = [arm[0] * hand[0] + arm[1] * hand[1] + arm[2] * hand[2] + arm[3],
         arm[4] * hand[0] + arm[5] * hand[1] + arm[6] * hand[2] + arm[7],

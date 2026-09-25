@@ -41,6 +41,9 @@ var _was_reloading := false
 var model: CharacterSprite
 ## Folha da arma em mãos (weapon_<id>[_mk2|_mk3]).
 var _gun_sheet: String = ""
+## Folha que está na camada agora (a da arma ou a da faca durante o golpe).
+var _layer_sheet: String = ""
+const KNIFE_SHEET := "weapon_knife"
 ## Animação curta em andamento (tiro, faca, dano) e quanto falta.
 var _action_anim: StringName = &""
 var _action_left := 0.0
@@ -236,10 +239,18 @@ func _show_gun(_kind: StringName = &"") -> void:
 	if model == null or weapon == null:
 		return
 	var sheet := gun_sheet(weapon.data.id, weapon.level)
+	# No golpe de faca, a faca aparece na mão no lugar da arma.
+	var shown := KNIFE_SHEET if _action_anim == &"Knife" and _action_left > 0.0 else sheet
+	if shown != _layer_sheet:
+		_layer_sheet = shown
+		model.set_layer(shown)
+		# O tiro e o clarão saem da ponta do cano desenhado (gravada na folha da arma).
+		var tip: Variant = model.layer_meta.get("muzzle")
+		if shown == sheet and tip is Array and muzzle.get_parent() is Node3D:
+			muzzle.position = Vector3(tip[0], tip[1], tip[2]) - (muzzle.get_parent() as Node3D).position
 	if sheet == _gun_sheet:
 		return
 	_gun_sheet = sheet
-	model.set_layer(sheet)
 	var other := inventory.other()
 	Events.weapon_visual_changed.emit(weapon.data.id, weapon.level, other.data.id if other else &"", other.level if other else 0)
 

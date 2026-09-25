@@ -8,6 +8,8 @@ import { join } from 'node:path';
 import { Resvg } from '@resvg/resvg-js';
 
 const FOLDERS = ['map', 'props', 'machines', 'events'];
+/** Ícones dos power-ups: pequenos, para virarem pixel art no Godot (filtro nearest). */
+const POWERUP_SIZE = 40;
 
 export function exportWebArt(): void {
   let count = 0;
@@ -21,6 +23,14 @@ export function exportWebArt(): void {
       writeFileSync(join(target, file.replace(/\.svg$/, '.png')), png);
       count++;
     }
+  }
+  const powerups = 'godot/assets/web/powerups';
+  mkdirSync(powerups, { recursive: true });
+  for (const file of readdirSync('public/assets/powerups')) {
+    if (!file.endsWith('.svg')) continue;
+    const svg = readFileSync(join('public/assets/powerups', file), 'utf8');
+    writeFileSync(join(powerups, file.replace(/\.svg$/, '.png')), new Resvg(svg, { fitTo: { mode: 'width', value: POWERUP_SIZE } }).render().asPng());
+    count++;
   }
   console.log(`  godot/assets/web: ${count} imagens da arte do jogo web`);
 }

@@ -12,7 +12,8 @@ var _label: Label3D
 var _material: StandardMaterial3D
 
 
-func build(title: String, color: Color) -> void:
+## art: objeto do kit de cenário (PropFactory), ex.: "panel_alarm"; sem ele, caixa lisa.
+func build(title: String, color: Color, art := "") -> void:
 	events_data = WorldEventData.shared()
 	collision_layer = PhysicsLayers.WORLD
 	collision_mask = 0
@@ -22,6 +23,11 @@ func build(title: String, color: Color) -> void:
 	collision.shape = shape
 	collision.position.y = SIZE.y * 0.5
 	add_child(collision)
+	var visual: Node3D = PropFactory.create(art) if art != "" else null
+	if visual:
+		add_child(visual)
+		_add_label(title, color)
+		return
 	var box := BoxMesh.new()
 	box.size = SIZE
 	_material = StandardMaterial3D.new()
@@ -33,6 +39,10 @@ func build(title: String, color: Color) -> void:
 	mesh.mesh = box
 	mesh.position.y = SIZE.y * 0.5
 	add_child(mesh)
+	_add_label(title, color)
+
+
+func _add_label(title: String, color: Color) -> void:
 	_label = Label3D.new()
 	_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	_label.pixel_size = 0.004

@@ -22,13 +22,13 @@ func setup(kind: String) -> void:
 		event_id = &"blackout"
 		action_text = "RELIGAR A ENERGIA"
 		idle_text = "PAINEL DE ENERGIA — FUNCIONANDO"
-		build("ENERGIA", Color(1.0, 0.83, 0.35))
+		build("ENERGIA", Color(1.0, 0.83, 0.35), "panel_power")
 	else:
 		name = "AlarmPanel"
 		event_id = &"emergency_alarm"
 		action_text = "DESLIGAR O ALARME"
 		idle_text = "ALARME DE EMERGÊNCIA — DESLIGADO"
-		build("ALARME", Color(1.0, 0.3, 0.25))
+		build("ALARME", Color(1.0, 0.3, 0.25), "panel_alarm")
 
 
 func _active() -> bool:

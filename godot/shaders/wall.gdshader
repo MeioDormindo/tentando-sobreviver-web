@@ -10,6 +10,8 @@ uniform vec2 side_size = vec2(2.0, 3.0);
 uniform vec2 top_size = vec2(2.0, 2.0);
 // Raio do círculo (fração da altura da tela).
 uniform float occlusion_radius = 0.14;
+// Textura presa ao objeto (trem em movimento) em vez de ao mundo.
+uniform bool object_space = false;
 
 global uniform vec2 occlusion_screen;
 global uniform float occlusion_view_z;
@@ -19,8 +21,8 @@ varying vec3 world_pos;
 varying vec3 world_normal;
 
 void vertex() {
-	world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
-	world_normal = normalize((MODEL_MATRIX * vec4(NORMAL, 0.0)).xyz);
+	world_pos = object_space ? VERTEX : (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	world_normal = object_space ? NORMAL : normalize((MODEL_MATRIX * vec4(NORMAL, 0.0)).xyz);
 }
 
 float bayer4(vec2 p) {

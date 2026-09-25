@@ -5,6 +5,8 @@ extends Node3D
 ## A direção sai da rotação do nó pai (o Pivot, que o gameplay já gira para onde o personagem
 ## olha). Mesma API usada antes com os modelos 3D: play, play_once, current, has_animation.
 ## Camada extra opcional (a arma do jogador), no mesmo quadro, na frente ou atrás do corpo.
+## A camada diz a postura ("stance" no JSON): com uma pistola, as animações que existem com o
+## sufixo _pistol (Idle_pistol, Walk_pistol...) tomam o lugar das normais.
 
 const SPRITES := "res://assets/sprites/%s"
 const PIXELS_PER_METER := 32.0
@@ -12,6 +14,12 @@ const PIXELS_PER_METER := 32.0
 const LAYER_GAP := 0.03
 
 var current: StringName = &""
+## Animação da folha que está tocando (a atual, com o sufixo da postura se houver).
+var playing: StringName = &""
+## Sufixo da postura da arma ("" = fuzil, "_pistol").
+var stance_suffix := ""
+## Dados da folha da camada (postura, ponta do cano...); vazio sem camada.
+var layer_meta: Dictionary = {}
 ## Direção desenhada agora (0 = olhando para a câmera, 2 = leste).
 var direction: int = 0
 
@@ -69,12 +77,34 @@ func set_layer(sheet: String) -> void:
 		_layer.queue_free()
 		_layer = null
 	_layer_behind = []
+	layer_meta = {}
 	if sheet == "" or not exists(sheet):
 		return
 	_layer = _make_sprite(sheet, "Layer")
 	add_child(_layer)
-	_layer_behind = _read_meta(sheet).get("weapon_behind", [])
+	var meta := _read_meta(sheet)
+	layer_meta = meta
+	_layer_behind = meta.get("weapon_behind", [])
+	# A faca não muda a postura (o golpe é o mesmo com qualquer arma).
+	match String(meta.get("stance", "")):
+		"pistol":
+			_set_stance("_pistol")
+		"rifle":
+			_set_stance("")
 	_apply_frame()
+
+
+func _set_stance(suffix: String) -> void:
+	if suffix == stance_suffix:
+		return
+	stance_suffix = suffix
+	if current != &"":
+		playing = _resolve(current)
+
+
+func _resolve(anim_name: StringName) -> StringName:
+	var with_stance := StringName(String(anim_name) + stance_suffix)
+	return with_stance if stance_suffix != "" and has_animation(with_stance) else anim_name
 
 
 func has_animation(anim_name: StringName) -> bool:
@@ -89,6 +119,7 @@ func play(anim_name: StringName, _blend := 0.15, speed := 1.0) -> void:
 	if current == anim_name:
 		return
 	current = anim_name
+	playing = _resolve(anim_name)
 	_frame = 0.0
 	_apply_frame()
 
@@ -98,6 +129,7 @@ func play_once(anim_name: StringName, _blend := 0.08, speed := 1.0) -> void:
 	if not has_animation(anim_name):
 		return
 	current = anim_name
+	playing = _resolve(anim_name)
 	_speed = speed
 	_frame = 0.0
 	_apply_frame()
@@ -105,7 +137,7 @@ func play_once(anim_name: StringName, _blend := 0.08, speed := 1.0) -> void:
 
 ## A animação atual (que não repete) chegou ao fim?
 func finished() -> bool:
-	var anim: Dictionary = _meta.animations.get(String(current), {})
+	var anim: Dictionary = _meta.animations.get(String(playing), {})
 	return not anim.is_empty() and not bool(anim.loop) and _frame >= float(anim.count) - 1.0
 
 
@@ -127,7 +159,7 @@ func _process(delta: float) -> void:
 		_flash_left -= delta
 		if _flash_left <= 0.0:
 			_set_modulate(_tint)
-	var anim: Dictionary = _meta.get("animations", {}).get(String(current), {})
+	var anim: Dictionary = _meta.get("animations", {}).get(String(playing), {})
 	if anim.is_empty():
 		return
 	var count := int(anim.count)
@@ -152,7 +184,7 @@ func _process(delta: float) -> void:
 func _apply_frame() -> void:
 	if _body == null:
 		return
-	var anim: Dictionary = _meta.get("animations", {}).get(String(current), {})
+	var anim: Dictionary = _meta.get("animations", {}).get(String(playing), {})
 	if anim.is_empty():
 		return
 	var columns := int(_meta.columns)
@@ -181,11 +213,26 @@ func _make_sprite(sheet: String, sprite_name: String) -> Sprite3D:
 	sprite.shaded = true
 	sprite.double_sided = false
 	sprite.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	sprite.material_override = _material(sheet, sprite.texture)
 	# Pés (pivô da folha) na origem do nó; o y do offset do Sprite3D cresce para cima.
 	var frame_size: Array = _meta.frame
 	var pivot: Array = _meta.pivot
 	sprite.offset = Vector2(float(frame_size[0]) * 0.5 - float(pivot[0]), float(pivot[1]) - float(frame_size[1]) * 0.5)
 	return sprite
+
+
+## Material do quadro (shaders/character_sprite.gdshader), um por folha: puxa o quadro para
+## perto da câmera, para as pernas não entrarem no chão nem nos objetos logo atrás.
+static var _materials: Dictionary = {}
+
+
+static func _material(sheet: String, texture: Texture2D) -> ShaderMaterial:
+	if not _materials.has(sheet):
+		var material := ShaderMaterial.new()
+		material.shader = preload("res://shaders/character_sprite.gdshader")
+		material.set_shader_parameter(&"tex", texture)
+		_materials[sheet] = material
+	return _materials[sheet]
 
 
 func _set_modulate(color: Color) -> void:

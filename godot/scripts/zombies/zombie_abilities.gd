@@ -119,15 +119,19 @@ func _spit(to_target: Vector3) -> void:
 	var from := zombie.global_position + Vector3.UP * 1.5
 	var land := zombie.global_position + to_target
 	land.y = 0.0
-	var ball := MeshInstance3D.new()
-	var mesh := SphereMesh.new()
-	mesh.radius = 0.15
-	mesh.height = 0.3
-	var material := StandardMaterial3D.new()
-	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	material.albedo_color = ACID_COLOR
-	mesh.material = material
-	ball.mesh = mesh
+	# Bolha de ácido em pixel art; sem a arte, uma esfera verde.
+	var ball := Node3D.new()
+	if PixelFx.attach_loop(ball, "acid", 0.5) == null:
+		var fallback := MeshInstance3D.new()
+		var mesh := SphereMesh.new()
+		mesh.radius = 0.15
+		mesh.height = 0.3
+		var material := StandardMaterial3D.new()
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		material.albedo_color = ACID_COLOR
+		mesh.material = material
+		fallback.mesh = mesh
+		ball.add_child(fallback)
 	var root := SpecialFire.world_root(zombie.get_tree())
 	root.add_child(ball)
 	ball.global_position = from
@@ -148,6 +152,6 @@ func _spawn_pool(params: Dictionary, color: Color, at: Vector3) -> void:
 
 static func _spawn_pool_at(root: Node, params: Dictionary, color: Color, at: Vector3) -> void:
 	var pool := HazardPool.new()
-	pool.setup(params, color)
+	pool.setup(params, color, color == GAS_COLOR)
 	root.add_child(pool)
 	pool.global_position = Vector3(at.x, 0.0, at.z)

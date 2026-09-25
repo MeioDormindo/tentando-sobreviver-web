@@ -32,9 +32,9 @@ func update(delta: float) -> bool:
 	for piece in _falling.duplicate():
 		piece.left -= delta
 		var t := 1.0 - maxf(0.0, piece.left) / warning
-		var ring: MeshInstance3D = piece.node
+		var ring: Sprite3D = piece.node
 		ring.scale = Vector3.ONE * (1.6 - 0.6 * t)
-		(ring.mesh.material as StandardMaterial3D).albedo_color.a = 0.15 + 0.35 * t
+		ring.modulate.a = 0.35 + 0.65 * t
 		if piece.left <= 0.0:
 			_impact(piece, radius)
 	return true
@@ -73,8 +73,12 @@ func _impact(piece: Dictionary, radius: float) -> void:
 	system.damage_area(at, radius, float(config.get("player_damage", 25)), float(config.get("zombie_damage", 220)))
 	SpecialFire.flash(system.get_tree(), at + Vector3.UP * 0.5, radius * 1.3, Color(0.78, 0.71, 0.54))
 	Events.screen_shake.emit(0.14, 0.1)
-	var rubble := EventFx.box(Vector3(0.7, 0.25, 0.5), EventFx.glow(Color(0.35, 0.32, 0.27), 1.0, 0.0))
+	var rubble: Node3D = PropFactory.create("rubble")
+	if rubble == null:
+		rubble = EventFx.box(Vector3(0.7, 0.25, 0.5), EventFx.glow(Color(0.35, 0.32, 0.27), 1.0, 0.0))
+		rubble.position.y = 0.12
 	system.world_root().add_child(rubble)
-	rubble.global_position = at + Vector3.UP * 0.12
+	rubble.global_position = at + Vector3.UP * rubble.position.y
+	PixelFx.spawn(system.get_tree(), "smoke", at + Vector3.UP * 0.5, 2.2)
 	rubble.rotation.y = randf() * TAU
 	_debris.append(rubble)

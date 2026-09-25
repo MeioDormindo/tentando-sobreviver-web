@@ -25,7 +25,7 @@ func setup(p_zone: Rect2) -> void:
 	tick_time = float(cfg.get("tick_time", 0.18))
 	zone = p_zone
 	name = "ElectricTrap"
-	build("ARMADILHA", Color(0.5, 0.85, 1.0))
+	build("ARMADILHA", Color(0.5, 0.85, 1.0), "panel_trap")
 
 
 func _ready() -> void:
@@ -38,6 +38,11 @@ func _ready() -> void:
 	_grate_material.albedo_color = Color(0.25, 0.27, 0.28)
 	_grate_material.emission_enabled = true
 	_grate_material.emission = Color(0.5, 0.85, 1.0) * 0.05
+	# Grade com faixas zebradas (arte do jogo web).
+	if ResourceLoader.exists("res://assets/web/props/trap_grate.png"):
+		_grate_material.albedo_color = Color.WHITE
+		_grate_material.albedo_texture = load("res://assets/web/props/trap_grate.png")
+		_grate_material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	mesh.material = _grate_material
 	grate.mesh = mesh
 	add_child(grate)

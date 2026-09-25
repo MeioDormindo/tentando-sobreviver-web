@@ -7,7 +7,7 @@
   48,
   69
  ],
- "columns": 44,
+ "columns": 73,
  "directions": 8,
  "direction_angle": "dir = round(atan2(facing.x, facing.z) / 45°) mod 8; 0 = olhando para a câmera (+Z), 2 = leste (+X)",
  "pitch": 60,
@@ -43,16 +43,16 @@
    "fps": 8,
    "loop": false
   },
-  "Knife": {
-   "start": 27,
-   "count": 5,
-   "fps": 14,
-   "loop": false
-  },
   "Hurt": {
-   "start": 32,
+   "start": 27,
    "count": 2,
    "fps": 10,
+   "loop": false
+  },
+  "Knife": {
+   "start": 29,
+   "count": 5,
+   "fps": 14,
    "loop": false
   },
   "Interact": {
@@ -66,16 +66,48 @@
    "count": 6,
    "fps": 10,
    "loop": false
+  },
+  "Idle_pistol": {
+   "start": 44,
+   "count": 4,
+   "fps": 3,
+   "loop": true
+  },
+  "Walk_pistol": {
+   "start": 48,
+   "count": 8,
+   "fps": 8,
+   "loop": true
+  },
+  "Run_pistol": {
+   "start": 56,
+   "count": 6,
+   "fps": 12,
+   "loop": true
+  },
+  "Shoot_pistol": {
+   "start": 62,
+   "count": 3,
+   "fps": 20,
+   "loop": false
+  },
+  "Reload_pistol": {
+   "start": 65,
+   "count": 6,
+   "fps": 8,
+   "loop": false
+  },
+  "Hurt_pistol": {
+   "start": 71,
+   "count": 2,
+   "fps": 10,
+   "loop": false
   }
  },
- "weapon_behind": [
-  false,
-  false,
-  false,
-  false,
-  true,
-  true,
-  false,
-  false
+ "stance": "rifle",
+ "muzzle": [
+  0.11,
+  1.187,
+  -0.774
  ]
 }

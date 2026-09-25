@@ -21,6 +21,9 @@ const SMOKE = [[34, 32, 34], [52, 50, 52], [74, 72, 72], [98, 96, 94]];
 const BLOOD = [[70, 8, 8], [112, 16, 14], [150, 26, 20], [186, 44, 34]];
 const PLASMA = [[20, 60, 110], [40, 120, 200], [90, 200, 255], [200, 245, 255], [255, 255, 255]];
 const WIND = [[120, 170, 190], [170, 220, 235], [220, 248, 255]];
+const ACID = [[40, 70, 10], [80, 130, 20], [140, 200, 40], [200, 245, 110], [240, 255, 200]];
+/** Cinza claro: recebe a cor no jogo (modulate), para poça de ácido e nuvem de gás. */
+const GRAY = [[110, 110, 110], [150, 150, 150], [190, 190, 190], [225, 225, 225], [255, 255, 255]];
 const OLIVE = [[40, 48, 26], [70, 84, 42], [104, 122, 64], [150, 168, 100]];
 
 function strip(frames, w, h, draw) {
@@ -146,6 +149,42 @@ export function buildFx() {
         const x = Math.round(18 + Math.cos(a) * radius), y = Math.round(18 + Math.sin(a) * radius * 0.7);
         if ((s + i) % 5 !== 0) px.set(x, y, ramp(WIND, 1 - s / 18 - t * 0.4));
       }
+    }
+  }) };
+  // Cuspe ácido: bolha verde tremendo, com gotas escorrendo.
+  out.acid = { fps: 12, loop: true, sheet: strip(4, 18, 18, (px, i) => {
+    const r = rng(101 + i);
+    blob(px, 9, 9, 5.5 + (i % 2) * 0.6, angularNoise(r, 0.35, 6), (d) => ramp(ACID, 1 - d * 0.85));
+    px.set(8 + (i % 3), 15, ACID[1]); px.set(8 + (i % 3), 16, ACID[0]);
+  }) };
+  // Poça (ácido, gás no chão): mancha irregular com bolhas que estouram; cinza, tingida no jogo.
+  out.pool = { fps: 6, loop: true, sheet: strip(4, 48, 48, (px, i) => {
+    const r = rng(113);
+    const noise = angularNoise(r, 0.3, 8);
+    blob(px, 24, 24, 19, noise, (d, x, y) => (d > 0.86 ? GRAY[4] : dither(x, y, 0.55 + (1 - d) * 0.4) ? ramp(GRAY, 0.25 + (1 - d) * 0.5) : GRAY[1]));
+    const b = rng(127);
+    for (let j = 0; j < 7; j++) {
+      const bx = 10 + b() * 28, by = 10 + b() * 28, phase = (j + i) % 4;
+      if (phase < 3) blob(px, bx, by, 1 + phase * 0.8, () => 0, (d) => (d > 0.6 ? GRAY[4] : null));
+    }
+  }) };
+  // Nuvem de gás: fumaça pontilhada que rola; cinza, tingida no jogo.
+  out.gas = { fps: 8, loop: true, sheet: strip(6, 40, 40, (px, i, n) => {
+    const r = rng(131);
+    for (let k = 0; k < 5; k++) {
+      const a = (k / 5) * Math.PI * 2 + (i / n) * Math.PI * 0.6;
+      const cx = 20 + Math.cos(a) * 7, cy = 21 + Math.sin(a) * 5;
+      blob(px, cx, cy, 8 + ((k + i) % 3), angularNoise(r, 0.3, 5), (d, x, y) => (dither(x + i, y, 0.75 - d * 0.55) ? ramp(GRAY, 0.9 - d * 0.6) : null));
+    }
+  }) };
+  // Onda de choque (boss): anel que se abre e some, deitado no chão.
+  out.shockwave = { fps: 18, loop: false, sheet: strip(7, 64, 64, (px, i, n) => {
+    const t = i / (n - 1);
+    const radius = 6 + t * 25, width = 4 - t * 2.5;
+    for (let y = 0; y < 64; y++) for (let x = 0; x < 64; x++) {
+      const d = Math.hypot(x + 0.5 - 32, y + 0.5 - 32);
+      if (Math.abs(d - radius) < width && dither(x, y, 1 - t * 0.8)) px.set(x, y, ramp(GRAY, 1 - Math.abs(d - radius) / width * 0.6));
+      else if (d < radius - width && d > radius - width - 3 && dither(x, y, 0.3 - t * 0.3)) px.set(x, y, GRAY[1]);
     }
   }) };
   return out;

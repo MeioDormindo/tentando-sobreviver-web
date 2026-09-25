@@ -59,9 +59,18 @@ de conceitos: ver `docs/analise-typescript.md`.
     zumbis, o cão, os 2 bosses, o jogador nos 4 visuais e as 19 armas (Mk II e Mk III
     visíveis), com ícones e efeitos em pixel (clarão, faíscas, sangue, explosão, plasma,
     granada, chama, vento);
-  - cenário (`npm run godot:scenery`): pisos e paredes, 32 objetos 2.5D montados pela
-    PropFactory (caixas, barris, bancos, macas, máquinas de perk na cor do perk, Mystery
-    Box com tampa que abre...) e decoração de parede e de chão espalhada por semente;
+  - cenário (`npm run godot:scenery`): pisos, paredes, portões das portas e o trem, 41
+    objetos 2.5D montados pela PropFactory (caixas, barris, bancos, macas, máquinas de perk
+    na cor do perk, Mystery Box com tampa que abre, painéis de alarme, energia, armadilha e
+    trem, disjuntor, caixa de suprimentos, geladeira de amostras, cano de gás, entulho...) e
+    decoração de parede e de chão espalhada por semente;
+  - jogador com cotovelos e duas posturas: fuzil (mão no cabo, a outra sob o cano) e pistola
+    (as duas mãos juntas); a faca aparece na mão no golpe; a arma é desenhada junto com o
+    corpo (a mão cobre o cabo) e a folha grava a ponta do cano, de onde sai o tiro;
+  - tiros como balas luminosas que voam até o alvo (faíscas quando chegam), raio e vento em
+    feixe; cuspe ácido, poças borbulhando, nuvem de gás, onda de choque e marcas no chão em
+    pixel; power-ups com os ícones do jogo web; personagens puxados para perto da câmera no
+    shader (pernas não entram no chão nem nos objetos);
 - **menu de pausa** com CONTINUAR, REINICIAR, MENU e as configurações que valem na hora;
 - **visuais do personagem** (tela PERSONAGEM): Sobrevivente, Enfermeiro, Maquinista e Agente,
   liberados por conquistas, com as cores da paleta do jogo web;

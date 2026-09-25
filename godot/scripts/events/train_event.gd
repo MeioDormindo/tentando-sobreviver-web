@@ -113,7 +113,7 @@ func _spawn_train() -> void:
 	var width := _bottom - _top - 0.6
 	for i in cars:
 		var engine := i == 0 or i == cars - 1
-		var car := EventFx.box(Vector3(car_length - 0.4, 2.6, width), EventFx.glow(Color(0.25, 0.36, 0.44) if engine else Color(0.3, 0.33, 0.36), 1.0, 0.05))
+		var car := EventFx.box(Vector3(car_length - 0.4, 2.6, width), LayoutMap.train_material(true, Color(0.25, 0.36, 0.44) if engine else Color(0.3, 0.33, 0.36)))
 		# O trem cresce para trás da frente (head_x).
 		car.position = Vector3(-direction * (car_length * 0.5 + i * car_length), 1.3, 0.0)
 		_train.add_child(car)

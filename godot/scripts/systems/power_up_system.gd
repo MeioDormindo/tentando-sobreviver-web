@@ -61,16 +61,41 @@ func spawn_drop(id: StringName, at: Vector3) -> Node3D:
 	pickup.name = "PowerUp_" + String(id)
 	pickup.set_meta(&"id", id)
 	pickup.set_meta(&"age", 0.0)
-	var orb := MeshInstance3D.new()
-	var mesh := SphereMesh.new()
-	mesh.radius = 0.32 if id != &"golden" else 0.42
-	mesh.height = mesh.radius * 2.0
-	var material := StandardMaterial3D.new()
-	material.albedo_color = color
-	material.emission_enabled = true
-	material.emission = color * 0.8
-	mesh.material = material
-	orb.mesh = mesh
+	# Ícone do jogo web em pixel art (40 px, filtro nearest), voltado para a câmera; sem o
+	# ícone, uma esfera na cor do power-up.
+	var icon_path := "res://assets/web/powerups/%s.png" % id
+	var orb: Node3D
+	if ResourceLoader.exists(icon_path):
+		var sprite := Sprite3D.new()
+		sprite.texture = load(icon_path)
+		sprite.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+		sprite.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+		sprite.shaded = false
+		sprite.alpha_cut = SpriteBase3D.ALPHA_CUT_DISCARD
+		sprite.pixel_size = (0.95 if id == &"golden" else 0.75) / float(sprite.texture.get_width())
+		sprite.no_depth_test = false
+		orb = sprite
+		var halo := Sprite3D.new()
+		halo.texture = _halo_texture(color)
+		halo.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+		halo.axis = Vector3.AXIS_Y
+		halo.shaded = false
+		halo.pixel_size = 1.4 / 24.0
+		halo.modulate = Color(color, 0.7)
+		halo.position.y = 0.03
+		pickup.add_child(halo)
+	else:
+		var sphere := MeshInstance3D.new()
+		var mesh := SphereMesh.new()
+		mesh.radius = 0.32 if id != &"golden" else 0.42
+		mesh.height = mesh.radius * 2.0
+		var material := StandardMaterial3D.new()
+		material.albedo_color = color
+		material.emission_enabled = true
+		material.emission = color * 0.8
+		mesh.material = material
+		sphere.mesh = mesh
+		orb = sphere
 	orb.position.y = 0.9
 	pickup.add_child(orb)
 	var label := Label3D.new()
@@ -95,6 +120,26 @@ func spawn_drop(id: StringName, at: Vector3) -> Node3D:
 	tween.tween_property(orb, "position:y", 0.9, 0.7).set_trans(Tween.TRANS_SINE)
 	_pickups.append(pickup)
 	return pickup
+
+
+## Brilho no chão embaixo do drop: anel pixelado (24 px) em pontilhado, branco (a cor entra
+## pelo modulate).
+static var _halo: ImageTexture
+
+
+static func _halo_texture(_color: Color) -> ImageTexture:
+	if _halo:
+		return _halo
+	var image := Image.create(24, 24, false, Image.FORMAT_RGBA8)
+	for y in 24:
+		for x in 24:
+			var d := Vector2(x + 0.5 - 12.0, y + 0.5 - 12.0).length() / 12.0
+			var alpha := 0.0
+			if d < 1.0:
+				alpha = 0.85 if d > 0.78 else (0.35 if (x + y) % 2 == 0 and d < 0.6 else 0.0)
+			image.set_pixel(x, y, Color(1, 1, 1, alpha))
+	_halo = ImageTexture.create_from_image(image)
+	return _halo
 
 
 ## Aplica o efeito (ao pegar). Devolve o detalhe mostrado na HUD.

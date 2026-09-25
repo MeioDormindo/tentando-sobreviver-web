@@ -103,7 +103,7 @@ export function posedBoxes(model, pose, dirIndex, only = null) {
  * animations: [{ name, frames, fps, loop, keys }]. layers: {nome: filtro de peças}.
  * Devolve { sheets: {camada: Pixels}, meta }.
  */
-export function buildSheet(model, animations, { pitch, layers = { body: null }, workSize = 200, fixedFrame = null, ppm = 48, renderer = 'sdf' }) {
+export function buildSheet(model, animations, { pitch, layers = { body: null }, workSize = 200, fixedFrame = null, ppm = 48, renderer = 'sdf', occlude = false }) {
   // Tamanhos pensados em 32 px/m; com outra densidade, a área de trabalho acompanha.
   workSize = Math.round((workSize * ppm) / 32);
   if (fixedFrame) fixedFrame = { size: fixedFrame.size.map((v) => Math.round((v * ppm) / 32)), pivot: fixedFrame.pivot.map((v) => Math.round((v * ppm) / 32)) };
@@ -127,8 +127,9 @@ export function buildSheet(model, animations, { pitch, layers = { body: null }, 
         const out = {};
         for (const [layer, filter] of Object.entries(layers)) {
           const canvas = new Pixels(workSize, workSize);
-          const boxes = posedBoxes(model, pose, dir, filter);
-          if (renderer === 'sdf') renderSdf(canvas, boxes, pitch, ppm, originX, originY);
+          // occlude: a camada é desenhada com o modelo todo e guarda só o que fica na frente.
+          const boxes = posedBoxes(model, pose, dir, occlude ? null : filter);
+          if (renderer === 'sdf') renderSdf(canvas, boxes, pitch, ppm, originX, originY, occlude ? filter : null);
           else drawBoxes(canvas, boxes, proj, originX, originY);
           canvas.outline();
           out[layer] = canvas;
@@ -142,7 +143,7 @@ export function buildSheet(model, animations, { pitch, layers = { body: null }, 
       }
     }
     // Camada da arma atrás do corpo quando o personagem olha para longe da câmera.
-    if (layers.weapon) {
+    if (layers.weapon && !occlude) {
       const pose = sample(animations[0].keys, 0);
       const all = posedBoxes(model, pose, dir);
       const depthOf = (list) => list.reduce((s, b) => s + proj.depth(apply(b.m, [0, 0, 0])), 0) / Math.max(1, list.length);

@@ -36,6 +36,13 @@ export function weaponShape(id, level = 0) {
   const scope = (y, len = 0.2) => add([0, y, 0.15], [0.045, len, 0.045], DARK, { shape: 'ellipsoid' });
 
   switch (id) {
+    case 'knife':
+      // Faca de combate: cabo escuro com guarda, lâmina clara com fio brilhante.
+      add([0, -0.01, 0], [0.04, 0.11, 0.045], DARK);
+      add([0, 0.05, 0], [0.08, 0.015, 0.05], STEEL);
+      add([0, 0.16, 0.004], [0.014, 0.2, 0.045], hex(0xc9ced4), { round: 0.004 });
+      add([0, 0.16, 0.024], [0.016, 0.19, 0.008], hex(0xf2f5f8), { flat: true, round: 0.002 });
+      break;
     case 'm1911':
       add([0, 0.07, 0.075], [0.045, 0.22, 0.06], metal); grip(-0.005, WOOD); sight(0.16, 0.11);
       break;

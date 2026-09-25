@@ -20,6 +20,7 @@ function frameOf(part) {
     ellipsoid: part.shape === 'ellipsoid',
     color: part.color,
     flat: part.flat,
+    layer: part.layer,
   };
 }
 
@@ -92,7 +93,8 @@ function toneColor(base, light) {
  * Desenha as peças na tela.
  * parts: [{ m, color, flat, shape, round }]; proj: { pitch em graus, ppm }.
  */
-export function renderSdf(canvas, parts, pitchDegrees, ppm, originX, originY) {
+/** keep(peça): só pinta os pixels em que a peça da frente passa no filtro (as outras só tampam). */
+export function renderSdf(canvas, parts, pitchDegrees, ppm, originX, originY, keep = null) {
   const p = (pitchDegrees * Math.PI) / 180;
   const sp = Math.sin(p), cp = Math.cos(p);
   const vx = 0, vy = cp, vz = sp; // para a câmera
@@ -144,6 +146,7 @@ export function renderSdf(canvas, parts, pitchDegrees, ppm, originX, originY) {
       if (!hit) continue;
       const hx = bx + vx * t, hy = by + vy * t, hz = bz + vz * t;
       const part = nearestPart(candidates, hx, hy, hz);
+      if (keep && !keep(part)) continue;
       let color;
       if (part.flat) {
         color = part.color;

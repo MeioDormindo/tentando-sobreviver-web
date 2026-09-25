@@ -24,6 +24,17 @@ func setup(p_label: String, p_hold_time: float, p_messages: PackedStringArray) -
 
 func _ready() -> void:
 	add_to_group(&"interactable")
+	var dial := OmniLight3D.new()
+	dial.light_color = Color(1.0, 0.7, 0.3)
+	dial.light_energy = 0.4
+	dial.omni_range = 1.2
+	dial.position.y = 0.4
+	add_child(dial)
+	# Rádio velho (arte do jogo web, de frente); sem ela, uma caixa.
+	var art := PixelShapes.standing("res://assets/web/props/radio.png", 64.0)
+	if art:
+		add_child(art)
+		return
 	var box := BoxMesh.new()
 	box.size = Vector3(0.55, 0.32, 0.22)
 	var material := StandardMaterial3D.new()
@@ -33,12 +44,6 @@ func _ready() -> void:
 	mesh.mesh = box
 	mesh.position.y = 0.16
 	add_child(mesh)
-	var dial := OmniLight3D.new()
-	dial.light_color = Color(1.0, 0.7, 0.3)
-	dial.light_energy = 0.4
-	dial.omni_range = 1.2
-	dial.position.y = 0.4
-	add_child(dial)
 
 
 func _process(delta: float) -> void:

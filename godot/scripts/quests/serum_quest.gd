@@ -140,7 +140,7 @@ func _components_enter() -> void:
 		got.fridge = true
 		_collected("AMOSTRAS COLETADAS"), float(cfg.fridge.get("hold_time", 4.0)))
 	fridge.name = "SampleFridge"
-	fridge.add_prop(Vector3(0.9, 1.6, 0.6), Color(0.8, 0.85, 0.9), 0.15)
+	fridge.add_prop(Vector3(0.9, 1.6, 0.6), Color(0.8, 0.85, 0.9), 0.15, PropFactory.create("sample_fridge"))
 	# Armário trancado: o cadeado só abre com tiro.
 	var cabinet := _spot("PEGAR O REAGENTE", _at(cfg.cabinet), func() -> void:
 		got.cabinet = true
@@ -148,7 +148,7 @@ func _components_enter() -> void:
 	cabinet.name = "MedCabinet"
 	cabinet.locked_label = "ARMÁRIO TRANCADO — ATIRE NO CADEADO"
 	cabinet.enabled = func() -> bool: return lock == null
-	cabinet.add_prop(Vector3(1.0, 1.4, 0.5), Color(0.75, 0.78, 0.74), 0.05)
+	cabinet.add_prop(Vector3(1.0, 1.4, 0.5), Color(0.75, 0.78, 0.74), 0.05, PropFactory.create("med_cabinet"))
 	lock = _make_lock(cabinet)
 	var drawer := _spot("ABRIR A GAVETA COM O CARTÃO", _at(cfg.drawer), func() -> void:
 		got.drawer = true
@@ -164,7 +164,8 @@ func _make_lock(cabinet: Node3D) -> Node3D:
 	padlock.name = "Padlock"
 	padlock.position = Vector3(0.0, 0.8, 0.3)
 	cabinet.add_child(padlock)
-	padlock.add_child(EventFx.box(Vector3(0.18, 0.22, 0.08), EventFx.glow(Color(0.85, 0.7, 0.25), 1.0, 0.3)))
+	var lock_art := PixelShapes.standing("res://assets/web/props/padlock.png", 80.0)
+	padlock.add_child(lock_art if lock_art else EventFx.box(Vector3(0.18, 0.22, 0.08), EventFx.glow(Color(0.85, 0.7, 0.25), 1.0, 0.3)))
 	var health := HealthComponent.new()
 	health.name = "HealthComponent"
 	padlock.add_child(health)
@@ -200,7 +201,7 @@ func _components_update(delta: float) -> bool:
 				has_card = true
 				Events.toast.emit("CARTÃO DE ACESSO — abra a gaveta do Necrotério"))
 			_card_spot.name = "Keycard"
-			_card_spot.add_prop(Vector3(0.3, 0.04, 0.2), Color(0.3, 0.6, 1.0), 0.8)
+			_card_spot.add_prop(Vector3(0.3, 0.04, 0.2), Color(0.3, 0.6, 1.0), 0.8, PixelShapes.standing("res://assets/web/props/keycard.png", 56.0))
 		else:
 			_next_armored -= delta
 			if _next_armored <= 0.0:
@@ -218,8 +219,10 @@ func _spawn_armored() -> void:
 	# Zumbi extra: entra na conta do round.
 	Events.zombies_summoned.emit(1)
 	_armored_last = armored.global_position
-	var card := EventFx.box(Vector3(0.25, 0.04, 0.16), EventFx.glow(Color(0.3, 0.6, 1.0), 1.0, 1.2))
-	card.position = Vector3(0.0, 1.2, -0.3)
+	var card: Node3D = PixelShapes.standing("res://assets/web/props/keycard.png", 56.0)
+	if card == null:
+		card = EventFx.box(Vector3(0.25, 0.04, 0.16), EventFx.glow(Color(0.3, 0.6, 1.0), 1.0, 1.2))
+	card.position = Vector3(0.0, 2.0, 0.0)
 	armored.add_child(card)
 	Events.toast.emit("UM SEGURANÇA BLINDADO ESTÁ COM O CARTÃO DE ACESSO")
 
@@ -239,17 +242,26 @@ func _defense_enter() -> void:
 	_centrifuge.name = "Centrifuge"
 	world.add_child(_centrifuge)
 	_centrifuge.global_position = at
-	var drum := CylinderMesh.new()
-	drum.top_radius = 0.45
-	drum.bottom_radius = 0.55
-	drum.height = 1.0
-	drum.material = EventFx.glow(Color(0.7, 0.72, 0.7), 1.0, 0.05)
-	var mesh := MeshInstance3D.new()
+	# Centrífuga em pixel art (PropFactory) num nó "Drum" que gira; sem a arte, um cilindro.
+	var mesh := Node3D.new()
 	mesh.name = "Drum"
-	mesh.mesh = drum
-	mesh.position.y = 0.5
 	_centrifuge.add_child(mesh)
-	mesh.add_child(EventFx.box(Vector3(1.2, 0.08, 0.12), EventFx.glow(SERUM_GREEN, 1.0, 0.6)))
+	var art := PropFactory.create("centrifuge")
+	if art:
+		mesh.add_child(art)
+	else:
+		var drum := CylinderMesh.new()
+		drum.top_radius = 0.45
+		drum.bottom_radius = 0.55
+		drum.height = 1.0
+		drum.material = EventFx.glow(Color(0.7, 0.72, 0.7), 1.0, 0.05)
+		var cylinder := MeshInstance3D.new()
+		cylinder.mesh = drum
+		cylinder.position.y = 0.5
+		mesh.add_child(cylinder)
+	var bar := EventFx.box(Vector3(1.2, 0.08, 0.12), EventFx.glow(SERUM_GREEN, 1.0, 0.6))
+	bar.position.y = 1.05
+	mesh.add_child(bar)
 	var spot := _spot("COLOCAR OS COMPONENTES NA CENTRÍFUGA", at + Vector3(0, 0, 1.0), func() -> void:
 		centrifuge_running = true
 		var spawn: Dictionary = cfg.centrifuge.get("spawn", {})
@@ -296,7 +308,7 @@ func _apply_enter() -> void:
 	var spot := _spot("APLICAR O SORO", Vector3(at.x, 0.0, at.z), func() -> void: applied = true, float(cfg.get("apply_hold_time", 3.0)))
 	spot.name = "SerumVial"
 	spot.interaction_radius = 2.2
-	spot.add_prop(Vector3(0.12, 0.3, 0.12), SERUM_GREEN, 1.0)
+	spot.add_prop(Vector3(0.12, 0.3, 0.12), SERUM_GREEN, 1.0, PixelShapes.standing("res://assets/web/props/serum_vial.png", 56.0))
 
 
 ## Fim: todos os perks, o Tornado e a conquista.

@@ -36,15 +36,36 @@ func setup(p_id: StringName, p_cost: int, p_areas: PackedStringArray, size: Vect
 	add_child(collision)
 	var box := BoxMesh.new()
 	box.size = shape.size
-	var material := StandardMaterial3D.new()
-	material.albedo_color = COLOR
-	box.material = material
+	box.material = _art_material()
 	_mesh = MeshInstance3D.new()
 	_mesh.mesh = box
 	_mesh.position.y = HEIGHT * 0.5
 	add_child(_mesh)
 	interaction_radius = maxf(size.x, size.y) * 0.5 + 1.4
 	add_to_group(&"interactable")
+
+
+## Portão de aço em pixel art (npm run godot:scenery), com o shader das paredes: mesma
+## densidade de pixels e o mesmo recorte quando o jogador passa atrás. Sem a arte, cor lisa.
+static var _shared_material: Material
+
+
+static func _art_material() -> Material:
+	if _shared_material:
+		return _shared_material
+	var side := "res://assets/tiles/door_shutter.png"
+	var top := "res://assets/tiles/door_cap.png"
+	if ResourceLoader.exists(side) and ResourceLoader.exists(top):
+		var material := ShaderMaterial.new()
+		material.shader = load("res://shaders/wall.gdshader")
+		material.set_shader_parameter(&"side_texture", load(side))
+		material.set_shader_parameter(&"top_texture", load(top))
+		_shared_material = material
+	else:
+		var plain := StandardMaterial3D.new()
+		plain.albedo_color = COLOR
+		_shared_material = plain
+	return _shared_material
 
 
 func get_interaction_prompt(_player: Node3D) -> String:

@@ -54,9 +54,20 @@ func _player_sprite() -> void:
 	check(sprite != null and sprite.has_animation(&"Run") and sprite.has_animation(&"Reload"), "jogador: folha em pixel art com as animações")
 	check(not (_player.get_node("Pivot/Body") as MeshInstance3D).visible, "formas simples escondidas quando o sprite carrega")
 	check(_player._gun_sheet == "weapon_m1911" and sprite.get_node_or_null("Layer") != null, "arma na mão: camada %s" % _player._gun_sheet)
+	sprite.play(&"Walk")
+	check(sprite.stance_suffix == "_pistol" and sprite.playing == &"Walk_pistol", "pistola: postura de duas mãos (%s)" % sprite.playing)
+	var pistol_muzzle := _player.muzzle.global_position
+	check((sprite.get_node("Body") as Sprite3D).material_override is ShaderMaterial, "sprite com o shader que evita as pernas entrarem no chão")
 	_player.give_weapon(load("res://data/weapons/pump.tres"))
 	await _frames(1)
 	check(_player._gun_sheet == "weapon_pump", "trocar de arma troca a camada (pump)")
+	check(sprite.stance_suffix == "" and not String(sprite.playing).ends_with("_pistol"), "espingarda: postura de fuzil (%s)" % sprite.playing)
+	check(_player.muzzle.global_position.distance_to(pistol_muzzle) > 0.1, "boca do cano segue a ponta da arma desenhada")
+	_player._play_action(&"Knife", 0.3)
+	await _frames(1)
+	check(_player._layer_sheet == "weapon_knife" and sprite.layer_meta.get("stance") == "knife", "golpe de faca: a faca aparece na mão")
+	await _tree.create_timer(0.4).timeout
+	check(_player._layer_sheet == "weapon_pump", "depois do golpe, a arma volta")
 	_player.weapon.level = 1
 	await _frames(1)
 	check(_player._gun_sheet == "weapon_pump_mk2", "Mk II no Weapon Lab muda o desenho da arma")

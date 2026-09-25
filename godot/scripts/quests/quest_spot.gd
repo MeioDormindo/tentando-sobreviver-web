@@ -18,7 +18,7 @@ var interaction_radius: float = 1.6
 var used := false
 
 var _progress := 0.0
-var _ring: MeshInstance3D
+var _ring: Sprite3D
 var _clock := 0.0
 
 
@@ -38,8 +38,12 @@ func _ready() -> void:
 	add_child(_ring)
 
 
-## Objeto no lugar (geladeira, cartão, frasco...).
-func add_prop(size: Vector3, color: Color, glow := 0.1) -> MeshInstance3D:
+## Objeto no lugar (geladeira, cartão, frasco...): a arte em pixel quando houver (art), senão
+## uma caixa na cor dada.
+func add_prop(size: Vector3, color: Color, glow := 0.1, art: Node3D = null) -> Node3D:
+	if art:
+		add_child(art)
+		return art
 	var prop := EventFx.box(size, EventFx.glow(color, 1.0, glow))
 	prop.position.y = size.y * 0.5
 	add_child(prop)

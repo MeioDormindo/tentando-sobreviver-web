@@ -113,7 +113,7 @@ static func _arc(weapon: Weapon, space: PhysicsDirectSpaceState3D, origin: Vecto
 		var next := _nearest_zombie(weapon.get_tree(), current.global_position, chain_range, struck)
 		if next == null:
 			break
-		weapon.spawn_tracer(current.global_position + Vector3.UP * 1.2, next.global_position + Vector3.UP * 1.2, ARC_COLOR)
+		weapon.spawn_tracer(current.global_position + Vector3.UP * 1.2, next.global_position + Vector3.UP * 1.2, ARC_COLOR, true)
 		var zap := PixelFx.spawn(weapon.get_tree(), "spark", next.global_position + Vector3.UP * 1.2, 0.7)
 		if zap:
 			zap.modulate = ARC_COLOR
@@ -155,7 +155,7 @@ static func _gust(weapon: Weapon, origin: Vector3, direction: Vector3, shooter: 
 	# Rastro das bordas e do meio do cone.
 	for angle in [-0.5, 0.0, 0.5]:
 		var edge := flat.rotated(Vector3.UP, acos(cos_half) * 2.0 * angle)
-		weapon.spawn_tracer(origin, origin + edge * reach, Color(0.85, 0.95, 1.0))
+		weapon.spawn_tracer(origin, origin + edge * reach, Color(0.85, 0.95, 1.0), true)
 	return hits
 
 

@@ -15,17 +15,10 @@ static func glow(color: Color, alpha: float = 1.0, energy: float = 1.0) -> Stand
 	return material
 
 
-## Disco no chão (aviso de área), com o raio em m.
-static func disc(color: Color, radius: float, alpha: float = 0.35) -> MeshInstance3D:
-	var mesh := CylinderMesh.new()
-	mesh.top_radius = radius
-	mesh.bottom_radius = radius
-	mesh.height = 0.03
-	mesh.material = glow(color, alpha)
-	var node := MeshInstance3D.new()
-	node.mesh = mesh
-	node.position.y = 0.03
-	return node
+## Disco de aviso no chão em pixel art (anel e miolo pontilhado), com o raio em m. A
+## transparência muda pelo modulate.
+static func disc(color: Color, radius: float, alpha: float = 0.35) -> Sprite3D:
+	return PixelShapes.flat("disc", Color(color, clampf(alpha * 2.2, 0.0, 1.0)), radius)
 
 
 static func box(size: Vector3, material: Material) -> MeshInstance3D:

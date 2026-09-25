@@ -29,18 +29,34 @@ func _ready() -> void:
 	_model = Node3D.new()
 	_model.rotation.y = randf_range(-0.6, 0.6)
 	add_child(_model)
-	var material := StandardMaterial3D.new()
-	material.albedo_color = Color(0.2, 0.2, 0.22)
-	material.emission_enabled = true
-	material.emission = Color(1.0, 0.91, 0.66) * 0.35
-	for part: Array in [[Vector3(0.7, 0.12, 0.14), Vector3(0, 0.12, 0)], [Vector3(0.14, 0.2, 0.1), Vector3(-0.2, 0.06, 0)]]:
-		var mesh := BoxMesh.new()
-		mesh.size = part[0]
-		mesh.material = material
-		var piece := MeshInstance3D.new()
-		piece.mesh = mesh
-		piece.position = part[1]
-		_model.add_child(piece)
+	# O ícone da arma em pixel art (com o acabamento do Mk), deitado no chão, com um anel
+	# de brilho embaixo; sem o ícone, uma silhueta simples.
+	var icon_path := "res://assets/sprites/icons/%s.png" % Player.gun_sheet(weapon.data.id, weapon.level) if weapon else ""
+	if icon_path != "" and ResourceLoader.exists(icon_path):
+		var icon := Sprite3D.new()
+		icon.texture = load(icon_path)
+		icon.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+		icon.axis = Vector3.AXIS_Y
+		icon.double_sided = true
+		icon.alpha_cut = SpriteBase3D.ALPHA_CUT_DISCARD
+		icon.pixel_size = 0.9 / float(icon.texture.get_width())
+		icon.position.y = 0.06
+		_model.add_child(icon)
+		var ring := PixelShapes.flat("ring", Color(1.0, 0.91, 0.66, 0.6), 0.6)
+		add_child(ring)
+	else:
+		var material := StandardMaterial3D.new()
+		material.albedo_color = Color(0.2, 0.2, 0.22)
+		material.emission_enabled = true
+		material.emission = Color(1.0, 0.91, 0.66) * 0.35
+		for part: Array in [[Vector3(0.7, 0.12, 0.14), Vector3(0, 0.12, 0)], [Vector3(0.14, 0.2, 0.1), Vector3(-0.2, 0.06, 0)]]:
+			var mesh := BoxMesh.new()
+			mesh.size = part[0]
+			mesh.material = material
+			var piece := MeshInstance3D.new()
+			piece.mesh = mesh
+			piece.position = part[1]
+			_model.add_child(piece)
 	var light := OmniLight3D.new()
 	light.light_color = Color(1.0, 0.91, 0.66)
 	light.light_energy = 0.8

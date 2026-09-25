@@ -11,6 +11,11 @@ var _progress := 0.0
 
 func _ready() -> void:
 	add_to_group(&"interactable")
+	# Cano rompido com a válvula vermelha (PropFactory); sem a arte, caixas.
+	var art := PropFactory.create("gas_pipe")
+	if art:
+		add_child(art)
+		return
 	add_child(EventFx.box(Vector3(1.4, 0.3, 0.3), EventFx.glow(Color(0.35, 0.38, 0.33), 1.0, 0.0)))
 	var wheel := EventFx.box(Vector3(0.1, 0.45, 0.45), EventFx.glow(Color(0.8, 0.2, 0.15), 1.0, 0.2))
 	wheel.position = Vector3(0.0, 0.35, 0.0)

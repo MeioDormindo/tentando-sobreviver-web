@@ -13,7 +13,7 @@ func setup() -> void:
 	price = int(cfg.get("price", 1500))
 	cooldown = float(cfg.get("cooldown_time", 90.0))
 	name = "TrainPanel"
-	build("TREM", Color(1.0, 0.75, 0.29))
+	build("TREM", Color(1.0, 0.75, 0.29), "panel_train")
 
 
 func _process(delta: float) -> void:

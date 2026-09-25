@@ -13,23 +13,37 @@ var is_open := false
 
 var _progress := 0.0
 var _clock := 0.0
-var _crate: MeshInstance3D
-var _chute: MeshInstance3D
+var _crate: Node3D
+var _chute: Node3D
 var _flare: OmniLight3D
 
 
 func _ready() -> void:
-	_crate = EventFx.box(Vector3(1.0, 0.7, 0.8), EventFx.glow(Color(0.33, 0.42, 0.24), 1.0, 0.05))
-	_crate.position.y = 0.35
+	# Caixa militar em pixel art (PropFactory) e o paraquedas do jogo web; sem a arte, formas lisas.
+	_crate = PropFactory.create("supply_crate")
+	if _crate == null:
+		_crate = EventFx.box(Vector3(1.0, 0.7, 0.8), EventFx.glow(Color(0.33, 0.42, 0.24), 1.0, 0.05))
+		_crate.position.y = 0.35
 	add_child(_crate)
-	var canopy := SphereMesh.new()
-	canopy.radius = 1.1
-	canopy.height = 0.9
-	canopy.is_hemisphere = true
-	canopy.material = EventFx.glow(Color(0.9, 0.9, 0.85), 1.0, 0.1)
-	_chute = MeshInstance3D.new()
-	_chute.mesh = canopy
-	_chute.position.y = 2.2
+	var chute_art := "res://assets/web/events/parachute.png"
+	if ResourceLoader.exists(chute_art):
+		var sprite := Sprite3D.new()
+		sprite.texture = load(chute_art)
+		sprite.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+		sprite.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+		sprite.alpha_cut = SpriteBase3D.ALPHA_CUT_DISCARD
+		sprite.pixel_size = 2.4 / float(sprite.texture.get_width())
+		_chute = sprite
+	else:
+		var canopy := SphereMesh.new()
+		canopy.radius = 1.1
+		canopy.height = 0.9
+		canopy.is_hemisphere = true
+		canopy.material = EventFx.glow(Color(0.9, 0.9, 0.85), 1.0, 0.1)
+		var mesh := MeshInstance3D.new()
+		mesh.mesh = canopy
+		_chute = mesh
+	_chute.position.y = 2.4
 	add_child(_chute)
 
 

@@ -11,6 +11,10 @@ var interaction_radius: float = 1.3
 func _ready() -> void:
 	add_to_group(&"interactable")
 	add_to_group(&"teddies")
+	var art := PixelShapes.standing("res://assets/sprites/icons/teddy.png", 40.0)
+	if art:
+		add_child(art)
+		return
 	var fur := StandardMaterial3D.new()
 	fur.albedo_color = Color(0.55, 0.38, 0.24)
 	fur.emission_enabled = true

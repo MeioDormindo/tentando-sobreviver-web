@@ -22,15 +22,20 @@ func setup(p_power: PowerSystem) -> void:
 	collision.shape = shape
 	collision.position.y = SIZE.y * 0.5
 	add_child(collision)
-	var box := BoxMesh.new()
-	box.size = SIZE
-	var material := StandardMaterial3D.new()
-	material.albedo_color = Color(0.35, 0.37, 0.33)
-	box.material = material
-	var mesh := MeshInstance3D.new()
-	mesh.mesh = box
-	mesh.position.y = SIZE.y * 0.5
-	add_child(mesh)
+	# Armário em pixel art (PropFactory); sem a arte, caixa lisa.
+	var visual := PropFactory.create("breaker")
+	if visual:
+		add_child(visual)
+	else:
+		var box := BoxMesh.new()
+		box.size = SIZE
+		var material := StandardMaterial3D.new()
+		material.albedo_color = Color(0.35, 0.37, 0.33)
+		box.material = material
+		var mesh := MeshInstance3D.new()
+		mesh.mesh = box
+		mesh.position.y = SIZE.y * 0.5
+		add_child(mesh)
 	_label = Label3D.new()
 	_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	_label.pixel_size = 0.005

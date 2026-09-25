@@ -32,7 +32,6 @@ var _recoil := 0.0
 var _spin := 0.0
 var _trigger_held := false
 ## Materiais dos rastros por cor (compartilhados).
-static var _tracer_materials: Dictionary = {}
 
 
 func _ready() -> void:
@@ -162,8 +161,11 @@ func trace(space: PhysicsDirectSpaceState3D, origin: Vector3, direction: Vector3
 		var hurtbox := hit.collider as Hurtbox
 		if hurtbox == null:
 			end = hit.position  # parede
+			# Faíscas quando a bala (Tracer) chega na parede, não no disparo.
 			if is_inside_tree():
-				PixelFx.spawn(get_tree(), "spark", end, 0.4)
+				var tree := get_tree()
+				var at := end
+				tree.create_timer(origin.distance_to(end) / Tracer.SPEED).timeout.connect(func() -> void: PixelFx.spawn(tree, "spark", at, 0.5))
 			break
 		skip.append(hurtbox.get_rid())
 		# Corpo e cabeça do mesmo zumbi contam como um alvo só.
@@ -192,22 +194,13 @@ func _emit_ammo() -> void:
 
 
 ## Rastro rápido do tiro (some em 60 ms).
-func spawn_tracer(from: Vector3, to: Vector3, color: Color) -> void:
+## beam = feixe instantâneo (raio da Arc Gun, vento); senão, bala que voa até o acerto.
+func spawn_tracer(from: Vector3, to: Vector3, color: Color, beam := false) -> void:
 	if not is_inside_tree() or from.distance_to(to) < 0.1:
 		return
-	var key := color.to_html()
-	if not _tracer_materials.has(key):
-		var material := StandardMaterial3D.new()
-		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-		material.albedo_color = color
-		_tracer_materials[key] = material
-	var mesh := BoxMesh.new()
-	mesh.size = Vector3(0.03, 0.03, from.distance_to(to))
-	var tracer := MeshInstance3D.new()
-	tracer.mesh = mesh
-	tracer.material_override = _tracer_materials[key]
-	tracer.top_level = true
-	add_child(tracer)
-	tracer.global_position = (from + to) * 0.5
-	tracer.look_at(to, Vector3.UP if absf((to - from).normalized().y) < 0.99 else Vector3.RIGHT)
-	get_tree().create_timer(0.06).timeout.connect(tracer.queue_free)
+	# O dano já foi aplicado; isto é só o visual, na raiz do mundo (sobrevive à troca de arma).
+	var root := SpecialFire.world_root(get_tree())
+	if beam:
+		Tracer.beam(root, from, to, color)
+	else:
+		Tracer.fire(root, from, to, color)
