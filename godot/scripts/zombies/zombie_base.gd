@@ -42,7 +42,7 @@ var _best_distance := INF
 var _abilities: ZombieAbilities
 var _materials: Array[StandardMaterial3D] = []
 ## Modelo do Blender (null = formas simples da cena).
-var model: CharacterModel
+var model: CharacterSprite
 var _attack_anim_left := 0.0
 var _armor_meshes: Array[MeshInstance3D] = []
 
@@ -225,6 +225,9 @@ func has_line_of_sight() -> bool:
 
 ## Brilho rápido no corpo (aviso de explosão, preparo do cuspe).
 func flash(color: Color) -> void:
+	if model:
+		model.flash(color)
+		return
 	for material in _materials:
 		material.emission_enabled = true
 		material.emission = color * 0.6
@@ -235,6 +238,8 @@ func flash(color: Color) -> void:
 
 ## A armadura caiu (headshot ou dano suficiente).
 func break_armor() -> void:
+	if model and CharacterSprite.exists(sprite_sheet() + "_bare"):
+		model.set_sheet(sprite_sheet() + "_bare")
 	for mesh in _armor_meshes:
 		if is_instance_valid(mesh):
 			mesh.queue_free()
@@ -243,9 +248,9 @@ func break_armor() -> void:
 
 ## Aparência provisória por tipo (cores, tamanho, rastejante, armadura) e raio do corpo.
 func _apply_look() -> void:
-	model = CharacterModel.create(data.model)
+	model = CharacterSprite.create(sprite_sheet())
 	if model:
-		_apply_model()
+		_apply_sprite()
 		return
 	var shirt := StandardMaterial3D.new()
 	shirt.albedo_color = data.shirt_color
@@ -298,22 +303,20 @@ func _apply_look() -> void:
 		_armor_meshes = [helmet, vest]
 
 
-## Modelo do Blender: cores do tipo, escala, cabeção e as mesmas hurtboxes da cena.
-func _apply_model() -> void:
+## Folha de sprites do tipo (gerada por npm run godot:sprites): "zombie_<tipo>" ou "hound".
+func sprite_sheet() -> String:
+	return "hound" if data.id == &"hound" else "zombie_%s" % data.id
+
+
+## Pixel art (especificação 2.5D): o sprite já vem no tamanho e com as cores do tipo (e a
+## armadura do blindado); as hurtboxes e o corpo continuam os da cena.
+func _apply_sprite() -> void:
 	for part in pivot.get_children():
 		if part is MeshInstance3D:
 			(part as MeshInstance3D).visible = false
 	pivot.add_child(model)
-	model.recolor({"Shirt": data.shirt_color, "Skin": data.skin_color, "Fur": data.shirt_color})
-	# Olhos brilhantes ficam fora do piscar de dano.
-	for material in model.materials:
-		if material.resource_name != "Eyes":
-			_materials.append(material)
-	if Save.data.secrets.get("konami", false) and bool(Save.get_setting("bigHeads")):
-		model.scale_bone("head", 1.9)
 	var scale_xz := data.model_scale
 	var scale_y := data.model_scale * (0.45 if data.crawls else 1.0)
-	pivot.scale = Vector3.ONE * data.model_scale
 	for child in get_children():
 		if child is Hurtbox:
 			var hurtbox := child as Hurtbox
@@ -323,34 +326,6 @@ func _apply_model() -> void:
 	if body_shape:
 		body_shape.radius = data.body_radius
 		($CollisionShape3D as CollisionShape3D).shape = body_shape
-	if not data.armor.is_empty():
-		var metal := StandardMaterial3D.new()
-		metal.albedo_color = Color(0.25, 0.27, 0.3)
-		metal.metallic = 0.6
-		var helmet := MeshInstance3D.new()
-		var helmet_mesh := BoxMesh.new()
-		helmet_mesh.size = Vector3(0.32, 0.14, 0.32)
-		helmet.mesh = helmet_mesh
-		helmet.material_override = metal
-		helmet.position = Vector3(0, 1.82, 0)
-		var vest := MeshInstance3D.new()
-		var vest_mesh := BoxMesh.new()
-		vest_mesh.size = Vector3(0.58, 0.46, 0.36)
-		vest.mesh = vest_mesh
-		vest.material_override = metal
-		vest.position = Vector3(0, 1.25, 0)
-		# Presos ao corpo do modelo (acompanham a animação).
-		var attach := BoneAttachment3D.new()
-		attach.bone_name = "spine"
-		model.skeleton.add_child(attach)
-		var head_attach := BoneAttachment3D.new()
-		head_attach.bone_name = "head"
-		model.skeleton.add_child(head_attach)
-		attach.add_child(vest)
-		head_attach.add_child(helmet)
-		vest.position = Vector3(0, 0.2, 0)
-		helmet.position = Vector3(0, 0.34, 0)
-		_armor_meshes = [helmet, vest]
 	model.play(&"Crawl" if data.crawls else &"Idle", 0.0)
 
 

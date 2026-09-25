@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" path="res://scripts/zombies/zombie_data.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://scenes/zombies/hound.tscn" id="2_scene"]
-[ext_resource type="PackedScene" path="res://assets/characters/hound.glb" id="3_model"]
 
 [resource]
 script = ExtResource("1_script")
@@ -23,4 +22,3 @@ shirt_color = Color(0.227, 0.102, 0.078, 1)
 skin_color = Color(0.353, 0.141, 0.102, 1)
 model_scale = 1
 crawls = false
-model = ExtResource("3_model")

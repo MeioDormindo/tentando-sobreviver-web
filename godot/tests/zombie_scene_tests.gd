@@ -112,7 +112,10 @@ func _tank() -> void:
 	zombie.apply_knockback(Vector3(20, 0, 0))
 	await _tree.create_timer(0.4).timeout
 	check(zombie.global_position.distance_to(start) < 0.2, "Tank: não é empurrado")
-	check(zombie.pivot.scale.x > 1.3, "Tank: maior que os outros")
+	# Maior: hurtboxes escaladas e, com o sprite, uma folha desenhada em tamanho maior.
+	var body := zombie.get_node("BodyHurtbox") as Node3D
+	var bigger: bool = zombie.model == null or int(zombie.model._meta.frame[1]) > int(CharacterSprite._read_meta("zombie_walker").frame[1])
+	check(body.scale.x > 1.3 and bigger, "Tank: maior que os outros")
 	zombie.queue_free()
 
 

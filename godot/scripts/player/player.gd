@@ -37,12 +37,12 @@ var _slow_factor := 1.0
 var _slow_until := 0.0
 var _last_hurt_at := -INF
 var _was_reloading := false
-## Modelo do Blender (null = formas simples da cena) e a arma na mão.
-var model: CharacterModel
-var _gun_model: Node3D
+## Pixel art (npm run godot:sprites): o corpo do visual escolhido e a arma na mão por tipo.
+var model: CharacterSprite
 var _gun_kind: StringName = &""
-const MODEL_PATH := "res://assets/characters/survivor.glb"
-const GUN_MODELS := "res://assets/weapons/gun_%s.glb"
+## Animação curta em andamento (tiro, faca, dano) e quanto falta.
+var _action_anim: StringName = &""
+var _action_left := 0.0
 var _firing := false
 ## Interagível mais perto (porta, compra...) e o último texto mostrado na HUD.
 var _interactable: Node3D
@@ -72,7 +72,9 @@ func _ready() -> void:
 	inventory.switch_time = data.switch_time
 	melee.data = data.knife
 	inventory.weapon_changed.connect(_on_weapon_changed)
-	melee.swung.connect(func() -> void: Events.knife_swung.emit())
+	melee.swung.connect(func() -> void:
+		_play_action(&"Knife", 0.36)
+		Events.knife_swung.emit())
 	perks.perks_changed.connect(_on_perks_changed)
 	Events.max_ammo.connect(func(_at: Vector3) -> void:
 		for w in inventory.weapons:
@@ -93,17 +95,12 @@ func _apply_skin() -> void:
 		skin = catalog.find("default")
 	if skin.is_empty():
 		return
-	if ResourceLoader.exists(MODEL_PATH):
-		model = CharacterModel.create(load(MODEL_PATH))
+	model = CharacterSprite.create("player_%s" % skin.id)
 	if model:
 		($Pivot/Body as MeshInstance3D).visible = false
 		($Pivot/Head as MeshInstance3D).visible = false
+		(get_node("Pivot/Hand/Mesh") as MeshInstance3D).visible = false
 		pivot.add_child(model)
-		model.recolor({"Jacket": skin.jacket, "Pack": skin.pack, "Hair": skin.hair})
-		if Save.data.secrets.get("konami", false) and bool(Save.get_setting("bigHeads")):
-			model.scale_bone("head", 1.9)
-		# A mão do modelo segura a arma um pouco mais à frente.
-		($Pivot/Hand as Node3D).position.z = -0.5
 		model.play(&"Idle", 0.0)
 		return
 	var jacket := StandardMaterial3D.new()
@@ -221,46 +218,50 @@ func take_damage(info: DamageInfo) -> float:
 			return 0.0
 	var applied := super(info)
 	if applied > 0.0:
+		_play_action(&"Hurt", 0.18)
 		if is_blow:
 			_invulnerable_until = _clock + data.invulnerability_time
 		_last_hurt_at = _clock
 	return applied
 
 
-## Modelo da arma em mãos (um por tipo: pistola, fuzil, espingarda...).
+## Arma em mãos: camada do sprite do tipo (pistola, fuzil, espingarda...).
 func _show_gun(kind: StringName) -> void:
-	if kind == _gun_kind:
-		return
-	var path := GUN_MODELS % kind
-	if not ResourceLoader.exists(path):
+	if kind == _gun_kind or model == null:
 		return
 	_gun_kind = kind
-	if _gun_model:
-		_gun_model.queue_free()
-	_gun_model = (load(path) as PackedScene).instantiate() as Node3D
-	for mesh: MeshInstance3D in _gun_model.find_children("*", "MeshInstance3D", true, false):
-		for i in mesh.get_surface_override_material_count():
-			var material := mesh.mesh.surface_get_material(i) as StandardMaterial3D
-			if material:
-				material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST_WITH_MIPMAPS
-	_gun_model.name = "GunModel"
-	var hand := $Pivot/Hand as Node3D
-	hand.add_child(_gun_model)
-	(hand.get_node("Mesh") as MeshInstance3D).visible = false
+	model.set_layer("weapon_%s" % kind)
 
 
-## Animação do modelo (parado, correndo, caído).
-func _process(_delta: float) -> void:
+## Toca uma animação curta (tiro, faca, dano) por cima da de movimento.
+func _play_action(anim: StringName, seconds: float) -> void:
+	if model == null:
+		return
+	_action_anim = anim
+	_action_left = seconds
+	model.play_once(anim)
+
+
+## Animação do sprite: caído, ação curta (tiro, faca, dano), recarga, correr/andar ou parado.
+func _process(delta: float) -> void:
 	if model == null:
 		return
 	if not is_alive() or is_down:
-		model.play(&"Death", 0.1)
+		model.play(&"Death")
+		return
+	_action_left -= delta
+	if _action_left > 0.0:
+		return
+	if weapon and weapon.reloading:
+		model.play(&"Reload")
 		return
 	var speed := Vector2(velocity.x, velocity.z).length()
-	if speed > 0.3:
-		model.play(&"Run", 0.15, clampf(speed / 5.0, 0.6, 1.6))
+	if speed > 3.5:
+		model.play(&"Run", 0.15, clampf(speed / 5.0, 0.7, 1.5))
+	elif speed > 0.3:
+		model.play(&"Walk", 0.15, clampf(speed / 2.5, 0.7, 1.5))
 	else:
-		model.play(&"Idle", 0.2)
+		model.play(&"Idle")
 
 
 ## Névoa da rodada dos cães: a lanterna fica mais fraca.
@@ -460,6 +461,7 @@ func _on_weapon_changed(current: Weapon, other: Weapon) -> void:
 
 
 func _on_fired() -> void:
+	_play_action(&"Shoot", 0.15)
 	Events.shot_fired.emit()
 	Events.weapon_fired.emit(weapon.data.id, weapon.level)
 

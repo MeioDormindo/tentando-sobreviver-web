@@ -930,18 +930,12 @@ def preview(path, distance=4.0, height=1.0, pose_action=None, frame=0):
     bpy.data.objects.remove(cam)
 
 
+# Personagens e armas agora são pixel art (npm run godot:sprites); aqui ficam só as máquinas.
 MODELS = {
-    "zombie": ("characters", zombie, 3.2, 1.0, "Walk"),
-    "survivor": ("characters", survivor, 3.2, 1.0, "Run"),
-    "hound": ("characters", hound, 2.2, 0.5, "Run"),
-    "boss_conductor": ("characters", conductor, 3.2, 1.0, "Roar"),
-    "boss_patient_zero": ("characters", patient_zero, 3.2, 1.0, "Slam"),
     "mystery_box": ("props", mystery_box, 3.5, 0.5, "Open"),
     "perk_machine": ("props", perk_machine, 4.0, 1.0, None),
     "weapon_lab": ("props", weapon_lab, 3.5, 0.9, None),
 }
-for _kind in WEAPON_KINDS:
-    MODELS["gun_" + _kind] = ("weapons", (lambda k: (lambda: weapon(k)))(_kind), 1.2, 0.1, None)
 
 
 def main():

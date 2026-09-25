@@ -31,13 +31,11 @@ var _charge_hit := false
 var _telegraph: MeshInstance3D
 var _body_material: StandardMaterial3D
 var _body_color := Color(0.3, 0.26, 0.22)
-## Modelo do Blender (null = formas simples da cena) e a ação em andamento (animação).
-var model: CharacterModel
+## Sprite em pixel art (null = formas simples da cena) e a ação em andamento (animação).
+var model: CharacterSprite
 var _action_id: StringName = &""
 ## Animação de cada ação.
 const ACTION_ANIMS := {&"shockwave": &"Slam", &"scream": &"Roar", &"summon": &"Roar", &"vomit": &"Attack"}
-## Tamanho do modelo (a cabeça na altura da hurtbox da cabeça do boss).
-const MODEL_SCALE := 1.68
 
 @onready var agent: NavigationAgent3D = $NavigationAgent3D
 @onready var pivot: Node3D = $Pivot
@@ -61,18 +59,13 @@ func _ready() -> void:
 	var body := pivot.get_node_or_null("Body") as MeshInstance3D
 	if body:
 		body.material_override = _body_material
-	model = CharacterModel.create(data.model)
+	# Pixel art (npm run godot:sprites): "boss_<id>", já no tamanho do boss.
+	model = CharacterSprite.create("boss_%s" % data.id)
 	if model:
 		for part in pivot.get_children():
 			if part is MeshInstance3D:
 				(part as MeshInstance3D).visible = false
-		model.scale = Vector3.ONE * MODEL_SCALE
 		pivot.add_child(model)
-		# O material principal (uniforme ou avental) fica cinza quando atordoado.
-		var main := model.find_material("Uniform") if model.find_material("Uniform") else model.find_material("Gown")
-		if main:
-			_body_material = main
-			_body_color = main.albedo_color
 		model.play(&"Roar", 0.0)
 	if data.lantern:
 		var lantern := OmniLight3D.new()
@@ -172,6 +165,8 @@ func _physics_process(delta: float) -> void:
 			_stop()
 			if _clock >= _mode_until:
 				_body_material.albedo_color = _body_color
+				if model:
+					model.tint(Color.WHITE)
 				_to_chase()
 		Mode.CHASE:
 			if target == null or not target.is_alive():
@@ -196,6 +191,8 @@ func _charging(distance: float) -> void:
 			mode = Mode.STUNNED
 			_mode_until = _clock + float(data.charge.get("stun_time", 1.2))
 			_body_material.albedo_color = Color(0.55, 0.55, 0.55)
+			if model:
+				model.tint(Color(0.6, 0.6, 0.65))
 			_stop()
 			return
 	if global_position.distance_to(_charge_start) >= float(data.charge.get("max_distance", 20.0)):
