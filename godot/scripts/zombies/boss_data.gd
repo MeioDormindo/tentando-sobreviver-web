@@ -38,11 +38,16 @@ extends Resource
 @export var vomit: Dictionary = {}
 ## from_phase, radius, slow_time, slow_factor, cooldown_time, summon_count, types.
 @export var scream: Dictionary = {}
+## Esferas de alma em leque (Entidade do Submundo): from_phase, count, spread_deg, speed,
+## range, damage, windup_time, cooldown_time.
+@export var volley: Dictionary = {}
 
 @export_group("Outros")
 ## Lanterna acesa na mão (The Conductor).
 @export var lantern: bool = false
 ## Fração da horda normal que acompanha o boss.
 @export var escort_ratio: float = 0.3
-## Extras só do Godot (Minotauro: rubble_time das pedras do Colapso, breaks_pillars).
+## Extras só do Godot: rubble_time e breaks_pillars (Minotauro); fire_pools (vômito e área
+## viram chamas), combo_bite (morde logo depois da investida), charge_from_phase,
+## phase_sheets {"3": folha} (troca de forma) e lore (mensagem ao ser derrotado).
 @export var extras: Dictionary = {}

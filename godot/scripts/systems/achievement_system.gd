@@ -27,7 +27,11 @@ func _ready() -> void:
 		elif id == &"patient_zero":
 			unlock("patient_zero")
 		elif id == &"minotaur":
-			unlock("minotaur"))
+			unlock("minotaur")
+		elif id == &"cerberus":
+			unlock("cerberus")
+		elif id == &"entity":
+			unlock("the_door"))
 	Events.perks_changed.connect(func(names: Array[String]) -> void:
 		if names.size() >= 7:
 			unlock("collector"))

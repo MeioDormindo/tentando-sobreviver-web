@@ -172,6 +172,15 @@ func _arsenal_and_looks() -> void:
 	hound.queue_free()
 
 
+func _spawn_boss(id: StringName, offset: Vector3) -> Boss:
+	var data := load("res://data/bosses/%s.tres" % id) as BossData
+	var boss := data.scene.instantiate() as Boss
+	boss.setup(data, _player, 1.0, func(_t: Array, _n: int, _at: Vector3) -> void: pass)
+	(_main.get_node("SpawnManager") as SpawnManager).container.add_child(boss)
+	boss.global_position = _player.global_position + offset
+	return boss
+
+
 func _spawn(type: StringName, offset: Vector3, speed_mult: float) -> ZombieBase:
 	var data := load("res://data/zombies/%s.tres" % type) as ZombieData
 	var zombie := ZombieFactory.create(data, _player, 1.0, 1.0, speed_mult)
@@ -240,6 +249,39 @@ func _bosses() -> void:
 	check(data.boss_for("temple", 10) == &"minotaur" and data.boss_for("terminal", 10) == &"conductor", "round 10: Minotauro no Templo, Condutor no Terminal")
 	check(data.is_boss_round_number("temple", 40) and not data.is_boss_round_number("terminal", 40), "no Templo os rounds de boss continuam depois do 30")
 	check(ResourceLoader.exists("res://data/bosses/minotaur.tres") and CharacterSprite.exists("boss_minotaur"), "Minotauro com dados e sprite")
+	check(data.boss_for("temple", 20) == &"cerberus" and data.boss_for("temple", 30) == &"entity" and data.boss_for("temple", 40) == &"minotaur",
+		"rodízio: 20 Cérbero, 30 Entidade, 40 Minotauro de novo")
+	check(CharacterSprite.exists("boss_cerberus") and CharacterSprite.exists("boss_entity") and CharacterSprite.exists("boss_entity_monstrous"), "Cérbero e as duas formas da Entidade com sprite")
+	# Cérbero: o fogo da cabeça da esquerda deixa chamas no chão.
+	var cerberus := _spawn_boss(&"cerberus", Vector3(0, 0, -6))
+	var fire := 0
+	for i in 60:
+		await _tree.create_timer(0.1).timeout
+		fire = maxi(fire, _tree.get_nodes_in_group(&"hazards").filter(func(h: Node) -> bool: return h is HazardPool).size())
+		if fire > 0:
+			break
+	check(fire > 0, "Cérbero cospe fogo (%d chamas)" % fire)
+	cerberus.queue_free()
+	for node in _tree.get_nodes_in_group(&"hazards"):
+		node.queue_free()
+	await _frames(2)
+	# Entidade: esferas de alma e, na fase 3, a forma monstruosa.
+	var entity := _spawn_boss(&"entity", Vector3(0, 0, -9))
+	var orbs := false
+	for i in 40:
+		await _tree.create_timer(0.1).timeout
+		if not _tree.get_nodes_in_group(&"boss_orbs").is_empty():
+			orbs = true
+			break
+	check(orbs, "Entidade atira esferas de alma")
+	entity.health.invulnerable = false
+	entity.take_damage(DamageInfo.new(entity.health.max_health * 0.7, DamageInfo.Kind.WEAPON, _player))
+	await _frames(2)
+	check(entity.phase == 3 and entity.model != null and entity.model.sheet_name == "boss_entity_monstrous", "fase 3: a Entidade assume a forma monstruosa")
+	entity.queue_free()
+	for node in _tree.get_nodes_in_group(&"hazards"):
+		node.queue_free()
+	await _frames(2)
 	var pillar := _tree.get_nodes_in_group(&"breakable_pillars")[0] as BreakablePillar
 	pillar.collapse()
 	check(pillar.broken and pillar.collision_layer == 0 and not pillar.is_in_group(&"breakable_pillars"), "coluna desaba e abre caminho")
@@ -250,7 +292,7 @@ func _bosses() -> void:
 	BossAttacks.area(_tree, _player.global_position + Vector3(6, 0, 6), cfg, false, null)
 	await _tree.create_timer(0.3).timeout
 	check(not _tree.get_nodes_in_group(&"boss_rubble").is_empty(), "Colapso: pedras viram escombro")
-	await _tree.create_timer(1.3).timeout
+	await _tree.create_timer(2.0).timeout
 	check(_tree.get_nodes_in_group(&"boss_rubble").is_empty(), "escombros somem depois")
 
 
@@ -293,6 +335,13 @@ func _quest_flow() -> void:
 	check(gate_spot.size() == 1 and _hold(gate_spot[0], TempleQuest.GATE_HOLD), "abriu o portão")
 	await _frames(4)
 	check(_world.door_by_id(&"gate_underworld").is_open and _world.is_area_open(&"underworld"), "Portão do Submundo aberto")
+	check(_quest.index == 6 and StringName(_rounds.forced_boss.get("boss", &"")) == &"cerberus", "o Cérbero vem no próximo round")
+	Events.boss_defeated.emit(&"cerberus", "Cérbero", 0, _player.global_position)
+	await _frames(4)
+	var seal := _spot("ArenaSeal")
+	check(_quest.index == 7 and seal != null and _hold(seal, TempleQuest.GATE_HOLD), "selou o portão no altar da Arena Final")
+	await _frames(4)
+	check(Save.has_achievement("cerberus"), "conquista Guardião dos Três")
 	var zeus := _player.inventory.find(&"zeus_bolt")
 	check(zeus != null and zeus.level == 1, "prêmio: Raio de Zeus Mk II")
 	check(Save.has_achievement("underworld_gate"), "conquista O Portão do Submundo")

@@ -478,7 +478,7 @@ func _test_achievements() -> void:
 	print("Conquistas e visuais (jogo web)")
 	Save.reset()
 	var catalog := load("res://data/configs/achievements.tres") as AchievementCatalog
-	check(catalog.achievements.size() == 21 and not catalog.find("last_train").is_empty() and not catalog.find("underworld_gate").is_empty(), "17 conquistas do jogo web + a da missão do Terminal + 3 do Templo")
+	check(catalog.achievements.size() == 23 and not catalog.find("last_train").is_empty() and not catalog.find("underworld_gate").is_empty(), "17 conquistas do jogo web + a da missão do Terminal + 5 do Templo")
 	check(catalog.achievements.all(func(a: Dictionary) -> bool: return String(a.get("icon", "")) != ""), "toda conquista tem ícone")
 	var system := AchievementSystem.new()
 	system.catalog = catalog

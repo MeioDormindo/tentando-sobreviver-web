@@ -180,3 +180,104 @@ export function archaeologistModel(look) {
     }
   } });
 }
+
+// ───────────────────────── Cérbero ─────────────────────────
+
+const CERBERUS_BONES = [
+  { name: 'body', pivot: [0, 0, 0.62] },
+  { name: 'head', parent: 'body', pivot: [0, 0.35, 0.72] },
+  { name: 'head.L', parent: 'body', pivot: [-0.2, 0.3, 0.7], side: -1 },
+  { name: 'head.R', parent: 'body', pivot: [0.2, 0.3, 0.7], side: 1 },
+  { name: 'tail', parent: 'body', pivot: [0, -0.38, 0.66] },
+  { name: 'leg.FR', parent: 'body', pivot: [0.15, 0.28, 0.55], side: 1 },
+  { name: 'leg.FL', parent: 'body', pivot: [-0.15, 0.28, 0.55], side: -1 },
+  { name: 'leg.BR', parent: 'body', pivot: [0.15, -0.28, 0.55], side: 1 },
+  { name: 'leg.BL', parent: 'body', pivot: [-0.15, -0.28, 0.55], side: -1 },
+];
+
+/** Cérbero: cão gigante de três cabeças (mordida, fogo, investida), pelagem negra e brasas. */
+export function cerberusModel() {
+  const fur = hex(0x46343a), dark = hex(0x241a1e), ember = hex(0xff6a1a), eyes = hex(0xffd060), collar = hex(0x8a7a6a);
+  const s = 2.3;
+  const parts = [
+    box('body', [0, 0, 0.62], [0.42, 0.86, 0.38], fur),
+    box('body', [0, 0.28, 0.7], [0.46, 0.26, 0.38], fur),
+    box('body', [0, 0.28, 0.72], [0.5, 0.1, 0.4], collar),  // coleira de ferro
+  ];
+  for (let i = 0; i < 6; i++) parts.push(box('body', [0, -0.32 + i * 0.12, 0.84], [0.06, 0.07, 0.12], ember, { rot: [-0.4, 0, 0] }));  // crista em brasa
+  // Três cabeças: a do meio morde, a da esquerda cospe fogo (boca acesa), a da direita investe.
+  for (const [bone, x, mouth] of [['head', 0, BONE], ['head.L', -0.2, ember], ['head.R', 0.2, BONE]]) {
+    parts.push(box(bone, [x, 0.52, 0.8], [0.2, 0.28, 0.2], fur));
+    parts.push(box(bone, [x, 0.7, 0.75], [0.13, 0.18, 0.1], dark));
+    parts.push(box(bone, [x, 0.79, 0.71], [0.11, 0.03, 0.03], mouth));
+    parts.push(box(bone, [x + 0.06, 0.46, 0.94], [0.04, 0.07, 0.11], fur, { rot: [0.3, 0, 0.2] }));
+    parts.push(box(bone, [x - 0.06, 0.46, 0.94], [0.04, 0.07, 0.11], fur, { rot: [0.3, 0, -0.2] }));
+    parts.push(box(bone, [x + 0.05, 0.665, 0.83], [0.04, 0.02, 0.035], eyes, { flat: true }));
+    parts.push(box(bone, [x - 0.05, 0.665, 0.83], [0.04, 0.02, 0.035], eyes, { flat: true }));
+  }
+  parts.push(box('tail', [0, -0.58, 0.72], [0.06, 0.44, 0.06], fur, { rot: [0.4, 0, 0] }));
+  parts.push(box('tail', [0, -0.8, 0.86], [0.08, 0.1, 0.1], ember, { rot: [0.4, 0, 0] }));  // ponta em chama
+  for (const [name, x, y] of [['leg.FR', 0.15, 0.28], ['leg.FL', -0.15, 0.28], ['leg.BR', 0.15, -0.28], ['leg.BL', -0.15, -0.28]]) {
+    parts.push(box(name, [x, y, 0.3], [0.1, 0.12, 0.5], fur));
+    parts.push(box(name, [x, y + 0.03, 0.03], [0.11, 0.15, 0.05], dark));
+  }
+  return {
+    bones: CERBERUS_BONES.map((b) => ({ ...b, pivot: b.pivot.map((v) => v * s) })),
+    parts: parts.map((p) => ({ ...p, at: p.at.map((v) => v * s), size: p.size.map((v) => v * s) })),
+    scale: s,
+  };
+}
+
+/** Animações do Cérbero com os nomes que o Boss usa (Idle, Walk, Attack, Charge, Roar, Slam...). */
+export function cerberusAnimations() {
+  const key = (t, pose) => [t, pose];
+  const run = (ph, k = 1) => ({
+    'leg.FR': { swing: 0.8 * ph * k }, 'leg.FL': { swing: 0.6 * ph * k }, 'leg.BR': { swing: -0.8 * ph * k }, 'leg.BL': { swing: -0.6 * ph * k },
+    body: { loc: [0, 0, 0.04 * ph * k], lean: -0.08 * ph * k }, tail: { lean: 0.3 * ph },
+    'head.L': { twist: 0.15 * ph }, 'head.R': { twist: -0.15 * ph },
+  });
+  const heads = (lean, twist = 0) => ({ head: { lean }, 'head.L': { lean, twist }, 'head.R': { lean, twist: -twist } });
+  return [
+    { name: 'Idle', frames: 4, fps: 4, loop: true, keys: [key(0, heads(0, 0.2)), key(0.5, heads(0.1, -0.1)), key(1, heads(0, 0.2))] },
+    { name: 'Walk', frames: 6, fps: 9, loop: true, keys: [key(0, run(1, 0.6)), key(0.5, run(-1, 0.6)), key(1, run(1, 0.6))] },
+    { name: 'Charge', frames: 4, fps: 14, loop: true, keys: [key(0, { ...run(1), ...heads(0.3) }), key(0.5, { ...run(-1), ...heads(0.3) }), key(1, { ...run(1), ...heads(0.3) })] },
+    { name: 'Attack', frames: 5, fps: 12, loop: false, keys: [
+      key(0, {}), key(0.3, { ...heads(-0.45, 0.2), body: { loc: [0, -0.05, 0], lean: 0.1 } }),
+      key(0.6, { ...heads(0.4), body: { loc: [0, 0.2, 0], lean: -0.12 } }), key(1, {}),
+    ] },
+    { name: 'Roar', frames: 6, fps: 6, loop: false, keys: [key(0, {}), key(0.4, { ...heads(-0.6, 0.45), body: { lean: 0.2 } }), key(0.85, { ...heads(-0.65, 0.5), body: { lean: 0.2 } }), key(1, {})] },
+    { name: 'Slam', frames: 6, fps: 10, loop: false, keys: [
+      key(0, {}), key(0.4, { body: { lean: 0.5, loc: [0, 0, 0.2] }, 'leg.FR': { swing: 1.2 }, 'leg.FL': { swing: 1.2 }, ...heads(-0.4) }),
+      key(0.6, { body: { lean: -0.15, loc: [0, 0, -0.05] }, 'leg.FR': { swing: -0.3 }, 'leg.FL': { swing: -0.3 }, ...heads(0.3) }), key(1, {}),
+    ] },
+    { name: 'Hurt', frames: 2, fps: 10, loop: false, keys: [key(0, { ...heads(-0.3), body: { lean: 0.15 } }), key(1, {})] },
+    { name: 'Death', frames: 6, fps: 8, loop: false, keys: [key(0, {}), key(1, { body: { loc: [0, 0, -0.38], twist: 0.3 }, 'leg.FR': { swing: 0.5, spread: 0.8 }, 'leg.BR': { swing: -0.5, spread: 0.8 }, ...heads(0.4, 0.4) })] },
+  ];
+}
+
+// ───────────────────────── A Entidade do Submundo ─────────────────────────
+
+/**
+ * A Entidade do Submundo: estátua de sombra rachada com fogo por dentro, coroa partida e manto
+ * em farrapos. monstrous = forma da fase 3: maior, chifres, garras em brasa e asas de fumaça.
+ */
+export function entityModel(monstrous = false) {
+  const stone = hex(0x5e5468), crack = hex(0xff8a2a), robe = hex(0x3a1a24), soul = hex(0xc08aff);
+  const c = { torso: stone, sleeve: stone, skin: stone, pants: robe, shoes: robe, eyes: hex(0xffd060), mouth: crack, brow: stone };
+  return humanoid(c, { bulk: monstrous ? 1.45 : 1.05, scale: monstrous ? 2.2 : 1.8, extra: (parts) => {
+    parts.push(box('hips', [0, 0, 0.62], [0.54, 0.34, 0.66], robe));  // manto
+    for (const [x, z] of [[-0.1, 1.3], [0.08, 1.15], [0.12, 1.38], [-0.05, 1.05], [0.16, 1.02], [-0.16, 1.2]]) parts.push(box('spine', [x, 0.145, z], [0.05, 0.02, 0.18], crack, { flat: true, rot: [0, 0.4, 0] }));
+    parts.push(box('head', [0, 0.135, 1.62], [0.2, 0.02, 0.04], crack, { flat: true }));  // rachadura no rosto
+    parts.push(box('spine', [0, 0.15, 1.24], [0.1, 0.02, 0.1], soul, { flat: true }));  // núcleo de alma
+    for (const [x, h] of [[-0.1, 0.1], [0, 0.16], [0.1, 0.08]]) parts.push(box('head', [x, 0.02, 1.8 + h / 2], [0.06, 0.06, h], hex(0xb08a3a)));  // coroa partida
+    if (monstrous) {
+      for (const s of [1, -1]) {
+        parts.push(box('head', [s * 0.18, 0, 1.82], [0.2, 0.07, 0.07], hex(0x3a3036), { rot: [0, 0, s * -0.6] }));  // chifres
+        parts.push(box('head', [s * 0.32, 0.02, 1.98], [0.07, 0.07, 0.2], hex(0x3a3036), { rot: [0, 0, s * 0.3] }));
+        parts.push(box(s > 0 ? 'fore.R' : 'fore.L', [s * 0.31, 0.08, 0.74], [0.16, 0.2, 0.12], crack));  // garras em brasa
+        parts.push(box('spine', [s * 0.45, -0.22, 1.45], [0.5, 0.06, 0.7], hex(0x3a2a44), { rot: [0, s * 0.5, s * 0.35] }));  // asas de fumaça
+      }
+      parts.push(box('spine', [0, 0.15, 1.24], [0.2, 0.02, 0.2], soul, { flat: true }));
+    }
+  } });
+}

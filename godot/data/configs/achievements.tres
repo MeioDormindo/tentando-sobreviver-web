@@ -25,7 +25,9 @@ achievements = [
 { "id": "last_train", "name": "O Último Trem", "description": "Complete a missão do Terminal e pegue a Lanterna do Condutor", "icon": "res://assets/sprites/icons/weapon_conductor_lantern.png", "total_key": "", "total_target": 0, "secret": false },
 { "id": "minotaur", "name": "Fio de Ariadne", "description": "Derrote o Minotauro", "icon": "res://assets/sprites/icons/weapon_lee_enfield.png", "total_key": "", "total_target": 0, "secret": false },
 { "id": "twelve_statues", "name": "Os Doze do Olimpo", "description": "Ative as 12 estátuas dos deuses no Templo", "icon": "res://assets/sprites/icons/weapon_artemis_bow.png", "total_key": "", "total_target": 0, "secret": false },
-{ "id": "underworld_gate", "name": "O Portão do Submundo", "description": "Complete a missão do Templo e pegue o Raio de Zeus", "icon": "res://assets/sprites/icons/weapon_zeus_bolt.png", "total_key": "", "total_target": 0, "secret": false }
+{ "id": "underworld_gate", "name": "O Portão do Submundo", "description": "Complete a missão do Templo e pegue o Raio de Zeus", "icon": "res://assets/sprites/icons/weapon_zeus_bolt.png", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "cerberus", "name": "Guardião dos Três", "description": "Derrote o Cérbero", "icon": "res://assets/sprites/icons/weapon_hephaestus_spear.png", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "the_door", "name": "A Porta", "description": "Derrote a Entidade do Submundo", "icon": "res://assets/sprites/icons/weapon_poseidon_trident.png", "total_key": "", "total_target": 0, "secret": false }
 ]
 survivor_round = 10
 veteran_round = 20

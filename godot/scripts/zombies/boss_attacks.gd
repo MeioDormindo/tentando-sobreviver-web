@@ -5,6 +5,9 @@ extends RefCounted
 
 const BLAST_COLOR := Color(0.84, 0.23, 0.16)
 const ACID_COLOR := Color(0.61, 0.81, 0.16)
+## Chamas (Cérbero, Entidade do Submundo) e esferas de alma.
+const FIRE_COLOR := Color(1.0, 0.45, 0.12)
+const SOUL_COLOR := Color(0.7, 0.45, 1.0)
 
 
 ## Onda de choque: um anel que cresce a partir do boss e fere o jogador quando passa por ele.
@@ -32,7 +35,7 @@ static func shockwave(tree: SceneTree, at: Vector3, cfg: Dictionary, player: Cha
 
 
 ## Círculos marcados perto do jogador que, no fim do aviso, explodem (ou viram poça de ácido).
-static func area(tree: SceneTree, target_at: Vector3, cfg: Dictionary, acid: bool, player: CharacterBase) -> void:
+static func area(tree: SceneTree, target_at: Vector3, cfg: Dictionary, acid: bool, player: CharacterBase, fire := false) -> void:
 	var spread := float(cfg.get("spread", 4.0))
 	var radius := float(cfg.get("radius", 2.0))
 	var points: Array[Vector3] = [target_at]
@@ -40,14 +43,14 @@ static func area(tree: SceneTree, target_at: Vector3, cfg: Dictionary, acid: boo
 		points.append(target_at + Vector3(randf_range(-spread, spread), 0.0, randf_range(-spread, spread)))
 	var root := SpecialFire.world_root(tree)
 	for point in points:
-		var mark := PixelShapes.flat("disc", Color(ACID_COLOR if acid else BLAST_COLOR, 0.3), radius)
+		var mark := PixelShapes.flat("disc", Color(FIRE_COLOR if fire else (ACID_COLOR if acid else BLAST_COLOR), 0.3), radius)
 		root.add_child(mark)
 		mark.global_position = Vector3(point.x, 0.06, point.z)
 		var tween := mark.create_tween()
 		tween.tween_property(mark, "modulate:a", 1.0, float(cfg.get("telegraph_time", 1.0)))
 		tween.tween_callback(func() -> void:
 			if acid and cfg.has("pool"):
-				ZombieAbilities._spawn_pool_at(root, cfg.pool, ACID_COLOR, point)
+				ZombieAbilities._spawn_pool_at(root, cfg.pool, FIRE_COLOR if fire else ACID_COLOR, point)
 			else:
 				SpecialFire.flash(tree, point, radius, BLAST_COLOR)
 			if float(cfg.get("rubble_time", 0.0)) > 0.0:
@@ -84,8 +87,57 @@ static func _rubble(root: Node, at: Vector3, seconds: float) -> void:
 	tween.tween_callback(body.queue_free)
 
 
+## Esferas de alma (Entidade do Submundo): um leque de esferas que seguem reto; ferem quem
+## estiver no caminho e somem na parede ou no alcance.
+static func volley(tree: SceneTree, from: Vector3, toward: Vector3, cfg: Dictionary, player: CharacterBase, source: Node) -> void:
+	var count := int(cfg.get("count", 5))
+	var spread := deg_to_rad(float(cfg.get("spread_deg", 50.0)))
+	var speed := float(cfg.get("speed", 9.0))
+	var reach := float(cfg.get("range", 18.0))
+	var damage := float(cfg.get("damage", 18.0))
+	var forward := Vector3(toward.x, 0.0, toward.z).normalized()
+	var root := SpecialFire.world_root(tree)
+	Audio.play_at("boss_area", from, "world", 0.9)
+	for i in count:
+		var t := (float(i) / maxf(1.0, count - 1.0)) - 0.5 if count > 1 else 0.0
+		var dir := forward.rotated(Vector3.UP, spread * t)
+		var orb := MeshInstance3D.new()
+		var sphere := SphereMesh.new()
+		sphere.radius = 0.22
+		sphere.height = 0.44
+		var material := StandardMaterial3D.new()
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		material.albedo_color = SOUL_COLOR
+		sphere.material = material
+		orb.mesh = sphere
+		orb.add_to_group(&"boss_orbs")
+		var glow := OmniLight3D.new()
+		glow.light_color = SOUL_COLOR
+		glow.light_energy = 0.8
+		glow.omni_range = 2.5
+		orb.add_child(glow)
+		root.add_child(orb)
+		orb.global_position = from
+		var state := {"hit": false}
+		var tween := orb.create_tween()
+		tween.tween_method(func(d: float) -> void:
+			if not is_instance_valid(orb) or state.hit:
+				return
+			orb.global_position = from + dir * d
+			if player and player.is_alive():
+				var offset := player.global_position + Vector3.UP * 1.0 - orb.global_position
+				if Vector2(offset.x, offset.z).length() <= 0.75:
+					state.hit = true
+					player.take_damage(DamageInfo.new(damage, DamageInfo.Kind.ZOMBIE, source if is_instance_valid(source) else null, false, orb.global_position))
+					SpecialFire.flash(tree, orb.global_position, 1.2, SOUL_COLOR)
+					orb.queue_free(), 0.0, reach, reach / speed)
+		tween.tween_callback(func() -> void:
+			if is_instance_valid(orb):
+				orb.queue_free())
+
+
 ## Vômito: poças de ácido em leque à frente do boss.
-static func vomit(tree: SceneTree, at: Vector3, facing: Vector3, cfg: Dictionary) -> void:
+static func vomit(tree: SceneTree, at: Vector3, facing: Vector3, cfg: Dictionary, fire := false) -> void:
 	var count := int(cfg.get("count", 5))
 	var reach := float(cfg.get("range", 8.0))
 	var arc := deg_to_rad(float(cfg.get("arc_deg", 50)))
@@ -95,7 +147,7 @@ static func vomit(tree: SceneTree, at: Vector3, facing: Vector3, cfg: Dictionary
 		var t := (float(i) / maxf(1.0, count - 1.0)) - 0.5
 		var dir := forward.rotated(Vector3.UP, arc * t)
 		var point := at + dir * reach * randf_range(0.4, 1.0)
-		ZombieAbilities._spawn_pool_at(root, cfg.get("pool", {}), ACID_COLOR, point)
+		ZombieAbilities._spawn_pool_at(root, cfg.get("pool", {}), FIRE_COLOR if fire else ACID_COLOR, point)
 
 
 ## Grito: deixa o jogador lento (se estiver no raio).

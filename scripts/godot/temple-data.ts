@@ -160,10 +160,40 @@ export const TEMPLE_BOSSES: GodotBoss[] = [
     },
     extras: { rubble_time: 6.0, breaks_pillars: true },
   },
+  {
+    // Cérbero: cada cabeça um ataque — mordida (golpe), fogo (leque de chamas no chão) e
+    // investida; morde logo depois de investir e, na fase 3, chama os cães de Hades.
+    id: 'cerberus', display_name: 'Cérbero', max_health: 9000, health_per_appearance: 0.6, move_speed: 3.2, body_radius: 1.0, reward: 3000,
+    phase_thresholds: [0.66, 0.33], phase_speed: [1, 1.25, 1.45], phase_cooldown: [1, 0.7, 0.55], roar_time: 1.1, escort_ratio: 0.25,
+    attacks: {
+      melee: { range: 2.6, damage: 35, cooldown_time: 0.9 },
+      charge: { windup_time: 0.55, speed: 17, max_distance: 20, damage: 45, cooldown_time: 5, stun_time: 1.0, min_range: 4, max_range: 16 },
+      vomit: { from_phase: 1, range: 8, arc_deg: 45, count: 6, windup_time: 0.6, cooldown_time: 6, pool: { radius: 1.3, duration_time: 4, dps: 16 } },
+      summon: { from_phase: 3, count: 3, types: [{ sn: 'hound' }, { sn: 'hound' }, { sn: 'hound' }], cooldown_time: 12 },
+    },
+    extras: { fire_pools: true, combo_bite: true },
+  },
+  {
+    // A Entidade do Submundo (boss final): estátua de sombra em chamas. Fase 1: esferas de
+    // alma, esqueletos; fase 2: chuva de fogo que vira lava; fase 3: forma monstruosa, com
+    // investida e onda de choque.
+    id: 'entity', display_name: 'A Entidade do Submundo', max_health: 12000, health_per_appearance: 0.6, move_speed: 2.2, body_radius: 0.9, reward: 4000,
+    phase_thresholds: [0.66, 0.33], phase_speed: [1, 1.15, 1.5], phase_cooldown: [1, 0.8, 0.6], roar_time: 1.4, escort_ratio: 0.2,
+    area_acid: true,
+    attacks: {
+      melee: { range: 2.4, damage: 40, cooldown_time: 1.4 },
+      volley: { from_phase: 1, count: 5, spread_deg: 50, speed: 9, range: 18, damage: 18, windup_time: 0.5, cooldown_time: 3.5 },
+      area: { from_phase: 2, count: 4, radius: 1.8, telegraph_time: 1.1, damage: 30, cooldown_time: 6, spread: 5, pool: { radius: 1.6, duration_time: 6, dps: 18 } },
+      summon: { from_phase: 1, count: 3, types: [{ sn: 'skeleton' }, { sn: 'skeleton' }, { sn: 'skeleton_archer' }], cooldown_time: 14 },
+      shockwave: { from_phase: 3, radius: 7, expand_time: 0.6, damage: 32, cooldown_time: 7, windup_time: 0.5 },
+      charge: { windup_time: 0.7, speed: 15, max_distance: 20, damage: 50, cooldown_time: 6, stun_time: 1.2, min_range: 5, max_range: 16 },
+    },
+    extras: { fire_pools: true, charge_from_phase: 3, phase_sheets: { '3': 'boss_entity_monstrous' }, lore: 'O templo não era uma prisão. Era uma porta... e ela está se abrindo.' },
+  },
 ];
 
-/** Rodízio dos bosses nos rounds de boss do Templo (Fase 2 acrescenta Cérbero e a Entidade). */
-export const TEMPLE_BOSS_ROTATION = ['minotaur'];
+/** Rodízio dos bosses nos rounds de boss do Templo: 10 Minotauro, 20 Cérbero, 30 Entidade, e de novo. */
+export const TEMPLE_BOSS_ROTATION = ['minotaur', 'cerberus', 'entity'];
 
 // ───────────────────────── Personagem e conquistas ─────────────────────────
 
@@ -180,4 +210,6 @@ export const TEMPLE_ACHIEVEMENTS = [
   { id: 'minotaur', name: 'Fio de Ariadne', description: 'Derrote o Minotauro', icon: 'res://assets/sprites/icons/weapon_lee_enfield.png' },
   { id: 'twelve_statues', name: 'Os Doze do Olimpo', description: 'Ative as 12 estátuas dos deuses no Templo', icon: 'res://assets/sprites/icons/weapon_artemis_bow.png' },
   { id: 'underworld_gate', name: 'O Portão do Submundo', description: 'Complete a missão do Templo e pegue o Raio de Zeus', icon: 'res://assets/sprites/icons/weapon_zeus_bolt.png' },
+  { id: 'cerberus', name: 'Guardião dos Três', description: 'Derrote o Cérbero', icon: 'res://assets/sprites/icons/weapon_hephaestus_spear.png' },
+  { id: 'the_door', name: 'A Porta', description: 'Derrote a Entidade do Submundo', icon: 'res://assets/sprites/icons/weapon_poseidon_trident.png' },
 ];

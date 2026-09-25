@@ -114,11 +114,17 @@ de conceitos: ver `docs/analise-typescript.md`.
     cabeça), Esqueleto (às vezes se levanta de novo) e Esqueleto Arqueiro (flecha reta); os
     tipos dos outros mapas ganham roupa grega (arqueólogo, cultista, gladiador, portador de
     ânfora, múmia, sacerdote do veneno, hoplita de bronze e o cão de Hades);
-  - bosses em rodízio nos rounds de boss (e o ciclo continua depois do 30): **o Minotauro**
-    (investida, onda de choque; na Fúria derruba as colunas da praça; no Colapso caem pedras
-    que viram escombro);
+  - bosses em rodízio nos rounds de boss — 10 **o Minotauro**, 20 **Cérbero**, 30 **a Entidade
+    do Submundo**, e o ciclo continua mais forte:
+    - Minotauro: investida, onda de choque; na Fúria derruba as colunas da praça; no Colapso
+      caem pedras que viram escombro;
+    - Cérbero: três cabeças — mordida, fogo (leque de chamas no chão) e investida, morde logo
+      depois de investir e chama os cães de Hades na fase 3;
+    - Entidade do Submundo: esferas de alma em leque e esqueletos; chuva de fogo que vira lava;
+      na fase 3 assume a forma monstruosa (investida e onda de choque);
   - **missão "O Portão do Submundo"**: gerador → 3 Fragmentos de Alma (Necrópole, Floresta e um
-    Esqueleto que carrega o terceiro) → os 3 altares → o Minotauro → a chave → o portão. Prêmio:
+    Esqueleto que carrega o terceiro) → os 3 altares → o Minotauro → a chave → o portão → o
+    Cérbero → selar o portão no altar da Arena Final. Prêmio:
     todos os perks e o Raio de Zeus no Mk II;
   - personagem do mapa: a arqueóloga (Arqueóloga, Caçadora do Labirinto, Sacerdotisa do Olimpo,
     Andarilha do Submundo), com as conquistas do Templo;

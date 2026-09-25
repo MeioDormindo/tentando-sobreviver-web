@@ -3,7 +3,8 @@ extends QuestSystem
 ## "O Portão do Submundo" (Templo dos Mortos): ligar o gerador dos arqueólogos → juntar os 3
 ## Fragmentos de Alma (Necrópole, Floresta e um Esqueleto que carrega o terceiro) → levar um a
 ## cada altar do Portão do Templo (abre o Templo da Górgona) → o Minotauro, guardião, vem no
-## próximo round → pegar a chave do Submundo onde ele caiu → abrir o Portão do Submundo.
+## próximo round → pegar a chave do Submundo onde ele caiu → abrir o Portão do Submundo → o
+## Cérbero, guardião do Submundo → selar o portão no altar da Arena Final.
 ## Prêmio: todos os perks + Raio de Zeus (Mk II). Só existe no mapa "temple".
 
 const MAP_ID := "temple"
@@ -23,6 +24,9 @@ var boss_round := 0
 var boss_down: Variant = null
 var has_key := false
 var gate_open := false
+var cerberus_round := 0
+var cerberus_down := false
+var sealed := false
 
 var _carrier_last: Variant = null
 var _next_carrier := 0.0
@@ -40,7 +44,9 @@ func _start() -> void:
 	cfg = _merge_map_spots({}, "gate")
 	Events.boss_defeated.connect(func(id: StringName, _n: String, _r: int, at: Vector3) -> void:
 		if id == &"minotaur" and boss_round > 0 and boss_down == null:
-			boss_down = at)
+			boss_down = at
+		elif id == &"cerberus" and cerberus_round > 0:
+			cerberus_down = true)
 	set_physics_process(true)
 	var power_step := QuestStep.make(
 		func() -> String: return "Ligue o gerador dos arqueólogos (Necrópole)",
@@ -63,7 +69,16 @@ func _start() -> void:
 		func() -> String: return "Abra o Portão do Submundo (sul das Ruínas)",
 		func() -> Variant: return _gate_position(&"gate_underworld"),
 		func(_d: float) -> bool: return gate_open, _gate_enter, _clear_spots)
-	begin("O PORTÃO DO SUBMUNDO", [power_step, fragments, altars, boss, key, gate], _complete)
+	var cerberus := QuestStep.make(
+		func() -> String: return "O Cérbero guarda o Submundo: derrote-o (round %d)" % cerberus_round,
+		func() -> Variant: return null,
+		func(_d: float) -> bool: return cerberus_down,
+		func() -> void: cerberus_round = round_manager.force_boss_next_round(BOSS_HEALTH, &"cerberus"))
+	var seal := QuestStep.make(
+		func() -> String: return "Sele o portão no altar da Arena Final",
+		func() -> Variant: return _at(cfg.arena) if cfg.has("arena") else null,
+		func(_d: float) -> bool: return sealed, _seal_enter, _clear_spots)
+	begin("O PORTÃO DO SUBMUNDO", [power_step, fragments, altars, boss, key, gate, cerberus, seal], _complete)
 
 
 # ── 2. Fragmentos de Alma ──
@@ -184,9 +199,20 @@ func _gate_enter() -> void:
 	spot.interaction_radius = 2.4
 
 
+## 8. Selar o portão na Arena Final.
+func _seal_enter() -> void:
+	if not cfg.has("arena"):
+		sealed = true
+		return
+	var spot := _spot("SELAR O PORTÃO DO SUBMUNDO", _at(cfg.arena), func() -> void: sealed = true, GATE_HOLD)
+	spot.name = "ArenaSeal"
+	spot.interaction_radius = 2.2
+	spot.add_prop(Vector3(1.6, 0.9, 0.9), SOUL, 0.6, PropFactory.create("altar"))
+
+
 ## Fim: todos os perks, o Raio de Zeus (já no Mk II) e a conquista.
 func _complete() -> void:
 	_grant_rewards(reward_weapon, 1)
 	SpecialFire.flash(get_tree(), player.global_position + Vector3.UP, 8.0, Color(0.6, 0.85, 1.0))
 	Events.screen_shake.emit(1.0, 0.18)
-	Events.quest_completed.emit(&"temple", "O PORTÃO DO SUBMUNDO ESTÁ ABERTO", "Todos os perks + Raio de Zeus. O que espera lá embaixo?")
+	Events.quest_completed.emit(&"temple", "O PORTÃO DO SUBMUNDO FOI SELADO", "Todos os perks + Raio de Zeus. Mas algo lá embaixo ainda respira...")

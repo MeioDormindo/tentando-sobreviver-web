@@ -14,7 +14,7 @@ import {
   zombieModel, zombieAnimations, playerModel, patientModel, playerAnimations, weaponParts,
   houndModel, houndAnimations, PISTOLS, conductorModel, patientZeroModel, bossAnimations,
 } from './characters.mjs';
-import { TEMPLE_LOOKS, TEMPLE_HOUND, hopliteModel, skeletonModel, minotaurModel, archaeologistModel } from './temple_characters.mjs';
+import { TEMPLE_LOOKS, TEMPLE_HOUND, hopliteModel, skeletonModel, minotaurModel, archaeologistModel, cerberusModel, cerberusAnimations, entityModel } from './temple_characters.mjs';
 
 // Filtro opcional: node build.mjs zombie_hoplite boss_ weapon_makarov → só as folhas cujo nome
 // começa com um desses (o resto fica como está). Sem argumentos, gera tudo.
@@ -120,6 +120,9 @@ emit('hound_temple', () => buildSheet(houndModel(TEMPLE_HOUND), houndAnimations(
 emit('boss_conductor', () => buildSheet(conductorModel(), bossAnimations(), { pitch: PITCH, workSize: 320 }));
 emit('boss_patient_zero', () => buildSheet(patientZeroModel(), bossAnimations(), { pitch: PITCH, workSize: 320 }));
 emit('boss_minotaur', () => buildSheet(minotaurModel(), bossAnimations(), { pitch: PITCH, workSize: 340 }));
+emit('boss_cerberus', () => buildSheet(cerberusModel(), cerberusAnimations(), { pitch: PITCH, workSize: 360 }));
+emit('boss_entity', () => buildSheet(entityModel(), bossAnimations(), { pitch: PITCH, workSize: 340 }));
+emit('boss_entity_monstrous', () => buildSheet(entityModel(true), bossAnimations(), { pitch: PITCH, workSize: 380 }));
 
 // Jogador: um por visual (cores do skins.tres), sem arma.
 const skins = readFileSync('godot/data/configs/skins.tres', 'utf8');

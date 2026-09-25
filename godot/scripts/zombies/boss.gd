@@ -35,7 +35,7 @@ var _body_color := Color(0.3, 0.26, 0.22)
 var model: CharacterSprite
 var _action_id: StringName = &""
 ## Animação de cada ação.
-const ACTION_ANIMS := {&"shockwave": &"Slam", &"scream": &"Roar", &"summon": &"Roar", &"vomit": &"Attack"}
+const ACTION_ANIMS := {&"shockwave": &"Slam", &"scream": &"Roar", &"summon": &"Roar", &"vomit": &"Attack", &"volley": &"Attack"}
 
 @onready var agent: NavigationAgent3D = $NavigationAgent3D
 @onready var pivot: Node3D = $Pivot
@@ -201,6 +201,9 @@ func _charging(distance: float) -> void:
 			return
 	if global_position.distance_to(_charge_start) >= float(data.charge.get("max_distance", 20.0)):
 		_to_chase()
+		# Cérbero: a cabeça da mordida ataca logo depois da investida.
+		if bool(data.extras.get("combo_bite", false)):
+			_ready_at[&"melee"] = _clock
 
 
 func _chase(delta: float, to_target: Vector3) -> void:
@@ -238,7 +241,7 @@ func _try_attack(distance: float, to_target: Vector3) -> bool:
 		if data.extras.has("rubble_time"):
 			area_cfg = data.area.duplicate()
 			area_cfg["rubble_time"] = data.extras.rubble_time
-		BossAttacks.area(get_tree(), target.global_position, area_cfg, data.area_acid, target)
+		BossAttacks.area(get_tree(), target.global_position, area_cfg, data.area_acid, target, bool(data.extras.get("fire_pools", false)))
 		return true
 	if _can(data.scream, &"scream") and distance <= float(data.scream.radius):
 		_start_action(1.0, float(data.scream.cooldown_time), &"scream")
@@ -256,11 +259,18 @@ func _try_attack(distance: float, to_target: Vector3) -> bool:
 		_pending_at = _clock + float(data.shockwave.windup_time)
 		_pending_action = &"shockwave"
 		return true
+	if _can(data.volley, &"volley") and distance <= float(data.volley.get("range", 16.0)) and _line_of_sight():
+		_face(to_target)
+		_start_action(float(data.volley.get("windup_time", 0.5)) + 0.3, float(data.volley.cooldown_time), &"volley")
+		_pending_at = _clock + float(data.volley.get("windup_time", 0.5))
+		_pending_action = &"volley"
+		return true
 	if _can(data.summon, &"summon"):
 		_start_action(0.9, float(data.summon.cooldown_time), &"summon")
 		_summon(data.summon.get("types", []), int(data.summon.get("count", 0)))
 		return true
-	if not data.charge.is_empty() and distance >= float(data.charge.min_range) and distance <= float(data.charge.max_range) \
+	if not data.charge.is_empty() and phase >= int(data.extras.get("charge_from_phase", 1)) \
+			and distance >= float(data.charge.min_range) and distance <= float(data.charge.max_range) \
 			and _is_ready(&"charge") and _line_of_sight():
 		mode = Mode.CHARGE_WINDUP
 		_mode_until = _clock + float(data.charge.windup_time)
@@ -298,7 +308,9 @@ func _resolve_pending() -> void:
 	_pending_at = -1.0
 	match _pending_action:
 		&"vomit":
-			BossAttacks.vomit(get_tree(), global_position, -pivot.global_basis.z, data.vomit)
+			BossAttacks.vomit(get_tree(), global_position, -pivot.global_basis.z, data.vomit, bool(data.extras.get("fire_pools", false)))
+		&"volley":
+			BossAttacks.volley(get_tree(), global_position + Vector3.UP * 1.4, (target.global_position - global_position), data.volley, target, self)
 		&"shockwave":
 			BossAttacks.shockwave(get_tree(), global_position, data.shockwave, target)
 	_pending_action = &""
@@ -331,6 +343,12 @@ func _on_damaged(info: DamageInfo, current: float) -> void:
 			new_phase += 1
 	if new_phase > phase and is_alive():
 		phase = new_phase
+		# Troca de forma (Entidade do Submundo, fase 3).
+		var sheet := String(data.extras.get("phase_sheets", {}).get(str(phase), ""))
+		if sheet != "" and model and CharacterSprite.exists(sheet):
+			model.set_sheet(sheet)
+			SpecialFire.flash(get_tree(), global_position + Vector3.UP * 1.5, 5.0, Color(0.7, 0.35, 1.0))
+			Events.screen_shake.emit(0.8, 0.2)
 		_clear_telegraph()
 		_enter_roar()
 		Events.boss_phase.emit(data.display_name, phase)
@@ -397,6 +415,8 @@ func _on_health_died(info: DamageInfo) -> void:
 			(child as Hurtbox).disable()
 	SpecialFire.flash(get_tree(), global_position, 4.0, Color(1.0, 0.85, 0.7))
 	Events.boss_defeated.emit(data.id, data.display_name, data.reward, global_position)
+	if data.extras.has("lore"):
+		Events.toast.emit(String(data.extras.lore))
 	var tween := create_tween()
 	if model and model.has_animation(&"Death"):
 		model.play_once(&"Death", 0.05, 0.6)
