@@ -66,15 +66,35 @@ func apply_settings() -> void:
 	if cols <= 0:
 		return
 	var grid := Vector2(cols, rows)
+	# O mapa gira com a câmera (isométrica): o que está "para cima" na tela fica para cima no
+	# mapa. Girado, ele ocupa um losango; o tamanho conta esse losango.
+	var yaw := _camera_yaw()
+	var spread := absf(cos(yaw)) + absf(sin(yaw))
 	if expanded:
 		var screen := get_viewport_rect().size
-		_scale = minf(screen.x * 0.8 / cols, screen.y * 0.8 / rows)
-		position = (screen - grid * _scale) * 0.5
+		_scale = minf(screen.x * 0.8, screen.y * 0.8) / ((cols + rows) * 0.5 * spread)
 	else:
-		_scale = clampf(BASE_WIDTH * float(SIZE_SCALE.get(String(Save.get_setting("minimapSize")), 1.0)) / cols, 0.5, 3.5)
-		position = CORNER
+		_scale = clampf(BASE_WIDTH * float(SIZE_SCALE.get(String(Save.get_setting("minimapSize")), 1.0)) / (cols * spread), 0.5, 3.5)
 	size = grid * _scale
+	pivot_offset = size * 0.5
+	rotation = yaw
+	var extent := Vector2(size.x * absf(cos(yaw)) + size.y * absf(sin(yaw)), size.x * absf(sin(yaw)) + size.y * absf(cos(yaw)))
+	if expanded:
+		position = (get_viewport_rect().size - size) * 0.5
+	else:
+		position = CORNER + (extent - size) * 0.5
 	queue_redraw()
+
+
+## Altura que o mapa ocupa na tela (girado).
+func screen_height() -> float:
+	var yaw := rotation
+	return size.x * absf(sin(yaw)) + size.y * absf(cos(yaw))
+
+
+func _camera_yaw() -> float:
+	var camera := get_viewport().get_camera_3d() if is_inside_tree() else null
+	return camera.global_rotation.y if camera else 0.0
 
 
 ## Ponto do mapa (metros no plano x/z) → posição no controle.

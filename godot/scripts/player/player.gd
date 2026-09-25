@@ -310,7 +310,8 @@ func _stand_up(revive: PerkData) -> void:
 
 
 func _read_input() -> void:
-	move_input = Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down")
+	# Relativo à tela: com a câmera isométrica, "para cima" é a diagonal do mapa.
+	move_input = screen_to_world(Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down"))
 	_update_aim_from_input()
 	if Input.is_action_just_pressed(&"fire") and weapon.magazine <= 0 and not weapon.reloading:
 		Events.dry_fire.emit()
@@ -399,8 +400,15 @@ func _face_aim() -> void:
 		pivot.rotation.y = atan2(-flat.x, -flat.z)
 
 
+## Direção da tela (x para a direita, y para baixo) → plano do chão (x, z), pelo giro da câmera.
+func screen_to_world(input: Vector2) -> Vector2:
+	if camera == null or input == Vector2.ZERO:
+		return input
+	return input.rotated(-camera.global_rotation.y)
+
+
 func _update_aim_from_input() -> void:
-	var stick := Input.get_vector(&"aim_left", &"aim_right", &"aim_up", &"aim_down")
+	var stick := screen_to_world(Input.get_vector(&"aim_left", &"aim_right", &"aim_up", &"aim_down"))
 	if stick.length() > 0.3:
 		aim_point = global_position + Vector3(stick.x, 0.0, stick.y).normalized() * stick_aim_distance
 		aim_point.y = muzzle_height

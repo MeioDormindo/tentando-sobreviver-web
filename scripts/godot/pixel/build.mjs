@@ -14,7 +14,7 @@ import {
 
 const OUT = 'godot/assets/sprites';
 /** Inclinação da câmera do jogo (TopDownCamera.pitch_degrees): o desenho usa a mesma vista. */
-const PITCH = 55;
+const PITCH = 40;
 /** Quadro comum do jogador e das armas (as camadas se sobrepõem). */
 const PLAYER_FRAME = { size: [64, 60], pivot: [32, 46] };
 

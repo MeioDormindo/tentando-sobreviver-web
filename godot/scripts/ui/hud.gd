@@ -111,7 +111,7 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	if _quest_title.text != "":
-		var top := minimap.position.y + minimap.size.y + 24.0 if minimap.visible and not minimap.expanded else Minimap.CORNER.y
+		var top := Minimap.CORNER.y + minimap.screen_height() + 24.0 if minimap.visible and not minimap.expanded else Minimap.CORNER.y
 		_quest_title.position = Vector2(MARGIN, top)
 		_quest_text.position = Vector2(MARGIN, top + 18.0)
 	# O marcador de acerto acompanha a mira do mouse.

@@ -136,11 +136,15 @@ func _process(delta: float) -> void:
 		_frame = fmod(_frame, float(count))
 	else:
 		_frame = minf(_frame, float(count) - 1.0)
-	# Direção: a frente do pai (-Z) no plano do chão.
+	# Direção: a frente do pai (-Z) no plano do chão, relativa ao giro da câmera (os
+	# desenhos são feitos do ponto de vista dela: 0 = olhando para a câmera).
 	var parent := get_parent() as Node3D
 	if parent:
 		var forward := -parent.global_basis.z
 		var angle := atan2(forward.x, forward.z)
+		var camera := get_viewport().get_camera_3d()
+		if camera:
+			angle -= camera.global_rotation.y
 		direction = posmod(roundi(angle / (PI / 4.0)), 8)
 	_apply_frame()
 
