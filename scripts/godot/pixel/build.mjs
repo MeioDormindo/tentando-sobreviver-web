@@ -5,10 +5,12 @@
 import { mkdirSync, readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { encodePng } from './png.mjs';
-import { buildSheet } from './rig.mjs';
+import { buildSheet, renderIcon } from './rig.mjs';
+import { weaponShape } from './weapons.mjs';
+import { rmSync } from 'node:fs';
 import { hex } from './raster.mjs';
 import {
-  zombieModel, zombieAnimations, playerModel, playerAnimations, weaponParts, WEAPON_KINDS,
+  zombieModel, zombieAnimations, playerModel, playerAnimations, weaponParts,
   houndModel, houndAnimations, conductorModel, patientZeroModel, bossAnimations,
 } from './characters.mjs';
 
@@ -79,12 +81,34 @@ for (const line of skins.split('\n')) {
   write(`player_${id[1]}`, buildSheet(model, playerAnimations(), { pitch: PITCH, fixedFrame: PLAYER_FRAME, layers: { body: null } }));
 }
 
-// Armas: mesma pose e quadro do jogador, só a arma (e se ela fica atrás do corpo).
+// Armas: uma folha por arma e por nível do Weapon Lab (weapon_<id>, _mk2, _mk3), na mesma
+// pose e quadro do jogador (e se ela fica atrás do corpo), e o ícone de perfil de cada uma.
+for (const file of readdirSync(OUT)) if (file.startsWith('weapon_')) rmSync(join(OUT, file));
+mkdirSync(join(OUT, 'icons'), { recursive: true });
 const base = playerModel({ jacket: [0, 0, 0], pack: [0, 0, 0], hair: [0, 0, 0] });
-for (const kind of WEAPON_KINDS) {
-  const model = { ...base, parts: [...base.parts, ...weaponParts(kind)] };
-  write(`weapon_${kind}`, buildSheet(model, playerAnimations(), {
-    pitch: PITCH, fixedFrame: PLAYER_FRAME,
-    layers: { weapon: (p) => p.layer === 'weapon' },
-  }));
+const weaponIds = readdirSync('godot/data/weapons')
+  .filter((f) => f.endsWith('.tres') && !['catalog.tres', 'knife.tres'].includes(f))
+  .map((f) => f.replace('.tres', ''));
+for (const id of weaponIds) {
+  for (const level of [0, 1, 2]) {
+    const model = { ...base, parts: [...base.parts, ...weaponParts(id, level)] };
+    write(`weapon_${id}${level ? `_mk${level + 1}` : ''}`, buildSheet(model, playerAnimations(), {
+      pitch: PITCH, fixedFrame: PLAYER_FRAME,
+      layers: { weapon: (p) => p.layer === 'weapon' },
+    }));
+    const icon = renderIcon(weaponShape(id, level));
+    writeFileSync(join(OUT, 'icons', `weapon_${id}${level ? `_mk${level + 1}` : ''}.png`), encodePng(icon.width, icon.height, icon.data));
+  }
 }
+
+// Efeitos em pixel (clarão, faísca, explosão, fumaça, sangue, projéteis, chama, vento).
+import('./fx.mjs').then(({ buildFx }) => {
+  const dir = join(OUT, 'fx');
+  mkdirSync(dir, { recursive: true });
+  for (const [name, fx] of Object.entries(buildFx())) {
+    const frames = fx.sheet.width / fx.sheet.height;
+    writeFileSync(join(dir, `${name}.png`), encodePng(fx.sheet.width, fx.sheet.height, fx.sheet.data));
+    writeFileSync(join(dir, `${name}.json`), JSON.stringify({ frame: [fx.sheet.height, fx.sheet.height], frames, fps: fx.fps, loop: fx.loop, pixels_per_meter: 48 }) + '\n');
+  }
+  console.log('  efeitos:', Object.keys(buildFx()).join(', '));
+});

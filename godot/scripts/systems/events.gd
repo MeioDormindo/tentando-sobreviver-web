@@ -96,6 +96,8 @@ signal knife_swung()
 signal zombie_attacked(zombie: Node3D)
 ## Explosão (granada, explodidor, foguete): som e tremor.
 signal explosion(at: Vector3, radius: float)
+## Visual da arma em mãos mudou (troca ou melhoria): ids e níveis (HUD mostra os ícones).
+signal weapon_visual_changed(weapon_id: StringName, level: int, other_id: StringName, other_level: int)
 ## Pausa ligada/desligada.
 signal pause_changed(paused: bool)
 ## A HUD pediu para jogar de novo.

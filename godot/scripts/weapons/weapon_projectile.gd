@@ -24,16 +24,7 @@ func setup(weapon: Weapon, direction: Vector3, exclude: Array[RID], shooter: Nod
 	_travel_left = weapon.data.max_range
 	_exclude = exclude.duplicate()
 	_shooter = shooter
-	var mesh := SphereMesh.new()
-	mesh.radius = 0.28 if _is_plasma else 0.13
-	mesh.height = mesh.radius * 2.0
-	var material := StandardMaterial3D.new()
-	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	material.albedo_color = SpecialFire.PLASMA_COLOR if _is_plasma else Color(0.3, 0.38, 0.2)
-	mesh.material = material
-	var visual := MeshInstance3D.new()
-	visual.mesh = mesh
-	add_child(visual)
+	PixelFx.attach_loop(self, "plasma" if _is_plasma else "grenade", 0.7 if _is_plasma else 0.32)
 	if _is_plasma:
 		var light := OmniLight3D.new()
 		light.light_color = SpecialFire.PLASMA_COLOR

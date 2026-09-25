@@ -26,6 +26,17 @@ func setup(p_weapon: WeaponData, wall_normal: Vector3) -> void:
 	# Encostado na parede, na altura dos olhos.
 	_label.position = -wall_normal * 0.45 + Vector3.UP * 2.1
 	add_child(_label)
+	# Desenho da arma em pixel art acima do nome (como um cartaz na parede).
+	if p_weapon and ResourceLoader.exists("res://assets/sprites/icons/weapon_%s.png" % p_weapon.id):
+		var icon := Sprite3D.new()
+		icon.name = "Icon"
+		icon.texture = load("res://assets/sprites/icons/weapon_%s.png" % p_weapon.id)
+		icon.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+		icon.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+		icon.pixel_size = 0.012
+		icon.shaded = false
+		icon.position = _label.position + Vector3.UP * 0.75
+		add_child(icon)
 	var board := MeshInstance3D.new()
 	var mesh := BoxMesh.new()
 	mesh.size = Vector3(1.4, 0.9, 0.04)

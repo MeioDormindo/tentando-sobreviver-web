@@ -33,6 +33,8 @@ var _label: Label3D
 var _mesh: MeshInstance3D
 ## Baú do Blender (tampa que abre no sorteio); fica dentro de _mesh, que sobe e some ao mudar.
 var _model: CharacterModel
+## Desenho da arma sorteada, flutuando sobre a caixa.
+var _icon: Sprite3D
 var _timer := 0.0
 var _cycle := 0.0
 
@@ -180,9 +182,30 @@ func _reveal() -> void:
 	_timer = data.take_time
 	_label.text = result.display_name.to_upper()
 	_label.modulate = RARITY_COLORS.get(result.rarity, Color.WHITE)
+	_show_icon(result)
+
+
+func _show_icon(weapon: WeaponData) -> void:
+	var path := "res://assets/sprites/icons/weapon_%s.png" % weapon.id if weapon else ""
+	if weapon == null or not ResourceLoader.exists(path):
+		if _icon:
+			_icon.visible = false
+		return
+	if _icon == null:
+		_icon = Sprite3D.new()
+		_icon.name = "Icon"
+		_icon.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+		_icon.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+		_icon.pixel_size = 0.012
+		_icon.shaded = false
+		_icon.position.y = 1.45
+		add_child(_icon)
+	_icon.texture = load(path)
+	_icon.visible = true
 
 
 func _reset() -> void:
+	_show_icon(null)
 	if _model:
 		_model.play(&"Closed", 0.3)
 	state = State.IDLE

@@ -2,6 +2,7 @@
 // Medidas em metros, no espaço do modelo: x = direita do personagem, y = frente, z = cima.
 import { hex } from './raster.mjs';
 import { mul, translate, rotX } from './raster.mjs';
+import { weaponShape } from './weapons.mjs';
 
 // ───────────────────────── Humanoide ─────────────────────────
 
@@ -222,61 +223,10 @@ export function playerModel(skin) {
 
 // ───────────────────────── Armas (camada à parte) ─────────────────────────
 
-const METAL = hex(0x2b2d31);
-const GRIP = hex(0x5a3f28);
-const GLOW = { arc: hex(0x72ccff), energy: hex(0x80ff72), wind: hex(0xc0f2ff), flamer: hex(0xff8a26) };
-
-/** Peças da arma em coordenadas da arma (y = cano, origem = cabo). */
-function gunShape(kind) {
-  const g = GLOW[kind] || hex(0xffcc66);
-  const p = [];
-  const b = (at, size, color, extra) => p.push({ at, size, color, ...extra });
-  const body = (len, h = 0.1, w = 0.06) => b([0, len * 0.5 - 0.05, 0.05], [w, len, h], METAL);
-  const barrel = (len, y0, r = 0.04) => b([0, y0 + len * 0.5, 0.07], [r, len, r], METAL);
-  const handle = () => b([0, 0, -0.04], [0.05, 0.07, 0.13], GRIP);
-  const stock = () => b([0, -0.18, 0.03], [0.05, 0.24, 0.1], GRIP);
-  switch (kind) {
-    case 'pistol': case 'revolver':
-      b([0, 0.06, 0.06], [0.05, 0.2, 0.07], METAL); handle();
-      if (kind === 'revolver') b([0, 0.05, 0.06], [0.07, 0.07, 0.07], METAL);
-      break;
-    case 'akimbo':
-      for (const x of [-0.1, 0.1]) { b([x, 0.06, 0.06], [0.05, 0.2, 0.07], METAL); b([x, 0, -0.04], [0.05, 0.07, 0.13], GRIP); }
-      break;
-    case 'smg': body(0.34); handle(); b([0, 0.1, -0.08], [0.04, 0.06, 0.16], METAL); barrel(0.12, 0.28); break;
-    case 'rifle': case 'ak': case 'sniper': {
-      const len = kind === 'sniper' ? 0.72 : 0.62;
-      body(len * 0.6); stock(); handle(); b([0, 0.16, -0.09], [0.04, 0.06, 0.2], METAL, kind === 'ak' ? { rot: [0.35, 0, 0] } : {});
-      barrel(len * 0.55, len * 0.5);
-      if (kind === 'ak') b([0, 0.38, 0.02], [0.055, 0.2, 0.05], GRIP);
-      if (kind === 'sniper') b([0, 0.2, 0.15], [0.05, 0.26, 0.05], METAL);
-      break;
-    }
-    case 'shotgun': case 'lmg':
-      body(0.5, 0.11, 0.07); stock(); handle(); barrel(0.4, 0.42, 0.045);
-      if (kind === 'shotgun') b([0, 0.4, 0.0], [0.05, 0.18, 0.05], GRIP);
-      else b([0.06, 0.16, -0.03], [0.12, 0.14, 0.12], METAL);
-      break;
-    case 'launcher': b([0, 0.2, 0.08], [0.12, 0.62, 0.12], METAL); handle(); b([0, 0.5, 0.08], [0.14, 0.04, 0.14], g, { flat: true }); break;
-    case 'flamer': body(0.5, 0.09); handle(); b([0, 0.12, -0.09], [0.1, 0.28, 0.1], g); barrel(0.2, 0.44, 0.05); break;
-    case 'arc': case 'energy':
-      body(0.44, 0.12, 0.08); handle();
-      for (let i = 0; i < 3; i++) b([0, 0.2 + i * 0.08, 0.07], [0.1 - i * 0.012, 0.035, 0.1 - i * 0.012], g, { flat: true });
-      barrel(0.14, 0.42);
-      break;
-    case 'wind': body(0.36, 0.1); handle(); b([0, 0.42, 0.08], [0.2, 0.16, 0.2], METAL); b([0, 0.51, 0.08], [0.16, 0.02, 0.16], g, { flat: true }); break;
-    default: body(0.3); handle();
-  }
-  return p;
-}
-
-export const WEAPON_KINDS = ['pistol', 'smg', 'rifle', 'ak', 'shotgun', 'launcher', 'flamer', 'arc', 'energy',
-  'revolver', 'sniper', 'akimbo', 'lmg', 'wind'];
-
-/** Peças da arma presas à mão direita, apontando para a frente (camada 'weapon'). */
-export function weaponParts(kind) {
+/** Peças da arma `id` (nível 0–2) presas à mão direita, apontando para a frente (camada 'weapon'). */
+export function weaponParts(id, level = 0) {
   const hand = [0.29, 0.0, 0.84];
-  return gunShape(kind).map((part) => ({
+  return weaponShape(id, level).map((part) => ({
     ...part,
     layer: 'weapon',
     // Na mão (ponta do braço direito), cano paralelo ao chão, na direção do tronco.

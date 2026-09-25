@@ -53,9 +53,15 @@ func _player_sprite() -> void:
 	var sprite := _player.model
 	check(sprite != null and sprite.has_animation(&"Run") and sprite.has_animation(&"Reload"), "jogador: folha em pixel art com as animações")
 	check(not (_player.get_node("Pivot/Body") as MeshInstance3D).visible, "formas simples escondidas quando o sprite carrega")
-	check(_player._gun_kind == _player.weapon.data.kind and sprite.get_node_or_null("Layer") != null, "arma na mão: camada %s" % _player._gun_kind)
+	check(_player._gun_sheet == "weapon_m1911" and sprite.get_node_or_null("Layer") != null, "arma na mão: camada %s" % _player._gun_sheet)
 	_player.give_weapon(load("res://data/weapons/pump.tres"))
-	check(_player._gun_kind == &"shotgun", "trocar de arma troca a camada (espingarda)")
+	await _frames(1)
+	check(_player._gun_sheet == "weapon_pump", "trocar de arma troca a camada (pump)")
+	_player.weapon.level = 1
+	await _frames(1)
+	check(_player._gun_sheet == "weapon_pump_mk2", "Mk II no Weapon Lab muda o desenho da arma")
+	_player.weapon.level = 0
+	check(ResourceLoader.exists("res://assets/sprites/icons/weapon_pump.png") and ResourceLoader.exists("res://assets/sprites/fx/explosion.png"), "ícones e efeitos em pixel gerados")
 	# Direção: olhando para o leste (+X) → direção 2; para a câmera (+Z) → 0.
 	# (o jogador vira o corpo para a mira a cada quadro)
 	_player.aim_point = _player.global_position + Vector3(6, 0, 0)

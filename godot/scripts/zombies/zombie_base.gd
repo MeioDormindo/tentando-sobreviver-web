@@ -70,7 +70,11 @@ func _ready() -> void:
 		_abilities = ZombieAbilities.new()
 		add_child(_abilities)
 		_abilities.setup(self)
-	health.damaged.connect(func(info: DamageInfo, _current: float) -> void: Events.zombie_hit.emit(self, info))
+	health.damaged.connect(func(info: DamageInfo, _current: float) -> void:
+		Events.zombie_hit.emit(self, info)
+		if info.kind in [DamageInfo.Kind.WEAPON, DamageInfo.Kind.MELEE] and is_inside_tree():
+			var at: Vector3 = info.hit_position if info.hit_position != Vector3.ZERO else global_position + Vector3.UP * 1.2
+			PixelFx.spawn(get_tree(), "blood_splat", at, 0.7))
 	# Espalha o recálculo de caminho entre os zumbis (nem todos no mesmo frame).
 	_repath_left = randf() * repath_interval
 
@@ -367,6 +371,8 @@ func _on_health_died(info: DamageInfo) -> void:
 	for child in get_children():
 		if child is Hurtbox:
 			(child as Hurtbox).disable()
+	if not data.burns_on_death and is_inside_tree():
+		PixelFx.decal(get_tree(), "blood_pool", global_position, 0.9 * data.model_scale)
 	if data.burns_on_death:
 		# Cão: pega fogo e some, sem corpo.
 		flash(Color(1.0, 0.45, 0.1))

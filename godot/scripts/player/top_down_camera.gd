@@ -2,7 +2,7 @@ class_name TopDownCamera
 extends Camera3D
 ## Câmera isométrica (especificação 2.5D pixel): girada 45° e inclinada, com perspectiva
 ## controlada (FOV baixo, pouca distorção), seguindo o alvo com suavização e adiantando um
-## pouco na direção da mira. Mostra cerca de 13 m de largura. Também faz o tremor de tela e o
+## pouco na direção da mira. Mostra cerca de 20 m de largura (como o jogo web). Também faz o tremor de tela e o
 ## zoom configurável. Os sprites são desenhados com a mesma inclinação (npm run godot:sprites).
 
 @export var target: Node3D
@@ -10,7 +10,7 @@ extends Camera3D
 @export_range(30.0, 85.0) var pitch_degrees: float = 40.0
 ## Giro em torno do vertical (45° = isométrico: os corredores ficam na diagonal).
 @export var yaw_degrees: float = 45.0
-@export var distance: float = 11.6
+@export var distance: float = 17.8
 @export var field_of_view: float = 35.0
 ## Zoom (1 = padrão; maior aproxima).
 @export var zoom: float = 1.0

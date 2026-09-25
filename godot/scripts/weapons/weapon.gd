@@ -162,6 +162,8 @@ func trace(space: PhysicsDirectSpaceState3D, origin: Vector3, direction: Vector3
 		var hurtbox := hit.collider as Hurtbox
 		if hurtbox == null:
 			end = hit.position  # parede
+			if is_inside_tree():
+				PixelFx.spawn(get_tree(), "spark", end, 0.4)
 			break
 		skip.append(hurtbox.get_rid())
 		# Corpo e cabeça do mesmo zumbi contam como um alvo só.

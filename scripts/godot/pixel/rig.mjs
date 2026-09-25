@@ -67,7 +67,7 @@ export function sample(keys, t) {
 }
 
 /** Matriz do modelo para o mundo do desenho, olhando para a direção `index`. */
-function facing(index) {
+export function facing(index) {
   const a = (index * 2 * Math.PI) / DIRECTIONS;
   const ca = Math.cos(a), sa = Math.sin(a);
   // x (direita do personagem) → (-cos, sen); y (frente) → (sen, cos); z → z.
@@ -191,4 +191,27 @@ export function buildSheet(model, animations, { pitch, layers = { body: null }, 
   };
   if (behind.length) meta.weapon_behind = behind;
   return { sheets, meta, union: union && { minX: union.minX - originX, minY: union.minY - originY, maxX: union.maxX - originX, maxY: union.maxY - originY } };
+}
+
+/**
+ * Ícone de peças soltas (arma de perfil): desenha na direção `dir` e recorta justo.
+ * parts: [{ at, size, color, flat?, shape?, round?, rot? }].
+ */
+export function renderIcon(parts, { pitch = 8, ppm = 96, dir = 2, size = 256 } = {}) {
+  const f = facing(dir);
+  const boxes = parts.map((part) => {
+    const rot = part.rot || [0, 0, 0];
+    const local = mul(translate(...part.at), mul(rotZ(rot[2]), mul(rotY(rot[1]), mul(rotX(rot[0]), scale(...part.size)))));
+    return { m: mul(f, local), color: part.color, flat: part.flat, shape: part.shape, round: part.round };
+  });
+  const canvas = new Pixels(size, size);
+  renderSdf(canvas, boxes, pitch, ppm, size / 2, size / 2);
+  canvas.outline();
+  const b = canvas.bounds();
+  const crop = new Pixels(b.maxX - b.minX + 3, b.maxY - b.minY + 3);
+  for (let y = b.minY; y <= b.maxY; y++) for (let x = b.minX; x <= b.maxX; x++) {
+    const a = canvas.alpha(x, y);
+    if (a > 0) crop.set(x - b.minX + 1, y - b.minY + 1, canvas.rgb(x, y), a);
+  }
+  return crop;
 }

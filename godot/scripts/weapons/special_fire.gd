@@ -28,6 +28,12 @@ static func fire(weapon: Weapon, space: PhysicsDirectSpaceState3D, origin: Vecto
 			for pellet in maxi(1, data.pellets):
 				var dir := direction.rotated(Vector3.UP, deg_to_rad(randf_range(-data.spread_degrees, data.spread_degrees)))
 				hits.append_array(weapon.trace(space, origin, dir, exclude, shooter))
+			# Bolas de fogo avançando no jato.
+			var reach := minf(data.max_range, 6.0)
+			for i in 3:
+				var puff := PixelFx.spawn(weapon.get_tree(), "flame", origin + direction * (0.4 + i * 0.5), 0.6 + i * 0.25)
+				if puff:
+					puff.create_tween().tween_property(puff, "global_position", origin + direction * reach * (0.5 + i * 0.25), 0.3)
 			for info in hits:
 				var zombie := info.target as CharacterBase
 				if zombie and zombie.is_alive() and zombie.has_method(&"apply_burn"):
@@ -77,25 +83,13 @@ static func flash(tree: SceneTree, at: Vector3, radius: float, color: Color) -> 
 	light.omni_range = radius * 2.0
 	root.add_child(light)
 	light.global_position = at + Vector3.UP
-	var sphere := MeshInstance3D.new()
-	var mesh := SphereMesh.new()
-	mesh.radius = 0.5
-	mesh.height = 1.0
-	var material := StandardMaterial3D.new()
-	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	material.albedo_color = Color(color, 0.55)
-	mesh.material = material
-	sphere.mesh = mesh
-	root.add_child(sphere)
-	sphere.global_position = at + Vector3.UP * 0.5
-	var tween := sphere.create_tween().set_parallel()
-	tween.tween_property(sphere, "scale", Vector3.ONE * radius * 2.0, 0.25)
-	tween.tween_property(material, "albedo_color:a", 0.0, 0.3)
-	tween.tween_property(light, "light_energy", 0.0, 0.35)
-	tween.chain().tween_callback(func() -> void:
-		sphere.queue_free()
-		light.queue_free())
+	# Explosão em pixel art (fogo que vira fumaça), no tamanho do raio; a luz some junto.
+	var boom := PixelFx.spawn(tree, "explosion", at + Vector3.UP * 0.6, maxf(1.2, radius * 2.2))
+	if boom:
+		boom.modulate = Color.WHITE.lerp(color, 0.25)
+	var tween := light.create_tween()
+	tween.tween_property(light, "light_energy", 0.0, 0.4)
+	tween.tween_callback(light.queue_free)
 
 
 ## Raio: acerta o primeiro zumbi na mira e salta para os mais próximos (dano caindo a cada salto).
@@ -120,6 +114,9 @@ static func _arc(weapon: Weapon, space: PhysicsDirectSpaceState3D, origin: Vecto
 		if next == null:
 			break
 		weapon.spawn_tracer(current.global_position + Vector3.UP * 1.2, next.global_position + Vector3.UP * 1.2, ARC_COLOR)
+		var zap := PixelFx.spawn(weapon.get_tree(), "spark", next.global_position + Vector3.UP * 1.2, 0.7)
+		if zap:
+			zap.modulate = ARC_COLOR
 		var hurtbox := next.get_node_or_null("BodyHurtbox") as Hurtbox
 		if hurtbox:
 			hits.append(hurtbox.receive_hit(damage, 1.0, DamageInfo.Kind.WEAPON, shooter, next.global_position))
@@ -133,6 +130,11 @@ static func _arc(weapon: Weapon, space: PhysicsDirectSpaceState3D, origin: Vecto
 ## Vento: tudo no cone à frente leva dano e é arremessado.
 static func _gust(weapon: Weapon, origin: Vector3, direction: Vector3, shooter: Node) -> Array[DamageInfo]:
 	var params := weapon.data.special_params
+	# Redemoinho de vento avançando à frente.
+	for i in 2:
+		var swirl := PixelFx.spawn(weapon.get_tree(), "wind", origin + direction * (1.0 + i), 1.6 + i * 0.8)
+		if swirl:
+			swirl.create_tween().tween_property(swirl, "global_position", origin + direction * (3.5 + i * 2.0), 0.35)
 	var reach := float(params.get("range", 0))
 	var cos_half := cos(deg_to_rad(float(params.get("arc_deg", 60)) * 0.5))
 	var flat := Vector3(direction.x, 0.0, direction.z).normalized()

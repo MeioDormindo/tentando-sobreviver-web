@@ -39,7 +39,8 @@ var _last_hurt_at := -INF
 var _was_reloading := false
 ## Pixel art (npm run godot:sprites): o corpo do visual escolhido e a arma na mão por tipo.
 var model: CharacterSprite
-var _gun_kind: StringName = &""
+## Folha da arma em mãos (weapon_<id>[_mk2|_mk3]).
+var _gun_sheet: String = ""
 ## Animação curta em andamento (tiro, faca, dano) e quanto falta.
 var _action_anim: StringName = &""
 var _action_left := 0.0
@@ -225,12 +226,35 @@ func take_damage(info: DamageInfo) -> float:
 	return applied
 
 
-## Arma em mãos: camada do sprite do tipo (pistola, fuzil, espingarda...).
-func _show_gun(kind: StringName) -> void:
-	if kind == _gun_kind or model == null:
+## Nome da folha de uma arma: weapon_<id>, com _mk2/_mk3 depois do Weapon Lab.
+static func gun_sheet(weapon_id: StringName, level: int) -> String:
+	return "weapon_%s%s" % [weapon_id, "" if level <= 0 else "_mk%d" % (mini(level, 2) + 1)]
+
+
+## Arma em mãos: camada do sprite da arma (e do nível do Weapon Lab).
+func _show_gun(_kind: StringName = &"") -> void:
+	if model == null or weapon == null:
 		return
-	_gun_kind = kind
-	model.set_layer("weapon_%s" % kind)
+	var sheet := gun_sheet(weapon.data.id, weapon.level)
+	if sheet == _gun_sheet:
+		return
+	_gun_sheet = sheet
+	model.set_layer(sheet)
+	var other := inventory.other()
+	Events.weapon_visual_changed.emit(weapon.data.id, weapon.level, other.data.id if other else &"", other.level if other else 0)
+
+
+## Clarão do disparo: sprite de fogo e luz rápida na boca da arma.
+func _muzzle_flash() -> void:
+	var at := muzzle.global_position
+	PixelFx.spawn(get_tree(), "muzzle", at, 0.55, 1.4)
+	var light := OmniLight3D.new()
+	light.light_color = Color(1.0, 0.78, 0.4)
+	light.light_energy = 2.5
+	light.omni_range = 5.0
+	SpecialFire.world_root(get_tree()).add_child(light)
+	light.global_position = at
+	get_tree().create_timer(0.05).timeout.connect(light.queue_free)
 
 
 ## Toca uma animação curta (tiro, faca, dano) por cima da de movimento.
@@ -246,6 +270,7 @@ func _play_action(anim: StringName, seconds: float) -> void:
 func _process(delta: float) -> void:
 	if model == null:
 		return
+	_show_gun()  # troca de arma ou melhoria no Weapon Lab
 	if not is_alive() or is_down:
 		model.play(&"Death")
 		return
@@ -470,6 +495,7 @@ func _on_weapon_changed(current: Weapon, other: Weapon) -> void:
 
 func _on_fired() -> void:
 	_play_action(&"Shoot", 0.15)
+	_muzzle_flash()
 	Events.shot_fired.emit()
 	Events.weapon_fired.emit(weapon.data.id, weapon.level)
 

@@ -21,6 +21,8 @@ var _health_label: Label
 var _weapon_label: Label
 var _ammo_label: Label
 var _other_weapon_label: Label
+var _weapon_icon: TextureRect
+var _other_weapon_icon: TextureRect
 var _prompt_label: Label
 var _banner: Label
 var _toast: Label
@@ -48,6 +50,11 @@ func _ready() -> void:
 	Events.points_changed.connect(_on_points_changed)
 	Events.player_health_changed.connect(_on_health_changed)
 	Events.ammo_changed.connect(_on_ammo_changed)
+	Events.weapon_visual_changed.connect(func(weapon_id: StringName, level: int, other_id: StringName, other_level: int) -> void:
+		_set_icon(_weapon_icon, weapon_id, level)
+		# A reserva fica logo acima da arma em mãos.
+		_other_weapon_icon.set_meta(&"offset", Vector2(-MARGIN, -100.0 - _weapon_icon.size.y - 10.0))
+		_set_icon(_other_weapon_icon, other_id, other_level))
 	Events.weapon_changed.connect(func(_current: String, other: String) -> void: _other_weapon_label.text = ("[Q] " + other.to_upper()) if other != "" else "")
 	Events.interaction_prompt.connect(func(text: String) -> void: _prompt_label.text = text)
 	Events.zombie_hit.connect(func(_z: Node3D, info: DamageInfo) -> void: if info.kind != DamageInfo.Kind.BURN: _flash_hit(TEXT))
@@ -159,6 +166,10 @@ func _build() -> void:
 	_weapon_label = _label(root, "", 18, TEXT, Control.PRESET_BOTTOM_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, -46)
 	_ammo_label = _label(root, "", 36, TEXT, Control.PRESET_BOTTOM_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT)
 	_other_weapon_label = _label(root, "", 14, DIM, Control.PRESET_BOTTOM_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, -70)
+	# Ícones em pixel art da arma em mãos (grande) e da reserva (pequeno, apagado).
+	_weapon_icon = _icon_rect(root, 2.0, Vector2(-MARGIN, -100))
+	_other_weapon_icon = _icon_rect(root, 1.0, Vector2(-MARGIN, -100))
+	_other_weapon_icon.modulate = Color(1, 1, 1, 0.55)
 
 	_prompt_label = _label(root, "", 20, TEXT, Control.PRESET_CENTER_BOTTOM, HORIZONTAL_ALIGNMENT_CENTER, -110)
 
@@ -194,6 +205,32 @@ func _build() -> void:
 	root.add_child(_pause_menu)
 	_game_over_panel = _overlay(root, "GAME OVER", "")
 	_game_over_text = _game_over_panel.get_node("Box/Subtitle") as Label
+
+
+## Ícone pixel art (sem suavização) preso ao canto de baixo à direita.
+func _icon_rect(root: Control, zoom: float, offset: Vector2) -> TextureRect:
+	var rect := TextureRect.new()
+	rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT
+	rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	rect.set_meta(&"zoom", zoom)
+	rect.set_meta(&"offset", offset)
+	root.add_child(rect)
+	return rect
+
+
+func _set_icon(rect: TextureRect, weapon_id: StringName, level: int) -> void:
+	var path := "res://assets/sprites/icons/%s.png" % Player.gun_sheet(weapon_id, level)
+	if weapon_id == &"" or not ResourceLoader.exists(path):
+		rect.texture = null
+		return
+	rect.texture = load(path)
+	var size: Vector2 = rect.texture.get_size() * float(rect.get_meta(&"zoom"))
+	var offset: Vector2 = rect.get_meta(&"offset")
+	rect.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	rect.size = size
+	rect.position = get_viewport().get_visible_rect().size + offset - size
 
 
 ## Rótulo preso a um canto (preset) com a margem padrão; `dy` desloca na vertical.
