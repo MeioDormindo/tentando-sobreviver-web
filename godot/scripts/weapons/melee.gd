@@ -1,7 +1,8 @@
 class_name Melee
 extends Node3D
 ## Faca (como no jogo web): se houver um zumbi à frente, o jogador avança até ele; depois de
-## uma breve preparação, o golpe acerta todos os zumbis no arco à frente e os empurra.
+## uma breve preparação, o golpe acerta UM zumbi — o alvo do avanço, ou o mais perto no arco
+## à frente — e o empurra.
 ## As armas ficam paradas durante o golpe.
 
 signal swung()
@@ -35,7 +36,7 @@ func swing(owner_body: Node3D, forward: Vector3, weapon: Weapon) -> bool:
 	if target:
 		var to_target := target.global_position - owner_body.global_position
 		to_target.y = 0.0
-		# Para a ~1 m do alvo: o arco pega ele e quem estiver ao lado e logo atrás.
+		# Para a ~1 m do alvo, que é quem leva o golpe.
 		var gap := maxf(0.0, to_target.length() - 1.0)
 		lunge_left = minf(data.lunge_time, gap / data.lunge_speed)
 		lunge_velocity = to_target.normalized() * data.lunge_speed
@@ -44,23 +45,32 @@ func swing(owner_body: Node3D, forward: Vector3, weapon: Weapon) -> bool:
 		weapon.busy = true
 		get_tree().create_timer(data.busy_time).timeout.connect(func() -> void: weapon.busy = false)
 	swung.emit()
-	get_tree().create_timer(data.windup + lunge_left).timeout.connect(_strike.bind(owner_body, forward))
+	get_tree().create_timer(data.windup + lunge_left).timeout.connect(_strike.bind(owner_body, forward, target))
 	return true
 
 
-func _strike(owner_body: Node3D, forward: Vector3) -> void:
+## Um alvo só: o do avanço, se ainda estiver no arco e ao alcance; senão, o mais perto no arco.
+func _strike(owner_body: Node3D, forward: Vector3, lunge_target: Node3D = null) -> void:
 	if not is_instance_valid(owner_body):
 		return
 	_slash_fx(owner_body, forward)
-	for zombie in _zombies_in_arc(owner_body.global_position - forward * 0.3, forward, data.reach + 0.3, data.arc_degrees):
-		var hurtbox := zombie.get_node_or_null("BodyHurtbox") as Hurtbox
-		if hurtbox == null:
-			continue
-		hurtbox.receive_hit(data.damage, 1.0, DamageInfo.Kind.MELEE, owner_body, zombie.global_position)
-		if zombie.has_method(&"apply_knockback"):
-			var push := zombie.global_position - owner_body.global_position
-			push.y = 0.0
-			zombie.call(&"apply_knockback", push.normalized() * data.knockback)
+	var origin := owner_body.global_position - forward * 0.3
+	var in_arc := _zombies_in_arc(origin, forward, data.reach + 0.3, data.arc_degrees)
+	var zombie: Node3D = lunge_target if is_instance_valid(lunge_target) and in_arc.has(lunge_target) else null
+	if zombie == null:
+		for candidate in in_arc:
+			if zombie == null or origin.distance_to(candidate.global_position) < origin.distance_to(zombie.global_position):
+				zombie = candidate
+	if zombie == null:
+		return
+	var hurtbox := zombie.get_node_or_null("BodyHurtbox") as Hurtbox
+	if hurtbox == null:
+		return
+	hurtbox.receive_hit(data.damage, 1.0, DamageInfo.Kind.MELEE, owner_body, zombie.global_position)
+	if zombie.has_method(&"apply_knockback"):
+		var push := zombie.global_position - owner_body.global_position
+		push.y = 0.0
+		zombie.call(&"apply_knockback", push.normalized() * data.knockback)
 
 
 ## Rastro do corte em pixel art: meia-lua deitada na altura da cintura, virada para o golpe.
@@ -88,6 +98,8 @@ func _zombies_in_arc(origin: Vector3, forward: Vector3, distance: float, arc_deg
 	for node in get_tree().get_nodes_in_group(zombie_group):
 		var zombie := node as CharacterBase
 		if zombie == null or not zombie.is_alive():
+			continue
+		if zombie.has_method(&"is_airborne") and zombie.call(&"is_airborne"):
 			continue
 		var to := zombie.global_position - origin
 		to.y = 0.0

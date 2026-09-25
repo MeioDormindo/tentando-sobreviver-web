@@ -8,7 +8,11 @@ extends Node
 ## - burns_on_death (Cão): pega fogo e não deixa corpo;
 ## - shield (Hoplita com Escudo, Templo): de frente só passa uma fração do dano (headshot passa);
 ## - revive (Esqueleto, Templo): às vezes se levanta de novo depois de desmontar (uma vez);
-## - ranged com projectile "arrow" (Esqueleto Arqueiro): flecha reta com dano direto.
+## - ranged com projectile "arrow" (Esqueleto Arqueiro): flecha reta com dano direto;
+## - zigzag (Sátiro): corre em zigue-zague;
+## - hit_and_run (Lobo Infernal): aproxima, investe, recua e repete;
+## - flying (Harpia): voa fora do alcance da faca, mergulha e sobe;
+## - gaze (Górgona): olhar que petrifica quem olha para ela; depois fica vulnerável.
 ## O ZombieBase pergunta `override_movement` a cada passo e avisa a morte em `on_death`.
 
 const ACID_COLOR := Color(0.55, 0.85, 0.2)
@@ -25,6 +29,22 @@ var _fuse_left := -1.0
 var _spit_cooldown := 0.0
 var _windup_left := -1.0
 var _exploded := false
+## Velocidade que a habilidade impõe neste passo (null = parado) e se olha para o alvo.
+var move_velocity: Variant = null
+var face_target := false
+var _clock := 0.0
+## Lobo: "approach", "lunge", "retreat", "rest"; Harpia: "hover", "dive", "rise".
+var _mode := ""
+var _mode_left := 0.0
+var _move_dir := Vector3.ZERO
+var _lunge_hit := false
+var _cooldown_left := 0.0
+## Górgona: olhar preparando/ativo e a janela de vulnerabilidade.
+var _gaze_windup := -1.0
+var _gaze_left := -1.0
+var _vulnerable_left := 0.0
+var _gaze_light: OmniLight3D
+var _hover := 0.0
 
 
 func setup(p_zombie: ZombieBase) -> void:
@@ -36,13 +56,58 @@ func setup(p_zombie: ZombieBase) -> void:
 		zombie.health.damage_filter = _filter_armor
 	elif not data.shield.is_empty():
 		zombie.health.damage_filter = _filter_shield
+	elif not data.gaze.is_empty():
+		zombie.health.damage_filter = _filter_gaze
+		_cooldown_left = float(data.gaze.get("cooldown_time", 6.0)) * 0.4
 	_spit_cooldown = float(data.ranged.get("cooldown_time", 0)) * 0.5
+	if not data.flying.is_empty():
+		_mode = "hover"
+		_hover = float(data.flying.get("height", 1.6))
+		_cooldown_left = float(data.flying.get("cooldown_time", 2.4)) * 0.5
+	if not data.hit_and_run.is_empty():
+		_mode = "approach"
+
+
+func _process(delta: float) -> void:
+	# Harpia: o corpo (visual e hurtboxes) sobe e desce com o voo.
+	if zombie == null or data_flying().is_empty() or not zombie.is_alive():
+		return
+	var goal := 0.35 if _mode == "dive" else _hover
+	zombie.pivot.position.y = move_toward(zombie.pivot.position.y, goal, delta * 5.0)
+
+
+func data_flying() -> Dictionary:
+	return zombie.data.flying
+
+
+## No ar e fora do mergulho: a faca não alcança.
+func airborne() -> bool:
+	return not zombie.data.flying.is_empty() and _mode != "dive" and zombie.pivot.position.y > 0.9
+
+
+## Direção da corrida (Sátiro: zigue-zague em volta do caminho).
+func steer(direction: Vector3, delta: float) -> Vector3:
+	var params := zombie.data.zigzag
+	if params.is_empty():
+		return direction
+	_clock += delta
+	var side := Vector3(-direction.z, 0.0, direction.x)
+	var wave := sin(_clock * float(params.get("frequency", 3.0)) + float(zombie.get_instance_id() % 7)) * float(params.get("amplitude", 0.8))
+	return (direction + side * wave).normalized()
 
 
 ## Devolve true quando a habilidade controla o zumbi neste passo (ele não persegue).
 func override_movement(delta: float, to_target: Vector3) -> bool:
 	var data := zombie.data
 	var distance := to_target.length()
+	move_velocity = null
+	face_target = false
+	if not data.hit_and_run.is_empty():
+		return _wolf(delta, to_target)
+	if not data.flying.is_empty():
+		return _harpy(delta, to_target)
+	if not data.gaze.is_empty() and _gorgon(delta, to_target):
+		return true
 	if not data.explosive.is_empty():
 		if _fuse_left >= 0.0:
 			_fuse_left -= delta
@@ -81,6 +146,151 @@ func on_death(_info: DamageInfo) -> void:
 		_spawn_pool(data.death_cloud, GAS_COLOR, zombie.global_position)
 	if not data.revive.is_empty() and not zombie.has_meta(&"revived") and randf() < float(data.revive.get("chance", 0.0)):
 		_schedule_revive()
+
+
+# ── Lobo Infernal: aproxima → investe → recua → descansa ──
+
+func _wolf(delta: float, to_target: Vector3) -> bool:
+	var p := zombie.data.hit_and_run
+	_mode_left -= delta
+	_cooldown_left -= delta
+	var distance := to_target.length()
+	match _mode:
+		"lunge":
+			move_velocity = _move_dir * float(p.get("lunge_speed", 11.0))
+			if not _lunge_hit and distance <= zombie.data.body_radius + 0.9:
+				_lunge_hit = true
+				zombie.target.take_damage(DamageInfo.new(float(p.get("damage", 20)) * (zombie.attack_damage / maxf(1.0, zombie.data.damage)), DamageInfo.Kind.ZOMBIE, zombie, false, zombie.global_position))
+			if _mode_left <= 0.0:
+				_mode = "retreat"
+				_mode_left = float(p.get("retreat_time", 0.9))
+			return true
+		"retreat":
+			move_velocity = -to_target.normalized() * float(p.get("retreat_speed", 4.5))
+			face_target = true
+			if _mode_left <= 0.0:
+				_mode = "approach"
+				_cooldown_left = float(p.get("cooldown_time", 1.2))
+			return true
+		_:
+			if _cooldown_left <= 0.0 and distance <= float(p.get("lunge_range", 5.0)) and zombie.has_line_of_sight():
+				_mode = "lunge"
+				_mode_left = float(p.get("lunge_time", 0.4))
+				_move_dir = to_target.normalized()
+				_lunge_hit = false
+				zombie.flash(Color(1.0, 0.5, 0.2))
+				Audio.play_at("hound_bark", zombie.global_position, "zombie", 0.9)
+				return true
+			return false
+
+
+# ── Harpia: paira → mergulha no jogador → sobe ──
+
+func _harpy(delta: float, to_target: Vector3) -> bool:
+	var p := zombie.data.flying
+	_mode_left -= delta
+	_cooldown_left -= delta
+	var distance := to_target.length()
+	match _mode:
+		"dive":
+			move_velocity = _move_dir * float(p.get("dive_speed", 10.0))
+			if not _lunge_hit and distance <= zombie.data.body_radius + 0.9:
+				_lunge_hit = true
+				zombie.target.take_damage(DamageInfo.new(float(p.get("damage", 15)) * (zombie.attack_damage / maxf(1.0, zombie.data.damage)), DamageInfo.Kind.ZOMBIE, zombie, false, zombie.global_position))
+			if _mode_left <= 0.0:
+				_mode = "rise"
+				_mode_left = float(p.get("rise_time", 0.9))
+			return true
+		"rise":
+			move_velocity = -to_target.normalized() * 3.0
+			face_target = true
+			if _mode_left <= 0.0:
+				_mode = "hover"
+				_cooldown_left = float(p.get("cooldown_time", 2.4))
+			return true
+		_:
+			if _cooldown_left <= 0.0 and distance <= float(p.get("dive_range", 5.5)):
+				_mode = "dive"
+				_mode_left = float(p.get("dive_time", 0.45))
+				_move_dir = to_target.normalized()
+				_lunge_hit = false
+				zombie.flash(Color(0.8, 0.7, 1.0))
+				return true
+			# Pairando: não encosta (fica rondando a uns 3 m) até poder mergulhar.
+			if distance < 3.0:
+				move_velocity = Vector3(-to_target.z, 0.0, to_target.x).normalized() * zombie.move_speed
+				face_target = true
+				return true
+			return false
+
+
+# ── Górgona: prepara → olha (petrifica quem olha para ela) → fica vulnerável ──
+
+func _gorgon(delta: float, to_target: Vector3) -> bool:
+	var p := zombie.data.gaze
+	_cooldown_left -= delta
+	_vulnerable_left = maxf(0.0, _vulnerable_left - delta)
+	if _gaze_windup >= 0.0:
+		_gaze_windup -= delta
+		zombie.flash(Color(0.6, 1.0, 0.5))
+		if _gaze_windup < 0.0:
+			_gaze_left = float(p.get("gaze_time", 1.8))
+			_set_gaze_light(true)
+		return true
+	if _gaze_left >= 0.0:
+		_gaze_left -= delta
+		var player := zombie.target
+		if player and player.is_alive() and player.has_method(&"petrify") and gazes_at(player):
+			player.call(&"petrify", float(p.get("rate", 0.75)) * delta)
+		if _gaze_left < 0.0:
+			_set_gaze_light(false)
+			_vulnerable_left = float(p.get("vulnerable_time", 2.2))
+			_cooldown_left = float(p.get("cooldown_time", 6.0))
+			zombie.flash(Color(1.0, 1.0, 1.0))
+		return true
+	if _cooldown_left <= 0.0 and to_target.length() <= float(p.get("range", 14.0)) and zombie.has_line_of_sight():
+		_gaze_windup = float(p.get("windup_time", 0.7))
+		Audio.play_at("spitter_windup", zombie.global_position, "zombie", 0.9)
+		return true
+	return false
+
+
+## O olhar pega o jogador? Precisa de linha de visão (parede e objeto protegem) e de o jogador
+## estar virado para a Górgona (dentro de `facing_deg` da mira); de costas, não pega.
+func gazes_at(player: Node3D) -> bool:
+	if not zombie.has_line_of_sight():
+		return false
+	var to_gorgon := zombie.global_position - player.global_position
+	to_gorgon.y = 0.0
+	var aim: Vector3 = -player.global_basis.z
+	if player.get(&"aim_point") is Vector3:
+		aim = (player.get(&"aim_point") as Vector3) - player.global_position
+	aim.y = 0.0
+	if aim.length() < 0.01 or to_gorgon.length() < 0.01:
+		return true
+	return rad_to_deg(aim.angle_to(to_gorgon)) <= float(zombie.data.gaze.get("facing_deg", 70.0))
+
+
+func gazing() -> bool:
+	return _gaze_left >= 0.0
+
+
+func _set_gaze_light(on: bool) -> void:
+	if on and _gaze_light == null:
+		_gaze_light = OmniLight3D.new()
+		_gaze_light.light_color = Color(0.5, 1.0, 0.45)
+		_gaze_light.light_energy = 2.2
+		_gaze_light.omni_range = 5.0
+		_gaze_light.position = Vector3(0, 1.9, -0.3)
+		zombie.pivot.add_child(_gaze_light)
+	elif not on and _gaze_light:
+		_gaze_light.queue_free()
+		_gaze_light = null
+
+
+## Depois de olhar, a Górgona fica exposta: leva dano extra.
+func _filter_gaze(info: DamageInfo) -> float:
+	return info.amount * (float(zombie.data.gaze.get("vulnerable_factor", 2.0)) if _vulnerable_left > 0.0 else 1.0)
 
 
 ## Escudo: de frente (arco `arc_deg` para onde o zumbi olha) só `factor` do dano passa;

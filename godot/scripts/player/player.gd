@@ -34,6 +34,15 @@ var fury_multiplier: float = 1.0:
 			_apply_weapon_modifiers()
 ## Lentidão (grito do Paciente Zero): fator e até quando.
 ## Lentidão ao levar um golpe de zumbi: fator da velocidade e duração (s).
+## Petrificação (olhar da Górgona): acumula de 0 a 1; em 1 vira pedra por STONE_TIME
+## (sem mover nem atirar); some aos poucos quando o olhar para.
+const STONE_TIME := 1.5
+const PETRIFY_DECAY := 0.35
+const STONE_COLOR := Color(0.62, 0.62, 0.6)
+var petrification := 0.0
+var _stone_until := 0.0
+var _last_gazed := -99.0
+var _stone_tint := false
 const HIT_SLOW_FACTOR := 0.6
 const HIT_SLOW_TIME := 0.7
 var _slow_factor := 1.0
@@ -163,12 +172,53 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector3.ZERO
 		return
 	_firing = false
+	_update_petrify(delta)
+	if is_stone():
+		velocity = Vector3.ZERO
+		move_and_slide()
+		return
 	if controlled:
 		_read_input()
 	_regenerate(delta)
 	_update_interaction()
 	_move(delta)
 	_face_aim()
+
+
+## Olhar da Górgona: soma à petrificação. Estágios: lento → cinza (metade) → pedra (inteira).
+func petrify(amount: float) -> void:
+	if is_stone() or not is_alive():
+		return
+	_last_gazed = _clock
+	petrification = minf(1.0, petrification + amount)
+	if petrification >= 1.0:
+		petrification = 0.0
+		_stone_until = _clock + STONE_TIME
+		Events.toast.emit("PETRIFICADO! Não olhe para a Górgona")
+		Events.screen_shake.emit(0.3, 0.1)
+		if model:
+			model.tint(STONE_COLOR * 0.85)
+			_stone_tint = true
+
+
+## Virado pedra agora (não anda nem atira).
+func is_stone() -> bool:
+	return _clock < _stone_until
+
+
+func _update_petrify(delta: float) -> void:
+	if is_stone():
+		return
+	if petrification > 0.0:
+		if _clock - _last_gazed > 0.3:
+			petrification = maxf(0.0, petrification - PETRIFY_DECAY * delta)
+		# Estágio 1: fica lento; estágio 2 (metade): também vai ficando cinza.
+		slow(1.0 - 0.55 * petrification, 0.2)
+	# Tinta cinza só enquanto há petrificação (e uma vez para voltar ao normal).
+	var grey := clampf((petrification - 0.4) / 0.6, 0.0, 1.0)
+	if model and (grey > 0.0 or _stone_tint):
+		model.tint(Color.WHITE.lerp(STONE_COLOR, grey))
+		_stone_tint = grey > 0.0
 
 
 ## Pega uma arma (compra, Mystery Box...). Devolve a arma que saiu do inventário.
@@ -178,7 +228,7 @@ func give_weapon(weapon_data: WeaponData) -> Weapon:
 
 ## Atira na direção da mira. Devolve os acertos.
 func fire() -> Array[DamageInfo]:
-	if not is_alive():
+	if not is_alive() or is_stone():
 		return []
 	_firing = true
 	_face_aim()
@@ -227,7 +277,7 @@ func hurt_within(seconds: float) -> bool:
 
 ## Golpe de faca na direção da mira.
 func knife() -> bool:
-	if not is_alive():
+	if not is_alive() or is_stone():
 		return false
 	return melee.swing(self, aim_point - global_position, weapon)
 

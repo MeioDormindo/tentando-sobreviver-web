@@ -14,7 +14,7 @@ import {
   zombieModel, zombieAnimations, playerModel, patientModel, playerAnimations, weaponParts,
   houndModel, houndAnimations, PISTOLS, conductorModel, patientZeroModel, bossAnimations,
 } from './characters.mjs';
-import { TEMPLE_LOOKS, TEMPLE_HOUND, hopliteModel, skeletonModel, minotaurModel, archaeologistModel, cerberusModel, cerberusAnimations, entityModel } from './temple_characters.mjs';
+import { TEMPLE_LOOKS, TEMPLE_HOUND, hopliteModel, skeletonModel, minotaurModel, archaeologistModel, cerberusModel, cerberusAnimations, entityModel, satyrModel, hellwolfLook, harpyModel, gorgonModel } from './temple_characters.mjs';
 
 // Filtro opcional: node build.mjs zombie_hoplite boss_ weapon_makarov → só as folhas cujo nome
 // começa com um desses (o resto fica como está). Sem argumentos, gera tudo.
@@ -70,10 +70,17 @@ for (const file of readdirSync('godot/data/zombies')) {
   const art = (text.match(/\nart = &"(\w+)"/) || [])[1] || '';
   if (id === 'hound') {
     emit('hound', () => buildSheet(houndModel(look), houndAnimations(), { pitch: PITCH }));
+  } else if (art === 'hellwolf') {
+    // Lobo Infernal: corpo de cão, com as animações do cão.
+    emit(`zombie_${id}`, () => buildSheet(houndModel({ ...hellwolfLook(look), glow: true }), houndAnimations(), { pitch: PITCH }));
   } else if (art) {
-    // Inimigos do Templo: modelos próprios (Hoplita, Esqueleto...).
-    const model = art.startsWith('hoplite') ? hopliteModel(look, art === 'hoplite_shield') : skeletonModel(look, art === 'skeleton_archer');
-    emit(`zombie_${id}`, () => buildSheet(model, zombieAnimations(), { pitch: PITCH, workSize: 240 }));
+    // Inimigos do Templo: modelos próprios (Hoplita, Esqueleto, Sátiro, Harpia, Górgona).
+    const MODELS = {
+      hoplite: () => hopliteModel(look, false), hoplite_shield: () => hopliteModel(look, true),
+      skeleton: () => skeletonModel(look, false), skeleton_archer: () => skeletonModel(look, true),
+      satyr: () => satyrModel(look), harpy: () => harpyModel(look), gorgon: () => gorgonModel(look),
+    };
+    emit(`zombie_${id}`, () => buildSheet((MODELS[art] || MODELS.skeleton)(), zombieAnimations(), { pitch: PITCH, workSize: 240 }));
   } else {
     emit(`zombie_${id}`, () => buildSheet(zombieModel(look), zombieAnimations(), { pitch: PITCH, workSize: 240 }));
     // Blindado sem a armadura (depois do headshot ou de dano suficiente).

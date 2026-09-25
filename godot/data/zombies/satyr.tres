@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="ZombieData" format=3]
+
+[ext_resource type="Script" path="res://scripts/zombies/zombie_data.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/zombies/zombie_walker.tscn" id="2_scene"]
+; Só do Godot (scripts/godot/temple-data.ts).
+
+[resource]
+script = ExtResource("1_script")
+id = &"satyr"
+display_name = "Sátiro"
+scene = ExtResource("2_scene")
+max_health = 55
+move_speed = 4.4
+damage = 8
+attack_range = 1.1
+attack_interval = 0.5
+points_kill = 90
+plank_damage = 1
+body_radius = 0.3
+pushable = true
+zigzag = { "amplitude": 0.85, "frequency": 3.2 }
+shirt_color = Color(0.353, 0.227, 0.133, 1)
+skin_color = Color(0.541, 0.416, 0.29, 1)
+model_scale = 0.82
+art = &"satyr"

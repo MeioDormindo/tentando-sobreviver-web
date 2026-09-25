@@ -114,6 +114,10 @@ de conceitos: ver `docs/analise-typescript.md`.
     cabeça), Esqueleto (às vezes se levanta de novo) e Esqueleto Arqueiro (flecha reta); os
     tipos dos outros mapas ganham roupa grega (arqueólogo, cultista, gladiador, portador de
     ânfora, múmia, sacerdote do veneno, hoplita de bronze e o cão de Hades);
+  - criaturas da Floresta e do Templo da Górgona: Sátiro (rápido, em zigue-zague, em bando),
+    Lobo Infernal (investe e recua), Harpia (voa fora do alcance da faca e mergulha) e Górgona
+    (o olhar petrifica quem olha para ela: fica lento, cinza e vira pedra por 1,5 s sem andar nem
+    atirar; parede, objeto ou virar de costas protegem; depois de olhar ela leva dano dobrado);
   - bosses em rodízio nos rounds de boss — 10 **o Minotauro**, 20 **Cérbero**, 30 **a Entidade
     do Submundo**, e o ciclo continua mais forte:
     - Minotauro: investida, onda de choque; na Fúria derruba as colunas da praça; no Colapso
@@ -160,7 +164,7 @@ de conceitos: ver `docs/analise-typescript.md`.
   lento de lado e de costas, e mais lento por um instante depois de um golpe de zumbi);
 - zumbis sentem os tiros: recuam um pouco, hesitam e piscam no acerto (Tank, Blindado e bosses
   não recuam);
-- 2 armas com troca, faca com avanço e as 19 armas do jogo web:
+- 2 armas com troca, faca com avanço (cada golpe acerta um zumbi: o alvo do avanço ou o mais perto à frente) e as 19 armas do jogo web:
   - chumbos, perfuração e o giro da minigun;
   - as especiais: granada, plasma, lança-chamas, raio e Canhão de Vento;
 - os 8 inimigos do jogo web, com comportamento e aparência próprios (provisória, em blocos):

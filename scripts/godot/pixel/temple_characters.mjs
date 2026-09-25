@@ -281,3 +281,67 @@ export function entityModel(monstrous = false) {
     }
   } });
 }
+
+// ───────────────────────── Floresta e Templo da Górgona ─────────────────────────
+
+/** Sátiro: pequeno, pernas de bode peludas com cascos, chifres curvos e barbicha. */
+export function satyrModel(look) {
+  const fur = look.shirt || hex(0x5a3a22), skin = look.skin || hex(0x8a6a4a), horn = hex(0xd8ccb0);
+  const c = { torso: skin, sleeve: skin, skin, pants: fur, shoes: hex(0x2a1e14), eyes: hex(0xffc83a), mouth: hex(0x3a1a10) };
+  return humanoid(c, { scale: look.scale || 0.82, extra: (parts) => {
+    for (const s of [1, -1]) {
+      const leg = s > 0 ? 'leg.R' : 'leg.L';
+      parts.push(box(leg, [s * 0.12, -0.05, 0.62], [0.21, 0.24, 0.5], fur));  // coxa peluda
+      parts.push(box(leg, [s * 0.12, -0.06, 0.26], [0.13, 0.15, 0.34], fur, { rot: [-0.25, 0, 0] }));  // canela de bode
+      parts.push(box('head', [s * 0.1, -0.02, 1.8], [0.06, 0.06, 0.16], horn, { rot: [-0.6, 0, s * 0.3] }));  // chifres
+      parts.push(box('head', [s * 0.13, -0.1, 1.86], [0.05, 0.1, 0.05], horn, { rot: [0.4, 0, 0] }));
+      parts.push(box('head', [s * 0.16, 0, 1.66], [0.08, 0.04, 0.06], skin, { rot: [0, 0, s * 0.6] }));  // orelha pontuda
+    }
+    parts.push(box('head', [0, 0.1, 1.5], [0.08, 0.05, 0.1], fur));  // barbicha
+    parts.push(box('head', [0, -0.02, 1.79], [0.28, 0.27, 0.06], fur));  // cabelo
+    parts.push(box('hips', [0, 0, 0.95], [0.46, 0.3, 0.18], fur));
+  } });
+}
+
+/** Lobo Infernal: o corpo do cão, pelagem carbonizada, olhos acesos e brasas no dorso. */
+export function hellwolfLook(look) {
+  return { shirt: look.shirt || hex(0x2a2226), skin: look.skin || hex(0x7a2a1a) };
+}
+
+/** Harpia: mulher-pássaro de asas no lugar dos braços, penas escuras e garras. */
+export function harpyModel(look) {
+  const feather = look.shirt || hex(0x4a3a5a), skin = look.skin || hex(0x9a8a7a), talon = hex(0xd8c89a);
+  const c = { torso: feather, sleeve: feather, forearm: feather, skin, pants: feather, shoes: talon, eyes: hex(0xff4a2a), mouth: hex(0x2a1a14) };
+  return humanoid(c, { bulk: 0.85, scale: look.scale || 0.9, extra: (parts) => {
+    for (const s of [1, -1]) {
+      const arm = s > 0 ? 'arm.R' : 'arm.L';
+      const fore = s > 0 ? 'fore.R' : 'fore.L';
+      parts.push(box(arm, [s * 0.45, -0.02, 1.32], [0.4, 0.1, 0.34], feather, { rot: [0, 0, s * 0.15] }));  // asa (braço)
+      parts.push(box(fore, [s * 0.6, -0.02, 1.0], [0.46, 0.08, 0.42], feather, { rot: [0, 0, s * 0.3] }));  // ponta da asa
+      for (let i = 0; i < 3; i++) parts.push(box(fore, [s * (0.5 + i * 0.12), 0.0, 0.8 - i * 0.06], [0.08, 0.04, 0.22], hex(0x2e2438)));  // penas longas
+      const leg = s > 0 ? 'leg.R' : 'leg.L';
+      parts.push(box(leg, [s * 0.12, 0.08, 0.03], [0.18, 0.22, 0.05], talon));  // garras
+    }
+    parts.push(box('head', [0, -0.03, 1.78], [0.32, 0.3, 0.1], hex(0x2a2030)));  // cabelo de penas
+    parts.push(box('head', [0, -0.16, 1.66], [0.22, 0.08, 0.3], hex(0x2a2030)));
+    parts.push(box('hips', [0, -0.18, 0.9], [0.3, 0.2, 0.3], feather, { rot: [0.5, 0, 0] }));  // cauda
+  } });
+}
+
+/** Górgona: vestido longo verde-escuro, pele escamosa e serpentes vivas no lugar do cabelo. */
+export function gorgonModel(look) {
+  const dress = look.shirt || hex(0x2e5a3a), skin = look.skin || hex(0x7a9a6a), snake = hex(0x4e7a3a), gold = GOLD;
+  const c = { torso: dress, sleeve: skin, skin, pants: dress, shoes: dress, eyes: hex(0xb4ff5a), mouth: hex(0x2a3a1a) };
+  return humanoid(c, { scale: look.scale || 1.15, extra: (parts) => {
+    parts.push(box('hips', [0, 0, 0.55], [0.56, 0.36, 0.8], dress));  // vestido até o chão
+    parts.push(box('spine', [0, 0.14, 1.44], [0.3, 0.03, 0.06], gold));  // colar
+    for (let i = 0; i < 9; i++) {  // serpentes do cabelo
+      const a = (i / 9) * Math.PI * 2;
+      const x = Math.cos(a) * 0.14, y = Math.sin(a) * 0.14;
+      parts.push(box('head', [x, y, 1.82], [0.05, 0.05, 0.16], snake, { rot: [y * 3, 0, -x * 3] }));
+      parts.push(box('head', [x * 1.6, y * 1.6, 1.9], [0.06, 0.06, 0.05], snake));
+      parts.push(box('head', [x * 1.7, y * 1.7 + 0.02, 1.915], [0.02, 0.02, 0.015], hex(0xff3a2a), { flat: true }));
+    }
+    for (const [x, z] of [[0.1, 1.2], [-0.12, 1.32], [0.05, 1.05]]) parts.push(box('spine', [x, 0.145, z], [0.06, 0.02, 0.04], scale(skin, 0.7), { flat: true }));  // escamas
+  } });
+}

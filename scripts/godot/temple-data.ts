@@ -112,17 +112,33 @@ export const TEMPLE_ZOMBIES: GodotZombie[] = [
     abilities: { ranged: { min_range: 4.5, max_range: 13, cooldown_time: 2.6, windup_time: 0.65, projectile_speed: 18, projectile: 'arrow', damage: 14 } } },
 ];
 
+/** Inimigos da Floresta e do Templo da Górgona (Fase 3). */
+TEMPLE_ZOMBIES.push(
+  // Sátiro: pequeno, muito rápido e frágil; corre em zigue-zague e vem em bando.
+  { id: 'satyr', display_name: 'Sátiro', max_health: 55, move_speed: 4.4, damage: 8, attack_range: 1.1, attack_interval: 0.5, points_kill: 90, plank_damage: 1, body_radius: 0.3, pushable: true, shirt: 0x5a3a22, skin: 0x8a6a4a, scale: 0.82, art: 'satyr',
+    abilities: { zigzag: { amplitude: 0.85, frequency: 3.2 } } },
+  // Lobo Infernal: aproxima, investe, recua e repete (olhos acesos e aura de brasa).
+  { id: 'hellwolf', display_name: 'Lobo Infernal', scene: 'res://scenes/zombies/hound.tscn', max_health: 140, move_speed: 3.4, damage: 18, attack_range: 1.3, attack_interval: 0.8, points_kill: 160, plank_damage: 1, body_radius: 0.42, pushable: true, shirt: 0x2a2226, skin: 0x7a2a1a, scale: 1.1, art: 'hellwolf',
+    abilities: { hit_and_run: { lunge_range: 5, lunge_speed: 11, lunge_time: 0.4, retreat_time: 0.9, retreat_speed: 4.5, cooldown_time: 1.2, damage: 22 } } },
+  // Harpia: voa fora do alcance da faca, mergulha sobre o jogador e sobe de novo.
+  { id: 'harpy', display_name: 'Harpia', max_health: 90, move_speed: 3.6, damage: 12, attack_range: 1.2, attack_interval: 0.9, points_kill: 170, plank_damage: 1, body_radius: 0.36, pushable: true, shirt: 0x4a3a5a, skin: 0x9a8a7a, scale: 0.9, art: 'harpy',
+    abilities: { flying: { height: 1.6, dive_range: 5.5, dive_time: 0.45, dive_speed: 11, rise_time: 0.9, cooldown_time: 2.4, damage: 16 } } },
+  // Górgona: o olhar petrifica quem olha para ela; depois de olhar, fica vulnerável.
+  { id: 'gorgon', display_name: 'Górgona', max_health: 420, move_speed: 1.4, damage: 20, attack_range: 1.4, attack_interval: 1.4, points_kill: 350, plank_damage: 2, body_radius: 0.45, pushable: false, shirt: 0x2e5a3a, skin: 0x7a9a6a, scale: 1.15, art: 'gorgon',
+    abilities: { gaze: { range: 14, windup_time: 0.7, gaze_time: 1.8, cooldown_time: 6, rate: 0.75, facing_deg: 70, vulnerable_time: 2.2, vulnerable_factor: 2 } } },
+);
+
 /** Composição dos rounds do Templo (vale a última cuja from_round já chegou). */
 export const TEMPLE_COMPOSITION: Array<{ from_round: number; weights: Record<string, number> }> = [
   { from_round: 1, weights: { walker: 80, skeleton: 20 } },
-  { from_round: 3, weights: { walker: 55, skeleton: 25, runner: 10, hoplite: 10 } },
-  { from_round: 6, weights: { walker: 40, skeleton: 20, runner: 12, hoplite: 14, skeleton_archer: 8, tank: 6 } },
-  { from_round: 9, weights: { walker: 32, skeleton: 18, runner: 12, hoplite: 12, hoplite_shield: 8, skeleton_archer: 10, tank: 4, crawler: 4 } },
-  { from_round: 13, weights: { walker: 26, skeleton: 16, runner: 12, hoplite: 10, hoplite_shield: 10, skeleton_archer: 12, tank: 5, exploder: 5, spitter: 4 } },
-];
+  { from_round: 3, weights: { walker: 50, skeleton: 22, runner: 10, hoplite: 10, satyr: 8 } },
+  { from_round: 6, weights: { walker: 36, skeleton: 18, runner: 8, hoplite: 12, skeleton_archer: 8, satyr: 10, tank: 4, hellwolf: 4 } },
+  { from_round: 9, weights: { walker: 28, skeleton: 16, runner: 8, hoplite: 10, hoplite_shield: 8, skeleton_archer: 8, satyr: 8, hellwolf: 6, harpy: 5, tank: 3 } },
+  { from_round: 13, weights: { walker: 22, skeleton: 14, runner: 8, hoplite: 9, hoplite_shield: 9, skeleton_archer: 9, satyr: 8, hellwolf: 7, harpy: 6, gorgon: 3, tank: 3, exploder: 2 } },
+]
 
 /** Limite de vivos ao mesmo tempo dos tipos novos. */
-export const TEMPLE_TYPE_CAPS: Record<string, number> = { hoplite_shield: 3, skeleton_archer: 4 };
+export const TEMPLE_TYPE_CAPS: Record<string, number> = { hoplite_shield: 3, skeleton_archer: 4, satyr: 8, hellwolf: 4, harpy: 4, gorgon: 1 };
 
 // ───────────────────────── Bosses ─────────────────────────
 

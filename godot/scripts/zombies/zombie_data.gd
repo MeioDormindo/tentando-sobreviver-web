@@ -40,6 +40,17 @@ extends Resource
 @export var shield: Dictionary = {}
 ## Volta a se levantar (Esqueleto): chance, delay_time, health_factor. Uma vez só.
 @export var revive: Dictionary = {}
+## Corre em zigue-zague (Sátiro): amplitude, frequency.
+@export var zigzag: Dictionary = {}
+## Investe e recua (Lobo Infernal): lunge_range, lunge_speed, lunge_time, retreat_time,
+## retreat_speed, cooldown_time, damage.
+@export var hit_and_run: Dictionary = {}
+## Voa e mergulha (Harpia): height, dive_range, dive_time, dive_speed, rise_time, cooldown_time,
+## damage. No ar a faca não alcança.
+@export var flying: Dictionary = {}
+## Olhar que petrifica (Górgona): range, windup_time, gaze_time, cooldown_time, rate,
+## facing_deg, vulnerable_time, vulnerable_factor.
+@export var gaze: Dictionary = {}
 
 @export_group("Aparência (provisória)")
 @export var shirt_color: Color = Color(0.37, 0.33, 0.26)

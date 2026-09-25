@@ -76,7 +76,8 @@ func _ready() -> void:
 	add_to_group(&"zombies")
 	_apply_look()
 	if not (data.explosive.is_empty() and data.ranged.is_empty() and data.armor.is_empty() and data.death_cloud.is_empty()
-			and data.shield.is_empty() and data.revive.is_empty()):
+			and data.shield.is_empty() and data.revive.is_empty() and data.zigzag.is_empty() and data.hit_and_run.is_empty()
+			and data.flying.is_empty() and data.gaze.is_empty()):
 		_abilities = ZombieAbilities.new()
 		add_child(_abilities)
 		_abilities.setup(self)
@@ -124,9 +125,11 @@ func _physics_process(delta: float) -> void:
 	_attack_cooldown = maxf(0.0, _attack_cooldown - delta)
 	var barricade := _blocking_barricade()
 	if _abilities and _abilities.override_movement(delta, to_target):
-		velocity.x = 0.0
-		velocity.z = 0.0
-		_face(to_target)
+		# A habilidade pode mover o zumbi (investida, recuo, mergulho) ou só pará-lo.
+		var moved: Variant = _abilities.move_velocity
+		velocity.x = (moved as Vector3).x if moved is Vector3 else 0.0
+		velocity.z = (moved as Vector3).z if moved is Vector3 else 0.0
+		_face(to_target if not moved is Vector3 or (moved as Vector3).length() < 0.1 or _abilities.face_target else moved)
 	elif flee_goal == null and to_target.length() <= data.attack_range:
 		_attack(to_target)
 	elif barricade:
@@ -158,10 +161,17 @@ func _chase(to_target: Vector3, delta: float) -> void:
 	if direction.length() < 0.05:
 		direction = to_target
 	direction = direction.normalized()
+	if _abilities:
+		direction = _abilities.steer(direction, delta)
 	var chill := (_chill_factor if _chill_left > 0.0 else 1.0) * (FLINCH_SPEED if _flinch_left > 0.0 else 1.0)
 	velocity.x = direction.x * move_speed * event_speed * chill
 	velocity.z = direction.z * move_speed * event_speed * chill
 	_face(direction)
+
+
+## No ar (Harpia fora do mergulho): a faca não alcança.
+func is_airborne() -> bool:
+	return _abilities != null and _abilities.airborne()
 
 
 func _attack(to_target: Vector3) -> void:

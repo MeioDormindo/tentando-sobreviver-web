@@ -28,7 +28,7 @@ func run(tree: SceneTree) -> int:
 	await _flame()
 	await _arc()
 	await _gust()
-	await _knife_cleave()
+	await _knife_single()
 
 	_player.queue_free()
 	_arena.queue_free()
@@ -47,15 +47,15 @@ func check(condition: bool, description: String) -> void:
 
 
 ## Faca: um golpe acerta a fileira da frente (o alvo, os lados e quem está logo atrás).
-func _knife_cleave() -> void:
+func _knife_single() -> void:
 	var at := _player.global_position
 	var zombies := _spawn([Vector3(0, 0, -1.6), Vector3(0.9, 0, -1.9), Vector3(-0.9, 0, -1.9), Vector3(0, 0, -2.6)])
 	_player.aim_point = at + Vector3(0, 1.2, -6)
 	await _frames(2)
 	_player.knife()
 	await _tree.create_timer(0.6).timeout
-	var hurt := zombies.filter(func(z: ZombieBase) -> bool: return z.health.current < z.health.max_health).size()
-	check(hurt >= 3, "faca: um golpe acerta vários zumbis à frente (%d de 4)" % hurt)
+	var hurt := zombies.filter(func(z: ZombieBase) -> bool: return z.health.current < z.health.max_health)
+	check(hurt.size() == 1 and hurt[0] == zombies[0], "faca: um golpe acerta só um zumbi, o da frente (%d de 4)" % hurt.size())
 	_clear(zombies)
 
 

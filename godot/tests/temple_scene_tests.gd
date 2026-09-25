@@ -42,6 +42,7 @@ func run(tree: SceneTree) -> int:
 	_map()
 	_arsenal_and_looks()
 	await _enemies()
+	await _creatures()
 	await _bosses()
 	await _quest_flow()
 	await _statues()
@@ -243,6 +244,89 @@ func _enemies() -> void:
 
 
 # ── Bosses ──
+
+# ── Floresta e Templo da Górgona ──
+
+func _creatures() -> void:
+	for type in ["satyr", "hellwolf", "harpy", "gorgon"]:
+		check(ResourceLoader.exists("res://data/zombies/%s.tres" % type) and CharacterSprite.exists("zombie_%s" % type), "%s com dados e sprite" % type)
+	# Sátiro: corre em zigue-zague (sai da linha reta até o jogador).
+	var satyr := _spawn(&"satyr", Vector3(0, 0, -12), 1.0)
+	var start_x := satyr.global_position.x
+	var drift := 0.0
+	for i in 16:
+		await _tree.create_timer(0.1).timeout
+		drift = maxf(drift, absf(satyr.global_position.x - start_x))
+	check(drift > 0.25, "Sátiro corre em zigue-zague (desvio de %.2f m)" % drift)
+	satyr.queue_free()
+	# Lobo Infernal: investe (fere) e recua (a distância volta a crescer).
+	var before := _player.health.current
+	var wolf := _spawn(&"hellwolf", Vector3(0, 0, -4.5), 1.0)
+	var closest := 99.0
+	var after_hit := 0.0
+	for i in 40:
+		await _tree.create_timer(0.1).timeout
+		var d := wolf.global_position.distance_to(_player.global_position)
+		closest = minf(closest, d)
+		if _player.health.current < before:
+			after_hit = maxf(after_hit, d)
+	check(_player.health.current < before, "Lobo Infernal investe e fere (%.0f)" % (before - _player.health.current))
+	check(after_hit > closest + 1.0, "Lobo Infernal recua depois do bote (%.1f m → %.1f m)" % [closest, after_hit])
+	wolf.queue_free()
+	await _frames(2)
+	# Harpia: no ar a faca não alcança; o mergulho fere.
+	var harpy := _spawn(&"harpy", Vector3(0, 0, -1.8), 0.0)
+	await _tree.create_timer(0.8).timeout
+	check(harpy.is_airborne(), "Harpia voa (fora do alcance da faca)")
+	var harpy_hp := harpy.health.current
+	_player.aim_point = harpy.global_position + Vector3.UP
+	_player.knife()
+	await _tree.create_timer(0.5).timeout
+	check(is_equal_approx(harpy.health.current, harpy_hp), "faca não acerta a Harpia no ar")
+	harpy.queue_free()
+	before = _player.health.current
+	var diver := _spawn(&"harpy", Vector3(0, 0, -5), 1.0)
+	for i in 40:
+		await _tree.create_timer(0.1).timeout
+		if _player.health.current < before:
+			break
+	check(_player.health.current < before, "Harpia mergulha e fere")
+	diver.queue_free()
+	await _frames(2)
+	# Górgona: olhando para ela, petrifica; de costas, não. Depois do olhar, fica vulnerável.
+	var gorgon := _spawn(&"gorgon", Vector3(0, 0, -8), 0.0)
+	gorgon._abilities._cooldown_left = 0.0
+	_player.aim_point = gorgon.global_position + Vector3.UP
+	var stoned := false
+	var petrified := 0.0
+	for i in 60:
+		await _tree.create_timer(0.1).timeout
+		_player.aim_point = gorgon.global_position + Vector3.UP
+		petrified = maxf(petrified, _player.petrification)
+		if _player.is_stone():
+			stoned = true
+			break
+	check(petrified > 0.3 or stoned, "o olhar da Górgona petrifica quem olha para ela (%.2f)" % petrified)
+	check(stoned, "petrificação completa: vira pedra")
+	check(_player.fire().is_empty() and not _player.knife(), "petrificado não atira nem golpeia")
+	await _tree.create_timer(Player.STONE_TIME + 0.2).timeout
+	check(not _player.is_stone(), "a pedra passa depois de %.1f s" % Player.STONE_TIME)
+	gorgon.queue_free()
+	await _frames(2)
+	var back := _spawn(&"gorgon", Vector3(0, 0, -8), 0.0)
+	back._abilities._cooldown_left = 0.0
+	_player.petrification = 0.0
+	for i in 30:
+		await _tree.create_timer(0.1).timeout
+		_player.aim_point = _player.global_position + Vector3(0, 1, 6)  # de costas para ela
+	check(_player.petrification < 0.05 and not _player.is_stone(), "de costas o olhar não pega")
+	back._abilities._vulnerable_left = 1.0
+	var hp := back.health.current
+	back.take_damage(DamageInfo.new(50.0, DamageInfo.Kind.WEAPON, _player))
+	check(is_equal_approx(hp - back.health.current, 100.0), "depois do olhar a Górgona leva dano dobrado")
+	back.queue_free()
+	await _frames(2)
+
 
 func _bosses() -> void:
 	var data := _rounds.data
