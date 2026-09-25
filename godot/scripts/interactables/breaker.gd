@@ -40,6 +40,7 @@ func setup(p_power: PowerSystem) -> void:
 		mesh.position.y = SIZE.y * 0.5
 		add_child(mesh)
 	_label = Label3D.new()
+	_label.outline_size = 0  # a fonte pixel já tem o contorno embutido
 	_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	_label.pixel_size = 0.0035
 	_label.font_size = 26

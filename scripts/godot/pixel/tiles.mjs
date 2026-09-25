@@ -1,6 +1,7 @@
 // Superfícies do cenário em pixel art: pisos (repetem sem costura) e paredes (lateral 2 m ×
 // 3 m e topo), a 48 px/m. Paleta escura e dessaturada, com sujeira, rachaduras e desgaste.
 import { PPM, rng, base, stain, crack, rect, hline, vline, bevel, mix, scale, hex, dither, noise2 } from './paint.mjs';
+import { doors } from './doors.mjs';
 
 const GRIME = hex(0x1a1714);
 const CRACK = hex(0x14120f);
@@ -145,28 +146,8 @@ export function walls() {
   bevel(cap, 0, 0, W, W, hex(0x45433f), hex(0x1c1b19));
   out.wall_cap = cap;
 
-  // Porta comprável: portão de aço de enrolar (ripas), moldura, placa de proibido e faixa
-  // zebrada no pé; em cima, zebrado amarelo e preto (lê como passagem fechada vista do alto).
-  r = rng('door_shutter');
-  const d = base(W, H, hex(0x6a7074), r, { amount: 0.06 });
-  for (let y = 10; y < H - 12; y += 6) { hline(d, y, hex(0x3e4346)); hline(d, y + 1, hex(0x8d9498)); }
-  rect(d, 0, 0, W, 10, hex(0x2c2f31)); hline(d, 9, hex(0x1a1c1d));  // caixa do rolo
-  rect(d, 0, 0, 4, H, hex(0x3a3d40)); rect(d, W - 4, 0, 4, H, hex(0x3a3d40));  // trilhos
-  for (let y = H - 12; y < H; y++) for (let x = 4; x < W - 4; x++) d.set(x, y, ((x + y) >> 2) % 2 ? hex(0xd2a32a) : hex(0x1d1d1d));
-  const cx = W / 2, cy = 56;  // placa redonda vermelha com faixa branca
-  for (let y = cy - 14; y <= cy + 14; y++) for (let x = cx - 14; x <= cx + 14; x++) {
-    const k = Math.hypot(x - cx, y - cy);
-    if (k <= 14) d.set(x, y, k > 12 ? hex(0x6a1410) : hex(0xc4281f));
-  }
-  rect(d, cx - 9, cy - 2, 18, 5, hex(0xf2eee6));
-  rect(d, cx - 16, cy + 22, 32, 10, hex(0x1d1e20)); for (let x = cx - 13; x < cx + 13; x += 4) rect(d, x, cy + 25, 2, 4, hex(0xd2a32a));  // plaqueta
-  for (let i = 0; i < 4; i++) stain(d, r, r() * W, 20 + r() * 100, 4 + r() * 8, hex(0x6a3a1e), 0.45);  // ferrugem
-  cracks(d, r, 1, 10);
-  out.door_shutter = d;
-  const dc = new (d.constructor)(W, W);
-  for (let y = 0; y < W; y++) for (let x = 0; x < W; x++) dc.set(x, y, ((x + y) >> 3) % 2 ? hex(0xd2a32a) : hex(0x1d1d1d));
-  bevel(dc, 0, 0, W, W, hex(0x45433f), hex(0x1c1b19));
-  out.door_cap = dc;
+  // Portas compráveis: um estilo por ambiente (doors.mjs; door.gd escolhe pela área).
+  Object.assign(out, doors(PPM, H));
 
   // Trem (parado na plataforma e o que passa no evento): lateral de 2 m com janela, faixa
   // laranja e a saia escura; o teto com as grades do ar-condicionado.

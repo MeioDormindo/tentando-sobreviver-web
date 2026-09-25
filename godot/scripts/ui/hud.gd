@@ -306,8 +306,7 @@ func _label(parent: Control, text: String, size: int, color: Color, preset: Cont
 	label.horizontal_alignment = align
 	label.add_theme_font_size_override(&"font_size", MenuKit.px(size))
 	label.add_theme_color_override(&"font_color", color)
-	label.add_theme_color_override(&"font_outline_color", Color.BLACK)
-	label.add_theme_constant_override(&"outline_size", maxi(4, size / 8))
+	# Sem contorno do Godot: a fonte pixel já tem o dela (o extra virava blocos escuros).
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if align != HORIZONTAL_ALIGNMENT_LEFT:
 		label.grow_horizontal = Control.GROW_DIRECTION_BEGIN if align == HORIZONTAL_ALIGNMENT_RIGHT else Control.GROW_DIRECTION_BOTH

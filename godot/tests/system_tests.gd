@@ -223,6 +223,20 @@ func _test_maps(tree: SceneTree) -> void:
 		check(map.data.areas.all(func(a: Dictionary) -> bool: return String(a.get("lighting", "")) in ["lit", "dim", "dark"]) and not lit.is_empty(),
 			"%s: luz por área, %d bem iluminadas" % [map.name, lit.size()])
 		check(map.find_child("Decor", false, false) != null and map.find_child("Decor", false, false).get_child_count() > 50, "%s: decoração espalhada" % map.name)
+		# Portas pelo ambiente: arte do vão (uma porta só, não portões repetidos), placa com o
+		# nome da área do outro lado nos dois lados, textos sem o contorno extra do Godot.
+		var door_nodes: Array = tree.get_nodes_in_group(&"interactable").filter(func(n: Node) -> bool: return n is Door and map.is_ancestor_of(n))
+		var styles := {}
+		var dressed := door_nodes.all(func(d: Door) -> bool:
+			d._dress()
+			styles[d.style] = true
+			var width := d._size.x if d.across.z != 0.0 else d._size.y
+			var signs: Array = d.get_children().filter(func(n: Node) -> bool: return n is Label3D)
+			return ResourceLoader.exists(Door.art_path(d.style, false, width)) and ResourceLoader.exists(Door.art_path(d.style, true)) and signs.size() == 2 and signs.all(func(l: Label3D) -> bool: return l.outline_size == 0 and l.text != ""))
+		check(dressed, "%s: cada porta com a arte do seu ambiente e placa dos dois lados" % map.name)
+		check(styles.size() >= (4 if map.map_id() == "terminal" else 6), "%s: portas diferentes por ambiente (%s)" % [map.name, ", ".join(styles.keys())])
+		var outlined := map.find_children("*", "Label3D", true, false).filter(func(l: Label3D) -> bool: return l.outline_size > 0)
+		check(outlined.is_empty(), "%s: nenhum texto no mundo com contorno extra (%d)" % [map.name, outlined.size()])
 		if map.map_id() == "map2":
 			var spots: Dictionary = map.data.quest.serum
 			var on_floor := spots.values().all(func(s: Dictionary) -> bool: return not "#TDW".contains(map.cell(floori(float(s.tx) + 0.5), floori(float(s.ty) + 0.5))))

@@ -99,11 +99,11 @@ func spawn_drop(id: StringName, at: Vector3) -> Node3D:
 	orb.position.y = 0.9
 	pickup.add_child(orb)
 	var label := Label3D.new()
+	label.outline_size = 0  # a fonte pixel já tem o contorno embutido
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	label.text = String(info.get("name", id)).to_upper()
 	label.font_size = 40
 	label.pixel_size = 0.005
-	label.outline_size = 8
 	label.modulate = color.lightened(0.3)
 	label.position.y = 1.6
 	pickup.add_child(label)

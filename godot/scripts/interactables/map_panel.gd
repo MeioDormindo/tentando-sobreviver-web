@@ -47,6 +47,7 @@ func build(title: String, color: Color, art := "") -> void:
 
 func _add_label(title: String, color: Color) -> void:
 	_label = Label3D.new()
+	_label.outline_size = 0  # a fonte pixel já tem o contorno embutido
 	_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	_label.pixel_size = 0.0035
 	_label.font_size = 26

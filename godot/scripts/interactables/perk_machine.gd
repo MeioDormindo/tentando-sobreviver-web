@@ -51,6 +51,7 @@ func setup(p_perk: PerkData) -> void:
 		logo.rotation.y = PI
 		add_child(logo)
 	var label := Label3D.new()
+	label.outline_size = 0  # a fonte pixel já tem o contorno embutido
 	label.pixel_size = 0.0034
 	label.font_size = 26
 	label.modulate = perk.color.lightened(0.5)

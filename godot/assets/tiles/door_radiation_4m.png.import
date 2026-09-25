@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://by4o1yc8732l7"
-path="res://.godot/imported/door_shutter.png-90a64248e5bf6a15342f84a87a5336b2.ctex"
+uid="uid://cjufk4nddvyny"
+path="res://.godot/imported/door_radiation_4m.png-ceba4f57cb65cd9701652aa849528c1d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/door_shutter.png"
-dest_files=["res://.godot/imported/door_shutter.png-90a64248e5bf6a15342f84a87a5336b2.ctex"]
+source_file="res://assets/tiles/door_radiation_4m.png"
+dest_files=["res://.godot/imported/door_radiation_4m.png-ceba4f57cb65cd9701652aa849528c1d.ctex"]
 
 [params]
 

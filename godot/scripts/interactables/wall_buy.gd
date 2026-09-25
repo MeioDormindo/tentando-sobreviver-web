@@ -41,6 +41,7 @@ func setup(p_weapon: WeaponData, wall_normal: Vector3) -> void:
 	var drawing := "res://assets/sprites/chalk/chalk_%s.png" % (p_weapon.id if p_weapon else &"ammo")
 	_flat_quad(drawing, face + wall_normal * 0.02 + Vector3.UP * 1.75, turn, 1.0 / 44.0 if p_weapon else 1.0 / 40.0)
 	_label = Label3D.new()
+	_label.outline_size = 0  # a fonte pixel já tem o contorno embutido
 	_label.billboard = BaseMaterial3D.BILLBOARD_DISABLED
 	_label.double_sided = false
 	_label.pixel_size = 0.0045

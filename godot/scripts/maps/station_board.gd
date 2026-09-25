@@ -46,11 +46,11 @@ func setup(station: Dictionary) -> void:
 		panel.position = Vector3(float(board.tx), 2.4, float(board.ty))
 		add_child(panel)
 		_board = Label3D.new()
+		_board.outline_size = 0  # a fonte pixel já tem o contorno embutido
 		_board.name = "Departures"
 		_board.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 		_board.pixel_size = 0.004
 		_board.font_size = 40
-		_board.outline_size = 6
 		_board.modulate = AMBER
 		_board.position = panel.position + Vector3(0, 0.05, 0.1)
 		add_child(_board)

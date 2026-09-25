@@ -33,6 +33,9 @@ var fury_multiplier: float = 1.0:
 		if is_node_ready():
 			_apply_weapon_modifiers()
 ## Lentidão (grito do Paciente Zero): fator e até quando.
+## Lentidão ao levar um golpe de zumbi: fator da velocidade e duração (s).
+const HIT_SLOW_FACTOR := 0.6
+const HIT_SLOW_TIME := 0.7
 var _slow_factor := 1.0
 var _slow_until := 0.0
 var _last_hurt_at := -INF
@@ -204,8 +207,17 @@ func refill_armor() -> void:
 
 ## Deixa o jogador mais lento por `seconds` (fator de velocidade).
 func slow(factor: float, seconds: float) -> void:
+	# Vale a lentidão mais forte das que estão valendo agora.
+	if _clock < _slow_until and _slow_factor < factor:
+		_slow_until = maxf(_slow_until, _clock + seconds)
+		return
 	_slow_factor = factor
 	_slow_until = _clock + seconds
+
+
+## Fator de lentidão valendo agora (1 = velocidade normal).
+func slow_factor() -> float:
+	return _slow_factor if _clock < _slow_until else 1.0
 
 
 ## Levou dano nos últimos `seconds` segundos?
@@ -225,6 +237,9 @@ func take_damage(info: DamageInfo) -> float:
 	var is_blow := info.kind == DamageInfo.Kind.ZOMBIE
 	if is_blow and _clock < _invulnerable_until:
 		return 0.0
+	# Golpe de zumbi: fica mais lento por um instante (o golpe "prende").
+	if is_blow:
+		slow(HIT_SLOW_FACTOR, HIT_SLOW_TIME)
 	if armor > 0.0 and info.amount > 0.0:
 		var absorbed := minf(armor, info.amount)
 		armor -= absorbed
@@ -411,7 +426,7 @@ func _read_input() -> void:
 
 func _move(delta: float) -> void:
 	var direction := Vector3(move_input.x, 0.0, move_input.y)
-	var slow := _slow_factor if _clock < _slow_until else 1.0
+	var slow := slow_factor()
 	var speed := data.move_speed * _speed_factor(direction) * perks.speed_multiplier * slow * speed_buff
 	var target := direction * speed
 	if melee.lunge_left > 0.0:

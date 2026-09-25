@@ -84,10 +84,10 @@ func setup(p_data: MysteryBoxData, p_catalog: WeaponCatalog, p_map_id: String, p
 		_model.position.y = -SIZE.y * 0.5
 		_lid = _model.get_node_or_null("lid") as Node3D
 	_label = Label3D.new()
+	_label.outline_size = 0  # a fonte pixel já tem o contorno embutido
 	_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	_label.pixel_size = 0.006
 	_label.font_size = 56
-	_label.outline_size = 12
 	_label.position.y = 2.0
 	# Parada, o "?" está desenhado no baú; o texto só aparece ao sortear.
 	_label.text = ""

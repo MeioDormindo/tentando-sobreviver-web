@@ -12,6 +12,10 @@ uniform vec2 top_size = vec2(2.0, 2.0);
 uniform float occlusion_radius = 0.14;
 // Textura presa ao objeto (trem em movimento) em vez de ao mundo.
 uniform bool object_space = false;
+// Com object_space: desloca o canto do objeto para (0, topo, 0) e, nas faces viradas para x,
+// a largura de cada módulo ao longo de z (porta: portões inteiros nas duas direções).
+uniform vec3 object_offset = vec3(0.0);
+uniform float side_width_z = 0.0;
 
 global uniform vec2 occlusion_screen;
 global uniform float occlusion_view_z;
@@ -21,7 +25,7 @@ varying vec3 world_pos;
 varying vec3 world_normal;
 
 void vertex() {
-	world_pos = object_space ? VERTEX : (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	world_pos = object_space ? VERTEX + object_offset : (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	world_normal = object_space ? NORMAL : normalize((MODEL_MATRIX * vec4(NORMAL, 0.0)).xyz);
 }
 
@@ -39,7 +43,8 @@ void fragment() {
 	if (n.y > 0.5) {
 		color = texture(top_texture, world_pos.xz / top_size).rgb;
 	} else if (n.x > n.z) {
-		color = texture(side_texture, vec2(world_pos.z, -world_pos.y) / side_size).rgb;
+		vec2 size_z = vec2(side_width_z > 0.0 ? side_width_z : side_size.x, side_size.y);
+		color = texture(side_texture, vec2(world_pos.z, -world_pos.y) / size_z).rgb;
 	} else {
 		color = texture(side_texture, vec2(world_pos.x, -world_pos.y) / side_size).rgb;
 	}

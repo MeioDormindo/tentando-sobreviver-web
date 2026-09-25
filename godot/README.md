@@ -71,7 +71,7 @@ de conceitos: ver `docs/analise-typescript.md`.
     (2×, 3×, 4×...), e molduras 9-slice; HUD em painéis nos cantos (ROUND, pontos, vida com
     barra segmentada, munição com o ícone da arma), botões e campos com moldura dourada no
     foco, retratos dos visuais na tela PERSONAGEM;
-  - cenário (`npm run godot:scenery`): pisos, paredes, portões das portas e o trem, 41
+  - cenário (`npm run godot:scenery`): pisos, paredes, as portas de cada ambiente (uma porta inteira do tamanho do vão, 3 m ou 4 m) e o trem, 41
     objetos 2.5D montados pela PropFactory (caixas, barris, bancos, macas, máquinas de perk
     na cor do perk, Mystery Box com tampa que abre, painéis de alarme, energia, armadilha e
     trem, disjuntor, caixa de suprimentos, geladeira de amostras, cano de gás, entulho...) e
@@ -103,7 +103,10 @@ de conceitos: ver `docs/analise-typescript.md`.
   entrar:
   - o mesmo layout do jogo web: áreas, paredes, trem parado, janelas por onde os zumbis entram,
     props e luzes;
-  - portas compráveis com E, que abrem a área e os spawns dela;
+  - portas compráveis com E, que abrem a área e os spawns dela; cada uma tem a cara do ambiente
+    que liga (portão de enrolar, grade de embarque, porta de serviço, comporta blindada, porta
+    dupla hospitalar, pediatria, refeitório, radiologia, farmácia, câmara fria, risco biológico)
+    e uma placa no chão dos dois lados com o nome da área do outro lado;
   - barricadas nas janelas: os zumbis arrancam as tábuas vindo de fora, e segurar E conserta
     (+10 por tábua);
   - armas e munição na parede, com o giz na parede mais próxima do ponto do layout;
@@ -123,7 +126,9 @@ de conceitos: ver `docs/analise-typescript.md`.
   - energia: segurar E no disjuntor liga perks e Lab, e as luzes voltam piscando;
   - mapa de teste (`scenes/maps/test_arena.tscn`);
 - jogador com os atributos do jogo web (velocidade, regeneração, invulnerabilidade curta, mais
-  lento de lado e de costas);
+  lento de lado e de costas, e mais lento por um instante depois de um golpe de zumbi);
+- zumbis sentem os tiros: recuam um pouco, hesitam e piscam no acerto (Tank, Blindado e bosses
+  não recuam);
 - 2 armas com troca, faca com avanço e as 19 armas do jogo web:
   - chumbos, perfuração e o giro da minigun;
   - as especiais: granada, plasma, lança-chamas, raio e Canhão de Vento;

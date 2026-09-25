@@ -29,6 +29,12 @@ var _speed_mult := 1.0
 var _repath_left := 0.0
 ## Empurrão (faca, explosões) que se soma ao movimento e some rápido.
 var _knockback := Vector3.ZERO
+## Tranco do tiro: tempo andando mais devagar e o quadro do último recuo (não empilha chumbos).
+const FLINCH_TIME := 0.12
+const FLINCH_SPEED := 0.35
+const FLINCH_PUSH := 1.6
+var _flinch_left := 0.0
+var _flinch_frame := -1
 var _attack_cooldown := 0.0
 ## Atordoado (raio, plasma): não anda nem ataca.
 var _stun_left := 0.0
@@ -77,7 +83,8 @@ func _ready() -> void:
 		Events.zombie_hit.emit(self, info)
 		if info.kind in [DamageInfo.Kind.WEAPON, DamageInfo.Kind.MELEE] and is_inside_tree():
 			var at: Vector3 = info.hit_position if info.hit_position != Vector3.ZERO else global_position + Vector3.UP * 1.2
-			PixelFx.spawn(get_tree(), "blood_splat", at, 0.7))
+			PixelFx.spawn(get_tree(), "blood_splat", at, 0.7)
+			_flinch(info))
 	# Espalha o recálculo de caminho entre os zumbis (nem todos no mesmo frame).
 	_repath_left = randf() * repath_interval
 
@@ -91,6 +98,7 @@ func _physics_process(delta: float) -> void:
 		if state == State.DEAD:
 			return
 	apply_gravity(delta)
+	_flinch_left = maxf(0.0, _flinch_left - delta)
 	if _chill_left > 0.0:
 		_chill_left -= delta
 		if _chill_left <= 0.0:
@@ -149,7 +157,7 @@ func _chase(to_target: Vector3, delta: float) -> void:
 	if direction.length() < 0.05:
 		direction = to_target
 	direction = direction.normalized()
-	var chill := _chill_factor if _chill_left > 0.0 else 1.0
+	var chill := (_chill_factor if _chill_left > 0.0 else 1.0) * (FLINCH_SPEED if _flinch_left > 0.0 else 1.0)
 	velocity.x = direction.x * move_speed * event_speed * chill
 	velocity.z = direction.z * move_speed * event_speed * chill
 	_face(direction)
@@ -247,6 +255,25 @@ func has_line_of_sight() -> bool:
 		return false
 	var query := PhysicsRayQueryParameters3D.create(global_position + Vector3.UP * 1.4, target.global_position + Vector3.UP * 1.2, PhysicsLayers.WORLD)
 	return get_world_3d().direct_space_state.intersect_ray(query).is_empty()
+
+
+## Tranco ao levar tiro ou faca (como sentir o impacto): recua um pouco na direção do golpe,
+## hesita por um instante e pisca. Uma vez por quadro (os chumbos de uma espingarda contam
+## como um tranco só). Tank e Blindado não recuam (apply_knockback ignora), só hesitam.
+func _flinch(info: DamageInfo) -> void:
+	var frame := Engine.get_physics_frames()
+	if frame == _flinch_frame or not is_alive():
+		return
+	_flinch_frame = frame
+	_flinch_left = FLINCH_TIME
+	var source := info.source as Node3D
+	if source and is_instance_valid(source):
+		var push := global_position - source.global_position
+		push.y = 0.0
+		if push.length() > 0.01 and _knockback.length() < FLINCH_PUSH:
+			apply_knockback(push.normalized() * FLINCH_PUSH)
+	if model:
+		model.flash(Color(1.0, 0.92, 0.9))
 
 
 ## Brilho rápido no corpo (aviso de explosão, preparo do cuspe).

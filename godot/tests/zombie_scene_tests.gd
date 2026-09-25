@@ -29,6 +29,8 @@ func run(tree: SceneTree) -> int:
 	await _hound()
 	await _tank()
 	await _hound_round()
+	await _flinch()
+	await _hit_slow()
 
 	_player.queue_free()
 	_arena.queue_free()
@@ -117,6 +119,45 @@ func _tank() -> void:
 	var bigger: bool = zombie.model == null or int(zombie.model._meta.frame[1]) > int(CharacterSprite._read_meta("zombie_walker").frame[1])
 	check(body.scale.x > 1.3 and bigger, "Tank: maior que os outros")
 	zombie.queue_free()
+
+
+## Impacto dos tiros: o zumbi baleado recua e hesita (fica para trás de um igual que não leva
+## tiro), pisca; o Tank não recua.
+func _flinch() -> void:
+	var shot := _spawn(&"walker", Vector3(-2.5, 0, -12), 1.0)
+	var calm := _spawn(&"walker", Vector3(2.5, 0, -12), 1.0)
+	shot.health.reset(100000.0)
+	calm.health.reset(100000.0)
+	await _tree.physics_frame
+	var body := shot.get_node("BodyHurtbox") as Hurtbox
+	for i in 12:
+		body.receive_hit(1.0, 1.0, DamageInfo.Kind.WEAPON, _player, shot.global_position)
+		await _tree.create_timer(0.1).timeout
+	var shot_left := shot.global_position.distance_to(_player.global_position)
+	var calm_left := calm.global_position.distance_to(_player.global_position)
+	check(shot_left > calm_left + 0.8, "Tiros: o zumbi baleado recua e fica para trás (%.1f m × %.1f m)" % [shot_left, calm_left])
+	shot.queue_free()
+	calm.queue_free()
+	var tank := _spawn(&"tank", Vector3(0, 0, -9), 0.0)
+	await _tree.physics_frame
+	var start := tank.global_position
+	(tank.get_node("BodyHurtbox") as Hurtbox).receive_hit(5.0, 1.0, DamageInfo.Kind.WEAPON, _player, start)
+	await _tree.create_timer(0.3).timeout
+	check(tank.global_position.distance_to(start) < 0.1, "Tiros: o Tank não recua")
+	tank.queue_free()
+	await _tree.physics_frame
+
+
+## Golpe de zumbi deixa o jogador mais lento por um instante; ácido não.
+func _hit_slow() -> void:
+	await _tree.create_timer(1.0).timeout
+	check(is_equal_approx(_player.slow_factor(), 1.0), "Golpe: sem golpe, velocidade normal")
+	_player.take_damage(DamageInfo.new(1.0, DamageInfo.Kind.ENVIRONMENT))
+	check(is_equal_approx(_player.slow_factor(), 1.0), "Golpe: ácido e gás não deixam lento")
+	_player.take_damage(DamageInfo.new(1.0, DamageInfo.Kind.ZOMBIE))
+	check(_player.slow_factor() < 0.7, "Golpe de zumbi: jogador fica lento (×%.2f)" % _player.slow_factor())
+	await _tree.create_timer(Player.HIT_SLOW_TIME + 0.2).timeout
+	check(is_equal_approx(_player.slow_factor(), 1.0), "Golpe de zumbi: a lentidão passa")
 
 
 ## Rodada dos cães no Hospital migrado: só cães, perto do jogador, névoa; o último deixa munição.
