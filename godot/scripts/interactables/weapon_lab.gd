@@ -28,7 +28,7 @@ func setup(p_data: WeaponLabData) -> void:
 	material.emission_enabled = true
 	material.emission = COLOR * 0.35
 	box.material = material
-	var model := CharacterModel.prop("res://assets/props/weapon_lab.glb", Vector3(0.89, 0.91, 1.25))
+	var model := PropFactory.create("weapon_lab")
 	if model:
 		add_child(model)
 	else:

@@ -19,14 +19,16 @@ const FLOOR_COLORS := {
 	"h": Color(0.62, 0.64, 0.6), "l": Color(0.45, 0.5, 0.48), "g": Color(0.5, 0.55, 0.58),
 }
 const WALL_COLOR := Color(0.16, 0.16, 0.15)
-## Arte do jogo web (npm run godot:data → assets/web): textura de cada piso e das paredes.
-## 32 px = 1 m, como no jogo web.
+## Cenário em pixel art (npm run godot:scenery → assets/tiles): textura de cada piso e das
+## paredes, a 48 px/m (a mesma densidade dos personagens).
 const FLOOR_ART := {
 	"t": "floor_terminal", "c": "floor_concrete", "m": "floor_metal", "r": "floor_tracks", "u": "floor_tunnel",
 	"w": "floor_wagon", "h": "floor_hospital", "l": "floor_linoleum", "g": "floor_morgue",
 }
-const WEB_ART := "res://assets/web/map/%s.png"
-const PIXELS_PER_METER := 32.0
+const WEB_ART := "res://assets/tiles/%s.png"
+const PIXELS_PER_METER := 48.0
+## Estilo da parede de cada mapa.
+const WALL_STYLE := {"terminal": "wall_terminal", "map2": "wall_hospital"}
 const TRAIN_COLOR := Color(0.23, 0.33, 0.4)
 const WINDOW_COLOR := Color(0.55, 0.7, 0.8, 0.35)
 const PROP_COLOR := Color(0.4, 0.33, 0.24)
@@ -89,6 +91,7 @@ func _ready() -> void:
 	_build_secrets()
 	_build_station()
 	_build_props()
+	_build_decor()
 	_build_lamps()
 	_build_spawns()
 	open_area(StringName(data.start_area))
@@ -561,18 +564,133 @@ func _build_props() -> void:
 			var collision := CollisionShape3D.new()
 			collision.shape = shape
 			body.add_child(collision)
-			body.add_child(_box_mesh(Rect2(-size.x * 0.5, -size.z * 0.5, size.x, size.z), -PROP_HEIGHT * 0.5, PROP_HEIGHT * 0.5, material))
+			# Visual em pixel art 2.5D (PropFactory); sem receita, uma caixa simples.
+			var visual := PropFactory.create(String(prop.type))
+			if visual:
+				visual.position.y = -PROP_HEIGHT * 0.5
+				visual.rotation.y = deg_to_rad(-float(prop.angle))
+				body.add_child(visual)
+			else:
+				body.add_child(_box_mesh(Rect2(-size.x * 0.5, -size.z * 0.5, size.x, size.z), -PROP_HEIGHT * 0.5, PROP_HEIGHT * 0.5, material))
 			group.add_child(body)
 			body.position = center + Vector3(body_data.ox, PROP_HEIGHT * 0.5, body_data.oz)
 		else:
-			# Decorativo (mala, cadeira...): uma placa baixa, sem colisão.
-			var mesh := _box_mesh(Rect2(-0.3, -0.2, 0.6, 0.4), 0.0, 0.3, material)
+			# Decorativo (mala, cadeira...): sem colisão.
+			var mesh: Node3D = PropFactory.create(String(prop.type))
+			if mesh == null:
+				mesh = _box_mesh(Rect2(-0.3, -0.2, 0.6, 0.4), 0.0, 0.3, material)
 			group.add_child(mesh)
 			mesh.position = center
 			mesh.rotation.y = deg_to_rad(-float(prop.angle))
 		var light_data: Variant = prop.light
 		if light_data is Dictionary:
 			_add_light(center + Vector3.UP * 1.2, light_data.radius, light_data.intensity, int(light_data.color))
+
+
+# ───────────────────────── Decoração ─────────────────────────
+
+## Peças de parede: nome → [chance por metro de parede, altura do centro (m)].
+const WALL_DECOR := {
+	"lamp": [0.06, 2.45], "lamp_broken": [0.025, 2.45], "vent": [0.04, 2.15], "exit_sign": [0.015, 2.35],
+	"board": [0.03, 1.45], "fusebox": [0.02, 1.35], "poster": [0.035, 1.45], "graffiti": [0.03, 0.85],
+	"blood_smear": [0.025, 1.0],
+}
+## Decalques de chão: nome → peso no sorteio.
+const FLOOR_DECOR := {
+	"paper": 4, "papers": 3, "can": 3, "bottle": 2, "trash": 3, "debris": 2, "puddle": 1, "crack": 2, "blood_trail": 1, "casings": 2,
+}
+## Chance de um metro de chão ganhar um decalque.
+const FLOOR_DECOR_CHANCE := 0.06
+
+var _decor_materials: Dictionary = {}
+
+
+## Decoração em pixel art (npm run godot:scenery): nas faces de parede que a câmera vê
+## (leste e sul) e decalques no chão. Mesma semente por mapa: sai igual toda partida.
+func _build_decor() -> void:
+	var index_path := "res://assets/tiles/decor.json"
+	if not FileAccess.file_exists(index_path):
+		return
+	var index: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(index_path))
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(map_id() + "_decor")
+	var group := Node3D.new()
+	group.name = "Decor"
+	add_child(group)
+	var pipe_run := {}
+	for z in height:
+		for x in width:
+			if cell(x, z) != "#":
+				continue
+			# Faces visíveis: leste (+X) e sul (+Z), com chão do outro lado.
+			for dir: Vector2i in [Vector2i(1, 0), Vector2i(0, 1)]:
+				var floor_ch := cell(x + dir.x, z + dir.y)
+				if not _is_floor(floor_ch):
+					continue
+				var normal := Vector3(dir.x, 0, dir.y)
+				var face := Vector3(x + 0.5 + dir.x * 0.5, 0.0, z + 0.5 + dir.y * 0.5) + normal * 0.012
+				# Canos em trechos contínuos, no alto.
+				var key := "%d" % (z if dir.x != 0 else x)
+				var along := z if dir.x != 0 else x
+				var running: bool = pipe_run.get(key + ("x" if dir.x != 0 else "z"), -99) == along - 1
+				if (running and rng.randf() < 0.85) or rng.randf() < 0.05:
+					pipe_run[key + ("x" if dir.x != 0 else "z")] = along
+					_add_decor(group, index.wall, "pipes", face + Vector3.UP * 2.78, normal, 1.0)
+				for decor_name: String in WALL_DECOR:
+					var entry: Array = WALL_DECOR[decor_name]
+					if rng.randf() < float(entry[0]):
+						_add_decor(group, index.wall, decor_name, face + Vector3.UP * float(entry[1]), normal)
+						break
+	# Chão: decalques espalhados (fora das portas).
+	var total := 0.0
+	for decor_name: String in FLOOR_DECOR:
+		total += float(FLOOR_DECOR[decor_name])
+	for z in height:
+		for x in width:
+			if not _is_floor(cell(x, z)) or rng.randf() >= FLOOR_DECOR_CHANCE:
+				continue
+			var roll := rng.randf() * total
+			var chosen := ""
+			for decor_name: String in FLOOR_DECOR:
+				roll -= float(FLOOR_DECOR[decor_name])
+				if roll < 0.0:
+					chosen = decor_name
+					break
+			var at := Vector3(x + rng.randf_range(0.2, 0.8), 0.012, z + rng.randf_range(0.2, 0.8))
+			var node := _add_decor(group, index.floor, chosen, at, Vector3.UP)
+			if node:
+				node.rotate_y(rng.randf() * TAU)
+
+
+## Um quadro de decoração: na parede (de pé, virado para `normal`) ou no chão (deitado).
+func _add_decor(group: Node3D, table: Dictionary, decor_name: String, at: Vector3, normal: Vector3, width_scale := 0.0) -> MeshInstance3D:
+	var info: Dictionary = table.get(decor_name, {})
+	var path := "res://assets/tiles/decor_%s.png" % decor_name
+	if info.is_empty() or not ResourceLoader.exists(path):
+		return null
+	var on_floor := normal == Vector3.UP
+	var quad := QuadMesh.new()
+	quad.size = Vector2(info.size[0] if width_scale <= 0.0 else width_scale, info.size[1])
+	var node := MeshInstance3D.new()
+	node.mesh = quad
+	node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	if not _decor_materials.has(decor_name):
+		var material := ShaderMaterial.new()
+		material.shader = load("res://shaders/decor.gdshader")
+		material.set_shader_parameter(&"tex", load(path))
+		material.set_shader_parameter(&"occlude", not on_floor)
+		var glow: Variant = info.get("glow")
+		if glow is Array:
+			material.set_shader_parameter(&"glow", Vector3(glow[0], glow[1], glow[2]))
+		_decor_materials[decor_name] = material
+	node.material_override = _decor_materials[decor_name]
+	group.add_child(node)
+	node.position = at
+	if on_floor:
+		node.rotation.x = -PI * 0.5
+	else:
+		node.rotation.y = atan2(normal.x, normal.z)
+	return node
 
 
 func _build_lamps() -> void:
@@ -651,7 +769,7 @@ func _box_mesh(rect: Rect2, bottom: float, top: float, material: Material, cente
 
 ## Paredes: arte do web (lateral e topo) e oclusão em volta do jogador (shaders/wall.gdshader).
 func _wall_material(fallback: Color) -> Material:
-	var side := WEB_ART % "wall_full"
+	var side := WEB_ART % String(WALL_STYLE.get(map_id(), "wall_concrete"))
 	var top := WEB_ART % "wall_cap"
 	if not ResourceLoader.exists(side) or not ResourceLoader.exists(top):
 		return _material(fallback)

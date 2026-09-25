@@ -31,8 +31,11 @@ var _dismiss_pending := false
 
 var _label: Label3D
 var _mesh: MeshInstance3D
-## Baú do Blender (tampa que abre no sorteio); fica dentro de _mesh, que sobe e some ao mudar.
-var _model: CharacterModel
+## Baú em pixel art 2.5D (tampa "lid" que abre no sorteio); fica dentro de _mesh, que sobe e
+## some ao mudar de lugar.
+var _model: Node3D
+var _lid: Node3D
+var lid_open := false
 ## Desenho da arma sorteada, flutuando sobre a caixa.
 var _icon: Sprite3D
 var _timer := 0.0
@@ -66,12 +69,12 @@ func setup(p_data: MysteryBoxData, p_catalog: WeaponCatalog, p_map_id: String, p
 	_mesh.mesh = box
 	_mesh.position.y = SIZE.y * 0.5
 	add_child(_mesh)
-	_model = CharacterModel.prop("res://assets/props/mystery_box.glb", Vector3(1.0, 0.92, 0.95))
+	_model = PropFactory.create("mystery_box")
 	if _model:
 		_mesh.mesh = null
 		_mesh.add_child(_model)
 		_model.position.y = -SIZE.y * 0.5
-		_model.play(&"Closed", 0.0)
+		_lid = _model.get_node_or_null("lid") as Node3D
 	_label = Label3D.new()
 	_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	_label.pixel_size = 0.006
@@ -169,8 +172,7 @@ func _roll() -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.randomize()
 	result = roll_weapon(catalog, data.rarity_weights, map_id, rng)
-	if _model:
-		_model.play_once(&"Open")
+	_set_lid(true)
 	Events.mystery_box_rolled.emit(price < data.price)
 	_timer = data.roll_time
 	_cycle = 0.0
@@ -183,6 +185,22 @@ func _reveal() -> void:
 	_label.text = result.display_name.to_upper()
 	_label.modulate = RARITY_COLORS.get(result.rarity, Color.WHITE)
 	_show_icon(result)
+
+
+## Abre (gira para trás pela dobradiça de trás) ou fecha a tampa.
+func _set_lid(value: bool) -> void:
+	lid_open = value
+	if _lid == null:
+		return
+	var hinge_z := -SIZE.z * 0.5
+	var angle := deg_to_rad(-70.0) if value else 0.0
+	var rest := Vector3(0.0, 0.87, 0.0)
+	# A tampa gira em torno da borda de trás: posição da dobradiça + o centro girado.
+	var offset := Vector3(0.0, 0.0, -hinge_z).rotated(Vector3.RIGHT, angle)
+	var target := Vector3(0.0, rest.y, hinge_z) + offset
+	var tween := _lid.create_tween().set_parallel()
+	tween.tween_property(_lid, "rotation:x", angle, 0.35)
+	tween.tween_property(_lid, "position", target, 0.35)
 
 
 func _show_icon(weapon: WeaponData) -> void:
@@ -206,8 +224,7 @@ func _show_icon(weapon: WeaponData) -> void:
 
 func _reset() -> void:
 	_show_icon(null)
-	if _model:
-		_model.play(&"Closed", 0.3)
+	_set_lid(false)
 	state = State.IDLE
 	result = null
 	_label.text = "?"

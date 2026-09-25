@@ -1,0 +1,281 @@
+// Objetos do cenário em pixel art 2.5D: cada objeto é uma receita de caixas e cilindros; cada
+// face recebe uma textura pixel pintada no tamanho real dela (48 px/m). As faces de um objeto
+// vão para um atlas PNG + JSON com as regiões (a PropFactory do Godot monta a malha).
+// Partes "tint" recebem a cor na hora (máquina de perk na cor do perk).
+import { writeFileSync } from 'node:fs';
+import { Pixels } from './raster.mjs';
+import { PPM, rng, base, stain, rect, hline, vline, bevel, mix, scale, hex, dither } from './paint.mjs';
+
+const px = (m) => Math.max(2, Math.round(m * PPM));
+const GRIME = hex(0x1a1714);
+
+// ───────────────────────── Pintores de face ─────────────────────────
+// Cada um: (w, h, r) em pixels → Pixels.
+
+const paint = {
+  wood: (color = hex(0x6d4a2c), dir = 'h') => (w, h, r) => {
+    const p = base(w, h, color, r, { amount: 0.1 });
+    const step = 8;
+    if (dir === 'h') for (let y = 0; y < h; y += step) { hline(p, y, scale(color, 0.55)); hline(p, y + 1, scale(color, 1.15)); }
+    else for (let x = 0; x < w; x += step) { vline(p, x, scale(color, 0.55)); vline(p, x + 1, scale(color, 1.15)); }
+    for (let i = 0; i < (w * h) / 60; i++) p.set(r.int(0, w - 1), r.int(0, h - 1), scale(color, 0.8));
+    return p;
+  },
+  crate: (color = hex(0x7a5431)) => (w, h, r) => {
+    const p = paint.wood(color)(w, h, r);
+    rect(p, 0, 0, w, 3, scale(color, 0.7)); rect(p, 0, h - 3, w, 3, scale(color, 0.7));
+    rect(p, 0, 0, 3, h, scale(color, 0.7)); rect(p, w - 3, 0, 3, h, scale(color, 0.7));
+    for (let t = 0; t < Math.max(w, h); t++) {  // travessa em diagonal
+      const x = Math.round((t / Math.max(w, h)) * w), y = Math.round((t / Math.max(w, h)) * h);
+      for (let k = -1; k <= 1; k++) p.set(x + k, y, scale(color, 0.85));
+    }
+    bevel(p, 0, 0, w, h, scale(color, 1.2), scale(color, 0.45));
+    return p;
+  },
+  metal: (color = hex(0x4c5258), { rivets = true, stripes = 0, rust = 0.3 } = {}) => (w, h, r) => {
+    const p = base(w, h, color, r, { amount: 0.08 });
+    if (stripes) for (let y = Math.floor(h / (stripes + 1)); y < h - 2; y += Math.floor(h / (stripes + 1))) { hline(p, y, scale(color, 0.6)); hline(p, y + 1, scale(color, 1.25)); }
+    if (rivets) for (const [x, y] of [[2, 2], [w - 3, 2], [2, h - 3], [w - 3, h - 3]]) p.set(x, y, scale(color, 1.45));
+    for (let i = 0; i < Math.round((w * h) / 900 * rust * 10); i++) stain(p, r, r() * w, r() * h, 2 + r() * 4, hex(0x6a3a1e), 0.4);
+    bevel(p, 0, 0, w, h, scale(color, 1.25), scale(color, 0.55));
+    return p;
+  },
+  painted: (color) => (w, h, r) => {
+    const p = paint.metal(color, { rivets: false, rust: 0.2 })(w, h, r);
+    for (let i = 0; i < 3; i++) stain(p, r, r() * w, r() * h, 2 + r() * 3, hex(0x55524c), 0.5);  // tinta descascada
+    return p;
+  },
+  barrel: (color = hex(0x7a2e22)) => (w, h, r) => {
+    const p = paint.metal(color, { rivets: false, stripes: 2, rust: 0.6 })(w, h, r);
+    if (h > 12) rect(p, Math.floor(w * 0.3), Math.floor(h * 0.4), Math.max(4, Math.floor(w * 0.15)), Math.max(3, Math.floor(h * 0.18)), hex(0xd9b93c));  // etiqueta
+    return p;
+  },
+  cap: (color) => (w, h, r) => {
+    const p = base(w, h, scale(color, 0.85), r, { amount: 0.06 });
+    const cx = w / 2, cy = h / 2;
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      const d = Math.hypot(x + 0.5 - cx, y + 0.5 - cy) / (w / 2);
+      if (d > 0.8 && d < 0.92) p.set(x, y, scale(color, 1.3));
+    }
+    p.set(Math.round(cx * 1.4), Math.round(cy * 0.7), hex(0x222222));
+    return p;
+  },
+  fabric: (color) => (w, h, r) => {
+    const p = base(w, h, color, r, { amount: 0.1, cells: 4 });
+    for (let y = 0; y < h; y += 2) for (let x = y % 4 === 0 ? 0 : 1; x < w; x += 2) p.set(x, y, scale(p.rgb(x, y), 0.92));
+    stain(p, r, r() * w, r() * h, 3 + r() * 4, GRIME, 0.3);
+    bevel(p, 0, 0, w, h, scale(color, 1.2), scale(color, 0.6));
+    return p;
+  },
+  sheet: (color = hex(0xc9cdc6), blood = true) => (w, h, r) => {
+    const p = base(w, h, color, r, { amount: 0.06 });
+    for (let i = 0; i < 4; i++) { const y = r.int(2, h - 3); for (let x = r.int(0, w / 3); x < w - r.int(0, w / 3); x++) if (dither(x, y, 0.6)) p.set(x, y, scale(color, 0.82)); }
+    if (blood) stain(p, r, r() * w, r() * h, 3 + r() * 4, hex(0x6a1a14), 0.6);
+    return p;
+  },
+  screen: (glow = hex(0x6fd3a0)) => (w, h, r) => {
+    const p = new Pixels(w, h);
+    rect(p, 0, 0, w, h, hex(0x16181a));
+    rect(p, 2, 2, w - 4, h - 4, scale(glow, 0.35));
+    for (let y = 3; y < h - 3; y += 2) for (let x = 3; x < w - 3 - r.int(0, w / 2); x++) p.set(x, y, scale(glow, 0.8 + r() * 0.2));
+    return p;
+  },
+  glass: (tint = hex(0x5d7a86)) => (w, h, r) => {
+    const p = new Pixels(w, h);
+    rect(p, 0, 0, w, h, scale(tint, 0.6));
+    for (let i = 0; i < w + h; i += 7) for (let k = 0; k < 3; k++) { const x = i - k, y = k; for (let t = 0; t < h; t++) { const xx = x - t; if (xx >= 0 && xx < w) p.set(xx, t, scale(tint, 1.1)); } }
+    bevel(p, 0, 0, w, h, hex(0x9aa4a8), hex(0x2a2e30));
+    return p;
+  },
+  shelves: (items) => (w, h, r) => {  // armário com vidro e frascos
+    const p = paint.metal(hex(0xb8bdb6), { rivets: false, rust: 0 })(w, h, r);
+    for (let row = 1; row < 4; row++) {
+      const y = Math.floor((h * row) / 4);
+      hline(p, y, hex(0x7c827b));
+      for (let x = 3; x < w - 3; x += r.int(3, 6)) rect(p, x, y - r.int(3, 6), 2, 3, r.pick(items));
+    }
+    return p;
+  },
+  locker: (color = hex(0x4b5a63)) => (w, h, r) => {
+    const p = paint.painted(color)(w, h, r);
+    const doors = Math.max(1, Math.round(w / 20));
+    for (let d = 0; d < doors; d++) {
+      const x0 = Math.floor((w * d) / doors);
+      vline(p, x0, scale(color, 0.5));
+      for (let y = 6; y < 16 && y < h; y += 3) hline(p, y, scale(color, 0.6), x0 + 4, x0 + Math.floor(w / doors) - 4);  // ventilação
+      p.set(x0 + Math.floor(w / doors) - 4, Math.floor(h / 2), hex(0xc9c2a0));  // puxador
+    }
+    return p;
+  },
+  drawers: () => (w, h, r) => {  // gavetas do necrotério
+    const p = paint.metal(hex(0x8a9396), { rivets: false, rust: 0.1 })(w, h, r);
+    const cols = Math.max(1, Math.round(w / 40)), rows = Math.max(1, Math.round(h / 22));
+    for (let c = 0; c < cols; c++) for (let rr = 0; rr < rows; rr++) {
+      const x = Math.floor((w * c) / cols) + 2, y = Math.floor((h * rr) / rows) + 2, cw = Math.floor(w / cols) - 4, ch = Math.floor(h / rows) - 4;
+      bevel(p, x, y, cw, ch, hex(0xb4bcbf), hex(0x4c5456));
+      rect(p, x + Math.floor(cw / 2) - 3, y + Math.floor(ch / 2), 6, 1, hex(0x2a2e30));
+    }
+    return p;
+  },
+  vending: (glow = hex(0xe8d27a)) => (w, h, r) => {
+    const p = paint.painted(hex(0x2f5d7c))(w, h, r);
+    const gx = 3, gy = 4, gw = Math.floor(w * 0.66), gh = Math.floor(h * 0.62);
+    rect(p, gx, gy, gw, gh, scale(glow, 0.35));
+    for (let y = gy + 3; y < gy + gh - 2; y += 6) for (let x = gx + 2; x < gx + gw - 3; x += 5) rect(p, x, y, 3, 4, r.pick([hex(0xd24a3a), hex(0x3aa0d2), hex(0xe0c040), hex(0x7ad24a)]));
+    rect(p, gx + gw + 2, gy + 4, w - gx - gw - 5, 6, hex(0x151515));
+    return p;
+  },
+  hazard: () => (w, h) => {
+    const p = new Pixels(w, h);
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) p.set(x, y, ((x + y) >> 2) % 2 ? hex(0xd2a32a) : hex(0x1d1d1d));
+    return p;
+  },
+  stripes: (a = hex(0xc2372c), b = hex(0xd8d4c8)) => (w, h) => {
+    const p = new Pixels(w, h);
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) p.set(x, y, Math.floor((x + y) / 6) % 2 ? a : b);
+    bevel(p, 0, 0, w, h, hex(0xeeeeee), hex(0x333333));
+    return p;
+  },
+  generator: () => (w, h, r) => {
+    const p = paint.painted(hex(0x5e6b3a))(w, h, r);
+    for (let y = 4; y < h - 8; y += 3) hline(p, y, hex(0x2d3320), Math.floor(w * 0.55), w - 4);  // grade
+    rect(p, 3, h - 6, w - 6, 3, hex(0xd2a32a));
+    return p;
+  },
+  mystery: () => (w, h, r) => {
+    const p = paint.wood(hex(0x6b4a24), 'h')(w, h, r);
+    rect(p, 0, 0, w, 3, hex(0xd9a640)); rect(p, 0, h - 3, w, 3, hex(0xd9a640));
+    rect(p, 0, 0, 3, h, hex(0xd9a640)); rect(p, w - 3, 0, 3, h, hex(0xd9a640));
+    // "?" brilhante no meio
+    const cx = Math.floor(w / 2), cy = Math.floor(h / 2);
+    const q = ['.###.', '#...#', '...#.', '..#..', '..#..', '.....', '..#..'];
+    q.forEach((row, j) => [...row].forEach((c, i) => { if (c === '#') rect(p, cx - 5 + i * 2, cy - 7 + j * 2, 2, 2, hex(0xffe08a)); }));
+    return p;
+  },
+  lab: () => (w, h, r) => {
+    const p = paint.metal(hex(0x3a3d42), { rust: 0.1 })(w, h, r);
+    rect(p, Math.floor(w * 0.55), 3, Math.floor(w * 0.35), Math.floor(h * 0.4), hex(0x14181c));
+    for (let y = 5; y < Math.floor(h * 0.4); y += 2) hline(p, y, hex(0x62d7ff), Math.floor(w * 0.57), Math.floor(w * 0.57) + r.int(4, Math.floor(w * 0.3)));
+    return p;
+  },
+  perk: () => (w, h, r) => {  // neutro: a cor do perk entra no Godot (tint)
+    const p = base(w, h, hex(0xb0b0b0), r, { amount: 0.08 });
+    rect(p, 3, 4, w - 6, Math.floor(h * 0.45), hex(0xf0f0f0));  // vitrine clara
+    for (let y = 8; y < Math.floor(h * 0.45); y += 6) for (let x = 6; x < w - 8; x += 6) rect(p, x, y, 3, 4, hex(0x8a8a8a));  // latas
+    rect(p, Math.floor(w * 0.3), Math.floor(h * 0.7), Math.floor(w * 0.4), 4, hex(0x333333));
+    bevel(p, 0, 0, w, h, hex(0xdddddd), hex(0x555555));
+    return p;
+  },
+  black: () => (w, h, r) => base(w, h, hex(0x1d1e20), r, { amount: 0.1 }),
+  plastic: (color) => (w, h, r) => { const p = base(w, h, color, r, { amount: 0.05 }); bevel(p, 0, 0, w, h, scale(color, 1.25), scale(color, 0.6)); return p; },
+};
+
+// ───────────────────────── Receitas ─────────────────────────
+// Medidas em metros: size [largura x, altura y, profundidade z], at = centro (y a partir do chão).
+
+const box = (size, at, tex, extra = {}) => ({ shape: 'box', size, at, tex, ...extra });
+const cyl = (d, h, at, tex, extra = {}) => ({ shape: 'cyl', size: [d, h, d], at, tex, ...extra });
+const all = (t) => ({ top: t, front: t, side: t });
+
+const WOOD = hex(0x6d4a2c);
+const STEEL = hex(0x8e9699);
+
+export const RECIPES = {
+  crate: [box([0.9, 0.9, 0.9], [0, 0.45, 0], all(paint.crate()))],
+  pallet: [box([1.2, 0.15, 1.2], [0, 0.075, 0], { top: paint.wood(hex(0x8a6a42), 'v'), front: paint.wood(hex(0x6a4e30)), side: paint.wood(hex(0x6a4e30)) }),
+    box([0.8, 0.5, 0.8], [0, 0.4, 0], all(paint.fabric(hex(0x7c7a6a))))],
+  barrel: [cyl(0.75, 0.95, [0, 0.475, 0], { top: paint.cap(hex(0x7a2e22)), side: paint.barrel() })],
+  trash: [cyl(0.65, 0.85, [0, 0.425, 0], { top: paint.cap(hex(0x3c5a3a)), side: paint.metal(hex(0x3c5a3a), { stripes: 1 }) })],
+  bench: [box([2.0, 0.08, 0.6], [0, 0.45, 0], { top: paint.wood(WOOD), front: paint.wood(WOOD), side: paint.wood(WOOD) }),
+    box([2.0, 0.5, 0.08], [0, 0.75, -0.26], all(paint.wood(WOOD))),
+    box([0.08, 0.45, 0.55], [-0.85, 0.22, 0], all(paint.metal(hex(0x2c2e30)))), box([0.08, 0.45, 0.55], [0.85, 0.22, 0], all(paint.metal(hex(0x2c2e30))))],
+  waiting_chairs: [box([2.4, 0.08, 0.5], [0, 0.45, 0], all(paint.plastic(hex(0x2f5d7c)))), box([2.4, 0.45, 0.06], [0, 0.72, -0.22], all(paint.plastic(hex(0x2f5d7c)))),
+    box([2.4, 0.06, 0.06], [0, 0.2, 0], all(paint.metal(hex(0x55595c))))],
+  generator: [box([1.45, 1.0, 0.9], [0, 0.5, 0], { top: paint.metal(hex(0x4e5a30)), front: paint.generator(), side: paint.generator() }),
+    cyl(0.2, 0.4, [0.5, 1.2, -0.2], { top: paint.cap(hex(0x333333)), side: paint.metal(hex(0x333333)) })],
+  luggage_cart: [box([1.8, 0.1, 0.9], [0, 0.35, 0], all(paint.metal(hex(0x6a6f72)))),
+    box([0.7, 0.45, 0.6], [-0.4, 0.62, 0], all(paint.fabric(hex(0x5a3a2a)))), box([0.6, 0.35, 0.5], [0.45, 0.57, 0], all(paint.fabric(hex(0x2a4a5a))))],
+  suitcase: [box([0.6, 0.25, 0.4], [0, 0.125, 0], all(paint.fabric(hex(0x5a3a2a))))],
+  sign_stand: [box([1.2, 1.1, 0.12], [0, 0.95, 0], { top: paint.metal(hex(0x333333)), front: paint.screen(hex(0x7ad24a)), side: paint.metal(hex(0x333333)) }, { glow: hex(0x7ad24a) }),
+    box([0.08, 0.4, 0.08], [0, 0.2, 0], all(paint.metal(hex(0x2c2e30))))],
+  extinguisher: [cyl(0.2, 0.55, [0, 0.275, 0], { top: paint.cap(hex(0xb02820)), side: paint.painted(hex(0xb02820)) })],
+  barrier: [box([1.85, 0.4, 0.15], [0, 0.75, 0], { top: paint.stripes(), front: paint.stripes(), side: paint.stripes() }),
+    box([0.1, 0.55, 0.4], [-0.8, 0.28, 0], all(paint.metal(hex(0x2c2e30)))), box([0.1, 0.55, 0.4], [0.8, 0.28, 0], all(paint.metal(hex(0x2c2e30))))],
+  desk_computer: [box([1.8, 0.08, 0.95], [0, 0.75, 0], all(paint.wood(hex(0x5a4a38)))), box([1.7, 0.7, 0.9], [0, 0.35, 0], all(paint.metal(hex(0x3a3d40)))),
+    box([0.55, 0.4, 0.05], [0.2, 1.0, -0.2], { top: paint.black(), front: paint.screen(), side: paint.black() }, { glow: hex(0x6fd3a0) })],
+  chair: [box([0.5, 0.06, 0.5], [0, 0.45, 0], all(paint.plastic(hex(0x3a3d40)))), box([0.5, 0.45, 0.06], [0, 0.7, -0.22], all(paint.plastic(hex(0x3a3d40))))],
+  vitrine: [box([1.85, 0.9, 0.9], [0, 0.45, 0], { top: paint.glass(), front: paint.shelves([hex(0xd2a040), hex(0xa04a3a), hex(0x4a7ad2)]), side: paint.metal(hex(0x4c5258)) }, { glow: hex(0xe8d27a) })],
+  locker: [box([1.6, 1.9, 0.65], [0, 0.95, 0], { top: paint.metal(hex(0x3b474e)), front: paint.locker(), side: paint.painted(hex(0x4b5a63)) })],
+  wagon_seat: [box([1.0, 0.45, 0.5], [0, 0.23, 0], all(paint.fabric(hex(0x5a2a2a)))), box([1.0, 0.5, 0.12], [0, 0.65, -0.2], all(paint.fabric(hex(0x5a2a2a))))],
+  cables: [box([1.2, 0.05, 0.3], [0, 0.03, 0], all(paint.black()))],
+  floor_pipe: [cyl(0.3, 2.0, [0, 0.15, 0], { top: paint.cap(hex(0x6a6f72)), side: paint.metal(hex(0x6a6f72), { stripes: 3 }) }, { rot: [0, 0, 90] })],
+  // Hospital
+  iv_stand: [cyl(0.05, 1.7, [0, 0.85, 0], { top: paint.metal(STEEL), side: paint.metal(STEEL) }), box([0.2, 0.3, 0.08], [0.08, 1.55, 0], all(paint.glass(hex(0xa0c8b8))))],
+  gurney: [box([1.8, 0.12, 0.65], [0, 0.8, 0], { top: paint.sheet(), front: paint.metal(STEEL), side: paint.metal(STEEL) }), box([1.7, 0.7, 0.08], [0, 0.4, 0], all(paint.metal(hex(0x5a6064))))],
+  wheelchair: [box([0.55, 0.08, 0.55], [0, 0.5, 0], all(paint.fabric(hex(0x2a2d30)))), box([0.55, 0.5, 0.06], [0, 0.8, -0.25], all(paint.fabric(hex(0x2a2d30)))),
+    cyl(0.6, 0.05, [-0.32, 0.3, 0], { top: paint.cap(hex(0x55595c)), side: paint.metal(hex(0x55595c)) }, { rot: [0, 0, 90] }),
+    cyl(0.6, 0.05, [0.32, 0.3, 0], { top: paint.cap(hex(0x55595c)), side: paint.metal(hex(0x55595c)) }, { rot: [0, 0, 90] })],
+  vending: [box([1.15, 1.9, 0.8], [0, 0.95, 0], { top: paint.metal(hex(0x2f5d7c)), front: paint.vending(), side: paint.painted(hex(0x2f5d7c)) }, { glow: hex(0xe8d27a) })],
+  surgical_light: [cyl(0.7, 0.2, [0, 2.2, 0], { top: paint.metal(STEEL), side: paint.metal(STEEL) }), cyl(0.06, 1.2, [0, 2.9, 0], { top: paint.metal(STEEL), side: paint.metal(STEEL) })],
+  med_cabinet: [box([1.65, 1.9, 0.6], [0, 0.95, 0], { top: paint.metal(hex(0xb8bdb6)), front: paint.shelves([hex(0xd24a3a), hex(0xe8e8e8), hex(0x3aa0d2), hex(0xe0c040)]), side: paint.painted(hex(0xb8bdb6)) })],
+  hospital_bed: [box([1.9, 0.25, 0.95], [0, 0.6, 0], { top: paint.sheet(), front: paint.sheet(hex(0xc9cdc6), false), side: paint.sheet(hex(0xc9cdc6), false) }),
+    box([0.08, 0.9, 0.95], [-0.93, 0.5, 0], all(paint.metal(STEEL))), box([1.9, 0.35, 0.9], [0, 0.25, 0], all(paint.metal(hex(0x5a6064)))),
+    box([0.45, 0.1, 0.6], [-0.65, 0.78, 0], all(paint.sheet(hex(0xe2e4de), false)))],
+  morgue_drawers: [box([2.9, 1.9, 0.8], [0, 0.95, 0], { top: paint.metal(hex(0x6a7275)), front: paint.drawers(), side: paint.metal(hex(0x8a9396)) })],
+  lab_bench: [box([2.4, 0.08, 0.85], [0, 0.9, 0], all(paint.metal(hex(0x2a2d30)))), box([2.3, 0.85, 0.8], [0, 0.43, 0], all(paint.painted(hex(0xb8bdb6)))),
+    cyl(0.12, 0.25, [-0.6, 1.07, 0], { top: paint.glass(hex(0x7ad24a)), side: paint.glass(hex(0x7ad24a)) }, { glow: hex(0x7ad24a) }),
+    box([0.4, 0.35, 0.3], [0.6, 1.1, 0], { top: paint.black(), front: paint.screen(hex(0x62d7ff)), side: paint.black() }, { glow: hex(0x62d7ff) })],
+  centrifuge: [cyl(1.0, 1.0, [0, 0.5, 0], { top: paint.cap(hex(0xb8bdb6)), side: paint.metal(hex(0xb8bdb6), { stripes: 2, rust: 0 }) })],
+  // Máquinas
+  mystery_box: [box([2.0, 0.8, 1.1], [0, 0.4, 0], { top: paint.wood(hex(0x6b4a24)), front: paint.mystery(), side: paint.wood(hex(0x6b4a24)) }, { glow: hex(0xffe08a) }),
+    box([2.06, 0.14, 1.16], [0, 0.87, 0], { top: paint.mystery(), front: paint.metal(hex(0xd9a640), { rust: 0 }), side: paint.metal(hex(0xd9a640), { rust: 0 }) }, { name: 'lid' })],
+  perk_machine: [box([1.2, 2.0, 0.9], [0, 1.0, 0], { top: paint.perk(), front: paint.perk(), side: paint.perk() }, { tint: true }),
+    box([1.24, 0.25, 0.94], [0, 2.1, 0], all(paint.metal(hex(0x2a2a2a))), { glow: hex(0xffffff), tint: true })],
+  weapon_lab: [box([1.6, 0.1, 1.0], [0, 0.95, 0], all(paint.metal(hex(0x55504a)))), box([1.5, 0.9, 0.9], [0, 0.45, 0], { top: paint.metal(hex(0x3a3d42)), front: paint.lab(), side: paint.metal(hex(0x3a3d42)) }),
+    box([0.5, 0.55, 0.45], [-0.45, 1.27, 0], all(paint.metal(hex(0x3a3d42)))), box([0.4, 0.3, 0.06], [0.4, 1.15, -0.3], { top: paint.black(), front: paint.screen(hex(0x62d7ff)), side: paint.black() }, { glow: hex(0x62d7ff) })],
+};
+
+// ───────────────────────── Atlas ─────────────────────────
+
+/** Tamanho em pixels de cada face de uma peça. */
+function faceSizes(part) {
+  const [w, h, d] = part.size;
+  if (part.shape === 'cyl') return { top: [px(w), px(d)], side: [px(Math.PI * w), px(h)] };
+  return { top: [px(w), px(d)], front: [px(w), px(h)], side: [px(d), px(h)] };
+}
+
+export function build(outDir, save) {
+  const index = {};
+  for (const [name, parts] of Object.entries(RECIPES)) {
+    const r = rng(name);
+    const faces = [];
+    parts.forEach((part, i) => {
+      for (const [face, [fw, fh]] of Object.entries(faceSizes(part))) {
+        const painter = part.tex[face] || part.tex.side;
+        faces.push({ part: i, face, pixels: painter(Math.min(fw, 512), Math.min(fh, 512), r) });
+      }
+    });
+    // Empacota em prateleiras (largura máxima 512).
+    let x = 0, y = 0, shelf = 0, width = 0;
+    for (const f of faces) {
+      if (x + f.pixels.width > 512) { x = 0; y += shelf; shelf = 0; }
+      f.rect = [x, y, f.pixels.width, f.pixels.height];
+      x += f.pixels.width;
+      shelf = Math.max(shelf, f.pixels.height);
+      width = Math.max(width, x);
+    }
+    const atlas = new Pixels(width, y + shelf);
+    for (const f of faces) atlas.blit(f.pixels, f.rect[0], f.rect[1]);
+    save(`prop_${name}`, atlas);
+    index[name] = {
+      atlas: [atlas.width, atlas.height],
+      parts: parts.map((part, i) => ({
+        shape: part.shape, size: part.size, at: part.at, rot: part.rot || [0, 0, 0], name: part.name || '',
+        tint: !!part.tint, glow: part.glow ? part.glow.map((v) => +(v / 255).toFixed(3)) : null,
+        faces: Object.fromEntries(faces.filter((f) => f.part === i).map((f) => [f.face, f.rect])),
+      })),
+    };
+  }
+  writeFileSync(`${outDir}/props.json`, JSON.stringify(index) + '\n');
+  console.log(`  objetos: ${Object.keys(index).length}`);
+}

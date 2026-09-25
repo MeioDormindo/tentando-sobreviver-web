@@ -29,11 +29,10 @@ func setup(p_perk: PerkData) -> void:
 	material.emission_enabled = true
 	material.emission = perk.color * 0.3
 	box.material = material
-	var model := CharacterModel.prop("res://assets/props/perk_machine.glb", Vector3(1.15, 0.95, 1.2))
+	# Máquina em pixel art 2.5D, pintada na cor do perk.
+	var model := PropFactory.create("perk_machine", perk.color)
 	if model:
 		add_child(model)
-		model.recolor({"Body": perk.color.darkened(0.35)})
-		model.glow("Glow", perk.color.lightened(0.2), 0.7)
 	else:
 		var mesh := MeshInstance3D.new()
 		mesh.mesh = box

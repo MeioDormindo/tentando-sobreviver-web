@@ -125,7 +125,7 @@ func _mystery_box() -> void:
 	var box := (load("res://scenes/interactables/mystery_box.tscn") as PackedScene).instantiate() as MysteryBox
 	box.setup(load("res://data/configs/mystery_box.tres"), load("res://data/weapons/catalog.tres"), "", [], null)
 	_arena.add_child(box)
-	check(box._model != null and box._model.current == &"Closed", "Mystery Box: baú fechado")
+	check(box._model != null and box._lid != null and not box.lid_open, "Mystery Box: baú em pixel art, fechado")
 	box._roll()
-	check(box._model.current == &"Open", "sorteio abre a tampa")
+	check(box.lid_open, "sorteio abre a tampa")
 	box.queue_free()
