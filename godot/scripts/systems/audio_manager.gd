@@ -55,9 +55,25 @@ func _ready() -> void:
 	_connect_events()
 
 
+## Armas só do Godot (sem som no jogo web): tiro de uma arma parecida, noutro tom.
+const SHOT_ALIAS := {
+	&"beretta": ["m1911", 1.1], &"nailgun": ["glock", 1.45], &"p90": ["mp5", 1.12],
+	&"sawed_off": ["pump", 0.82], &"conductor_lantern": ["arc_gun", 0.75],
+}
+
+
+## Som do tiro da arma: [chave, tom]. Usa o próprio (shot_<id>) ou o parecido da tabela.
+static func shot_sound(id: StringName) -> Array:
+	if Audio.has_sound("shot_%s" % id) or not SHOT_ALIAS.has(id):
+		return ["shot_%s" % id, 1.0]
+	var alias: Array = SHOT_ALIAS[id]
+	return ["shot_%s" % alias[0], float(alias[1])]
+
+
 func _connect_events() -> void:
 	Events.weapon_fired.connect(func(id: StringName, level: int) -> void:
-		Audio.play("shot_%s" % id, "weapon", 0.85, 0.05)
+		var shot := shot_sound(id)
+		Audio.play(shot[0], "weapon", 0.85, 0.05, shot[1])
 		if level > 0:
 			Audio.play("mk2_layer", "weapon", 0.6))
 	Events.weapon_reload_started.connect(func(kind: StringName) -> void: Audio.play("reload_%s" % kind, "weapon", 0.7, 0.0))

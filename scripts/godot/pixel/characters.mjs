@@ -238,6 +238,22 @@ export function zombieModel(look) {
       parts.push(box('spine', [0, 0, 1.25], [0.58, 0.36, 0.46], metal));
     }
     if (look.glow) parts.push(box('spine', [0, 0.15, 1.1], [0.2, 0.02, 0.16], look.glow, { flat: true }));
+    // Roupas do Hospital (os tipos que também existem no Terminal ganham o tema do mapa).
+    if (look.outfit === 'gown') {  // paciente: camisola comprida, pulseira
+      parts.push(box('hips', [0, 0, 0.8], [0.5, 0.3, 0.3], look.shirt));
+      parts.push(box('spine', [-0.1, 0.145, 1.2], [0.12, 0.02, 0.1], BLOOD));
+      parts.push(box('fore.L', [-0.29, 0, 0.9], [0.12, 0.12, 0.04], hex(0xf2f2f2)));
+    } else if (look.outfit === 'scrubs') {  // enfermeiro: touca e bolso
+      parts.push(box('head', [0, -0.01, 1.8], [0.3, 0.29, 0.1], look.shirt));
+      parts.push(box('spine', [0.12, 0.145, 1.3], [0.08, 0.02, 0.08], hex(0x3a6a66)));
+    } else if (look.outfit === 'orderly') {  // maqueiro: avental e crachá
+      parts.push(box('spine', [0, 0.15, 1.1], [0.42, 0.03, 0.5], hex(0xb8b6ae)));
+      parts.push(box('spine', [0.14, 0.17, 1.36], [0.07, 0.01, 0.09], hex(0x3a78c0), { flat: true }));
+    } else if (look.outfit === 'hazmat') {  // quarentena: capuz com visor
+      parts.push(box('head', [0, 0, 1.66], [0.34, 0.33, 0.38], look.shirt, { shape: 'ellipsoid' }));
+      parts.push(box('head', [0, 0.15, 1.68], [0.22, 0.03, 0.12], hex(0x1c2a2e), { flat: true }));
+      parts.push(box('spine', [0, 0.145, 1.3], [0.14, 0.02, 0.1], hex(0x1a1a1a), { flat: true }));  // símbolo
+    }
     if (look.crown) {  // coroa do zumbi dourado
       parts.push(box('head', [0, 0, 1.82], [0.24, 0.24, 0.07], look.crown));
       for (const [x, y] of [[0.09, 0.09], [-0.09, 0.09], [0.09, -0.09], [-0.09, -0.09], [0, 0.11]]) parts.push(box('head', [x, y, 1.89], [0.05, 0.05, 0.08], look.crown));

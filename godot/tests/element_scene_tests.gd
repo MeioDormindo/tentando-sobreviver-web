@@ -141,6 +141,7 @@ func _effects() -> void:
 	var b := _walker(Vector3(1.2, 0, -3.5))
 	var c := _walker(Vector3(-1.2, 0, -3.5))
 	await _frames(3)
+	check(a.model and a.model.sheet_name == "zombie_walker", "Terminal: zumbi com o visual de sempre")
 	_hit(weapon, a, &"fire")
 	check(a._burn_left > 0.0, "fogo: queima")
 	_hit(weapon, a, &"ice")
@@ -182,6 +183,9 @@ func _box() -> void:
 
 
 func _hospital() -> void:
+	var walker := _walker(Vector3(0, 0, -4))
+	check(walker.model and walker.model.sheet_name == "zombie_walker_hospital", "Hospital: o Walker é um paciente zumbi (visual do mapa)")
+	walker.queue_free()
 	check(_player.weapon != null and _player.weapon.data.id == &"beretta" and _player.start_weapon_id() == &"beretta", "Hospital: começa com a Beretta 92")
 	var terminal: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/maps/terminal.json"))
 	var hospital: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/maps/map2.json"))

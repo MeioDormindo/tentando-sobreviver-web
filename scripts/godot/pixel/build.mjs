@@ -65,6 +65,23 @@ for (const file of readdirSync('godot/data/zombies')) {
   }
 }
 
+// Zumbis do Hospital: os tipos que também aparecem no Terminal com o tema do mapa (paciente,
+// enfermeiro, maqueiro e quarentena), em zombie_<tipo>_hospital.
+const HOSPITAL_LOOKS = {
+  walker: { shirt: hex(0x7f9fb8), outfit: 'gown' },
+  runner: { shirt: hex(0x4f8a86), outfit: 'scrubs' },
+  tank: { shirt: hex(0xd8d6cc), outfit: 'orderly' },
+  exploder: { shirt: hex(0xd8b82a), outfit: 'hazmat' },
+};
+for (const [id, extra] of Object.entries(HOSPITAL_LOOKS)) {
+  const text = readFileSync(join('godot/data/zombies', `${id}.tres`), 'utf8');
+  const look = {
+    skin: tresColor(text, 'skin_color'), scale: tresNumber(text, 'model_scale', 1), glow: GLOWS[id], ...extra,
+    pants: extra.outfit === 'gown' ? tresColor(text, 'skin_color') : extra.outfit === 'hazmat' ? extra.shirt : extra.outfit === 'orderly' ? hex(0xc8c6bc) : extra.shirt,
+  };
+  write(`zombie_${id}_hospital`, buildSheet(zombieModel(look), zombieAnimations(), { pitch: PITCH, workSize: 240 }));
+}
+
 // Zumbi dourado (evento): o runner inteiro em ouro, olhos amarelos e coroa.
 {
   const runner = readFileSync(join('godot/data/zombies', 'runner.tres'), 'utf8');

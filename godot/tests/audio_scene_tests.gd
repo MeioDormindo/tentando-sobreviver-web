@@ -31,6 +31,7 @@ func run(tree: SceneTree) -> int:
 	await _positional()
 	await _loops()
 	_voices()
+	_weapon_shots()
 	await _game_sounds()
 	await _music()
 
@@ -38,6 +39,15 @@ func run(tree: SceneTree) -> int:
 	await tree.physics_frame
 	print("\n%d ok, %d falharam (áudio)" % [_passed, _failed])
 	return _failed
+
+
+## Toda arma (catálogo + Lanterna) tem som de tiro: o próprio ou o parecido (SHOT_ALIAS).
+func _weapon_shots() -> void:
+	var catalog := load("res://data/weapons/catalog.tres") as WeaponCatalog
+	var ids: Array = catalog.weapons.map(func(w: WeaponData) -> StringName: return w.id)
+	ids.append(&"conductor_lantern")
+	var silent: Array = ids.filter(func(id: StringName) -> bool: return not _audio.has_sound(String(AudioManager.shot_sound(id)[0])))
+	check(silent.is_empty(), "todas as %d armas têm som de tiro (sem som: %s)" % [ids.size(), str(silent)])
 
 
 func check(condition: bool, description: String) -> void:

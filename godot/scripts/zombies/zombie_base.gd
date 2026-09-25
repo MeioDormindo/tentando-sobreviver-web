@@ -330,8 +330,15 @@ func _apply_look() -> void:
 
 
 ## Folha de sprites do tipo (gerada por npm run godot:sprites): "zombie_<tipo>" ou "hound".
+## No Hospital, os tipos que também existem no Terminal têm o visual do mapa (paciente,
+## enfermeiro, maqueiro, quarentena): zombie_<tipo>_hospital, quando a folha existe.
 func sprite_sheet() -> String:
-	return "hound" if data.id == &"hound" else "zombie_%s" % data.id
+	if data.id == &"hound":
+		return "hound"
+	var sheet := "zombie_%s" % data.id
+	if Session.map_id == "map2" and CharacterSprite.exists(sheet + "_hospital"):
+		return sheet + "_hospital"
+	return sheet
 
 
 ## Pixel art (especificação 2.5D): o sprite já vem no tamanho e com as cores do tipo (e a

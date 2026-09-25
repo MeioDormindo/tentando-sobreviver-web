@@ -88,7 +88,7 @@ de conceitos: ver `docs/analise-typescript.md`.
   **lanterna** que liga e desliga (F), com aviso na HUD e dica ao entrar no escuro sem ela;
   luminárias que falham piscando e as quebradas soltando faíscas;
 - **menu de pausa** com CONTINUAR, REINICIAR, MENU e as configurações que valem na hora;
-- **um personagem por mapa, com 4 visuais cada** (tela PERSONAGEM, uma fileira por mapa),
+- **um personagem por mapa, com 4 visuais cada** (escolhido depois do mapa, antes de jogar),
   liberados por conquistas: no Terminal o sobrevivente (Sobrevivente, Maquinista, Agente, Guarda
   da Estação); no Hospital um paciente fugido (Paciente, Enfermeiro, Paciente da UTI, Cobaia do
   Laboratório);
@@ -114,6 +114,8 @@ de conceitos: ver `docs/analise-typescript.md`.
     elemento dela (Luz atordoa, Sombra rouba vida, Gelo deixa lento e congela, Raio salta, Fogo
     queima, Explosivo estoura); a munição vende o da pistola inicial; o toque só compra munição
     ao soltar, então segurar com o pente incompleto compra só o elemento;
+  - **zumbis do Hospital com o tema do mapa**: paciente de camisola (Walker), enfermeiro
+    (Runner), maqueiro (Tank) e roupa de quarentena (Exploder);
   - **arsenal próprio do Hospital**: começa com a Beretta 92 e as paredes têm Pistola de Pregos,
     P90, Cano Serrado, Magnum, Uzi Dupla e Barrett — nenhuma repete as do Terminal;
   - Weapon Lab: Mk II e Mk III (o Canhão de Vento vira Tornado);

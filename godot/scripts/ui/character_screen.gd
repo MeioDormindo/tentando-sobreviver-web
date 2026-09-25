@@ -1,7 +1,9 @@
 extends Control
-## Visual do personagem (como no jogo web): os trancados mostram a conquista que libera.
+## Personagem do mapa escolhido (etapa entre a escolha de mapa e a partida): os 4 visuais do
+## personagem daquele mapa; os trancados mostram a conquista que libera. JOGAR começa.
 
-const MENU := "res://scenes/ui/main_menu.tscn"
+const MAP_SELECT := "res://scenes/ui/map_select.tscn"
+const GAME := "res://scenes/main.tscn"
 
 var _skins: SkinCatalog
 var _achievements: AchievementCatalog
@@ -23,14 +25,14 @@ func _build() -> void:
 		child.queue_free()
 	var column := MenuKit.screen(self, 820.0)
 	MenuKit.spacer(column, 10)
+	var map := Session.map_id if Save.catalog.maps.has(Session.map_id) else Save.catalog.default_map
 	MenuKit.title(column, "PERSONAGEM", 48)
-	MenuKit.label(column, "Cada mapa tem o seu personagem. Libere os visuais com as conquistas.", 14, MenuKit.DIM, HORIZONTAL_ALIGNMENT_CENTER)
-	var first: Button = null
-	for map_id: String in Save.catalog.order:
+	MenuKit.label(column, Save.catalog.display_name(map).to_upper(), 20, MenuKit.GOLD, HORIZONTAL_ALIGNMENT_CENTER)
+	MenuKit.label(column, "Libere os visuais com as conquistas.", 14, MenuKit.DIM, HORIZONTAL_ALIGNMENT_CENTER)
+	for map_id: String in [map]:
 		var skins := _skins.for_map(map_id)
 		if skins.is_empty():
 			continue
-		MenuKit.label(column, Save.catalog.display_name(map_id).to_upper(), 20, MenuKit.GOLD)
 		var row := HBoxContainer.new()
 		row.alignment = BoxContainer.ALIGNMENT_CENTER
 		row.add_theme_constant_override(&"separation", 14)
@@ -45,11 +47,11 @@ func _build() -> void:
 			var button := MenuKit.button(card, "%s\n%s" % [String(skin.name).to_upper(), status], _choose.bind(skin), 16)
 			if skin.id == selected:
 				button.add_theme_color_override(&"font_color", MenuKit.GOLD)
-			if first == null:
-				first = button
 	_message = MenuKit.label(column, "", 15, MenuKit.DIM, HORIZONTAL_ALIGNMENT_CENTER)
-	MenuKit.button(column, "VOLTAR", func() -> void: MenuKit.go(self, MENU))
-	first.grab_focus.call_deferred()
+	var play := MenuKit.button(column, "JOGAR", func() -> void: MenuKit.go(self, GAME), 26)
+	play.name = "Play"
+	MenuKit.button(column, "VOLTAR", func() -> void: MenuKit.go(self, MAP_SELECT))
+	play.grab_focus.call_deferred()
 
 
 ## Retrato: o sprite do visual (parado, de frente, com a pistola) num painel pixel; os
@@ -103,4 +105,4 @@ func _choose(skin: Dictionary) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed(&"pause"):
-		MenuKit.go(self, MENU)
+		MenuKit.go(self, MAP_SELECT)

@@ -175,7 +175,8 @@ function exportKnifeAndPlayer(): void {
     invulnerability_time: s(playerConfig.invulnerabilityMs),
     strafe_multiplier: playerConfig.strafeMultiplier,
     backpedal_multiplier: playerConfig.backpedalMultiplier,
-    regen_delay: s(playerConfig.regenDelayMs),
+    // Godot: a vida demora mais a voltar depois de um golpe (8 s; no web, 5 s).
+    regen_delay: Math.max(8, s(playerConfig.regenDelayMs)),
     regen_per_second: playerConfig.regenPerSecond,
     inventory_slots: INVENTORY_SLOTS,
     switch_time: s(WEAPON_SWITCH_MS),

@@ -4,6 +4,8 @@ extends Control
 ## escurecidos e dizem como liberar.
 
 const GAME := "res://scenes/main.tscn"
+## Depois do mapa, a escolha do visual do personagem daquele mapa (e dali, a partida).
+const CHARACTER := "res://scenes/ui/character.tscn"
 const MENU := "res://scenes/ui/main_menu.tscn"
 const CARD_WIDTH := 520.0
 ## Conquista da missão de cada mapa (selo de missão concluída).
@@ -72,7 +74,7 @@ func _card(parent: Control, id: String) -> Button:
 
 func _play(id: String) -> void:
 	Session.map_id = id
-	MenuKit.go(self, GAME)
+	MenuKit.go(self, CHARACTER)
 
 
 func _unhandled_input(event: InputEvent) -> void:
