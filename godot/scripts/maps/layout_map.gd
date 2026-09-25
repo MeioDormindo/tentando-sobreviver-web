@@ -226,6 +226,13 @@ func station() -> Dictionary:
 	return value if value is Dictionary else {}
 
 
+## Pistola inicial do mapa (seção "start_weapon"), ou null para a padrão do jogador.
+func start_weapon() -> WeaponData:
+	var id := String(data.get("start_weapon", ""))
+	var path := "res://data/weapons/%s.tres" % id
+	return load(path) as WeaponData if id != "" and ResourceLoader.exists(path) else null
+
+
 func map_id() -> String:
 	return String(data.get("id", ""))
 

@@ -59,8 +59,10 @@ export function hospital(): MapBuilder {
     .pocket(rect(24, 36, 5, 5)).window('win_reception_w2', rect(29, 38, 1, 2), 'reception').spawn('R2', 26, 38, 'reception')
     .pocket(rect(75, 26, 5, 5)).window('win_reception_e1', rect(74, 28, 1, 2), 'reception').spawn('R3', 77, 28, 'reception')
     .pocket(rect(75, 36, 5, 5)).window('win_reception_e2', rect(74, 38, 1, 2), 'reception').spawn('R4', 77, 38, 'reception');
+  // Arsenal próprio: nenhuma arma de parede repete as do Terminal; começa com a Beretta.
+  m.startWeapon('beretta');
   m.playerStart('reception', 52, 37).boss([52, 34], [44, 36], [60, 36], [52, 41]);
-  m.weapon('glock', 44, 24).ammo(60, 24).weapon('magnum', 31, 42).mysteryBox(52, 24, 'reception')
+  m.weapon('nailgun', 44, 24).ammo(60, 24).weapon('magnum', 31, 42).mysteryBox(52, 24, 'reception')
     .boxSpot(41, 43, 'reception').boxSpot(63, 43, 'reception');
   m.perk('quick_revive', 73, 34).alarmPanel(33, 24.2);
   m.lamp(42, 27, { intensity: 0.7 }).lamp(62, 27, { intensity: 0.7, flicker: 0.15 }).lamp(52, 34, { intensity: 0.75 })
@@ -79,7 +81,7 @@ export function hospital(): MapBuilder {
     .door('door_radiology_ward', rect(32, 53, 4, 3), 1000, 'radiology', 'ward')
     .pocket(rect(2, 48, 5, 5)).window('win_ward_1', rect(7, 50, 1, 2), 'ward').spawn('W1', 4, 50, 'ward')
     .pocket(rect(2, 56, 5, 5)).window('win_ward_2', rect(7, 58, 1, 2), 'ward').spawn('W2', 4, 58, 'ward');
-  m.weapon('mp5', 20, 47).perk('fortify', 8, 54).boxSpot(10, 61, 'ward');
+  m.weapon('p90', 20, 47).perk('fortify', 8, 54).boxSpot(10, 61, 'ward');
   m.lamp(14, 50, { intensity: 0.6 }).lamp(26, 50, { intensity: 0.6, flicker: 0.2 }).lamp(20, 58, { intensity: 0.55 });
   m.props('hospital_bed', [[12, 48, 90], [17, 48, 90], [22, 48, 90], [27, 48, 90], [12, 59, 90], [17, 59, 90], [22, 59, 90]])
     .props('iv_stand', [[14, 48], [24, 48], [19, 60]])
@@ -92,7 +94,7 @@ export function hospital(): MapBuilder {
     .door('door_reception_radiology', rect(50, 44, 4, 3), 750, 'reception', 'radiology')
     .door('door_radiology_pharmacy', rect(68, 53, 4, 3), 1000, 'radiology', 'pharmacy');
   m.spawn('X1', 37, 48, 'radiology').spawn('X2', 66, 48, 'radiology');
-  m.weapon('pump', 62, 47).ammo(40, 47).perk('sprint', 67, 59).boxSpot(51, 61, 'radiology');
+  m.weapon('sawed_off', 62, 47).ammo(40, 47).perk('sprint', 67, 59).boxSpot(51, 61, 'radiology');
   m.trap(47, 47.2, rect(49, 47, 6, 3));
   m.lamp(41, 50, { intensity: 0.5, flicker: 0.4 }).lamp(62, 50, { intensity: 0.45 }).lamp(52, 58, { intensity: 0.5, flicker: 0.7 })
     .lamp(40, 60, { broken: true });

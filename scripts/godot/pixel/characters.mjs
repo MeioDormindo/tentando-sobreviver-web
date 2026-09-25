@@ -1,6 +1,7 @@
 // Personagens em pixel art: peças do corpo, cores e animações (quadros-chave).
 // Medidas em metros, no espaço do modelo: x = direita do personagem, y = frente, z = cima.
 import { hex } from './raster.mjs';
+const scale = (c, k) => c.map((v) => Math.max(0, Math.min(255, Math.round(v * k))));
 import { mul, translate, rotX } from './raster.mjs';
 import { weaponShape } from './weapons.mjs';
 
@@ -149,7 +150,7 @@ const STANCES = {
 };
 
 /** Armas que se seguram como pistola (uma mão no cabo, a outra por cima). */
-export const PISTOLS = ['m1911', 'glock', 'magnum', 'uzi_dual'];
+export const PISTOLS = ['m1911', 'glock', 'magnum', 'uzi_dual', 'beretta', 'nailgun'];
 
 /** Animações que dependem da postura: nomes com o sufixo dela (Idle_pistol...). */
 function stanceAnimations(stance, suffix) {
@@ -261,6 +262,47 @@ export function playerModel(skin) {
     parts.push(box('hips', [0.2, 0.15, 1.0], [0.1, 0.07, 0.1], pouch));
     parts.push(box('leg.R', [0.12, 0.1, 0.55], [0.17, 0.05, 0.1], pouch));  // joelheiras
     parts.push(box('leg.L', [-0.12, 0.1, 0.55], [0.17, 0.05, 0.1], pouch));
+  } });
+}
+
+/**
+ * Personagem do Hospital: um paciente que fugiu do quarto. Camisola comprida, braços e pernas
+ * de fora, chinelos, pulseira de identificação e cabelo bagunçado. look.style:
+ * gown (camisola), bandage (camisola da UTI + faixa na cabeça), jumpsuit (macacão numerado da
+ * cobaia) e scrubs (roupa de enfermeiro com touca).
+ */
+export function patientModel(look) {
+  const skinTone = hex(0xd8a888);
+  const gown = look.jacket, accent = look.pack;
+  const style = look.style || 'gown';
+  const covered = style === 'jumpsuit' || style === 'scrubs';
+  const c = {
+    torso: gown, sleeve: gown, forearm: style === 'jumpsuit' ? gown : skinTone, skin: skinTone,
+    pants: covered ? gown : skinTone, shoes: style === 'jumpsuit' ? hex(0x2a2c2e) : hex(0xc8ccd0), eyes: hex(0x1a1a1a),
+  };
+  return humanoid(c, { extra: (parts) => {
+    if (!covered) {
+      parts.push(box('hips', [0, 0, 0.8], [0.5, 0.3, 0.3], gown));  // barra da camisola
+      for (const x of [-0.12, 0.12]) parts.push(box('spine', [x, 0.13, 1.24], [0.1, 0.02, 0.1], scale(gown, 0.8)));  // estampa
+      parts.push(box('spine', [0, -0.15, 1.35], [0.06, 0.02, 0.2], accent));  // laço das costas
+    }
+    if (style === 'jumpsuit') {
+      parts.push(box('spine', [0.1, 0.145, 1.32], [0.12, 0.02, 0.08], hex(0xf0f0f0), { flat: true }));  // número
+      for (const x of [0.07, 0.1, 0.13]) parts.push(box('spine', [x, 0.156, 1.32], [0.012, 0.01, 0.05], hex(0x1a1a1a), { flat: true }));
+    }
+    parts.push(box('fore.L', [-0.29, 0, 0.9], [0.12, 0.12, 0.04], style === 'jumpsuit' ? accent : hex(0xf2f2f2)));  // pulseira
+    if (style === 'scrubs') {
+      parts.push(box('head', [0, -0.01, 1.8], [0.3, 0.29, 0.1], gown));  // touca
+      parts.push(box('spine', [0.12, 0.145, 1.3], [0.08, 0.02, 0.08], scale(gown, 0.75)));  // bolso
+    } else {
+      // Cabelo bagunçado (tufos).
+      parts.push(box('head', [0, -0.02, 1.8], [0.29, 0.28, 0.07], look.hair));
+      for (const [x, y] of [[0.08, 0.06], [-0.07, -0.04], [0.02, -0.09], [-0.1, 0.07]]) parts.push(box('head', [x, y, 1.85], [0.07, 0.07, 0.06], look.hair, { shape: 'ellipsoid' }));
+    }
+    if (style === 'bandage') {
+      parts.push(box('head', [0, 0.005, 1.7], [0.3, 0.29, 0.05], hex(0xf0ece4)));  // faixa
+      parts.push(box('head', [0.09, 0.14, 1.71], [0.04, 0.02, 0.03], hex(0xa83a30), { flat: true }));  // mancha
+    }
   } });
 }
 

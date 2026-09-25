@@ -11,7 +11,7 @@ import { weaponShape } from './weapons.mjs';
 import { rmSync } from 'node:fs';
 import { hex } from './raster.mjs';
 import {
-  zombieModel, zombieAnimations, playerModel, playerAnimations, weaponParts,
+  zombieModel, zombieAnimations, playerModel, patientModel, playerAnimations, weaponParts,
   houndModel, houndAnimations, PISTOLS, conductorModel, patientZeroModel, bossAnimations,
 } from './characters.mjs';
 
@@ -85,7 +85,11 @@ for (const line of skins.split('\n')) {
     const m = line.match(new RegExp(`"${key}": Color\\(([^)]+)\\)`));
     return m[1].split(',').slice(0, 3).map((v) => Math.round(parseFloat(v) * 255));
   };
-  const model = playerModel({ jacket: color('jacket'), pack: color('pack'), hair: color('hair') });
+  // Modelo do personagem do mapa: sobrevivente (Terminal) ou paciente (Hospital).
+  const kind = (line.match(/"model": "(\w+)"/) || [])[1] || 'survivor';
+  const style = (line.match(/"style": "(\w*)"/) || [])[1] || '';
+  const look = { jacket: color('jacket'), pack: color('pack'), hair: color('hair'), style };
+  const model = kind === 'patient' ? patientModel(look) : playerModel(look);
   write(`player_${id[1]}`, buildSheet(model, playerAnimations(), { pitch: PITCH, fixedFrame: PLAYER_FRAME, layers: { body: null } }));
 }
 

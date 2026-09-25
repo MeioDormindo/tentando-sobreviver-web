@@ -273,7 +273,7 @@ func _defaults() -> Dictionary:
 		"settings": {"muted": false, "musicOn": true, "playerName": "SOBREVIVENTE", "volume": 1.0, "minimap": true,
 			"minimapSize": "medium", "touchMode": "auto", "screenShake": true, "bigHeads": false, "skin": "default",
 			# Só no Godot (o jogo web ignora chaves que não conhece).
-			"fullscreen": false},
+			"fullscreen": false, "skinHospital": "patient"},
 		"records": recs,
 		"unlockedMaps": unlocked,
 		"ranking": rank,

@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+
+; Só do Godot: arma de parede do Hospital (a Mystery Box sorteia nos dois mapas). Espingarda de cano serrado: dois tiros, chumbo aberto e forte de perto.
+[resource]
+script = ExtResource("1_script")
+id = &"sawed_off"
+display_name = "Cano Serrado"
+kind = &"shotgun"
+rarity = &"uncommon"
+damage = 22
+fire_rate = 2.4
+automatic = false
+magazine_size = 2
+reserve_ammo = 40
+reload_time = 1.6
+spread_degrees = 13
+max_range = 8.0
+projectile_speed = 0
+pellets = 10
+pierce = 0
+headshot_multiplier = 1.5
+price = 1500
+ammo_price = 750
+box_only = false
+element = &"fire"
+tracer_color = Color(1, 0.85, 0.45, 1)
+special_type = &""

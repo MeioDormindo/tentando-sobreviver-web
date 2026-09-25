@@ -20,6 +20,8 @@ var busy: bool = false
 ## Nível no Weapon Lab: 0 normal, 1 Mk II, 2 Mk III.
 var level: int = 0
 ## Modificadores dos perks (aplicados pelo Player): dano, bônus de headshot e recarga.
+## Elemento especial comprado na parede ("" = nenhum). Fica com a arma no Weapon Lab e no chão.
+var element: StringName = &""
 var damage_multiplier: float = 1.0
 var headshot_bonus: float = 0.0
 var reload_multiplier: float = 1.0
@@ -137,10 +139,19 @@ func shoot(space: PhysicsDirectSpaceState3D, origin: Vector3, target: Vector3, e
 	if data.special_type != &"":
 		# Granada, plasma, chama, raio, vento (special_fire.gd).
 		var special_dir := aim.rotated(Vector3.UP, deg_to_rad(randf_range(-deviation, deviation))) if data.special_type != &"flame" else aim
-		return SpecialFire.fire(self, space, origin, special_dir, exclude, shooter)
-	for pellet in maxi(1, data.pellets):
+		var special_hits := SpecialFire.fire(self, space, origin, special_dir, exclude, shooter)
+		# Elemento (a caixa pode dar a qualquer arma): por disparo, dividido entre os acertos.
+		for info in special_hits:
+			ElementEffects.apply(self, info, shooter, 1.0 / float(maxi(1, special_hits.size())))
+		return special_hits
+	var pellets := maxi(1, data.pellets)
+	for pellet in pellets:
 		var direction := aim.rotated(Vector3.UP, deg_to_rad(randf_range(-deviation, deviation)))
-		hits.append_array(trace(space, origin, direction, exclude, shooter))
+		var pellet_hits := trace(space, origin, direction, exclude, shooter, _element_color())
+		# Elemento: em cada acerto; os efeitos "por disparo" com chance 1/chumbos.
+		for info in pellet_hits:
+			ElementEffects.apply(self, info, shooter, 1.0 / float(pellets))
+		hits.append_array(pellet_hits)
 	_recoil = minf(_recoil + data.recoil_degrees, 10.0)
 	return hits
 
@@ -178,6 +189,13 @@ func trace(space: PhysicsDirectSpaceState3D, origin: Vector3, direction: Vector3
 			break
 	spawn_tracer(origin, end, color if color.a > 0.0 else data.tracer_color)
 	return hits
+
+
+## Cor do traço com elemento (transparente = a cor normal da arma).
+func _element_color() -> Color:
+	if element == &"":
+		return Color(0, 0, 0, 0)
+	return ElementCatalog.shared().info(element).get("color", Color(0, 0, 0, 0))
 
 
 func _finish_reload() -> void:

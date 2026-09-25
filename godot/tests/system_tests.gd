@@ -186,7 +186,7 @@ func _test_migrated_data() -> void:
 	var launcher := load("res://data/weapons/grenade_launcher.tres") as WeaponData
 	check(launcher.special_type == &"grenade" and launcher.box_only, "lança-granadas: especial e só na Mystery Box")
 	var catalog := load("res://data/weapons/catalog.tres") as WeaponCatalog
-	check(catalog.weapons.size() == 19, "19 armas migradas no catálogo (%d)" % catalog.weapons.size())
+	check(catalog.weapons.size() == 23, "19 armas do jogo web + 4 do Hospital no catálogo (%d)" % catalog.weapons.size())
 
 
 func _test_maps(tree: SceneTree) -> void:
@@ -264,7 +264,7 @@ func _test_mystery_box() -> void:
 		counts[weapon.rarity] = counts.get(weapon.rarity, 0) + 1
 		if weapon.id == &"wind_cannon":
 			wind_on_terminal += 1
-	check(wind_on_terminal == 0, "Canhão de Vento não sai no Terminal (só no Hospital)")
+	check(wind_on_terminal > 0, "a caixa traz armas dos dois mapas: Canhão de Vento também no Terminal (%d)" % wind_on_terminal)
 	var legendary := float(counts.get(&"legendary", 0)) / 2000.0
 	check(legendary > 0.04 and legendary < 0.13, "lendárias perto do peso do jogo web (8%%): %.1f%%" % (legendary * 100.0))
 	var wind_on_hospital := false
@@ -487,7 +487,7 @@ func _test_achievements() -> void:
 	check(Save.has_achievement("dog_trainer"), "Adestrador: rodada dos cães sem levar dano")
 	Events.achievement_unlocked.disconnect(capture)
 	var skins := load("res://data/configs/skins.tres") as SkinCatalog
-	check(skins.skins.size() == 4 and CharacterScreenCheck.unlocked(skins.find("conductor")) and not CharacterScreenCheck.unlocked(skins.find("agent")),
+	check(skins.skins.size() == 8 and CharacterScreenCheck.unlocked(skins.find("conductor")) and not CharacterScreenCheck.unlocked(skins.find("agent")),
 		"visual Maquinista liberado pelo boss; Agente ainda trancado")
 	walker.free()
 	system.queue_free()

@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ElementCatalog" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/element_catalog.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+elements = {
+"light": { "name": "LUZ", "icon": "✦", "color": Color(1, 0.949, 0.659, 1), "price": 2500, "description": "Clarão que cega: atordoa os zumbis e causa +50% de dano no boss." },
+"shadow": { "name": "SOMBRA", "icon": "☾", "color": Color(0.69, 0.478, 0.878, 1), "price": 2500, "description": "Rouba vida: cada acerto recupera parte do dano causado." },
+"ice": { "name": "GELO", "icon": "❄", "color": Color(0.624, 0.89, 1, 1), "price": 3000, "description": "Deixa os zumbis lentos e às vezes os congela." },
+"lightning": { "name": "RAIO", "icon": "ϟ", "color": Color(0.498, 0.847, 1, 1), "price": 3000, "description": "A eletricidade salta para 2 zumbis próximos." },
+"fire": { "name": "FOGO", "icon": "✹", "color": Color(1, 0.541, 0.227, 1), "price": 3000, "description": "Incendeia: dano contínuo por alguns segundos." },
+"explosive": { "name": "EXPLOSIVO", "icon": "✺", "color": Color(1, 0.702, 0.278, 1), "price": 3500, "description": "Cada tiro que acerta estoura numa pequena explosão." }
+}
+params = {
+"light": { "stun_time": 0.6, "boss_bonus": 0.5 },
+"shadow": { "leech": 0.08, "max_heal_per_hit": 6 },
+"ice": { "slow_factor": 0.55, "slow_time": 2.2, "freeze_chance": 0.12, "freeze_time": 1.3 },
+"lightning": { "chains": 2, "range": 4.063, "damage_factor": 0.5, "per_shot": true },
+"fire": { "dps": 22, "burn_time": 2.5 },
+"explosive": { "radius": 1.5, "damage_factor": 0.7, "per_shot": true }
+}

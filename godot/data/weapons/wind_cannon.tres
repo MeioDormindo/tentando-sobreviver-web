@@ -26,7 +26,6 @@ box_only = true
 element = &""
 tracer_color = Color(0.624, 0.91, 1, 1)
 upgrade_name = "Tornado"
-maps = PackedStringArray("map2")
 special_type = &"gust"
 special_params = {
 "range": 10.625,

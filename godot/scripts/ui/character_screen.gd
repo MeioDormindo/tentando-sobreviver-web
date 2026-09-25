@@ -21,28 +21,33 @@ static func is_unlocked(skin: Dictionary) -> bool:
 func _build() -> void:
 	for child in get_children():
 		child.queue_free()
-	var column := MenuKit.screen(self, 760.0)
-	MenuKit.spacer(column, 30)
+	var column := MenuKit.screen(self, 820.0)
+	MenuKit.spacer(column, 10)
 	MenuKit.title(column, "PERSONAGEM", 48)
-	var row := HBoxContainer.new()
-	row.alignment = BoxContainer.ALIGNMENT_CENTER
-	row.add_theme_constant_override(&"separation", 18)
-	column.add_child(row)
-	var selected := String(Save.get_setting("skin"))
+	MenuKit.label(column, "Cada mapa tem o seu personagem. Libere os visuais com as conquistas.", 14, MenuKit.DIM, HORIZONTAL_ALIGNMENT_CENTER)
 	var first: Button = null
-	for skin: Dictionary in _skins.skins:
-		var card := VBoxContainer.new()
-		card.custom_minimum_size = Vector2(170, 0)
-		row.add_child(card)
-		card.add_child(_portrait(skin))
-		var status := "EM USO" if skin.id == selected else ("USAR" if is_unlocked(skin) else "TRANCADO")
-		var button := MenuKit.button(card, "%s\n%s" % [String(skin.name).to_upper(), status], _choose.bind(skin), 16)
-		if skin.id == selected:
-			button.add_theme_color_override(&"font_color", MenuKit.GOLD)
-		if first == null:
-			first = button
+	for map_id: String in Save.catalog.order:
+		var skins := _skins.for_map(map_id)
+		if skins.is_empty():
+			continue
+		MenuKit.label(column, Save.catalog.display_name(map_id).to_upper(), 20, MenuKit.GOLD)
+		var row := HBoxContainer.new()
+		row.alignment = BoxContainer.ALIGNMENT_CENTER
+		row.add_theme_constant_override(&"separation", 14)
+		column.add_child(row)
+		var selected := String(_skins.chosen(map_id).id)
+		for skin: Dictionary in skins:
+			var card := VBoxContainer.new()
+			card.custom_minimum_size = Vector2(190, 0)
+			row.add_child(card)
+			card.add_child(_portrait(skin))
+			var status := "EM USO" if skin.id == selected else ("USAR" if is_unlocked(skin) else "TRANCADO")
+			var button := MenuKit.button(card, "%s\n%s" % [String(skin.name).to_upper(), status], _choose.bind(skin), 16)
+			if skin.id == selected:
+				button.add_theme_color_override(&"font_color", MenuKit.GOLD)
+			if first == null:
+				first = button
 	_message = MenuKit.label(column, "", 15, MenuKit.DIM, HORIZONTAL_ALIGNMENT_CENTER)
-	MenuKit.spacer(column, 12)
 	MenuKit.button(column, "VOLTAR", func() -> void: MenuKit.go(self, MENU))
 	first.grab_focus.call_deferred()
 
@@ -51,7 +56,7 @@ func _build() -> void:
 ## trancados aparecem em silhueta. Sem a folha, a cor da jaqueta.
 func _portrait(skin: Dictionary) -> Control:
 	var frame := PanelContainer.new()
-	frame.custom_minimum_size = Vector2(170, 190)
+	frame.custom_minimum_size = Vector2(190, 170)
 	frame.add_theme_stylebox_override(&"panel", PixelSkin.panel(false, 6.0))
 	var sheet := "player_%s" % skin.id
 	var meta_path := "res://assets/sprites/%s.json" % sheet
@@ -66,7 +71,9 @@ func _portrait(skin: Dictionary) -> Control:
 	stack.custom_minimum_size = size * 2.0
 	frame.add_child(stack)
 	var idle: int = int(meta.animations.get("Idle_pistol", meta.animations.Idle).start)
-	for layer: String in [sheet, "weapon_m1911"]:
+	# Com a pistola inicial do mapa do visual (M1911 no Terminal, Beretta no Hospital).
+	var pistol := "weapon_beretta" if String(skin.get("map", "")) == "map2" else "weapon_m1911"
+	for layer: String in [sheet, pistol]:
 		if not ResourceLoader.exists("res://assets/sprites/%s.png" % layer):
 			continue
 		var atlas := AtlasTexture.new()
@@ -90,7 +97,7 @@ func _choose(skin: Dictionary) -> void:
 		_message.text = "Trancado — libere com a conquista \"%s\": %s" % [need.get("name", ""), need.get("description", "")]
 		_message.add_theme_color_override(&"font_color", MenuKit.RED)
 		return
-	Save.set_setting("skin", skin.id)
+	Save.set_setting(SkinCatalog.setting_key(String(skin.get("map", "terminal"))), skin.id)
 	_build.call_deferred()
 
 

@@ -53,6 +53,15 @@ func give(data: WeaponData) -> Weapon:
 	return _add(weapon)
 
 
+## Começa de novo só com esta arma (a pistola inicial do mapa).
+func reset_to(data: WeaponData) -> void:
+	for weapon in weapons:
+		weapon.queue_free()
+	weapons.clear()
+	current_index = 0
+	give(data)
+
+
 ## Pega de volta uma arma que estava no chão (com a munição e as melhorias dela). Devolve a
 ## arma que saiu no lugar (ou null).
 func take_back(weapon: Weapon) -> Weapon:

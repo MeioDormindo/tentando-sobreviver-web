@@ -91,12 +91,27 @@ func _ready() -> void:
 	call_deferred(&"_emit_initial_state")
 
 
+## Pistola inicial deste mapa (a do PlayerData, ou a do mapa: Hospital começa com a Beretta).
+var _start_weapon: WeaponData
+
+
+func start_weapon_id() -> StringName:
+	return (_start_weapon if _start_weapon else data.starting_weapon).id
+
+
+## Troca a arma inicial pela do mapa (no começo da partida).
+func set_start_weapon(weapon_data: WeaponData) -> void:
+	if weapon_data == null or weapon_data.id == start_weapon_id():
+		return
+	_start_weapon = weapon_data
+	inventory.reset_to(weapon_data)
+
+
 ## Visual escolhido (cores da jaqueta, mochila e cabelo); trancado volta ao padrão.
 func _apply_skin() -> void:
+	# O personagem do mapa da partida (sobrevivente no Terminal, paciente no Hospital).
 	var catalog := load("res://data/configs/skins.tres") as SkinCatalog
-	var skin := catalog.find(String(Save.get_setting("skin")))
-	if String(skin.get("unlock", "")) != "" and not Save.has_achievement(skin.unlock):
-		skin = catalog.find("default")
+	var skin := catalog.chosen(Session.map_id)
 	if skin.is_empty():
 		return
 	model = CharacterSprite.create("player_%s" % skin.id)

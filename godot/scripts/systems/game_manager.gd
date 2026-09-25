@@ -48,6 +48,8 @@ func _place_player() -> void:
 	if not arena.is_node_ready():
 		await arena.ready
 	player.global_position = arena.get_player_spawn()
+	if arena.has_method(&"start_weapon"):
+		player.set_start_weapon(arena.call(&"start_weapon"))
 	var camera := get_viewport().get_camera_3d() as TopDownCamera
 	if camera:
 		camera.snap()

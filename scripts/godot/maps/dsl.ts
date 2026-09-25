@@ -46,6 +46,7 @@ export class MapBuilder {
   private readonly interactions: Array<Record<string, unknown>> = [];
   private readonly propList: Array<Record<string, unknown>> = [];
   private start = { area: '', x: 0, z: 0 };
+  private startWeaponId = '';
   private stationData: Record<string, unknown> | null = null;
   private secretsData: Record<string, unknown> | null = null;
   private questData: Record<string, unknown> | null = null;
@@ -111,6 +112,12 @@ export class MapBuilder {
 
   playerStart(area: string, tx: number, ty: number): this {
     this.start = { area, x: tx + 0.5, z: ty + 0.5 };
+    return this;
+  }
+
+  /** Pistola inicial do mapa (id de godot/data/weapons); vazio = a padrão do jogador (M1911). */
+  startWeapon(id: string): this {
+    this.startWeaponId = id;
     return this;
   }
 
@@ -265,6 +272,7 @@ export class MapBuilder {
       cells: g.map((row) => row.join('')),
       start_area: this.start.area,
       player_start: { x: this.start.x, z: this.start.z },
+      start_weapon: this.startWeaponId,
       outside_darkness: this.options.outsideDarkness,
       areas: this.areas.map((a) => ({ id: a.id, name: a.name, darkness: a.darkness, lighting: a.lighting, rects: a.rects })),
       doors: this.doors,

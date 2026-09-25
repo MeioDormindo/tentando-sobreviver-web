@@ -14,10 +14,13 @@ var _shooter: Node
 var _struck: Array[HealthComponent] = []
 var _is_plasma := false
 var _done := false
+## Arma que disparou (elemento na explosão); pode ter saído do inventário.
+var _weapon: Weapon
 
 
 func setup(weapon: Weapon, direction: Vector3, exclude: Array[RID], shooter: Node) -> void:
 	_weapon_data = weapon.data
+	_weapon = weapon
 	_damage_multiplier = weapon.damage_multiplier
 	_is_plasma = weapon.data.special_type == &"plasma"
 	_velocity = Vector3(direction.x, 0.0, direction.z).normalized() * weapon.data.projectile_speed
@@ -67,6 +70,10 @@ func _physics_process(delta: float) -> void:
 func _explode(at: Vector3) -> void:
 	_done = true
 	var params := _weapon_data.special_params
-	SpecialFire.blast(get_tree(), at, float(params.get("blast_radius", 0)), float(params.get("blast_damage", 0)) * _damage_multiplier,
+	var hits := SpecialFire.blast(get_tree(), at, float(params.get("blast_radius", 0)), float(params.get("blast_damage", 0)) * _damage_multiplier,
 		float(params.get("stun_time", 0)), _shooter, SpecialFire.PLASMA_COLOR if _is_plasma else SpecialFire.EXPLOSION_COLOR)
+	# Elemento da arma (a Mystery Box pode dar elemento até às especiais).
+	if is_instance_valid(_weapon):
+		for info in hits:
+			ElementEffects.apply(_weapon, info, _shooter, 1.0 / float(maxi(1, hits.size())))
 	queue_free()

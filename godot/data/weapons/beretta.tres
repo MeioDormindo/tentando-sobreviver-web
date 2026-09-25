@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+
+; Só do Godot: arma de parede do Hospital (a Mystery Box sorteia nos dois mapas). Pistola inicial do Hospital.
+[resource]
+script = ExtResource("1_script")
+id = &"beretta"
+display_name = "Beretta 92"
+kind = &"pistol"
+rarity = &"common"
+damage = 30
+fire_rate = 5
+automatic = false
+magazine_size = 15
+reserve_ammo = 90
+reload_time = 1.35
+spread_degrees = 2.2
+max_range = 21.0
+projectile_speed = 0
+pellets = 1
+pierce = 0
+headshot_multiplier = 1.6
+price = 0
+ammo_price = 250
+box_only = false
+element = &"ice"
+tracer_color = Color(1, 0.85, 0.45, 1)
+special_type = &""

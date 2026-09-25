@@ -23,6 +23,7 @@ import { onlineConfig, accountConfig } from '../../src/config/online.config';
 import { antiCheatConfig } from '../../src/config/anticheat.config';
 import { ACHIEVEMENTS, achievementConfig } from '../../src/config/achievements.config';
 import { SKINS } from '../../src/config/skins.config';
+import { elements, elementParams } from '../../src/config/elements.config';
 import { powerUps, dropConfig, powerUpEffects, goldenConfig } from '../../src/config/powerups.config';
 // @ts-expect-error módulo de arte em JS puro (paleta dos visuais do jogador)
 import { PLAYER_SKINS } from '../art/characters.mjs';
@@ -85,6 +86,24 @@ function special(cfg: WeaponConfig): Record<string, TresValue | undefined> {
   return { special_type: name(sp.type), special_params: raw(`{\n${params.join(',\n')}\n}`) };
 }
 
+/**
+ * Godot: em que mapas a Mystery Box sorteia cada arma. A caixa traz armas dos dois mapas,
+ * inclusive o Canhão de Vento (no web só no Hospital); lista vazia = todos os mapas.
+ */
+const GODOT_WEAPON_MAPS: Record<string, string[]> = { wind_cannon: [] };
+
+function weaponMaps(id: string, maps: readonly string[] | undefined): { raw: string } | undefined {
+  const list = GODOT_WEAPON_MAPS[id] ?? maps ?? [];
+  return list.length ? raw(`PackedStringArray(${list.map((x) => JSON.stringify(x)).join(', ')})`) : undefined;
+}
+
+/**
+ * Armas que só existem no Godot (escritas à mão em godot/data/weapons, nunca sobrescritas):
+ * as de parede do Hospital, que também entram no catálogo da Mystery Box. A Lanterna do
+ * Condutor (prêmio da missão do Terminal) fica fora do catálogo de propósito.
+ */
+const GODOT_ONLY_WEAPONS = ['beretta', 'nailgun', 'p90', 'sawed_off'];
+
 function exportWeapons(): void {
   for (const cfg of Object.values(weapons)) {
     write(`weapons/${cfg.id}.tres`, tres('WeaponData', 'res://scripts/weapons/weapon_data.gd', {
@@ -113,7 +132,7 @@ function exportWeapons(): void {
       akimbo: cfg.akimbo,
       tracer_color: cfg.tracerTint !== undefined ? color(cfg.tracerTint) : undefined,
       upgrade_name: cfg.upgradeName,
-      maps: cfg.maps ? raw(`PackedStringArray(${cfg.maps.map((x) => JSON.stringify(x)).join(', ')})`) : undefined,
+      maps: weaponMaps(cfg.id, cfg.maps),
       ...special(cfg),
     }));
   }
@@ -121,7 +140,7 @@ function exportWeapons(): void {
 
 /** Catálogo com todas as armas (sorteio da Mystery Box; listar pastas não funciona no jogo exportado). */
 function exportCatalog(): void {
-  const list = Object.values(weapons);
+  const list = [...Object.values(weapons).map((w) => ({ id: w.id })), ...GODOT_ONLY_WEAPONS.map((id) => ({ id }))];
   const ext = list.map((w, i) => `[ext_resource type="Resource" path="res://data/weapons/${w.id}.tres" id="w${i}"]`).join('\n');
   write("weapons/catalog.tres", `[gd_resource type="Resource" script_class="WeaponCatalog" format=3]
 
@@ -344,6 +363,32 @@ const GODOT_ONLY_ACHIEVEMENTS = [
   { id: 'last_train', name: 'O Último Trem', description: 'Complete a missão do Terminal e pegue a Lanterna do Condutor', icon: 'res://assets/sprites/icons/weapon_conductor_lantern.png' },
 ];
 
+/** Elementos das armas de parede: nome, ícone, cor, preço e parâmetros (px → m, ms → s). */
+function exportElements(): void {
+  const PX = 32;
+  const convert = (params: Record<string, number | boolean>): string => Object.entries(params).map(([key, value]) => {
+    let k = key.replace(/([A-Z])/g, '_$1').toLowerCase();
+    let v: number | boolean = value;
+    if (typeof value === 'number' && k.endsWith('_ms')) { k = k.replace(/_ms$/, '_time'); v = Math.round((value / 1000) * 1000) / 1000; }
+    else if (typeof value === 'number' && (k === 'range' || k === 'radius')) v = Math.round((value / PX) * 1000) / 1000;
+    return `"${k}": ${v}`;
+  }).join(', ');
+  const list = Object.entries(elements).map(([id, e]) => `"${id}": { "name": "${e.name}", "icon": "${e.icon}", "color": ${color(e.color).raw}, "price": ${e.price}, "description": ${JSON.stringify(e.description)} }`);
+  const params = Object.entries(elementParams).map(([id, prm]) => `"${id}": { ${convert(prm as Record<string, number | boolean>)} }`);
+  write('configs/elements.tres', tres('ElementCatalog', 'res://scripts/weapons/element_catalog.gd', {
+    elements: raw(`{\n${list.join(',\n')}\n}`),
+    params: raw(`{\n${params.join(',\n')}\n}`),
+  }));
+}
+
+/** Visuais que só existem no Godot: o 4º do Terminal e o paciente do Hospital com 2 variações. */
+const GODOT_ONLY_SKINS = [
+  { id: 'station_guard', name: 'Guarda da Estação', unlock: 'last_train', map: 'terminal', model: 'survivor', style: '', jacket: '#d2742a', pack: '#3a3d40', hair: '#2a1c12' },
+  { id: 'patient', name: 'Paciente', unlock: '', map: 'map2', model: 'patient', style: 'gown', jacket: '#8fb4d4', pack: '#e8e4d8', hair: '#4a3020' },
+  { id: 'icu_patient', name: 'Paciente da UTI', unlock: 'patient_zero', map: 'map2', model: 'patient', style: 'bandage', jacket: '#7fb08a', pack: '#e8e4d8', hair: '#2a1c12' },
+  { id: 'test_subject', name: 'Cobaia do Laboratório', unlock: 'dog_trainer', map: 'map2', model: 'patient', style: 'jumpsuit', jacket: '#e0782a', pack: '#2a2c2e', hair: '#1a1410' },
+];
+
 function exportAchievements(): void {
   const list = ACHIEVEMENTS.map((a) => `{ "id": "${a.id}", "name": ${JSON.stringify(a.name)}, "description": ${JSON.stringify(a.description)}, "icon": "${achievementIcon(a.icon)}", "total_key": "${a.total?.key ?? ''}", "total_target": ${a.total?.target ?? 0}, "secret": ${a.secret ?? false} }`);
   for (const a of GODOT_ONLY_ACHIEVEMENTS) list.push(`{ "id": "${a.id}", "name": ${JSON.stringify(a.name)}, "description": ${JSON.stringify(a.description)}, "icon": "${a.icon}", "total_key": "", "total_target": 0, "secret": false }`);
@@ -358,7 +403,18 @@ function exportAchievements(): void {
     default: { jacket: '#4b5140', pack: '#5d4731', hair: '#35271b' },
     ...(PLAYER_SKINS as Record<string, { jacket: string; pack: string; hair: string }>),
   };
-  const skins = SKINS.map((k) => `{ "id": "${k.id}", "name": ${JSON.stringify(k.name)}, "unlock": "${k.unlock ?? ''}", "jacket": ${palette(looks[k.id].jacket).raw}, "pack": ${palette(looks[k.id].pack).raw}, "hair": ${palette(looks[k.id].hair).raw} }`);
+  // Godot: cada mapa tem o seu personagem (Terminal: o sobrevivente; Hospital: um paciente),
+  // com 4 visuais cada. As do web ganham o mapa e o modelo; as novas só existem no Godot.
+  const place: Record<string, { map: string; model: string; style: string }> = {
+    default: { map: 'terminal', model: 'survivor', style: '' },
+    conductor: { map: 'terminal', model: 'survivor', style: '' },
+    agent: { map: 'terminal', model: 'survivor', style: '' },
+    nurse: { map: 'map2', model: 'patient', style: 'scrubs' },
+  };
+  const entry = (k: { id: string; name: string; unlock: string; jacket: string; pack: string; hair: string; map: string; model: string; style: string }): string =>
+    `{ "id": "${k.id}", "name": ${JSON.stringify(k.name)}, "unlock": "${k.unlock}", "map": "${k.map}", "model": "${k.model}", "style": "${k.style}", "jacket": ${palette(k.jacket).raw}, "pack": ${palette(k.pack).raw}, "hair": ${palette(k.hair).raw} }`;
+  const skins = SKINS.map((k) => entry({ id: k.id, name: k.name, unlock: k.unlock ?? '', ...looks[k.id], ...(place[k.id] ?? place.default) }));
+  for (const k of GODOT_ONLY_SKINS) skins.push(entry(k));
   write('configs/skins.tres', tres('SkinCatalog', 'res://scripts/player/skin_catalog.gd', {
     skins: raw(`[\n${skins.join(',\n')}\n]`),
   }));
@@ -472,6 +528,7 @@ exportBosses();
 exportProgression();
 exportOnline();
 exportAchievements();
+exportElements();
 exportPowerUps();
 exportWorldEvents();
 exportQuests();

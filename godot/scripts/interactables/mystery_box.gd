@@ -19,6 +19,11 @@ var catalog: WeaponCatalog
 var map_id: String = ""
 var state: State = State.IDLE
 var result: WeaponData
+## Elemento que veio junto com a arma sorteada ("" = nenhum): qualquer um dos seis, em qualquer
+## arma, até nas que não têm elemento na parede e nas especiais.
+var result_element: StringName = &""
+## Chance de a arma da caixa já vir com um elemento.
+const ELEMENT_CHANCE := 0.3
 var uses: int = 0
 var interaction_radius: float = 2.3
 ## Preço atual (o Fire Sale muda).
@@ -134,7 +139,8 @@ func get_interaction_prompt(player: Node3D) -> String:
 		State.READY:
 			var p := player as Player
 			var owned := p != null and p.inventory.owns(result.id)
-			return "[E] PEGAR %s%s" % [result.display_name.to_upper(), " (MUNIÇÃO)" if owned else ""]
+			var element := ("  " + ElementCatalog.shared().label(result_element)) if result_element != &"" else ""
+			return "[E] PEGAR %s%s%s" % [result.display_name.to_upper(), element, " (MUNIÇÃO)" if owned else ""]
 	return ""
 
 
@@ -154,9 +160,22 @@ func interact(player: Node3D) -> bool:
 			var dropped := p.give_weapon(result)
 			if dropped:
 				Events.weapon_dropped.emit(dropped, p.global_position)
+			# Veio com elemento: a arma (nova ou a que você já tinha) fica com ele.
+			var taken := p.inventory.find(result.id)
+			if taken and result_element != &"":
+				taken.element = result_element
+				Events.weapon_element_changed.emit(result.id, result_element)
 			_reset()
 			return true
 	return false
+
+
+## Elemento que acompanha a arma (função pura): com chance ELEMENT_CHANCE, um dos seis.
+static func roll_element(roll: float, pick: int) -> StringName:
+	if roll >= ELEMENT_CHANCE:
+		return &""
+	var ids := ElementCatalog.shared().elements.keys()
+	return StringName(ids[posmod(pick, ids.size())])
 
 
 ## Sorteio (função pura): raridade pelos pesos, depois uma arma dela que possa sair neste
@@ -198,7 +217,8 @@ func _reveal() -> void:
 	Audio.play_at("box_reveal", global_position, "ui", 1.0)
 	state = State.READY
 	_timer = data.take_time
-	_label.text = result.display_name.to_upper()
+	result_element = roll_element(randf(), randi())
+	_label.text = result.display_name.to_upper() + (("  " + ElementCatalog.shared().label(result_element)) if result_element != &"" else "")
 	_label.modulate = RARITY_COLORS.get(result.rarity, Color.WHITE)
 	_show_icon(result)
 

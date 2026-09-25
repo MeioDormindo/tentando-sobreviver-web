@@ -88,8 +88,12 @@ de conceitos: ver `docs/analise-typescript.md`.
   **lanterna** que liga e desliga (F), com aviso na HUD e dica ao entrar no escuro sem ela;
   luminárias que falham piscando e as quebradas soltando faíscas;
 - **menu de pausa** com CONTINUAR, REINICIAR, MENU e as configurações que valem na hora;
-- **visuais do personagem** (tela PERSONAGEM): Sobrevivente, Enfermeiro, Maquinista e Agente,
-  liberados por conquistas, com as cores da paleta do jogo web;
+- **um personagem por mapa, com 4 visuais cada** (tela PERSONAGEM, uma fileira por mapa),
+  liberados por conquistas: no Terminal o sobrevivente (Sobrevivente, Maquinista, Agente, Guarda
+  da Estação); no Hospital um paciente fugido (Paciente, Enfermeiro, Paciente da UTI, Cobaia do
+  Laboratório);
+- **tela ARMAS** (como no jogo web): todas as armas por raridade, com barras de dano, cadência,
+  pente, reserva, recarga e alcance, onde achar, elemento, efeito especial e o Mk II/III;
 - **código Konami** no menu (↑↑↓↓←→←→BA): libera o modo cabeção;
 - **anti-trapaça**: ganho impossível para o round ou pontos/score alterados por fora invalidam a
   partida, com zoeira na tela, e ela não vale save nem ranking;
@@ -103,8 +107,15 @@ de conceitos: ver `docs/analise-typescript.md`.
   - barricadas nas janelas: os zumbis arrancam as tábuas vindo de fora, e segurar E conserta
     (+10 por tábua);
   - armas e munição na parede, com o giz na parede mais próxima do ponto do layout;
-  - Mystery Box, com os pesos de raridade do jogo web, armas só de um mapa e troca de lugar a cada
-    3 usos;
+  - Mystery Box, com os pesos de raridade do jogo web, armas dos dois mapas (inclusive as
+    especiais; a Lanterna do Condutor só pela missão), chance de a arma já vir com um elemento
+    qualquer (até nas especiais) e troca de lugar a cada 3 usos;
+  - **elementos** (como no jogo web): segurar E na parede de uma arma que você tem compra o
+    elemento dela (Luz atordoa, Sombra rouba vida, Gelo deixa lento e congela, Raio salta, Fogo
+    queima, Explosivo estoura); a munição vende o da pistola inicial; o toque só compra munição
+    ao soltar, então segurar com o pente incompleto compra só o elemento;
+  - **arsenal próprio do Hospital**: começa com a Beretta 92 e as paredes têm Pistola de Pregos,
+    P90, Cano Serrado, Magnum, Uzi Dupla e Barrett — nenhuma repete as do Terminal;
   - Weapon Lab: Mk II e Mk III (o Canhão de Vento vira Tornado);
   - 7 perks com os efeitos do jogo web; o Quick Revive levanta sozinho, até 3 vezes;
   - energia: segurar E no disjuntor liga perks e Lab, e as luzes voltam piscando;

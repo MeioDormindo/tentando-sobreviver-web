@@ -126,6 +126,7 @@
   "x": 52.5,
   "z": 37.5
  },
+ "start_weapon": "beretta",
  "outside_darkness": 0.84,
  "areas": [
   {
@@ -695,7 +696,7 @@
   },
   {
    "type": "weapon",
-   "weaponId": "glock",
+   "weaponId": "nailgun",
    "tx": 44,
    "ty": 24,
    "x": 44.5,
@@ -718,7 +719,7 @@
   },
   {
    "type": "weapon",
-   "weaponId": "mp5",
+   "weaponId": "p90",
    "tx": 20,
    "ty": 47,
    "x": 20.5,
@@ -726,7 +727,7 @@
   },
   {
    "type": "weapon",
-   "weaponId": "pump",
+   "weaponId": "sawed_off",
    "tx": 62,
    "ty": 47,
    "x": 62.5,

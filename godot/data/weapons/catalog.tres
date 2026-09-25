@@ -20,7 +20,11 @@
 [ext_resource type="Resource" path="res://data/weapons/uzi_dual.tres" id="w16"]
 [ext_resource type="Resource" path="res://data/weapons/minigun.tres" id="w17"]
 [ext_resource type="Resource" path="res://data/weapons/wind_cannon.tres" id="w18"]
+[ext_resource type="Resource" path="res://data/weapons/beretta.tres" id="w19"]
+[ext_resource type="Resource" path="res://data/weapons/nailgun.tres" id="w20"]
+[ext_resource type="Resource" path="res://data/weapons/p90.tres" id="w21"]
+[ext_resource type="Resource" path="res://data/weapons/sawed_off.tres" id="w22"]
 
 [resource]
 script = ExtResource("1_script")
-weapons = Array[Resource]([ExtResource("w0"), ExtResource("w1"), ExtResource("w2"), ExtResource("w3"), ExtResource("w4"), ExtResource("w5"), ExtResource("w6"), ExtResource("w7"), ExtResource("w8"), ExtResource("w9"), ExtResource("w10"), ExtResource("w11"), ExtResource("w12"), ExtResource("w13"), ExtResource("w14"), ExtResource("w15"), ExtResource("w16"), ExtResource("w17"), ExtResource("w18")])
+weapons = Array[Resource]([ExtResource("w0"), ExtResource("w1"), ExtResource("w2"), ExtResource("w3"), ExtResource("w4"), ExtResource("w5"), ExtResource("w6"), ExtResource("w7"), ExtResource("w8"), ExtResource("w9"), ExtResource("w10"), ExtResource("w11"), ExtResource("w12"), ExtResource("w13"), ExtResource("w14"), ExtResource("w15"), ExtResource("w16"), ExtResource("w17"), ExtResource("w18"), ExtResource("w19"), ExtResource("w20"), ExtResource("w21"), ExtResource("w22")])

@@ -4,6 +4,7 @@ extends Control
 
 const MAP_SELECT := "res://scenes/ui/map_select.tscn"
 const RANKING := "res://scenes/ui/ranking.tscn"
+const ARMORY := "res://scenes/ui/armory.tscn"
 const SETTINGS := "res://scenes/ui/settings.tscn"
 const ACCOUNT := "res://scenes/ui/account.tscn"
 const ACHIEVEMENTS := "res://scenes/ui/achievements.tscn"
@@ -26,6 +27,7 @@ func _ready() -> void:
 	MenuKit.spacer(column, 24)
 	var play := MenuKit.button(column, "JOGAR", func() -> void: MenuKit.go(self, MAP_SELECT))
 	MenuKit.button(column, "RANKING", func() -> void: MenuKit.go(self, RANKING))
+	MenuKit.button(column, "ARMAS", func() -> void: MenuKit.go(self, ARMORY))
 	MenuKit.button(column, "CONQUISTAS", func() -> void: MenuKit.go(self, ACHIEVEMENTS))
 	MenuKit.button(column, "PERSONAGEM", func() -> void: MenuKit.go(self, CHARACTER))
 	var user := Account.current_user()

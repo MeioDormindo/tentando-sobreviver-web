@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+
+; Só do Godot: arma de parede do Hospital (a Mystery Box sorteia nos dois mapas). Submetralhadora de pente grande.
+[resource]
+script = ExtResource("1_script")
+id = &"p90"
+display_name = "P90"
+kind = &"smg"
+rarity = &"uncommon"
+damage = 21
+fire_rate = 13.5
+automatic = true
+magazine_size = 50
+reserve_ammo = 200
+reload_time = 2.3
+spread_degrees = 4.5
+max_range = 20.0
+projectile_speed = 0
+pellets = 1
+pierce = 0
+headshot_multiplier = 1.5
+price = 1200
+ammo_price = 600
+box_only = false
+element = &"lightning"
+tracer_color = Color(1, 0.85, 0.45, 1)
+special_type = &""

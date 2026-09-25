@@ -63,6 +63,28 @@ export function weaponShape(id, level = 0) {
     case 'glock':
       add([0, 0.065, 0.075], [0.05, 0.2, 0.065], POLY); grip(0, POLY); add([0, 0.14, 0.05], [0.04, 0.05, 0.02], DARK);
       break;
+    case 'beretta':
+      // Beretta 92 (pistola inicial do Hospital): ferrolho vazado com o cano à mostra.
+      add([0, 0.07, 0.078], [0.046, 0.23, 0.058], metal); add([0, 0.12, 0.078], [0.03, 0.08, 0.03], DARK);
+      grip(-0.005, POLY); sight(0.17, 0.112);
+      break;
+    case 'nailgun':
+      // Pistola de pregos: corpo amarelo de ferramenta, pente de pregos embaixo, bico curto.
+      add([0, 0.06, 0.08], [0.07, 0.22, 0.09], hex(0xd8b02a)); add([0, 0.06, 0.13], [0.05, 0.14, 0.025], DARK);
+      add([0, 0.19, 0.06], [0.035, 0.06, 0.035], metal); add([0, 0.1, 0.0], [0.03, 0.2, 0.05], hex(0x9aa0a4), { rot: [0.15, 0, 0] });
+      grip(-0.02, DARK);
+      break;
+    case 'p90':
+      // P90: corpo arredondado de polímero, pente em cima, empunhadura vazada.
+      add([0, 0.08, 0.06], [0.07, 0.36, 0.11], POLY, { round: 0.03 }); add([0, 0.09, 0.135], [0.05, 0.26, 0.03], hex(0x6a6d68));
+      add([0, 0.05, -0.02], [0.04, 0.08, 0.1], DARK); barrel(0.26, 0.06, 0.028); sight(0.02, 0.16);
+      break;
+    case 'sawed_off':
+      // Cano serrado: dois canos curtos lado a lado e coronha de madeira cortada.
+      add([0, 0.02, 0.06], [0.07, 0.12, 0.08], metal); grip(-0.02, WOOD); stock(0.12, WOOD, 0.03);
+      for (const x of [-0.022, 0.022]) add([x, 0.2, 0.07], [0.04, 0.26, 0.04], DARK, { round: 0.015 });
+      add([0, 0.14, 0.03], [0.07, 0.1, 0.04], WOOD);
+      break;
     case 'magnum':
       add([0, 0.03, 0.065], [0.05, 0.12, 0.08], metal); add([0, 0.03, 0.06], [0.075, 0.07, 0.075], metal, { shape: 'ellipsoid' });
       barrel(0.09, 0.2, 0.04, 0.08); grip(-0.02, WOOD);

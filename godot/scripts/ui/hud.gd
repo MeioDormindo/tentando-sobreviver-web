@@ -125,6 +125,11 @@ func _ready() -> void:
 		_flashlight_on = on
 		_update_flashlight_label())
 	Events.lighting_changed.connect(_on_lighting_changed)
+	# Comprou elemento: o nome da arma na HUD ganha o ícone na hora.
+	Events.weapon_element_changed.connect(func(_id: StringName, _e: StringName) -> void:
+		var player := get_tree().get_first_node_in_group(&"player") as Player
+		if player and player.weapon:
+			_on_ammo_changed(player.weapon.data.display_name, player.weapon.magazine, player.weapon.reserve, player.weapon.reloading))
 	# O jogador pode ter anunciado a arma antes de a HUD existir: pede de novo.
 	(func() -> void:
 		var player := get_tree().get_first_node_in_group(&"player")
@@ -384,7 +389,12 @@ func _on_health_changed(current: float, maximum: float) -> void:
 
 
 func _on_ammo_changed(weapon_name: String, magazine: int, reserve: int, reloading: bool) -> void:
-	_weapon_label.text = weapon_name.to_upper() + ("  ·  RECARREGANDO" if reloading else "")
+	# Elemento comprado na parede: ícone e nome ao lado da arma (ex.: "M4 ✹ FOGO").
+	var element := ""
+	var player := get_tree().get_first_node_in_group(&"player") as Player
+	if player and player.weapon and player.weapon.element != &"":
+		element = "  " + ElementCatalog.shared().label(player.weapon.element)
+	_weapon_label.text = weapon_name.to_upper() + element + ("  ·  RECARREGANDO" if reloading else "")
 	_ammo_label.text = "%d / %d" % [magazine, reserve]
 	_ammo_label.add_theme_color_override(&"font_color", RED if magazine == 0 else TEXT)
 

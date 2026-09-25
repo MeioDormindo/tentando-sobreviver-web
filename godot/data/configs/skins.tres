@@ -5,8 +5,12 @@
 [resource]
 script = ExtResource("1_script")
 skins = [
-{ "id": "default", "name": "Sobrevivente", "unlock": "", "jacket": Color(0.294, 0.318, 0.251, 1), "pack": Color(0.365, 0.278, 0.192, 1), "hair": Color(0.208, 0.153, 0.106, 1) },
-{ "id": "nurse", "name": "Enfermeiro", "unlock": "serum", "jacket": Color(0.373, 0.612, 0.588, 1), "pack": Color(0.788, 0.769, 0.714, 1), "hair": Color(0.11, 0.086, 0.071, 1) },
-{ "id": "conductor", "name": "Maquinista", "unlock": "conductor", "jacket": Color(0.173, 0.227, 0.353, 1), "pack": Color(0.42, 0.29, 0.165, 1), "hair": Color(0.541, 0.541, 0.533, 1) },
-{ "id": "agent", "name": "Agente", "unlock": "veteran", "jacket": Color(0.153, 0.161, 0.18, 1), "pack": Color(0.184, 0.192, 0.212, 1), "hair": Color(0.059, 0.051, 0.043, 1) }
+{ "id": "default", "name": "Sobrevivente", "unlock": "", "map": "terminal", "model": "survivor", "style": "", "jacket": Color(0.294, 0.318, 0.251, 1), "pack": Color(0.365, 0.278, 0.192, 1), "hair": Color(0.208, 0.153, 0.106, 1) },
+{ "id": "nurse", "name": "Enfermeiro", "unlock": "serum", "map": "map2", "model": "patient", "style": "scrubs", "jacket": Color(0.373, 0.612, 0.588, 1), "pack": Color(0.788, 0.769, 0.714, 1), "hair": Color(0.11, 0.086, 0.071, 1) },
+{ "id": "conductor", "name": "Maquinista", "unlock": "conductor", "map": "terminal", "model": "survivor", "style": "", "jacket": Color(0.173, 0.227, 0.353, 1), "pack": Color(0.42, 0.29, 0.165, 1), "hair": Color(0.541, 0.541, 0.533, 1) },
+{ "id": "agent", "name": "Agente", "unlock": "veteran", "map": "terminal", "model": "survivor", "style": "", "jacket": Color(0.153, 0.161, 0.18, 1), "pack": Color(0.184, 0.192, 0.212, 1), "hair": Color(0.059, 0.051, 0.043, 1) },
+{ "id": "station_guard", "name": "Guarda da Estação", "unlock": "last_train", "map": "terminal", "model": "survivor", "style": "", "jacket": Color(0.824, 0.455, 0.165, 1), "pack": Color(0.227, 0.239, 0.251, 1), "hair": Color(0.165, 0.11, 0.071, 1) },
+{ "id": "patient", "name": "Paciente", "unlock": "", "map": "map2", "model": "patient", "style": "gown", "jacket": Color(0.561, 0.706, 0.831, 1), "pack": Color(0.91, 0.894, 0.847, 1), "hair": Color(0.29, 0.188, 0.125, 1) },
+{ "id": "icu_patient", "name": "Paciente da UTI", "unlock": "patient_zero", "map": "map2", "model": "patient", "style": "bandage", "jacket": Color(0.498, 0.69, 0.541, 1), "pack": Color(0.91, 0.894, 0.847, 1), "hair": Color(0.165, 0.11, 0.071, 1) },
+{ "id": "test_subject", "name": "Cobaia do Laboratório", "unlock": "dog_trainer", "map": "map2", "model": "patient", "style": "jumpsuit", "jacket": Color(0.878, 0.471, 0.165, 1), "pack": Color(0.165, 0.173, 0.18, 1), "hair": Color(0.102, 0.078, 0.063, 1) }
 ]

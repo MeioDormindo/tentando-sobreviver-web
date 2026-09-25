@@ -104,5 +104,7 @@ signal pause_changed(paused: bool)
 signal restart_requested()
 ## Luz da área onde o jogador está mudou ("lit", "dim" ou "dark").
 signal lighting_changed(lighting: String)
+## Elemento especial comprado numa arma (id da arma, id do elemento).
+signal weapon_element_changed(weapon_id: StringName, element: StringName)
 ## Lanterna ligada/desligada pelo jogador.
 signal flashlight_toggled(on: bool)

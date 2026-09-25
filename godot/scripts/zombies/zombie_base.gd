@@ -32,6 +32,9 @@ var _knockback := Vector3.ZERO
 var _attack_cooldown := 0.0
 ## Atordoado (raio, plasma): não anda nem ataca.
 var _stun_left := 0.0
+## Lentidão do gelo: tempo restante e fator da velocidade.
+var _chill_left := 0.0
+var _chill_factor := 1.0
 ## Queimando (lança-chamas): dano por segundo até acabar o tempo.
 var _burn_dps := 0.0
 var _burn_left := 0.0
@@ -88,6 +91,12 @@ func _physics_process(delta: float) -> void:
 		if state == State.DEAD:
 			return
 	apply_gravity(delta)
+	if _chill_left > 0.0:
+		_chill_left -= delta
+		if _chill_left <= 0.0:
+			_chill_factor = 1.0
+			if model:
+				model.tint(Color.WHITE)
 	if _stun_left > 0.0:
 		_stun_left -= delta
 		velocity.x = _knockback.x
@@ -140,8 +149,9 @@ func _chase(to_target: Vector3, delta: float) -> void:
 	if direction.length() < 0.05:
 		direction = to_target
 	direction = direction.normalized()
-	velocity.x = direction.x * move_speed * event_speed
-	velocity.z = direction.z * move_speed * event_speed
+	var chill := _chill_factor if _chill_left > 0.0 else 1.0
+	velocity.x = direction.x * move_speed * event_speed * chill
+	velocity.z = direction.z * move_speed * event_speed * chill
 	_face(direction)
 
 
@@ -193,6 +203,18 @@ func _break(barricade: Barricade) -> void:
 	if _attack_cooldown <= 0.0:
 		_attack_cooldown = data.attack_interval
 		barricade.take_hit(data.plank_damage)
+
+
+## Gelo: fica lento (velocidade × `factor`) por `seconds`, com um tom azulado.
+func chill(seconds: float, factor: float) -> void:
+	_chill_left = maxf(_chill_left, seconds)
+	_chill_factor = minf(factor, _chill_factor if _chill_left > 0.0 else 1.0)
+	if model:
+		model.tint(Color(0.62, 0.85, 1.25))
+
+
+func is_chilled() -> bool:
+	return _chill_left > 0.0
 
 
 ## Atordoa por `seconds` (não soma: vale o maior).
