@@ -17,8 +17,10 @@ de conceitos: ver `docs/analise-typescript.md`.
   - conta com usuário e senha (tela CONTA): a senha fica só como hash no servidor, e no
     aparelho fica apenas a sessão (`user://session.json`);
   - save na nuvem mesclado ao entrar e enviado a cada mudança, **compartilhado com a versão web**;
-- **conquistas** (as 17 do jogo web), com aviso na HUD e tela CONQUISTAS (progresso, datas,
+- **conquistas** (as 17 do jogo web + "O Último Trem"), com aviso na HUD e tela CONQUISTAS em
+  cartões com ícone, como no web (trancadas em silhueta, barra das acumuladas, datas,
   estatísticas por mapa e da carreira);
+- **escolha de mapa** em cartões com a miniatura da planta, recorde, 1º do ranking e a missão;
 - **power-ups** (como no jogo web): zumbis às vezes soltam Max Ammo, Double Cash, Instant Kill,
   Nuke, Full Heal, Armor (barra azul que absorve o dano), Speed Boost, Carpenter, Fire Sale
   (caixa a 10 em todos os locais das áreas abertas) e o raro Golden Drop (arma especial,
@@ -31,7 +33,7 @@ de conceitos: ver `docs/analise-typescript.md`.
 - **eventos do mapa** (os 10 do jogo web, com a mesma agenda: sorteio no início do round,
   round mínimo, espera entre repetições, Horda garantida no round 15 e a cada 10): Apagão,
   Alarme de emergência, Horda, Suprimentos (caixa de paraquedas, segurar E), Vazamento de gás
-  (válvula), Zumbi Dourado (foge; abatido dá Golden Drop), Lua de Sangue, Desabamento,
+  (válvula), Zumbi Dourado (todo em ouro, com coroa e estrela no minimapa; foge; abatido dá Golden Drop), Lua de Sangue, Desabamento,
   Neblina e o trem, com agenda própria, que atropela quem estiver nos trilhos; indicador na HUD;
 - **painéis e armadilhas**: energia (encerra o Apagão), alarme, painel do trem (chama o trem)
   e armadilhas elétricas; estação com túneis, semáforos e painel de horários;
@@ -39,7 +41,12 @@ de conceitos: ver `docs/analise-typescript.md`.
   amostras da UTI, reagente do armário da Farmácia (atire no cadeado) e o catalisador da
   gaveta do Necrotério, que abre com o cartão de um Blindado → defender a centrífuga → o
   Paciente Zero enfurecido num round de boss forçado → aplicar o soro. Prêmio: todos os perks
-  e o Canhão de Vento. Objetivo na HUD e no minimapa;
+  e o Tornado (Canhão de Vento no Mk II). Objetivo na HUD e no minimapa;
+- **missão do Terminal, "O Último Trem"** (só do Godot): ligar a energia → fusível do armário da
+  Manutenção, chave do cofre da Bilheteria (atire no cadeado) e a manivela de um Blindado →
+  consertar o sinal da Plataforma e segurá-lo por 60 s → o Condutor enfurecido → pegar a
+  lanterna dele. Prêmio: todos os perks e a **Lanterna do Condutor** (raio âmbar em cadeia,
+  exclusiva da missão, fora da Mystery Box; no Weapon Lab vira o Farol do Condutor);
 - **segredos**: ursinhos escondidos (todos = Golden Drop e conquista), rádio/gravador com a
   história do mapa e a placa de créditos;
 - **sons e música do jogo web**: os 142 sons (293 variações) são os mesmos, sintetizados pelo
@@ -252,7 +259,7 @@ scripts/maps/prop_factory.gd     PropFactory: objetos 2.5D a partir das receitas
 scripts/weapons/pixel_fx.gd      PixelFx: efeitos e decalques em pixel art
 scripts/audio/audio_service.gd   autoload Audio: catálogo, play/play_at/loop_at, vozes, barramentos
 scripts/quests/                  QuestSystem (etapas, HUD, minimapa), QuestStep, QuestSpot,
-                                 SerumQuest (missão do Hospital), QuestData
+                                 SerumQuest (Hospital), TrainQuest (Terminal), QuestData
 scripts/events/                  WorldEventSystem (agenda), WorldEvent + um arquivo por evento
                                  (Apagão, Alarme, Horda, Suprimentos, Gás, Zumbi Dourado, Lua de
                                  Sangue, Desabamento, Neblina, Trem), WorldEventData, EventFx

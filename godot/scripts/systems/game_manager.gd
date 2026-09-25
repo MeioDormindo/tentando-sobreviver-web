@@ -23,8 +23,7 @@ var elapsed: float = 0.0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	if arena and player:
-		player.global_position = arena.get_player_spawn()
+	_place_player()
 	Events.zombie_killed.connect(_on_zombie_killed)
 	Events.player_died.connect(_on_player_died)
 	Events.restart_requested.connect(restart)
@@ -39,6 +38,19 @@ func _ready() -> void:
 	Events.boss_defeated.connect(_on_boss_defeated)
 	# Arma que saiu do inventário cai no chão (pode ser pega de volta por 60s).
 	Events.weapon_dropped.connect(func(weapon: Weapon, at: Vector3) -> void: WeaponDrop.spawn(get_tree(), weapon, at))
+
+
+## Jogador no início do mapa. O mapa trocado pelo menu (Hospital) fica pronto depois deste
+## nó: espera ele carregar os dados, senão o início cairia em (0, 0).
+func _place_player() -> void:
+	if arena == null or player == null:
+		return
+	if not arena.is_node_ready():
+		await arena.ready
+	player.global_position = arena.get_player_spawn()
+	var camera := get_viewport().get_camera_3d() as TopDownCamera
+	if camera:
+		camera.snap()
 
 
 func _process(delta: float) -> void:

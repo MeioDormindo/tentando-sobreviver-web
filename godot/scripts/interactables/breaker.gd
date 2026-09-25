@@ -9,6 +9,8 @@ var interaction_radius: float = 1.8
 
 var _progress := 0.0
 var _label: Label3D
+var _led: Node3D
+var _blink := 0.0
 
 
 func setup(p_power: PowerSystem) -> void:
@@ -26,6 +28,7 @@ func setup(p_power: PowerSystem) -> void:
 	var visual := PropFactory.create("breaker")
 	if visual:
 		add_child(visual)
+		_led = visual.find_child("led", true, false) as Node3D
 	else:
 		var box := BoxMesh.new()
 		box.size = SIZE
@@ -38,14 +41,20 @@ func setup(p_power: PowerSystem) -> void:
 		add_child(mesh)
 	_label = Label3D.new()
 	_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	_label.pixel_size = 0.005
-	_label.font_size = 48
-	_label.outline_size = 10
+	_label.pixel_size = 0.0035
+	_label.font_size = 26
 	_label.modulate = Color(1.0, 0.83, 0.35)
 	_label.text = "DISJUNTOR"
-	_label.position.y = SIZE.y + 0.4
+	_label.position.y = 2.05
 	add_child(_label)
 	add_to_group(&"interactable")
+
+
+func _process(delta: float) -> void:
+	# LED vermelho piscando até a energia ligar; depois fica aceso.
+	if _led:
+		_blink += delta
+		_led.visible = power != null and power.is_on or fmod(_blink, 0.8) < 0.4
 
 
 func get_interaction_prompt(_player: Node3D) -> String:

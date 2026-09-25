@@ -35,7 +35,9 @@ func _ready() -> void:
 	Events.hound_round_changed.connect(_on_hound_round)
 	Events.quest_completed.connect(func(id: StringName, _t: String, _s: String) -> void:
 		if id == &"serum":
-			unlock("serum"))
+			unlock("serum")
+		elif id == &"train":
+			unlock("last_train"))
 	Events.train_run_over.connect(func(count: int) -> void:
 		if count >= catalog.train_kills:
 			unlock("train_wreck"))

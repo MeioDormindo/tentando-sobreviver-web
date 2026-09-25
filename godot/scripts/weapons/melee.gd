@@ -35,7 +35,8 @@ func swing(owner_body: Node3D, forward: Vector3, weapon: Weapon) -> bool:
 	if target:
 		var to_target := target.global_position - owner_body.global_position
 		to_target.y = 0.0
-		var gap := maxf(0.0, to_target.length() - data.reach * 0.7)
+		# Para a ~1 m do alvo: o arco pega ele e quem estiver ao lado e logo atrás.
+		var gap := maxf(0.0, to_target.length() - 1.0)
 		lunge_left = minf(data.lunge_time, gap / data.lunge_speed)
 		lunge_velocity = to_target.normalized() * data.lunge_speed
 		forward = to_target.normalized()
@@ -50,7 +51,8 @@ func swing(owner_body: Node3D, forward: Vector3, weapon: Weapon) -> bool:
 func _strike(owner_body: Node3D, forward: Vector3) -> void:
 	if not is_instance_valid(owner_body):
 		return
-	for zombie in _zombies_in_arc(owner_body.global_position, forward, data.reach, data.arc_degrees):
+	_slash_fx(owner_body, forward)
+	for zombie in _zombies_in_arc(owner_body.global_position - forward * 0.3, forward, data.reach + 0.3, data.arc_degrees):
 		var hurtbox := zombie.get_node_or_null("BodyHurtbox") as Hurtbox
 		if hurtbox == null:
 			continue
@@ -59,6 +61,16 @@ func _strike(owner_body: Node3D, forward: Vector3) -> void:
 			var push := zombie.global_position - owner_body.global_position
 			push.y = 0.0
 			zombie.call(&"apply_knockback", push.normalized() * data.knockback)
+
+
+## Rastro do corte em pixel art: meia-lua deitada na altura da cintura, virada para o golpe.
+func _slash_fx(owner_body: Node3D, forward: Vector3) -> void:
+	var fx := PixelFx.spawn(get_tree(), "slash", owner_body.global_position + forward * 0.9 + Vector3.UP * 0.9, data.reach * 1.5, 1.0)
+	if fx:
+		fx.billboard = BaseMaterial3D.BILLBOARD_DISABLED
+		fx.axis = Vector3.AXIS_Y
+		fx.double_sided = true
+		fx.rotation.y = atan2(-forward.x, -forward.z)
 
 
 func _nearest_in_front(origin: Vector3, forward: Vector3, max_distance: float) -> Node3D:

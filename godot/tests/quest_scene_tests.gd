@@ -33,6 +33,9 @@ func run(tree: SceneTree) -> int:
 	events.data = events.data.duplicate(true)
 	events.data.schedule["chance_per_wave"] = 0.0
 	await _tree.create_timer(0.5).timeout
+	var world := _main.get_node("World") as LayoutMap
+	var start := world.get_player_spawn()
+	check(Vector2(_player.global_position.x - start.x, _player.global_position.z - start.z).length() < 1.0 and world.area_of(_player.global_position) == &"reception", "Hospital: o jogador nasce na Recepção, não no canto (%s)" % str(_player.global_position))
 	_player.health.reset(99999.0)
 	_rounds.stop()
 
@@ -41,8 +44,11 @@ func run(tree: SceneTree) -> int:
 	await _centrifuge()
 	await _boss_and_serum()
 
-	Events.quest_state.disconnect(_on_state)
 	_main.queue_free()
+	await _frames(2)
+	await _terminal_quest()
+
+	Events.quest_state.disconnect(_on_state)
 	Session.map_id = previous_map
 	await tree.physics_frame
 	print("\n%d ok, %d falharam (missão)" % [_passed, _failed])
@@ -185,5 +191,95 @@ func _boss_and_serum() -> void:
 	check(vial != null and _hold(vial, vial.hold_time + 0.1), "segurar E aplica o soro")
 	await _frames(2)
 	check(_quest.done and completed[0] == "serum" and _state.is_empty(), "missão concluída")
-	check(_player.perks.owned.size() >= 7 and _player.inventory.owns(&"wind_cannon"), "prêmio: todos os perks e o Canhão de Vento")
+	var tornado := _player.inventory.find(&"wind_cannon")
+	check(_player.perks.owned.size() >= 7 and tornado != null and tornado.level == 1 and tornado.data.display_name == "Tornado", "prêmio: todos os perks e o Tornado (Canhão de Vento no Mk II)")
 	check(Save.has_achievement("serum"), "conquista O Soro (no save de teste)")
+
+
+# ───────────────────────── "O Último Trem" (Terminal) ─────────────────────────
+
+func _terminal_quest() -> void:
+	print("Missão O Último Trem (cena, Terminal)")
+	Session.map_id = "terminal"
+	_main = (load("res://scenes/main.tscn") as PackedScene).instantiate()
+	_tree.root.add_child(_main)
+	_player = _main.get_node("Player") as Player
+	_player.controlled = false
+	var quest := _main.get_node("TrainQuest") as TrainQuest
+	_rounds = _main.get_node("RoundManager") as RoundManager
+	var events := _main.get_node("WorldEventSystem") as WorldEventSystem
+	events.data = events.data.duplicate(true)
+	events.data.schedule["chance_per_wave"] = 0.0
+	await _tree.create_timer(0.5).timeout
+	_player.health.reset(99999.0)
+	_rounds.stop()
+	check((_main.get_node("SerumQuest") as SerumQuest).index == -1, "no Terminal a missão do Soro não roda")
+	check(quest.is_physics_processing() and quest.index == 0 and String(_state.get("objective", "")).contains("Área Técnica"), "missão do Terminal ativa: %s" % _state.get("objective", ""))
+	(_tree.get_first_node_in_group(&"power_system") as PowerSystem).turn_on()
+	await _frames(2)
+	check(quest.index == 1 and String(_state.get("objective", "")).begins_with("Peças do sinal"), "energia ligada: peças do sinal")
+	# Fusível (segurar E) e o cofre com cadeado (tiro).
+	var fuse := _spot("SignalFuse")
+	check(fuse != null and _hold(fuse, fuse.hold_time + 0.1) and quest.got.fuse, "fusível do armário da Manutenção")
+	var safe := _spot("TicketSafe")
+	check(safe != null and not safe.available(), "cofre da Bilheteria trancado")
+	var lock_at := quest.lock.global_position
+	_player.weapon.shoot(_player.get_world_3d().direct_space_state, lock_at + Vector3(0, 0, 2.0), lock_at, [_player.get_rid()], _player)
+	await _frames(2)
+	check(quest.lock == null and safe.interact(_player) and quest.got.key, "tiro no cadeado: chave do painel")
+	# Blindado com a manivela.
+	var waited := 0.0
+	while quest.carrier == null and waited < 6.0:
+		await _tree.create_timer(0.25).timeout
+		waited += 0.25
+	var carrier := quest.carrier
+	check(carrier != null and carrier.data.id == &"armored", "um Blindado com a manivela aparece")
+	if carrier == null:
+		return
+	carrier.take_damage(DamageInfo.new(carrier.health.current + 999.0, DamageInfo.Kind.WEAPON, _player, false, carrier.global_position))
+	await _frames(3)
+	var crank := _spot("SignalCrank")
+	check(crank != null and crank.interact(_player) and quest.got.crank, "a manivela fica onde o Blindado caiu")
+	await _frames(2)
+	check(quest.index == 2, "3/3 peças: etapa do sinal")
+	# Sinal: consertar e segurar.
+	var repair := _spot("SignalRepair")
+	check(repair != null and repair.interact(_player) and quest.signal_running and _rounds.spawn_modifiers.has(&"train_quest"), "sinal consertado: mais zumbis vindo")
+	await _tree.create_timer(0.4).timeout
+	check(quest.signal_progress > 0.2, "sem zumbis perto o tempo corre")
+	quest.signal_progress = float(quest.cfg.signal.defend_time) - 0.1
+	await _tree.create_timer(0.4).timeout
+	check(quest.index == 3 and quest.boss_round == _rounds.round_number + 1, "sinal segurado: o Condutor vem no round %d" % quest.boss_round)
+	# O Condutor enfurecido.
+	_rounds.start_round(quest.boss_round)
+	var bosses := _main.get_node("BossManager") as BossManager
+	waited = 0.0
+	while not is_instance_valid(bosses.boss) and waited < 6.0:
+		await _tree.create_timer(0.25).timeout
+		waited += 0.25
+	var boss := bosses.boss
+	check(boss != null and boss.data.id == &"conductor" and boss.health.max_health > boss.data.max_health * 1.4, "o Condutor enfurecido aparece (vida x1,5)")
+	if boss == null:
+		return
+	waited = 0.0
+	while boss.is_invulnerable() and waited < 8.0:
+		await _tree.create_timer(0.25).timeout
+		waited += 0.25
+	boss.take_damage(DamageInfo.new(boss.health.current + 1.0, DamageInfo.Kind.WEAPON, _player, false, boss.global_position))
+	waited = 0.0
+	while quest.index < 4 and waited < 8.0:
+		await _tree.create_timer(0.25).timeout
+		waited += 0.25
+	check(quest.index == 4 and quest.boss_down is Vector3, "Condutor derrotado: pegar a lanterna")
+	var lantern := _spot("ConductorLantern")
+	var completed := [""]
+	Events.quest_completed.connect(func(id: StringName, _t: String, _s: String) -> void: completed[0] = String(id), CONNECT_ONE_SHOT)
+	check(lantern != null and _hold(lantern, lantern.hold_time + 0.1), "segurar E pega a Lanterna do Condutor")
+	await _frames(2)
+	check(quest.done and completed[0] == "train", "missão O Último Trem concluída")
+	check(_player.perks.owned.size() >= 7 and _player.inventory.owns(&"conductor_lantern"), "prêmio: todos os perks e a Lanterna do Condutor")
+	check(Save.has_achievement("last_train"), "conquista O Último Trem (no save de teste)")
+	var catalog := load("res://data/weapons/catalog.tres") as WeaponCatalog
+	check(not catalog.weapons.any(func(w: WeaponData) -> bool: return w.id == &"conductor_lantern"), "a Lanterna nunca sai na Mystery Box (fora do catálogo)")
+	_main.queue_free()
+	await _frames(2)

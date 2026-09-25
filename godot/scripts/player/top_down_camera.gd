@@ -35,6 +35,13 @@ func _ready() -> void:
 		global_position = _desired_position()
 
 
+## Pula direto para o alvo (início da partida, sem a câmera deslizar do canto).
+func snap() -> void:
+	if target:
+		_look = Vector3.ZERO
+		global_position = _desired_position()
+
+
 ## Posição da câmera em relação ao ponto que ela enquadra.
 func offset() -> Vector3:
 	var pitch := deg_to_rad(pitch_degrees)

@@ -137,8 +137,10 @@ weapons = Array[Resource]([${list.map((_, i) => `ExtResource("w${i}")`).join(", 
 function exportKnifeAndPlayer(): void {
   write('weapons/knife.tres', tres('MeleeData', 'res://scripts/weapons/melee_data.gd', {
     damage: knifeConfig.damage,
-    reach: m(knifeConfig.range),
-    arc_degrees: knifeConfig.arcDeg,
+    // Godot: com a câmera 2.5D e zumbis se empurrando, o golpe precisa de mais alcance e
+    // arco para pegar a fileira da frente (no web a faca já pega vários de perto).
+    reach: Math.max(2.4, m(knifeConfig.range)),
+    arc_degrees: Math.max(150, knifeConfig.arcDeg),
     cooldown: s(knifeConfig.cooldownMs),
     windup: s(knifeConfig.windupMs),
     busy_time: s(knifeConfig.busyMs),
@@ -328,8 +330,23 @@ function exportOnline(): void {
 }
 
 /** Conquistas (textos, metas e segredos) e visuais do personagem (cores da paleta do jogo web). */
+/** Ícone da conquista no Godot: power-ups e o frasco vêm da arte do web; armas, dos ícones pixel. */
+const GUN_ICONS: Record<string, string> = { pistol: 'weapon_m1911', wind: 'weapon_wind_cannon_mk2', sniper: 'weapon_barrett', akimbo: 'weapon_uzi_dual' };
+function achievementIcon(key: string): string {
+  if (key.startsWith('powerup_')) return `res://assets/web/powerups/${key.slice('powerup_'.length)}.png`;
+  if (key.startsWith('gun_')) return `res://assets/sprites/icons/${GUN_ICONS[key.slice('gun_'.length)] ?? 'weapon_m1911'}.png`;
+  if (key === 'prop_serum_vial') return 'res://assets/web/props/serum_vial.png';
+  return '';
+}
+
+/** Conquistas que só existem no Godot (a missão do Terminal). */
+const GODOT_ONLY_ACHIEVEMENTS = [
+  { id: 'last_train', name: 'O Último Trem', description: 'Complete a missão do Terminal e pegue a Lanterna do Condutor', icon: 'res://assets/sprites/icons/weapon_conductor_lantern.png' },
+];
+
 function exportAchievements(): void {
-  const list = ACHIEVEMENTS.map((a) => `{ "id": "${a.id}", "name": ${JSON.stringify(a.name)}, "description": ${JSON.stringify(a.description)}, "total_key": "${a.total?.key ?? ''}", "total_target": ${a.total?.target ?? 0}, "secret": ${a.secret ?? false} }`);
+  const list = ACHIEVEMENTS.map((a) => `{ "id": "${a.id}", "name": ${JSON.stringify(a.name)}, "description": ${JSON.stringify(a.description)}, "icon": "${achievementIcon(a.icon)}", "total_key": "${a.total?.key ?? ''}", "total_target": ${a.total?.target ?? 0}, "secret": ${a.secret ?? false} }`);
+  for (const a of GODOT_ONLY_ACHIEVEMENTS) list.push(`{ "id": "${a.id}", "name": ${JSON.stringify(a.name)}, "description": ${JSON.stringify(a.description)}, "icon": "${a.icon}", "total_key": "", "total_target": 0, "secret": false }`);
   write('configs/achievements.tres', tres('AchievementCatalog', 'res://scripts/systems/achievement_catalog.gd', {
     achievements: raw(`[\n${list.join(',\n')}\n]`),
     survivor_round: achievementConfig.survivorWave,

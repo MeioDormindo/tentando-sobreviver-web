@@ -35,6 +35,9 @@ var _mesh: MeshInstance3D
 ## some ao mudar de lugar.
 var _model: Node3D
 var _lid: Node3D
+var _beam: Sprite3D
+var _light: OmniLight3D
+var _pulse := 0.0
 var lid_open := false
 ## Desenho da arma sorteada, flutuando sobre a caixa.
 var _icon: Sprite3D
@@ -81,9 +84,19 @@ func setup(p_data: MysteryBoxData, p_catalog: WeaponCatalog, p_map_id: String, p
 	_label.font_size = 56
 	_label.outline_size = 12
 	_label.position.y = 2.0
-	_label.text = "?"
+	# Parada, o "?" está desenhado no baú; o texto só aparece ao sortear.
+	_label.text = ""
 	add_child(_label)
+	# Feixe de luz dourada subindo da caixa (como no CoD): dá para achá-la de longe.
+	_beam = PixelFx.attach_loop(self, "box_beam", 1.4)
+	if _beam:
+		_beam.billboard = BaseMaterial3D.BILLBOARD_FIXED_Y
+		_beam.alpha_cut = SpriteBase3D.ALPHA_CUT_DISABLED
+		_beam.modulate = Color(1, 1, 1, 0.85)
+		_beam.position.y = 0.9 + 2.8
+		_beam.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	var light := OmniLight3D.new()
+	_light = light
 	light.light_color = Color(1.0, 0.82, 0.48)
 	light.light_energy = 1.4
 	light.omni_range = 4.0
@@ -94,6 +107,9 @@ func setup(p_data: MysteryBoxData, p_catalog: WeaponCatalog, p_map_id: String, p
 
 
 func _process(delta: float) -> void:
+	_pulse += delta
+	if _light:
+		_light.light_energy = 1.3 + 0.45 * sin(_pulse * 3.0)
 	match state:
 		State.ROLLING:
 			_timer -= delta
@@ -227,7 +243,7 @@ func _reset() -> void:
 	_set_lid(false)
 	state = State.IDLE
 	result = null
-	_label.text = "?"
+	_label.text = ""
 	_label.modulate = Color.WHITE
 	if _dismiss_pending:
 		queue_free()

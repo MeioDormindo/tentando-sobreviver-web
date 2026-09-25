@@ -5,23 +5,24 @@
 [resource]
 script = ExtResource("1_script")
 achievements = [
-{ "id": "first_blood", "name": "Primeiro Sangue", "description": "Abata o primeiro zumbi", "total_key": "", "total_target": 0, "secret": false },
-{ "id": "survivor", "name": "Sobrevivente", "description": "Chegue à wave 10", "total_key": "", "total_target": 0, "secret": false },
-{ "id": "veteran", "name": "Veterano", "description": "Chegue à wave 20", "total_key": "", "total_target": 0, "secret": false },
-{ "id": "power_on", "name": "Energia!", "description": "Ligue o disjuntor principal", "total_key": "", "total_target": 0, "secret": false },
-{ "id": "conductor", "name": "Maquinista", "description": "Derrote o boss The Conductor", "total_key": "", "total_target": 0, "secret": false },
-{ "id": "patient_zero", "name": "Paciente Curado", "description": "Derrote o Paciente Zero", "total_key": "", "total_target": 0, "secret": false },
-{ "id": "serum", "name": "O Soro", "description": "Complete a missão do Dr. Almeida", "total_key": "", "total_target": 0, "secret": false },
-{ "id": "dog_trainer", "name": "Adestrador", "description": "Vença uma rodada de cães sem levar dano", "total_key": "", "total_target": 0, "secret": false },
-{ "id": "train_wreck", "name": "Atropelador", "description": "Atropele 10 zumbis com uma passagem do trem", "total_key": "", "total_target": 0, "secret": false },
-{ "id": "collector", "name": "Colecionador", "description": "Tenha todos os perks na mesma partida", "total_key": "", "total_target": 0, "secret": false },
-{ "id": "tornado", "name": "Olho do Furacão", "description": "Transforme o Canhão de Vento no Tornado", "total_key": "", "total_target": 0, "secret": false },
-{ "id": "fire_sale", "name": "Liquidação", "description": "Use a Mystery Box durante um Fire Sale", "total_key": "", "total_target": 0, "secret": false },
-{ "id": "butcher", "name": "Açougueiro", "description": "Abata 1.000 zumbis", "total_key": "kills", "total_target": 1000, "secret": false },
-{ "id": "knife_master", "name": "Faca na Caveira", "description": "Abata 50 zumbis na faca", "total_key": "knifeKills", "total_target": 50, "secret": false },
-{ "id": "golden_aim", "name": "Mira de Ouro", "description": "Acerte 100 headshots fatais", "total_key": "headshots", "total_target": 100, "secret": false },
-{ "id": "teddies", "name": "Ursinhos", "description": "Encontre todos os ursinhos escondidos", "total_key": "", "total_target": 0, "secret": true },
-{ "id": "konami", "name": "Cabeção", "description": "Descubra o código secreto do menu", "total_key": "", "total_target": 0, "secret": true }
+{ "id": "first_blood", "name": "Primeiro Sangue", "description": "Abata o primeiro zumbi", "icon": "res://assets/sprites/icons/weapon_m1911.png", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "survivor", "name": "Sobrevivente", "description": "Chegue à wave 10", "icon": "res://assets/web/powerups/full_heal.png", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "veteran", "name": "Veterano", "description": "Chegue à wave 20", "icon": "res://assets/web/powerups/armor.png", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "power_on", "name": "Energia!", "description": "Ligue o disjuntor principal", "icon": "res://assets/web/powerups/speed_boost.png", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "conductor", "name": "Maquinista", "description": "Derrote o boss The Conductor", "icon": "res://assets/web/powerups/nuke.png", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "patient_zero", "name": "Paciente Curado", "description": "Derrote o Paciente Zero", "icon": "res://assets/web/powerups/insta_kill.png", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "serum", "name": "O Soro", "description": "Complete a missão do Dr. Almeida", "icon": "res://assets/web/props/serum_vial.png", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "dog_trainer", "name": "Adestrador", "description": "Vença uma rodada de cães sem levar dano", "icon": "res://assets/web/powerups/carpenter.png", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "train_wreck", "name": "Atropelador", "description": "Atropele 10 zumbis com uma passagem do trem", "icon": "res://assets/web/powerups/max_ammo.png", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "collector", "name": "Colecionador", "description": "Tenha todos os perks na mesma partida", "icon": "res://assets/web/powerups/golden.png", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "tornado", "name": "Olho do Furacão", "description": "Transforme o Canhão de Vento no Tornado", "icon": "res://assets/sprites/icons/weapon_wind_cannon_mk2.png", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "fire_sale", "name": "Liquidação", "description": "Use a Mystery Box durante um Fire Sale", "icon": "res://assets/web/powerups/fire_sale.png", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "butcher", "name": "Açougueiro", "description": "Abata 1.000 zumbis", "icon": "res://assets/web/powerups/double_cash.png", "total_key": "kills", "total_target": 1000, "secret": false },
+{ "id": "knife_master", "name": "Faca na Caveira", "description": "Abata 50 zumbis na faca", "icon": "res://assets/web/powerups/insta_kill.png", "total_key": "knifeKills", "total_target": 50, "secret": false },
+{ "id": "golden_aim", "name": "Mira de Ouro", "description": "Acerte 100 headshots fatais", "icon": "res://assets/sprites/icons/weapon_barrett.png", "total_key": "headshots", "total_target": 100, "secret": false },
+{ "id": "teddies", "name": "Ursinhos", "description": "Encontre todos os ursinhos escondidos", "icon": "res://assets/web/powerups/golden.png", "total_key": "", "total_target": 0, "secret": true },
+{ "id": "konami", "name": "Cabeção", "description": "Descubra o código secreto do menu", "icon": "res://assets/sprites/icons/weapon_uzi_dual.png", "total_key": "", "total_target": 0, "secret": true },
+{ "id": "last_train", "name": "O Último Trem", "description": "Complete a missão do Terminal e pegue a Lanterna do Condutor", "icon": "res://assets/sprites/icons/weapon_conductor_lantern.png", "total_key": "", "total_target": 0, "secret": false }
 ]
 survivor_round = 10
 veteran_round = 20

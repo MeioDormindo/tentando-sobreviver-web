@@ -2,7 +2,8 @@ class_name AchievementCatalog
 extends Resource
 ## Conquistas (gerado a partir do jogo web): id, nome, descrição, meta acumulada e segredo.
 
-## [{id, name, description, total_key, total_target, secret}]. total_key: kills, knifeKills,
+## [{id, name, description, icon, total_key, total_target, secret}]. icon: textura (res://).
+## total_key: kills, knifeKills,
 ## headshots (totais do save) ou vazio (conquista de um momento).
 @export var achievements: Array = []
 @export var survivor_round: int = 10

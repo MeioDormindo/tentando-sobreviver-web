@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+
+; Só do Godot: prêmio da missão do Terminal ("O Último Trem"). Fica fora do catalog.tres,
+; então a Mystery Box nunca sorteia. Lanterna de sinal do Condutor adaptada: dispara um raio
+; âmbar que salta entre muitos zumbis e atordoa.
+[resource]
+script = ExtResource("1_script")
+id = &"conductor_lantern"
+display_name = "Lanterna do Condutor"
+kind = &"arc"
+rarity = &"legendary"
+damage = 150
+fire_rate = 3.2
+automatic = true
+magazine_size = 30
+reserve_ammo = 240
+reload_time = 2.2
+spread_degrees = 0
+max_range = 18
+projectile_speed = 0
+pellets = 1
+pierce = 0
+headshot_multiplier = 1.5
+price = 0
+ammo_price = 2500
+box_only = true
+maps = PackedStringArray("terminal")
+upgrade_name = "Farol do Condutor"
+element = &""
+tracer_color = Color(1, 0.72, 0.3, 1)
+special_type = &"arc"
+special_params = {
+"chains": 8,
+"chain_range": 7.0,
+"chain_falloff": 0.9,
+"stun_time": 1.0
+}

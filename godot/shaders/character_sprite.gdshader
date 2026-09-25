@@ -8,6 +8,8 @@ render_mode skip_vertex_transform, cull_disabled, depth_prepass_alpha, diffuse_l
 uniform sampler2D tex : source_color, filter_nearest;
 /// Quanto o quadro chega para perto da câmera (m).
 uniform float toward_camera = 0.9;
+/// Brilho próprio por personagem (zumbi dourado): cor × força em alfa.
+instance uniform vec4 glow_color = vec4(0.0);
 
 void vertex() {
 	// Billboard: eixos da câmera, com a escala do nó.
@@ -31,4 +33,5 @@ void fragment() {
 	}
 	ALBEDO = color.rgb;
 	ROUGHNESS = 1.0;
+	EMISSION = color.rgb * glow_color.rgb * glow_color.a;
 }

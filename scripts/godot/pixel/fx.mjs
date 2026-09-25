@@ -151,6 +151,40 @@ export function buildFx() {
       }
     }
   }) };
+  // Feixe da Mystery Box: coluna de luz dourada que sobe, com faíscas (repete). Quadro 24×96.
+  out.box_beam = { fps: 10, loop: true, frame: [24, 96], sheet: strip(6, 24, 96, (px, i) => {
+    const r = rng(141 + i);
+    for (let y = 0; y < 96; y++) {
+      const fade = y / 95;  // 0 no alto, 1 embaixo
+      const half = 6 + fade * 5 + Math.sin(y * 0.3 + i) * 0.8;
+      for (let x = 0; x < 24; x++) {
+        const d = Math.abs(x + 0.5 - 12) / half;
+        if (d > 1) continue;
+        const v = Math.min(1, (1 - d) * (0.55 + fade * 0.6) + 0.15);
+        if (dither(x, y + i * 2, v)) px.set(x, y, d < 0.35 ? [255, 250, 220] : [255, 214, 110]);
+      }
+    }
+    for (let k = 0; k < 7; k++) {
+      const y = Math.floor((r() * 96 + (96 - i * 16)) % 96), x = Math.floor(4 + r() * 16);
+      px.set(x, y, [255, 255, 235]);
+    }
+  }) };
+  // Corte da faca: meia-lua que varre da esquerda para a direita e some (deitada no chão,
+  // a frente do golpe é o alto da imagem).
+  out.slash = { fps: 24, loop: false, sheet: strip(5, 48, 48, (px, i, n) => {
+    const t = i / (n - 1);
+    const from = Math.PI * (1.05 + t * 0.5), to = Math.PI * (1.45 + t * 0.55);
+    for (let a = from; a <= to; a += 0.01) {
+      const k = (a - from) / (to - from);  // 0 na cauda, 1 na ponta
+      for (let r = 0; r < 4 * (0.4 + k) * (1 - t * 0.5); r++) {
+        const radius = 20 - r;
+        const x = Math.round(24 + Math.cos(a) * radius), y = Math.round(40 + Math.sin(a) * radius * 0.9);
+        if (x < 0 || y < 0 || x > 47 || y > 47) continue;
+        const color = r === 0 ? [255, 255, 255] : k > 0.6 ? [255, 236, 170] : [200, 210, 225];
+        if (k > 0.25 || (x + y) % 2 === 0) px.set(x, y, color);
+      }
+    }
+  }) };
   // Cuspe ácido: bolha verde tremendo, com gotas escorrendo.
   out.acid = { fps: 12, loop: true, sheet: strip(4, 18, 18, (px, i) => {
     const r = rng(101 + i);

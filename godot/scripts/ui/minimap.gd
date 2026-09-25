@@ -130,6 +130,17 @@ func _draw() -> void:
 		var rect := Rect2(to_local_point(b) - Vector2(2.5, 2.5), Vector2(5, 5))
 		draw_rect(rect, Color8(255, 210, 122))
 		draw_rect(rect, Color(0, 0, 0, 0.8), false, 1.0)
+	# Zumbi dourado: estrela dourada pulsando, maior que os outros pontos.
+	var golden: Variant = _state.get("golden")
+	if golden is Vector2:
+		var g := to_local_point(golden)
+		var gr := (3.5 + 1.2 * sin(_clock * 8.0)) * (1.6 if expanded else 1.0)
+		var star := PackedVector2Array()
+		for i in 10:
+			var angle := -PI / 2.0 + i * PI / 5.0
+			star.append(g + Vector2(cos(angle), sin(angle)) * (gr if i % 2 == 0 else gr * 0.45))
+		draw_colored_polygon(star, Color8(255, 214, 74))
+		draw_polyline(star + PackedVector2Array([star[0]]), Color.BLACK, 1.0)
 	var boss: Variant = _state.get("boss")
 	if boss is Vector2:
 		var pulse := 3.5 + sin(_clock * 6.0)

@@ -57,6 +57,7 @@ func build_state() -> Dictionary:
 		"boxes": boxes,
 		"supply": _first(&"minimap_supply"),
 		"objective": _first(&"minimap_objective"),
+		"golden": _first(&"minimap_golden"),
 	}
 
 

@@ -13,6 +13,8 @@ const PIXELS_PER_METER := 32.0
 ## Quanto a camada da arma fica à frente/atrás do corpo, na direção da câmera (m).
 const LAYER_GAP := 0.03
 
+## Folha do corpo agora (ex.: "zombie_golden").
+var sheet_name := ""
 var current: StringName = &""
 ## Animação da folha que está tocando (a atual, com o sufixo da postura se houver).
 var playing: StringName = &""
@@ -31,6 +33,7 @@ var _frame := 0.0
 var _speed := 1.0
 var _flash_left := 0.0
 var _tint := Color.WHITE
+var _glow := Color(0, 0, 0, 0)
 
 
 ## Cria o visual a partir do nome da folha (ex.: "zombie_walker"); null se não existir.
@@ -41,6 +44,7 @@ static func create(sheet: String) -> CharacterSprite:
 	var node := CharacterSprite.new()
 	node.name = "Sprite"
 	node._meta = meta
+	node.sheet_name = sheet
 	node._body = node._make_sprite(sheet, "Body")
 	node.add_child(node._body)
 	node.play(&"Idle", 0.0)
@@ -65,9 +69,13 @@ func set_sheet(sheet: String) -> void:
 		return
 	_meta = meta
 	var old := _body
+	old.name = "OldBody"
+	sheet_name = sheet
 	_body = _make_sprite(sheet, "Body")
 	add_child(_body)
 	old.queue_free()
+	if _glow.a > 0.0:
+		_body.set_instance_shader_parameter(&"glow_color", _glow)
 	_apply_frame()
 
 
@@ -145,6 +153,14 @@ func finished() -> bool:
 func flash(color: Color, seconds := 0.08) -> void:
 	_flash_left = seconds
 	_set_modulate(color.lightened(0.3))
+
+
+## Brilho próprio (brilha no escuro): cor e força em alfa; Color(0,0,0,0) apaga.
+func set_glow(color: Color) -> void:
+	_glow = color
+	for child in get_children():
+		if child is Sprite3D:
+			(child as Sprite3D).set_instance_shader_parameter(&"glow_color", color)
 
 
 ## Cor fixa (atordoado, congelado); branco = normal.

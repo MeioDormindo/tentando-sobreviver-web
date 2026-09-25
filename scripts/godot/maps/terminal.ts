@@ -156,6 +156,15 @@ export function terminal(): MapBuilder {
     .props('floor_pipe', [[50, 101]])
     .props('extinguisher', [[28, 97]]);
 
+  // Missão "O Último Trem": fusível no armário da Manutenção, chave no cofre da Bilheteria
+  // (o cadeado abre com tiro), manivela com um Blindado; o sinal é consertado na Plataforma.
+  m.quest({
+    train: {
+      fuse: { tx: 35, ty: 93.2 },
+      safe: { tx: 10, ty: 47.2 },
+      signal: { tx: 22, ty: 15.5 },
+    },
+  });
   m.secrets({
     // Ursinhos em cantos escuros: Lojas, Bilheteria e Túneis
     teddies: [{ tx: 91, ty: 46 }, { tx: 8, ty: 61 }, { tx: 91, ty: 89 }],

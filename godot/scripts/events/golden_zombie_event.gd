@@ -44,8 +44,21 @@ func start() -> void:
 	zombie.position = system.spawn_manager.container.to_local(at + Vector3.UP * 0.1)
 	system.spawn_manager.container.add_child(zombie)
 	Events.zombies_summoned.emit(1)
-	for mesh: MeshInstance3D in zombie.find_children("*", "MeshInstance3D", true, false):
-		mesh.material_override = EventFx.glow(GOLD, 1.0, 0.6)
+	# Todo em ouro (folha zombie_golden, com coroa), brilhando e soltando faíscas douradas;
+	# marca própria no minimapa.
+	zombie.add_to_group(&"minimap_golden")
+	if zombie.model:
+		zombie.model.set_sheet("zombie_golden")
+		zombie.model.set_glow(Color(1.0, 0.8, 0.3, 0.55))
+	else:
+		for mesh: MeshInstance3D in zombie.find_children("*", "MeshInstance3D", true, false):
+			mesh.material_override = EventFx.glow(GOLD, 1.0, 0.6)
+	var sparkle := Node3D.new()
+	sparkle.position.y = 1.0
+	zombie.add_child(sparkle)
+	var sparks := PixelFx.attach_loop(sparkle, "spark", 1.1)
+	if sparks:
+		sparks.modulate = GOLD.lightened(0.3)
 	var light := EventFx.light(GOLD, 2.0, 3.0)
 	light.position.y = 1.2
 	zombie.add_child(light)

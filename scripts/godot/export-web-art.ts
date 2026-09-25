@@ -32,5 +32,14 @@ export function exportWebArt(): void {
     writeFileSync(join(powerups, file.replace(/\.svg$/, '.png')), new Resvg(svg, { fitTo: { mode: 'width', value: POWERUP_SIZE } }).render().asPng());
     count++;
   }
+  // Logos dos perks (frente das máquinas): pequenos, para virarem pixel art.
+  const perks = 'godot/assets/web/perks';
+  mkdirSync(perks, { recursive: true });
+  for (const file of readdirSync('public/assets/ui')) {
+    if (!file.startsWith('perk_icon_') || !file.endsWith('.svg')) continue;
+    const svg = readFileSync(join('public/assets/ui', file), 'utf8');
+    writeFileSync(join(perks, file.replace('perk_icon_', '').replace(/\.svg$/, '.png')), new Resvg(svg, { fitTo: { mode: 'width', value: 28 } }).render().asPng());
+    count++;
+  }
   console.log(`  godot/assets/web: ${count} imagens da arte do jogo web`);
 }

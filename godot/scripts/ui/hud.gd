@@ -204,7 +204,7 @@ func _build() -> void:
 
 	_prompt_label = _label(root, "", 20, TEXT, Control.PRESET_CENTER_BOTTOM, HORIZONTAL_ALIGNMENT_CENTER, -110)
 
-	_banner = _label(root, "", 56, RED, Control.PRESET_CENTER_TOP, HORIZONTAL_ALIGNMENT_CENTER, 130)
+	_banner = _label(root, "", 36, RED, Control.PRESET_CENTER_TOP, HORIZONTAL_ALIGNMENT_CENTER, 130)
 	_banner.modulate.a = 0.0
 	_toast = _label(root, "", 20, GOLD, Control.PRESET_CENTER_TOP, HORIZONTAL_ALIGNMENT_CENTER, 220)
 	_boss_label = _label(root, "", 18, RED, Control.PRESET_CENTER_TOP, HORIZONTAL_ALIGNMENT_CENTER, 4)

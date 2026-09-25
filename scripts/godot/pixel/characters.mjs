@@ -223,8 +223,8 @@ const BLOOD = hex(0x6a1a14);
 /** Zumbi com as cores do tipo (dados exportados do jogo web). */
 export function zombieModel(look) {
   const c = {
-    torso: look.shirt, sleeve: look.shirt, skin: look.skin, pants: hex(0x35393a), shoes: hex(0x1d1b19),
-    eyes: hex(0xff4a2a), mouth: hex(0x4a1210),
+    torso: look.shirt, sleeve: look.shirt, skin: look.skin, pants: look.pants || hex(0x35393a), shoes: look.shoes || hex(0x1d1b19),
+    eyes: look.eyes || hex(0xff4a2a), mouth: hex(0x4a1210),
   };
   return humanoid(c, { scale: look.scale, extra: (parts) => {
     parts.push(box('spine', [0.13, 0.145, 0.97], [0.14, 0.03, 0.12], look.shirt, { rot: [0.3, 0, 0.25] }));  // aba rasgada
@@ -237,6 +237,11 @@ export function zombieModel(look) {
       parts.push(box('spine', [0, 0, 1.25], [0.58, 0.36, 0.46], metal));
     }
     if (look.glow) parts.push(box('spine', [0, 0.15, 1.1], [0.2, 0.02, 0.16], look.glow, { flat: true }));
+    if (look.crown) {  // coroa do zumbi dourado
+      parts.push(box('head', [0, 0, 1.82], [0.24, 0.24, 0.07], look.crown));
+      for (const [x, y] of [[0.09, 0.09], [-0.09, 0.09], [0.09, -0.09], [-0.09, -0.09], [0, 0.11]]) parts.push(box('head', [x, y, 1.89], [0.05, 0.05, 0.08], look.crown));
+      parts.push(box('head', [0, 0.125, 1.83], [0.05, 0.02, 0.04], hex(0xd22a3a), { flat: true }));
+    }
   } });
 }
 

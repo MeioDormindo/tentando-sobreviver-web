@@ -12,45 +12,48 @@ var interaction_radius: float = 1.7
 var _label: Label3D
 
 
-## `wall_normal`: direção da parede para o chão onde o jogador fica.
+## `wall_normal`: direção da parede para o chão onde o jogador fica. Tudo fica chapado na face
+## da parede (quadro-negro, desenho de giz da arma e o nome com o preço), com o shader da
+## decoração: some junto com o recorte da parede quando o jogador passa atrás.
 func setup(p_weapon: WeaponData, wall_normal: Vector3) -> void:
 	weapon_data = p_weapon
 	name = String(p_weapon.id) if p_weapon else "ammo"
+	# Face da parede: o nó fica no centro do tile do chão, a meio metro dela.
+	var face := -wall_normal * 0.5
+	var turn := atan2(wall_normal.x, wall_normal.z)
+	_flat_quad("res://assets/sprites/chalk/chalkboard.png", face + wall_normal * 0.012 + Vector3.UP * 1.55, turn, 1.0 / 48.0)
+	var drawing := "res://assets/sprites/chalk/chalk_%s.png" % (p_weapon.id if p_weapon else &"ammo")
+	_flat_quad(drawing, face + wall_normal * 0.02 + Vector3.UP * 1.75, turn, 1.0 / 44.0 if p_weapon else 1.0 / 40.0)
 	_label = Label3D.new()
-	_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	_label.pixel_size = 0.006
-	_label.font_size = 64
-	_label.outline_size = 12
+	_label.billboard = BaseMaterial3D.BILLBOARD_DISABLED
+	_label.double_sided = false
+	_label.pixel_size = 0.0045
+	_label.font_size = 26
 	_label.modulate = CHALK
-	_label.text = ("%s\n%d" % [p_weapon.display_name.to_upper(), p_weapon.price]) if p_weapon else "MUNIÇÃO"
-	# Encostado na parede, na altura dos olhos.
-	_label.position = -wall_normal * 0.45 + Vector3.UP * 2.1
+	_label.text = ("%s  %d" % [p_weapon.display_name.to_upper(), p_weapon.price]) if p_weapon else "MUNIÇÃO"
+	_label.position = face + wall_normal * 0.025 + Vector3.UP * 1.26
+	_label.rotation.y = turn
 	add_child(_label)
-	# Desenho da arma em pixel art acima do nome (como um cartaz na parede).
-	if p_weapon and ResourceLoader.exists("res://assets/sprites/icons/weapon_%s.png" % p_weapon.id):
-		var icon := Sprite3D.new()
-		icon.name = "Icon"
-		icon.texture = load("res://assets/sprites/icons/weapon_%s.png" % p_weapon.id)
-		icon.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-		icon.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
-		icon.pixel_size = 0.012
-		icon.shaded = false
-		icon.position = _label.position + Vector3.UP * 0.75
-		add_child(icon)
-	var board := MeshInstance3D.new()
-	var mesh := BoxMesh.new()
-	mesh.size = Vector3(1.4, 0.9, 0.04)
-	board.mesh = mesh
-	var material := StandardMaterial3D.new()
-	material.albedo_color = Color(CHALK, 0.25)
-	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	board.material_override = material
-	board.position = -wall_normal * 0.52 + Vector3.UP * 1.5
-	add_child(board)
-	# A face larga do quadro fica voltada para o chão onde o jogador está.
-	board.rotation.y = atan2(wall_normal.x, wall_normal.z)
 	add_to_group(&"interactable")
+
+
+## Quadro chapado na parede com o shader da decoração (pixels nítidos e o recorte da parede).
+func _flat_quad(path: String, at: Vector3, turn: float, pixel_size: float) -> void:
+	if not ResourceLoader.exists(path):
+		return
+	var texture := load(path) as Texture2D
+	var quad := QuadMesh.new()
+	quad.size = Vector2(texture.get_width(), texture.get_height()) * pixel_size
+	var node := MeshInstance3D.new()
+	node.mesh = quad
+	node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	var material := ShaderMaterial.new()
+	material.shader = load("res://shaders/decor.gdshader")
+	material.set_shader_parameter(&"tex", texture)
+	node.material_override = material
+	add_child(node)
+	node.position = at
+	node.rotation.y = turn
 
 
 func get_interaction_prompt(player: Node3D) -> String:

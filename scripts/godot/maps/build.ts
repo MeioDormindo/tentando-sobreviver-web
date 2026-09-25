@@ -45,6 +45,35 @@ function preview(data: Record<string, any>): Buffer {
   return encodePng(w, h, rgba);
 }
 
+/**
+ * Miniatura da planta para a escolha de mapa (godot/assets/ui/map_<id>.png): 3 px por tile,
+ * paredes quase pretas com borda, pisos no tom de cada tipo, portas douradas e janelas.
+ */
+function thumbnail(data: Record<string, any>): Buffer {
+  const T = 3;
+  const w = data.width * T, h = data.height * T;
+  const rgba = new Uint8Array(w * h * 4);
+  const floorTone: Record<string, number> = { t: 0x6a6258, c: 0x55544f, m: 0x4a5258, r: 0x3e342c, u: 0x3a3f3a, w: 0x5e523e, h: 0x8a9696, l: 0x6a7a80, g: 0x56646a };
+  const cells = data.cells as string[];
+  const at = (x: number, y: number): string => cells[y]?.[x] ?? '#';
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const tx = Math.floor(x / T), ty = Math.floor(y / T), ch = at(tx, ty);
+    let c: number;
+    if (ch === '#') {
+      const edge = [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([a, b]) => at(tx + a, ty + b) !== '#');
+      c = edge ? 0x2a2c30 : 0x0d0e10;
+    } else if (ch === 'D') c = 0xd9a640;
+    else if (ch === 'W') c = 0x6ac8e8;
+    else if (ch === 'T') c = 0x3a5566;
+    else c = floorTone[ch] ?? 0x555555;
+    // Pontilhado leve no chão (cara de pixel art).
+    if (ch !== '#' && (x + y) % 6 === 0) c = c - 0x0a0a0a;
+    const i = (y * w + x) * 4;
+    rgba[i] = c >> 16; rgba[i + 1] = (c >> 8) & 255; rgba[i + 2] = c & 255; rgba[i + 3] = 255;
+  }
+  return encodePng(w, h, rgba);
+}
+
 for (const make of [terminal, hospital] as Array<() => MapBuilder>) {
   const map = make();
   const data = map.build() as Record<string, any>;
@@ -52,5 +81,7 @@ for (const make of [terminal, hospital] as Array<() => MapBuilder>) {
   mkdirSync('godot/build/maps', { recursive: true });
   writeFileSync(`godot/data/maps/${map.id}.json`, JSON.stringify(data, null, 1) + '\n');
   writeFileSync(`godot/build/maps/${map.id}.png`, preview(data));
+  mkdirSync('godot/assets/ui', { recursive: true });
+  writeFileSync(`godot/assets/ui/map_${map.id}.png`, thumbnail(data));
   console.log(`  ${map.id}: ${data.width}×${data.height}, ${data.areas.length} áreas, ${data.doors.length} portas, ${data.spawns.length} spawns, ${data.props.length} objetos`);
 }

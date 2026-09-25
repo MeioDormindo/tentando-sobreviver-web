@@ -15,7 +15,7 @@ const GOLD = hex(0xe0ad45);
 /** Cor de destaque de cada arma (brilho das energéticas, faixa do Mk III). */
 const ACCENT = {
   arc_gun: hex(0x72ccff), energy_cannon: hex(0x80ff72), rail: hex(0x7fe7ff), wind_cannon: hex(0xc0f2ff),
-  flamethrower: hex(0xff8a26), grenade_launcher: hex(0xb6d04a), minigun: hex(0xffc85a),
+  flamethrower: hex(0xff8a26), conductor_lantern: hex(0xffc85a), grenade_launcher: hex(0xb6d04a), minigun: hex(0xffc85a),
 };
 
 /**
@@ -36,6 +36,20 @@ export function weaponShape(id, level = 0) {
   const scope = (y, len = 0.2) => add([0, y, 0.15], [0.045, len, 0.045], DARK, { shape: 'ellipsoid' });
 
   switch (id) {
+    case 'conductor_lantern':
+      // Lanterna de sinal ferroviário do Condutor: coronha de madeira, corpo de latão com a
+      // lente âmbar acesa, alça em cima e o cano com bobinas de cobre.
+      stock(0.26, WOOD);
+      add([0, 0.08, 0.07], [0.12, 0.2, 0.14], hex(0xb8862e));                                   // corpo de latão
+      add([0, 0.19, 0.07], [0.1, 0.02, 0.1], hex(0xffb84a), { flat: true });                     // lente âmbar
+      add([0, 0.08, 0.17], [0.03, 0.14, 0.05], hex(0x5a4020));                                   // alça
+      barrel(0.2, 0.34, 0.04, 0.07, DARK);
+      for (const y of [0.27, 0.35, 0.43]) add([0, y, 0.07], [0.06, 0.025, 0.06], hex(0xc2703a));  // bobinas
+      add([0, 0.56, 0.07], [0.07, 0.04, 0.07], accent, { flat: true });                         // ponta acesa
+      grip(0, WOOD);
+      if (level >= 1) add([0, 0.08, -0.04], [0.1, 0.12, 0.05], metal);                           // bateria extra
+      if (level >= 2) add([0, 0.3, 0.12], [0.02, 0.26, 0.02], GOLD);
+      break;
     case 'knife':
       // Faca de combate: cabo escuro com guarda, lâmina clara com fio brilhante.
       add([0, -0.01, 0], [0.04, 0.11, 0.045], DARK);

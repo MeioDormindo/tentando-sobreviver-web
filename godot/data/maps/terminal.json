@@ -1234,7 +1234,22 @@
    "📻 \"...se alguém ouvir isto: tentem sobreviver. O resgate chega ao amanhecer. Talvez.\""
   ]
  },
- "quest": null,
+ "quest": {
+  "train": {
+   "fuse": {
+    "tx": 35,
+    "ty": 93.2
+   },
+   "safe": {
+    "tx": 10,
+    "ty": 47.2
+   },
+   "signal": {
+    "tx": 22,
+    "ty": 15.5
+   }
+  }
+ },
  "decor": {
   "seed": "terminal-2d5",
   "density": {

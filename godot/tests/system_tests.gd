@@ -208,6 +208,10 @@ func _test_maps(tree: SceneTree) -> void:
 			var t := Vector2i(floori(b.position.x), floori(b.position.z))
 			return [Vector2i.UP, Vector2i.LEFT, Vector2i.RIGHT, Vector2i.DOWN].any(func(d: Vector2i) -> bool: return "#T".contains(map.cell(t.x + d.x, t.y + d.y))))
 		check(on_wall, "%s: cada compra fica encostada numa parede" % map.name)
+		var flat := buys.all(func(b: WallBuy) -> bool:
+			var parts := b.get_children().filter(func(n: Node) -> bool: return n is Label3D or n is MeshInstance3D)
+			return parts.size() >= 3 and parts.all(func(n: Node3D) -> bool: return (not (n is Label3D) or (n as Label3D).billboard == BaseMaterial3D.BILLBOARD_DISABLED) and absf(Vector2(n.position.x, n.position.z).length() - 0.5) < 0.05))
+		check(flat, "%s: quadro, giz e preço chapados na face da parede (nada flutuando)" % map.name)
 		var perk_count: int = map.data.machines.filter(func(m: Dictionary) -> bool: return m.type == "perk").size()
 		var machines := map.find_children("*", "StaticBody3D", true, false).filter(func(n: Node) -> bool: return n is PerkMachine)
 		check(machines.size() == perk_count and perk_count > 0, "%s: %d máquinas de perk" % [map.name, machines.size()])
@@ -460,7 +464,8 @@ func _test_achievements() -> void:
 	print("Conquistas e visuais (jogo web)")
 	Save.reset()
 	var catalog := load("res://data/configs/achievements.tres") as AchievementCatalog
-	check(catalog.achievements.size() == 17, "17 conquistas migradas")
+	check(catalog.achievements.size() == 18 and not catalog.find("last_train").is_empty(), "17 conquistas do jogo web + a da missão do Terminal")
+	check(catalog.achievements.all(func(a: Dictionary) -> bool: return String(a.get("icon", "")) != ""), "toda conquista tem ícone")
 	var system := AchievementSystem.new()
 	system.catalog = catalog
 	_tree_root.add_child(system)

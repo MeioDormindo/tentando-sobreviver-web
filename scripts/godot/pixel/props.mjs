@@ -207,6 +207,98 @@ const paint = {
     rect(p, 6, h - 14, w - 12, 6, hex(0x2a2c2e)); for (let x = 8; x < w - 8; x += 3) p.set(x, h - 11, hex(0x62d7ff));  // visor
     return p;
   },
+  /** Mystery Box: madeira escura em tábuas, faixas e cantoneiras douradas com rebites. */
+  chest: (withLock = false) => (w, h, r) => {
+    const wood = hex(0x3a2414), gold = hex(0xd9a640);
+    const p = paint.wood(wood, 'h')(w, h, r);
+    const band = (x0) => { rect(p, x0, 0, 5, h, gold); vline(p, x0, scale(gold, 1.35)); vline(p, x0 + 4, scale(gold, 0.55)); for (let y = 3; y < h; y += 7) p.set(x0 + 2, y, hex(0xfff0b0)); };
+    band(Math.floor(w * 0.18)); band(Math.floor(w * 0.82) - 5);
+    rect(p, 0, 0, w, 3, gold); rect(p, 0, h - 3, w, 3, gold);
+    for (const [x, y] of [[0, 0], [w - 7, 0], [0, h - 7], [w - 7, h - 7]]) { rect(p, x, y, 7, 7, scale(gold, 0.9)); bevel(p, x, y, 7, 7, scale(gold, 1.3), scale(gold, 0.5)); }
+    if (withLock) { const cx = Math.floor(w / 2); rect(p, cx - 4, h - 16, 9, 11, gold); bevel(p, cx - 4, h - 16, 9, 11, scale(gold, 1.3), scale(gold, 0.5)); rect(p, cx, h - 13, 1, 4, hex(0x1a1008)); }
+    return p;
+  },
+  /** Tampa: fundo escuro com runas acesas em volta e um grande "?" no meio. */
+  runes: () => (w, h, r) => {
+    const p = base(w, h, hex(0x2a1a10), r, { amount: 0.08 });
+    bevel(p, 0, 0, w, h, hex(0xd9a640), hex(0x6a4a18));
+    for (let x = 6; x < w - 6; x += 6) { const y = r() < 0.5 ? 3 : h - 5; rect(p, x, y, 2, 2, hex(0x7fe7ff)); if (r() < 0.5) p.set(x + 2, y + 1, hex(0x7fe7ff)); }
+    const cx = Math.floor(w / 2), cy = Math.floor(h / 2);
+    const q = ['.###.', '#...#', '...#.', '..#..', '..#..', '.....', '..#..'];
+    q.forEach((row, j) => [...row].forEach((c, i) => { if (c === '#') rect(p, cx - 5 + i * 2, cy - 7 + j * 2, 2, 2, hex(0xffe08a)); }));
+    return p;
+  },
+  /** Medalhão com "?" (a peça que brilha). */
+  emblem: () => (w, h) => {
+    const p = new Pixels(w, h);
+    const cx = w / 2, cy = h / 2;
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      const d = Math.hypot(x + 0.5 - cx, y + 0.5 - cy) / (w / 2);
+      if (d < 1) p.set(x, y, d > 0.82 ? hex(0xd9a640) : d > 0.72 ? hex(0x6a4a18) : hex(0x1a1030));
+    }
+    const q = ['.###.', '#...#', '...#.', '..#..', '..#..', '.....', '..#..'];
+    const k = Math.max(1, Math.floor(w / 12));
+    q.forEach((row, j) => [...row].forEach((c, i) => { if (c === '#') rect(p, Math.floor(cx - 2.5 * k) + i * k, Math.floor(cy - 3.5 * k) + j * k, k, k, hex(0xfff0b0)); }));
+    return p;
+  },
+  /** Máquina de perk (neutra: a cor do perk entra pelo tint): vitrine de latas, saída e moedeiro. */
+  perkBody: () => (w, h, r) => {
+    const p = base(w, h, hex(0xd8d8d8), r, { amount: 0.05 });
+    for (let x = 4; x < w - 4; x += 10) vline(p, x, hex(0xbcbcbc), 0, h - 1);  // frisos
+    const gx = 5, gy = Math.floor(h * 0.12), gw = w - 10, gh = Math.floor(h * 0.42);
+    rect(p, gx, gy, gw, gh, hex(0x242424)); bevel(p, gx, gy, gw, gh, hex(0x101010), hex(0xf4f4f4));
+    for (let y = gy + 4; y < gy + gh - 6; y += 9) {  // prateleiras com latas
+      hline(p, y + 7, hex(0x8a8a8a), gx + 2, gx + gw - 3);
+      for (let x = gx + 4; x < gx + gw - 5; x += 6) { rect(p, x, y, 4, 7, hex(0xf0f0f0)); hline(p, y + 1, hex(0x9a9a9a), x, x + 3); p.set(x + 1, y + 3, hex(0x505050)); }
+    }
+    for (let x = gx + 2; x < gx + gw - 2; x += 3) p.set(x, gy + 2, hex(0xffffff));  // reflexo
+    const sy = Math.floor(h * 0.62);
+    rect(p, 6, sy, w - 12, 5, hex(0xf8f8f8)); hline(p, sy, hex(0xffffff));  // faixa
+    rect(p, Math.floor(w * 0.18), Math.floor(h * 0.75), Math.floor(w * 0.45), Math.floor(h * 0.12), hex(0x161616));  // saída
+    bevel(p, Math.floor(w * 0.18), Math.floor(h * 0.75), Math.floor(w * 0.45), Math.floor(h * 0.12), hex(0x080808), hex(0x9a9a9a));
+    rect(p, Math.floor(w * 0.72), Math.floor(h * 0.72), 6, 12, hex(0x3a3a3a)); rect(p, Math.floor(w * 0.72) + 2, Math.floor(h * 0.72) + 3, 2, 6, hex(0x0a0a0a));  // moedeiro
+    bevel(p, 0, 0, w, h, hex(0xffffff), hex(0x6a6a6a));
+    return p;
+  },
+  /** Letreiro de neon da máquina de perk (brilha na cor do perk). */
+  neon: () => (w, h) => {
+    const p = new Pixels(w, h);
+    rect(p, 0, 0, w, h, hex(0x303030));
+    rect(p, 2, 2, w - 4, h - 4, hex(0xf6f6f6));
+    for (let x = 4; x < w - 4; x += 5) p.set(x, Math.floor(h / 2), hex(0xb0b0b0));
+    return p;
+  },
+  /** Painel de ferramentas perfurado do Weapon Lab. */
+  pegboard: () => (w, h, r) => {
+    const p = base(w, h, hex(0x8a6a44), r, { amount: 0.08 });
+    for (let y = 3; y < h; y += 5) for (let x = 3; x < w; x += 5) p.set(x, y, hex(0x4a3420));
+    const tools = [[0.12, hex(0x9aa0a4), 3, 22], [0.25, hex(0xc2372c), 4, 16], [0.4, hex(0x6a6f72), 10, 6], [0.55, hex(0xd2a32a), 3, 20], [0.7, hex(0x9aa0a4), 12, 4], [0.85, hex(0x3a3d40), 5, 14]];
+    for (const [fx, c, tw, th] of tools) { const x = Math.floor(fx * w); rect(p, x, 6, tw, th, c); hline(p, 6, scale(c, 1.3), x, x + tw - 1); }
+    bevel(p, 0, 0, w, h, hex(0xa88a60), hex(0x3a2414));
+    return p;
+  },
+  /** Cofre da Bilheteria: aço escuro, dial, maçaneta e dobradiças. */
+  safe: () => (w, h, r) => {
+    const p = paint.metal(hex(0x3c4246), { rust: 0.3 })(w, h, r);
+    bevel(p, 3, 3, w - 6, h - 6, hex(0x5a6064), hex(0x1c1f21));
+    const cx = Math.floor(w * 0.42), cy = Math.floor(h * 0.45), rad = Math.floor(Math.min(w, h) * 0.16);
+    for (let y = -rad; y <= rad; y++) for (let x = -rad; x <= rad; x++) { const d = Math.hypot(x, y); if (d <= rad) p.set(cx + x, cy + y, d > rad - 2 ? hex(0xd9a640) : hex(0x2a2c2e)); }
+    for (let a = 0; a < 12; a++) p.set(Math.round(cx + Math.cos(a * 0.52) * (rad - 3)), Math.round(cy + Math.sin(a * 0.52) * (rad - 3)), hex(0xd8d4c8));
+    rect(p, Math.floor(w * 0.72), cy - 2, Math.floor(w * 0.16), 4, hex(0xb8bdb6));
+    for (const y of [Math.floor(h * 0.2), Math.floor(h * 0.75)]) rect(p, 2, y, 3, 6, hex(0x8a8f92));
+    return p;
+  },
+  /** Cabeça do sinal ferroviário: três lentes (vermelha, âmbar, verde) com viseira. */
+  signalHead: () => (w, h) => {
+    const p = new Pixels(w, h);
+    rect(p, 0, 0, w, h, hex(0x1a1c1e));
+    const lens = [hex(0xff3a2a), hex(0xffb84a), hex(0x4aff7a)];
+    lens.forEach((c, i) => {
+      const cx = w / 2, cy = (h / 4) * (i + 1), rr = Math.min(w, h / 3) * 0.32;
+      for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) { const d = Math.hypot(x + 0.5 - cx, y + 0.5 - cy); if (d < rr) p.set(x, y, d < rr * 0.5 ? scale(c, 1.2) : c); }
+    });
+    return p;
+  },
   /** Disjuntor principal: armário grande com fileiras de chaves e a alavanca. */
   breaker: () => (w, h, r) => {
     const p = paint.metal(hex(0x55604a), { rust: 0.4 })(w, h, r);
@@ -289,26 +381,50 @@ export const RECIPES = {
     box([0.4, 0.35, 0.3], [0.6, 1.1, 0], { top: paint.black(), front: paint.screen(hex(0x62d7ff)), side: paint.black() }, { glow: hex(0x62d7ff) })],
   centrifuge: [cyl(1.0, 1.0, [0, 0.5, 0], { top: paint.cap(hex(0xb8bdb6)), side: paint.metal(hex(0xb8bdb6), { stripes: 2, rust: 0 }) })],
   // Painéis de parede (evento, armadilha, trem) e o disjuntor principal.
-  panel_alarm: [box([0.9, 1.5, 0.45], [0, 0.75, 0], { top: paint.metal(hex(0x464b4f)), front: paint.panel(hex(0xd23a2a), 'bell'), side: paint.metal(hex(0x464b4f)) }, { glow: hex(0xff5a4a) })],
-  panel_power: [box([0.9, 1.5, 0.45], [0, 0.75, 0], { top: paint.metal(hex(0x464b4f)), front: paint.panel(hex(0xe0b030), 'power'), side: paint.metal(hex(0x464b4f)) }, { glow: hex(0xffd35a) })],
-  panel_trap: [box([0.9, 1.5, 0.45], [0, 0.75, 0], { top: paint.metal(hex(0x464b4f)), front: paint.panel(hex(0x4ab8f0), 'bolt'), side: paint.metal(hex(0x464b4f)) }, { glow: hex(0x7fd8ff) })],
-  panel_train: [box([0.9, 1.5, 0.45], [0, 0.75, 0], { top: paint.metal(hex(0x464b4f)), front: paint.panel(hex(0xe89a3a), 'train'), side: paint.metal(hex(0x464b4f)) }, { glow: hex(0xffb85a) })],
-  breaker: [box([1.2, 1.8, 0.5], [0, 0.9, 0], { top: paint.metal(hex(0x55604a)), front: paint.breaker(), side: paint.painted(hex(0x55604a)) })],
+  panel_alarm: [box([0.9, 1.3, 0.26], [0, 0.95, 0.12], { top: paint.metal(hex(0x3a3e42)), front: paint.panel(hex(0xd23a2a), 'bell'), side: paint.metal(hex(0x3a3e42)) }),
+    box([0.5, 0.44, 0.03], [0, 1.12, -0.02], all(paint.screen(hex(0xff5a4a))), { glow: hex(0xff5a4a) }),
+    box([0.08, 0.08, 0.04], [0.33, 1.52, -0.02], all(paint.black()), { glow: hex(0xff5a4a), name: 'led' }),
+    box([0.06, 0.6, 0.06], [-0.3, 0.3, 0.2], all(paint.metal(hex(0x2a2c2e))))],
+  panel_power: [box([0.9, 1.3, 0.26], [0, 0.95, 0.12], { top: paint.metal(hex(0x3a3e42)), front: paint.panel(hex(0xe0b030), 'power'), side: paint.metal(hex(0x3a3e42)) }),
+    box([0.5, 0.44, 0.03], [0, 1.12, -0.02], all(paint.screen(hex(0xffd35a))), { glow: hex(0xffd35a) }),
+    box([0.08, 0.08, 0.04], [0.33, 1.52, -0.02], all(paint.black()), { glow: hex(0xffd35a), name: 'led' }),
+    box([0.06, 0.6, 0.06], [-0.3, 0.3, 0.2], all(paint.metal(hex(0x2a2c2e))))],
+  panel_trap: [box([0.9, 1.3, 0.26], [0, 0.95, 0.12], { top: paint.metal(hex(0x3a3e42)), front: paint.panel(hex(0x4ab8f0), 'bolt'), side: paint.metal(hex(0x3a3e42)) }),
+    box([0.5, 0.44, 0.03], [0, 1.12, -0.02], all(paint.screen(hex(0x7fd8ff))), { glow: hex(0x7fd8ff) }),
+    box([0.08, 0.08, 0.04], [0.33, 1.52, -0.02], all(paint.black()), { glow: hex(0x7fd8ff), name: 'led' }),
+    box([0.06, 0.6, 0.06], [-0.3, 0.3, 0.2], all(paint.metal(hex(0x2a2c2e))))],
+  panel_train: [box([0.9, 1.3, 0.26], [0, 0.95, 0.12], { top: paint.metal(hex(0x3a3e42)), front: paint.panel(hex(0xe89a3a), 'train'), side: paint.metal(hex(0x3a3e42)) }),
+    box([0.5, 0.44, 0.03], [0, 1.12, -0.02], all(paint.screen(hex(0xffb85a))), { glow: hex(0xffb85a) }),
+    box([0.08, 0.08, 0.04], [0.33, 1.52, -0.02], all(paint.black()), { glow: hex(0xffb85a), name: 'led' }),
+    box([0.06, 0.6, 0.06], [-0.3, 0.3, 0.2], all(paint.metal(hex(0x2a2c2e))))],
+  breaker: [box([1.2, 1.7, 0.3], [0, 0.95, 0.1], { top: paint.metal(hex(0x55604a)), front: paint.breaker(), side: paint.painted(hex(0x55604a)) }),
+    box([0.08, 0.08, 0.04], [0.48, 1.7, -0.07], all(paint.black()), { glow: hex(0xff4a3a), name: 'led' })],
   sample_fridge: [box([0.9, 1.7, 0.7], [0, 0.85, 0], { top: paint.metal(hex(0xd8dcd8), { rust: 0 }), front: paint.fridge(), side: paint.painted(hex(0xd8dcd8)) }, { glow: hex(0xbfefff) })],
   gas_pipe: [cyl(0.3, 1.6, [0, 0.2, 0], { top: paint.cap(hex(0x8a8f5a)), side: paint.metal(hex(0x8a8f5a), { stripes: 2, rust: 0.8 }) }, { rot: [0, 0, 90] }),
     cyl(0.12, 0.35, [0, 0.45, 0], { top: paint.cap(hex(0x6a6f72)), side: paint.metal(hex(0x6a6f72)) }),
     cyl(0.5, 0.06, [0, 0.66, 0], { top: paint.cap(hex(0xc2372c)), side: paint.painted(hex(0xc2372c)) })],
   rubble: [box([0.7, 0.3, 0.5], [0, 0.15, 0], all(paint.concrete())), box([0.45, 0.22, 0.4], [0.35, 0.11, 0.25], all(paint.concrete()), { rot: [0, 35, 0] }),
     box([0.35, 0.18, 0.3], [-0.35, 0.09, -0.2], all(paint.concrete()), { rot: [0, -20, 0] }), box([0.9, 0.06, 0.08], [0.1, 0.33, 0], all(paint.metal(hex(0x6a3a1e))), { rot: [0, 20, 10] })],
+  safe: [box([0.8, 0.95, 0.6], [0, 0.475, 0], { top: paint.metal(hex(0x3c4246)), front: paint.safe(), side: paint.metal(hex(0x3c4246), { stripes: 1 }) })],
+  signal_cabinet: [box([0.8, 1.2, 0.55], [0, 0.6, 0], { top: paint.metal(hex(0x2f4a36)), front: paint.panel(hex(0xe89a3a), 'train'), side: paint.painted(hex(0x2f4a36)) }),
+    box([0.12, 1.0, 0.12], [0, 1.7, 0], all(paint.metal(hex(0x2a2c2e)))),
+    box([0.42, 0.9, 0.2], [0, 2.4, -0.02], { top: paint.black(), front: paint.signalHead(), side: paint.black() }, { glow: hex(0xffe0a0), name: 'head' })],
   supply_crate: [box([1.0, 0.7, 0.8], [0, 0.35, 0], { top: paint.supply(), front: paint.supply(), side: paint.supply(false) }),
     cyl(0.08, 0.22, [0.38, 0.81, 0.25], { top: paint.cap(hex(0xff4a3a)), side: paint.metal(hex(0xc2372c), { rivets: false }) }, { glow: hex(0xff4a3a) })],
   // Máquinas
-  mystery_box: [box([2.0, 0.8, 1.1], [0, 0.4, 0], { top: paint.wood(hex(0x6b4a24)), front: paint.mystery(), side: paint.wood(hex(0x6b4a24)) }, { glow: hex(0xffe08a) }),
-    box([2.06, 0.14, 1.16], [0, 0.87, 0], { top: paint.mystery(), front: paint.metal(hex(0xd9a640), { rust: 0 }), side: paint.metal(hex(0xd9a640), { rust: 0 }) }, { name: 'lid' })],
-  perk_machine: [box([1.2, 2.0, 0.9], [0, 1.0, 0], { top: paint.perk(), front: paint.perk(), side: paint.perk() }, { tint: true }),
-    box([1.24, 0.25, 0.94], [0, 2.1, 0], all(paint.metal(hex(0x2a2a2a))), { glow: hex(0xffffff), tint: true })],
-  weapon_lab: [box([1.6, 0.1, 1.0], [0, 0.95, 0], all(paint.metal(hex(0x55504a)))), box([1.5, 0.9, 0.9], [0, 0.45, 0], { top: paint.metal(hex(0x3a3d42)), front: paint.lab(), side: paint.metal(hex(0x3a3d42)) }),
-    box([0.5, 0.55, 0.45], [-0.45, 1.27, 0], all(paint.metal(hex(0x3a3d42)))), box([0.4, 0.3, 0.06], [0.4, 1.15, -0.3], { top: paint.black(), front: paint.screen(hex(0x62d7ff)), side: paint.black() }, { glow: hex(0x62d7ff) })],
+  mystery_box: [box([2.0, 0.78, 1.1], [0, 0.39, 0], { top: paint.chest(), front: paint.chest(true), side: paint.chest() }),
+    box([0.46, 0.46, 1.14], [0, 0.42, 0], all(paint.emblem()), { glow: hex(0xffd878) }),
+    ...[[-0.97, -0.52], [0.97, -0.52], [-0.97, 0.52], [0.97, 0.52]].map(([x, z]) => box([0.1, 0.84, 0.1], [x, 0.42, z], all(paint.metal(hex(0xd9a640), { rust: 0 })))),
+    box([2.08, 0.16, 1.18], [0, 0.86, 0], { top: paint.runes(), front: paint.metal(hex(0xd9a640), { rust: 0, stripes: 1 }), side: paint.metal(hex(0xd9a640), { rust: 0 }) }, { name: 'lid', glow: hex(0x9fe8ff) })],
+  perk_machine: [box([1.2, 1.86, 0.86], [0, 1.0, 0], { top: paint.metal(hex(0x9a9a9a), { rust: 0 }), front: paint.perkBody(), side: paint.painted(hex(0xc8c8c8)) }, { tint: true }),
+    box([1.28, 0.36, 0.92], [0, 2.08, 0], { top: paint.metal(hex(0x2a2a2a)), front: paint.neon(), side: paint.metal(hex(0x2a2a2a)) }, { glow: hex(0xffffff), tint: true, name: 'sign' }),
+    box([1.26, 0.1, 0.9], [0, 0.05, 0], all(paint.metal(hex(0x2a2c2e)))),
+    box([0.1, 1.8, 0.1], [-0.6, 1.0, -0.43], all(paint.metal(hex(0xc8ccd0), { rust: 0 }))), box([0.1, 1.8, 0.1], [0.6, 1.0, -0.43], all(paint.metal(hex(0xc8ccd0), { rust: 0 })))],
+  weapon_lab: [box([1.7, 0.1, 1.0], [0, 0.95, 0], all(paint.metal(hex(0x55504a)))), box([1.6, 0.9, 0.9], [0, 0.45, 0], { top: paint.metal(hex(0x3a3d42)), front: paint.lab(), side: paint.metal(hex(0x3a3d42)) }),
+    box([1.7, 1.1, 0.06], [0, 1.55, 0.47], { top: paint.metal(hex(0x3a2414)), front: paint.pegboard(), side: paint.metal(hex(0x3a2414)) }),
+    box([0.34, 0.26, 0.3], [-0.52, 1.13, -0.1], all(paint.metal(hex(0x2f5d7c)))), box([0.08, 0.06, 0.4], [-0.52, 1.28, -0.1], all(paint.metal(hex(0xb8bdb6), { rust: 0 }))),
+    box([0.4, 0.14, 0.2], [0.05, 1.07, 0.05], all(paint.metal(hex(0x2a2c2e)))),
+    box([0.46, 0.34, 0.06], [0.52, 1.2, 0.15], { top: paint.black(), front: paint.screen(hex(0x62d7ff)), side: paint.black() }, { glow: hex(0x62d7ff) })],
 };
 
 // ───────────────────────── Atlas ─────────────────────────

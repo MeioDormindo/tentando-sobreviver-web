@@ -608,6 +608,19 @@ func _build_interactions() -> void:
 		if node:
 			nav_region.add_child(node)
 			node.position = Vector3(float(item.tx) + 0.5, 0.0, float(item.ty) + 0.5)
+			# Painéis e disjuntor: de costas para a parede mais perto e encostados nela.
+			node.rotation.y = facing_toward_open(node.position)
+			node.position = _against_wall(node.position, node.rotation.y, 0.28)
+
+
+## Recua o ponto (de costas, eixo +Z local depois do giro) até `depth` m da parede de trás.
+func _against_wall(at: Vector3, angle: float, depth: float) -> Vector3:
+	var back := Vector3(sin(angle), 0.0, cos(angle))
+	for step in 30:
+		var probe := at + back * (step * 0.05)
+		if not _is_floor(cell(floori(probe.x), floori(probe.z))):
+			return at + back * maxf(0.0, step * 0.05 - depth)
+	return at
 
 
 ## Segredos do mapa: ursinhos escondidos, rádio (ou gravador) com a história e a placa.

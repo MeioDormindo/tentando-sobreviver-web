@@ -38,14 +38,26 @@ func setup(p_perk: PerkData) -> void:
 		mesh.mesh = box
 		mesh.position.y = SIZE.y * 0.5
 		add_child(mesh)
+	# Logo do perk na vitrine de cima e o nome no letreiro, chapados na frente (-Z).
+	var logo_path := "res://assets/web/perks/%s.png" % perk.id
+	if ResourceLoader.exists(logo_path):
+		var logo := Sprite3D.new()
+		logo.texture = load(logo_path)
+		logo.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+		logo.pixel_size = 0.5 / float(logo.texture.get_width())
+		logo.shaded = false
+		logo.alpha_cut = SpriteBase3D.ALPHA_CUT_DISCARD
+		logo.position = Vector3(0.0, 1.38, -0.44)
+		logo.rotation.y = PI
+		add_child(logo)
 	var label := Label3D.new()
-	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	label.pixel_size = 0.005
-	label.font_size = 52
-	label.outline_size = 10
-	label.modulate = perk.color.lightened(0.4)
+	label.pixel_size = 0.0034
+	label.font_size = 26
+	label.modulate = perk.color.lightened(0.5)
 	label.text = perk.display_name.to_upper()
-	label.position.y = SIZE.y + 0.5
+	label.position = Vector3(0.0, 2.08, -0.47)
+	label.rotation.y = PI
+	label.double_sided = false
 	add_child(label)
 	_light = OmniLight3D.new()
 	_light.light_color = perk.color

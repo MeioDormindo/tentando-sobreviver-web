@@ -65,6 +65,13 @@ for (const file of readdirSync('godot/data/zombies')) {
   }
 }
 
+// Zumbi dourado (evento): o runner inteiro em ouro, olhos amarelos e coroa.
+{
+  const runner = readFileSync(join('godot/data/zombies', 'runner.tres'), 'utf8');
+  const gold = { shirt: hex(0xd9a520), skin: hex(0xf0c85a), pants: hex(0xa8741a), shoes: hex(0x7a5210), eyes: hex(0xfff2a0), crown: hex(0xffd84a), scale: tresNumber(runner, 'model_scale', 1) };
+  write('zombie_golden', buildSheet(zombieModel(gold), zombieAnimations(), { pitch: PITCH, workSize: 240 }));
+}
+
 // Bosses.
 write('boss_conductor', buildSheet(conductorModel(), bossAnimations(), { pitch: PITCH, workSize: 320 }));
 write('boss_patient_zero', buildSheet(patientZeroModel(), bossAnimations(), { pitch: PITCH, workSize: 320 }));
@@ -123,6 +130,9 @@ function muzzleOf(id, level, stance) {
   return [x, z, -y].map((v) => Math.round(v * 1000) / 1000);
 }
 
+// Desenhos de giz das compras na parede (armas que não são só da caixa) e o quadro-negro.
+import('./chalk.mjs').then(({ buildChalk }) => buildChalk(join(OUT, 'chalk'), weaponIds.filter((id) => id !== 'knife')));
+
 // Ursinho (segredo): sentado, visto pela câmera do jogo.
 {
   const fur = hex(0x8a5a36), light = hex(0xc89a6a), dark = hex(0x2a1a12);
@@ -143,14 +153,28 @@ function muzzleOf(id, level, stance) {
   writeFileSync(join(OUT, 'icons', 'teddy.png'), encodePng(icon.width, icon.height, icon.data));
 }
 
+// Manivela do sinal (missão do Terminal): cabo de madeira, braço de ferro e eixo.
+{
+  const iron = hex(0x5a5f63), wood = hex(0x7a4a28);
+  const crank = [
+    { at: [0, 0, 0], size: [0.05, 0.36, 0.05], color: iron },
+    { at: [0, 0.2, 0.08], size: [0.05, 0.05, 0.2], color: iron },
+    { at: [0, 0.2, 0.2], size: [0.07, 0.14, 0.07], color: wood, shape: 'ellipsoid' },
+    { at: [0, -0.2, 0], size: [0.09, 0.08, 0.09], color: hex(0x3a3d40) },
+  ];
+  const icon = renderIcon(crank, { pitch: 20, ppm: 70, dir: 2, size: 96 });
+  writeFileSync(join(OUT, 'icons', 'crank.png'), encodePng(icon.width, icon.height, icon.data));
+}
+
 // Efeitos em pixel (clarão, faísca, explosão, fumaça, sangue, projéteis, chama, vento).
 import('./fx.mjs').then(({ buildFx }) => {
   const dir = join(OUT, 'fx');
   mkdirSync(dir, { recursive: true });
   for (const [name, fx] of Object.entries(buildFx())) {
-    const frames = fx.sheet.width / fx.sheet.height;
+    const frame = fx.frame || [fx.sheet.height, fx.sheet.height];
+    const frames = fx.sheet.width / frame[0];
     writeFileSync(join(dir, `${name}.png`), encodePng(fx.sheet.width, fx.sheet.height, fx.sheet.data));
-    writeFileSync(join(dir, `${name}.json`), JSON.stringify({ frame: [fx.sheet.height, fx.sheet.height], frames, fps: fx.fps, loop: fx.loop, pixels_per_meter: 48 }) + '\n');
+    writeFileSync(join(dir, `${name}.json`), JSON.stringify({ frame,  frames, fps: fx.fps, loop: fx.loop, pixels_per_meter: 48 }) + '\n');
   }
   console.log('  efeitos:', Object.keys(buildFx()).join(', '));
 });

@@ -200,6 +200,9 @@ func _golden_zombie() -> void:
 	check(zombie != null and _rounds.total == total + 1, "o Zumbi Dourado conta no round")
 	await _tree.create_timer(1.0).timeout
 	check(zombie.flee_goal is Vector3, "ele foge para um esconderijo")
+	check(zombie.model != null and zombie.model.sheet_name == "zombie_golden", "todo em ouro (folha zombie_golden)")
+	var feed := _main.get_node("MinimapFeed") as MinimapFeed
+	check(feed != null and feed.build_state().golden is Vector2, "marca própria no minimapa")
 	var before := _points.points
 	zombie.take_damage(DamageInfo.new(zombie.health.current + 1.0, DamageInfo.Kind.WEAPON, _player, false, zombie.global_position))
 	await _frames(2)

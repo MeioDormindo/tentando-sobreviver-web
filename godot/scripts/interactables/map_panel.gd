@@ -9,6 +9,8 @@ var interaction_radius: float = 1.6
 var events_data: WorldEventData
 
 var _label: Label3D
+var _led: Node3D
+var _blink := 0.0
 var _material: StandardMaterial3D
 
 
@@ -26,6 +28,7 @@ func build(title: String, color: Color, art := "") -> void:
 	var visual: Node3D = PropFactory.create(art) if art != "" else null
 	if visual:
 		add_child(visual)
+		_led = visual.find_child("led", true, false) as Node3D
 		_add_label(title, color)
 		return
 	var box := BoxMesh.new()
@@ -45,14 +48,20 @@ func build(title: String, color: Color, art := "") -> void:
 func _add_label(title: String, color: Color) -> void:
 	_label = Label3D.new()
 	_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	_label.pixel_size = 0.004
-	_label.font_size = 40
-	_label.outline_size = 8
+	_label.pixel_size = 0.0035
+	_label.font_size = 26
 	_label.modulate = color.lightened(0.2)
 	_label.text = title
-	_label.position.y = SIZE.y + 0.35
+	_label.position.y = 1.85
 	add_child(_label)
 	add_to_group(&"interactable")
+
+
+func _process(delta: float) -> void:
+	# LED do painel piscando (aceso ~70% do tempo).
+	if _led:
+		_blink += delta
+		_led.visible = fmod(_blink, 1.1) < 0.8
 
 
 func world_events() -> WorldEventSystem:
