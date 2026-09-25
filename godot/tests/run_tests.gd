@@ -30,5 +30,7 @@ func _initialize() -> void:
 	failures += await boss_tests.call(&"run", self)
 	var menu_tests: RefCounted = (load("res://tests/menu_scene_tests.gd") as GDScript).new()
 	failures += await menu_tests.call(&"run", self)
+	var online_tests: RefCounted = (load("res://tests/online_tests.gd") as GDScript).new()
+	failures += await online_tests.call(&"run", self)
 	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://test_save.json"))
 	quit(1 if failures > 0 else 0)

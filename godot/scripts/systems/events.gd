@@ -53,6 +53,8 @@ signal score_changed(total: int, delta: int)
 signal shot_fired()
 ## Um mapa foi liberado (fica salvo).
 signal map_unlocked(map_id: String, map_name: String)
+## Anti-trapaça: a partida foi invalidada (zoeira e aviso).
+signal cheat_detected(taunt: String, subtitle: String)
 ## Pausa ligada/desligada.
 signal pause_changed(paused: bool)
 ## A HUD pediu para jogar de novo.

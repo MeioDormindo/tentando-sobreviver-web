@@ -28,6 +28,7 @@ func run(tree: SceneTree) -> int:
 	_test_composition()
 	_test_save()
 	_test_score()
+	_test_anti_cheat()
 	print("\n%d ok, %d falharam" % [_passed, _failed])
 	return _failed
 
@@ -377,3 +378,53 @@ func _test_score() -> void:
 	check(score.score - before - 6 == 150, "round 3 completo: +150")
 	walker.free()
 	score.queue_free()
+
+
+func _test_anti_cheat() -> void:
+	print("Anti-trapaça (jogo web)")
+	var cheat_data := load("res://data/configs/anticheat.tres") as AntiCheatData
+	var make := func() -> Array:
+		var points := PointsManager.new()
+		points.data = load("res://data/configs/points.tres")
+		var score := ScoreManager.new()
+		score.data = load("res://data/configs/score.tres")
+		var guard := AntiCheat.new()
+		guard.data = cheat_data
+		guard.points_manager = points
+		guard.score_manager = score
+		for node in [points, score, guard]:
+			_tree_root.add_child(node)
+		return [points, score, guard]
+	var honest: Array = make.call()
+	for i in 20:
+		(honest[0] as PointsManager).add(150)
+		(honest[1] as ScoreManager).add(40)
+	check(not (honest[2] as AntiCheat).flagged, "jogo normal não é marcado")
+	var greedy: Array = make.call()
+	(greedy[0] as PointsManager).add(999999)
+	check((greedy[2] as AntiCheat).flagged and (greedy[2] as AntiCheat).taunt in cheat_data.taunts, "ganho absurdo de pontos invalida a partida (zoeira)")
+	var editor: Array = make.call()
+	(editor[1] as ScoreManager).score = 500000  # alterado por fora, sem passar pelo sistema
+	(editor[2] as AntiCheat)._check_integrity()
+	check((editor[2] as AntiCheat).flagged, "score alterado por fora é detectado")
+	# Partida invalidada: o fim de jogo não grava nada no save.
+	Save.reset()
+	var rounds := RoundManager.new()
+	rounds.data = load("res://data/configs/rounds.tres")
+	rounds.process_mode = Node.PROCESS_MODE_DISABLED
+	var game := GameManager.new()
+	game.round_manager = rounds
+	game.points_manager = editor[0]
+	game.score_manager = editor[1]
+	game.anti_cheat = editor[2]
+	_tree_root.add_child(rounds)
+	_tree_root.add_child(game)
+	var summary := {}
+	var capture := func(s: Dictionary) -> void: summary.merge(s)
+	Events.game_over.connect(capture)
+	Events.player_died.emit()
+	Events.game_over.disconnect(capture)
+	check(summary.get("cheat_taunt", "") != "" and not summary.get("rank_eligible", true), "fim de jogo invalidado: sem ranking")
+	check(Save.lifetime.gamesPlayed == 0 and Save.records(Session.map_id).bestScore == 0, "fim de jogo invalidado: save intacto")
+	for node in honest + greedy + editor + [rounds, game]:
+		node.queue_free()

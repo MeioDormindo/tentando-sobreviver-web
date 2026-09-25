@@ -8,6 +8,7 @@ extends Node
 @export var round_manager: RoundManager
 @export var points_manager: PointsManager
 @export var score_manager: ScoreManager
+@export var anti_cheat: AntiCheat
 
 var kills: int = 0
 var headshots: int = 0
@@ -91,7 +92,9 @@ func _on_player_died() -> void:
 	var score := score_manager.score if score_manager else 0
 	var run := {"wave": round_manager.round_number, "kills": kills, "score": score, "bosses": bosses,
 		"time_ms": int(elapsed * 1000.0), "knife_kills": knife_kills, "headshots": headshots}
-	var before := Save.finish_run(map_id, run)
+	var flagged := anti_cheat != null and anti_cheat.flagged
+	# Partida invalidada pelo anti-trapaça não entra em recordes, totais nem ranking.
+	var before := Save.records(map_id).duplicate() if flagged else Save.finish_run(map_id, run)
 	var best := Save.records(map_id)
 	Events.game_over.emit({
 		"map_id": map_id,
@@ -109,8 +112,9 @@ func _on_player_died() -> void:
 		"score": score,
 		"best_score": int(best.bestScore),
 		"best_wave": int(best.bestWave),
-		"new_record": score > int(before.bestScore),
-		"rank_eligible": Save.qualifies(map_id, score),
+		"new_record": not flagged and score > int(before.bestScore),
+		"rank_eligible": not flagged and Save.qualifies(map_id, score),
+		"cheat_taunt": anti_cheat.taunt if flagged else "",
 	})
 
 

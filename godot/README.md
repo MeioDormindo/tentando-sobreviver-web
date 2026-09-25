@@ -12,6 +12,13 @@ de conceitos: ver `docs/analise-typescript.md`.
   nuvem entre as duas versões): configurações, recordes, mapas liberados, ranking, totais,
   segredos e conquistas; validado campo a campo e gravado de forma segura;
 - **pontuação do ranking** (score, separada dos pontos de compra), como no jogo web;
+- **online, o mesmo do jogo web** (Supabase via `HTTPRequest`, funciona também na Web):
+  - ranking global por temporada de 15 dias, com abas LOCAL/GLOBAL;
+  - conta com usuário e senha (tela CONTA): a senha fica só como hash no servidor, e no
+    aparelho fica apenas a sessão (`user://session.json`);
+  - save na nuvem mesclado ao entrar e enviado a cada mudança, **compartilhado com a versão web**;
+- **anti-trapaça**: ganho impossível para o round ou pontos/score alterados por fora invalidam a
+  partida, com zoeira na tela, e ela não vale save nem ranking;
 - **tela de fim**: estatísticas, recorde, nome no ranking e botões de jogar de novo, ranking e
   menu;
 - **Terminal Central migrado** (a partida começa nele) e o Hospital Santa Luzia pronto para
@@ -85,6 +92,7 @@ reais do jogo web (`src/config`) e gera os `.tres` de `data/`:
 - os 2 bosses, com cada ataque;
 - barricadas, Mystery Box, Weapon Lab, os 7 perks, energia e o catálogo de armas;
 - a pontuação do ranking e o catálogo de mapas (nomes, descrições, desbloqueio);
+- online (servidor, temporada, regras de usuário e senha) e anti-trapaça;
 - os mapas (`data/maps/terminal.json` e `map2.json`): a grade de tiles montada na mesma ordem do
   jogo web, com áreas, portas, janelas, spawns por área, luzes, props, máquinas e compras na
   parede.
@@ -101,7 +109,9 @@ passam a ser editados direto no Godot.
 # mapas com portas, barricadas, compras, máquinas e navegação, sorteio da caixa, Weapon Lab,
 # perks, composição por round, rodada dos cães) e, na mesma execução, os testes de cena: as
 # 5 armas especiais, cada tipo de zumbi, a rodada dos cães, os dois bosses nos mapas migrados
-# e as telas de menu. Save, pontuação e menus usam um save de teste (o do jogador não muda):
+# e as telas de menu; e o online contra o servidor real, só com operações que não gravam
+# (ler o ranking, envio recusado, login errado). Os testes usam um save de teste (o do
+# jogador não muda) e o bot joga offline (não envia nada ao ranking global):
 Godot --headless --path godot -s res://tests/run_tests.gd
 
 # Jogado (abre uma janela), no Terminal migrado: um bot joga até o round 3 e confere
@@ -125,6 +135,8 @@ scripts/systems/events.gd        autoload Events: barramento de sinais (sistemas
 scripts/systems/save_store.gd    autoload Save: save no formato do jogo web (+ mesclagem da nuvem)
 scripts/systems/session.gd       autoload Session: mapa escolhido para a partida
 scripts/main.gd                  troca o mapa da partida pelo escolhido
+scripts/online/                  autoloads Online (cliente REST) e Account (conta e nuvem),
+                                 Leaderboard (ranking global), AntiCheat
 scripts/ui/                      HUD (fim de jogo com ranking), MenuKit e as telas de menu
 scripts/systems/input_bindings.gd autoload InputBindings: ações abstratas (teclado, mouse, controle)
 scripts/components/              HealthComponent, Hurtbox (corpo/cabeça), DamageInfo
@@ -175,8 +187,6 @@ Decisões:
 ## Próximas fases (roadmap da especificação)
 
 - **Fase 4 (rounds):** novos tipos de zumbi e composição por round.
-- **Online:** ranking global por temporada, conta com usuário e senha e save na nuvem (mesmo
-  Supabase e mesmo formato do jogo web), anti-trapaça.
 - **Conquistas e visuais do personagem.**
 - **Minimapa, pausa com configurações.**
 - **Eventos e extras:** power-ups (incluindo o Fire Sale), eventos do mapa (trem, apagão...),

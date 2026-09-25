@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="AntiCheatData" format=3]
+
+[ext_resource type="Script" path="res://scripts/online/anticheat_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+points_event_base = 15000
+points_event_per_round = 300
+points_window_base = 60000
+points_window_per_round = 1500
+score_event_base = 5000
+score_event_per_round = 200
+score_window_base = 30000
+score_window_per_round = 2000
+window = 10
+integrity_check_interval = 1
+taunts = PackedStringArray("HACKER DETECTADO! Até os zumbis estão rindo de você.", "Dinheiro caiu do céu? Aqui não, espertinho.", "Parabéns, você hackeou... o próprio vexame.", "Os zumbis votaram: você é o mais fraco daqui.", "Quer pontos grátis? Tenta jogar direito, campeão.", "Nem o Paciente Zero é tão desesperado assim.")
+taunt_subtitle = "PARTIDA INVALIDADA — não vale save nem ranking"

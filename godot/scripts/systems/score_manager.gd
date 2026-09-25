@@ -9,6 +9,7 @@ extends Node
 @export var player: Node3D
 
 var score: int = 0
+var _guard := AntiCheat.Guard.new(0)
 
 var _round := 1
 var _streak := 0
@@ -32,7 +33,13 @@ func add(points: float) -> void:
 	if delta <= 0:
 		return
 	score += delta
+	_guard.set_value(score)
 	Events.score_changed.emit(score, delta)
+
+
+## O score bate com a cópia de verificação (anti-trapaça)?
+func intact() -> bool:
+	return _guard.matches(score)
 
 
 func _on_kill(zombie: Node3D, info: DamageInfo) -> void:

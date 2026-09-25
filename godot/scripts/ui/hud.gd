@@ -15,6 +15,7 @@ var _remaining_label: Label
 var _points_label: Label
 var _points_delta: Label
 var _score_label: Label
+var _invalid_label: Label
 var _health_bar: ProgressBar
 var _health_label: Label
 var _weapon_label: Label
@@ -48,6 +49,7 @@ func _ready() -> void:
 	Events.area_opened.connect(func(_id: StringName, area_name: String) -> void: _show_banner(area_name.to_upper() + " ABERTA", GOLD))
 	Events.purchase_denied.connect(func() -> void: _flash_points_denied())
 	Events.toast.connect(_show_toast)
+	Events.cheat_detected.connect(_on_cheat_detected)
 	Events.score_changed.connect(func(total: int, _delta: int) -> void: _score_label.text = "SCORE %d" % total)
 	Events.map_unlocked.connect(func(_id: String, map_name: String) -> void: _show_banner(map_name.to_upper() + " DESBLOQUEADO!", GOLD))
 	Events.boss_incoming.connect(func(boss_name: String) -> void: _show_banner(boss_name.to_upper() + " SE APROXIMA", RED))
@@ -84,6 +86,7 @@ func _build() -> void:
 	_points_label = _label(root, "0", 40, GOLD, Control.PRESET_TOP_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, -6)
 	_points_delta = _label(root, "", 18, GOLD, Control.PRESET_TOP_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, 44)
 	_score_label = _label(root, "SCORE 0", 16, TEXT, Control.PRESET_TOP_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, 70)
+	_invalid_label = _label(root, "", 14, RED, Control.PRESET_TOP_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, 92)
 
 	_health_bar = ProgressBar.new()
 	_health_bar.show_percentage = false
@@ -251,7 +254,16 @@ func _on_game_over(summary: Dictionary) -> void:
 	record.add_theme_font_size_override(&"font_size", 26 if summary.new_record else 15)
 	record.add_theme_color_override(&"font_color", GOLD if summary.new_record else DIM)
 	box.add_child(record)
-	if summary.rank_eligible:
+	if summary.cheat_taunt != "":
+		record.text = "PARTIDA INVALIDADA — NÃO VALE SAVE NEM RANKING"
+		record.add_theme_color_override(&"font_color", RED)
+		var taunt := Label.new()
+		taunt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		taunt.text = summary.cheat_taunt
+		taunt.add_theme_font_size_override(&"font_size", 26)
+		taunt.add_theme_color_override(&"font_color", Color(1.0, 0.48, 0.36))
+		box.add_child(taunt)
+	elif summary.score > 0 and (summary.rank_eligible or Online.is_configured()):
 		_add_ranking_entry(box, summary)
 	var buttons := HBoxContainer.new()
 	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -271,30 +283,61 @@ func _on_game_over(summary: Dictionary) -> void:
 	create_tween().tween_property(_game_over_panel, "modulate:a", 1.0, 0.8).set_delay(0.6)
 
 
+## Anti-trapaça: zoa o jogador e deixa um aviso fixo de partida invalidada.
+func _on_cheat_detected(taunt: String, subtitle: String) -> void:
+	_invalid_label.text = "PARTIDA INVALIDADA"
+	var message := _label(_banner.get_parent() as Control, "%s\n%s" % [taunt, subtitle], 30, Color(1.0, 0.48, 0.36), Control.PRESET_CENTER, HORIZONTAL_ALIGNMENT_CENTER, -60)
+	message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	message.custom_minimum_size = Vector2(900, 0)
+	message.set_anchors_and_offsets_preset(Control.PRESET_CENTER, Control.PRESET_MODE_KEEP_SIZE)
+	var tween := create_tween()
+	tween.tween_interval(5.0)
+	tween.tween_property(message, "modulate:a", 0.0, 0.8)
+	tween.tween_callback(message.queue_free)
+
+
 ## Campo do nome (abre o teclado no celular) e botão para gravar no ranking local.
 func _add_ranking_entry(box: VBoxContainer, summary: Dictionary) -> void:
 	var line := HBoxContainer.new()
 	line.alignment = BoxContainer.ALIGNMENT_CENTER
 	box.add_child(line)
 	var hint := Label.new()
-	hint.text = "ENTROU NO TOP! SEU NOME:"
+	hint.text = "ENTROU NO TOP! SEU NOME:" if summary.rank_eligible else "SEU NOME PARA O RANKING GLOBAL:"
 	hint.add_theme_color_override(&"font_color", GOLD)
 	line.add_child(hint)
 	var edit := LineEdit.new()
 	edit.name = "RankName"
-	edit.text = Save.player_name
+	edit.text = Account.current_user().to_upper().substr(0, Save.catalog.player_name_max) if Account.current_user() != "" else Save.player_name
 	edit.max_length = Save.catalog.player_name_max
 	edit.custom_minimum_size = Vector2(220, 0)
 	line.add_child(edit)
 	var submit := func() -> void:
-		var position := Save.add_ranking(summary.map_id, edit.text, summary.score, summary.round, summary.kills)
+		var player := edit.text.strip_edges().substr(0, Save.catalog.player_name_max).to_upper()
+		if player == "":
+			player = "SOBREVIVENTE"
+		Save.set_setting("playerName", player)
+		var position := Save.add_ranking(summary.map_id, player, summary.score, summary.round, summary.kills)
+		var index := line.get_index()
 		line.queue_free()
 		var result := Label.new()
+		result.name = "RankResult"
 		result.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		result.text = "%dº LUGAR NO RANKING DE %s!" % [position, Save.catalog.display_name(summary.map_id).to_upper()] if position > 0 else "NÃO ENTROU NO RANKING"
+		result.text = "%dº LUGAR NO RANKING DE %s!" % [position, Save.catalog.display_name(summary.map_id).to_upper()] if position > 0 else ""
 		result.add_theme_color_override(&"font_color", GOLD)
 		box.add_child(result)
-		box.move_child(result, line.get_index())
+		box.move_child(result, index)
+		if Online.is_configured():
+			var global := Label.new()
+			global.name = "GlobalResult"
+			global.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			global.text = "ENVIANDO AO RANKING GLOBAL..."
+			global.add_theme_color_override(&"font_color", DIM)
+			box.add_child(global)
+			box.move_child(global, index + 1)
+			var error_text: String = await Leaderboard.submit(Online, summary.map_id, player, summary.score, summary.round, summary.kills)
+			if is_instance_valid(global):
+				global.text = ("RANKING GLOBAL: " + error_text.to_upper()) if error_text != "" else "ENVIADO AO RANKING GLOBAL DA TEMPORADA!"
+				global.add_theme_color_override(&"font_color", RED if error_text != "" else GOLD)
 	edit.text_submitted.connect(func(_t: String) -> void: submit.call())
 	_menu_button(line, "SALVAR", submit)
 

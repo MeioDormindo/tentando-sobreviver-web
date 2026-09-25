@@ -19,6 +19,8 @@ import { exportMachines } from './export-machines';
 import { bosses } from '../../src/config/bosses.config';
 import { scoreConfig } from '../../src/config/score.config';
 import { MAPS, RANKING_SIZE, PLAYER_NAME_MAX, DEFAULT_MAP } from '../../src/config/maps.config';
+import { onlineConfig, accountConfig } from '../../src/config/online.config';
+import { antiCheatConfig } from '../../src/config/anticheat.config';
 
 const OUT = 'godot/data';
 const PX = 32;
@@ -284,6 +286,38 @@ function exportProgression(): void {
   }));
 }
 
+/** Online (mesmo Supabase do jogo web: a chave publicável é pública) e anti-trapaça. */
+function exportOnline(): void {
+  write('configs/online.tres', tres('OnlineData', 'res://scripts/online/online_data.gd', {
+    url: onlineConfig.url,
+    publishable_key: onlineConfig.publishableKey,
+    season_seconds: onlineConfig.seasonSeconds,
+    timeout: s(onlineConfig.timeoutMs),
+    global_rank_size: onlineConfig.globalRankSize,
+    email_domain: accountConfig.emailDomain,
+    username_pattern: accountConfig.usernamePattern.source,
+    password_min: accountConfig.passwordMin,
+    password_max: accountConfig.passwordMax,
+    refresh_margin: s(accountConfig.refreshMarginMs),
+    sync_debounce: s(accountConfig.syncDebounceMs),
+  }));
+  const a = antiCheatConfig;
+  write('configs/anticheat.tres', tres('AntiCheatData', 'res://scripts/online/anticheat_data.gd', {
+    points_event_base: a.money.eventBase,
+    points_event_per_round: a.money.eventPerWave,
+    points_window_base: a.money.windowBase,
+    points_window_per_round: a.money.windowPerWave,
+    score_event_base: a.score.eventBase,
+    score_event_per_round: a.score.eventPerWave,
+    score_window_base: a.score.windowBase,
+    score_window_per_round: a.score.windowPerWave,
+    window: s(a.windowMs),
+    integrity_check_interval: s(a.integrityCheckMs),
+    taunts: raw(`PackedStringArray(${a.taunts.map((t) => JSON.stringify(t)).join(', ')})`),
+    taunt_subtitle: a.tauntSubtitle,
+  }));
+}
+
 function exportZombies(): void {
   for (const z of Object.values(zombieTypes)) {
     const look = LOOKS[z.id] ?? LOOKS.walker;
@@ -321,6 +355,7 @@ exportRoundsAndPoints();
 exportZombies();
 exportBosses();
 exportProgression();
+exportOnline();
 exportMaps();
 exportMachines(write, tres as never);
 console.log('Pronto.');

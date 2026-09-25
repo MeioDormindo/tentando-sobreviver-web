@@ -54,6 +54,9 @@ func _ready() -> void:
 	# Save de teste: o bot nunca mexe no save de verdade do jogador.
 	Save.load_from("user://test_save.json")
 	Save.reset()
+	# Offline: o bot nunca envia nada ao ranking global de verdade.
+	Online.data = Online.data.duplicate()
+	Online.data.url = ""
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://tests/output"))
 	Events.zombie_killed.connect(_on_zombie_killed)
 	Events.round_started.connect(_on_round_started)

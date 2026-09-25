@@ -21,6 +21,8 @@ Events="*res://scripts/systems/events.gd"
 InputBindings="*res://scripts/systems/input_bindings.gd"
 Save="*res://scripts/systems/save_store.gd"
 Session="*res://scripts/systems/session.gd"
+Online="*res://scripts/online/online_client.gd"
+Account="*res://scripts/online/account.gd"
 
 [display]
 

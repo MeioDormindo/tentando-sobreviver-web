@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="OnlineData" format=3]
+
+[ext_resource type="Script" path="res://scripts/online/online_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+url = "https://aurhaotqpbxpiwieabna.supabase.co"
+publishable_key = "sb_publishable_zqlTrvzS-zvH564fC2VK-w_UYll3-hk"
+season_seconds = 1296000
+timeout = 8
+global_rank_size = 10
+email_domain = "jogador.tentandosobreviver.invalid"
+username_pattern = "^[a-z0-9_]{3,16}$"
+password_min = 6
+password_max = 72
+refresh_margin = 60
+sync_debounce = 4

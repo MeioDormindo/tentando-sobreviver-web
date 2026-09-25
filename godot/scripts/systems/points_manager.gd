@@ -8,10 +8,12 @@ extends Node
 var points: int = 0
 ## Total ganho na partida (estatística do fim de jogo).
 var earned: int = 0
+var _guard := AntiCheat.Guard.new(0)
 
 
 func _ready() -> void:
 	points = data.start_points
+	_guard.set_value(points)
 	add_to_group(&"points_manager")
 	Events.zombie_hit.connect(_on_zombie_hit)
 	Events.zombie_killed.connect(_on_zombie_killed)
@@ -29,6 +31,7 @@ func add(amount: int) -> void:
 	if amount <= 0:
 		return
 	points += amount
+	_guard.set_value(points)
 	earned += amount
 	Events.points_changed.emit(points, amount)
 
@@ -38,8 +41,14 @@ func spend(amount: int) -> bool:
 	if amount > points:
 		return false
 	points -= amount
+	_guard.set_value(points)
 	Events.points_changed.emit(points, -amount)
 	return true
+
+
+## Os pontos batem com a cópia de verificação (anti-trapaça)?
+func intact() -> bool:
+	return _guard.matches(points)
 
 
 func _on_zombie_hit(_zombie: Node3D, info: DamageInfo) -> void:

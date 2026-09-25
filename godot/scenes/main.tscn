@@ -16,6 +16,8 @@
 [ext_resource type="Script" path="res://scripts/main.gd" id="14_main"]
 [ext_resource type="Script" path="res://scripts/systems/score_manager.gd" id="15_score"]
 [ext_resource type="Resource" path="res://data/configs/score.tres" id="16_score_data"]
+[ext_resource type="Script" path="res://scripts/online/anti_cheat.gd" id="17_cheat"]
+[ext_resource type="Resource" path="res://data/configs/anticheat.tres" id="18_cheat_data"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("14_main")
@@ -59,7 +61,14 @@ script = ExtResource("15_score")
 data = ExtResource("16_score_data")
 player = NodePath("../Player")
 
-[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("player", "arena", "round_manager", "points_manager", "score_manager")]
+[node name="AntiCheat" type="Node" parent="." node_paths=PackedStringArray("points_manager", "score_manager")]
+script = ExtResource("17_cheat")
+data = ExtResource("18_cheat_data")
+points_manager = NodePath("../PointsManager")
+score_manager = NodePath("../ScoreManager")
+anti_cheat = NodePath("../AntiCheat")
+
+[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("player", "arena", "round_manager", "points_manager", "score_manager", "anti_cheat")]
 script = ExtResource("8_game")
 player = NodePath("../Player")
 arena = NodePath("../World")

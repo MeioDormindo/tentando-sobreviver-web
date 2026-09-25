@@ -5,6 +5,7 @@ extends Control
 const MAP_SELECT := "res://scenes/ui/map_select.tscn"
 const RANKING := "res://scenes/ui/ranking.tscn"
 const SETTINGS := "res://scenes/ui/settings.tscn"
+const ACCOUNT := "res://scenes/ui/account.tscn"
 const GAME := "res://scenes/main.tscn"
 
 
@@ -18,6 +19,8 @@ func _ready() -> void:
 	MenuKit.spacer(column, 24)
 	var play := MenuKit.button(column, "JOGAR", func() -> void: MenuKit.go(self, MAP_SELECT))
 	MenuKit.button(column, "RANKING", func() -> void: MenuKit.go(self, RANKING))
+	var user := Account.current_user()
+	MenuKit.button(column, ("CONTA: " + user.to_upper()) if user != "" else "CONTA / SALVAR NA NUVEM", func() -> void: MenuKit.go(self, ACCOUNT))
 	MenuKit.button(column, "CONFIGURAÇÕES", func() -> void: MenuKit.go(self, SETTINGS))
 	if not OS.has_feature("web"):
 		MenuKit.button(column, "SAIR", func() -> void: get_tree().quit())
