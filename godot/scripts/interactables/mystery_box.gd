@@ -23,21 +23,24 @@ var uses: int = 0
 var interaction_radius: float = 2.3
 ## Preço atual (o Fire Sale muda).
 var price: int = 0
+## Caixa extra do Fire Sale: some quando a liquidação acaba.
+var temporary: bool = false
+var spots: Array[Vector3] = []
+var world: GameWorld
+var _dismiss_pending := false
 
-var _spots: Array[Vector3] = []
-var _world: GameWorld
 var _label: Label3D
 var _mesh: MeshInstance3D
 var _timer := 0.0
 var _cycle := 0.0
 
 
-func setup(p_data: MysteryBoxData, p_catalog: WeaponCatalog, p_map_id: String, spots: Array[Vector3], world: GameWorld) -> void:
+func setup(p_data: MysteryBoxData, p_catalog: WeaponCatalog, p_map_id: String, p_spots: Array[Vector3], p_world: GameWorld) -> void:
 	data = p_data
 	catalog = p_catalog
 	map_id = p_map_id
-	_spots = spots
-	_world = world
+	spots = p_spots
+	world = p_world
 	price = data.price
 	name = "MysteryBox"
 	collision_layer = PhysicsLayers.WORLD
@@ -74,6 +77,7 @@ func setup(p_data: MysteryBoxData, p_catalog: WeaponCatalog, p_map_id: String, s
 	light.position.y = 1.5
 	add_child(light)
 	add_to_group(&"interactable")
+	add_to_group(&"mystery_box")
 
 
 func _process(delta: float) -> void:
@@ -120,7 +124,7 @@ func interact(player: Node3D) -> bool:
 		State.READY:
 			var dropped := p.give_weapon(result)
 			if dropped:
-				dropped.queue_free()
+				Events.weapon_dropped.emit(dropped, p.global_position)
 			_reset()
 			return true
 	return false
@@ -155,6 +159,7 @@ func _roll() -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.randomize()
 	result = roll_weapon(catalog, data.rarity_weights, map_id, rng)
+	Events.mystery_box_rolled.emit(price < data.price)
 	_timer = data.roll_time
 	_cycle = 0.0
 
@@ -171,13 +176,23 @@ func _reset() -> void:
 	result = null
 	_label.text = "?"
 	_label.modulate = Color.WHITE
-	if uses >= data.uses_before_move:
+	if _dismiss_pending:
+		queue_free()
+	elif uses >= data.uses_before_move and not temporary and price >= data.price:
 		_move_away()
+
+
+## Caixa extra do Fire Sale: some agora (ou quando o sorteio em andamento acabar).
+func dismiss() -> void:
+	if state == State.IDLE:
+		queue_free()
+	else:
+		_dismiss_pending = true
 
 
 ## Some e reaparece em outro ponto (qualquer um, mesmo em área fechada, como no jogo web).
 func _move_away() -> void:
-	var options := _spots.filter(func(p: Vector3) -> bool: return p.distance_to(global_position) > 1.0)
+	var options := spots.filter(func(p: Vector3) -> bool: return p.distance_to(global_position) > 1.0)
 	uses = 0
 	if options.is_empty():
 		return
@@ -191,8 +206,8 @@ func _move_away() -> void:
 		collision_layer = 0)
 	tween.tween_interval(data.move_gap_time)
 	tween.tween_callback(func() -> void: _appear_at(spot))
-	var area := _world.area_of(spot) if _world else &""
-	Events.toast.emit("A MYSTERY BOX MUDOU DE LUGAR — %s" % _world.area_display_name(area).to_upper() if area != &"" else "A MYSTERY BOX MUDOU DE LUGAR")
+	var area := world.area_of(spot) if world else &""
+	Events.toast.emit("A MYSTERY BOX MUDOU DE LUGAR — %s" % world.area_display_name(area).to_upper() if area != &"" else "A MYSTERY BOX MUDOU DE LUGAR")
 
 
 func _appear_at(spot: Vector3) -> void:

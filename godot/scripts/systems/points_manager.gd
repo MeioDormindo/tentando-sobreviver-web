@@ -8,6 +8,8 @@ extends Node
 var points: int = 0
 ## Total ganho na partida (estatística do fim de jogo).
 var earned: int = 0
+## Double Cash (power-up).
+var multiplier: float = 1.0
 var _guard := AntiCheat.Guard.new(0)
 
 
@@ -27,13 +29,16 @@ func _emit_initial_state() -> void:
 	Events.points_changed.emit(points, 0)
 
 
-func add(amount: int) -> void:
+## Soma pontos (com o Double Cash, se `apply_multiplier`). Devolve o valor efetivamente ganho.
+func add(amount: int, apply_multiplier: bool = true) -> int:
 	if amount <= 0:
-		return
+		return 0
+	amount = roundi(amount * (multiplier if apply_multiplier else 1.0))
 	points += amount
 	_guard.set_value(points)
 	earned += amount
 	Events.points_changed.emit(points, amount)
+	return amount
 
 
 ## Debita se houver pontos suficientes.
@@ -54,7 +59,7 @@ func intact() -> bool:
 func _on_zombie_hit(_zombie: Node3D, info: DamageInfo) -> void:
 	if info.kind == DamageInfo.Kind.WEAPON:
 		var shooter := info.source as Player
-		add(shooter.weapon.data.points_per_hit if shooter else 10)
+		add(shooter.weapon.data.points_per_hit if shooter and shooter.weapon else 10)
 
 
 func _on_zombie_killed(zombie: Node3D, info: DamageInfo) -> void:

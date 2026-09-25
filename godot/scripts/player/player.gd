@@ -23,6 +23,15 @@ var aim_point: Vector3 = Vector3.ZERO
 ## Relógio de jogo (s): para com a pausa e acompanha a velocidade do jogo.
 var _clock := 0.0
 var _invulnerable_until := 0.0
+## Armadura (power-up): absorve o dano antes da vida.
+var armor: float = 0.0
+## Speed Boost (power-up) e Fúria (Golden Drop: dano das armas multiplicado).
+var speed_buff: float = 1.0
+var fury_multiplier: float = 1.0:
+	set(value):
+		fury_multiplier = value
+		if is_node_ready():
+			_apply_weapon_modifiers()
 ## Lentidão (grito do Paciente Zero): fator e até quando.
 var _slow_factor := 1.0
 var _slow_until := 0.0
@@ -150,6 +159,12 @@ func hold_interact(delta: float) -> bool:
 	return _interactable.call(&"hold_interact", self, delta)
 
 
+## Armadura cheia (power-up Armor).
+func refill_armor() -> void:
+	armor = data.max_armor
+	Events.player_armor_changed.emit(armor, data.max_armor)
+
+
 ## Deixa o jogador mais lento por `seconds` (fator de velocidade).
 func slow(factor: float, seconds: float) -> void:
 	_slow_factor = factor
@@ -173,6 +188,16 @@ func take_damage(info: DamageInfo) -> float:
 	var is_blow := info.kind == DamageInfo.Kind.ZOMBIE
 	if is_blow and _clock < _invulnerable_until:
 		return 0.0
+	if armor > 0.0 and info.amount > 0.0:
+		var absorbed := minf(armor, info.amount)
+		armor -= absorbed
+		info.amount -= absorbed
+		Events.player_armor_changed.emit(armor, data.max_armor)
+		if info.amount <= 0.0:
+			if is_blow:
+				_invulnerable_until = _clock + data.invulnerability_time
+			_last_hurt_at = _clock
+			return 0.0
 	var applied := super(info)
 	if applied > 0.0:
 		if is_blow:
@@ -246,7 +271,7 @@ func _read_input() -> void:
 func _move(delta: float) -> void:
 	var direction := Vector3(move_input.x, 0.0, move_input.y)
 	var slow := _slow_factor if _clock < _slow_until else 1.0
-	var speed := data.move_speed * _speed_factor(direction) * perks.speed_multiplier * slow
+	var speed := data.move_speed * _speed_factor(direction) * perks.speed_multiplier * slow * speed_buff
 	var target := direction * speed
 	if melee.lunge_left > 0.0:
 		target = melee.lunge_velocity
@@ -349,7 +374,7 @@ func _on_perks_changed() -> void:
 
 func _apply_weapon_modifiers() -> void:
 	for w in inventory.weapons:
-		w.damage_multiplier = perks.damage_multiplier
+		w.damage_multiplier = perks.damage_multiplier * fury_multiplier
 		w.headshot_bonus = perks.headshot_bonus
 		w.reload_multiplier = perks.reload_multiplier
 

@@ -18,8 +18,13 @@ de conceitos: ver `docs/analise-typescript.md`.
     aparelho fica apenas a sessão (`user://session.json`);
   - save na nuvem mesclado ao entrar e enviado a cada mudança, **compartilhado com a versão web**;
 - **conquistas** (as 17 do jogo web), com aviso na HUD e tela CONQUISTAS (progresso, datas,
-  estatísticas por mapa e da carreira). Trem, Fire Sale, ursinhos e a missão do Soro ainda não
+  estatísticas por mapa e da carreira). Trem, ursinhos e a missão do Soro ainda não
   foram migrados, então essas conquistas ainda não têm gatilho;
+- **power-ups** (como no jogo web): zumbis às vezes soltam Max Ammo, Double Cash, Instant Kill,
+  Nuke, Full Heal, Armor (barra azul que absorve o dano), Speed Boost, Carpenter, Fire Sale
+  (caixa a 10 em todos os locais das áreas abertas) e o raro Golden Drop (arma especial,
+  dinheiro, perk grátis ou Fúria); o boss deixa um Golden Drop e um Max Ammo; cronômetros
+  dos efeitos na HUD;
 - **visuais do personagem** (tela PERSONAGEM): Sobrevivente, Enfermeiro, Maquinista e Agente,
   liberados por conquistas, com as cores da paleta do jogo web;
 - **código Konami** no menu (↑↑↓↓←→←→BA): libera o modo cabeção;
@@ -116,7 +121,7 @@ passam a ser editados direto no Godot.
 # mapas com portas, barricadas, compras, máquinas e navegação, sorteio da caixa, Weapon Lab,
 # perks, composição por round, rodada dos cães) e, na mesma execução, os testes de cena: as
 # 5 armas especiais, cada tipo de zumbi, a rodada dos cães, os dois bosses nos mapas migrados
-# e as telas de menu; e o online contra o servidor real, só com operações que não gravam
+# as telas de menu e os power-ups; e o online contra o servidor real, só com operações que não gravam
 # (ler o ranking, envio recusado, login errado). Os testes usam um save de teste (o do
 # jogador não muda) e o bot joga offline (não envia nada ao ranking global):
 Godot --headless --path godot -s res://tests/run_tests.gd
@@ -124,7 +129,7 @@ Godot --headless --path godot -s res://tests/run_tests.gd
 # Jogado (abre uma janela), no Terminal migrado: um bot joga até o round 3 e confere
 # navegação, ataque, abates na cabeça e no corpo, compra de porta, compras na parede,
 # barricadas (quebra e conserto), Mystery Box, Weapon Lab, energia, perks, Quick Revive,
-# troca de arma, chumbos, faca, pontos, limite de vivos, morte, nome no ranking, recordes
+# troca de arma, chumbos, faca, pontos, limite de vivos, Fire Sale, morte, nome no ranking, recordes
 # gravados e reinício.
 # Salva prints em tests/output/.
 Godot --path godot -s res://tests/playtest.gd
@@ -160,7 +165,8 @@ scripts/weapons/                 Weapon (munição, recarga, raycast, chumbos, p
                                  WeaponProjectile (granada, plasma, chama, raio, vento)
 scripts/systems/                 PerkSystem (modificadores dos perks), PowerSystem (energia),
                                  BossManager (round de boss), ScoreManager (score do ranking),
-                                 AchievementSystem (conquistas),
+                                 AchievementSystem (conquistas), PowerUpSystem +
+                                 PowerUpData (power-ups),
                                  RoundManager + RoundData, SpawnManager, PointsManager +
                                  PointsData, GameManager, AudioManager
 scripts/maps/                    GameWorld (base: spawn do jogador, áreas abertas, spawns ativos),
@@ -196,7 +202,7 @@ Decisões:
 
 - **Fase 4 (rounds):** novos tipos de zumbi e composição por round.
 - **Minimapa, pausa com configurações.**
-- **Eventos e extras:** power-ups (incluindo o Fire Sale), eventos do mapa (trem, apagão...),
+- **Eventos e extras:** eventos do mapa (trem, apagão...),
   missão do Hospital, arma caída ao trocar.
 - **Fase 7 (polimento):** sons e efeitos, modelos do Blender no lugar das primitivas.
 - **Fase 8 (plataformas):** exportações e controles de toque.

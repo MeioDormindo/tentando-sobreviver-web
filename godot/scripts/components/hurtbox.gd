@@ -4,6 +4,9 @@ extends Area3D
 ## para a cabeça: o raio da arma acerta a primeira que encontrar e a hurtbox entrega o dano
 ## (com o multiplicador de headshot) ao HealthComponent.
 
+## Instant Kill (power-up): golpes do jogador matam qualquer zumbi (não o boss) de uma vez.
+static var insta_kill: bool = false
+
 @export var health: HealthComponent
 @export var is_head: bool = false
 
@@ -14,7 +17,10 @@ static func compute_damage(base_damage: float, headshot: bool, headshot_multipli
 
 
 func receive_hit(base_damage: float, headshot_multiplier: float, kind: DamageInfo.Kind, source: Node, hit_position: Vector3) -> DamageInfo:
-	var info := DamageInfo.new(compute_damage(base_damage, is_head, headshot_multiplier), kind, source, is_head, hit_position)
+	var damage := compute_damage(base_damage, is_head, headshot_multiplier)
+	if insta_kill and health and kind in [DamageInfo.Kind.WEAPON, DamageInfo.Kind.MELEE] and health.get_parent() is ZombieBase:
+		damage = health.current + 1.0
+	var info := DamageInfo.new(damage, kind, source, is_head, hit_position)
 	info.target = health.get_parent() if health else get_parent()
 	if health:
 		health.apply_damage(info)

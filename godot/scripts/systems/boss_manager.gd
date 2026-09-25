@@ -76,4 +76,10 @@ func _summon(types: Array, count: int, at: Vector3) -> int:
 
 func _on_boss_defeated(_id: StringName, _name: String, _reward: int, at: Vector3) -> void:
 	defeated += 1
-	Events.max_ammo.emit(at)
+	# Como no jogo web: o boss deixa um Golden Drop e um Max Ammo no chão.
+	var power_ups := get_tree().get_first_node_in_group(&"power_ups") as PowerUpSystem
+	if power_ups:
+		power_ups.spawn_drop(&"golden", at)
+		power_ups.spawn_drop(&"max_ammo", at + Vector3(1.3, 0, 0))
+	else:
+		Events.max_ammo.emit(at)

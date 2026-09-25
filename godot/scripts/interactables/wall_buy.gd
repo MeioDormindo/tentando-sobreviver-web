@@ -76,7 +76,7 @@ func interact(player: Node3D) -> bool:
 		return false
 	var dropped := p.give_weapon(weapon_data)
 	if dropped:
-		dropped.queue_free()
+		Events.weapon_dropped.emit(dropped, p.global_position)
 	return true
 
 

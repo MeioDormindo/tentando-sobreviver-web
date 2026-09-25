@@ -25,6 +25,8 @@ var _prompt_label: Label
 var _banner: Label
 var _toast: Label
 var _perks_label: Label
+var _armor_bar: ProgressBar
+var _timers_label: Label
 var _boss_bar: ProgressBar
 var _boss_label: Label
 var _hit_marker: Label
@@ -50,6 +52,20 @@ func _ready() -> void:
 	Events.purchase_denied.connect(func() -> void: _flash_points_denied())
 	Events.toast.connect(_show_toast)
 	Events.cheat_detected.connect(_on_cheat_detected)
+	Events.player_armor_changed.connect(func(current: float, maximum: float) -> void:
+		_armor_bar.visible = current > 0.0
+		_armor_bar.max_value = maximum
+		_armor_bar.value = current)
+	Events.power_up_timers.connect(func(active: Dictionary, definitions: Dictionary) -> void:
+		var parts: Array[String] = []
+		for id: StringName in active:
+			var info: Dictionary = definitions.get(id, {"name": "Fúria"})
+			parts.append("%s %ds" % [String(info.get("name", id)).to_upper(), ceili(float(active[id]))])
+		_timers_label.text = "   ".join(parts))
+	Events.power_up_collected.connect(func(_id: StringName, power_up_name: String, color: Color, detail: String) -> void:
+		_show_banner(power_up_name.to_upper(), color)
+		if detail != "":
+			_show_toast(detail))
 	Events.achievement_unlocked.connect(func(_id: String, achievement_name: String, _d: String) -> void:
 		_show_toast("CONQUISTA DESBLOQUEADA: " + achievement_name.to_upper()))
 	Events.score_changed.connect(func(total: int, _delta: int) -> void: _score_label.text = "SCORE %d" % total)
@@ -98,7 +114,18 @@ func _build() -> void:
 	root.add_child(_health_bar)
 	_health_bar.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT, Control.PRESET_MODE_KEEP_SIZE, MARGIN)
 	_health_label = _label(root, "VIDA", 15, TEXT, Control.PRESET_BOTTOM_LEFT, HORIZONTAL_ALIGNMENT_LEFT, -22)
-	_perks_label = _label(root, "", 14, GOLD, Control.PRESET_BOTTOM_LEFT, HORIZONTAL_ALIGNMENT_LEFT, -44)
+	_perks_label = _label(root, "", 14, GOLD, Control.PRESET_BOTTOM_LEFT, HORIZONTAL_ALIGNMENT_LEFT, -62)
+	_armor_bar = ProgressBar.new()
+	_armor_bar.show_percentage = false
+	_armor_bar.custom_minimum_size = Vector2(240, 6)
+	_armor_bar.add_theme_stylebox_override(&"fill", _flat(Color(0.24, 0.56, 0.84)))
+	_armor_bar.add_theme_stylebox_override(&"background", _flat(Color(0.1, 0.1, 0.1, 0.6)))
+	root.add_child(_armor_bar)
+	_armor_bar.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT, Control.PRESET_MODE_KEEP_SIZE, MARGIN)
+	_armor_bar.offset_top -= 18
+	_armor_bar.offset_bottom -= 18
+	_armor_bar.visible = false
+	_timers_label = _label(root, "", 16, TEXT, Control.PRESET_CENTER_BOTTOM, HORIZONTAL_ALIGNMENT_CENTER, -70)
 
 	_weapon_label = _label(root, "", 18, TEXT, Control.PRESET_BOTTOM_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, -46)
 	_ammo_label = _label(root, "", 36, TEXT, Control.PRESET_BOTTOM_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT)

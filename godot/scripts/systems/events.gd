@@ -57,6 +57,15 @@ signal map_unlocked(map_id: String, map_name: String)
 signal cheat_detected(taunt: String, subtitle: String)
 ## Conquista liberada (aviso na HUD).
 signal achievement_unlocked(id: String, achievement_name: String, description: String)
+## Power-up pego (nome, cor e detalhe do efeito) e cronômetros dos efeitos ativos.
+signal power_up_collected(id: StringName, power_up_name: String, color: Color, detail: String)
+signal power_up_timers(active: Dictionary, definitions: Dictionary)
+## Armadura do jogador.
+signal player_armor_changed(current: float, maximum: float)
+## A Mystery Box começou a sortear (com Fire Sale ativo ou não).
+signal mystery_box_rolled(fire_sale: bool)
+## Uma arma saiu do inventário (vai para o chão por um tempo).
+signal weapon_dropped(weapon: Weapon, at: Vector3)
 ## Pausa ligada/desligada.
 signal pause_changed(paused: bool)
 ## A HUD pediu para jogar de novo.

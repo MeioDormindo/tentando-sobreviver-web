@@ -260,6 +260,17 @@ func _end_play(main: Node, player: Player, rounds: RoundManager) -> void:
 	_check(is_equal_approx(_fortify_health, 150.0), "Fortify: vida máxima 150 (%.0f)" % _fortify_health)
 	_check(_has_revive, "comprou o Quick Revive")
 	_check(_box_step == 2 and _box_weapon != "", "Mystery Box sorteou e entregou: %s" % _box_weapon)
+	# Fire Sale no mapa de verdade: caixas extras nas áreas abertas, todas a 10.
+	var power_ups := main.get_node("PowerUpSystem") as PowerUpSystem
+	var boxes_before := main.get_tree().get_nodes_in_group(&"mystery_box").size()
+	power_ups.apply(&"fire_sale")
+	var boxes := main.get_tree().get_nodes_in_group(&"mystery_box")
+	_check(boxes.size() > boxes_before and boxes.all(func(b: Node) -> bool: return (b as MysteryBox).price == (b as MysteryBox).data.fire_sale_price),
+		"Fire Sale: %d → %d caixas, todas a %d" % [boxes_before, boxes.size(), (boxes[0] as MysteryBox).data.fire_sale_price])
+	power_ups.active.erase(&"fire_sale")
+	power_ups._end(&"fire_sale")
+	_check(boxes.all(func(b: Node) -> bool: return (b as MysteryBox).temporary == b.is_queued_for_deletion() and (b as MysteryBox).price == (b as MysteryBox).data.price),
+		"fim do Fire Sale: caixas extras somem e o preço volta")
 	_check(_upgraded.ends_with("Mk II") or _upgraded == "Tornado", "Weapon Lab melhorou a arma: %s" % _upgraded)
 	_check(_bought_glock, "comprou a Glock na parede (-500)")
 	_check(_bought_ammo, "comprou munição na parede quando acabou")

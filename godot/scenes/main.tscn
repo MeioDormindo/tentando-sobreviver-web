@@ -20,6 +20,9 @@
 [ext_resource type="Resource" path="res://data/configs/anticheat.tres" id="18_cheat_data"]
 [ext_resource type="Script" path="res://scripts/systems/achievement_system.gd" id="19_achievements"]
 [ext_resource type="Resource" path="res://data/configs/achievements.tres" id="20_achievement_data"]
+[ext_resource type="Script" path="res://scripts/systems/power_up_system.gd" id="21_powerups"]
+[ext_resource type="Resource" path="res://data/configs/powerups.tres" id="22_powerup_data"]
+[ext_resource type="Resource" path="res://data/weapons/catalog.tres" id="23_catalog"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("14_main")
@@ -69,6 +72,13 @@ data = ExtResource("18_cheat_data")
 points_manager = NodePath("../PointsManager")
 score_manager = NodePath("../ScoreManager")
 anti_cheat = NodePath("../AntiCheat")
+
+[node name="PowerUpSystem" type="Node" parent="." node_paths=PackedStringArray("player", "points_manager")]
+script = ExtResource("21_powerups")
+data = ExtResource("22_powerup_data")
+player = NodePath("../Player")
+points_manager = NodePath("../PointsManager")
+weapon_catalog = ExtResource("23_catalog")
 
 [node name="AchievementSystem" type="Node" parent="." node_paths=PackedStringArray("anti_cheat")]
 script = ExtResource("19_achievements")

@@ -3,7 +3,7 @@ extends Node
 ## Conquistas da partida (como no jogo web): escuta os eventos e libera as conquistas (salvas
 ## na hora, e na nuvem com a conta). As acumuladas somam o total salvo com o desta partida.
 ## Partida invalidada pelo anti-trapaça não libera nada.
-## Ainda sem gatilho no Godot (as partes não foram migradas): trem, Fire Sale, ursinhos e a
+## Ainda sem gatilho no Godot (as partes não foram migradas): trem, ursinhos e a
 ## missão do Soro.
 
 @export var catalog: AchievementCatalog
@@ -35,6 +35,7 @@ func _ready() -> void:
 		if weapon_name == "Tornado":
 			unlock("tornado"))
 	Events.hound_round_changed.connect(_on_hound_round)
+	Events.mystery_box_rolled.connect(func(fire_sale: bool) -> void: if fire_sale: unlock("fire_sale"))
 	Events.player_health_changed.connect(func(current: float, _max: float) -> void:
 		if current < _last_health and _hound_round:
 			_hurt_in_hound_round = true

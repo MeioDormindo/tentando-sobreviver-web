@@ -21,6 +21,7 @@ func _ready() -> void:
 	Events.zombie_killed.connect(_on_kill)
 	Events.round_started.connect(func(n: int, _total: int) -> void: _round = maxi(1, n))
 	Events.round_completed.connect(func(n: int) -> void: add(data.round_complete * n))
+	Events.power_up_collected.connect(func(_id: StringName, _n: String, _c: Color, _d: String) -> void: add(data.power_up))
 	Events.boss_defeated.connect(func(_id: StringName, _n: String, _r: int, _at: Vector3) -> void: add(data.boss))
 
 

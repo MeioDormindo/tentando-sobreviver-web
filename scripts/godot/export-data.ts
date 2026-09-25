@@ -23,6 +23,7 @@ import { onlineConfig, accountConfig } from '../../src/config/online.config';
 import { antiCheatConfig } from '../../src/config/anticheat.config';
 import { ACHIEVEMENTS, achievementConfig } from '../../src/config/achievements.config';
 import { SKINS } from '../../src/config/skins.config';
+import { powerUps, dropConfig, powerUpEffects, goldenConfig } from '../../src/config/powerups.config';
 // @ts-expect-error módulo de arte em JS puro (paleta dos visuais do jogador)
 import { PLAYER_SKINS } from '../art/characters.mjs';
 
@@ -342,6 +343,30 @@ function exportAchievements(): void {
   }));
 }
 
+/** Power-ups: definições, chance e tabela de drop, efeitos e o Golden Drop. */
+function exportPowerUps(): void {
+  const defs = Object.values(powerUps).map((u) => `&"${u.id}": { "name": ${JSON.stringify(u.name)}, "color": ${color(u.color).raw}, "duration": ${u.durationMs ? s(u.durationMs) : 0} }`);
+  write('configs/powerups.tres', tres('PowerUpData', 'res://scripts/systems/power_up_data.gd', {
+    power_ups: raw(`{\n${defs.join(',\n')}\n}`),
+    drop_chance: dropConfig.chance,
+    golden_chance: dropConfig.goldenChance,
+    drop_table: raw(`{ ${Object.entries(dropConfig.table).map(([k, v]) => `&"${k}": ${v}`).join(', ')} }`),
+    max_per_round: dropConfig.maxPerWave,
+    lifetime: s(dropConfig.lifetimeMs),
+    blink_at: s(dropConfig.blinkAtMs),
+    pickup_radius: m(dropConfig.pickupRadius),
+    cash_multiplier: powerUpEffects.cashMultiplier,
+    speed_multiplier: powerUpEffects.speedMultiplier,
+    nuke_reward: powerUpEffects.nukeReward,
+    carpenter_reward: powerUpEffects.carpenterReward,
+    golden_outcomes: raw(`{ ${Object.entries(goldenConfig.outcomes).map(([k, v]) => `&"${k}": ${v}`).join(', ')} }`),
+    golden_weapons: raw(`PackedStringArray(${goldenConfig.weapons.map((w) => JSON.stringify(w)).join(', ')})`),
+    golden_money: goldenConfig.money,
+    fury_duration: s(goldenConfig.furyDurationMs),
+    fury_damage_multiplier: goldenConfig.furyDamageMultiplier,
+  }));
+}
+
 function exportZombies(): void {
   for (const z of Object.values(zombieTypes)) {
     const look = LOOKS[z.id] ?? LOOKS.walker;
@@ -381,6 +406,7 @@ exportBosses();
 exportProgression();
 exportOnline();
 exportAchievements();
+exportPowerUps();
 exportMaps();
 exportMachines(write, tres as never);
 console.log('Pronto.');

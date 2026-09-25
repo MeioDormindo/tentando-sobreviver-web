@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="PowerUpData" format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/power_up_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+power_ups = {
+&"max_ammo": { "name": "Max Ammo", "color": Color(0.298, 0.686, 0.314, 1), "duration": 0 },
+&"double_cash": { "name": "Double Cash", "color": Color(0.902, 0.706, 0.133, 1), "duration": 30 },
+&"insta_kill": { "name": "Instant Kill", "color": Color(0.839, 0.271, 0.255, 1), "duration": 20 },
+&"nuke": { "name": "Nuke", "color": Color(0.941, 0.541, 0.141, 1), "duration": 0 },
+&"full_heal": { "name": "Full Heal", "color": Color(0.914, 0.894, 0.847, 1), "duration": 0 },
+&"armor": { "name": "Armor", "color": Color(0.239, 0.561, 0.839, 1), "duration": 0 },
+&"speed_boost": { "name": "Speed Boost", "color": Color(0.208, 0.78, 0.753, 1), "duration": 15 },
+&"carpenter": { "name": "Carpenter", "color": Color(0.784, 0.529, 0.227, 1), "duration": 0 },
+&"golden": { "name": "Golden Drop", "color": Color(1, 0.827, 0.353, 1), "duration": 0 },
+&"fire_sale": { "name": "Fire Sale", "color": Color(0.91, 0.271, 0.173, 1), "duration": 30 }
+}
+drop_chance = 0.05
+golden_chance = 0.005
+drop_table = { &"max_ammo": 20, &"double_cash": 20, &"insta_kill": 15, &"nuke": 10, &"full_heal": 15, &"armor": 10, &"speed_boost": 10, &"carpenter": 8, &"fire_sale": 6 }
+max_per_round = 4
+lifetime = 30
+blink_at = 22
+pickup_radius = 0.938
+cash_multiplier = 2
+speed_multiplier = 1.35
+nuke_reward = 400
+carpenter_reward = 200
+golden_outcomes = { &"weapon": 30, &"money": 30, &"perk": 25, &"fury": 15 }
+golden_weapons = PackedStringArray("rail", "energy_cannon", "rpk", "grenade_launcher", "flamethrower", "arc_gun")
+golden_money = 2000
+fury_duration = 20
+fury_damage_multiplier = 2
