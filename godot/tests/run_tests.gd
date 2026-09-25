@@ -3,7 +3,7 @@ extends SceneTree
 ##   godot --headless --path godot -s res://tests/run_tests.gd
 ##   godot --headless --path godot -s res://tests/run_tests.gd -- --only=events
 ## Sai com código 1 se algum teste falhar. `--only=` roda uma suíte só (o save de teste vale
-## do mesmo jeito): unit, weapons, zombies, bosses, menus, powerups, match, events, online.
+## do mesmo jeito): unit, weapons, zombies, bosses, menus, powerups, match, events, quest, online.
 ##
 ## A suíte é carregada só aqui dentro: com `-s`, este arquivo é compilado antes de os
 ## autoloads (Events, InputBindings) existirem, então ele não pode citar os scripts do jogo.
@@ -17,6 +17,7 @@ const SCENE_SUITES := {
 	"powerups": "res://tests/power_up_scene_tests.gd",
 	"match": "res://tests/hud_scene_tests.gd",
 	"events": "res://tests/world_event_scene_tests.gd",
+	"quest": "res://tests/quest_scene_tests.gd",
 	"online": "res://tests/online_tests.gd",
 }
 

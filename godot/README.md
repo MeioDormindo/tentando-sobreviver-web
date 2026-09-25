@@ -18,8 +18,7 @@ de conceitos: ver `docs/analise-typescript.md`.
     aparelho fica apenas a sessão (`user://session.json`);
   - save na nuvem mesclado ao entrar e enviado a cada mudança, **compartilhado com a versão web**;
 - **conquistas** (as 17 do jogo web), com aviso na HUD e tela CONQUISTAS (progresso, datas,
-  estatísticas por mapa e da carreira). A missão do Soro ainda não foi migrada, então essa
-  conquista ainda não tem gatilho;
+  estatísticas por mapa e da carreira);
 - **power-ups** (como no jogo web): zumbis às vezes soltam Max Ammo, Double Cash, Instant Kill,
   Nuke, Full Heal, Armor (barra azul que absorve o dano), Speed Boost, Carpenter, Fire Sale
   (caixa a 10 em todos os locais das áreas abertas) e o raro Golden Drop (arma especial,
@@ -36,6 +35,11 @@ de conceitos: ver `docs/analise-typescript.md`.
   Neblina e o trem, com agenda própria, que atropela quem estiver nos trilhos; indicador na HUD;
 - **painéis e armadilhas**: energia (encerra o Apagão), alarme, painel do trem (chama o trem)
   e armadilhas elétricas; estação com túneis, semáforos e painel de horários;
+- **missão do Hospital, "O Soro do Dr. Almeida"** (como no jogo web): ligar a energia →
+  amostras da UTI, reagente do armário da Farmácia (atire no cadeado) e o catalisador da
+  gaveta do Necrotério, que abre com o cartão de um Blindado → defender a centrífuga → o
+  Paciente Zero enfurecido num round de boss forçado → aplicar o soro. Prêmio: todos os perks
+  e o Canhão de Vento. Objetivo na HUD e no minimapa;
 - **segredos**: ursinhos escondidos (todos = Golden Drop e conquista), rádio/gravador com a
   história do mapa e a placa de créditos;
 - **menu de pausa** com CONTINUAR, REINICIAR, MENU e as configurações que valem na hora;
@@ -136,11 +140,11 @@ passam a ser editados direto no Godot.
 # perks, composição por round, rodada dos cães) e, na mesma execução, os testes de cena: as
 # 5 armas especiais, cada tipo de zumbi, a rodada dos cães, os dois bosses nos mapas migrados
 # as telas de menu, os power-ups, a arma caída, o minimapa, a pausa e os eventos, painéis,
-# armadilhas e segredos; e o online contra o servidor real, só com operações que não gravam
+# armadilhas e segredos, e a missão do Soro de ponta a ponta; e o online contra o servidor real, só com operações que não gravam
 # (ler o ranking, envio recusado, login errado). Os testes usam um save de teste (o do
 # jogador não muda) e o bot joga offline (não envia nada ao ranking global):
 Godot --headless --path godot -s res://tests/run_tests.gd
-# Uma suíte só (unit, weapons, zombies, bosses, menus, powerups, match, events, online):
+# Uma suíte só (unit, weapons, zombies, bosses, menus, powerups, match, events, quest, online):
 Godot --headless --path godot -s res://tests/run_tests.gd -- --only=events
 
 # Jogado (abre uma janela), no Terminal migrado: um bot joga até o round 3 e confere
@@ -190,6 +194,8 @@ scripts/systems/                 PerkSystem (modificadores dos perks), PowerSyst
 scripts/maps/                    GameWorld (base: spawn do jogador, áreas abertas, spawns ativos),
                                  LayoutMap (mapa migrado do JSON), Arena (mapa de teste),
                                  StationBoard (túneis, semáforos, horários do trem)
+scripts/quests/                  QuestSystem (etapas, HUD, minimapa), QuestStep, QuestSpot,
+                                 SerumQuest (missão do Hospital), QuestData
 scripts/events/                  WorldEventSystem (agenda), WorldEvent + um arquivo por evento
                                  (Apagão, Alarme, Horda, Suprimentos, Gás, Zumbi Dourado, Lua de
                                  Sangue, Desabamento, Neblina, Trem), WorldEventData, EventFx
@@ -224,6 +230,5 @@ Decisões:
 ## Próximas fases (roadmap da especificação)
 
 - **Fase 4 (rounds):** novos tipos de zumbi e composição por round.
-- **Missão do Hospital** (o Soro).
 - **Fase 7 (polimento):** sons e efeitos, modelos do Blender no lugar das primitivas.
 - **Fase 8 (plataformas):** exportações e controles de toque.

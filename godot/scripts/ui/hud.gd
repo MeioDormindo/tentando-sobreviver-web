@@ -28,6 +28,8 @@ var _perks_label: Label
 var _armor_bar: ProgressBar
 var _timers_label: Label
 var _event_label: Label
+var _quest_title: Label
+var _quest_text: Label
 var _boss_bar: ProgressBar
 var _boss_label: Label
 var _hit_marker: Label
@@ -93,11 +95,25 @@ func _ready() -> void:
 		var remaining := float(state.remaining)
 		_event_label.text = String(state.name) + ("  %ds" % ceili(remaining) if remaining >= 0.0 else "")
 		_event_label.add_theme_color_override(&"font_color", state.color))
+	Events.quest_state.connect(func(state: Dictionary) -> void:
+		if state.is_empty():
+			_quest_title.text = ""
+			_quest_text.text = ""
+			return
+		_quest_title.text = "◆ %s  %d/%d" % [state.title, state.step, state.total]
+		_quest_text.text = String(state.objective))
+	Events.quest_completed.connect(func(_id: StringName, title: String, subtitle: String) -> void:
+		_show_banner(title, GOLD)
+		_show_toast(subtitle))
 	Events.settings_changed.connect(func() -> void: minimap.apply_settings())
 	Events.game_over.connect(_on_game_over)
 
 
 func _process(_delta: float) -> void:
+	if _quest_title.text != "":
+		var top := minimap.position.y + minimap.size.y + 24.0 if minimap.visible and not minimap.expanded else Minimap.CORNER.y
+		_quest_title.position = Vector2(MARGIN, top)
+		_quest_text.position = Vector2(MARGIN, top + 18.0)
 	# O marcador de acerto acompanha a mira do mouse.
 	_hit_marker.position = get_viewport().get_mouse_position() - _hit_marker.size * 0.5
 
@@ -168,6 +184,11 @@ func _build() -> void:
 	minimap = Minimap.new()
 	minimap.name = "Minimap"
 	root.add_child(minimap)
+	# Missão principal: logo abaixo do minimapa.
+	_quest_title = _label(root, "", 13, GOLD, Control.PRESET_TOP_LEFT)
+	_quest_text = _label(root, "", 15, TEXT, Control.PRESET_TOP_LEFT)
+	_quest_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_quest_text.custom_minimum_size.x = 260
 	_pause_menu = PauseMenu.new()
 	_pause_menu.name = "PauseMenu"
 	root.add_child(_pause_menu)

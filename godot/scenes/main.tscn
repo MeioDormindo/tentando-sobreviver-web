@@ -24,6 +24,9 @@
 [ext_resource type="Script" path="res://scripts/systems/minimap_feed.gd" id="24_minimap"]
 [ext_resource type="Script" path="res://scripts/events/world_event_system.gd" id="25_events"]
 [ext_resource type="Resource" path="res://data/configs/world_events.tres" id="26_event_data"]
+[ext_resource type="Script" path="res://scripts/quests/serum_quest.gd" id="27_serum"]
+[ext_resource type="Resource" path="res://data/configs/quests.tres" id="28_quests"]
+[ext_resource type="Resource" path="res://data/weapons/wind_cannon.tres" id="29_tornado"]
 [ext_resource type="Resource" path="res://data/configs/powerups.tres" id="22_powerup_data"]
 [ext_resource type="Resource" path="res://data/weapons/catalog.tres" id="23_catalog"]
 
@@ -91,6 +94,15 @@ world = NodePath("../World")
 round_manager = NodePath("../RoundManager")
 spawn_manager = NodePath("../SpawnManager")
 points_manager = NodePath("../PointsManager")
+
+[node name="SerumQuest" type="Node" parent="." node_paths=PackedStringArray("player", "world", "round_manager", "spawn_manager")]
+script = ExtResource("27_serum")
+data = ExtResource("28_quests")
+player = NodePath("../Player")
+world = NodePath("../World")
+round_manager = NodePath("../RoundManager")
+spawn_manager = NodePath("../SpawnManager")
+reward_weapon = ExtResource("29_tornado")
 
 [node name="MinimapFeed" type="Node" parent="." node_paths=PackedStringArray("world", "player")]
 script = ExtResource("24_minimap")

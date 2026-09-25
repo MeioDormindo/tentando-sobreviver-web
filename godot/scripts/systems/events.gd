@@ -84,6 +84,9 @@ signal train_run_over(count: int)
 signal teddy_found(found: int, total: int)
 ## Tremor de tela (a câmera obedece à configuração).
 signal screen_shake(duration: float, strength: float)
+## Missão principal: objetivo atual para a HUD (vazio = nenhuma) e missão concluída.
+signal quest_state(state: Dictionary)
+signal quest_completed(id: StringName, title: String, subtitle: String)
 ## Pausa ligada/desligada.
 signal pause_changed(paused: bool)
 ## A HUD pediu para jogar de novo.

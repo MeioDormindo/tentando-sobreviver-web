@@ -18,6 +18,9 @@ func _enter_tree() -> void:
 	world.name = "World"
 	add_child(world)
 	move_child(world, index)
-	# Referências que apontavam para o mapa antigo.
-	($SpawnManager as SpawnManager).world = world
+	# Referências que apontavam para o mapa antigo (todo sistema com `world`, e a arena do
+	# GameManager).
+	for child in get_children():
+		if child != world and &"world" in child:
+			child.set(&"world", world)
 	($GameManager as GameManager).arena = world

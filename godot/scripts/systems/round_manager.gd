@@ -22,6 +22,8 @@ var is_boss_round: bool = false
 
 ## Eventos do mapa (Alarme, Horda): id → {interval_multiplier, max_alive_bonus}.
 var spawn_modifiers: Dictionary = {}
+## Round de boss forçado (final da missão do Soro): {round, health_multiplier}.
+var forced_boss: Dictionary = {}
 var _timer := 0.0
 var _rng := RandomNumberGenerator.new()
 var _spawn_timer := 0.0
@@ -58,15 +60,16 @@ func tick(delta: float) -> void:
 func start_round(number: int) -> void:
 	round_number = number
 	var map_id := _map_id()
-	is_hound_round = data.is_hound_round(number, map_id)
+	var boss_id: StringName = data.boss_by_map.get(map_id, &"")
+	var forced := int(forced_boss.get("round", -1)) == number
+	is_boss_round = boss_manager != null and boss_id != &"" and (data.boss_rounds.has(number) or forced)
+	is_hound_round = not is_boss_round and data.is_hound_round(number, map_id)
 	total = data.hound_total(number, map_id) if is_hound_round else data.total_zombies(number)
 	Events.hound_round_changed.emit(is_hound_round, data.hound_rounds.get(map_id, {}))
-	var boss_id: StringName = data.boss_by_map.get(map_id, &"")
-	is_boss_round = boss_manager != null and boss_id != &"" and data.boss_rounds.has(number)
 	if is_boss_round:
 		# O boss vem com uma horda reduzida de escolta.
 		total = maxi(2, roundi(total * boss_manager.escort_ratio(boss_id)))
-		boss_manager.start(boss_id)
+		boss_manager.start(boss_id, float(forced_boss.get("health_multiplier", 1.0)) if forced else 1.0)
 	spawn_manager.round_multipliers = [data.health_multiplier(number), data.damage_multiplier(number), data.speed_multiplier(number), number]
 	spawned = 0
 	killed = 0
@@ -82,6 +85,13 @@ func set_spawn_modifier(id: StringName, modifier: Dictionary) -> void:
 		spawn_modifiers.erase(id)
 	else:
 		spawn_modifiers[id] = modifier
+
+
+## O próximo round passa a ser de boss, com vida extra (final da missão). Devolve o round.
+func force_boss_next_round(health_multiplier: float) -> int:
+	var number := round_number + 1
+	forced_boss = {"round": number, "health_multiplier": health_multiplier}
+	return number
 
 
 ## Zumbis extras nesta wave (Horda).

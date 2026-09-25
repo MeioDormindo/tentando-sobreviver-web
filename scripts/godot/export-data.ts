@@ -29,6 +29,7 @@ import { PLAYER_SKINS } from '../art/characters.mjs';
 import * as eventsConfig from '../../src/config/events.config';
 import { interactionsConfig } from '../../src/config/interactions.config';
 import { secretsConfig } from '../../src/config/secrets.config';
+import { serumQuestConfig } from '../../src/config/quests.config';
 
 const OUT = 'godot/data';
 const PX = 32;
@@ -408,6 +409,13 @@ function exportWorldEvents(): void {
   }));
 }
 
+/** Missão do Hospital (posições em tiles; tempos em s; raios em m). */
+function exportQuests(): void {
+  write('configs/quests.tres', tres('QuestData', 'res://scripts/quests/quest_data.gd', {
+    serum: raw(eventValue('serum', serumQuestConfig)),
+  }));
+}
+
 function exportZombies(): void {
   for (const z of Object.values(zombieTypes)) {
     const look = LOOKS[z.id] ?? LOOKS.walker;
@@ -449,6 +457,7 @@ exportOnline();
 exportAchievements();
 exportPowerUps();
 exportWorldEvents();
+exportQuests();
 exportMaps();
 exportMachines(write, tres as never);
 console.log('Pronto.');

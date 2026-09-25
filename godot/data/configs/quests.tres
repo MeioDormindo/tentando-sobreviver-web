@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="QuestData" format=3]
+
+[ext_resource type="Script" path="res://scripts/quests/quest_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+serum = { "title": "O SORO DO DR. ALMEIDA", "fridge": { "tx": 108, "ty": 4.7, "hold_time": 4 }, "cabinet": { "tx": 110, "ty": 56.7, "lock_radius": 0.438 }, "drawer": { "tx": 64, "ty": 79.2 }, "centrifuge": { "tx": 66, "ty": 95.8, "defend_time": 60, "threat_radius": 2.188, "spawn": { "interval_multiplier": 0.55, "max_alive_bonus": 6 } }, "boss_health_multiplier": 1.5, "apply_hold_time": 3 }

@@ -3,7 +3,6 @@ extends Node
 ## Conquistas da partida (como no jogo web): escuta os eventos e libera as conquistas (salvas
 ## na hora, e na nuvem com a conta). As acumuladas somam o total salvo com o desta partida.
 ## Partida invalidada pelo anti-trapaça não libera nada.
-## Ainda sem gatilho no Godot (a parte não foi migrada): a missão do Soro.
 
 @export var catalog: AchievementCatalog
 @export var anti_cheat: AntiCheat
@@ -34,6 +33,9 @@ func _ready() -> void:
 		if weapon_name == "Tornado":
 			unlock("tornado"))
 	Events.hound_round_changed.connect(_on_hound_round)
+	Events.quest_completed.connect(func(id: StringName, _t: String, _s: String) -> void:
+		if id == &"serum":
+			unlock("serum"))
 	Events.train_run_over.connect(func(count: int) -> void:
 		if count >= catalog.train_kills:
 			unlock("train_wreck"))
