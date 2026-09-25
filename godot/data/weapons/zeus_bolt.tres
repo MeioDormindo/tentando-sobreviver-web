@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+; Só do Godot (scripts/godot/temple-data.ts): Prêmio da missão do Templo.
+
+[resource]
+script = ExtResource("1_script")
+id = &"zeus_bolt"
+display_name = "Raio de Zeus"
+kind = &"arc"
+rarity = &"legendary"
+damage = 170
+fire_rate = 3.4
+automatic = true
+magazine_size = 30
+reserve_ammo = 240
+reload_time = 2.2
+spread_degrees = 0
+max_range = 19
+projectile_speed = 0
+pellets = 1
+pierce = 0
+headshot_multiplier = 1.5
+price = 0
+ammo_price = 2500
+box_only = true
+maps = PackedStringArray("temple")
+element = &""
+upgrade_name = "Ira do Olimpo"
+tracer_color = Color(0.624, 0.847, 1, 1)
+special_type = &"arc"
+special_params = { "chains": 9, "chain_range": 7.5, "chain_falloff": 0.9, "stun_time": 1.1 }

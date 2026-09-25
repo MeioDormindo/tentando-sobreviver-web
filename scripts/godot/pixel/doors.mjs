@@ -5,6 +5,7 @@
 import { rng, base, stain, crack, rect, hline, vline, bevel, mix, scale, hex } from './paint.mjs';
 
 const Y = hex(0xd2a32a), K = hex(0x1d1d1d);
+const GOLD_BOLT = hex(0xf0c040);
 
 function disc(px, cx, cy, radius, color, inner = 0) {
   for (let y = Math.floor(cy - radius); y <= cy + radius; y++) for (let x = Math.floor(cx - radius); x <= cx + radius; x++) {
@@ -233,6 +234,112 @@ function doorFaces(W, H) {
   for (let i = 0; i < 4; i++) stain(bh, r, r() * W, 70 + r() * 60, 3 + r() * 6, hex(0x6fa03a), 0.35);  // respingo verde
   out.door_biohazard = bh;
   out.door_biohazard_cap = cap(W, O, K);
+
+  // ── Templo dos Mortos ──
+
+  // Ruínas e Labirinto: porta dupla de bronze com meandro, argolas e cravos.
+  r = rng('door_bronze');
+  const bz = base(W, H, hex(0x2a2620), r, { amount: 0.05 });
+  jamb(bz, hex(0x6e6a60), 8);
+  const BR = hex(0x9a6a2a);
+  leaf(bz, 6, 10, W / 2 - 6, H - 10, BR); leaf(bz, W / 2, 10, W / 2 - 6, H - 10, BR);
+  for (let x = 10; x < W - 10; x += 12) {  // meandro no alto
+    const c = hex(0x5a3a14);
+    hline(bz, 16, c, x, x + 9); vline(bz, x + 9, c, 16, 23); hline(bz, 23, c, x + 3, x + 9); vline(bz, x + 3, c, 19, 23);
+  }
+  for (let y = 36; y < H - 10; y += 16) for (let x = 12; x < W - 10; x += 14) disc(bz, x, y, 1.5, hex(0xd8a24a));  // cravos
+  for (const x of [W / 2 - 12, W / 2 + 12]) { disc(bz, x, 80, 7, hex(0x5a3a14), 5); disc(bz, x, 73, 2.5, hex(0xd8a24a)); }  // argolas
+  for (let i = 0; i < 6; i++) stain(bz, r, r() * W, 20 + r() * 110, 4 + r() * 8, hex(0x3e7a5a), 0.45);  // pátina verde
+  cracks(bz, r, 1, 10);
+  out.door_bronze = bz;
+  out.door_bronze_cap = cap(W, hex(0x9a6a2a), hex(0x2a2620));
+
+  // Necrópole: grade feita de ossos e crânios sobre a escuridão.
+  r = rng('door_bones');
+  const bo2 = base(W, H, hex(0x121010), r, { amount: 0.1 });
+  const BONE = hex(0xcfc6aa), BONE_D = hex(0x8a826a);
+  for (let x = 8; x < W - 6; x += 10) { vline(bo2, x, BONE, 8, H - 8); vline(bo2, x + 1, BONE_D, 8, H - 8); disc(bo2, x, 8, 2.5, BONE); disc(bo2, x, H - 8, 2.5, BONE); }
+  for (const y of [40, 96]) { rect(bo2, 4, y, W - 8, 3, BONE); hline(bo2, y + 3, BONE_D, 4, W - 5); }
+  for (let x = 16; x < W - 10; x += 28) {  // crânios na travessa
+    disc(bo2, x, 66, 8, BONE); rect(bo2, x - 5, 70, 10, 6, BONE);
+    disc(bo2, x - 3, 65, 2, K); disc(bo2, x + 3, 65, 2, K); rect(bo2, x - 3, 72, 1, 3, K); rect(bo2, x, 72, 1, 3, K); rect(bo2, x + 3, 72, 1, 3, K);
+  }
+  jamb(bo2, hex(0x3a3630), 0);
+  out.door_bones = bo2;
+  out.door_bones_cap = cap(W, BONE_D, hex(0x121010));
+
+  // Floresta: portão de madeira velha tomado por raízes e musgo.
+  r = rng('door_roots');
+  const rt = base(W, H, hex(0x4a3420), r, { amount: 0.1 });
+  for (let x = 6; x < W - 6; x += 11) { vline(rt, x, hex(0x2a1c10)); vline(rt, x + 1, hex(0x6a4a2c)); }
+  jamb(rt, hex(0x5e584c), 6);
+  for (let k = 0; k < 7; k++) {  // raízes descendo
+    let x = r() * W, y = 6;
+    for (let i = 0; i < 120; i++) {
+      x += (r() - 0.5) * 2.2; y += 1;
+      if (y >= H) break;
+      const xx = Math.max(0, Math.min(W - 1, Math.round(x)));
+      rt.set(xx, y, hex(0x2e2214)); if (xx + 1 < W) rt.set(xx + 1, y, hex(0x5a4028));
+    }
+  }
+  for (let i = 0; i < 12; i++) stain(rt, r, r() * W, r() * H, 4 + r() * 8, hex(0x3e5a2a), 0.6);  // musgo
+  rect(rt, W / 2 - 3, 70, 6, 12, hex(0x2a2a26)); disc(rt, W / 2, 68, 4, hex(0x5a5a52), 2);  // cadeado velho
+  out.door_roots = rt;
+  out.door_roots_cap = cap(W, hex(0x3e5a2a), hex(0x4a3420));
+
+  // Templo da Górgona: porta de mármore com a cabeça da Medusa e serpentes em relevo.
+  r = rng('door_serpent');
+  const sp = base(W, H, hex(0xb0ac9e), r, { amount: 0.04 });
+  jamb(sp, hex(0x6e6a60), 10);
+  leaf(sp, 6, 12, W / 2 - 6, H - 12, hex(0xb8b4a6)); leaf(sp, W / 2, 12, W / 2 - 6, H - 12, hex(0xb8b4a6));
+  cx = W / 2; cy = 56;
+  disc(sp, cx, cy, 16, hex(0x8a877e)); disc(sp, cx, cy, 13, hex(0xc8c4b6));
+  disc(sp, cx - 5, cy - 2, 2, hex(0x3e7a3a)); disc(sp, cx + 5, cy - 2, 2, hex(0x3e7a3a)); hline(sp, cy + 6, hex(0x5a5650), cx - 4, cx + 4);
+  for (let a = 0; a < 10; a++) {  // serpentes do cabelo
+    const t = (a / 10) * Math.PI * 2;
+    for (let k = 0; k < 14; k++) {
+      const d = 14 + k, w = Math.sin(k * 0.9 + a) * 2.5;
+      sp.set(Math.round(cx + Math.cos(t) * d - Math.sin(t) * w), Math.round(cy + Math.sin(t) * d + Math.cos(t) * w), k < 12 ? hex(0x4e7a3a) : hex(0xc4281f));
+    }
+  }
+  for (const x of [W / 2 - 10, W / 2 + 10]) { vline(sp, x, hex(0x8a877e), 90, H - 8); }
+  for (let i = 0; i < 3; i++) stain(sp, r, r() * W, 90 + r() * 40, 4 + r() * 6, hex(0x5a1a14), 0.4);
+  cracks(sp, r, 2, 14);
+  out.door_serpent = sp;
+  out.door_serpent_cap = cap(W, hex(0x4e7a3a), hex(0xb0ac9e));
+
+  // Submundo e Arena: portão de ferro negro com chamas nas grades e o selo roxo de Hades.
+  r = rng('door_infernal');
+  const inf = base(W, H, hex(0x1a1416), r, { amount: 0.08 });
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (y > H - 40 && r() < (y - (H - 40)) / 90) inf.set(x, y, mix(inf.rgb(x, y), hex(0xff6a1a), 0.5));  // brasa embaixo
+  for (let x = 8; x < W - 6; x += 9) { vline(inf, x, hex(0x3a3436), 14); vline(inf, x + 1, hex(0x5a5256), 14); inf.set(x, 12, hex(0x5a5256)); inf.set(x, 11, hex(0x7a7276)); }
+  for (const y of [34, 90]) { rect(inf, 0, y, W, 4, hex(0x3a3436)); hline(inf, y, hex(0x6a6266)); }
+  cx = W / 2; cy = 62;
+  disc(inf, cx, cy, 15, hex(0x2a1e30)); disc(inf, cx, cy, 13, hex(0x6a3aa0), 11); disc(inf, cx, cy, 3, hex(0xb07aff));
+  for (let a = 0; a < 6; a++) { const t = (a / 6) * Math.PI * 2; for (let k = 4; k < 11; k++) inf.set(Math.round(cx + Math.cos(t) * k), Math.round(cy + Math.sin(t) * k), hex(0x9a6aff)); }
+  jamb(inf, hex(0x2a2224), 10);
+  zebra(inf, 4, 3, W - 8, 5, hex(0xff8a2a), hex(0x2a1e1c));
+  out.door_infernal = inf;
+  out.door_infernal_cap = cap(W, hex(0xb8401a), hex(0x1a1416));
+
+  // Santuário do Olimpo: porta branca e dourada com o raio de Zeus e louros.
+  r = rng('door_olympus');
+  const ol = base(W, H, hex(0xe0dccc), r, { amount: 0.03 });
+  jamb(ol, hex(0xc8a24a), 10);
+  leaf(ol, 6, 12, W / 2 - 6, H - 12, hex(0xe8e4d4)); leaf(ol, W / 2, 12, W / 2 - 6, H - 12, hex(0xe8e4d4));
+  cx = W / 2; cy = 58;
+  // Raio de Zeus: zigue-zague grosso em ouro, com contorno.
+  const bolt = [[cx + 10, cy - 30], [cx - 6, cy - 2], [cx + 6, cy - 2], [cx - 10, cy + 30]];
+  for (let seg = 0; seg < 3; seg++) {
+    const [x0, y0] = bolt[seg], [x1, y1] = bolt[seg + 1];
+    const n = Math.ceil(Math.hypot(x1 - x0, y1 - y0));
+    for (let i = 0; i <= n; i++) { const x = x0 + (x1 - x0) * i / n, y = y0 + (y1 - y0) * i / n; disc(ol, x, y, 4, hex(0x8a6a1a)); }
+    for (let i = 0; i <= n; i++) { const x = x0 + (x1 - x0) * i / n, y = y0 + (y1 - y0) * i / n; disc(ol, x, y, 2.5, GOLD_BOLT); }
+  }
+  for (let k = 0; k < 16; k++) { disc(ol, cx - 20 + k * 0.4, cy + 12 - k * 1.6, 2, hex(0x6a8a3a)); disc(ol, cx + 20 - k * 0.4, cy + 12 - k * 1.6, 2, hex(0x6a8a3a)); }  // louros
+  for (const x of [W / 2 - 10, W / 2 + 10]) vline(ol, x, hex(0xc8a24a), 92, H - 10);
+  out.door_olympus = ol;
+  out.door_olympus_cap = cap(W, hex(0xc8a24a), hex(0xe0dccc));
 
   return out;
 }

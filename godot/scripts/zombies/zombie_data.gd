@@ -36,6 +36,10 @@ extends Resource
 @export var death_cloud: Dictionary = {}
 ## Pega fogo ao morrer e não deixa corpo (Cão Infernal).
 @export var burns_on_death: bool = false
+## Escudo (Hoplita): arc_deg (arco frontal protegido) e factor (fração do dano que passa de frente).
+@export var shield: Dictionary = {}
+## Volta a se levantar (Esqueleto): chance, delay_time, health_factor. Uma vez só.
+@export var revive: Dictionary = {}
 
 @export_group("Aparência (provisória)")
 @export var shirt_color: Color = Color(0.37, 0.33, 0.26)
@@ -43,3 +47,5 @@ extends Resource
 @export var model_scale: float = 1.0
 ## Anda rastejando (corpo e cabeça baixos).
 @export var crawls: bool = false
+## Modelo do gerador de sprites (build.mjs) quando não é o zumbi comum: hoplite, skeleton...
+@export var art: StringName = &""

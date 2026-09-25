@@ -2,7 +2,8 @@ class_name MapCatalog
 extends Resource
 ## Mapas do jogo e como cada um é liberado (gerado a partir do jogo web).
 
-## id → {name, description, scene, unlock_boss_round, unlock_on_map} (0 / "" = livre).
+## id → {name, description, scene, unlock_boss_round, unlock_on_map, unlock_achievements}
+## (0 / "" / [] = livre). unlock_achievements: libera com qualquer uma dessas conquistas.
 @export var maps: Dictionary = {}
 ## Ordem de exibição na escolha de mapa.
 @export var order: PackedStringArray = PackedStringArray()
@@ -18,6 +19,21 @@ func info(id: String) -> Dictionary:
 
 func display_name(id: String) -> String:
 	return String(info(id).get("name", id))
+
+
+## Começa liberado (sem boss nem conquista pedidos).
+func starts_unlocked(id: String) -> bool:
+	var m := info(id)
+	return int(m.get("unlock_boss_round", 0)) == 0 and (m.get("unlock_achievements", []) as Array).is_empty()
+
+
+## Mapas liberados pela conquista `achievement` (ex.: missão do Terminal ou do Hospital → Templo).
+func unlocked_by_achievement(achievement: String) -> PackedStringArray:
+	var result := PackedStringArray()
+	for id: String in maps:
+		if (maps[id].get("unlock_achievements", []) as Array).has(achievement):
+			result.append(id)
+	return result
 
 
 ## Mapas liberados por derrotar o boss do round `round_number` em `on_map`.

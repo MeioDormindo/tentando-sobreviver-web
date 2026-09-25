@@ -5,6 +5,7 @@
 import { writeFileSync } from 'node:fs';
 import { Pixels } from './raster.mjs';
 import { PPM, rng, base, stain, rect, hline, vline, bevel, mix, scale, hex, dither } from './paint.mjs';
+import { templeRecipes } from './temple_props.mjs';
 
 const px = (m) => Math.max(2, Math.round(m * PPM));
 const GRIME = hex(0x1a1714);
@@ -426,6 +427,9 @@ export const RECIPES = {
     box([0.4, 0.14, 0.2], [0.05, 1.07, 0.05], all(paint.metal(hex(0x2a2c2e)))),
     box([0.46, 0.34, 0.06], [0.52, 1.2, 0.15], { top: paint.black(), front: paint.screen(hex(0x62d7ff)), side: paint.black() }, { glow: hex(0x62d7ff) })],
 };
+
+// Templo dos Mortos (Mapa 3).
+Object.assign(RECIPES, templeRecipes({ box, cyl, all }));
 
 // ───────────────────────── Atlas ─────────────────────────
 

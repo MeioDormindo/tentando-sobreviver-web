@@ -9,7 +9,8 @@ const CHARACTER := "res://scenes/ui/character.tscn"
 const MENU := "res://scenes/ui/main_menu.tscn"
 const CARD_WIDTH := 520.0
 ## Conquista da missão de cada mapa (selo de missão concluída).
-const QUESTS := {"terminal": ["last_train", "O Último Trem"], "map2": ["serum", "O Soro do Dr. Almeida"]}
+const QUESTS := {"terminal": ["last_train", "O Último Trem"], "map2": ["serum", "O Soro do Dr. Almeida"],
+	"temple": ["underworld_gate", "O Portão do Submundo"]}
 
 
 func _ready() -> void:
@@ -58,7 +59,7 @@ func _card(parent: Control, id: String) -> Button:
 	MenuKit.label(box, String(info.name).to_upper(), 28, MenuKit.GOLD if unlocked else MenuKit.DIM)
 	MenuKit.label(box, String(info.description), 15, MenuKit.TEXT if unlocked else MenuKit.DIM)
 	if not unlocked:
-		MenuKit.label(box, "BLOQUEADO — derrote o boss do round %d no %s" % [info.unlock_boss_round, catalog.display_name(info.unlock_on_map)], 15, MenuKit.RED)
+		MenuKit.label(box, unlock_text(info), 15, MenuKit.RED)
 		return null
 	var best := Save.records(id)
 	MenuKit.label(box, ("Recorde: %d pontos · round %d" % [best.bestScore, best.bestWave]) if int(best.bestScore) > 0 else "Sem recorde ainda", 14, MenuKit.TEXT)
@@ -70,6 +71,19 @@ func _card(parent: Control, id: String) -> Button:
 		var done := Save.has_achievement(quest[0])
 		MenuKit.label(box, ("✓ MISSÃO CONCLUÍDA: " if done else "◆ MISSÃO: ") + String(quest[1]).to_upper(), 14, MenuKit.GOLD if done else MenuKit.DIM)
 	return MenuKit.button(box, "JOGAR", _play.bind(id), 26)
+
+
+## Como liberar um mapa trancado: boss de um round noutro mapa, ou a missão de outro mapa.
+static func unlock_text(info: Dictionary) -> String:
+	var catalog := Save.catalog
+	var by_quest: Array = info.get("unlock_achievements", [])
+	if not by_quest.is_empty():
+		var names: Array[String] = []
+		for id: String in catalog.order:
+			if QUESTS.has(id) and by_quest.has(QUESTS[id][0]):
+				names.append(catalog.display_name(id))
+		return "BLOQUEADO — conclua a missão do %s" % " ou do ".join(names)
+	return "BLOQUEADO — derrote o boss do round %d no %s" % [int(info.unlock_boss_round), catalog.display_name(String(info.unlock_on_map))]
 
 
 func _play(id: String) -> void:

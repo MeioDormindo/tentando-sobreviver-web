@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+; Só do Godot (scripts/godot/temple-data.ts): Prêmio do evento Portão do Submundo.
+
+[resource]
+script = ExtResource("1_script")
+id = &"poseidon_trident"
+display_name = "Tridente de Poseidon"
+kind = &"wind"
+rarity = &"legendary"
+damage = 0
+fire_rate = 1.2
+automatic = false
+magazine_size = 3
+reserve_ammo = 15
+reload_time = 2.4
+spread_degrees = 0
+max_range = 11
+projectile_speed = 0
+pellets = 1
+pierce = 0
+headshot_multiplier = 1.5
+price = 0
+ammo_price = 4000
+box_only = true
+maps = PackedStringArray("temple")
+element = &""
+upgrade_name = "Maremoto"
+tracer_color = Color(0.435, 0.839, 1, 1)
+special_type = &"gust"
+special_params = { "range": 11, "arc_deg": 75, "damage": 1400, "knockback": 30 }

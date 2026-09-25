@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="ZombieData" format=3]
+
+[ext_resource type="Script" path="res://scripts/zombies/zombie_data.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/zombies/zombie_walker.tscn" id="2_scene"]
+; Só do Godot (scripts/godot/temple-data.ts).
+
+[resource]
+script = ExtResource("1_script")
+id = &"hoplite_shield"
+display_name = "Hoplita com Escudo"
+scene = ExtResource("2_scene")
+max_health = 220
+move_speed = 1.55
+damage = 18
+attack_range = 1.6
+attack_interval = 1.25
+points_kill = 190
+plank_damage = 2
+body_radius = 0.45
+pushable = false
+shield = { "arc_deg": 100, "factor": 0.2 }
+shirt_color = Color(0.478, 0.165, 0.118, 1)
+skin_color = Color(0.49, 0.51, 0.4, 1)
+model_scale = 1.08
+art = &"hoplite_shield"

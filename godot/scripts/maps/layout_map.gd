@@ -17,6 +17,9 @@ const FLOOR_COLORS := {
 	"t": Color(0.34, 0.33, 0.3), "c": Color(0.27, 0.27, 0.26), "m": Color(0.3, 0.32, 0.34),
 	"r": Color(0.22, 0.2, 0.18), "u": Color(0.2, 0.21, 0.2), "w": Color(0.28, 0.3, 0.32),
 	"h": Color(0.62, 0.64, 0.6), "l": Color(0.45, 0.5, 0.48), "g": Color(0.5, 0.55, 0.58),
+	# Templo dos Mortos: mosaico, pedra, mármore, catacumba, grama e rocha vulcânica.
+	"o": Color(0.6, 0.54, 0.42), "e": Color(0.43, 0.42, 0.38), "a": Color(0.72, 0.7, 0.66),
+	"k": Color(0.29, 0.27, 0.22), "f": Color(0.2, 0.29, 0.15), "v": Color(0.2, 0.16, 0.16),
 }
 const WALL_COLOR := Color(0.16, 0.16, 0.15)
 ## Cenário em pixel art (npm run godot:scenery → assets/tiles): textura de cada piso e das
@@ -24,11 +27,16 @@ const WALL_COLOR := Color(0.16, 0.16, 0.15)
 const FLOOR_ART := {
 	"t": "floor_terminal", "c": "floor_concrete", "m": "floor_metal", "r": "floor_tracks", "u": "floor_tunnel",
 	"w": "floor_wagon", "h": "floor_hospital", "l": "floor_linoleum", "g": "floor_morgue",
+	"o": "floor_mosaic", "e": "floor_stone", "a": "floor_marble", "k": "floor_catacomb", "f": "floor_grass", "v": "floor_volcanic",
 }
 const WEB_ART := "res://assets/tiles/%s.png"
 const PIXELS_PER_METER := 48.0
 ## Estilo da parede de cada mapa.
-const WALL_STYLE := {"terminal": "wall_terminal", "map2": "wall_hospital"}
+const WALL_STYLE := {"terminal": "wall_terminal", "map2": "wall_hospital", "temple": "wall_temple"}
+## Rio de lava (Templo): altura da margem, cor da luz e a cada quantos metros uma luz.
+const LAVA_HEIGHT := 0.12
+const LAVA_LIGHT := 0xff6a2a
+const LAVA_LIGHT_STEP := 7.0
 const TRAIN_COLOR := Color(0.23, 0.33, 0.4)
 const WINDOW_COLOR := Color(0.55, 0.7, 0.8, 0.35)
 const PROP_COLOR := Color(0.4, 0.33, 0.24)
@@ -97,6 +105,7 @@ func _ready() -> void:
 	_build_floor()
 	_build_solids("#", WALL_HEIGHT, WALL_COLOR, PhysicsLayers.WORLD, "Wall")
 	_build_solids("T", TRAIN_HEIGHT, TRAIN_COLOR, PhysicsLayers.WORLD, "Train")
+	_build_lava()
 	_build_barricades()
 	_build_doors()
 	_build_wall_buys()
@@ -105,6 +114,7 @@ func _ready() -> void:
 	_build_secrets()
 	_build_station()
 	_build_props()
+	_build_temple()
 	_build_decor()
 	_build_lamps()
 	_build_spawns()
@@ -459,6 +469,7 @@ func _build_doors() -> void:
 	for door_data: Dictionary in data.doors:
 		var door := door_scene.instantiate() as Door
 		var rect := Rect2(door_data.rect.x, door_data.rect.y, door_data.rect.w, door_data.rect.h)
+		door.kind = StringName(door_data.get("kind", "buy"))
 		door.setup(StringName(door_data.id), int(door_data.cost), PackedStringArray(door_data.areas), rect.size, self)
 		nav_region.add_child(door)
 		door.position = Vector3(rect.get_center().x, 0.0, rect.get_center().y)
@@ -705,7 +716,104 @@ func _build_props() -> void:
 			mesh.rotation.y = deg_to_rad(-float(prop.angle))
 		var light_data: Variant = prop.light
 		if light_data is Dictionary:
-			_add_light(center + Vector3.UP * 1.2, light_data.radius, light_data.intensity, int(light_data.color))
+			_add_light(center + Vector3.UP * 1.2, light_data.radius, light_data.intensity, int(light_data.color), not FIRE_PROPS.has(String(prop.type)))
+
+
+## Objetos com fogo ou brilho próprio: a luz deles não depende da energia.
+const FIRE_PROPS := ["brazier", "altar", "soul_crystal"]
+
+
+# ───────────────────────── Templo dos Mortos ─────────────────────────
+
+## Rio de lava: faixa baixa e brilhante que não se atravessa (bloqueia como móvel: a bala passa
+## por cima), com luz vermelha ao longo dela (fogo: acende sem energia).
+func _build_lava() -> void:
+	var rects := _merge(func(c: String) -> bool: return c == "V")
+	if rects.is_empty():
+		return
+	var group := Node3D.new()
+	group.name = "Lava"
+	nav_region.add_child(group)
+	var material := _lava_material()
+	for rect in rects:
+		var body := StaticBody3D.new()
+		body.collision_layer = PhysicsLayers.PROPS
+		body.collision_mask = 0
+		var shape := BoxShape3D.new()
+		shape.size = Vector3(rect.size.x, 1.2, rect.size.y)
+		var collision := CollisionShape3D.new()
+		collision.shape = shape
+		collision.position.y = 0.6 - LAVA_HEIGHT * 0.5
+		body.add_child(collision)
+		body.add_child(_box_mesh(Rect2(-rect.size * 0.5, rect.size), -LAVA_HEIGHT * 0.5, LAVA_HEIGHT * 0.5, material, true))
+		group.add_child(body)
+		body.position = Vector3(rect.get_center().x, LAVA_HEIGHT * 0.5, rect.get_center().y)
+		var along := maxf(rect.size.x, rect.size.y)
+		var lights := maxi(1, int(along / LAVA_LIGHT_STEP))
+		for i in lights:
+			var t := (i + 0.5) / lights
+			var at := Vector3(rect.position.x + rect.size.x * (t if rect.size.x >= rect.size.y else 0.5), 2.4,
+				rect.position.y + rect.size.y * (t if rect.size.y > rect.size.x else 0.5))
+			var light := _add_light(at, 3.4, 0.4, LAVA_LIGHT, false)
+			_flickers.append([light, 0.3])
+
+
+func _lava_material() -> Material:
+	# Sem sombreamento: a lava tem a cor da própria textura (brilha no escuro sem estourar).
+	var path := WEB_ART % "lava_top"
+	var material := StandardMaterial3D.new()
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.albedo_color = Color(0.95, 0.35, 0.1)
+	if ResourceLoader.exists(path):
+		var texture := load(path) as Texture2D
+		material.albedo_color = Color.WHITE
+		material.albedo_texture = texture
+		material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST_WITH_MIPMAPS
+		material.uv1_triplanar = true
+		material.uv1_world_triplanar = true
+		var size := texture.get_size() / PIXELS_PER_METER
+		material.uv1_scale = Vector3(1.0 / size.x, 1.0 / size.y, 1.0 / size.x)
+	return material
+
+
+## Templo: colunas da praça que o Minotauro derruba, os 3 altares do Portão do Templo e as 12
+## estátuas dos deuses (segredo).
+func _build_temple() -> void:
+	var group := Node3D.new()
+	group.name = "Temple"
+	nav_region.add_child(group)
+	for spot: Dictionary in data.get("pillars", []):
+		var pillar := BreakablePillar.new()
+		pillar.world = self
+		pillar.position = Vector3(float(spot.tx) + 0.5, 0.0, float(spot.ty) + 0.5)
+		group.add_child(pillar)
+	for spot: Dictionary in data.get("altars", []):
+		var altar := SoulAltar.new()
+		altar.god = StringName(spot.id)
+		altar.position = Vector3(float(spot.tx) + 0.5, 0.0, float(spot.ty) + 0.5)
+		group.add_child(altar)
+	var sanctuary: Variant = data.get("sanctuary")
+	if sanctuary is Dictionary and sanctuary.get("bow") is Dictionary:
+		var pedestal := PrizePedestal.new()
+		pedestal.position = Vector3(float(sanctuary.bow.tx) + 0.5, 0.0, float(sanctuary.bow.ty) + 0.5)
+		group.add_child(pedestal)
+	var secrets: Variant = data.get("secrets")
+	if secrets is Dictionary:
+		var statues: Array = secrets.get("statues", [])
+		for spot: Dictionary in statues:
+			var statue := GodStatue.new()
+			statue.god = StringName(spot.god)
+			statue.total = statues.size()
+			statue.position = Vector3(float(spot.tx) + 0.5, 0.0, float(spot.ty) + 0.5)
+			group.add_child(statue)
+
+
+## Porta pelo id (portões do Templo abrem por missão, altar e segredo).
+func door_by_id(id: StringName) -> Door:
+	for node in nav_region.get_children():
+		if node is Door and (node as Door).door_id == id:
+			return node
+	return null
 
 
 # ───────────────────────── Decoração ─────────────────────────
@@ -719,6 +827,16 @@ const WALL_DECOR := {
 ## Decalques de chão: nome → peso no sorteio.
 const FLOOR_DECOR := {
 	"paper": 4, "papers": 3, "can": 3, "bottle": 2, "trash": 3, "debris": 2, "puddle": 1, "crack": 2, "blood_trail": 1, "casings": 2,
+}
+## Mapas com decoração própria (Templo: inscrições, nichos de crânios, velas, trepadeiras,
+## tochas e murais; no chão, ossos, folhas, cacos de ânfora e cinzas). Sem canos.
+const DECOR_BY_MAP := {
+	"temple": {
+		"wall": {"inscription": [0.035, 1.5], "skull_niche": [0.03, 1.2], "candles": [0.02, 1.05], "vines": [0.05, 1.7],
+			"sconce": [0.03, 1.9], "mural": [0.02, 1.55], "blood_smear": [0.02, 1.0]},
+		"floor": {"skull": 3, "bone_scatter": 3, "leaves": 3, "shards": 3, "debris": 2, "ash": 2, "crack": 2, "blood_trail": 1},
+		"pipes": false,
+	},
 }
 ## Chance de um metro de chão ganhar um decalque.
 const FLOOR_DECOR_CHANCE := 0.06
@@ -741,6 +859,10 @@ func _build_decor() -> void:
 	group.name = "Decor"
 	add_child(group)
 	var pipe_run := {}
+	var theme: Dictionary = DECOR_BY_MAP.get(map_id(), {})
+	var wall_decor: Dictionary = theme.get("wall", WALL_DECOR)
+	var floor_decor: Dictionary = theme.get("floor", FLOOR_DECOR)
+	var pipes: bool = theme.get("pipes", true)
 	for z in height:
 		for x in width:
 			if cell(x, z) != "#":
@@ -756,27 +878,27 @@ func _build_decor() -> void:
 				var key := "%d" % (z if dir.x != 0 else x)
 				var along := z if dir.x != 0 else x
 				var running: bool = pipe_run.get(key + ("x" if dir.x != 0 else "z"), -99) == along - 1
-				if (running and rng.randf() < 0.85) or rng.randf() < 0.05:
+				if pipes and ((running and rng.randf() < 0.85) or rng.randf() < 0.05):
 					pipe_run[key + ("x" if dir.x != 0 else "z")] = along
 					_add_decor(group, index.wall, "pipes", face + Vector3.UP * 2.78, normal, 1.0)
 				var density := _decor_density(x + dir.x, z + dir.y)
-				for decor_name: String in WALL_DECOR:
-					var entry: Array = WALL_DECOR[decor_name]
+				for decor_name: String in wall_decor:
+					var entry: Array = wall_decor[decor_name]
 					if rng.randf() < float(entry[0]) * density:
 						_add_decor(group, index.wall, decor_name, face + Vector3.UP * float(entry[1]), normal)
 						break
 	# Chão: decalques espalhados (fora das portas).
 	var total := 0.0
-	for decor_name: String in FLOOR_DECOR:
-		total += float(FLOOR_DECOR[decor_name])
+	for decor_name: String in floor_decor:
+		total += float(floor_decor[decor_name])
 	for z in height:
 		for x in width:
 			if not _is_floor(cell(x, z)) or rng.randf() >= FLOOR_DECOR_CHANCE * _decor_density(x, z):
 				continue
 			var roll := rng.randf() * total
 			var chosen := ""
-			for decor_name: String in FLOOR_DECOR:
-				roll -= float(FLOOR_DECOR[decor_name])
+			for decor_name: String in floor_decor:
+				roll -= float(floor_decor[decor_name])
 				if roll < 0.0:
 					chosen = decor_name
 					break
@@ -823,19 +945,21 @@ func _build_lamps() -> void:
 		if lamp.get("broken", false):
 			_broken.append(Vector3(lamp.x, 0.0, lamp.z))
 			continue
-		var light := _add_light(Vector3(lamp.x, LAMP_HEIGHT, lamp.z), lamp.radius, lamp.intensity, int(lamp.color))
+		# Tochas e braseiros (Templo) são fogo: acendem sem energia, mais baixos.
+		var torch: bool = lamp.get("torch", false)
+		var light := _add_light(Vector3(lamp.x, 2.2 if torch else LAMP_HEIGHT, lamp.z), lamp.radius, lamp.intensity, int(lamp.color), not torch)
 		if float(lamp.get("flicker", 0.0)) >= 0.3:
 			_flickers.append([light, float(lamp.flicker)])
 
 
-func _add_light(position_3d: Vector3, radius: float, intensity: float, color_hex: int) -> OmniLight3D:
+func _add_light(position_3d: Vector3, radius: float, intensity: float, color_hex: int, powered := true) -> OmniLight3D:
 	var light := OmniLight3D.new()
 	light.light_color = Color.hex((color_hex << 8) | 0xff)
 	light.light_energy = intensity * 2.4
 	light.omni_range = maxf(3.0, radius * 1.6)
 	add_child(light)
 	light.position = position_3d
-	if power:
+	if power and powered:
 		power.register_light(light)
 	return light
 

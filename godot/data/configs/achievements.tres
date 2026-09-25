@@ -22,7 +22,10 @@ achievements = [
 { "id": "golden_aim", "name": "Mira de Ouro", "description": "Acerte 100 headshots fatais", "icon": "res://assets/sprites/icons/weapon_barrett.png", "total_key": "headshots", "total_target": 100, "secret": false },
 { "id": "teddies", "name": "Ursinhos", "description": "Encontre todos os ursinhos escondidos", "icon": "res://assets/web/powerups/golden.png", "total_key": "", "total_target": 0, "secret": true },
 { "id": "konami", "name": "Cabeção", "description": "Descubra o código secreto do menu", "icon": "res://assets/sprites/icons/weapon_uzi_dual.png", "total_key": "", "total_target": 0, "secret": true },
-{ "id": "last_train", "name": "O Último Trem", "description": "Complete a missão do Terminal e pegue a Lanterna do Condutor", "icon": "res://assets/sprites/icons/weapon_conductor_lantern.png", "total_key": "", "total_target": 0, "secret": false }
+{ "id": "last_train", "name": "O Último Trem", "description": "Complete a missão do Terminal e pegue a Lanterna do Condutor", "icon": "res://assets/sprites/icons/weapon_conductor_lantern.png", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "minotaur", "name": "Fio de Ariadne", "description": "Derrote o Minotauro", "icon": "res://assets/sprites/icons/weapon_lee_enfield.png", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "twelve_statues", "name": "Os Doze do Olimpo", "description": "Ative as 12 estátuas dos deuses no Templo", "icon": "res://assets/sprites/icons/weapon_artemis_bow.png", "total_key": "", "total_target": 0, "secret": false },
+{ "id": "underworld_gate", "name": "O Portão do Submundo", "description": "Complete a missão do Templo e pegue o Raio de Zeus", "icon": "res://assets/sprites/icons/weapon_zeus_bolt.png", "total_key": "", "total_target": 0, "secret": false }
 ]
 survivor_round = 10
 veteran_round = 20

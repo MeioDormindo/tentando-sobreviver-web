@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+; Só do Godot (scripts/godot/temple-data.ts): Parede do Templo.
+
+[resource]
+script = ExtResource("1_script")
+id = &"lee_enfield"
+display_name = "Lee-Enfield"
+kind = &"sniper"
+rarity = &"rare"
+damage = 190
+fire_rate = 1.4
+automatic = false
+magazine_size = 10
+reserve_ammo = 60
+reload_time = 2.4
+spread_degrees = 0.6
+max_range = 38
+projectile_speed = 0
+pellets = 1
+pierce = 2
+headshot_multiplier = 2.5
+price = 1800
+ammo_price = 900
+box_only = false
+maps = PackedStringArray("temple")
+element = &"lightning"
+tracer_color = Color(1, 0.949, 0.753, 1)
+special_type = &""

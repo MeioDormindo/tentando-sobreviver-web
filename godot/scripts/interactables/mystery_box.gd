@@ -77,7 +77,9 @@ func setup(p_data: MysteryBoxData, p_catalog: WeaponCatalog, p_map_id: String, p
 	_mesh.mesh = box
 	_mesh.position.y = SIZE.y * 0.5
 	add_child(_mesh)
-	_model = PropFactory.create("mystery_box")
+	# Versão temática do mapa, se houver (Templo: altar de pedra com tampa de sarcófago).
+	var themed := "mystery_box_%s" % map_id
+	_model = PropFactory.create(themed if PropFactory.has(themed) else "mystery_box")
 	if _model:
 		_mesh.mesh = null
 		_mesh.add_child(_model)

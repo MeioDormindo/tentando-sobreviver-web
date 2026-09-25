@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+; Só do Godot (scripts/godot/temple-data.ts): Mystery Box do Templo.
+
+[resource]
+script = ExtResource("1_script")
+id = &"hephaestus_spear"
+display_name = "Lança de Hefesto"
+kind = &"launcher"
+rarity = &"legendary"
+damage = 260
+fire_rate = 1
+automatic = false
+magazine_size = 4
+reserve_ammo = 24
+reload_time = 2.6
+spread_degrees = 0
+max_range = 30
+projectile_speed = 22
+pellets = 1
+pierce = 999
+headshot_multiplier = 1.5
+price = 0
+ammo_price = 3000
+box_only = true
+maps = PackedStringArray("temple")
+element = &""
+upgrade_name = "Forja de Hefesto"
+tracer_color = Color(1, 0.541, 0.149, 1)
+special_type = &"plasma"
+special_params = { "blast_radius": 3.5, "blast_damage": 240, "stun_time": 0.4, "burn_dps": 30, "burn_time": 3 }

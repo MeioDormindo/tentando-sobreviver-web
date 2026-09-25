@@ -186,7 +186,7 @@ func _test_migrated_data() -> void:
 	var launcher := load("res://data/weapons/grenade_launcher.tres") as WeaponData
 	check(launcher.special_type == &"grenade" and launcher.box_only, "lança-granadas: especial e só na Mystery Box")
 	var catalog := load("res://data/weapons/catalog.tres") as WeaponCatalog
-	check(catalog.weapons.size() == 23, "19 armas do jogo web + 4 do Hospital no catálogo (%d)" % catalog.weapons.size())
+	check(catalog.weapons.size() == 32, "19 armas do jogo web + 4 do Hospital + 9 do Templo no catálogo (%d)" % catalog.weapons.size())
 
 
 func _test_maps(tree: SceneTree) -> void:
@@ -478,7 +478,7 @@ func _test_achievements() -> void:
 	print("Conquistas e visuais (jogo web)")
 	Save.reset()
 	var catalog := load("res://data/configs/achievements.tres") as AchievementCatalog
-	check(catalog.achievements.size() == 18 and not catalog.find("last_train").is_empty(), "17 conquistas do jogo web + a da missão do Terminal")
+	check(catalog.achievements.size() == 21 and not catalog.find("last_train").is_empty() and not catalog.find("underworld_gate").is_empty(), "17 conquistas do jogo web + a da missão do Terminal + 3 do Templo")
 	check(catalog.achievements.all(func(a: Dictionary) -> bool: return String(a.get("icon", "")) != ""), "toda conquista tem ícone")
 	var system := AchievementSystem.new()
 	system.catalog = catalog
@@ -501,7 +501,7 @@ func _test_achievements() -> void:
 	check(Save.has_achievement("dog_trainer"), "Adestrador: rodada dos cães sem levar dano")
 	Events.achievement_unlocked.disconnect(capture)
 	var skins := load("res://data/configs/skins.tres") as SkinCatalog
-	check(skins.skins.size() == 8 and CharacterScreenCheck.unlocked(skins.find("conductor")) and not CharacterScreenCheck.unlocked(skins.find("agent")),
+	check(skins.skins.size() == 12 and CharacterScreenCheck.unlocked(skins.find("conductor")) and not CharacterScreenCheck.unlocked(skins.find("agent")),
 		"visual Maquinista liberado pelo boss; Agente ainda trancado")
 	walker.free()
 	system.queue_free()

@@ -1,0 +1,47 @@
+{
+ "frame": [
+  102,
+  96
+ ],
+ "pivot": [
+  51,
+  60
+ ],
+ "columns": 22,
+ "directions": 8,
+ "direction_angle": "dir = round(atan2(facing.x, facing.z) / 45°) mod 8; 0 = olhando para a câmera (+Z), 2 = leste (+X)",
+ "pitch": 60,
+ "pixels_per_meter": 48,
+ "animations": {
+  "Idle": {
+   "start": 0,
+   "count": 4,
+   "fps": 4,
+   "loop": true
+  },
+  "Run": {
+   "start": 4,
+   "count": 6,
+   "fps": 14,
+   "loop": true
+  },
+  "Attack": {
+   "start": 10,
+   "count": 5,
+   "fps": 12,
+   "loop": false
+  },
+  "Hurt": {
+   "start": 15,
+   "count": 2,
+   "fps": 10,
+   "loop": false
+  },
+  "Death": {
+   "start": 17,
+   "count": 5,
+   "fps": 10,
+   "loop": false
+  }
+ }
+}

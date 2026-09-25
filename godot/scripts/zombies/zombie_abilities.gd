@@ -5,12 +5,18 @@ extends Node
 ## - ranged (Cuspidor): a uma distância certa, para, prepara e cospe ácido que vira poça;
 ## - armor (Blindado): absorve o dano no corpo até quebrar; headshot derruba o capacete;
 ## - death_cloud (Rastejante): deixa uma nuvem de gás ao morrer;
-## - burns_on_death (Cão): pega fogo e não deixa corpo.
+## - burns_on_death (Cão): pega fogo e não deixa corpo;
+## - shield (Hoplita com Escudo, Templo): de frente só passa uma fração do dano (headshot passa);
+## - revive (Esqueleto, Templo): às vezes se levanta de novo depois de desmontar (uma vez);
+## - ranged com projectile "arrow" (Esqueleto Arqueiro): flecha reta com dano direto.
 ## O ZombieBase pergunta `override_movement` a cada passo e avisa a morte em `on_death`.
 
 const ACID_COLOR := Color(0.55, 0.85, 0.2)
 const GAS_COLOR := Color(0.6, 0.75, 0.35)
 const EXPLOSION_COLOR := Color(1.0, 0.55, 0.2)
+const ARROW_COLOR := Color(0.55, 0.4, 0.25)
+## Raio em volta do ponto de chegada da flecha que ainda acerta o jogador.
+const ARROW_HIT_RADIUS := 0.9
 
 var zombie: ZombieBase
 var armor_hp: float = 0.0
@@ -28,6 +34,8 @@ func setup(p_zombie: ZombieBase) -> void:
 	if not data.armor.is_empty():
 		armor_hp = float(data.armor.get("hp", 0))
 		zombie.health.damage_filter = _filter_armor
+	elif not data.shield.is_empty():
+		zombie.health.damage_filter = _filter_shield
 	_spit_cooldown = float(data.ranged.get("cooldown_time", 0)) * 0.5
 
 
@@ -49,10 +57,13 @@ func override_movement(delta: float, to_target: Vector3) -> bool:
 		_spit_cooldown -= delta
 		if _windup_left >= 0.0:
 			_windup_left -= delta
-			zombie.flash(ACID_COLOR)
+			zombie.flash(ARROW_COLOR if String(data.ranged.get("projectile", "")) == "arrow" else ACID_COLOR)
 			if _windup_left <= 0.0:
 				_windup_left = -1.0
-				_spit(to_target)
+				if String(data.ranged.get("projectile", "")) == "arrow":
+					_shoot_arrow(to_target)
+				else:
+					_spit(to_target)
 			return true
 		var min_range := float(data.ranged.get("min_range", 4.0))
 		var max_range := float(data.ranged.get("max_range", 9.0))
@@ -68,6 +79,86 @@ func on_death(_info: DamageInfo) -> void:
 		_explode()
 	if not data.death_cloud.is_empty():
 		_spawn_pool(data.death_cloud, GAS_COLOR, zombie.global_position)
+	if not data.revive.is_empty() and not zombie.has_meta(&"revived") and randf() < float(data.revive.get("chance", 0.0)):
+		_schedule_revive()
+
+
+## Escudo: de frente (arco `arc_deg` para onde o zumbi olha) só `factor` do dano passa;
+## tiro na cabeça, de lado ou de costas passa inteiro.
+func _filter_shield(info: DamageInfo) -> float:
+	if info.is_headshot or not blocks(info.source):
+		return info.amount
+	Audio.play_at("armor_hit", zombie.global_position, "zombie", 0.7)
+	PixelFx.spawn(zombie.get_tree(), "spark", zombie.global_position + Vector3.UP * 1.1 - zombie.pivot.global_basis.z * 0.4, 0.5)
+	return info.amount * float(zombie.data.shield.get("factor", 0.2))
+
+
+## O escudo cobre quem vem de `source` (de frente, dentro do arco)?
+func blocks(source: Node) -> bool:
+	if zombie.data.shield.is_empty() or not source is Node3D:
+		return false
+	var to_source := (source as Node3D).global_position - zombie.global_position
+	to_source.y = 0.0
+	var forward := -zombie.pivot.global_basis.z
+	forward.y = 0.0
+	if to_source.length() < 0.01 or forward.length() < 0.01:
+		return false
+	return rad_to_deg(forward.angle_to(to_source)) <= float(zombie.data.shield.get("arc_deg", 100.0)) * 0.5
+
+
+## Esqueleto: os ossos ficam no chão e, depois de `delay_time`, ele se levanta com parte da
+## vida (entra na conta do round como um zumbi a mais; só uma vez).
+func _schedule_revive() -> void:
+	var tree := zombie.get_tree()
+	var parent := zombie.get_parent()
+	var at := zombie.global_position
+	var params := zombie.data.revive
+	var data := zombie.data
+	var target := zombie.target
+	var health := zombie.health.max_health * float(params.get("health_factor", 0.5))
+	Events.zombies_summoned.emit(1)
+	tree.create_timer(float(params.get("delay_time", 2.0))).timeout.connect(func() -> void:
+		if not is_instance_valid(parent) or not is_instance_valid(target):
+			return
+		var risen := ZombieFactory.create(data, target, 1.0, 1.0, 1.0)
+		risen.set_meta(&"revived", true)
+		parent.add_child(risen)
+		risen.global_position = at
+		risen.health.reset(health)
+		PixelFx.spawn(tree, "dust", at + Vector3.UP * 0.5, 1.2)
+		risen.flash(Color(0.8, 0.9, 1.0)))
+
+
+## Flecha: reta e rápida até onde o alvo está agora; fere quem estiver perto da chegada.
+func _shoot_arrow(to_target: Vector3) -> void:
+	Audio.play_at("knife_swing", zombie.global_position, "zombie", 0.8)
+	var params := zombie.data.ranged
+	var from := zombie.global_position + Vector3.UP * 1.3
+	var land := zombie.global_position + to_target + Vector3.UP * 1.0
+	var arrow := MeshInstance3D.new()
+	var mesh := BoxMesh.new()
+	mesh.size = Vector3(0.05, 0.05, 0.7)
+	var material := StandardMaterial3D.new()
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.albedo_color = ARROW_COLOR
+	mesh.material = material
+	arrow.mesh = mesh
+	var root := SpecialFire.world_root(zombie.get_tree())
+	root.add_child(arrow)
+	arrow.global_position = from
+	arrow.look_at(land, Vector3.UP)
+	var flight := maxf(0.08, from.distance_to(land) / float(params.get("projectile_speed", 18.0)))
+	var damage := float(params.get("damage", 12)) * (zombie.attack_damage / maxf(1.0, zombie.data.damage))
+	var shooter := zombie
+	var tween := arrow.create_tween()
+	tween.tween_property(arrow, "global_position", land, flight)
+	tween.tween_callback(func() -> void:
+		for node in arrow.get_tree().get_nodes_in_group(&"player"):
+			var player := node as CharacterBase
+			if player and Vector2(player.global_position.x - land.x, player.global_position.z - land.z).length() <= ARROW_HIT_RADIUS:
+				player.take_damage(DamageInfo.new(damage, DamageInfo.Kind.ZOMBIE, shooter if is_instance_valid(shooter) else null, false, land))
+		arrow.queue_free())
+	_spit_cooldown = float(params.get("cooldown_time", 2.6))
 
 
 ## Armadura: o capacete cai com um headshot; no corpo, só `body_factor` do dano passa enquanto

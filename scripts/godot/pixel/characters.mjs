@@ -150,7 +150,7 @@ const STANCES = {
 };
 
 /** Armas que se seguram como pistola (uma mão no cabo, a outra por cima). */
-export const PISTOLS = ['m1911', 'glock', 'magnum', 'uzi_dual', 'beretta', 'nailgun'];
+export const PISTOLS = ['m1911', 'glock', 'magnum', 'uzi_dual', 'beretta', 'nailgun', 'makarov', 'mauser_c96'];
 
 /** Animações que dependem da postura: nomes com o sufixo dela (Idle_pistol...). */
 function stanceAnimations(stance, suffix) {
@@ -254,6 +254,8 @@ export function zombieModel(look) {
       parts.push(box('head', [0, 0.15, 1.68], [0.22, 0.03, 0.12], hex(0x1c2a2e), { flat: true }));
       parts.push(box('spine', [0, 0.145, 1.3], [0.14, 0.02, 0.1], hex(0x1a1a1a), { flat: true }));  // símbolo
     }
+    // Roupas do Templo (e de outros temas): acessórios prontos.
+    if (look.extra) look.extra(parts, look);
     if (look.crown) {  // coroa do zumbi dourado
       parts.push(box('head', [0, 0, 1.82], [0.24, 0.24, 0.07], look.crown));
       for (const [x, y] of [[0.09, 0.09], [-0.09, 0.09], [0.09, -0.09], [-0.09, -0.09], [0, 0.11]]) parts.push(box('head', [x, y, 1.89], [0.05, 0.05, 0.08], look.crown));

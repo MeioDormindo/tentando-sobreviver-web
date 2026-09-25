@@ -12,6 +12,7 @@ import { join } from 'node:path';
 import { SOUND_DEFS } from '../../src/audio/SoundBank';
 import { rng } from '../../src/audio/dsp';
 import { audioConfig, musicConfig, ambientEvents, ambienceAlias, stepAlias } from '../../src/config/audio.config';
+import { TEMPLE_SOUNDS, TEMPLE_AMBIENCE_ALIAS, TEMPLE_AMBIENT_EVENTS, TEMPLE_STEP_ALIAS } from './temple-audio';
 
 const OUT = 'godot/assets/audio';
 const PX = 32;
@@ -51,7 +52,8 @@ for (const file of readdirSync(OUT)) if (file.endsWith('.wav')) rmSync(join(OUT,
 
 const sounds: Record<string, number> = {};
 let total = 0;
-for (const def of SOUND_DEFS) {
+// Os do jogo web e os só do Godot (ambiente do Templo).
+for (const def of [...SOUND_DEFS, ...TEMPLE_SOUNDS]) {
   for (let v = 0; v < def.variants; v++) {
     const data = def.make(def.sr, rng(hash(def.key) + v * 7919));
     if (def.gain && def.gain !== 1) for (let i = 0; i < data.length; i++) data[i] = Math.max(-1, Math.min(1, data[i] * def.gain));
@@ -72,9 +74,9 @@ const config = {
   ambient_event_time: audioConfig.ambientEventMs.map(s),
   ambience_crossfade: s(audioConfig.ambienceCrossfadeMs),
   heartbeat_below: audioConfig.heartbeatBelow,
-  ambient_events: ambientEvents,
-  ambience_alias: ambienceAlias,
-  step_alias: stepAlias,
+  ambient_events: { ...ambientEvents, ...TEMPLE_AMBIENT_EVENTS },
+  ambience_alias: { ...ambienceAlias, ...TEMPLE_AMBIENCE_ALIAS },
+  step_alias: { ...stepAlias, ...TEMPLE_STEP_ALIAS },
   music: {
     fade_per_second: musicConfig.fadePerSecond,
     high_alive: musicConfig.highAlive,

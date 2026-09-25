@@ -256,6 +256,11 @@ func sanitize(raw: Variant) -> Dictionary:
 	for id: String in ach:
 		if ach[id] is String:
 			d.achievements[id] = String(ach[id]).substr(0, 40)
+	# Mapas liberados por conquista (saves de antes do Templo já com a missão feita).
+	for id: String in d.achievements:
+		for map_id in catalog.unlocked_by_achievement(id):
+			if not map_id in d.unlockedMaps:
+				d.unlockedMaps.append(map_id)
 	return d
 
 
@@ -266,14 +271,14 @@ func _defaults() -> Dictionary:
 	for id: String in catalog.maps:
 		recs[id] = _empty_records()
 		rank[id] = []
-		if int(catalog.maps[id].unlock_boss_round) == 0:
+		if catalog.starts_unlocked(id):
 			unlocked.append(id)
 	return {
 		"version": VERSION,
 		"settings": {"muted": false, "musicOn": true, "playerName": "SOBREVIVENTE", "volume": 1.0, "minimap": true,
 			"minimapSize": "medium", "touchMode": "auto", "screenShake": true, "bigHeads": false, "skin": "default",
 			# Só no Godot (o jogo web ignora chaves que não conhece).
-			"fullscreen": false, "skinHospital": "patient"},
+			"fullscreen": false, "skinHospital": "patient", "skinTemple": "archaeologist"},
 		"records": recs,
 		"unlockedMaps": unlocked,
 		"ranking": rank,

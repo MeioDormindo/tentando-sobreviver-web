@@ -60,9 +60,11 @@ func tick(delta: float) -> void:
 func start_round(number: int) -> void:
 	round_number = number
 	var map_id := _map_id()
-	var boss_id: StringName = data.boss_by_map.get(map_id, &"")
+	var boss_id := data.boss_for(map_id, number)
 	var forced := int(forced_boss.get("round", -1)) == number
-	is_boss_round = boss_manager != null and boss_id != &"" and (data.boss_rounds.has(number) or forced)
+	if forced and StringName(forced_boss.get("boss", &"")) != &"":
+		boss_id = StringName(forced_boss.boss)
+	is_boss_round = boss_manager != null and boss_id != &"" and (data.is_boss_round_number(map_id, number) or forced)
 	is_hound_round = not is_boss_round and data.is_hound_round(number, map_id)
 	total = data.hound_total(number, map_id) if is_hound_round else data.total_zombies(number)
 	Events.hound_round_changed.emit(is_hound_round, data.hound_rounds.get(map_id, {}))
@@ -87,10 +89,11 @@ func set_spawn_modifier(id: StringName, modifier: Dictionary) -> void:
 		spawn_modifiers[id] = modifier
 
 
-## O próximo round passa a ser de boss, com vida extra (final da missão). Devolve o round.
-func force_boss_next_round(health_multiplier: float) -> int:
+## O próximo round passa a ser de boss, com vida extra (etapas das missões). `boss` escolhe qual
+## (vazio = o do mapa naquele round). Devolve o round.
+func force_boss_next_round(health_multiplier: float, boss: StringName = &"") -> int:
 	var number := round_number + 1
-	forced_boss = {"round": number, "health_multiplier": health_multiplier}
+	forced_boss = {"round": number, "health_multiplier": health_multiplier, "boss": boss}
 	return number
 
 

@@ -44,3 +44,5 @@ extends Resource
 @export var lantern: bool = false
 ## Fração da horda normal que acompanha o boss.
 @export var escort_ratio: float = 0.3
+## Extras só do Godot (Minotauro: rubble_time das pedras do Colapso, breaks_pillars).
+@export var extras: Dictionary = {}

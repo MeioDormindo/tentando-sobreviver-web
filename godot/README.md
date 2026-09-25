@@ -6,7 +6,7 @@ de conceitos: ver `docs/analise-typescript.md`.
 
 **Estado: combate, mapas, loja, máquinas, inimigos e progressão local migrados do jogo web.** Tem:
 - **menu principal**, escolha de mapa (o Hospital libera ao vencer o boss do round 10 no
-  Terminal), ranking local por mapa, configurações (volume, som, música, tremor, tela cheia,
+  Terminal; o Templo dos Mortos, ao concluir a missão do Terminal ou a do Hospital), ranking local por mapa, configurações (volume, som, música, tremor, tela cheia,
   nome, apagar progresso);
 - **save** em `user://save.json` com **o mesmo formato JSON do jogo web** (prepara o save na
   nuvem entre as duas versões): configurações, recordes, mapas liberados, ranking, totais,
@@ -97,6 +97,31 @@ de conceitos: ver `docs/analise-typescript.md`.
 - **código Konami** no menu (↑↑↓↓←→←→BA): libera o modo cabeção;
 - **anti-trapaça**: ganho impossível para o round ou pontos/score alterados por fora invalidam a
   partida, com zoeira na tela, e ela não vale save nem ranking;
+- **Mapa 3, Templo dos Mortos** (só do Godot, mitologia grega sombria; conteúdo em
+  `scripts/godot/temple-data.ts`, `maps/temple.ts`, `pixel/temple_*.mjs` e `temple-audio.ts`):
+  - áreas: Ruínas Gregas (início), Necrópole, Labirinto, Floresta de Artemis, Templo da Górgona,
+    Submundo (rio de lava com pontes), Arena Final e o Santuário do Olimpo (secreto); pisos de
+    mosaico, pedra, mármore, catacumba, grama e rocha vulcânica, parede de blocos com meandro,
+    tochas e braseiros que acendem sem energia, decoração própria (inscrições, nichos de
+    crânios, velas, trepadeiras, murais) e som ambiente de cada região;
+  - portões especiais: o do Templo abre com Fragmentos de Alma nos 3 altares, o do Submundo com a
+    chave do Minotauro, e a passagem do Santuário com as 12 estátuas dos deuses acesas;
+  - **arsenal todo novo**: começa com a Makarov; paredes com Mauser C96, Thompson, Lupara,
+    Lee-Enfield, StG 44, Winchester 1887 e Bren; Lança de Hefesto só na Mystery Box do Templo
+    (um altar de pedra); Raio de Zeus (missão), Arco de Artemis (Santuário) e Tridente de
+    Poseidon (evento);
+  - inimigos novos: Hoplita, Hoplita com Escudo (segura de frente, não de costas nem na
+    cabeça), Esqueleto (às vezes se levanta de novo) e Esqueleto Arqueiro (flecha reta); os
+    tipos dos outros mapas ganham roupa grega (arqueólogo, cultista, gladiador, portador de
+    ânfora, múmia, sacerdote do veneno, hoplita de bronze e o cão de Hades);
+  - bosses em rodízio nos rounds de boss (e o ciclo continua depois do 30): **o Minotauro**
+    (investida, onda de choque; na Fúria derruba as colunas da praça; no Colapso caem pedras
+    que viram escombro);
+  - **missão "O Portão do Submundo"**: gerador → 3 Fragmentos de Alma (Necrópole, Floresta e um
+    Esqueleto que carrega o terceiro) → os 3 altares → o Minotauro → a chave → o portão. Prêmio:
+    todos os perks e o Raio de Zeus no Mk II;
+  - personagem do mapa: a arqueóloga (Arqueóloga, Caçadora do Labirinto, Sacerdotisa do Olimpo,
+    Andarilha do Submundo), com as conquistas do Templo;
 - **tela de fim**: estatísticas, recorde, nome no ranking e botões de jogar de novo, ranking e
   menu;
 - **Terminal Central migrado** (a partida começa nele) e o Hospital Santa Luzia pronto para
@@ -197,7 +222,7 @@ reais do jogo web (`src/config`) e gera os `.tres` de `data/`:
 - power-ups, eventos do mapa, painéis e armadilhas, segredos e a missão do Soro;
 
 Os **mapas** são só do Godot (o jogo web continua com os dele): `npm run godot:maps` gera
-`data/maps/terminal.json` e `map2.json` a partir da DSL em `scripts/godot/maps/` (um arquivo
+`data/maps/terminal.json`, `map2.json` e `temple.json` a partir da DSL em `scripts/godot/maps/` (um arquivo
 por mapa: `room`, `solid`, `door`, `window`, `spawn`, `weapon`, `perk`, `lamp`, `prop`...).
 O gerador confere o desenho (tudo em chão, portas ligando as áreas certas, toda área alcançável)
 e grava uma prévia em `build/maps/<id>.png`. Além da grade, áreas, portas, janelas, spawns,

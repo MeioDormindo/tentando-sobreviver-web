@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+; Só do Godot (scripts/godot/temple-data.ts): Parede do Templo (Submundo).
+
+[resource]
+script = ExtResource("1_script")
+id = &"bren"
+display_name = "Bren"
+kind = &"lmg"
+rarity = &"epic"
+damage = 44
+fire_rate = 8.5
+automatic = true
+magazine_size = 30
+reserve_ammo = 240
+reload_time = 3.1
+spread_degrees = 3
+max_range = 30
+projectile_speed = 0
+pellets = 1
+pierce = 1
+headshot_multiplier = 1.5
+price = 3000
+ammo_price = 1500
+box_only = false
+maps = PackedStringArray("temple")
+element = &"light"
+tracer_color = Color(1, 0.824, 0.478, 1)
+special_type = &""

@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="ZombieData" format=3]
+
+[ext_resource type="Script" path="res://scripts/zombies/zombie_data.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/zombies/zombie_walker.tscn" id="2_scene"]
+; Só do Godot (scripts/godot/temple-data.ts).
+
+[resource]
+script = ExtResource("1_script")
+id = &"skeleton"
+display_name = "Esqueleto Guerreiro"
+scene = ExtResource("2_scene")
+max_health = 70
+move_speed = 2.9
+damage = 12
+attack_range = 1.2
+attack_interval = 0.8
+points_kill = 110
+plank_damage = 1
+body_radius = 0.34
+pushable = true
+revive = { "chance": 0.35, "delay_time": 2.2, "health_factor": 0.5 }
+shirt_color = Color(0.353, 0.29, 0.196, 1)
+skin_color = Color(0.847, 0.816, 0.722, 1)
+model_scale = 0.96
+art = &"skeleton"

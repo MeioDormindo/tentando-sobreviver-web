@@ -9,12 +9,14 @@ import { encodePng } from '../pixel/png.mjs';
 import type { MapBuilder } from './dsl';
 import { terminal } from './terminal';
 import { hospital } from './hospital';
+import { temple } from './temple';
 
 const TILE = 6;
 const COLORS: Record<string, number> = {
   '#': 0x1b1c1e, T: 0x3a5566, D: 0xd08a2a, W: 0x6ac8e8,
   t: 0x8a8272, c: 0x6a6a66, m: 0x5a646a, r: 0x4a3e34, u: 0x3a3f3a, w: 0x7a6a52,
   h: 0xb8c4c4, l: 0x8aa0a8, g: 0x6a7a80,
+  o: 0xa89878, e: 0x7a7468, a: 0xc8c4b8, k: 0x4a4438, f: 0x3e5a2e, v: 0x3a2a26, V: 0xe0501a,
 };
 const MARKS: Array<[string, number]> = [
   ['spawns', 0xe03030], ['stations', 0xf0d040], ['machines', 0xd040d0], ['box_spots', 0xff80ff],
@@ -53,7 +55,8 @@ function thumbnail(data: Record<string, any>): Buffer {
   const T = 3;
   const w = data.width * T, h = data.height * T;
   const rgba = new Uint8Array(w * h * 4);
-  const floorTone: Record<string, number> = { t: 0x6a6258, c: 0x55544f, m: 0x4a5258, r: 0x3e342c, u: 0x3a3f3a, w: 0x5e523e, h: 0x8a9696, l: 0x6a7a80, g: 0x56646a };
+  const floorTone: Record<string, number> = { t: 0x6a6258, c: 0x55544f, m: 0x4a5258, r: 0x3e342c, u: 0x3a3f3a, w: 0x5e523e, h: 0x8a9696, l: 0x6a7a80, g: 0x56646a,
+    o: 0x8a7a5e, e: 0x5e5a52, a: 0x9e9a90, k: 0x3e392f, f: 0x344a28, v: 0x33251f };
   const cells = data.cells as string[];
   const at = (x: number, y: number): string => cells[y]?.[x] ?? '#';
   for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
@@ -65,6 +68,7 @@ function thumbnail(data: Record<string, any>): Buffer {
     } else if (ch === 'D') c = 0xd9a640;
     else if (ch === 'W') c = 0x6ac8e8;
     else if (ch === 'T') c = 0x3a5566;
+    else if (ch === 'V') c = (x * 7 + y * 3) % 5 === 0 ? 0xffb040 : 0xd0441a;
     else c = floorTone[ch] ?? 0x555555;
     // Pontilhado leve no chão (cara de pixel art).
     if (ch !== '#' && (x + y) % 6 === 0) c = c - 0x0a0a0a;
@@ -74,7 +78,7 @@ function thumbnail(data: Record<string, any>): Buffer {
   return encodePng(w, h, rgba);
 }
 
-for (const make of [terminal, hospital] as Array<() => MapBuilder>) {
+for (const make of [terminal, hospital, temple] as Array<() => MapBuilder>) {
   const map = make();
   const data = map.build() as Record<string, any>;
   mkdirSync('godot/data/maps', { recursive: true });

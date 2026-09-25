@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+; Só do Godot (scripts/godot/temple-data.ts): Parede do Templo.
+
+[resource]
+script = ExtResource("1_script")
+id = &"winchester_1887"
+display_name = "Winchester 1887"
+kind = &"shotgun"
+rarity = &"rare"
+damage = 19
+fire_rate = 2.6
+automatic = false
+magazine_size = 5
+reserve_ammo = 50
+reload_time = 2.3
+spread_degrees = 8.5
+max_range = 11
+projectile_speed = 0
+pellets = 8
+pierce = 0
+headshot_multiplier = 1.5
+price = 2200
+ammo_price = 1100
+box_only = false
+maps = PackedStringArray("temple")
+element = &"explosive"
+tracer_color = Color(1, 0.824, 0.478, 1)
+special_type = &""

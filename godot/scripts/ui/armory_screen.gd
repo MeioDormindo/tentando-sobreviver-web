@@ -8,7 +8,15 @@ const MENU := "res://scenes/ui/main_menu.tscn"
 const RARITY_ORDER := [&"common", &"uncommon", &"rare", &"epic", &"legendary"]
 const RARITY_NAMES := {&"common": "COMUM", &"uncommon": "INCOMUM", &"rare": "RARA", &"epic": "ÉPICA", &"legendary": "LENDÁRIA"}
 ## Armas fora do catálogo da caixa que também aparecem aqui.
-const EXTRA := ["res://data/weapons/conductor_lantern.tres"]
+const EXTRA := ["res://data/weapons/conductor_lantern.tres", "res://data/weapons/zeus_bolt.tres",
+	"res://data/weapons/artemis_bow.tres", "res://data/weapons/poseidon_trident.tres"]
+## Como se ganha cada prêmio (armas que nunca saem na Mystery Box).
+const PRIZES := {
+	&"conductor_lantern": "Prêmio da missão O Último Trem (Terminal) — nunca sai na Mystery Box",
+	&"zeus_bolt": "Prêmio da missão O Portão do Submundo (Templo) — nunca sai na Mystery Box",
+	&"artemis_bow": "Santuário do Olimpo: ative as 12 estátuas dos deuses no Templo",
+	&"poseidon_trident": "Evento Portão do Submundo (Templo): destrua o portal",
+}
 ## [rótulo, valor (para a barra), máximo, texto].
 const STATS := ["DANO", "CADÊNCIA", "PENTE", "RESERVA", "RECARGA", "ALCANCE"]
 
@@ -182,20 +190,23 @@ func _stat_row(stat: String, weapon: WeaponData) -> void:
 
 ## Onde conseguir: arma inicial, parede (preço, mapa e área), Mystery Box ou prêmio da missão.
 func source_text(weapon: WeaponData) -> String:
-	if weapon.id == &"conductor_lantern":
-		return "Prêmio da missão O Último Trem (Terminal) — nunca sai na Mystery Box"
+	if PRIZES.has(weapon.id):
+		return PRIZES[weapon.id]
 	var parts: Array[String] = []
 	for map_id: String in _maps:
 		var data: Dictionary = _maps[map_id]
 		var start := String(data.get("start_weapon", ""))
-		if start == "" and map_id == "terminal":
+		if start == "":
 			start = "m1911"
 		if start == String(weapon.id):
 			parts.append("Arma inicial do %s" % Save.catalog.display_name(map_id))
 		for station: Dictionary in data.get("stations", []):
 			if station.get("weaponId", "") == String(weapon.id):
 				parts.append("Parede: %d · %s · %s" % [weapon.price, Save.catalog.display_name(map_id), _area_name(data, float(station.tx), float(station.ty))])
-	parts.append("Mystery Box (nos dois mapas)" if parts.is_empty() else "também na Mystery Box")
+	if weapon.box_only and not weapon.maps.is_empty():
+		parts.append("Mystery Box só no %s" % ", ".join(Array(weapon.maps).map(func(m: String) -> String: return Save.catalog.display_name(m))))
+	else:
+		parts.append("Mystery Box (em todos os mapas)" if parts.is_empty() else "também na Mystery Box")
 	return " · ".join(parts)
 
 

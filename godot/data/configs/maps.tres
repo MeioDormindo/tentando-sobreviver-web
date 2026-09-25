@@ -5,10 +5,11 @@
 [resource]
 script = ExtResource("1_script")
 maps = {
-"terminal": { "name": "Terminal Central", "description": "Estação de trem abandonada: hall, plataforma, lojas, túneis e manutenção.", "scene": "res://scenes/maps/terminal.tscn", "unlock_boss_round": 0, "unlock_on_map": "" },
-"map2": { "name": "Hospital Santa Luzia", "description": "Onde o vírus nasceu: recepção, UTI, centro cirúrgico, necrotério e o laboratório no subsolo.", "scene": "res://scenes/maps/hospital.tscn", "unlock_boss_round": 10, "unlock_on_map": "terminal" }
+"terminal": { "name": "Terminal Central", "description": "Estação de trem abandonada: hall, plataforma, lojas, túneis e manutenção.", "scene": "res://scenes/maps/terminal.tscn", "unlock_boss_round": 0, "unlock_on_map": "", "unlock_achievements": [] },
+"map2": { "name": "Hospital Santa Luzia", "description": "Onde o vírus nasceu: recepção, UTI, centro cirúrgico, necrotério e o laboratório no subsolo.", "scene": "res://scenes/maps/hospital.tscn", "unlock_boss_round": 10, "unlock_on_map": "terminal", "unlock_achievements": [] },
+"temple": { "name": "Templo dos Mortos", "description": "Ruínas gregas, uma necrópole, a floresta de Artemis e o portão para o Submundo.", "scene": "res://scenes/maps/temple.tscn", "unlock_boss_round": 0, "unlock_on_map": "", "unlock_achievements": ["last_train", "serum"] }
 }
-order = PackedStringArray("terminal", "map2")
+order = PackedStringArray("terminal", "map2", "temple")
 default_map = "terminal"
 ranking_size = 10
 player_name_max = 14

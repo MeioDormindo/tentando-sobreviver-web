@@ -13,6 +13,9 @@ const COLOR := Color(0.55, 0.36, 0.16)
 ## plataforma, comporta blindada nos túneis, câmara fria no necrotério, risco biológico no
 ## laboratório... Arte em assets/tiles/door_<estilo>.png (npm run godot:scenery).
 const STYLE_BY_AREA := [
+	# Templo dos Mortos.
+	[&"sanctuary", &"olympus"], [&"arena", &"infernal"], [&"underworld", &"infernal"], [&"gorgon_temple", &"serpent"],
+	[&"forest", &"roots"], [&"necropolis", &"bones"], [&"labyrinth", &"bronze"], [&"ruins", &"bronze"],
 	[&"lab", &"biohazard"], [&"morgue", &"cold"], [&"cafeteria", &"kitchen"], [&"pharmacy", &"pharmacy"],
 	[&"radiology", &"radiation"], [&"pediatrics", &"pediatric"], [&"icu", &"ward"], [&"surgery", &"ward"],
 	[&"ward", &"ward"], [&"reception", &"ward"], [&"maintenance", &"blast"], [&"tunnels", &"blast"],
@@ -27,6 +30,15 @@ const SIGN_COLORS := {
 }
 
 var door_id: StringName
+## "buy" (compra com pontos) ou um portão especial do Templo que abre por outra via:
+## "altar" (os 3 altares com Fragmentos de Alma), "quest" (chave do Minotauro), "secret" (12 estátuas).
+var kind: StringName = &"buy"
+## O que o portão especial pede (texto de interação).
+const GATE_HINTS := {
+	&"altar": "PORTÃO DO TEMPLO — leve Fragmentos de Alma aos 3 altares",
+	&"quest": "PORTÃO DO SUBMUNDO — precisa da chave do Minotauro",
+	&"secret": "PASSAGEM SELADA — ative as 12 estátuas dos deuses",
+}
 var cost: int = 0
 var areas: PackedStringArray = PackedStringArray()
 ## Distância (m, do centro) para o jogador poder interagir.
@@ -168,6 +180,8 @@ static func _art_material(p_style: StringName, size: Vector2, p_across: Vector3)
 func get_interaction_prompt(_player: Node3D) -> String:
 	if is_open:
 		return ""
+	if kind != &"buy":
+		return String(GATE_HINTS.get(kind, "PORTÃO FECHADO"))
 	var names := []
 	for area in areas:
 		if _world and not _world.is_area_open(StringName(area)):
@@ -177,7 +191,7 @@ func get_interaction_prompt(_player: Node3D) -> String:
 
 
 func interact(_player: Node3D) -> bool:
-	if is_open:
+	if is_open or kind != &"buy":
 		return false
 	var points := get_tree().get_first_node_in_group(&"points_manager") as PointsManager
 	if points == null or not points.spend(cost):

@@ -14,6 +14,12 @@ import {
   zombieModel, zombieAnimations, playerModel, patientModel, playerAnimations, weaponParts,
   houndModel, houndAnimations, PISTOLS, conductorModel, patientZeroModel, bossAnimations,
 } from './characters.mjs';
+import { TEMPLE_LOOKS, TEMPLE_HOUND, hopliteModel, skeletonModel, minotaurModel, archaeologistModel } from './temple_characters.mjs';
+
+// Filtro opcional: node build.mjs zombie_hoplite boss_ weapon_makarov → só as folhas cujo nome
+// começa com um desses (o resto fica como está). Sem argumentos, gera tudo.
+const ONLY = process.argv.slice(2);
+const want = (name) => ONLY.length === 0 || ONLY.some((p) => name.startsWith(p));
 
 const OUT = 'godot/assets/sprites';
 /** Inclinação da câmera do jogo (TopDownCamera.pitch_degrees): o desenho usa a mesma vista. */
@@ -36,6 +42,11 @@ function tresNumber(text, key, fallback) {
   return m ? parseFloat(m[1]) : fallback;
 }
 
+/** Gera e grava a folha `name` (make() só roda se o filtro pedir essa folha). */
+function emit(name, make) {
+  if (want(name)) write(name, make());
+}
+
 function write(name, result) {
   for (const [layer, sheet] of Object.entries(result.sheets)) {
     const file = layer === 'body' || layer === 'weapon' ? name : `${name}_${layer}`;
@@ -56,12 +67,17 @@ for (const file of readdirSync('godot/data/zombies')) {
     shirt: tresColor(text, 'shirt_color'), skin: tresColor(text, 'skin_color'),
     scale: tresNumber(text, 'model_scale', 1), armored: /\narmor = \{/.test(text), glow: GLOWS[id],
   };
+  const art = (text.match(/\nart = &"(\w+)"/) || [])[1] || '';
   if (id === 'hound') {
-    write('hound', buildSheet(houndModel(look), houndAnimations(), { pitch: PITCH }));
+    emit('hound', () => buildSheet(houndModel(look), houndAnimations(), { pitch: PITCH }));
+  } else if (art) {
+    // Inimigos do Templo: modelos próprios (Hoplita, Esqueleto...).
+    const model = art.startsWith('hoplite') ? hopliteModel(look, art === 'hoplite_shield') : skeletonModel(look, art === 'skeleton_archer');
+    emit(`zombie_${id}`, () => buildSheet(model, zombieAnimations(), { pitch: PITCH, workSize: 240 }));
   } else {
-    write(`zombie_${id}`, buildSheet(zombieModel(look), zombieAnimations(), { pitch: PITCH, workSize: 240 }));
+    emit(`zombie_${id}`, () => buildSheet(zombieModel(look), zombieAnimations(), { pitch: PITCH, workSize: 240 }));
     // Blindado sem a armadura (depois do headshot ou de dano suficiente).
-    if (look.armored) write(`zombie_${id}_bare`, buildSheet(zombieModel({ ...look, armored: false }), zombieAnimations(), { pitch: PITCH, workSize: 240 }));
+    if (look.armored) emit(`zombie_${id}_bare`, () => buildSheet(zombieModel({ ...look, armored: false }), zombieAnimations(), { pitch: PITCH, workSize: 240 }));
   }
 }
 
@@ -79,19 +95,31 @@ for (const [id, extra] of Object.entries(HOSPITAL_LOOKS)) {
     skin: tresColor(text, 'skin_color'), scale: tresNumber(text, 'model_scale', 1), glow: GLOWS[id], ...extra,
     pants: extra.outfit === 'gown' ? tresColor(text, 'skin_color') : extra.outfit === 'hazmat' ? extra.shirt : extra.outfit === 'orderly' ? hex(0xc8c6bc) : extra.shirt,
   };
-  write(`zombie_${id}_hospital`, buildSheet(zombieModel(look), zombieAnimations(), { pitch: PITCH, workSize: 240 }));
+  emit(`zombie_${id}_hospital`, () => buildSheet(zombieModel(look), zombieAnimations(), { pitch: PITCH, workSize: 240 }));
 }
+
+// Zumbis do Templo: todos os tipos que existem nos outros mapas ganham roupa grega
+// (arqueólogo, cultista, gladiador, portador de ânfora, múmia, sacerdote do veneno, hoplita
+// de bronze) e o cão vira o cão de Hades: zombie_<tipo>_temple / hound_temple.
+for (const [id, extra] of Object.entries(TEMPLE_LOOKS)) {
+  const text = readFileSync(join('godot/data/zombies', `${id}.tres`), 'utf8');
+  const look = { skin: tresColor(text, 'skin_color'), scale: tresNumber(text, 'model_scale', 1), glow: GLOWS[id], armored: /\narmor = \{/.test(text), ...extra };
+  emit(`zombie_${id}_temple`, () => buildSheet(zombieModel(look), zombieAnimations(), { pitch: PITCH, workSize: 240 }));
+  if (look.armored) emit(`zombie_${id}_temple_bare`, () => buildSheet(zombieModel({ ...look, armored: false }), zombieAnimations(), { pitch: PITCH, workSize: 240 }));
+}
+emit('hound_temple', () => buildSheet(houndModel(TEMPLE_HOUND), houndAnimations(), { pitch: PITCH }));
 
 // Zumbi dourado (evento): o runner inteiro em ouro, olhos amarelos e coroa.
 {
   const runner = readFileSync(join('godot/data/zombies', 'runner.tres'), 'utf8');
   const gold = { shirt: hex(0xd9a520), skin: hex(0xf0c85a), pants: hex(0xa8741a), shoes: hex(0x7a5210), eyes: hex(0xfff2a0), crown: hex(0xffd84a), scale: tresNumber(runner, 'model_scale', 1) };
-  write('zombie_golden', buildSheet(zombieModel(gold), zombieAnimations(), { pitch: PITCH, workSize: 240 }));
+  emit('zombie_golden', () => buildSheet(zombieModel(gold), zombieAnimations(), { pitch: PITCH, workSize: 240 }));
 }
 
 // Bosses.
-write('boss_conductor', buildSheet(conductorModel(), bossAnimations(), { pitch: PITCH, workSize: 320 }));
-write('boss_patient_zero', buildSheet(patientZeroModel(), bossAnimations(), { pitch: PITCH, workSize: 320 }));
+emit('boss_conductor', () => buildSheet(conductorModel(), bossAnimations(), { pitch: PITCH, workSize: 320 }));
+emit('boss_patient_zero', () => buildSheet(patientZeroModel(), bossAnimations(), { pitch: PITCH, workSize: 320 }));
+emit('boss_minotaur', () => buildSheet(minotaurModel(), bossAnimations(), { pitch: PITCH, workSize: 340 }));
 
 // Jogador: um por visual (cores do skins.tres), sem arma.
 const skins = readFileSync('godot/data/configs/skins.tres', 'utf8');
@@ -106,13 +134,13 @@ for (const line of skins.split('\n')) {
   const kind = (line.match(/"model": "(\w+)"/) || [])[1] || 'survivor';
   const style = (line.match(/"style": "(\w*)"/) || [])[1] || '';
   const look = { jacket: color('jacket'), pack: color('pack'), hair: color('hair'), style };
-  const model = kind === 'patient' ? patientModel(look) : playerModel(look);
-  write(`player_${id[1]}`, buildSheet(model, playerAnimations(), { pitch: PITCH, fixedFrame: PLAYER_FRAME, layers: { body: null } }));
+  const model = kind === 'patient' ? patientModel(look) : kind === 'archaeologist' ? archaeologistModel(look) : playerModel(look);
+  emit(`player_${id[1]}`, () => buildSheet(model, playerAnimations(), { pitch: PITCH, fixedFrame: PLAYER_FRAME, layers: { body: null } }));
 }
 
 // Armas: uma folha por arma e por nível do Weapon Lab (weapon_<id>, _mk2, _mk3), na mesma
 // pose e quadro do jogador (e se ela fica atrás do corpo), e o ícone de perfil de cada uma.
-for (const file of readdirSync(OUT)) if (file.startsWith('weapon_')) rmSync(join(OUT, file));
+if (ONLY.length === 0) for (const file of readdirSync(OUT)) if (file.startsWith('weapon_')) rmSync(join(OUT, file));
 mkdirSync(join(OUT, 'icons'), { recursive: true });
 const base = playerModel({ jacket: [0, 0, 0], pack: [0, 0, 0], hair: [0, 0, 0] });
 const weaponIds = readdirSync('godot/data/weapons')
@@ -121,6 +149,7 @@ const weaponIds = readdirSync('godot/data/weapons')
 for (const id of weaponIds) {
   // A faca não tem melhorias do Weapon Lab.
   for (const level of id === 'knife' ? [0] : [0, 1, 2]) {
+    if (!want(`weapon_${id}`)) continue;
     const model = { ...base, parts: [...base.parts, ...weaponParts(id, level)] };
     // Desenhada com o corpo na frente: só os pixels da arma que aparecem (a mão cobre o cabo),
     // e a camada vai sempre por cima do corpo.
@@ -152,7 +181,7 @@ function muzzleOf(id, level, stance) {
 }
 
 // Desenhos de giz das compras na parede (armas que não são só da caixa) e o quadro-negro.
-import('./chalk.mjs').then(({ buildChalk }) => buildChalk(join(OUT, 'chalk'), weaponIds.filter((id) => id !== 'knife')));
+if (ONLY.length === 0 || ONLY.some((p) => p.startsWith('weapon_') || p === 'chalk')) import('./chalk.mjs').then(({ buildChalk }) => buildChalk(join(OUT, 'chalk'), weaponIds.filter((id) => id !== 'knife' && want(`weapon_${id}`))));
 
 // Ursinho (segredo): sentado, visto pela câmera do jogo.
 {

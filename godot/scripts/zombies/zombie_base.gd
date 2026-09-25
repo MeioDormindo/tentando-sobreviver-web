@@ -75,7 +75,8 @@ func _ready() -> void:
 	attack_damage = data.damage * _damage_mult
 	add_to_group(&"zombies")
 	_apply_look()
-	if not (data.explosive.is_empty() and data.ranged.is_empty() and data.armor.is_empty() and data.death_cloud.is_empty()):
+	if not (data.explosive.is_empty() and data.ranged.is_empty() and data.armor.is_empty() and data.death_cloud.is_empty()
+			and data.shield.is_empty() and data.revive.is_empty()):
 		_abilities = ZombieAbilities.new()
 		add_child(_abilities)
 		_abilities.setup(self)
@@ -356,15 +357,19 @@ func _apply_look() -> void:
 		_armor_meshes = [helmet, vest]
 
 
+## Visual adaptado ao mapa dos tipos que existem em mais de um mapa (sufixo da folha).
+const MAP_LOOK := {"map2": "_hospital", "temple": "_temple"}
+
+
 ## Folha de sprites do tipo (gerada por npm run godot:sprites): "zombie_<tipo>" ou "hound".
-## No Hospital, os tipos que também existem no Terminal têm o visual do mapa (paciente,
-## enfermeiro, maqueiro, quarentena): zombie_<tipo>_hospital, quando a folha existe.
+## No Hospital e no Templo, os tipos que também existem no Terminal têm o visual do mapa
+## (Hospital: paciente, enfermeiro...; Templo: arqueólogo, cultista, gladiador...), quando a
+## folha existe.
 func sprite_sheet() -> String:
-	if data.id == &"hound":
-		return "hound"
-	var sheet := "zombie_%s" % data.id
-	if Session.map_id == "map2" and CharacterSprite.exists(sheet + "_hospital"):
-		return sheet + "_hospital"
+	var sheet := "hound" if data.id == &"hound" else "zombie_%s" % data.id
+	var suffix := String(MAP_LOOK.get(Session.map_id, ""))
+	if suffix != "" and CharacterSprite.exists(sheet + suffix):
+		return sheet + suffix
 	return sheet
 
 

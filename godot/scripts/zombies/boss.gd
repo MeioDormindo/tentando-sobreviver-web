@@ -187,6 +187,10 @@ func _charging(distance: float) -> void:
 	# Bateu na parede: fica atordoado (janela para o jogador atacar).
 	for i in get_slide_collision_count():
 		var collider := get_slide_collision(i).get_collider()
+		# Minotauro na Fúria (fase 2+): atravessa as colunas da praça, que desabam.
+		if collider is BreakablePillar and bool(data.extras.get("breaks_pillars", false)) and phase >= 2:
+			(collider as BreakablePillar).collapse()
+			continue
 		if collider is StaticBody3D and absf(get_slide_collision(i).get_normal().y) < 0.5:
 			mode = Mode.STUNNED
 			_mode_until = _clock + float(data.charge.get("stun_time", 1.2))
@@ -229,7 +233,12 @@ func _try_attack(distance: float, to_target: Vector3) -> bool:
 		return true
 	if _can(data.area, &"area"):
 		_start_action(0.65, float(data.area.cooldown_time), &"area")
-		BossAttacks.area(get_tree(), target.global_position, data.area, data.area_acid, target)
+		# Minotauro (Colapso): as pedras que caem ficam como escombro por alguns segundos.
+		var area_cfg := data.area
+		if data.extras.has("rubble_time"):
+			area_cfg = data.area.duplicate()
+			area_cfg["rubble_time"] = data.extras.rubble_time
+		BossAttacks.area(get_tree(), target.global_position, area_cfg, data.area_acid, target)
 		return true
 	if _can(data.scream, &"scream") and distance <= float(data.scream.radius):
 		_start_action(1.0, float(data.scream.cooldown_time), &"scream")

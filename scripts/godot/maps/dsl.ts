@@ -7,16 +7,49 @@
  * Construção da grade: tudo começa parede → salas e bolsões viram chão → sólidos (pilares,
  * balcões, trem) → recortes → portas → janelas. O tipo de piso só pinta o que já é chão.
  */
-import { PROP_DEFS, type PropType } from '../../../src/map/props';
+import { PROP_DEFS, type PropType, type PropDef } from '../../../src/map/props';
+
+/** Deuses das 12 estátuas do Templo (uma receita de objeto por deus: statue_<deus>). */
+export const GODS = ['zeus', 'hera', 'poseidon', 'demeter', 'athena', 'apollo', 'artemis', 'ares', 'aphrodite', 'hephaestus', 'hermes', 'dionysus'] as const;
+export type God = typeof GODS[number];
+
+/**
+ * Objetos que só existem no Godot (Templo dos Mortos): mesmas unidades do jogo web (px, 32 = 1 m)
+ * para o corpo de colisão; a arte vem das receitas de scripts/godot/pixel/props.mjs.
+ */
+export const GODOT_PROP_DEFS = {
+  column: { body: { w: 30, h: 30, ox: 0, oy: 0 }, blocksBullets: true },
+  column_broken: { body: { w: 30, h: 30, ox: 0, oy: 0 }, blocksBullets: true },
+  column_fallen: { body: { w: 88, h: 26, ox: 0, oy: 0 }, blocksBullets: true },
+  altar: { body: { w: 56, h: 34, ox: 0, oy: 0 }, blocksBullets: true, light: { radius: 90, intensity: 0.45, color: 0xffb060 } },
+  brazier: { body: { w: 24, h: 24, ox: 0, oy: 0 }, blocksBullets: false, light: { radius: 150, intensity: 0.75, color: 0xff9a3a } },
+  sarcophagus: { body: { w: 72, h: 32, ox: 0, oy: 0 }, blocksBullets: true },
+  tomb: { body: { w: 40, h: 20, ox: 0, oy: 0 }, blocksBullets: true },
+  bones: { blocksBullets: false },
+  amphora: { body: { w: 16, h: 16, ox: 0, oy: 0 }, blocksBullets: false },
+  tree: { body: { w: 26, h: 26, ox: 0, oy: 0 }, blocksBullets: true },
+  dead_tree: { body: { w: 22, h: 22, ox: 0, oy: 0 }, blocksBullets: true },
+  bush: { blocksBullets: false },
+  rock: { body: { w: 40, h: 32, ox: 0, oy: 0 }, blocksBullets: true },
+  statue_stone: { body: { w: 26, h: 26, ox: 0, oy: 0 }, blocksBullets: true },
+  soul_crystal: { blocksBullets: false, light: { radius: 80, intensity: 0.5, color: 0x8a6aff } },
+  chains: { blocksBullets: false },
+  ...Object.fromEntries(GODS.map((g) => [`statue_${g}`, { body: { w: 34, h: 34, ox: 0, oy: 0 }, blocksBullets: true }])),
+} as Record<string, Omit<PropDef, 'texture'>>;
+export type AnyProp = PropType | keyof typeof GODOT_PROP_DEFS;
 
 export interface Rect { x: number; y: number; w: number; h: number }
-export type Floor = 'terminal' | 'concrete' | 'metal' | 'tracks' | 'tunnel' | 'wagon' | 'hospital' | 'linoleum' | 'morgue';
+export type Floor = 'terminal' | 'concrete' | 'metal' | 'tracks' | 'tunnel' | 'wagon' | 'hospital' | 'linoleum' | 'morgue'
+  | 'mosaic' | 'stone' | 'marble' | 'catacomb' | 'grass' | 'volcanic';
+/** Portão especial: abre por altar (3 altares), missão (chave) ou segredo (12 estátuas); não se compra. */
+export type DoorKind = 'buy' | 'altar' | 'quest' | 'secret';
 /** Luz de uma área: bem iluminada (a lanterna sobra), meia-luz ou escura (a lanterna ajuda). */
 export type Lighting = 'lit' | 'dim' | 'dark';
 
 export const FLOOR_CHARS: Record<Floor, string> = {
   terminal: 't', concrete: 'c', metal: 'm', tracks: 'r', tunnel: 'u', wagon: 'w',
   hospital: 'h', linoleum: 'l', morgue: 'g',
+  mosaic: 'o', stone: 'e', marble: 'a', catacomb: 'k', grass: 'f', volcanic: 'v',
 };
 
 const PX = 32;
@@ -24,18 +57,19 @@ const r3 = (n: number): number => Math.round(n * 1000) / 1000;
 export const rect = (x: number, y: number, w: number, h: number): Rect => ({ x, y, w, h });
 
 interface Area { id: string; name: string; darkness: number; lighting: Lighting; rects: Rect[]; decor: number }
-interface Lamp { x: number; z: number; radius: number; intensity: number; flicker: number; color: number; broken: boolean }
+interface Lamp { x: number; z: number; radius: number; intensity: number; flicker: number; color: number; broken: boolean; torch: boolean }
 
-export interface LampOptions { radius?: number; intensity?: number; flicker?: number; color?: number; broken?: boolean }
+/** torch: tocha/braseiro (fogo, acende sem energia e tremula). */
+export interface LampOptions { radius?: number; intensity?: number; flicker?: number; color?: number; broken?: boolean; torch?: boolean }
 
 export class MapBuilder {
   private readonly areas: Area[] = [];
   private readonly rooms: Array<{ rect: Rect; floor: Floor }> = [];
   private readonly pockets: Array<{ rect: Rect; floor: Floor }> = [];
-  private readonly solids: Array<{ rect: Rect; ch: '#' | 'T' }> = [];
+  private readonly solids: Array<{ rect: Rect; ch: '#' | 'T' | 'V' }> = [];
   private readonly carves: Array<{ rect: Rect; floor: Floor }> = [];
   private readonly floors: Array<{ rect: Rect; floor: Floor }> = [];
-  private readonly doors: Array<{ id: string; rect: Rect; cost: number; areas: [string, string] }> = [];
+  private readonly doors: Array<{ id: string; rect: Rect; cost: number; areas: [string, string]; kind?: DoorKind }> = [];
   private readonly windows: Array<{ id: string; rect: Rect; area: string }> = [];
   private readonly spawns: Array<{ id: string; x: number; z: number; area: string; min_round: number }> = [];
   private readonly stations: Array<Record<string, unknown>> = [];
@@ -50,6 +84,7 @@ export class MapBuilder {
   private stationData: Record<string, unknown> | null = null;
   private secretsData: Record<string, unknown> | null = null;
   private questData: Record<string, unknown> | null = null;
+  private readonly extras: Record<string, unknown> = {};
 
   constructor(readonly id: string, readonly width: number, readonly height: number, private readonly options: { outsideDarkness: number; decorSeed: string }) {}
 
@@ -86,6 +121,12 @@ export class MapBuilder {
     return this;
   }
 
+  /** Rio de lava (Templo): não se anda nem se atravessa; brilha e ilumina (as pontes são chão). */
+  lava(...rects: Rect[]): this {
+    for (const r of rects) this.solids.push({ rect: r, ch: 'V' });
+    return this;
+  }
+
   /** Recorte feito depois dos sólidos (interior do vagão aberto). */
   carve(r: Rect, floor: Floor): this {
     this.carves.push({ rect: r, floor });
@@ -98,8 +139,8 @@ export class MapBuilder {
     return this;
   }
 
-  door(id: string, r: Rect, cost: number, a: string, b: string): this {
-    this.doors.push({ id, rect: r, cost, areas: [a, b] });
+  door(id: string, r: Rect, cost: number, a: string, b: string, kind: DoorKind = 'buy'): this {
+    this.doors.push({ id, rect: r, cost, areas: [a, b], ...(kind !== 'buy' ? { kind } : {}) });
     return this;
   }
 
@@ -166,7 +207,8 @@ export class MapBuilder {
   lamp(tx: number, ty: number, o: LampOptions = {}): this {
     this.lamps.push({
       x: tx + 0.5, z: ty + 0.5, radius: o.radius ?? 6.5, intensity: o.intensity ?? 0.6,
-      flicker: o.flicker ?? 0.1, color: o.color ?? 0xffd6a0, broken: o.broken ?? false,
+      flicker: o.flicker ?? (o.torch ? 0.35 : 0.1), color: o.color ?? (o.torch ? 0xff9a48 : 0xffd6a0), broken: o.broken ?? false,
+      torch: o.torch ?? false,
     });
     return this;
   }
@@ -189,8 +231,8 @@ export class MapBuilder {
   }
 
   /** Objeto do kit (PropFactory). Ângulo em graus; em 90/270 o corpo de colisão gira junto. */
-  prop(type: PropType, tx: number, ty: number, angle = 0): this {
-    const def = PROP_DEFS[type];
+  prop(type: AnyProp, tx: number, ty: number, angle = 0): this {
+    const def = (PROP_DEFS as Record<string, Omit<PropDef, 'texture'>>)[type] ?? GODOT_PROP_DEFS[type];
     if (!def) throw new Error(`${this.id}: prop desconhecido ${type}`);
     const turned = Math.abs(Math.round(angle / 90)) % 2 === 1 && angle % 90 === 0;
     const body = def.body
@@ -207,7 +249,7 @@ export class MapBuilder {
   }
 
   /** Vários do mesmo tipo: [tx, ty, ângulo?]. */
-  props(type: PropType, spots: Array<[number, number, number?]>): this {
+  props(type: AnyProp, spots: Array<[number, number, number?]>): this {
     for (const [tx, ty, angle] of spots) this.prop(type, tx, ty, angle ?? 0);
     return this;
   }
@@ -219,6 +261,12 @@ export class MapBuilder {
 
   secrets(data: Record<string, unknown>): this {
     this.secretsData = data;
+    return this;
+  }
+
+  /** Dados extras do mapa (Templo: colunas que o Minotauro derruba, altares e fragmentos). */
+  extra(key: string, value: unknown): this {
+    this.extras[key] = value;
     return this;
   }
 
@@ -268,7 +316,7 @@ export class MapBuilder {
       id: this.id,
       width: this.width,
       height: this.height,
-      legend: { wall: '#', train: 'T', door: 'D', window: 'W', floors: FLOOR_CHARS },
+      legend: { wall: '#', train: 'T', lava: 'V', door: 'D', window: 'W', floors: FLOOR_CHARS },
       cells: g.map((row) => row.join('')),
       start_area: this.start.area,
       player_start: { x: this.start.x, z: this.start.z },
@@ -289,6 +337,7 @@ export class MapBuilder {
       quest: this.questData,
       decor: { seed: this.options.decorSeed, density: Object.fromEntries(this.areas.map((a) => [a.id, a.decor])) },
       props: this.propList,
+      ...this.extras,
     };
   }
 
@@ -297,7 +346,7 @@ export class MapBuilder {
   private validate(g: string[][]): void {
     const errors: string[] = [];
     const at = (x: number, z: number): string => g[Math.floor(z)]?.[Math.floor(x)] ?? '#';
-    const walkable = (ch: string): boolean => ch !== '#' && ch !== 'T' && ch !== 'W';
+    const walkable = (ch: string): boolean => ch !== '#' && ch !== 'T' && ch !== 'W' && ch !== 'V';
     const inArea = (id: string, x: number, z: number): boolean =>
       this.getArea(id).rects.some((r) => x >= r.x && x < r.x + r.w && z >= r.y && z < r.y + r.h);
     const need = (what: string, x: number, z: number): void => {

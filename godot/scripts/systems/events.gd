@@ -82,6 +82,8 @@ signal reward_multiplier_changed(multiplier: float)
 signal train_run_over(count: int)
 ## Ursinho escondido achado (found de total).
 signal teddy_found(found: int, total: int)
+## Estátua de deus acesa no Templo (segredo das 12).
+signal statue_lit(found: int, total: int)
 ## Tremor de tela (a câmera obedece à configuração).
 signal screen_shake(duration: float, strength: float)
 ## Missão principal: objetivo atual para a HUD (vazio = nenhuma) e missão concluída.

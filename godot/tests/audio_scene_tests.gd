@@ -71,7 +71,7 @@ func _playing(key: String) -> Array[Node]:
 
 func _catalog() -> void:
 	var sounds: Dictionary = _audio.config.get("sounds", {})
-	check(sounds.size() == 142, "catálogo do jogo web: %d sons" % sounds.size())
+	check(sounds.size() == 146, "catálogo do jogo web + 4 ambientes do Templo: %d sons" % sounds.size())
 	var missing: Array[String] = []
 	for key: String in sounds:
 		for v in int(sounds[key]):

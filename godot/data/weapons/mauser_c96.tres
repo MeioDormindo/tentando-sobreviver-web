@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+; Só do Godot (scripts/godot/temple-data.ts): Parede do Templo (Ruínas).
+
+[resource]
+script = ExtResource("1_script")
+id = &"mauser_c96"
+display_name = "Mauser C96"
+kind = &"pistol"
+rarity = &"common"
+damage = 30
+fire_rate = 6.5
+automatic = false
+magazine_size = 10
+reserve_ammo = 120
+reload_time = 1.6
+spread_degrees = 2.2
+max_range = 22
+projectile_speed = 0
+pellets = 1
+pierce = 0
+headshot_multiplier = 1.5
+price = 500
+ammo_price = 250
+box_only = false
+maps = PackedStringArray("temple")
+element = &"shadow"
+tracer_color = Color(1, 0.824, 0.478, 1)
+special_type = &""

@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+; Só do Godot (scripts/godot/temple-data.ts): Pistola inicial do Templo.
+
+[resource]
+script = ExtResource("1_script")
+id = &"makarov"
+display_name = "Makarov PM"
+kind = &"pistol"
+rarity = &"common"
+damage = 32
+fire_rate = 4.5
+automatic = false
+magazine_size = 8
+reserve_ammo = 88
+reload_time = 1.35
+spread_degrees = 2.1
+max_range = 21
+projectile_speed = 0
+pellets = 1
+pierce = 0
+headshot_multiplier = 1.5
+price = 0
+ammo_price = 250
+box_only = false
+element = &"fire"
+tracer_color = Color(1, 0.824, 0.478, 1)
+special_type = &""

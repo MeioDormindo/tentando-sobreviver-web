@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+; Só do Godot (scripts/godot/temple-data.ts): Santuário do Olimpo (12 estátuas).
+
+[resource]
+script = ExtResource("1_script")
+id = &"artemis_bow"
+display_name = "Arco de Artemis"
+kind = &"sniper"
+rarity = &"legendary"
+damage = 520
+fire_rate = 1.3
+automatic = false
+magazine_size = 6
+reserve_ammo = 48
+reload_time = 1.6
+spread_degrees = 0
+max_range = 45
+projectile_speed = 0
+pellets = 1
+pierce = 8
+headshot_multiplier = 3
+price = 0
+ammo_price = 2500
+box_only = true
+maps = PackedStringArray("temple")
+element = &""
+upgrade_name = "Caçada Lunar"
+tracer_color = Color(0.847, 0.941, 1, 1)
+special_type = &""

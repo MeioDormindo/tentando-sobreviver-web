@@ -99,6 +99,66 @@ const WALL = {
   } },
 };
 
+// Templo dos Mortos: inscrições gregas, nichos com crânios, velas, trepadeiras, tochas.
+Object.assign(WALL, {
+  inscription: { size: [1.3, 0.55], draw: (r) => {
+    const p = T(62, 26);
+    rect(p, 0, 0, 62, 26, hex(0x8a8272)); bevel(p, 0, 0, 62, 26, hex(0xa8a090), hex(0x4a453c));
+    for (let row = 0; row < 3; row++) for (let x = 4; x < 58; x += 5) {  // letras gregas em blocos
+      const y = 4 + row * 7, k = r.int(0, 3);
+      if (k === 0) { hline(p, y, hex(0x3a352c), x, x + 3); vline(p, x + 1, hex(0x3a352c), y, y + 4); }
+      else if (k === 1) { vline(p, x, hex(0x3a352c), y, y + 4); vline(p, x + 3, hex(0x3a352c), y, y + 4); hline(p, y, hex(0x3a352c), x, x + 3); }
+      else if (k === 2) { hline(p, y, hex(0x3a352c), x, x + 3); hline(p, y + 4, hex(0x3a352c), x, x + 3); p.set(x + 1, y + 2, hex(0x3a352c)); p.set(x + 2, y + 2, hex(0x3a352c)); }
+      else { p.set(x + 1, y, hex(0x3a352c)); p.set(x, y + 2, hex(0x3a352c)); p.set(x + 2, y + 2, hex(0x3a352c)); hline(p, y + 4, hex(0x3a352c), x, x + 3); }
+    }
+    return p;
+  } },
+  skull_niche: { size: [0.7, 0.6], draw: () => {
+    const p = T(34, 29);
+    rect(p, 0, 0, 34, 29, hex(0x1a1612)); bevel(p, 0, 0, 34, 29, hex(0x3a342c), hex(0x0a0806));
+    for (const cx of [9, 24]) {
+      rect(p, cx - 5, 10, 10, 9, hex(0xcfc6aa)); rect(p, cx - 3, 19, 6, 4, hex(0xcfc6aa));
+      rect(p, cx - 3, 13, 2, 3, hex(0x1a1612)); rect(p, cx + 1, 13, 2, 3, hex(0x1a1612));
+    }
+    return p;
+  } },
+  candles: { size: [0.5, 0.35], glow: [1.0, 0.75, 0.4], draw: () => {
+    const p = T(24, 17);
+    for (const [x, h] of [[3, 9], [9, 12], [15, 7], [20, 10]]) {
+      rect(p, x, 17 - h, 3, h, hex(0xe8dcc0)); p.set(x + 1, 16 - h, hex(0xffd060)); p.set(x + 1, 15 - h, hex(0xff8a2a));
+    }
+    return p;
+  } },
+  vines: { size: [1.0, 1.4], draw: (r) => {
+    const p = T(48, 67);
+    for (let k = 0; k < 5; k++) {
+      let x = r.int(4, 44);
+      for (let y = 0; y < 67; y++) {
+        x += r.int(-1, 1);
+        if (x < 0 || x > 47) break;
+        p.set(x, y, hex(0x2e4a22));
+        if (r() < 0.3) { p.set(x + 1, y, hex(0x4e6a34)); p.set(x - 1, y, hex(0x3e5a2a)); }
+      }
+    }
+    return p;
+  } },
+  sconce: { size: [0.35, 0.6], glow: [1.0, 0.6, 0.25], draw: () => {
+    const p = T(17, 29);
+    rect(p, 6, 14, 5, 15, hex(0x5a3a1a)); rect(p, 3, 12, 11, 3, hex(0x3a2a14));
+    for (let y = 0; y < 12; y++) { const w = Math.max(1, 6 - Math.abs(y - 7)); hline(p, y, y < 5 ? hex(0xffd060) : hex(0xff8a2a), 8 - w, 8 + w); }
+    return p;
+  } },
+  mural: { size: [1.6, 0.8], draw: (r) => {
+    const p = T(77, 38);
+    rect(p, 0, 0, 77, 38, hex(0xa8582a)); bevel(p, 0, 0, 77, 38, hex(0xc8784a), hex(0x5a2a14));
+    for (let x = 8; x < 72; x += 14) {  // figuras negras em procissão
+      rect(p, x, 12, 5, 14, hex(0x1d1612)); rect(p, x + 1, 7, 3, 4, hex(0x1d1612)); vline(p, x + 6, hex(0x1d1612), 6, 26);
+    }
+    for (let i = 0; i < 4; i++) stain(p, r, r() * 77, r() * 38, 4, hex(0x3a352c), 0.5);
+    return p;
+  } },
+});
+
 const FLOOR = {
   paper: { size: [0.3, 0.3], draw: (r) => { const p = T(14, 14); rect(p, 2, 3, 10, 8, hex(0xd8d2c0)); for (let y = 5; y < 10; y += 2) hline(p, y, hex(0x8a8678), 3, 10); return p; } },
   papers: { size: [0.6, 0.5], draw: (r) => { const p = T(29, 24); for (let i = 0; i < 5; i++) { const x = r.int(0, 18), y = r.int(0, 14); rect(p, x, y, 10, 8, r.pick([hex(0xd8d2c0), hex(0xc8c0a8), hex(0xe0dccc)])); hline(p, y + 3, hex(0x8a8678), x + 1, x + 8); } return p; } },
@@ -111,6 +171,14 @@ const FLOOR = {
   blood_trail: { size: [1.6, 0.6], draw: (r) => { const p = T(77, 29); for (let x = 2; x < 74; x += r.int(3, 7)) blobFill(p, x, 14 + Math.sin(x * 0.15) * 4, r.int(2, 4), r.int(1, 3), r, hex(0x5a0e0c), 0.6); return p; } },
   casings: { size: [0.4, 0.3], draw: (r) => { const p = T(19, 14); for (let i = 0; i < 6; i++) { const x = r.int(1, 16), y = r.int(1, 12); p.set(x, y, hex(0xd9b048)); p.set(x + 1, y, hex(0x9a7a28)); } return p; } },
 };
+
+Object.assign(FLOOR, {
+  skull: { size: [0.3, 0.3], draw: () => { const p = T(14, 14); rect(p, 3, 3, 8, 7, hex(0xcfc6aa)); rect(p, 5, 10, 4, 2, hex(0xcfc6aa)); rect(p, 4, 5, 2, 2, hex(0x1a1612)); rect(p, 8, 5, 2, 2, hex(0x1a1612)); return p; } },
+  bone_scatter: { size: [0.7, 0.5], draw: (r) => { const p = T(34, 24); for (let i = 0; i < 6; i++) { const x = r.int(2, 26), y = r.int(2, 20); hline(p, y, hex(0xcfc6aa), x, x + r.int(4, 7)); p.set(x - 1, y - 1, hex(0xcfc6aa)); } return p; } },
+  leaves: { size: [0.8, 0.6], draw: (r) => { const p = T(38, 29); for (let i = 0; i < 30; i++) { const x = r.int(1, 35), y = r.int(1, 26); rect(p, x, y, 2, 1, r.pick([hex(0x8a5a24), hex(0x6a3a1e), hex(0x5a6a2a)])); } return p; } },
+  shards: { size: [0.6, 0.5], draw: (r) => { const p = T(29, 24); for (let i = 0; i < 9; i++) blobFill(p, r.int(4, 25), r.int(4, 20), r.int(1, 3), r.int(1, 2), r, r.pick([hex(0xb0602a), hex(0x1d1612), hex(0x8a4a20)]), 0.6); return p; } },
+  ash: { size: [1.0, 0.8], draw: (r) => { const p = T(48, 38); blobFill(p, 24, 19, 20, 14, r, hex(0x2a2424), 0.6); for (let i = 0; i < 12; i++) p.set(r.int(10, 38), r.int(8, 30), r.pick([hex(0xff8a2a), hex(0x5a4a44)])); return p; } },
+});
 
 export function build(outDir, save) {
   const index = { wall: {}, floor: {} };

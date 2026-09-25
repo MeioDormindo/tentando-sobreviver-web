@@ -49,7 +49,8 @@ extends Resource
 @export var late_max_alive_per_type: Dictionary = {}
 
 @export_group("Rodadas especiais")
-## Boss de cada mapa (id do mapa → id do boss).
+## Boss de cada mapa: id do mapa → id do boss, ou uma lista de bosses que se revezam nos rounds
+## de boss (Templo: Minotauro no 10, Cérbero no 20, Entidade no 30, e o ciclo continua).
 @export var boss_by_map: Dictionary = {}
 ## Rounds de boss (a rodada dos cães nunca cai neles).
 @export var boss_rounds: PackedInt32Array = PackedInt32Array()
@@ -119,6 +120,47 @@ func type_cap(type: StringName, round_number: int) -> int:
 
 
 ## Este round é uma rodada dos cães neste mapa? (nunca em round de boss)
+## Boss do round (vazio se o mapa não tem). Com lista, o n-ésimo round de boss leva o n-ésimo
+## da lista, em ciclo.
+func boss_for(map_id: String, round_number: int) -> StringName:
+	var entry: Variant = boss_by_map.get(map_id, &"")
+	if entry is Array:
+		var list: Array = entry
+		if list.is_empty():
+			return &""
+		return StringName(list[maxi(0, boss_index(map_id, round_number)) % list.size()])
+	return StringName(entry)
+
+
+## Quantos rounds de boss vieram antes deste (0 no primeiro).
+func boss_index(map_id: String, round_number: int) -> int:
+	var index := 0
+	for n in boss_rounds:
+		if n < round_number:
+			index += 1
+	if boss_cycles(map_id) and not boss_rounds.is_empty():
+		var last := boss_rounds[boss_rounds.size() - 1]
+		var every := last - boss_rounds[boss_rounds.size() - 2] if boss_rounds.size() > 1 else last
+		if round_number > last:
+			index = boss_rounds.size() + (round_number - last - 1) / every
+	return index
+
+
+## Mapas com lista de bosses continuam tendo rounds de boss depois do último da lista.
+func boss_cycles(map_id: String) -> bool:
+	return boss_by_map.get(map_id, &"") is Array
+
+
+func is_boss_round_number(map_id: String, round_number: int) -> bool:
+	if boss_rounds.has(round_number):
+		return true
+	if not boss_cycles(map_id) or boss_rounds.size() < 2:
+		return false
+	var last := boss_rounds[boss_rounds.size() - 1]
+	var every := last - boss_rounds[boss_rounds.size() - 2]
+	return round_number > last and (round_number - last) % every == 0
+
+
 func is_hound_round(round_number: int, map_id: String) -> bool:
 	var cfg: Dictionary = hound_rounds.get(map_id, {})
 	if cfg.is_empty() or round_number < int(cfg.first_round) or boss_rounds.has(round_number):

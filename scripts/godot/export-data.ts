@@ -31,6 +31,10 @@ import * as eventsConfig from '../../src/config/events.config';
 import { interactionsConfig } from '../../src/config/interactions.config';
 import { secretsConfig } from '../../src/config/secrets.config';
 import { serumQuestConfig } from '../../src/config/quests.config';
+import {
+  TEMPLE_MAP, TEMPLE_WEAPONS, TEMPLE_ZOMBIES, TEMPLE_COMPOSITION, TEMPLE_TYPE_CAPS, TEMPLE_BOSSES, TEMPLE_BOSS_ROTATION,
+  TEMPLE_SKINS, TEMPLE_ACHIEVEMENTS, type GdValue,
+} from './temple-data';
 
 const OUT = 'godot/data';
 const PX = 32;
@@ -64,6 +68,19 @@ script = ExtResource("1_script")
 ${lines.join('\n')}
 `;
 }
+
+/** Valor do Godot a partir de um valor JS (dicionários, listas, StringName com { sn }). */
+function gdValue(v: GdValue): string {
+  if (Array.isArray(v)) return `[${v.map(gdValue).join(', ')}]`;
+  if (typeof v === 'object') {
+    if ('sn' in v && typeof (v as { sn: unknown }).sn === 'string') return `&"${(v as { sn: string }).sn}"`;
+    return `{ ${Object.entries(v).map(([k, x]) => `"${k}": ${gdValue(x as GdValue)}`).join(', ')} }`;
+  }
+  if (typeof v === 'string') return JSON.stringify(v);
+  if (typeof v === 'boolean') return v ? 'true' : 'false';
+  return String(v);
+}
+const gd = (v: GdValue): { raw: string } => raw(gdValue(v));
 
 function write(path: string, content: string): void {
   const full = join(OUT, path);
@@ -138,9 +155,43 @@ function exportWeapons(): void {
   }
 }
 
+/** Arsenal do Templo (Godot-only): a inicial, as de parede e as especiais dos deuses. */
+function exportTempleWeapons(): void {
+  for (const w of TEMPLE_WEAPONS) {
+    write(`weapons/${w.id}.tres`, tres('WeaponData', 'res://scripts/weapons/weapon_data.gd', {
+      id: name(w.id),
+      display_name: w.display_name,
+      kind: name(w.kind),
+      rarity: name(w.rarity),
+      damage: w.damage,
+      fire_rate: w.fire_rate,
+      automatic: w.automatic,
+      magazine_size: w.magazine_size,
+      reserve_ammo: w.reserve_ammo,
+      reload_time: w.reload_time,
+      spread_degrees: w.spread_degrees,
+      max_range: w.max_range,
+      projectile_speed: w.projectile_speed ?? 0,
+      pellets: w.pellets ?? 1,
+      pierce: w.pierce ?? 0,
+      headshot_multiplier: w.headshot_multiplier ?? headshotConfig.damageMultiplier,
+      price: w.price,
+      ammo_price: w.ammo_price,
+      box_only: w.box_only ?? false,
+      maps: w.maps?.length ? raw(`PackedStringArray(${w.maps.map((x) => JSON.stringify(x)).join(', ')})`) : undefined,
+      element: name(w.element ?? ''),
+      upgrade_name: w.upgrade_name,
+      tracer_color: color(w.tracer),
+      special_type: name(w.special_type ?? ''),
+      special_params: w.special_params ? gd(w.special_params) : undefined,
+    }, `; Só do Godot (scripts/godot/temple-data.ts): ${w.note}\n`));
+  }
+}
+
 /** Catálogo com todas as armas (sorteio da Mystery Box; listar pastas não funciona no jogo exportado). */
 function exportCatalog(): void {
-  const list = [...Object.values(weapons).map((w) => ({ id: w.id })), ...GODOT_ONLY_WEAPONS.map((id) => ({ id }))];
+  const list = [...Object.values(weapons).map((w) => ({ id: w.id })), ...GODOT_ONLY_WEAPONS.map((id) => ({ id })),
+    ...TEMPLE_WEAPONS.filter((w) => !w.prize).map((w) => ({ id: w.id }))];
   const ext = list.map((w, i) => `[ext_resource type="Resource" path="res://data/weapons/${w.id}.tres" id="w${i}"]`).join('\n');
   write("weapons/catalog.tres", `[gd_resource type="Resource" script_class="WeaponCatalog" format=3]
 
@@ -211,10 +262,12 @@ function exportRoundsAndPoints(): void {
     // O jogo web não reabastece: a munição vem das compras na parede.
     refill_ammo_on_round_end: false,
     composition: composition(w.composition),
-    composition_by_map: raw(`{\n${Object.entries(w.compositionByMap).map(([id, list]) => `"${id}": ${composition(list!).raw}`).join(',\n')}\n}`),
-    max_alive_per_type: raw(`{ ${Object.entries(w.maxAlivePerType).map(([k, v]) => `&"${k}": ${v}`).join(', ')} }`),
+    composition_by_map: raw(`{\n${[...Object.entries(w.compositionByMap).map(([id, list]) => `"${id}": ${composition(list!).raw}`),
+      `"${TEMPLE_MAP.id}": ${composition(TEMPLE_COMPOSITION.map((c) => ({ fromWave: c.from_round, weights: c.weights }))).raw}`].join(',\n')}\n}`),
+    max_alive_per_type: raw(`{ ${Object.entries({ ...w.maxAlivePerType, ...TEMPLE_TYPE_CAPS }).map(([k, v]) => `&"${k}": ${v}`).join(', ')} }`),
     late_caps_from_round: w.lateMaxAlivePerType.fromWave,
-    boss_by_map: raw('{ "terminal": &"conductor", "map2": &"patient_zero" }'),
+    // Templo: os bosses se revezam nos rounds de boss (lista), e o ciclo continua depois do 30.
+    boss_by_map: raw(`{ "terminal": &"conductor", "map2": &"patient_zero", "${TEMPLE_MAP.id}": [${TEMPLE_BOSS_ROTATION.map((b) => `&"${b}"`).join(', ')}] }`),
     boss_rounds: raw(`PackedInt32Array(${w.bossWaves.join(', ')})`),
     hound_rounds: raw(`{\n${Object.entries(houndRounds).map(([id, h]) => `"${id}": { "first_round": ${h!.firstWave}, "every": ${h!.every}, "per_round": ${h!.perWave}, "cap": ${h!.cap}, "max_alive": ${h!.maxAlive}, "spawn_interval": ${s(h!.spawnIntervalMs)}, "spawn_distance_min": ${m(h!.spawnDistance[0])}, "spawn_distance_max": ${m(h!.spawnDistance[1])}, "fog_darkness": ${h!.fog.extraDarkness}, "flashlight_factor": ${h!.fog.flashlightFactor} }`).join(',\n')}\n}`),
     late_max_alive_per_type: raw(`{ ${Object.entries(w.lateMaxAlivePerType.caps).map(([k, v]) => `&"${k}": ${v}`).join(', ')} }`),
@@ -257,6 +310,29 @@ const LOOKS: Record<string, { scene?: string; shirt: number; skin: number; scale
   armored: { shirt: 0x2c3140, skin: 0x5a6150, scale: 1.1 },
   hound: { scene: 'res://scenes/zombies/hound.tscn', shirt: 0x3a1a14, skin: 0x5a241a, scale: 1 },
 };
+
+function exportTempleBosses(): void {
+  for (const b of TEMPLE_BOSSES) {
+    write(`bosses/${b.id}.tres`, tres('BossData', 'res://scripts/zombies/boss_data.gd', {
+      id: name(b.id),
+      display_name: b.display_name,
+      scene: raw('ExtResource("2_scene")'),
+      max_health: b.max_health,
+      health_per_appearance: b.health_per_appearance,
+      move_speed: b.move_speed,
+      body_radius: b.body_radius,
+      reward: b.reward,
+      phase_thresholds: raw(`PackedFloat32Array(${b.phase_thresholds.join(', ')})`),
+      phase_speed: raw(`PackedFloat32Array(${b.phase_speed.join(', ')})`),
+      phase_cooldown: raw(`PackedFloat32Array(${b.phase_cooldown.join(', ')})`),
+      roar_time: b.roar_time,
+      ...Object.fromEntries(Object.entries(b.attacks).map(([k, v]) => [k, gd(v)])),
+      area_acid: b.area_acid ?? false,
+      escort_ratio: b.escort_ratio,
+      extras: b.extras ? gd(b.extras) : undefined,
+    }, '[ext_resource type="PackedScene" path="res://scenes/zombies/boss.tscn" id="2_scene"]\n; Só do Godot (scripts/godot/temple-data.ts).\n'));
+  }
+}
 
 /** Bosses: vida por aparição, fases e cada ataque (distâncias em m, tempos em s). */
 function exportBosses(): void {
@@ -307,10 +383,13 @@ function exportProgression(): void {
     boss: c.boss,
     power_up: c.powerUp,
   }));
-  const entries = Object.values(MAPS).map((mp) => `"${mp.id}": { "name": ${JSON.stringify(mp.name)}, "description": ${JSON.stringify(mp.description)}, "scene": "res://scenes/maps/${mp.id === 'terminal' ? 'terminal' : 'hospital'}.tscn", "unlock_boss_round": ${mp.unlock?.bossWave ?? 0}, "unlock_on_map": "${mp.unlock?.onMap ?? ''}" }`);
+  const scenes: Record<string, string> = { terminal: 'terminal', map2: 'hospital' };
+  const entries = Object.values(MAPS).map((mp) => `"${mp.id}": { "name": ${JSON.stringify(mp.name)}, "description": ${JSON.stringify(mp.description)}, "scene": "res://scenes/maps/${scenes[mp.id] ?? mp.id}.tscn", "unlock_boss_round": ${mp.unlock?.bossWave ?? 0}, "unlock_on_map": "${mp.unlock?.onMap ?? ''}", "unlock_achievements": [] }`);
+  // Godot: o Templo dos Mortos libera ao concluir a missão do Terminal ou a do Hospital.
+  entries.push(`"${TEMPLE_MAP.id}": { "name": ${JSON.stringify(TEMPLE_MAP.name)}, "description": ${JSON.stringify(TEMPLE_MAP.description)}, "scene": "${TEMPLE_MAP.scene}", "unlock_boss_round": 0, "unlock_on_map": "", "unlock_achievements": ${gdValue(TEMPLE_MAP.unlockAchievements)} }`);
   write('configs/maps.tres', tres('MapCatalog', 'res://scripts/maps/map_catalog.gd', {
     maps: raw(`{\n${entries.join(',\n')}\n}`),
-    order: raw(`PackedStringArray(${Object.keys(MAPS).map((k) => JSON.stringify(k)).join(', ')})`),
+    order: raw(`PackedStringArray(${[...Object.keys(MAPS), TEMPLE_MAP.id].map((k) => JSON.stringify(k)).join(', ')})`),
     default_map: DEFAULT_MAP,
     ranking_size: RANKING_SIZE,
     player_name_max: PLAYER_NAME_MAX,
@@ -392,7 +471,7 @@ const GODOT_ONLY_SKINS = [
 
 function exportAchievements(): void {
   const list = ACHIEVEMENTS.map((a) => `{ "id": "${a.id}", "name": ${JSON.stringify(a.name)}, "description": ${JSON.stringify(a.description)}, "icon": "${achievementIcon(a.icon)}", "total_key": "${a.total?.key ?? ''}", "total_target": ${a.total?.target ?? 0}, "secret": ${a.secret ?? false} }`);
-  for (const a of GODOT_ONLY_ACHIEVEMENTS) list.push(`{ "id": "${a.id}", "name": ${JSON.stringify(a.name)}, "description": ${JSON.stringify(a.description)}, "icon": "${a.icon}", "total_key": "", "total_target": 0, "secret": false }`);
+  for (const a of [...GODOT_ONLY_ACHIEVEMENTS, ...TEMPLE_ACHIEVEMENTS]) list.push(`{ "id": "${a.id}", "name": ${JSON.stringify(a.name)}, "description": ${JSON.stringify(a.description)}, "icon": "${a.icon}", "total_key": "", "total_target": 0, "secret": false }`);
   write('configs/achievements.tres', tres('AchievementCatalog', 'res://scripts/systems/achievement_catalog.gd', {
     achievements: raw(`[\n${list.join(',\n')}\n]`),
     survivor_round: achievementConfig.survivorWave,
@@ -415,7 +494,7 @@ function exportAchievements(): void {
   const entry = (k: { id: string; name: string; unlock: string; jacket: string; pack: string; hair: string; map: string; model: string; style: string }): string =>
     `{ "id": "${k.id}", "name": ${JSON.stringify(k.name)}, "unlock": "${k.unlock}", "map": "${k.map}", "model": "${k.model}", "style": "${k.style}", "jacket": ${palette(k.jacket).raw}, "pack": ${palette(k.pack).raw}, "hair": ${palette(k.hair).raw} }`;
   const skins = SKINS.map((k) => entry({ id: k.id, name: k.name, unlock: k.unlock ?? '', ...looks[k.id], ...(place[k.id] ?? place.default) }));
-  for (const k of GODOT_ONLY_SKINS) skins.push(entry(k));
+  for (const k of [...GODOT_ONLY_SKINS, ...TEMPLE_SKINS]) skins.push(entry(k));
   write('configs/skins.tres', tres('SkinCatalog', 'res://scripts/player/skin_catalog.gd', {
     skins: raw(`[\n${skins.join(',\n')}\n]`),
   }));
@@ -490,6 +569,31 @@ function exportQuests(): void {
   }));
 }
 
+function exportTempleZombies(): void {
+  for (const z of TEMPLE_ZOMBIES) {
+    const ab = z.abilities ?? {};
+    write(`zombies/${z.id}.tres`, tres('ZombieData', 'res://scripts/zombies/zombie_data.gd', {
+      id: name(z.id),
+      display_name: z.display_name,
+      scene: raw('ExtResource("2_scene")'),
+      max_health: z.max_health,
+      move_speed: z.move_speed,
+      damage: z.damage,
+      attack_range: z.attack_range,
+      attack_interval: z.attack_interval,
+      points_kill: z.points_kill,
+      plank_damage: z.plank_damage,
+      body_radius: z.body_radius,
+      pushable: z.pushable,
+      ...Object.fromEntries(Object.entries(ab).map(([k, v]) => [k, gd(v)])),
+      shirt_color: color(z.shirt),
+      skin_color: color(z.skin),
+      model_scale: z.scale,
+      art: name(z.art),
+    }, `[ext_resource type="PackedScene" path="${z.scene ?? 'res://scenes/zombies/zombie_walker.tscn'}" id="2_scene"]\n; Só do Godot (scripts/godot/temple-data.ts).\n`));
+  }
+}
+
 function exportZombies(): void {
   for (const z of Object.values(zombieTypes)) {
     const look = LOOKS[z.id] ?? LOOKS.walker;
@@ -521,11 +625,14 @@ function exportZombies(): void {
 
 console.log('Exportando dados do jogo web para o Godot:');
 exportWeapons();
+exportTempleWeapons();
 exportCatalog();
 exportKnifeAndPlayer();
 exportRoundsAndPoints();
 exportZombies();
+exportTempleZombies();
 exportBosses();
+exportTempleBosses();
 exportProgression();
 exportOnline();
 exportAchievements();

@@ -216,7 +216,7 @@ func _armory() -> void:
 	_tree.root.add_child(screen)
 	await _frames(2)
 	var catalog := load("res://data/weapons/catalog.tres") as WeaponCatalog
-	check(screen.weapons.size() == catalog.weapons.size() + 1, "ARMAS lista todas as armas (%d)" % screen.weapons.size())
+	check(screen.weapons.size() == catalog.weapons.size() + 4, "ARMAS lista todas as armas (%d)" % screen.weapons.size())
 	var toggle := screen.find_child("MkToggle", true, false) as Button
 	check(toggle != null, "botão VER MK II")
 	if toggle:

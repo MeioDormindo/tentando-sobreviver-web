@@ -1,0 +1,2632 @@
+{
+ "id": "temple",
+ "width": 120,
+ "height": 116,
+ "legend": {
+  "wall": "#",
+  "train": "T",
+  "lava": "V",
+  "door": "D",
+  "window": "W",
+  "floors": {
+   "terminal": "t",
+   "concrete": "c",
+   "metal": "m",
+   "tracks": "r",
+   "tunnel": "u",
+   "wagon": "w",
+   "hospital": "h",
+   "linoleum": "l",
+   "morgue": "g",
+   "mosaic": "o",
+   "stone": "e",
+   "marble": "a",
+   "catacomb": "k",
+   "grass": "f",
+   "volcanic": "v"
+  }
+ },
+ "cells": [
+  "########################################################################################################################",
+  "########################################################################################################################",
+  "########################################################################################################################",
+  "####eeeeeee#eeeeeeeeeeeeeee#eeeeeeeeeeeeee##############################################################################",
+  "####eeeeeee#eeeeeeeeeeeeeee#eeeeeeeeeeeeee##############################################################################",
+  "####eeeeeee#eeeeeeeeeeeeeee#eeeeeeeeeeeeee##############################################################################",
+  "####eeeeeee#eeeeeeeeeeeeeee#eeeeeeeeeeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "####eeeeeee#eeeeeeeeeeeeeee#eeeeeeeeeeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "####eeeeeee#eeeeeeeeeeeeeee#eeeeeeeeeeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "####eeeeeee#eeeeeeeeeeeeeee#eeeeeeeeeeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "####eeeeeee#eeeeeee#eeeeeee#eeeeeee#eeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "####eeeeeee#eeeeeee#eeeeeee#eeeeeee#eeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "####eeeeeee#eeeeeee#eeeeeee#eeeeeee#eeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "####eeeeeee#eeeeeee#eeeeeee#eeeeeee#eeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "####eeeeeee#eeeeeee#eeeeeee#eeeeeee#eeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "####eeeeeee#eeeeeee#eeeeeee#eeeeeee#eeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "####eeeeeee#eeeeeee#eeeeeee#eeeeeee#eeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "####eeeeeee#eeeeeee#eeeeeee#eeeeeee#eeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "####eeeeeee#eeeeeee#eeeeeee#eeeeeee#eeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "####eeeeeee#eeeeeee#eeeeeee#eeeeeee#eeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "####eeeeeee#eeeeeee#eeeeeee#eeeeeee#eeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "####eeeeeeeeeeeeeee#eeeeeeeeeeeeeee#eeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "####eeeeeeeeeeeeeee#eeeeeeeeeeeeeee#eeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "####eeeeeeeeeeeeeee#eeeeeeeeeeeeeee#eeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "####eeeeeeeeeeeeeee#eeeeeeeeeeeeeee#eeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "####eeeeeeeeeeeeeee#eeeeeeeeeeeeeee#eeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "####eeeeeeeeeeeeeee#eeeeeeeeeeeeeee#eeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "####eeeeeeeeeeeeeee#eeeeeeeeeeeeeee#eeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "####eeeeeeeeeeeeeee#eeeeeeeeeeeeeee#eeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "####eeeeeeeeeeeeeee#eeeeeeeeeeeeeee#eeeeee####aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "##############DDD#############################aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa############################################",
+  "##############DDD######################eeeee##aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#eeeee######################################",
+  "##############DDD######################eeeee##aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#eeeee######################################",
+  "##############DDD######################eeeee##aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa#eeeee######################################",
+  "####kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk#####eeeee##############DDDD###############eeeee######################################",
+  "####kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk#####eeeee##############DDDD###############eeeee#############fffff####################",
+  "####kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk######WWW###############DDDD################WWW##############fffff####################",
+  "####kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk######WWW###############DDDD################WWW##############fffff####################",
+  "####kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo##############WWW#####################",
+  "####kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo##############WWW#####################",
+  "#kk#kkkkkkkk#kkkkkkkkkkk#kkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffffffffffffff####",
+  "#kkWkkkkkkkk#kkkkkkkkkkk#kkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffffffffffffff####",
+  "#kkWkkkkkkkk#kkkkkkkkkkk#kkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffffffffffffff####",
+  "#kk#kkkkkkkk#kkkkkkkkkkk#kkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffffffffffffff####",
+  "####kkkkkkkk#kkkkkkkkkkk#kkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffffffffffffff####",
+  "####kkkkkkkk#kkkkkkkkkkk#kkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffffffffffffff#ff#",
+  "####kkkkkkkk#kkkkkkkkkkk#kkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffffffffffffffWff#",
+  "####kkkkkkkk#kkkkkkkkkkk#kkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffffffffffffffWff#",
+  "####kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffffffffffffff#ff#",
+  "####kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffffffffffffff####",
+  "####kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffffffffffffff####",
+  "####kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkDDDDeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeDDDDeeeeeeeeeeeeeeeeeeeeeeeeeeeeee####",
+  "####kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkDDDDeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeDDDDeeeeeeeeeeeeeeeeeeeeeeeeeeeeee####",
+  "####kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkDDDDeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeDDDDeeeeeeeeeeeeeeeeeeeeeeeeeeeeee####",
+  "####kkkkkkkk#kkkkkkkkkkk#kkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffeeeeefffffff####",
+  "####kkkkkkkk#kkkkkkkkkkk#kkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffeeeeefffffff####",
+  "#kk#kkkkkkkk#kkkkkkkkkkk#kkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffeeeeefffffff####",
+  "#kkWkkkkkkkk#kkkkkkkkkkk#kkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffeeeeefffffff####",
+  "#kkWkkkkkkkk#kkkkkkkkkkk#kkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffeeeeefffffff####",
+  "#kk#kkkkkkkk#kkkkkkkkkkk#kkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffeeeeefffffff####",
+  "####kkkkkkkk#kkkkkkkkkkk#kkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffeeeeefffffff#ff#",
+  "####kkkkkkkk#kkkkkkkkkkk#kkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffeeeeefffffffWff#",
+  "####kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffeeeeefffffffWff#",
+  "####kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffeeeeefffffff#ff#",
+  "####kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffeeeeefffffff####",
+  "####kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffeeeeefffffff####",
+  "####kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffeeeeefffffff####",
+  "####kkkkkkkkkkkkkkkkkkkkkkkkkkkkkk####ooooooooooooooooooooeeeeoooooooooooooooooooo####ffffffffffffffffffeeeeefffffff####",
+  "##########################################################DDDD########################ffffffffffffffffffeeeeefffffff####",
+  "##########################################################DDDD########################ffffffffffffffffffeeeeefffffff####",
+  "##########################################################DDDD###########################################DDD############",
+  "##########################################################DDDD###########################################DDD############",
+  "####################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#####################DDD############",
+  "####################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#####################DDD############",
+  "####################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##############aaaaaaaaaaaaaaaaaa####",
+  "####################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##############aaaaaaaaaaaaaaaaaa####",
+  "####################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##############aaaaaaaaaaaaaaaaaa####",
+  "####################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##############aaaaaaaaaaaaaaaaaa####",
+  "####################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##############aaaaaaaaaaaaaaaaaa####",
+  "####################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##############aaaaaaaaaaaaaaaaaa####",
+  "####################VVVVVVVVVVVVVVVVeeeeVVVVVVVVVVVVVVVVVVeeeeVVVVVVVVVVVVVVVVVVVVVV##############aaaaaaaaaaaaaaaaaa####",
+  "####################VVVVVVVVVVVVVVVVeeeeVVVVVVVVVVVVVVVVVVeeeeVVVVVVVVVVVVVVVVVVVVVV##############aaaaaaaaaaaaaaaaaa####",
+  "####################VVVVVVVVVVVVVVVVeeeeVVVVVVVVVVVVVVVVVVeeeeVVVVVVVVVVVVVVVVVVVVVV##############aaaaaaaaaaaaaaaaaa####",
+  "####################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##############aaaaaaaaaaaaaaaaaa####",
+  "####################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##############aaaaaaaaaaaaaaaaaa####",
+  "####################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##############aaaaaaaaaaaaaaaaaa####",
+  "####################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##############aaaaaaaaaaaaaaaaaa####",
+  "####################vvvvvvVVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVVVVvvvvvv##############aaaaaaaaaaaaaaaaaa####",
+  "####################vvvvvvVVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVVVVvvvvvv##############aaaaaaaaaaaaaaaaaa####",
+  "####################vvvvvvVVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVVVVvvvvvv##############aaaaaaaaaaaaaaaaaa####",
+  "####################vvvvvvVVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVVVVvvvvvv##############aaaaaaaaaaaaaaaaaa####",
+  "####################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##############aaaaaaaaaaaaaaaaaa####",
+  "####################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv####################################",
+  "####################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv####################################",
+  "####################################################DDDD################################################################",
+  "####################################################DDDD################################################################",
+  "####################################################DDDD################################################################",
+  "####################################################DDDD################################################################",
+  "##############################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##########################################",
+  "##############################vVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVv##########################################",
+  "##############################vVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVv##########################################",
+  "##############################vVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVv##########################################",
+  "##############################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##########################################",
+  "##############################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##########################################",
+  "##############################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##########################################",
+  "##############################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##########################################",
+  "##############################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##########################################",
+  "##############################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##########################################",
+  "##############################vVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVv##########################################",
+  "##############################vVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVv##########################################",
+  "##############################vVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVv##########################################",
+  "##############################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##########################################",
+  "########################################################################################################################",
+  "########################################################################################################################",
+  "########################################################################################################################",
+  "########################################################################################################################"
+ ],
+ "start_area": "ruins",
+ "player_start": {
+  "x": 60.5,
+  "z": 55.5
+ },
+ "start_weapon": "makarov",
+ "outside_darkness": 0.86,
+ "areas": [
+  {
+   "id": "ruins",
+   "name": "Ruínas Gregas",
+   "darkness": 0.55,
+   "lighting": "lit",
+   "rects": [
+    {
+     "x": 38,
+     "y": 38,
+     "w": 44,
+     "h": 30
+    }
+   ]
+  },
+  {
+   "id": "necropolis",
+   "name": "Necrópole",
+   "darkness": 0.9,
+   "lighting": "dark",
+   "rects": [
+    {
+     "x": 4,
+     "y": 34,
+     "w": 30,
+     "h": 34
+    }
+   ]
+  },
+  {
+   "id": "labyrinth",
+   "name": "Labirinto",
+   "darkness": 0.78,
+   "lighting": "dim",
+   "rects": [
+    {
+     "x": 4,
+     "y": 3,
+     "w": 38,
+     "h": 27
+    }
+   ]
+  },
+  {
+   "id": "forest",
+   "name": "Floresta de Artemis",
+   "darkness": 0.8,
+   "lighting": "dim",
+   "rects": [
+    {
+     "x": 86,
+     "y": 40,
+     "w": 30,
+     "h": 30
+    }
+   ]
+  },
+  {
+   "id": "gorgon_temple",
+   "name": "Templo da Górgona",
+   "darkness": 0.76,
+   "lighting": "dim",
+   "rects": [
+    {
+     "x": 46,
+     "y": 6,
+     "w": 30,
+     "h": 28
+    }
+   ]
+  },
+  {
+   "id": "underworld",
+   "name": "Submundo",
+   "darkness": 0.9,
+   "lighting": "dark",
+   "rects": [
+    {
+     "x": 20,
+     "y": 72,
+     "w": 64,
+     "h": 22
+    }
+   ]
+  },
+  {
+   "id": "arena",
+   "name": "Arena Final",
+   "darkness": 0.7,
+   "lighting": "dim",
+   "rects": [
+    {
+     "x": 30,
+     "y": 98,
+     "w": 48,
+     "h": 14
+    }
+   ]
+  },
+  {
+   "id": "sanctuary",
+   "name": "Santuário do Olimpo",
+   "darkness": 0.5,
+   "lighting": "lit",
+   "rects": [
+    {
+     "x": 98,
+     "y": 74,
+     "w": 18,
+     "h": 18
+    }
+   ]
+  }
+ ],
+ "doors": [
+  {
+   "id": "door_ruins_necropolis",
+   "rect": {
+    "x": 34,
+    "y": 51,
+    "w": 4,
+    "h": 3
+   },
+   "cost": 750,
+   "areas": [
+    "ruins",
+    "necropolis"
+   ]
+  },
+  {
+   "id": "door_necropolis_labyrinth",
+   "rect": {
+    "x": 14,
+    "y": 30,
+    "w": 3,
+    "h": 4
+   },
+   "cost": 1500,
+   "areas": [
+    "necropolis",
+    "labyrinth"
+   ]
+  },
+  {
+   "id": "gate_temple",
+   "rect": {
+    "x": 58,
+    "y": 34,
+    "w": 4,
+    "h": 4
+   },
+   "cost": 0,
+   "areas": [
+    "ruins",
+    "gorgon_temple"
+   ],
+   "kind": "altar"
+  },
+  {
+   "id": "door_ruins_forest",
+   "rect": {
+    "x": 82,
+    "y": 51,
+    "w": 4,
+    "h": 3
+   },
+   "cost": 1000,
+   "areas": [
+    "ruins",
+    "forest"
+   ]
+  },
+  {
+   "id": "gate_sanctuary",
+   "rect": {
+    "x": 105,
+    "y": 70,
+    "w": 3,
+    "h": 4
+   },
+   "cost": 0,
+   "areas": [
+    "forest",
+    "sanctuary"
+   ],
+   "kind": "secret"
+  },
+  {
+   "id": "gate_underworld",
+   "rect": {
+    "x": 58,
+    "y": 68,
+    "w": 4,
+    "h": 4
+   },
+   "cost": 0,
+   "areas": [
+    "ruins",
+    "underworld"
+   ],
+   "kind": "quest"
+  },
+  {
+   "id": "door_underworld_arena",
+   "rect": {
+    "x": 52,
+    "y": 94,
+    "w": 4,
+    "h": 4
+   },
+   "cost": 3000,
+   "areas": [
+    "underworld",
+    "arena"
+   ]
+  }
+ ],
+ "windows": [
+  {
+   "id": "win_ruins_nw",
+   "rect": {
+    "x": 40,
+    "y": 36,
+    "w": 3,
+    "h": 2
+   },
+   "area": "ruins"
+  },
+  {
+   "id": "win_ruins_ne",
+   "rect": {
+    "x": 78,
+    "y": 36,
+    "w": 3,
+    "h": 2
+   },
+   "area": "ruins"
+  },
+  {
+   "id": "win_necro_1",
+   "rect": {
+    "x": 3,
+    "y": 41,
+    "w": 1,
+    "h": 2
+   },
+   "area": "necropolis"
+  },
+  {
+   "id": "win_necro_2",
+   "rect": {
+    "x": 3,
+    "y": 57,
+    "w": 1,
+    "h": 2
+   },
+   "area": "necropolis"
+  },
+  {
+   "id": "win_forest_n",
+   "rect": {
+    "x": 96,
+    "y": 38,
+    "w": 3,
+    "h": 2
+   },
+   "area": "forest"
+  },
+  {
+   "id": "win_forest_e1",
+   "rect": {
+    "x": 116,
+    "y": 46,
+    "w": 1,
+    "h": 2
+   },
+   "area": "forest"
+  },
+  {
+   "id": "win_forest_e2",
+   "rect": {
+    "x": 116,
+    "y": 61,
+    "w": 1,
+    "h": 2
+   },
+   "area": "forest"
+  }
+ ],
+ "spawns": [
+  {
+   "id": "R1",
+   "x": 41.5,
+   "z": 33.5,
+   "area": "ruins",
+   "min_round": 1
+  },
+  {
+   "id": "R2",
+   "x": 79.5,
+   "z": 33.5,
+   "area": "ruins",
+   "min_round": 1
+  },
+  {
+   "id": "R3",
+   "x": 39.5,
+   "z": 66.5,
+   "area": "ruins",
+   "min_round": 1
+  },
+  {
+   "id": "R4",
+   "x": 80.5,
+   "z": 66.5,
+   "area": "ruins",
+   "min_round": 1
+  },
+  {
+   "id": "N1",
+   "x": 1.5,
+   "z": 42.5,
+   "area": "necropolis",
+   "min_round": 1
+  },
+  {
+   "id": "N2",
+   "x": 1.5,
+   "z": 58.5,
+   "area": "necropolis",
+   "min_round": 1
+  },
+  {
+   "id": "N3",
+   "x": 32.5,
+   "z": 66.5,
+   "area": "necropolis",
+   "min_round": 1
+  },
+  {
+   "id": "N4",
+   "x": 18.5,
+   "z": 50.5,
+   "area": "necropolis",
+   "min_round": 1
+  },
+  {
+   "id": "L1",
+   "x": 5.5,
+   "z": 4.5,
+   "area": "labyrinth",
+   "min_round": 1
+  },
+  {
+   "id": "L2",
+   "x": 40.5,
+   "z": 4.5,
+   "area": "labyrinth",
+   "min_round": 1
+  },
+  {
+   "id": "L3",
+   "x": 31.5,
+   "z": 28.5,
+   "area": "labyrinth",
+   "min_round": 1
+  },
+  {
+   "id": "G1",
+   "x": 47.5,
+   "z": 7.5,
+   "area": "gorgon_temple",
+   "min_round": 1
+  },
+  {
+   "id": "G2",
+   "x": 74.5,
+   "z": 7.5,
+   "area": "gorgon_temple",
+   "min_round": 1
+  },
+  {
+   "id": "G3",
+   "x": 60.5,
+   "z": 8.5,
+   "area": "gorgon_temple",
+   "min_round": 1
+  },
+  {
+   "id": "F1",
+   "x": 97.5,
+   "z": 36.5,
+   "area": "forest",
+   "min_round": 1
+  },
+  {
+   "id": "F2",
+   "x": 117.5,
+   "z": 47.5,
+   "area": "forest",
+   "min_round": 1
+  },
+  {
+   "id": "F3",
+   "x": 117.5,
+   "z": 62.5,
+   "area": "forest",
+   "min_round": 1
+  },
+  {
+   "id": "F4",
+   "x": 87.5,
+   "z": 68.5,
+   "area": "forest",
+   "min_round": 1
+  },
+  {
+   "id": "S1",
+   "x": 99.5,
+   "z": 90.5,
+   "area": "sanctuary",
+   "min_round": 1
+  },
+  {
+   "id": "S2",
+   "x": 114.5,
+   "z": 90.5,
+   "area": "sanctuary",
+   "min_round": 1
+  },
+  {
+   "id": "U1",
+   "x": 21.5,
+   "z": 73.5,
+   "area": "underworld",
+   "min_round": 1
+  },
+  {
+   "id": "U2",
+   "x": 82.5,
+   "z": 92.5,
+   "area": "underworld",
+   "min_round": 1
+  },
+  {
+   "id": "U3",
+   "x": 48.5,
+   "z": 92.5,
+   "area": "underworld",
+   "min_round": 1
+  },
+  {
+   "id": "U4",
+   "x": 76.5,
+   "z": 74.5,
+   "area": "underworld",
+   "min_round": 1
+  },
+  {
+   "id": "A1",
+   "x": 40.5,
+   "z": 110.5,
+   "area": "arena",
+   "min_round": 1
+  },
+  {
+   "id": "A2",
+   "x": 68.5,
+   "z": 110.5,
+   "area": "arena",
+   "min_round": 1
+  },
+  {
+   "id": "A3",
+   "x": 40.5,
+   "z": 100.5,
+   "area": "arena",
+   "min_round": 1
+  }
+ ],
+ "stations": [
+  {
+   "type": "weapon",
+   "weaponId": "mauser_c96",
+   "tx": 46,
+   "ty": 67,
+   "x": 46.5,
+   "z": 67.5
+  },
+  {
+   "type": "weapon",
+   "weaponId": "thompson",
+   "tx": 74,
+   "ty": 67,
+   "x": 74.5,
+   "z": 67.5
+  },
+  {
+   "type": "ammo",
+   "tx": 38,
+   "ty": 46,
+   "x": 38.5,
+   "z": 46.5
+  },
+  {
+   "type": "ammo",
+   "tx": 81,
+   "ty": 46,
+   "x": 81.5,
+   "z": 46.5
+  },
+  {
+   "type": "weapon",
+   "weaponId": "lupara",
+   "tx": 14,
+   "ty": 67,
+   "x": 14.5,
+   "z": 67.5
+  },
+  {
+   "type": "weapon",
+   "weaponId": "stg44",
+   "tx": 23,
+   "ty": 3,
+   "x": 23.5,
+   "z": 3.5
+  },
+  {
+   "type": "weapon",
+   "weaponId": "winchester_1887",
+   "tx": 46,
+   "ty": 20,
+   "x": 46.5,
+   "z": 20.5
+  },
+  {
+   "type": "weapon",
+   "weaponId": "lee_enfield",
+   "tx": 110,
+   "ty": 40,
+   "x": 110.5,
+   "z": 40.5
+  },
+  {
+   "type": "weapon",
+   "weaponId": "bren",
+   "tx": 40,
+   "ty": 93,
+   "x": 40.5,
+   "z": 93.5
+  },
+  {
+   "type": "ammo",
+   "tx": 66,
+   "ty": 93,
+   "x": 66.5,
+   "z": 93.5
+  }
+ ],
+ "machines": [
+  {
+   "type": "mystery_box",
+   "tx": 60,
+   "ty": 66,
+   "x": 60.5,
+   "z": 66.5
+  },
+  {
+   "type": "perk",
+   "perkId": "quick_revive",
+   "tx": 81,
+   "ty": 56,
+   "x": 81.5,
+   "z": 56.5
+  },
+  {
+   "type": "perk",
+   "perkId": "fortify",
+   "tx": 4,
+   "ty": 64,
+   "x": 4.5,
+   "z": 64.5
+  },
+  {
+   "type": "perk",
+   "perkId": "adrenaline",
+   "tx": 5,
+   "ty": 28,
+   "x": 5.5,
+   "z": 28.5
+  },
+  {
+   "type": "weapon_lab",
+   "tx": 75,
+   "ty": 20,
+   "x": 75.5,
+   "z": 20.5
+  },
+  {
+   "type": "perk",
+   "perkId": "deadeye",
+   "tx": 75,
+   "ty": 30,
+   "x": 75.5,
+   "z": 30.5
+  },
+  {
+   "type": "perk",
+   "perkId": "sprint",
+   "tx": 115,
+   "ty": 55,
+   "x": 115.5,
+   "z": 55.5
+  },
+  {
+   "type": "perk",
+   "perkId": "quick_hands",
+   "tx": 86,
+   "ty": 64,
+   "x": 86.5,
+   "z": 64.5
+  },
+  {
+   "type": "perk",
+   "perkId": "overload",
+   "tx": 83,
+   "ty": 76,
+   "x": 83.5,
+   "z": 76.5
+  }
+ ],
+ "box_spots": [
+  {
+   "x": 60.5,
+   "z": 66.5,
+   "area": "ruins"
+  },
+  {
+   "x": 40.5,
+   "z": 60.5,
+   "area": "ruins"
+  },
+  {
+   "x": 80.5,
+   "z": 60.5,
+   "area": "ruins"
+  },
+  {
+   "x": 28.5,
+   "z": 36.5,
+   "area": "necropolis"
+  },
+  {
+   "x": 39.5,
+   "z": 28.5,
+   "area": "labyrinth"
+  },
+  {
+   "x": 48.5,
+   "z": 32.5,
+   "area": "gorgon_temple"
+  },
+  {
+   "x": 100.5,
+   "z": 68.5,
+   "area": "forest"
+  },
+  {
+   "x": 30.5,
+   "z": 92.5,
+   "area": "underworld"
+  },
+  {
+   "x": 64.5,
+   "z": 110.5,
+   "area": "arena"
+  }
+ ],
+ "boss_spawns": [
+  {
+   "x": 44.5,
+   "z": 42.5
+  },
+  {
+   "x": 76.5,
+   "z": 42.5
+  },
+  {
+   "x": 44.5,
+   "z": 64.5
+  },
+  {
+   "x": 76.5,
+   "z": 64.5
+  }
+ ],
+ "lamps": [
+  {
+   "x": 44.5,
+   "z": 44.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.35,
+   "color": 16751176,
+   "broken": false,
+   "torch": true
+  },
+  {
+   "x": 76.5,
+   "z": 44.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.35,
+   "color": 16751176,
+   "broken": false,
+   "torch": true
+  },
+  {
+   "x": 44.5,
+   "z": 62.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.35,
+   "color": 16751176,
+   "broken": false,
+   "torch": true
+  },
+  {
+   "x": 76.5,
+   "z": 62.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.35,
+   "color": 16751176,
+   "broken": false,
+   "torch": true
+  },
+  {
+   "x": 60.5,
+   "z": 47.5,
+   "radius": 6.5,
+   "intensity": 0.5,
+   "flicker": 0.1,
+   "color": 16769200,
+   "broken": false,
+   "torch": false
+  },
+  {
+   "x": 8.5,
+   "z": 38.5,
+   "radius": 6.5,
+   "intensity": 0.45,
+   "flicker": 0.35,
+   "color": 16751176,
+   "broken": false,
+   "torch": true
+  },
+  {
+   "x": 30.5,
+   "z": 60.5,
+   "radius": 6.5,
+   "intensity": 0.4,
+   "flicker": 0.35,
+   "color": 16751176,
+   "broken": false,
+   "torch": true
+  },
+  {
+   "x": 18.5,
+   "z": 64.5,
+   "radius": 6.5,
+   "intensity": 0.35,
+   "flicker": 0.6,
+   "color": 16751176,
+   "broken": false,
+   "torch": true
+  },
+  {
+   "x": 8.5,
+   "z": 52.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": true,
+   "torch": false
+  },
+  {
+   "x": 7.5,
+   "z": 12.5,
+   "radius": 6.5,
+   "intensity": 0.4,
+   "flicker": 0.35,
+   "color": 16751176,
+   "broken": false,
+   "torch": true
+  },
+  {
+   "x": 15.5,
+   "z": 22.5,
+   "radius": 6.5,
+   "intensity": 0.4,
+   "flicker": 0.35,
+   "color": 16751176,
+   "broken": false,
+   "torch": true
+  },
+  {
+   "x": 23.5,
+   "z": 12.5,
+   "radius": 6.5,
+   "intensity": 0.4,
+   "flicker": 0.35,
+   "color": 16751176,
+   "broken": false,
+   "torch": true
+  },
+  {
+   "x": 31.5,
+   "z": 22.5,
+   "radius": 6.5,
+   "intensity": 0.4,
+   "flicker": 0.35,
+   "color": 16751176,
+   "broken": false,
+   "torch": true
+  },
+  {
+   "x": 39.5,
+   "z": 14.5,
+   "radius": 6.5,
+   "intensity": 0.4,
+   "flicker": 0.35,
+   "color": 16751176,
+   "broken": false,
+   "torch": true
+  },
+  {
+   "x": 52.5,
+   "z": 12.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.35,
+   "color": 16751176,
+   "broken": false,
+   "torch": true
+  },
+  {
+   "x": 70.5,
+   "z": 12.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.35,
+   "color": 16751176,
+   "broken": false,
+   "torch": true
+  },
+  {
+   "x": 52.5,
+   "z": 27.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.35,
+   "color": 16751176,
+   "broken": false,
+   "torch": true
+  },
+  {
+   "x": 70.5,
+   "z": 27.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.35,
+   "color": 16751176,
+   "broken": false,
+   "torch": true
+  },
+  {
+   "x": 61.5,
+   "z": 18.5,
+   "radius": 6.5,
+   "intensity": 0.55,
+   "flicker": 0.2,
+   "color": 10477744,
+   "broken": false,
+   "torch": false
+  },
+  {
+   "x": 92.5,
+   "z": 46.5,
+   "radius": 6.5,
+   "intensity": 0.4,
+   "flicker": 0.35,
+   "color": 16751176,
+   "broken": false,
+   "torch": true
+  },
+  {
+   "x": 110.5,
+   "z": 58.5,
+   "radius": 6.5,
+   "intensity": 0.4,
+   "flicker": 0.35,
+   "color": 16751176,
+   "broken": false,
+   "torch": true
+  },
+  {
+   "x": 98.5,
+   "z": 64.5,
+   "radius": 6.5,
+   "intensity": 0.35,
+   "flicker": 0.2,
+   "color": 10537215,
+   "broken": false,
+   "torch": false
+  },
+  {
+   "x": 102.5,
+   "z": 78.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.35,
+   "color": 16751176,
+   "broken": false,
+   "torch": true
+  },
+  {
+   "x": 112.5,
+   "z": 78.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.35,
+   "color": 16751176,
+   "broken": false,
+   "torch": true
+  },
+  {
+   "x": 107.5,
+   "z": 86.5,
+   "radius": 6.5,
+   "intensity": 0.7,
+   "flicker": 0.1,
+   "color": 16773312,
+   "broken": false,
+   "torch": false
+  },
+  {
+   "x": 30.5,
+   "z": 75.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.35,
+   "color": 16738858,
+   "broken": false,
+   "torch": true
+  },
+  {
+   "x": 74.5,
+   "z": 76.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.35,
+   "color": 16738858,
+   "broken": false,
+   "torch": true
+  },
+  {
+   "x": 50.5,
+   "z": 90.5,
+   "radius": 6.5,
+   "intensity": 0.5,
+   "flicker": 0.4,
+   "color": 10513151,
+   "broken": false,
+   "torch": false
+  },
+  {
+   "x": 44.5,
+   "z": 104.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.35,
+   "color": 16738858,
+   "broken": false,
+   "torch": true
+  },
+  {
+   "x": 64.5,
+   "z": 104.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.35,
+   "color": 16738858,
+   "broken": false,
+   "torch": true
+  }
+ ],
+ "interactions": [
+  {
+   "type": "breaker",
+   "tx": 20,
+   "ty": 34.2
+  },
+  {
+   "type": "trap",
+   "tx": 29,
+   "ty": 3.2,
+   "zone": {
+    "x": 29,
+    "y": 4,
+    "w": 5,
+    "h": 3
+   }
+  }
+ ],
+ "station": null,
+ "secrets": {
+  "statues": [
+   {
+    "god": "zeus",
+    "tx": 40,
+    "ty": 66
+   },
+   {
+    "god": "hera",
+    "tx": 80,
+    "ty": 40
+   },
+   {
+    "god": "poseidon",
+    "tx": 5,
+    "ty": 66
+   },
+   {
+    "god": "demeter",
+    "tx": 32,
+    "ty": 35
+   },
+   {
+    "god": "athena",
+    "tx": 5,
+    "ty": 4
+   },
+   {
+    "god": "apollo",
+    "tx": 40,
+    "ty": 20
+   },
+   {
+    "god": "artemis",
+    "tx": 47,
+    "ty": 32
+   },
+   {
+    "god": "ares",
+    "tx": 74,
+    "ty": 16
+   },
+   {
+    "god": "aphrodite",
+    "tx": 88,
+    "ty": 68
+   },
+   {
+    "god": "hephaestus",
+    "tx": 114,
+    "ty": 41
+   },
+   {
+    "god": "hermes",
+    "tx": 82,
+    "ty": 73
+   },
+   {
+    "god": "dionysus",
+    "tx": 31,
+    "ty": 104
+   }
+  ],
+  "radio": {
+   "tx": 42,
+   "ty": 38.2,
+   "holdMs": 900,
+   "label": "LER A INSCRIÇÃO"
+  },
+  "loreMessages": [
+   "📜 \"Diário da Dra. Helena, escavação 7: as inscrições falam de mortos que voltam quando o portão é tocado.\"",
+   "📜 \"Chegou a caixa do Hospital Santa Luzia: amostras do Dr. Almeida. Ele disse que o soro veio DAQUI.\"",
+   "📜 \"Os trens da Estação Central traziam os caixotes à noite. Nenhum carregador voltou para a segunda viagem.\"",
+   "📜 \"O templo não era uma prisão. Era uma porta. E alguém, do outro lado, está batendo.\""
+  ]
+ },
+ "quest": {
+  "gate": {
+   "fragments": {
+    "necropolis": {
+     "tx": 6,
+     "ty": 36
+    },
+    "forest": {
+     "tx": 113,
+     "ty": 67
+    }
+   },
+   "arena": {
+    "tx": 54,
+    "ty": 104
+   }
+  }
+ },
+ "decor": {
+  "seed": "temple-2d5",
+  "density": {
+   "ruins": 1,
+   "necropolis": 1.4,
+   "labyrinth": 1.1,
+   "forest": 1.2,
+   "gorgon_temple": 1.2,
+   "underworld": 1.3,
+   "arena": 0.8,
+   "sanctuary": 0.6
+  }
+ },
+ "props": [
+  {
+   "type": "brazier",
+   "x": 50.5,
+   "z": 40.5,
+   "angle": 0,
+   "body": {
+    "w": 0.75,
+    "d": 0.75,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 4.688,
+    "intensity": 0.75,
+    "color": 16751162
+   }
+  },
+  {
+   "type": "brazier",
+   "x": 70.5,
+   "z": 40.5,
+   "angle": 0,
+   "body": {
+    "w": 0.75,
+    "d": 0.75,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 4.688,
+    "intensity": 0.75,
+    "color": 16751162
+   }
+  },
+  {
+   "type": "brazier",
+   "x": 50.5,
+   "z": 66.5,
+   "angle": 0,
+   "body": {
+    "w": 0.75,
+    "d": 0.75,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 4.688,
+    "intensity": 0.75,
+    "color": 16751162
+   }
+  },
+  {
+   "type": "brazier",
+   "x": 70.5,
+   "z": 66.5,
+   "angle": 0,
+   "body": {
+    "w": 0.75,
+    "d": 0.75,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 4.688,
+    "intensity": 0.75,
+    "color": 16751162
+   }
+  },
+  {
+   "type": "column_broken",
+   "x": 39.5,
+   "z": 39.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "column_broken",
+   "x": 81.5,
+   "z": 39.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "column_broken",
+   "x": 39.5,
+   "z": 50.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "column_broken",
+   "x": 81.5,
+   "z": 50.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "column_fallen",
+   "x": 46.5,
+   "z": 57.5,
+   "angle": 20,
+   "body": {
+    "w": 2.75,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "column_fallen",
+   "x": 73.5,
+   "z": 48.5,
+   "angle": -15,
+   "body": {
+    "w": 2.75,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "amphora",
+   "x": 42.5,
+   "z": 39.5,
+   "angle": 0,
+   "body": {
+    "w": 0.5,
+    "d": 0.5,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "amphora",
+   "x": 43.5,
+   "z": 40.5,
+   "angle": 0,
+   "body": {
+    "w": 0.5,
+    "d": 0.5,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "amphora",
+   "x": 78.5,
+   "z": 65.5,
+   "angle": 0,
+   "body": {
+    "w": 0.5,
+    "d": 0.5,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "amphora",
+   "x": 52.5,
+   "z": 66.5,
+   "angle": 0,
+   "body": {
+    "w": 0.5,
+    "d": 0.5,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bones",
+   "x": 48.5,
+   "z": 45.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bones",
+   "x": 72.5,
+   "z": 60.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bones",
+   "x": 55.5,
+   "z": 63.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "rock",
+   "x": 40.5,
+   "z": 43.5,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "rock",
+   "x": 79.5,
+   "z": 57.5,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "sarcophagus",
+   "x": 8.5,
+   "z": 44.5,
+   "angle": 90,
+   "body": {
+    "w": 1,
+    "d": 2.25,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "sarcophagus",
+   "x": 8.5,
+   "z": 60.5,
+   "angle": 90,
+   "body": {
+    "w": 1,
+    "d": 2.25,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "sarcophagus",
+   "x": 18.5,
+   "z": 44.5,
+   "angle": 90,
+   "body": {
+    "w": 1,
+    "d": 2.25,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "sarcophagus",
+   "x": 29.5,
+   "z": 44.5,
+   "angle": 90,
+   "body": {
+    "w": 1,
+    "d": 2.25,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "sarcophagus",
+   "x": 18.5,
+   "z": 60.5,
+   "angle": 90,
+   "body": {
+    "w": 1,
+    "d": 2.25,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "sarcophagus",
+   "x": 29.5,
+   "z": 60.5,
+   "angle": 90,
+   "body": {
+    "w": 1,
+    "d": 2.25,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "tomb",
+   "x": 6.5,
+   "z": 50.5,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 0.625,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "tomb",
+   "x": 16.5,
+   "z": 51.5,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 0.625,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "tomb",
+   "x": 21.5,
+   "z": 51.5,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 0.625,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "tomb",
+   "x": 30.5,
+   "z": 51.5,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 0.625,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "bones",
+   "x": 10.5,
+   "z": 38.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bones",
+   "x": 26.5,
+   "z": 55.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bones",
+   "x": 14.5,
+   "z": 64.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bones",
+   "x": 31.5,
+   "z": 40.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "chains",
+   "x": 22.5,
+   "z": 35.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "chains",
+   "x": 7.5,
+   "z": 66.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bones",
+   "x": 6.5,
+   "z": 20.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bones",
+   "x": 22.5,
+   "z": 26.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bones",
+   "x": 38.5,
+   "z": 8.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "column_broken",
+   "x": 15.5,
+   "z": 4.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "column_broken",
+   "x": 31.5,
+   "z": 4.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "rock",
+   "x": 8.5,
+   "z": 26.5,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "rock",
+   "x": 24.5,
+   "z": 6.5,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "column",
+   "x": 51.5,
+   "z": 9.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "column",
+   "x": 51.5,
+   "z": 15.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "column",
+   "x": 51.5,
+   "z": 21.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "column",
+   "x": 51.5,
+   "z": 27.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "column",
+   "x": 70.5,
+   "z": 9.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "column",
+   "x": 70.5,
+   "z": 15.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "column",
+   "x": 70.5,
+   "z": 21.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "column",
+   "x": 70.5,
+   "z": 27.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "statue_stone",
+   "x": 56.5,
+   "z": 12.5,
+   "angle": 0,
+   "body": {
+    "w": 0.813,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "statue_stone",
+   "x": 64.5,
+   "z": 11.5,
+   "angle": 0,
+   "body": {
+    "w": 0.813,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "statue_stone",
+   "x": 58.5,
+   "z": 24.5,
+   "angle": 0,
+   "body": {
+    "w": 0.813,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "statue_stone",
+   "x": 66.5,
+   "z": 26.5,
+   "angle": 0,
+   "body": {
+    "w": 0.813,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "statue_stone",
+   "x": 62.5,
+   "z": 30.5,
+   "angle": 0,
+   "body": {
+    "w": 0.813,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "altar",
+   "x": 61.5,
+   "z": 7.5,
+   "angle": 0,
+   "body": {
+    "w": 1.75,
+    "d": 1.063,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 2.813,
+    "intensity": 0.45,
+    "color": 16756832
+   }
+  },
+  {
+   "type": "brazier",
+   "x": 57.5,
+   "z": 7.5,
+   "angle": 0,
+   "body": {
+    "w": 0.75,
+    "d": 0.75,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 4.688,
+    "intensity": 0.75,
+    "color": 16751162
+   }
+  },
+  {
+   "type": "brazier",
+   "x": 65.5,
+   "z": 7.5,
+   "angle": 0,
+   "body": {
+    "w": 0.75,
+    "d": 0.75,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 4.688,
+    "intensity": 0.75,
+    "color": 16751162
+   }
+  },
+  {
+   "type": "tree",
+   "x": 89.5,
+   "z": 43.5,
+   "angle": 0,
+   "body": {
+    "w": 0.813,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "tree",
+   "x": 93.5,
+   "z": 57.5,
+   "angle": 0,
+   "body": {
+    "w": 0.813,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "tree",
+   "x": 99.5,
+   "z": 44.5,
+   "angle": 0,
+   "body": {
+    "w": 0.813,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "tree",
+   "x": 101.5,
+   "z": 60.5,
+   "angle": 0,
+   "body": {
+    "w": 0.813,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "tree",
+   "x": 112.5,
+   "z": 44.5,
+   "angle": 0,
+   "body": {
+    "w": 0.813,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "tree",
+   "x": 112.5,
+   "z": 65.5,
+   "angle": 0,
+   "body": {
+    "w": 0.813,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "tree",
+   "x": 90.5,
+   "z": 63.5,
+   "angle": 0,
+   "body": {
+    "w": 0.813,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "tree",
+   "x": 108.5,
+   "z": 48.5,
+   "angle": 0,
+   "body": {
+    "w": 0.813,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "dead_tree",
+   "x": 96.5,
+   "z": 67.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "dead_tree",
+   "x": 114.5,
+   "z": 50.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "bush",
+   "x": 91.5,
+   "z": 48.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bush",
+   "x": 97.5,
+   "z": 49.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bush",
+   "x": 103.5,
+   "z": 57.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bush",
+   "x": 110.5,
+   "z": 62.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bush",
+   "x": 95.5,
+   "z": 60.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bush",
+   "x": 113.5,
+   "z": 58.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "rock",
+   "x": 88.5,
+   "z": 55.5,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "rock",
+   "x": 105.5,
+   "z": 45.5,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "rock",
+   "x": 99.5,
+   "z": 69.5,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "statue_stone",
+   "x": 102.5,
+   "z": 64.5,
+   "angle": 0,
+   "body": {
+    "w": 0.813,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "column",
+   "x": 100.5,
+   "z": 76.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "column",
+   "x": 114.5,
+   "z": 76.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "column",
+   "x": 100.5,
+   "z": 89.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "column",
+   "x": 114.5,
+   "z": 89.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "altar",
+   "x": 107.5,
+   "z": 82.5,
+   "angle": 0,
+   "body": {
+    "w": 1.75,
+    "d": 1.063,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 2.813,
+    "intensity": 0.45,
+    "color": 16756832
+   }
+  },
+  {
+   "type": "chains",
+   "x": 24.5,
+   "z": 74.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "chains",
+   "x": 44.5,
+   "z": 74.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "chains",
+   "x": 80.5,
+   "z": 90.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "soul_crystal",
+   "x": 22.5,
+   "z": 92.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": {
+    "radius": 2.5,
+    "intensity": 0.5,
+    "color": 9071359
+   }
+  },
+  {
+   "type": "soul_crystal",
+   "x": 56.5,
+   "z": 76.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": {
+    "radius": 2.5,
+    "intensity": 0.5,
+    "color": 9071359
+   }
+  },
+  {
+   "type": "soul_crystal",
+   "x": 80.5,
+   "z": 84.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": {
+    "radius": 2.5,
+    "intensity": 0.5,
+    "color": 9071359
+   }
+  },
+  {
+   "type": "bones",
+   "x": 34.5,
+   "z": 90.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bones",
+   "x": 64.5,
+   "z": 76.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bones",
+   "x": 46.5,
+   "z": 85.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "column_broken",
+   "x": 21.5,
+   "z": 85.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "column_broken",
+   "x": 82.5,
+   "z": 74.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "column",
+   "x": 42.5,
+   "z": 101.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "column",
+   "x": 66.5,
+   "z": 101.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "column",
+   "x": 42.5,
+   "z": 109.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "column",
+   "x": 66.5,
+   "z": 109.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "brazier",
+   "x": 54.5,
+   "z": 110.5,
+   "angle": 0,
+   "body": {
+    "w": 0.75,
+    "d": 0.75,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 4.688,
+    "intensity": 0.75,
+    "color": 16751162
+   }
+  }
+ ],
+ "pillars": [
+  {
+   "tx": 52,
+   "ty": 52
+  },
+  {
+   "tx": 68,
+   "ty": 52
+  },
+  {
+   "tx": 60,
+   "ty": 45
+  },
+  {
+   "tx": 54,
+   "ty": 47
+  },
+  {
+   "tx": 66,
+   "ty": 47
+  },
+  {
+   "tx": 54,
+   "ty": 58
+  },
+  {
+   "tx": 66,
+   "ty": 58
+  }
+ ],
+ "altars": [
+  {
+   "id": "zeus",
+   "tx": 53,
+   "ty": 39
+  },
+  {
+   "id": "poseidon",
+   "tx": 66,
+   "ty": 39
+  },
+  {
+   "id": "hades",
+   "tx": 71,
+   "ty": 39
+  }
+ ],
+ "sanctuary": {
+  "bow": {
+   "tx": 107,
+   "ty": 84
+  }
+ }
+}

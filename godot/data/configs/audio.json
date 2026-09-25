@@ -141,7 +141,11 @@
   "mus_drive": 1,
   "mus_boss": 1,
   "mus_victory": 1,
-  "mus_gameover": 1
+  "mus_gameover": 1,
+  "amb_ruins": 1,
+  "amb_necropolis": 1,
+  "amb_forest": 1,
+  "amb_underworld": 1
  },
  "master": 0.8,
  "categories": {
@@ -253,6 +257,41 @@
    "amb_steam",
    "amb_drip",
    "amb_bang"
+  ],
+  "ruins": [
+   "amb_creak",
+   "amb_moan",
+   "amb_bang"
+  ],
+  "necropolis": [
+   "amb_drip",
+   "amb_moan",
+   "amb_creak"
+  ],
+  "labyrinth": [
+   "amb_drip",
+   "amb_moan",
+   "amb_bang"
+  ],
+  "forest": [
+   "amb_creak",
+   "amb_moan"
+  ],
+  "gorgon_temple": [
+   "amb_creak",
+   "amb_moan"
+  ],
+  "underworld": [
+   "amb_steam",
+   "amb_moan",
+   "amb_bang"
+  ],
+  "arena": [
+   "amb_steam",
+   "amb_bang"
+  ],
+  "sanctuary": [
+   "amb_creak"
   ]
  },
  "ambience_alias": {
@@ -261,12 +300,22 @@
   "pediatrics": "ward",
   "radiology": "reception",
   "pharmacy": "reception",
-  "cafeteria": "reception"
+  "cafeteria": "reception",
+  "labyrinth": "necropolis",
+  "gorgon_temple": "ruins",
+  "arena": "underworld",
+  "sanctuary": "ruins"
  },
  "step_alias": {
   "hospital": "terminal",
   "linoleum": "terminal",
-  "morgue": "terminal"
+  "morgue": "terminal",
+  "mosaic": "terminal",
+  "stone": "concrete",
+  "marble": "terminal",
+  "catacomb": "tunnel",
+  "grass": "tunnel",
+  "volcanic": "concrete"
  },
  "music": {
   "fade_per_second": 0.6,

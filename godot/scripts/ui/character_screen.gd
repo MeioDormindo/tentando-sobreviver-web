@@ -73,8 +73,9 @@ func _portrait(skin: Dictionary) -> Control:
 	stack.custom_minimum_size = size * 2.0
 	frame.add_child(stack)
 	var idle: int = int(meta.animations.get("Idle_pistol", meta.animations.Idle).start)
-	# Com a pistola inicial do mapa do visual (M1911 no Terminal, Beretta no Hospital).
-	var pistol := "weapon_beretta" if String(skin.get("map", "")) == "map2" else "weapon_m1911"
+	# Com a pistola inicial do mapa do visual (M1911 no Terminal, Beretta no Hospital,
+	# Makarov no Templo), lida do mapa.
+	var pistol := "weapon_%s" % start_weapon(String(skin.get("map", "terminal")))
 	for layer: String in [sheet, pistol]:
 		if not ResourceLoader.exists("res://assets/sprites/%s.png" % layer):
 			continue
@@ -91,6 +92,16 @@ func _portrait(skin: Dictionary) -> Control:
 			picture.modulate = Color(0.05, 0.05, 0.06)
 		stack.add_child(picture)
 	return frame
+
+
+## Arma inicial do mapa (campo start_weapon do JSON; o Terminal usa a M1911).
+static func start_weapon(map_id: String) -> String:
+	var path := "res://data/maps/%s.json" % map_id
+	if FileAccess.file_exists(path):
+		var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+		if data is Dictionary and String(data.get("start_weapon", "")) != "":
+			return String(data.start_weapon)
+	return "m1911"
 
 
 func _choose(skin: Dictionary) -> void:

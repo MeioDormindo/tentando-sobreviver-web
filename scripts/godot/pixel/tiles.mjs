@@ -2,6 +2,7 @@
 // 3 m e topo), a 48 px/m. Paleta escura e dessaturada, com sujeira, rachaduras e desgaste.
 import { PPM, rng, base, stain, crack, rect, hline, vline, bevel, mix, scale, hex, dither, noise2 } from './paint.mjs';
 import { doors } from './doors.mjs';
+import { templeFloors, templeWalls } from './temple_tiles.mjs';
 
 const GRIME = hex(0x1a1714);
 const CRACK = hex(0x14120f);
@@ -94,6 +95,8 @@ export function floors() {
   rect(out.floor_morgue, 90, 90, 12, 12, hex(0x2a3033));  // ralo
   for (let i = 92; i < 102; i += 3) hline(out.floor_morgue, i, hex(0x14181a), 91, 100);
   grime(out.floor_morgue, r, 6, 0.3);
+  // Templo dos Mortos (Mapa 3).
+  Object.assign(out, templeFloors(S));
   return out;
 }
 
@@ -148,6 +151,7 @@ export function walls() {
 
   // Portas compráveis: um estilo por ambiente (doors.mjs; door.gd escolhe pela área).
   Object.assign(out, doors(PPM, H));
+  Object.assign(out, templeWalls(W, H));
 
   // Trem (parado na plataforma e o que passa no evento): lateral de 2 m com janela, faixa
   // laranja e a saia escura; o teto com as grades do ar-condicionado.

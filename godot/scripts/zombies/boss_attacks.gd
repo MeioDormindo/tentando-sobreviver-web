@@ -50,12 +50,38 @@ static func area(tree: SceneTree, target_at: Vector3, cfg: Dictionary, acid: boo
 				ZombieAbilities._spawn_pool_at(root, cfg.pool, ACID_COLOR, point)
 			else:
 				SpecialFire.flash(tree, point, radius, BLAST_COLOR)
+			if float(cfg.get("rubble_time", 0.0)) > 0.0:
+				_rubble(root, point, float(cfg.rubble_time))
 			if player and player.is_alive():
 				var offset := player.global_position - point
 				offset.y = 0.0
 				if offset.length() <= radius + 0.3:
 					player.take_damage(DamageInfo.new(float(cfg.get("damage", 30)), DamageInfo.Kind.ZOMBIE, null, false, point))
 			mark.queue_free())
+
+
+## Escombro que caiu do teto (Minotauro, Colapso): bloqueia a passagem e some depois de `seconds`.
+static func _rubble(root: Node, at: Vector3, seconds: float) -> void:
+	var body := StaticBody3D.new()
+	body.name = "Rubble"
+	body.collision_layer = PhysicsLayers.PROPS
+	body.collision_mask = 0
+	var shape := BoxShape3D.new()
+	shape.size = Vector3(1.1, 0.8, 1.1)
+	var collision := CollisionShape3D.new()
+	collision.shape = shape
+	collision.position.y = 0.4
+	body.add_child(collision)
+	var art := PropFactory.create("rubble")
+	body.add_child(art if art else EventFx.box(Vector3(1.0, 0.5, 1.0), EventFx.glow(Color(0.45, 0.43, 0.4), 1.0, 0.0)))
+	root.add_child(body)
+	body.global_position = Vector3(at.x, 0.0, at.z)
+	body.add_to_group(&"boss_rubble")
+	Events.screen_shake.emit(0.25, 0.1)
+	var tween := body.create_tween()
+	tween.tween_interval(seconds)
+	tween.tween_property(body, "scale", Vector3.ONE * 0.05, 0.4)
+	tween.tween_callback(body.queue_free)
 
 
 ## Vômito: poças de ácido em leque à frente do boss.

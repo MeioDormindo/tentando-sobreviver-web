@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+; Só do Godot (scripts/godot/temple-data.ts): Parede do Templo.
+
+[resource]
+script = ExtResource("1_script")
+id = &"thompson"
+display_name = "Thompson M1928"
+kind = &"smg"
+rarity = &"uncommon"
+damage = 27
+fire_rate = 11
+automatic = true
+magazine_size = 30
+reserve_ammo = 180
+reload_time = 2.1
+spread_degrees = 4.2
+max_range = 20
+projectile_speed = 0
+pellets = 1
+pierce = 0
+headshot_multiplier = 1.5
+price = 1200
+ammo_price = 600
+box_only = false
+maps = PackedStringArray("temple")
+element = &"ice"
+tracer_color = Color(1, 0.824, 0.478, 1)
+special_type = &""

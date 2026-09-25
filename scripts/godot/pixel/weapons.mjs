@@ -16,7 +16,11 @@ const GOLD = hex(0xe0ad45);
 const ACCENT = {
   arc_gun: hex(0x72ccff), energy_cannon: hex(0x80ff72), rail: hex(0x7fe7ff), wind_cannon: hex(0xc0f2ff),
   flamethrower: hex(0xff8a26), conductor_lantern: hex(0xffc85a), grenade_launcher: hex(0xb6d04a), minigun: hex(0xffc85a),
+  // Templo dos Mortos.
+  zeus_bolt: hex(0x9fd8ff), hephaestus_spear: hex(0xff8a26), artemis_bow: hex(0xd8f0ff), poseidon_trident: hex(0x6fd6ff),
 };
+const BRONZE = hex(0xb07a32);
+const MARBLE = hex(0xd8d4c6);
 
 /**
  * Peças da arma `id` no nível `level` (0 = original, 1 = Mk II, 2 = Mk III).
@@ -154,6 +158,78 @@ export function weaponShape(id, level = 0) {
     case 'wind_cannon':
       receiver(0.34, 0.1); grip(0.02); add([0, 0.4, 0.08], [0.22, 0.16, 0.22], metal, { shape: 'ellipsoid' });
       add([0, 0.49, 0.08], [0.17, 0.02, 0.17], accent, { flat: true, shape: 'ellipsoid' });
+      break;
+    // ── Templo dos Mortos: armas de época e as dos deuses ──
+    case 'makarov':
+      // Makarov PM: ferrolho curto e liso, cabo de baquelite marrom.
+      add([0, 0.06, 0.075], [0.044, 0.19, 0.058], metal); grip(-0.005, hex(0x4a2e1e)); sight(0.14, 0.108);
+      break;
+    case 'mauser_c96':
+      // Mauser C96 "Broomhandle": pente na frente do gatilho, cano longo, cabo cabo-de-vassoura.
+      add([0, 0.06, 0.08], [0.05, 0.2, 0.07], metal); barrel(0.16, 0.16, 0.03, 0.08); add([0, 0.1, 0.0], [0.04, 0.07, 0.12], DARK);
+      add([0, -0.03, -0.06], [0.045, 0.06, 0.15], WOOD, { rot: [-0.25, 0, 0], shape: 'ellipsoid' });
+      break;
+    case 'thompson':
+      // Thompson M1928: coronha e punho frontal de madeira, carregador de tambor, aletas no cano.
+      receiver(0.32, 0.1); grip(0, WOOD); stock(0.2, WOOD, 0.04); add([0, 0.28, 0.02], [0.05, 0.07, 0.1], WOOD);
+      add([0, 0.12, -0.05], [0.05, 0.16, 0.16], DARK, { shape: 'ellipsoid' });  // tambor
+      barrel(0.26, 0.16, 0.034); for (let i = 0; i < 4; i++) add([0, 0.28 + i * 0.03, 0.07], [0.05, 0.012, 0.05], metal);
+      break;
+    case 'lupara':
+      // Lupara: espingarda siciliana de cano duplo serrado e coronha curta.
+      add([0, 0.02, 0.06], [0.07, 0.12, 0.08], metal); grip(-0.02, WOOD); stock(0.16, WOOD, 0.03);
+      for (const x of [-0.022, 0.022]) add([x, 0.22, 0.07], [0.04, 0.3, 0.04], DARK, { round: 0.015 });
+      break;
+    case 'lee_enfield':
+      // Lee-Enfield: fuzil de ferrolho com madeira até perto da ponta, alça do ferrolho e baioneta.
+      receiver(0.34, 0.09, 0.06); grip(0, WOOD); stock(0.28, WOOD, 0.03); mag(0.12, 0.08);
+      add([0, 0.34, 0.05], [0.06, 0.42, 0.07], WOOD); barrel(0.52, 0.16, 0.03); add([0.05, 0.02, 0.1], [0.04, 0.02, 0.02], metal);
+      if (level >= 1) scope(0.14, 0.2);
+      break;
+    case 'stg44':
+      // StG 44: receptor de chapa estampada, carregador curvo comprido e coronha de madeira.
+      receiver(0.36, 0.1); grip(0, WOOD); mag(0.14, 0.22, DARK, 0.25); stock(0.24, WOOD, 0.03); barrel(0.34, 0.24, 0.03);
+      add([0, 0.3, 0.1], [0.04, 0.06, 0.04], DARK);
+      break;
+    case 'winchester_1887':
+      // Winchester 1887: espingarda de alavanca, cano longo sobre o tubo, madeira clara.
+      receiver(0.2, 0.11, 0.065); grip(0, hex(0x8a5a32)); stock(0.26, hex(0x8a5a32), 0.03);
+      barrel(0.14, 0.46, 0.042, 0.09); barrel(0.14, 0.4, 0.03, 0.05, DARK);
+      add([0, 0.0, -0.05], [0.03, 0.14, 0.05], metal, { rot: [0.2, 0, 0] });  // alavanca
+      break;
+    case 'bren':
+      // Bren: carregador curvo em cima, cano com alça de transporte e bipé.
+      receiver(0.44, 0.1); grip(0.02, WOOD); stock(0.26, DARK, 0.04); barrel(0.42, 0.34, 0.036);
+      add([0, 0.14, 0.2], [0.04, 0.1, 0.16], DARK, { rot: [-0.4, 0, 0] });  // carregador
+      add([0, 0.44, 0.13], [0.03, 0.08, 0.04], metal);
+      add([0.03, 0.66, -0.05], [0.015, 0.02, 0.16], DARK, { rot: [0, 0.4, 0] }); add([-0.03, 0.66, -0.05], [0.015, 0.02, 0.16], DARK, { rot: [0, -0.4, 0] });
+      break;
+    case 'hephaestus_spear':
+      // Lança de Hefesto: haste de bronze com ponta em brasa e as tenazes da forja no cabo.
+      add([0, 0.2, 0.07], [0.04, 0.8, 0.04], BRONZE, { round: 0.015 });
+      add([0, 0.66, 0.07], [0.09, 0.16, 0.03], accent, { flat: true });
+      add([0, 0.6, 0.07], [0.12, 0.04, 0.05], hex(0x6a3a1a));
+      grip(-0.02, hex(0x3a2a1e)); add([0, -0.12, 0.07], [0.06, 0.08, 0.06], BRONZE);
+      break;
+    case 'zeus_bolt':
+      // Raio de Zeus: um raio de ouro e mármore, com o núcleo azul aceso.
+      add([0, 0.08, 0.07], [0.1, 0.22, 0.12], MARBLE); grip(0, hex(0xc8a24a));
+      for (let i = 0; i < 4; i++) add([i % 2 ? 0.03 : -0.03, 0.22 + i * 0.09, 0.07], [0.05, 0.1, 0.05], hex(0xf0c040), { rot: [0, 0, i % 2 ? 0.5 : -0.5] });
+      add([0, 0.1, 0.07], [0.06, 0.08, 0.14], accent, { flat: true, shape: 'ellipsoid' });
+      break;
+    case 'artemis_bow':
+      // Arco de Artemis: arco prateado em crescente com a corda luminosa e a flecha apoiada.
+      for (let i = -3; i <= 3; i++) add([0, 0.08 - Math.abs(i) * 0.02, 0.07 + i * 0.07], [0.03, 0.03, 0.08], hex(0xd8e0e8), { round: 0.01 });
+      add([0, 0.0, 0.07], [0.008, 0.008, 0.46], accent, { flat: true });
+      add([0, 0.2, 0.07], [0.015, 0.4, 0.015], hex(0x6a4a2a)); add([0, 0.41, 0.07], [0.04, 0.04, 0.03], hex(0xe8f0ff));
+      grip(0, hex(0x5a6a7a));
+      break;
+    case 'poseidon_trident':
+      // Tridente de Poseidon: haste de bronze e as três pontas de coral-azul.
+      add([0, 0.2, 0.07], [0.04, 0.7, 0.04], BRONZE, { round: 0.015 });
+      add([0, 0.54, 0.07], [0.2, 0.04, 0.04], BRONZE);
+      for (const x of [-0.09, 0, 0.09]) add([x, 0.63, 0.07], [0.03, 0.16, 0.03], accent, { round: 0.01 });
+      grip(-0.02, hex(0x2a4a5a));
       break;
     default:
       receiver(0.3); grip();

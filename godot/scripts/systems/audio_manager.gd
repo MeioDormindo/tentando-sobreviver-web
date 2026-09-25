@@ -59,6 +59,11 @@ func _ready() -> void:
 const SHOT_ALIAS := {
 	&"beretta": ["m1911", 1.1], &"nailgun": ["glock", 1.45], &"p90": ["mp5", 1.12],
 	&"sawed_off": ["pump", 0.82], &"conductor_lantern": ["arc_gun", 0.75],
+	# Arsenal do Templo.
+	&"makarov": ["m1911", 1.2], &"mauser_c96": ["glock", 0.9], &"thompson": ["mp5", 0.88], &"lupara": ["pump", 0.9],
+	&"lee_enfield": ["barrett", 1.25], &"stg44": ["ak", 0.95], &"winchester_1887": ["combat_shotgun", 0.85], &"bren": ["rpk", 0.9],
+	&"hephaestus_spear": ["grenade_launcher", 0.8], &"zeus_bolt": ["arc_gun", 0.62], &"artemis_bow": ["rail", 1.35],
+	&"poseidon_trident": ["wind_cannon", 0.8],
 }
 
 

@@ -25,7 +25,9 @@ func _ready() -> void:
 		if id == &"conductor":
 			unlock("conductor")
 		elif id == &"patient_zero":
-			unlock("patient_zero"))
+			unlock("patient_zero")
+		elif id == &"minotaur":
+			unlock("minotaur"))
 	Events.perks_changed.connect(func(names: Array[String]) -> void:
 		if names.size() >= 7:
 			unlock("collector"))
@@ -37,7 +39,12 @@ func _ready() -> void:
 		if id == &"serum":
 			unlock("serum")
 		elif id == &"train":
-			unlock("last_train"))
+			unlock("last_train")
+		elif id == &"temple":
+			unlock("underworld_gate"))
+	Events.statue_lit.connect(func(found: int, total: int) -> void:
+		if found >= total:
+			unlock("twelve_statues"))
 	Events.train_run_over.connect(func(count: int) -> void:
 		if count >= catalog.train_kills:
 			unlock("train_wreck"))
@@ -58,6 +65,10 @@ func unlock(id: String) -> void:
 	if info.is_empty() or not Save.unlock_achievement(id):
 		return
 	Events.achievement_unlocked.emit(id, String(info.name), String(info.description))
+	# Conquistas que liberam mapas (missão do Terminal ou do Hospital → Templo).
+	for map_id in Save.catalog.unlocked_by_achievement(id):
+		if Save.unlock(map_id):
+			Events.map_unlocked.emit(map_id, Save.catalog.display_name(map_id))
 
 
 func _on_kill(_zombie: Node3D, info: DamageInfo) -> void:

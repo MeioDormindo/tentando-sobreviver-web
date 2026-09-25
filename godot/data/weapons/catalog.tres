@@ -24,7 +24,16 @@
 [ext_resource type="Resource" path="res://data/weapons/nailgun.tres" id="w20"]
 [ext_resource type="Resource" path="res://data/weapons/p90.tres" id="w21"]
 [ext_resource type="Resource" path="res://data/weapons/sawed_off.tres" id="w22"]
+[ext_resource type="Resource" path="res://data/weapons/makarov.tres" id="w23"]
+[ext_resource type="Resource" path="res://data/weapons/mauser_c96.tres" id="w24"]
+[ext_resource type="Resource" path="res://data/weapons/thompson.tres" id="w25"]
+[ext_resource type="Resource" path="res://data/weapons/lupara.tres" id="w26"]
+[ext_resource type="Resource" path="res://data/weapons/lee_enfield.tres" id="w27"]
+[ext_resource type="Resource" path="res://data/weapons/stg44.tres" id="w28"]
+[ext_resource type="Resource" path="res://data/weapons/winchester_1887.tres" id="w29"]
+[ext_resource type="Resource" path="res://data/weapons/bren.tres" id="w30"]
+[ext_resource type="Resource" path="res://data/weapons/hephaestus_spear.tres" id="w31"]
 
 [resource]
 script = ExtResource("1_script")
-weapons = Array[Resource]([ExtResource("w0"), ExtResource("w1"), ExtResource("w2"), ExtResource("w3"), ExtResource("w4"), ExtResource("w5"), ExtResource("w6"), ExtResource("w7"), ExtResource("w8"), ExtResource("w9"), ExtResource("w10"), ExtResource("w11"), ExtResource("w12"), ExtResource("w13"), ExtResource("w14"), ExtResource("w15"), ExtResource("w16"), ExtResource("w17"), ExtResource("w18"), ExtResource("w19"), ExtResource("w20"), ExtResource("w21"), ExtResource("w22")])
+weapons = Array[Resource]([ExtResource("w0"), ExtResource("w1"), ExtResource("w2"), ExtResource("w3"), ExtResource("w4"), ExtResource("w5"), ExtResource("w6"), ExtResource("w7"), ExtResource("w8"), ExtResource("w9"), ExtResource("w10"), ExtResource("w11"), ExtResource("w12"), ExtResource("w13"), ExtResource("w14"), ExtResource("w15"), ExtResource("w16"), ExtResource("w17"), ExtResource("w18"), ExtResource("w19"), ExtResource("w20"), ExtResource("w21"), ExtResource("w22"), ExtResource("w23"), ExtResource("w24"), ExtResource("w25"), ExtResource("w26"), ExtResource("w27"), ExtResource("w28"), ExtResource("w29"), ExtResource("w30"), ExtResource("w31")])

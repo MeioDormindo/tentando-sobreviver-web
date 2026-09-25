@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="1_script"]
+; Só do Godot (scripts/godot/temple-data.ts): Parede do Templo.
+
+[resource]
+script = ExtResource("1_script")
+id = &"stg44"
+display_name = "StG 44"
+kind = &"ak"
+rarity = &"rare"
+damage = 40
+fire_rate = 9
+automatic = true
+magazine_size = 30
+reserve_ammo = 180
+reload_time = 2.4
+spread_degrees = 3.2
+max_range = 28
+projectile_speed = 0
+pellets = 1
+pierce = 0
+headshot_multiplier = 1.5
+price = 2000
+ammo_price = 1000
+box_only = false
+maps = PackedStringArray("temple")
+element = &"fire"
+tracer_color = Color(1, 0.824, 0.478, 1)
+special_type = &""
