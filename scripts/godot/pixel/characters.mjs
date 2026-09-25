@@ -16,6 +16,7 @@ export const HUMAN_BONES = [
 ];
 
 const box = (bone, at, size, color, extra = {}) => ({ bone, at, size, color, ...extra });
+const darken = (c) => c.map((v) => Math.round(v * 0.45));
 
 /**
  * Corpo humano em peças. c: {torso, sleeve, skin, pants, shoes, eyes}; bulk engorda o tronco.
@@ -27,9 +28,15 @@ export function humanoid(c, { bulk = 1, extra = null, scale = 1 } = {}) {
     box('spine', [0, 0, 1.24], [w, 0.28 * bulk, 0.5], c.torso),
     box('hips', [0, 0, 0.98], [0.44 * bulk, 0.26 * bulk, 0.2], c.pants),
     box('spine', [0, 0, 1.5], [0.13, 0.13, 0.08], c.skin),
-    box('head', [0, 0.01, 1.64], [0.27, 0.26, 0.28], c.skin),
-    box('head', [0.065, 0.135, 1.68], [0.06, 0.02, 0.05], c.eyes, { flat: true }),
-    box('head', [-0.065, 0.135, 1.68], [0.06, 0.02, 0.05], c.eyes, { flat: true }),
+    box('head', [0, 0.01, 1.64], [0.27, 0.27, 0.3], c.skin, { shape: 'ellipsoid' }),
+    box('head', [0, 0.13, 1.61], [0.05, 0.05, 0.06], c.skin, { shape: 'ellipsoid' }),  // nariz
+    box('head', [0.065, 0.125, 1.675], [0.055, 0.03, 0.05], c.eyes, { flat: true, shape: 'ellipsoid' }),
+    box('head', [-0.065, 0.125, 1.675], [0.055, 0.03, 0.05], c.eyes, { flat: true, shape: 'ellipsoid' }),
+    box('head', [0.065, 0.12, 1.72], [0.07, 0.03, 0.018], c.brow || darken(c.skin), { flat: true }),  // sobrancelhas
+    box('head', [-0.065, 0.12, 1.72], [0.07, 0.03, 0.018], c.brow || darken(c.skin), { flat: true }),
+    box('head', [0, 0.125, 1.565], [0.08, 0.03, 0.02], c.mouth || darken(c.skin), { flat: true }),  // boca
+    box('head', [0.14, 0, 1.64], [0.04, 0.07, 0.09], c.skin, { shape: 'ellipsoid' }),  // orelhas
+    box('head', [-0.14, 0, 1.64], [0.04, 0.07, 0.09], c.skin, { shape: 'ellipsoid' }),
   ];
   for (const side of [1, -1]) {
     const arm = side > 0 ? 'arm.R' : 'arm.L';
@@ -37,6 +44,7 @@ export function humanoid(c, { bulk = 1, extra = null, scale = 1 } = {}) {
     const x = side * (0.29 + (w - 0.5) * 0.5);
     parts.push(box(arm, [x, 0, 1.3], [0.13, 0.13, 0.32], c.sleeve));
     parts.push(box(arm, [x, 0, 0.98], [0.11, 0.11, 0.32], c.skin));
+    parts.push(box(arm, [x, 0.01, 0.8], [0.1, 0.11, 0.1], c.skin, { shape: 'ellipsoid' }));  // mão
     parts.push(box(leg, [side * 0.12, 0, 0.68], [0.17, 0.19, 0.48], c.pants));
     parts.push(box(leg, [side * 0.12, 0, 0.28], [0.15, 0.17, 0.36], c.pants));
     parts.push(box(leg, [side * 0.12, 0.04, 0.05], [0.16, 0.26, 0.1], c.shoes));
@@ -179,7 +187,7 @@ const BLOOD = hex(0x6a1a14);
 export function zombieModel(look) {
   const c = {
     torso: look.shirt, sleeve: look.shirt, skin: look.skin, pants: hex(0x35393a), shoes: hex(0x1d1b19),
-    eyes: hex(0xff4a2a),
+    eyes: hex(0xff4a2a), mouth: hex(0x4a1210),
   };
   return humanoid(c, { scale: look.scale, extra: (parts) => {
     parts.push(box('spine', [0.13, 0.145, 0.97], [0.14, 0.03, 0.12], look.shirt, { rot: [0.3, 0, 0.25] }));  // aba rasgada

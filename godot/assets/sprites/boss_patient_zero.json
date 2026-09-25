@@ -1,17 +1,17 @@
 {
  "frame": [
-  107,
-  134
+  164,
+  199
  ],
  "pivot": [
-  53,
-  97
+  82,
+  146
  ],
  "columns": 47,
  "directions": 8,
  "direction_angle": "dir = round(atan2(facing.x, facing.z) / 45°) mod 8; 0 = olhando para a câmera (+Z), 2 = leste (+X)",
  "pitch": 40,
- "pixels_per_meter": 32,
+ "pixels_per_meter": 48,
  "animations": {
   "Idle": {
    "start": 0,

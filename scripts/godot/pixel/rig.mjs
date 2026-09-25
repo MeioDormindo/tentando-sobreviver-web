@@ -1,6 +1,7 @@
 // Esqueleto simples de peças rígidas, poses por quadros-chave e montagem das folhas de
 // sprites em 8 direções (a mesma vista 3/4 da câmera do jogo).
 import { Pixels, drawBoxes, projector, ident, mul, translate, scale, rotX, rotY, rotZ, apply } from './raster.mjs';
+import { renderSdf } from './sdf.mjs';
 
 /** Ângulo de cada direção: 0 = olhando para a câmera (sul, +Z do Godot), 90° = leste (+X). */
 export const DIRECTIONS = 8;
@@ -92,7 +93,7 @@ export function posedBoxes(model, pose, dirIndex, only = null) {
     }
     const rot = part.rot || [0, 0, 0];
     const local = mul(translate(...part.at), mul(rotZ(rot[2]), mul(rotY(rot[1]), mul(rotX(rot[0]), scale(...part.size)))));
-    boxes.push({ m: mul(f, mul(m, local)), color: part.color, flat: part.flat, layer: part.layer || 'body' });
+    boxes.push({ m: mul(f, mul(m, local)), color: part.color, flat: part.flat, layer: part.layer || 'body', shape: part.shape, round: part.round });
   }
   return boxes;
 }
@@ -102,8 +103,11 @@ export function posedBoxes(model, pose, dirIndex, only = null) {
  * animations: [{ name, frames, fps, loop, keys }]. layers: {nome: filtro de peças}.
  * Devolve { sheets: {camada: Pixels}, meta }.
  */
-export function buildSheet(model, animations, { pitch, layers = { body: null }, workSize = 200, fixedFrame = null }) {
-  const proj = projector(pitch);
+export function buildSheet(model, animations, { pitch, layers = { body: null }, workSize = 200, fixedFrame = null, ppm = 48, renderer = 'sdf' }) {
+  // Tamanhos pensados em 32 px/m; com outra densidade, a área de trabalho acompanha.
+  workSize = Math.round((workSize * ppm) / 32);
+  if (fixedFrame) fixedFrame = { size: fixedFrame.size.map((v) => Math.round((v * ppm) / 32)), pivot: fixedFrame.pivot.map((v) => Math.round((v * ppm) / 32)) };
+  const proj = projector(pitch, ppm);
   const originX = workSize / 2, originY = workSize * 0.7;
   const frames = []; // [dir][frame] = {layer: Pixels}
   const animMeta = {};
@@ -123,7 +127,9 @@ export function buildSheet(model, animations, { pitch, layers = { body: null }, 
         const out = {};
         for (const [layer, filter] of Object.entries(layers)) {
           const canvas = new Pixels(workSize, workSize);
-          drawBoxes(canvas, posedBoxes(model, pose, dir, filter), proj, originX, originY);
+          const boxes = posedBoxes(model, pose, dir, filter);
+          if (renderer === 'sdf') renderSdf(canvas, boxes, pitch, ppm, originX, originY);
+          else drawBoxes(canvas, boxes, proj, originX, originY);
           canvas.outline();
           out[layer] = canvas;
           const b = canvas.bounds();
@@ -180,7 +186,7 @@ export function buildSheet(model, animations, { pitch, layers = { body: null }, 
     directions: DIRECTIONS,
     direction_angle: 'dir = round(atan2(facing.x, facing.z) / 45°) mod 8; 0 = olhando para a câmera (+Z), 2 = leste (+X)',
     pitch,
-    pixels_per_meter: 32,
+    pixels_per_meter: ppm,
     animations: animMeta,
   };
   if (behind.length) meta.weapon_behind = behind;

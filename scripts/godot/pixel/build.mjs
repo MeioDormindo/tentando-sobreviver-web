@@ -16,6 +16,7 @@ const OUT = 'godot/assets/sprites';
 /** Inclinação da câmera do jogo (TopDownCamera.pitch_degrees): o desenho usa a mesma vista. */
 const PITCH = 40;
 /** Quadro comum do jogador e das armas (as camadas se sobrepõem). */
+// (medidas em 32 px/m; o rig converte para a densidade da folha)
 const PLAYER_FRAME = { size: [64, 60], pivot: [32, 46] };
 
 mkdirSync(OUT, { recursive: true });

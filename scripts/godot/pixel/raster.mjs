@@ -158,12 +158,12 @@ export class Pixels {
  * Mundo do desenho: X para a direita da tela, D na direção da câmera (o "sul" da tela,
  * +Z do Godot), Z para cima. A câmera olha de cima com inclinação `pitch` (a mesma do jogo).
  */
-export function projector(pitchDegrees) {
+export function projector(pitchDegrees, ppm = PX_PER_M) {
   const p = (pitchDegrees * Math.PI) / 180;
   const sp = Math.sin(p), cp = Math.cos(p);
   return {
     // Tela (pixels, y para baixo) relativa ao pé do personagem.
-    screen: ([x, d, z]) => [x * PX_PER_M, (d * sp - z * cp) * PX_PER_M],
+    screen: ([x, d, z]) => [x * ppm, (d * sp - z * cp) * ppm],
     // Profundidade: maior = mais perto da câmera (desenhado por último).
     depth: ([, d, z]) => d * cp + z * sp,
     toCamera: [0, cp, sp],

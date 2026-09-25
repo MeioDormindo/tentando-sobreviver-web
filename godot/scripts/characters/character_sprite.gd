@@ -174,7 +174,7 @@ func _make_sprite(sheet: String, sprite_name: String) -> Sprite3D:
 	sprite.texture = load((SPRITES % sheet) + ".png")
 	sprite.hframes = int(_meta.columns)
 	sprite.vframes = int(_meta.directions)
-	sprite.pixel_size = 1.0 / PIXELS_PER_METER
+	sprite.pixel_size = 1.0 / float(_meta.get("pixels_per_meter", PIXELS_PER_METER))
 	sprite.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	sprite.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	sprite.alpha_cut = SpriteBase3D.ALPHA_CUT_DISCARD
