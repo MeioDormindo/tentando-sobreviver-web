@@ -17,6 +17,8 @@ import { zombies as zombieTypes } from '../../src/config/zombies.config';
 import { exportMaps } from './export-maps';
 import { exportMachines } from './export-machines';
 import { bosses } from '../../src/config/bosses.config';
+import { scoreConfig } from '../../src/config/score.config';
+import { MAPS, RANKING_SIZE, PLAYER_NAME_MAX, DEFAULT_MAP } from '../../src/config/maps.config';
 
 const OUT = 'godot/data';
 const PX = 32;
@@ -253,6 +255,35 @@ function exportBosses(): void {
   }
 }
 
+/** Pontuação (score do ranking, separada dos pontos de compra) e mapas (nomes, desbloqueio). */
+function exportProgression(): void {
+  const c = scoreConfig;
+  write('configs/score.tres', tres('ScoreData', 'res://scripts/systems/score_data.gd', {
+    kill_points: raw(`{ ${Object.entries(c.kill).map(([k, v]) => `&"${k}": ${v}`).join(', ')} }`),
+    kill_default: c.killDefault,
+    per_round_multiplier: c.perWaveMultiplier,
+    headshot: c.headshot,
+    knife_kill: c.knifeKill,
+    close_range_distance: m(c.closeRange.distance),
+    close_range_bonus: c.closeRange.bonus,
+    multi_kill_window: s(c.multiKill.windowMs),
+    multi_kill_bonus_per_step: c.multiKill.bonusPerStep,
+    multi_kill_max_steps: c.multiKill.maxSteps,
+    indirect_factor: c.indirectFactor,
+    round_complete: c.waveComplete,
+    boss: c.boss,
+    power_up: c.powerUp,
+  }));
+  const entries = Object.values(MAPS).map((mp) => `"${mp.id}": { "name": ${JSON.stringify(mp.name)}, "description": ${JSON.stringify(mp.description)}, "scene": "res://scenes/maps/${mp.id === 'terminal' ? 'terminal' : 'hospital'}.tscn", "unlock_boss_round": ${mp.unlock?.bossWave ?? 0}, "unlock_on_map": "${mp.unlock?.onMap ?? ''}" }`);
+  write('configs/maps.tres', tres('MapCatalog', 'res://scripts/maps/map_catalog.gd', {
+    maps: raw(`{\n${entries.join(',\n')}\n}`),
+    order: raw(`PackedStringArray(${Object.keys(MAPS).map((k) => JSON.stringify(k)).join(', ')})`),
+    default_map: DEFAULT_MAP,
+    ranking_size: RANKING_SIZE,
+    player_name_max: PLAYER_NAME_MAX,
+  }));
+}
+
 function exportZombies(): void {
   for (const z of Object.values(zombieTypes)) {
     const look = LOOKS[z.id] ?? LOOKS.walker;
@@ -289,6 +320,7 @@ exportKnifeAndPlayer();
 exportRoundsAndPoints();
 exportZombies();
 exportBosses();
+exportProgression();
 exportMaps();
 exportMachines(write, tres as never);
 console.log('Pronto.');

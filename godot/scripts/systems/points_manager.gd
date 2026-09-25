@@ -6,6 +6,8 @@ extends Node
 @export var data: PointsData
 
 var points: int = 0
+## Total ganho na partida (estatística do fim de jogo).
+var earned: int = 0
 
 
 func _ready() -> void:
@@ -27,6 +29,7 @@ func add(amount: int) -> void:
 	if amount <= 0:
 		return
 	points += amount
+	earned += amount
 	Events.points_changed.emit(points, amount)
 
 

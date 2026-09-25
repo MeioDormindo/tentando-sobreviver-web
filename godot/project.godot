@@ -7,7 +7,7 @@ config_version=5
 
 config/name="Tentando Sobreviver"
 config/description="Sobrevivência por rounds contra hordas de zumbis."
-run/main_scene="res://scenes/main.tscn"
+run/main_scene="res://scenes/ui/main_menu.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -19,6 +19,8 @@ buses/default_bus_layout="res://data/configs/default_bus_layout.tres"
 
 Events="*res://scripts/systems/events.gd"
 InputBindings="*res://scripts/systems/input_bindings.gd"
+Save="*res://scripts/systems/save_store.gd"
+Session="*res://scripts/systems/session.gd"
 
 [display]
 

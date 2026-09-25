@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ScoreData" format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/score_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+kill_points = { &"walker": 10, &"runner": 15, &"tank": 60, &"exploder": 25 }
+kill_default = 10
+per_round_multiplier = 0.1
+headshot = 5
+knife_kill = 15
+close_range_distance = 2.188
+close_range_bonus = 5
+multi_kill_window = 1.5
+multi_kill_bonus_per_step = 10
+multi_kill_max_steps = 5
+indirect_factor = 0.5
+round_complete = 50
+boss = 1000
+power_up = 25

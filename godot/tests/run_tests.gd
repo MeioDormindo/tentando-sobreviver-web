@@ -10,6 +10,10 @@ extends SceneTree
 func _initialize() -> void:
 	# Espera a árvore ficar ativa (os testes de mapa precisam do _ready dos nós).
 	await process_frame
+	# Save de teste: os testes nunca mexem no save de verdade do jogador.
+	var save := root.get_node("Save")
+	save.call(&"load_from", "user://test_save.json")
+	save.call(&"reset")
 	var script := load("res://tests/system_tests.gd") as GDScript
 	if script == null or not script.can_instantiate():
 		printerr("A suíte de testes não compilou (veja o erro acima).")
@@ -24,4 +28,7 @@ func _initialize() -> void:
 	failures += await zombie_tests.call(&"run", self)
 	var boss_tests: RefCounted = (load("res://tests/boss_scene_tests.gd") as GDScript).new()
 	failures += await boss_tests.call(&"run", self)
+	var menu_tests: RefCounted = (load("res://tests/menu_scene_tests.gd") as GDScript).new()
+	failures += await menu_tests.call(&"run", self)
+	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://test_save.json"))
 	quit(1 if failures > 0 else 0)

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MapCatalog" format=3]
+
+[ext_resource type="Script" path="res://scripts/maps/map_catalog.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+maps = {
+"terminal": { "name": "Terminal Central", "description": "Estação de trem abandonada: hall, plataforma, lojas, túneis e manutenção.", "scene": "res://scenes/maps/terminal.tscn", "unlock_boss_round": 0, "unlock_on_map": "" },
+"map2": { "name": "Hospital Santa Luzia", "description": "Onde o vírus nasceu: recepção, UTI, centro cirúrgico, necrotério e o laboratório no subsolo.", "scene": "res://scenes/maps/hospital.tscn", "unlock_boss_round": 10, "unlock_on_map": "terminal" }
+}
+order = PackedStringArray("terminal", "map2")
+default_map = "terminal"
+ranking_size = 10
+player_name_max = 14

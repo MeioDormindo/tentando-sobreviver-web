@@ -47,6 +47,12 @@ signal boss_phase(boss_name: String, phase: int)
 signal boss_defeated(boss_id: StringName, boss_name: String, reward: int, at: Vector3)
 ## O boss invocou zumbis (entram na contagem do round).
 signal zombies_summoned(count: int)
+## Pontuação do ranking (total e variação).
+signal score_changed(total: int, delta: int)
+## O jogador disparou (estatística de precisão).
+signal shot_fired()
+## Um mapa foi liberado (fica salvo).
+signal map_unlocked(map_id: String, map_name: String)
 ## Pausa ligada/desligada.
 signal pause_changed(paused: bool)
 ## A HUD pediu para jogar de novo.

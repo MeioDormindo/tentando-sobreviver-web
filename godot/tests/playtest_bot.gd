@@ -51,6 +51,9 @@ var _platform_spawns_after := 0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	# Save de teste: o bot nunca mexe no save de verdade do jogador.
+	Save.load_from("user://test_save.json")
+	Save.reset()
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://tests/output"))
 	Events.zombie_killed.connect(_on_zombie_killed)
 	Events.round_started.connect(_on_round_started)
@@ -275,6 +278,14 @@ func _finish_game_over(main: Node) -> void:
 	var panel := hud.get(&"_game_over_panel") as Control
 	_check(_saw_revive, "Quick Revive: caiu e levantou antes de morrer de vez")
 	_check(panel != null and panel.visible, "tela de fim de jogo aparece quando o jogador morre")
+	var name_edit := hud.find_child("RankName", true, false) as LineEdit
+	_check(name_edit != null, "fim de jogo: entrou no top e pede o nome")
+	if name_edit:
+		name_edit.text = "bot teste"
+		name_edit.text_submitted.emit(name_edit.text)
+	var ranking := Save.ranking(Session.map_id)
+	_check(not ranking.is_empty() and ranking[0].name == "BOT TESTE", "nome gravado no ranking local")
+	_check(Save.lifetime.gamesPlayed == 1 and int(Save.records(Session.map_id).bestWave) >= 3, "recordes e totais gravados no save")
 	await _screenshot("playtest_game_over")
 	Events.restart_requested.emit()
 	await get_tree().create_timer(1.0 * TIME_SCALE).timeout
@@ -318,5 +329,6 @@ func _report() -> void:
 	for line in _checks:
 		print(line)
 	print("%d falharam" % _failed)
+	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://test_save.json"))
 	Engine.time_scale = 1.0
 	get_tree().quit(1 if _failed > 0 else 0)

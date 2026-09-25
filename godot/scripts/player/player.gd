@@ -321,11 +321,18 @@ func _apply_weapon_modifiers() -> void:
 func _on_weapon_changed(current: Weapon, other: Weapon) -> void:
 	_apply_weapon_modifiers()
 	for w in inventory.weapons:
+		if not w.fired.is_connected(_on_fired):
+			w.fired.connect(_on_fired)
+	for w in inventory.weapons:
 		if w.ammo_changed.is_connected(_on_ammo_changed):
 			w.ammo_changed.disconnect(_on_ammo_changed)
 	current.ammo_changed.connect(_on_ammo_changed)
 	Events.weapon_changed.emit(current.data.display_name, other.data.display_name if other else "")
 	_on_ammo_changed(current.magazine, current.reserve, current.reloading)
+
+
+func _on_fired() -> void:
+	Events.shot_fired.emit()
 
 
 func _on_ammo_changed(magazine: int, reserve: int, reloading: bool) -> void:

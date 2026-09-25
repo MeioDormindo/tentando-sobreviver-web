@@ -13,8 +13,12 @@
 [ext_resource type="Resource" path="res://data/configs/rounds.tres" id="11_rounds"]
 [ext_resource type="Resource" path="res://data/configs/points.tres" id="12_points"]
 [ext_resource type="Script" path="res://scripts/systems/boss_manager.gd" id="13_boss"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="14_main"]
+[ext_resource type="Script" path="res://scripts/systems/score_manager.gd" id="15_score"]
+[ext_resource type="Resource" path="res://data/configs/score.tres" id="16_score_data"]
 
 [node name="Main" type="Node3D"]
+script = ExtResource("14_main")
 
 [node name="World" parent="." instance=ExtResource("1_arena")]
 
@@ -50,12 +54,18 @@ boss_manager = NodePath("../BossManager")
 script = ExtResource("7_points")
 data = ExtResource("12_points")
 
-[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("player", "arena", "round_manager", "points_manager")]
+[node name="ScoreManager" type="Node" parent="." node_paths=PackedStringArray("player")]
+script = ExtResource("15_score")
+data = ExtResource("16_score_data")
+player = NodePath("../Player")
+
+[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("player", "arena", "round_manager", "points_manager", "score_manager")]
 script = ExtResource("8_game")
 player = NodePath("../Player")
 arena = NodePath("../World")
 round_manager = NodePath("../RoundManager")
 points_manager = NodePath("../PointsManager")
+score_manager = NodePath("../ScoreManager")
 
 [node name="AudioManager" type="Node" parent="."]
 script = ExtResource("9_audio")

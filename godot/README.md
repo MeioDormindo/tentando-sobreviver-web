@@ -4,7 +4,16 @@ Versão em **Godot 4.7 + GDScript** do jogo de sobrevivência por rounds (especi
 projeto). O jogo web em TypeScript (raiz deste repositório) continua no ar e serve de referência
 de conceitos: ver `docs/analise-typescript.md`.
 
-**Estado: combate, mapas, loja, máquinas e inimigos migrados do jogo web.** Tem:
+**Estado: combate, mapas, loja, máquinas, inimigos e progressão local migrados do jogo web.** Tem:
+- **menu principal**, escolha de mapa (o Hospital libera ao vencer o boss do round 10 no
+  Terminal), ranking local por mapa, configurações (volume, som, música, tremor, tela cheia,
+  nome, apagar progresso);
+- **save** em `user://save.json` com **o mesmo formato JSON do jogo web** (prepara o save na
+  nuvem entre as duas versões): configurações, recordes, mapas liberados, ranking, totais,
+  segredos e conquistas; validado campo a campo e gravado de forma segura;
+- **pontuação do ranking** (score, separada dos pontos de compra), como no jogo web;
+- **tela de fim**: estatísticas, recorde, nome no ranking e botões de jogar de novo, ranking e
+  menu;
 - **Terminal Central migrado** (a partida começa nele) e o Hospital Santa Luzia pronto para
   entrar:
   - o mesmo layout do jogo web: áreas, paredes, trem parado, janelas por onde os zumbis entram,
@@ -48,7 +57,8 @@ de conceitos: ver `docs/analise-typescript.md`.
 1. Godot **4.7.2** (versão padrão, sem .NET): https://godotengine.org. Nesta máquina ele está em
    `E:\Tools\Godot\`.
 2. Abrir o `project.godot` desta pasta no Godot (ou `Godot --path godot` na raiz do repo).
-3. F5 roda a cena principal (`scenes/main.tscn`).
+3. F5 abre o menu (`scenes/ui/main_menu.tscn`); a partida é `scenes/main.tscn`, que carrega o
+   mapa escolhido.
 
 | Controle | Teclado + mouse | Controle |
 |---|---|---|
@@ -74,6 +84,7 @@ reais do jogo web (`src/config`) e gera os `.tres` de `data/`:
 - os 8 tipos de zumbi e as habilidades deles, a composição por round e a rodada dos cães;
 - os 2 bosses, com cada ataque;
 - barricadas, Mystery Box, Weapon Lab, os 7 perks, energia e o catálogo de armas;
+- a pontuação do ranking e o catálogo de mapas (nomes, descrições, desbloqueio);
 - os mapas (`data/maps/terminal.json` e `map2.json`): a grade de tiles montada na mesma ordem do
   jogo web, com áreas, portas, janelas, spawns por área, luzes, props, máquinas e compras na
   parede.
@@ -89,13 +100,15 @@ passam a ser editados direto no Godot.
 # escolha do ponto de spawn, pontos, inventário, giro da minigun, dados migrados, os dois
 # mapas com portas, barricadas, compras, máquinas e navegação, sorteio da caixa, Weapon Lab,
 # perks, composição por round, rodada dos cães) e, na mesma execução, os testes de cena: as
-# 5 armas especiais, cada tipo de zumbi, a rodada dos cães e os dois bosses nos mapas migrados:
+# 5 armas especiais, cada tipo de zumbi, a rodada dos cães, os dois bosses nos mapas migrados
+# e as telas de menu. Save, pontuação e menus usam um save de teste (o do jogador não muda):
 Godot --headless --path godot -s res://tests/run_tests.gd
 
 # Jogado (abre uma janela), no Terminal migrado: um bot joga até o round 3 e confere
 # navegação, ataque, abates na cabeça e no corpo, compra de porta, compras na parede,
 # barricadas (quebra e conserto), Mystery Box, Weapon Lab, energia, perks, Quick Revive,
-# troca de arma, chumbos, faca, pontos, limite de vivos, morte e reinício.
+# troca de arma, chumbos, faca, pontos, limite de vivos, morte, nome no ranking, recordes
+# gravados e reinício.
 # Salva prints em tests/output/.
 Godot --path godot -s res://tests/playtest.gd
 ```
@@ -109,6 +122,10 @@ Os dois saem com código 1 se algo falhar. Depois de criar scripts novos com `cl
 scenes/main.tscn                 Main: World, Player, Camera, Zombies, SpawnManager,
                                  RoundManager, PointsManager, GameManager, AudioManager, HUD
 scripts/systems/events.gd        autoload Events: barramento de sinais (sistemas não se conhecem)
+scripts/systems/save_store.gd    autoload Save: save no formato do jogo web (+ mesclagem da nuvem)
+scripts/systems/session.gd       autoload Session: mapa escolhido para a partida
+scripts/main.gd                  troca o mapa da partida pelo escolhido
+scripts/ui/                      HUD (fim de jogo com ranking), MenuKit e as telas de menu
 scripts/systems/input_bindings.gd autoload InputBindings: ações abstratas (teclado, mouse, controle)
 scripts/components/              HealthComponent, Hurtbox (corpo/cabeça), DamageInfo
 scripts/characters/              CharacterBase (CharacterBody3D + vida por composição)
@@ -123,7 +140,7 @@ scripts/weapons/                 Weapon (munição, recarga, raycast, chumbos, p
                                  WeaponUpgrade (Mk II/III), WeaponCatalog, SpecialFire +
                                  WeaponProjectile (granada, plasma, chama, raio, vento)
 scripts/systems/                 PerkSystem (modificadores dos perks), PowerSystem (energia),
-                                 BossManager (round de boss),
+                                 BossManager (round de boss), ScoreManager (score do ranking),
                                  RoundManager + RoundData, SpawnManager, PointsManager +
                                  PointsData, GameManager, AudioManager
 scripts/maps/                    GameWorld (base: spawn do jogador, áreas abertas, spawns ativos),
@@ -158,7 +175,10 @@ Decisões:
 ## Próximas fases (roadmap da especificação)
 
 - **Fase 4 (rounds):** novos tipos de zumbi e composição por round.
-- **Menu e progressão:** escolha de mapa, save, ranking online, conquistas, visuais.
+- **Online:** ranking global por temporada, conta com usuário e senha e save na nuvem (mesmo
+  Supabase e mesmo formato do jogo web), anti-trapaça.
+- **Conquistas e visuais do personagem.**
+- **Minimapa, pausa com configurações.**
 - **Eventos e extras:** power-ups (incluindo o Fire Sale), eventos do mapa (trem, apagão...),
   missão do Hospital, arma caída ao trocar.
 - **Fase 7 (polimento):** sons e efeitos, modelos do Blender no lugar das primitivas.

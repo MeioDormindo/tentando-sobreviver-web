@@ -5,8 +5,12 @@ var _passed := 0
 var _failed := 0
 
 
+var _tree_root: Node
+
+
 ## Roda tudo e devolve o número de falhas.
 func run(tree: SceneTree) -> int:
+	_tree_root = tree.root
 	_test_health()
 	_test_hurtbox()
 	_test_weapon_ammo_and_reload()
@@ -22,6 +26,8 @@ func run(tree: SceneTree) -> int:
 	_test_weapon_lab()
 	_test_perks()
 	_test_composition()
+	_test_save()
+	_test_score()
 	print("\n%d ok, %d falharam" % [_passed, _failed])
 	return _failed
 
@@ -318,3 +324,56 @@ func _test_composition() -> void:
 	check(hound_rounds == [5, 11, 17, 23, 29], "cães no Hospital: rounds 5, 11, 17... (%s)" % [hound_rounds])
 	check(range(1, 30).all(func(r: int) -> bool: return not data.is_hound_round(r, "terminal")), "sem rodada dos cães no Terminal")
 	check(data.hound_total(5, "map2") == 7, "round 5: 7 cães")
+
+
+func _test_save() -> void:
+	print("Save (mesmo formato do jogo web)")
+	# Um save escrito pelo jogo web (chaves em camelCase, números como no JSON do navegador).
+	var web := {
+		"version": 1,
+		"settings": {"muted": false, "musicOn": false, "playerName": "MARIA", "volume": 0.5, "skin": "nurse"},
+		"records": {"terminal": {"bestWave": 12, "bestKills": 150, "bestScore": 42000}},
+		"unlockedMaps": ["terminal", "map2", "mapa_que_nao_existe"],
+		"ranking": {"terminal": [{"name": "MARIA", "score": 42000, "wave": 12, "kills": 150, "date": "2026-09-20T10:00:00Z"}]},
+		"lifetime": {"gamesPlayed": 7, "totalKills": 900, "bossesDefeated": 1, "playTimeMs": 3600000, "knifeKills": 12, "headshots": 80},
+		"secrets": {"teddies": true, "konami": false},
+		"achievements": {"first_blood": "2026-09-20T10:00:00Z"},
+	}
+	var clean := Save.sanitize(web)
+	check(clean.settings.playerName == "MARIA" and clean.settings.musicOn == false and is_equal_approx(clean.settings.volume, 0.5), "lê as configurações do jogo web")
+	check(clean.records.terminal.bestScore == 42000 and clean.unlockedMaps == ["terminal", "map2"], "lê recordes e mapas (ignora mapa desconhecido)")
+	check(clean.lifetime.totalKills == 900 and clean.achievements.has("first_blood"), "lê totais e conquistas")
+	var broken := Save.sanitize({"settings": "lixo", "records": [1, 2], "ranking": {"terminal": [{"sem_nome": 1}]}, "lifetime": {"totalKills": "muitos"}})
+	check(broken.settings.playerName == "SOBREVIVENTE" and broken.ranking.terminal.is_empty() and broken.lifetime.totalKills == 0, "save corrompido vira o padrão, campo a campo")
+	check(Save.sanitize(null).unlockedMaps == ["terminal"], "save vazio: só o Terminal liberado")
+	Save.reset()
+	for i in 12:
+		Save.add_ranking("terminal", "j%d" % i, 1000 + i * 10, 3, 20)
+	var list := Save.ranking("terminal")
+	check(list.size() == 10 and list[0].score == 1110 and list[0].name == "J11", "ranking: top 10, ordenado, nome em maiúsculas")
+	check(not Save.qualifies("terminal", 1000) and Save.qualifies("terminal", 5000), "só entra quem supera o 10º")
+	var before := Save.finish_run("terminal", {"wave": 8, "kills": 60, "score": 9000, "bosses": 0, "time_ms": 60000, "knife_kills": 2, "headshots": 9})
+	check(before.bestScore == 0 and Save.records("terminal").bestScore == 9000 and Save.lifetime.gamesPlayed == 1, "fim de partida grava recorde e totais")
+	Save.merge_from(web)
+	check(Save.records("terminal").bestScore == 42000 and Save.is_unlocked("map2") and Save.lifetime.gamesPlayed == 7, "mescla da nuvem fica com o melhor de cada lado")
+	check(Save.ranking("terminal")[0].name == "MARIA", "mescla junta os rankings")
+	check(Save.catalog.unlocked_by("terminal", 10) == PackedStringArray(["map2"]) and Save.catalog.unlocked_by("terminal", 9).is_empty(), "boss do round 10 no Terminal libera o Hospital")
+	Save.reset()
+
+
+func _test_score() -> void:
+	print("Pontuação do ranking (jogo web)")
+	var score := ScoreManager.new()
+	score.data = load("res://data/configs/score.tres")
+	_tree_root.add_child(score)
+	var walker := ZombieFactory.create(load("res://data/zombies/walker.tres"), null, 1, 1, 1)
+	Events.round_started.emit(1, 9)
+	Events.zombie_killed.emit(walker, DamageInfo.new(100, DamageInfo.Kind.WEAPON, null, true))
+	check(score.score == 16, "Walker no round 1 na cabeça: 10 × 1.1 + 5 = 16 (%d)" % score.score)
+	var before := score.score
+	Events.zombie_killed.emit(walker, DamageInfo.new(100, DamageInfo.Kind.ENVIRONMENT))
+	check(score.score - before == 6, "morte indireta vale metade (%d)" % (score.score - before))
+	Events.round_completed.emit(3)
+	check(score.score - before - 6 == 150, "round 3 completo: +150")
+	walker.free()
+	score.queue_free()

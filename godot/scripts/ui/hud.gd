@@ -14,6 +14,7 @@ var _round_label: Label
 var _remaining_label: Label
 var _points_label: Label
 var _points_delta: Label
+var _score_label: Label
 var _health_bar: ProgressBar
 var _health_label: Label
 var _weapon_label: Label
@@ -47,6 +48,8 @@ func _ready() -> void:
 	Events.area_opened.connect(func(_id: StringName, area_name: String) -> void: _show_banner(area_name.to_upper() + " ABERTA", GOLD))
 	Events.purchase_denied.connect(func() -> void: _flash_points_denied())
 	Events.toast.connect(_show_toast)
+	Events.score_changed.connect(func(total: int, _delta: int) -> void: _score_label.text = "SCORE %d" % total)
+	Events.map_unlocked.connect(func(_id: String, map_name: String) -> void: _show_banner(map_name.to_upper() + " DESBLOQUEADO!", GOLD))
 	Events.boss_incoming.connect(func(boss_name: String) -> void: _show_banner(boss_name.to_upper() + " SE APROXIMA", RED))
 	Events.boss_state.connect(_on_boss_state)
 	Events.boss_phase.connect(func(_n: String, phase: int) -> void: _show_toast("FASE %d" % phase))
@@ -80,6 +83,7 @@ func _build() -> void:
 
 	_points_label = _label(root, "0", 40, GOLD, Control.PRESET_TOP_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, -6)
 	_points_delta = _label(root, "", 18, GOLD, Control.PRESET_TOP_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, 44)
+	_score_label = _label(root, "SCORE 0", 16, TEXT, Control.PRESET_TOP_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, 70)
 
 	_health_bar = ProgressBar.new()
 	_health_bar.show_percentage = false
@@ -117,14 +121,8 @@ func _build() -> void:
 	_hit_marker.modulate.a = 0.0
 
 	_pause_panel = _overlay(root, "PAUSADO", "ESC para continuar")
-	_game_over_panel = _overlay(root, "VOCÊ MORREU", "")
+	_game_over_panel = _overlay(root, "GAME OVER", "")
 	_game_over_text = _game_over_panel.get_node("Box/Subtitle") as Label
-	var button := Button.new()
-	button.text = "JOGAR NOVAMENTE"
-	button.custom_minimum_size = Vector2(260, 48)
-	button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	button.pressed.connect(func() -> void: Events.restart_requested.emit())
-	_game_over_panel.get_node("Box").add_child(button)
 
 
 ## Rótulo preso a um canto (preset) com a margem padrão; `dy` desloca na vertical.
@@ -222,12 +220,92 @@ func _on_ammo_changed(weapon_name: String, magazine: int, reserve: int, reloadin
 	_ammo_label.add_theme_color_override(&"font_color", RED if magazine == 0 else TEXT)
 
 
+## Fim de jogo (como no jogo web): score, estatísticas em duas colunas, recorde e, se entrou
+## no top do mapa, o nome para o ranking.
 func _on_game_over(summary: Dictionary) -> void:
-	_game_over_text.text = "Round %d  ·  %d abates (%d na cabeça)  ·  %d pontos  ·  %ds" % [
-		summary.round, summary.kills, summary.headshots, summary.points, summary.time_seconds]
+	var box := _game_over_panel.get_node("Box") as VBoxContainer
+	_game_over_text.text = "SCORE %d" % summary.score
+	_game_over_text.add_theme_font_size_override(&"font_size", 32)
+	var accuracy := roundi(100.0 * summary.shots_hit / summary.shots_fired) if summary.shots_fired > 0 else 0
+	var rows := [
+		["ROUND", str(summary.round)], ["ZUMBIS ABATIDOS", str(summary.kills)], ["HEADSHOTS", str(summary.headshots)],
+		["PONTOS GANHOS", str(summary.points_earned)], ["TEMPO", "%d:%02d" % [summary.time_seconds / 60, summary.time_seconds % 60]],
+		["BOSSES", str(summary.bosses)], ["DANO CAUSADO", str(summary.damage)], ["DISPAROS / ACERTOS", "%d / %d" % [summary.shots_fired, summary.shots_hit]],
+		["PRECISÃO", "%d%%" % accuracy], ["ABATES NA FACA", str(summary.knife_kills)],
+	]
+	var grid := GridContainer.new()
+	grid.columns = 4
+	grid.add_theme_constant_override(&"h_separation", 28)
+	grid.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	for row in rows:
+		for i in 2:
+			var cell := Label.new()
+			cell.text = row[i]
+			cell.add_theme_font_size_override(&"font_size", 15 if i == 0 else 17)
+			cell.add_theme_color_override(&"font_color", DIM if i == 0 else TEXT)
+			grid.add_child(cell)
+	box.add_child(grid)
+	var record := Label.new()
+	record.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	record.text = "NOVO RECORDE!" if summary.new_record else "RECORDE: %d PONTOS · ROUND %d" % [summary.best_score, summary.best_wave]
+	record.add_theme_font_size_override(&"font_size", 26 if summary.new_record else 15)
+	record.add_theme_color_override(&"font_color", GOLD if summary.new_record else DIM)
+	box.add_child(record)
+	if summary.rank_eligible:
+		_add_ranking_entry(box, summary)
+	var buttons := HBoxContainer.new()
+	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
+	buttons.add_theme_constant_override(&"separation", 24)
+	box.add_child(buttons)
+	var again := _menu_button(buttons, "JOGAR NOVAMENTE", func() -> void: Events.restart_requested.emit())
+	_menu_button(buttons, "RANKING", func() -> void:
+		Session.map_id = summary.map_id
+		get_tree().paused = false
+		get_tree().change_scene_to_file("res://scenes/ui/ranking.tscn"))
+	_menu_button(buttons, "MENU", func() -> void:
+		get_tree().paused = false
+		get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn"))
+	again.grab_focus.call_deferred()
 	_game_over_panel.visible = true
 	_game_over_panel.modulate.a = 0.0
 	create_tween().tween_property(_game_over_panel, "modulate:a", 1.0, 0.8).set_delay(0.6)
+
+
+## Campo do nome (abre o teclado no celular) e botão para gravar no ranking local.
+func _add_ranking_entry(box: VBoxContainer, summary: Dictionary) -> void:
+	var line := HBoxContainer.new()
+	line.alignment = BoxContainer.ALIGNMENT_CENTER
+	box.add_child(line)
+	var hint := Label.new()
+	hint.text = "ENTROU NO TOP! SEU NOME:"
+	hint.add_theme_color_override(&"font_color", GOLD)
+	line.add_child(hint)
+	var edit := LineEdit.new()
+	edit.name = "RankName"
+	edit.text = Save.player_name
+	edit.max_length = Save.catalog.player_name_max
+	edit.custom_minimum_size = Vector2(220, 0)
+	line.add_child(edit)
+	var submit := func() -> void:
+		var position := Save.add_ranking(summary.map_id, edit.text, summary.score, summary.round, summary.kills)
+		line.queue_free()
+		var result := Label.new()
+		result.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		result.text = "%dº LUGAR NO RANKING DE %s!" % [position, Save.catalog.display_name(summary.map_id).to_upper()] if position > 0 else "NÃO ENTROU NO RANKING"
+		result.add_theme_color_override(&"font_color", GOLD)
+		box.add_child(result)
+		box.move_child(result, line.get_index())
+	edit.text_submitted.connect(func(_t: String) -> void: submit.call())
+	_menu_button(line, "SALVAR", submit)
+
+
+func _menu_button(parent: Control, text: String, on_press: Callable) -> Button:
+	var button := Button.new()
+	button.text = text
+	button.custom_minimum_size = Vector2(180, 44)
+	button.pressed.connect(on_press)
+	parent.add_child(button)
+	return button
 
 
 func _show_banner(text: String, color: Color) -> void:
