@@ -73,6 +73,17 @@ signal minimap_state(state: Dictionary)
 signal settings_changed
 ## Botão CONTINUAR do menu de pausa.
 signal resume_requested
+## Eventos do mapa: começou (nome, instrução e cor) e o indicador da HUD (vazio = nenhum).
+signal world_event_started(id: StringName, event_name: String, hint: String, color: Color)
+signal world_event_state(state: Dictionary)
+## Lua de Sangue: dinheiro e score multiplicados (1 = normal).
+signal reward_multiplier_changed(multiplier: float)
+## O trem passou e atropelou zumbis.
+signal train_run_over(count: int)
+## Ursinho escondido achado (found de total).
+signal teddy_found(found: int, total: int)
+## Tremor de tela (a câmera obedece à configuração).
+signal screen_shake(duration: float, strength: float)
 ## Pausa ligada/desligada.
 signal pause_changed(paused: bool)
 ## A HUD pediu para jogar de novo.

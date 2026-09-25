@@ -26,6 +26,9 @@ import { SKINS } from '../../src/config/skins.config';
 import { powerUps, dropConfig, powerUpEffects, goldenConfig } from '../../src/config/powerups.config';
 // @ts-expect-error módulo de arte em JS puro (paleta dos visuais do jogador)
 import { PLAYER_SKINS } from '../art/characters.mjs';
+import * as eventsConfig from '../../src/config/events.config';
+import { interactionsConfig } from '../../src/config/interactions.config';
+import { secretsConfig } from '../../src/config/secrets.config';
 
 const OUT = 'godot/data';
 const PX = 32;
@@ -367,6 +370,44 @@ function exportPowerUps(): void {
   }));
 }
 
+/**
+ * Valor .tres de uma config de evento: tempos (…Ms) em s, distâncias e velocidades em m,
+ * listas convertidas pela regra da chave, textos entre aspas.
+ */
+function eventValue(key: string, v: unknown): string {
+  if (Array.isArray(v)) return `[${v.map((x) => eventValue(key, x)).join(', ')}]`;
+  if (typeof v === 'string') return JSON.stringify(v);
+  if (typeof v === 'boolean') return String(v);
+  if (typeof v === 'number') return String(/Ms$/.test(key) ? s(v) : /range|radius|distance|spread|length|^speed$/i.test(key) ? m(v) : v);
+  if (typeof v === 'object' && v !== null) {
+    const entries = Object.entries(v as Record<string, unknown>).map(([k, x]) => `"${snake(k.replace(/Ms$/, 'Time'))}": ${eventValue(k, x)}`);
+    return `{ ${entries.join(', ')} }`;
+  }
+  return 'null';
+}
+
+function exportWorldEvents(): void {
+  const { worldEvents, eventScheduleConfig, ...configs } = eventsConfig;
+  const defs = Object.entries(worldEvents).map(([id, e]) =>
+    `&"${id}": { "name": ${JSON.stringify(e.name)}, "hint": ${JSON.stringify(e.hint)}, "color": ${color(e.color).raw}, "weight": ${e.weight}, "min_round": ${e.minWave}, "cooldown_rounds": ${e.cooldownWaves} }`);
+  // blackoutConfig → &"blackout", emergency_alarm usa alarmConfig, etc.
+  const configIds: Record<string, string> = {
+    blackoutConfig: 'blackout', alarmConfig: 'emergency_alarm', hordeConfig: 'horde', trainConfig: 'train', stationConfig: 'station',
+    supplyDropConfig: 'supply_drop', gasLeakConfig: 'gas_leak', goldenZombieConfig: 'golden_zombie', bloodMoonConfig: 'blood_moon',
+    collapseConfig: 'collapse', fogConfig: 'fog',
+  };
+  const cfg = Object.entries(configs)
+    .filter(([k]) => configIds[k])
+    .map(([k, v]) => `&"${configIds[k]}": ${eventValue(k, v)}`);
+  write('configs/world_events.tres', tres('WorldEventData', 'res://scripts/events/world_event_data.gd', {
+    events: raw(`{\n${defs.join(',\n')}\n}`),
+    schedule: raw(eventValue('schedule', eventScheduleConfig)),
+    configs: raw(`{\n${cfg.join(',\n')}\n}`),
+    interactions: raw(eventValue('interactions', interactionsConfig)),
+    credits: secretsConfig.credits.replace('TypeScript + Phaser', 'Godot + GDScript'),
+  }));
+}
+
 function exportZombies(): void {
   for (const z of Object.values(zombieTypes)) {
     const look = LOOKS[z.id] ?? LOOKS.walker;
@@ -407,6 +448,7 @@ exportProgression();
 exportOnline();
 exportAchievements();
 exportPowerUps();
+exportWorldEvents();
 exportMaps();
 exportMachines(write, tres as never);
 console.log('Pronto.');

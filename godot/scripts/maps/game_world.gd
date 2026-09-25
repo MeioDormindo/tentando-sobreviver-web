@@ -63,6 +63,21 @@ func minimap_cells() -> PackedByteArray:
 	return PackedByteArray()
 
 
+## Ponto bom para um evento (chão livre em volta, área aberta).
+func is_open_floor(_point: Vector3) -> bool:
+	return true
+
+
+## Estação de trem (faixa dos trilhos, trecho, semáforos...) ou {} se o mapa não tiver.
+func station() -> Dictionary:
+	return {}
+
+
+## Visual dos eventos do mapa (Apagão, Alarme, Lua de Sangue, Neblina).
+func set_event_mood(_id: StringName, _on: bool, _config: Dictionary) -> void:
+	pass
+
+
 ## Recalcula a navegação (ex.: porta aberta).
 func rebake_navigation() -> void:
 	pass

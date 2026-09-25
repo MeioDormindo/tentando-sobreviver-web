@@ -27,6 +27,7 @@ var _toast: Label
 var _perks_label: Label
 var _armor_bar: ProgressBar
 var _timers_label: Label
+var _event_label: Label
 var _boss_bar: ProgressBar
 var _boss_label: Label
 var _hit_marker: Label
@@ -82,6 +83,16 @@ func _ready() -> void:
 	Events.max_ammo.connect(func(_at: Vector3) -> void: _show_toast("MAX AMMO"))
 	Events.power_changed.connect(func(on: bool) -> void: if on: _show_banner("ENERGIA LIGADA", GOLD))
 	Events.perks_changed.connect(func(names: Array[String]) -> void: _perks_label.text = "  ·  ".join(names).to_upper())
+	Events.world_event_started.connect(func(_id: StringName, event_name: String, hint: String, color: Color) -> void:
+		_show_banner(event_name, color)
+		_show_toast(hint))
+	Events.world_event_state.connect(func(state: Dictionary) -> void:
+		if state.is_empty():
+			_event_label.text = ""
+			return
+		var remaining := float(state.remaining)
+		_event_label.text = String(state.name) + ("  %ds" % ceili(remaining) if remaining >= 0.0 else "")
+		_event_label.add_theme_color_override(&"font_color", state.color))
 	Events.settings_changed.connect(func() -> void: minimap.apply_settings())
 	Events.game_over.connect(_on_game_over)
 
@@ -127,6 +138,7 @@ func _build() -> void:
 	_armor_bar.offset_bottom -= 18
 	_armor_bar.visible = false
 	_timers_label = _label(root, "", 16, TEXT, Control.PRESET_CENTER_BOTTOM, HORIZONTAL_ALIGNMENT_CENTER, -70)
+	_event_label = _label(root, "", 18, TEXT, Control.PRESET_CENTER_TOP, HORIZONTAL_ALIGNMENT_CENTER, 48)
 
 	_weapon_label = _label(root, "", 18, TEXT, Control.PRESET_BOTTOM_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, -46)
 	_ammo_label = _label(root, "", 36, TEXT, Control.PRESET_BOTTOM_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT)

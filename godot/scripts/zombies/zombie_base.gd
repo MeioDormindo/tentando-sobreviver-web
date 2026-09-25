@@ -13,7 +13,12 @@ const CORPSE_TIME := 1.6
 @export var data: ZombieData
 @export var repath_interval: float = 0.25
 
+## Lua de Sangue: todos os zumbis mais rápidos.
+static var event_speed: float = 1.0
+
 var target: CharacterBase
+## Destino de fuga (Zumbi Dourado): anda até lá em vez de perseguir e não ataca.
+var flee_goal: Variant = null
 var state: State = State.CHASE
 var move_speed: float = 0.0
 var attack_damage: float = 0.0
@@ -97,7 +102,7 @@ func _physics_process(delta: float) -> void:
 		velocity.x = 0.0
 		velocity.z = 0.0
 		_face(to_target)
-	elif to_target.length() <= data.attack_range:
+	elif flee_goal == null and to_target.length() <= data.attack_range:
 		_attack(to_target)
 	elif barricade:
 		_break(barricade)
@@ -121,15 +126,15 @@ func _chase(to_target: Vector3, delta: float) -> void:
 	_repath_left -= delta
 	if _repath_left <= 0.0:
 		_repath_left = repath_interval
-		agent.target_position = target.global_position
+		agent.target_position = flee_goal if flee_goal is Vector3 else target.global_position
 	var direction := agent.get_next_path_position() - global_position
 	direction.y = 0.0
 	# Sem caminho ainda (malha sincronizando): vai direto.
 	if direction.length() < 0.05:
 		direction = to_target
 	direction = direction.normalized()
-	velocity.x = direction.x * move_speed
-	velocity.z = direction.z * move_speed
+	velocity.x = direction.x * move_speed * event_speed
+	velocity.z = direction.z * move_speed * event_speed
 	_face(direction)
 
 

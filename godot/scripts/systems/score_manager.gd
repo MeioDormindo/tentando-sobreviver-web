@@ -15,9 +15,12 @@ var _round := 1
 var _streak := 0
 var _last_kill_at := -INF
 var _clock := 0.0
+## Lua de Sangue: score multiplicado.
+var _event_multiplier := 1.0
 
 
 func _ready() -> void:
+	Events.reward_multiplier_changed.connect(func(value: float) -> void: _event_multiplier = value)
 	Events.zombie_killed.connect(_on_kill)
 	Events.round_started.connect(func(n: int, _total: int) -> void: _round = maxi(1, n))
 	Events.round_completed.connect(func(n: int) -> void: add(data.round_complete * n))
@@ -30,7 +33,7 @@ func _process(delta: float) -> void:
 
 
 func add(points: float) -> void:
-	var delta := roundi(points)
+	var delta := roundi(points * _event_multiplier)
 	if delta <= 0:
 		return
 	score += delta

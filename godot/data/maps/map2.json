@@ -1145,6 +1145,39 @@
    }
   }
  ],
+ "station": null,
+ "secrets": {
+  "teddies": [
+   {
+    "tx": 9,
+    "ty": 91
+   },
+   {
+    "tx": 111,
+    "ty": 24
+   },
+   {
+    "tx": 73,
+    "ty": 91
+   }
+  ],
+  "radio": {
+   "tx": 88,
+   "ty": 95,
+   "holdMs": 900,
+   "label": "OUVIR O GRAVADOR"
+  },
+  "creditsSign": {
+   "tx": 66,
+   "ty": 52.4
+  },
+  "loreMessages": [
+   "📼 \"Diário do Dr. Almeida, dia 3: a amostra do Paciente Zero reagiu ao soro. As células não param de se dividir.\"",
+   "📼 \"Dia 9: a febre some e volta. O Paciente Zero arrancou as amarras. Três enfermeiros foram mordidos.\"",
+   "📼 \"Dia 12: lacramos o laboratório e mandamos as amostras de trem para a Estação Central. Que Deus nos perdoe.\"",
+   "📼 \"...se estiver ouvindo isto: não deixe o Paciente Zero chegar à superfície. O soro está na câmara.\""
+  ]
+ },
  "props": [
   {
    "type": "waiting_chairs",

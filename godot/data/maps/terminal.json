@@ -1059,6 +1059,73 @@
    }
   }
  ],
+ "station": {
+  "area": "platform",
+  "lane": {
+   "y": 12,
+   "h": 4
+  },
+  "span": {
+   "from": 16,
+   "to": 112
+  },
+  "tunnels": [
+   {
+    "y": 4,
+    "h": 5
+   },
+   {
+    "y": 12,
+    "h": 4
+   }
+  ],
+  "signals": [
+   {
+    "tx": 16.8,
+    "ty": 16.4
+   },
+   {
+    "tx": 110.2,
+    "ty": 16.4
+   }
+  ],
+  "board": {
+   "tx": 72,
+   "ty": 17.1
+  }
+ },
+ "secrets": {
+  "teddies": [
+   {
+    "tx": 115,
+    "ty": 58
+   },
+   {
+    "tx": 12,
+    "ty": 77
+   },
+   {
+    "tx": 111,
+    "ty": 106
+   }
+  ],
+  "radio": {
+   "tx": 37.4,
+   "ty": 110.2,
+   "holdMs": 900,
+   "label": "SINTONIZAR O RÁDIO"
+  },
+  "creditsSign": {
+   "tx": 57.5,
+   "ty": 30.5
+  },
+  "loreMessages": [
+   "📻 \"...controle da Estação Central. O trem das 23h40 NÃO deve parar. Repito: não parem o trem...\"",
+   "📻 \"...o maquinista não responde. Alguém viu o Condutor? Ele desceu nos túneis e voltou... diferente.\"",
+   "📻 \"...quarentena decretada. Portas lacradas. Quem ficou lá dentro está por conta própria.\"",
+   "📻 \"...se alguém ouvir isto: tentem sobreviver. O resgate chega ao amanhecer. Talvez.\""
+  ]
+ },
  "props": [
   {
    "type": "bench",

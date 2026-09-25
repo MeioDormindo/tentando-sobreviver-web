@@ -80,6 +80,11 @@ function exportMap(id: string, layout: MapLayout): void {
     boss_spawns: layout.bossSpawns.map((b) => ({ x: b.tx + 0.5, z: b.ty + 0.5 })),
     lamps: layout.lamps.map((l) => ({ x: l.tx + 0.5, z: l.ty + 0.5, radius: m(l.radius), intensity: l.intensity, flicker: l.flicker, color: l.color ?? 0xffd6a0 })),
     interactions: layout.interactions,
+    // Estação de trem (só o Terminal) e segredos, em tiles (1 tile = 1 m).
+    station: layout.station
+      ? { area: layout.station.area, lane: layout.station.lane, span: layout.station.span, tunnels: layout.station.tunnels, signals: layout.station.signals, board: layout.station.board }
+      : null,
+    secrets: layout.secrets,
     props,
   };
   mkdirSync('godot/data/maps', { recursive: true });

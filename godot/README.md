@@ -18,8 +18,8 @@ de conceitos: ver `docs/analise-typescript.md`.
     aparelho fica apenas a sessão (`user://session.json`);
   - save na nuvem mesclado ao entrar e enviado a cada mudança, **compartilhado com a versão web**;
 - **conquistas** (as 17 do jogo web), com aviso na HUD e tela CONQUISTAS (progresso, datas,
-  estatísticas por mapa e da carreira). Trem, ursinhos e a missão do Soro ainda não
-  foram migrados, então essas conquistas ainda não têm gatilho;
+  estatísticas por mapa e da carreira). A missão do Soro ainda não foi migrada, então essa
+  conquista ainda não tem gatilho;
 - **power-ups** (como no jogo web): zumbis às vezes soltam Max Ammo, Double Cash, Instant Kill,
   Nuke, Full Heal, Armor (barra azul que absorve o dano), Speed Boost, Carpenter, Fire Sale
   (caixa a 10 em todos os locais das áreas abertas) e o raro Golden Drop (arma especial,
@@ -29,6 +29,15 @@ de conceitos: ver `docs/analise-typescript.md`.
   pode ser pega de volta por 60s (com a munição e as melhorias dela);
 - **minimapa** no canto (áreas abertas e fechadas, portas, jogador, zumbis, boss, Mystery Box);
   Tab segurado mostra o mapa grande; liga/desliga e tamanho nas configurações;
+- **eventos do mapa** (os 10 do jogo web, com a mesma agenda: sorteio no início do round,
+  round mínimo, espera entre repetições, Horda garantida no round 15 e a cada 10): Apagão,
+  Alarme de emergência, Horda, Suprimentos (caixa de paraquedas, segurar E), Vazamento de gás
+  (válvula), Zumbi Dourado (foge; abatido dá Golden Drop), Lua de Sangue, Desabamento,
+  Neblina e o trem, com agenda própria, que atropela quem estiver nos trilhos; indicador na HUD;
+- **painéis e armadilhas**: energia (encerra o Apagão), alarme, painel do trem (chama o trem)
+  e armadilhas elétricas; estação com túneis, semáforos e painel de horários;
+- **segredos**: ursinhos escondidos (todos = Golden Drop e conquista), rádio/gravador com a
+  história do mapa e a placa de créditos;
 - **menu de pausa** com CONTINUAR, REINICIAR, MENU e as configurações que valem na hora;
 - **visuais do personagem** (tela PERSONAGEM): Sobrevivente, Enfermeiro, Maquinista e Agente,
   liberados por conquistas, com as cores da paleta do jogo web;
@@ -126,10 +135,13 @@ passam a ser editados direto no Godot.
 # mapas com portas, barricadas, compras, máquinas e navegação, sorteio da caixa, Weapon Lab,
 # perks, composição por round, rodada dos cães) e, na mesma execução, os testes de cena: as
 # 5 armas especiais, cada tipo de zumbi, a rodada dos cães, os dois bosses nos mapas migrados
-# as telas de menu, os power-ups, a arma caída, o minimapa e a pausa; e o online contra o servidor real, só com operações que não gravam
+# as telas de menu, os power-ups, a arma caída, o minimapa, a pausa e os eventos, painéis,
+# armadilhas e segredos; e o online contra o servidor real, só com operações que não gravam
 # (ler o ranking, envio recusado, login errado). Os testes usam um save de teste (o do
 # jogador não muda) e o bot joga offline (não envia nada ao ranking global):
 Godot --headless --path godot -s res://tests/run_tests.gd
+# Uma suíte só (unit, weapons, zombies, bosses, menus, powerups, match, events, online):
+Godot --headless --path godot -s res://tests/run_tests.gd -- --only=events
 
 # Jogado (abre uma janela), no Terminal migrado: um bot joga até o round 3 e confere
 # navegação, ataque, abates na cabeça e no corpo, compra de porta, compras na parede,
@@ -176,10 +188,15 @@ scripts/systems/                 PerkSystem (modificadores dos perks), PowerSyst
                                  RoundManager + RoundData, SpawnManager, PointsManager +
                                  PointsData, GameManager, AudioManager
 scripts/maps/                    GameWorld (base: spawn do jogador, áreas abertas, spawns ativos),
-                                 LayoutMap (mapa migrado do JSON), Arena (mapa de teste)
+                                 LayoutMap (mapa migrado do JSON), Arena (mapa de teste),
+                                 StationBoard (túneis, semáforos, horários do trem)
+scripts/events/                  WorldEventSystem (agenda), WorldEvent + um arquivo por evento
+                                 (Apagão, Alarme, Horda, Suprimentos, Gás, Zumbi Dourado, Lua de
+                                 Sangue, Desabamento, Neblina, Trem), WorldEventData, EventFx
 scripts/interactables/           tudo que se usa com E (grupo "interactable"): Door, Barricade,
-                                 WallBuy, MysteryBox, WeaponLab, PerkMachine, Breaker, WeaponDrop (+ os
-                                 Resources de dados de cada um)
+                                 WallBuy, MysteryBox, WeaponLab, PerkMachine, Breaker, WeaponDrop,
+                                 MapPanel → EventSwitch/TrainPanel/ElectricTrap, e os segredos
+                                 Teddy, LoreRadio e CreditsSign (+ os Resources de dados)
 scripts/ui/hud.gd                HUD (só escuta Events)
 data/                            .tres: m1911, walker, rounds, points, barramentos de áudio
 ```
@@ -207,7 +224,6 @@ Decisões:
 ## Próximas fases (roadmap da especificação)
 
 - **Fase 4 (rounds):** novos tipos de zumbi e composição por round.
-- **Eventos e extras:** eventos do mapa (trem, apagão...),
-  missão do Hospital.
+- **Missão do Hospital** (o Soro).
 - **Fase 7 (polimento):** sons e efeitos, modelos do Blender no lugar das primitivas.
 - **Fase 8 (plataformas):** exportações e controles de toque.

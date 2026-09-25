@@ -12,6 +12,9 @@ var _player: Player
 
 func run(tree: SceneTree) -> int:
 	_tree = tree
+	# Nunca no save do jogador: sem o save de teste do run_tests, usa um só desta suíte.
+	if not String(Save.get("_path")).contains("test"):
+		Save.load_from("user://test_save.json")
 	print("Partida: arma caída, minimapa e pausa (cena)")
 	_main = (load("res://scenes/main.tscn") as PackedScene).instantiate()
 	tree.root.add_child(_main)

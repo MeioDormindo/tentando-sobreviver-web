@@ -8,6 +8,9 @@ extends Node
 
 var is_on: bool = false
 
+## Apagão (evento do mapa): as luminárias apagam mesmo com energia.
+var blackout: bool = false
+
 ## Luzes controladas: luz → energia normal.
 var _lights: Dictionary = {}
 
@@ -32,6 +35,21 @@ func turn_on() -> bool:
 			_flicker_back(light, _lights[light])
 	Events.power_changed.emit(true)
 	return true
+
+
+## Apagão: as luzes piscam e apagam (ou voltam piscando).
+func set_blackout(on: bool, flicker_time: float = 1.4) -> void:
+	if blackout == on:
+		return
+	blackout = on
+	for light: Light3D in _lights:
+		if not is_instance_valid(light):
+			continue
+		var energy: float = _lights[light] * (1.0 if is_on else data.lamp_factor_off)
+		var tween := create_tween()
+		for i in 5:
+			tween.tween_property(light, "light_energy", energy * (1.0 if i % 2 == 0 else 0.15), flicker_time / 6.0)
+		tween.tween_property(light, "light_energy", 0.0 if on else energy, flicker_time / 6.0)
 
 
 func _flicker_back(light: Light3D, energy: float) -> void:

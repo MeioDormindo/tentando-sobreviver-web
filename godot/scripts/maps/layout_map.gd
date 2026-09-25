@@ -46,6 +46,11 @@ var height: int = 0
 var _cells: PackedStringArray
 var _materials: Dictionary = {}
 var _area_names: Dictionary = {}
+## Ambiente sem efeitos (luz ambiente e névoa), a névoa dos cães ativa e os eventos com visual.
+var _base_env: Dictionary = {}
+var _hound: Dictionary = {}
+var _moods: Dictionary = {}
+var _clock := 0.0
 ## Área de cada tile (índice em data.areas, -1 = nenhuma), calculada uma vez para o minimapa.
 var _tile_areas := PackedInt32Array()
 
@@ -71,6 +76,8 @@ func _ready() -> void:
 	_build_wall_buys()
 	_build_machines()
 	_build_interactions()
+	_build_secrets()
+	_build_station()
 	_build_props()
 	_build_lamps()
 	_build_spawns()
@@ -81,18 +88,83 @@ func _ready() -> void:
 
 ## Névoa azulada e mais escuro durante a rodada dos cães.
 func _on_hound_round(active: bool, config: Dictionary) -> void:
-	var environment := get_node_or_null("WorldEnvironment") as WorldEnvironment
-	if environment == null:
+	_hound = config if active else {}
+	_apply_environment()
+
+
+## Visual dos eventos: Apagão (luminárias apagam, mais escuro), Alarme (luz vermelha pulsando),
+## Lua de Sangue (escuridão avermelhada) e Neblina (névoa cinza e mais escuro).
+func set_event_mood(id: StringName, on: bool, config: Dictionary) -> void:
+	if on:
+		_moods[id] = config
+	else:
+		_moods.erase(id)
+	if id == &"blackout" and power:
+		power.set_blackout(on, float(config.get("flicker_time", 1.4)))
+	_apply_environment()
+
+
+func _process(delta: float) -> void:
+	_clock += delta
+	if _moods.has(&"emergency_alarm"):
+		var env := _environment()
+		if env:
+			var base: Color = _base_env.get("color", env.ambient_light_color)
+			env.ambient_light_color = base.lerp(Color(1.0, 0.12, 0.08), 0.35 + 0.35 * sin(_clock * 6.0))
+
+
+func _environment() -> Environment:
+	var node := get_node_or_null("WorldEnvironment") as WorldEnvironment
+	return node.environment if node else null
+
+
+## Junta o ambiente base, a névoa dos cães e os eventos ativos.
+func _apply_environment() -> void:
+	var env := _environment()
+	if env == null:
 		return
-	var env := environment.environment
-	if not has_meta(&"base_ambient"):
-		set_meta(&"base_ambient", env.ambient_light_energy)
-	var base: float = get_meta(&"base_ambient")
-	env.fog_enabled = active
-	if active:
+	if _base_env.is_empty():
+		_base_env = {"energy": env.ambient_light_energy, "color": env.ambient_light_color}
+	var energy: float = _base_env.energy
+	var color: Color = _base_env.color
+	var fog := false
+	if not _hound.is_empty():
+		fog = true
 		env.fog_light_color = Color(0.1, 0.16, 0.3)
 		env.fog_density = 0.035
-	env.ambient_light_energy = base * (1.0 - float(config.get("fog_darkness", 0.0)) * 3.0 if active else 1.0)
+		energy *= 1.0 - float(_hound.get("fog_darkness", 0.0)) * 3.0
+	if _moods.has(&"blackout"):
+		energy *= 1.0 - float(_moods.blackout.get("extra_darkness", 0.2)) * 2.5
+	if _moods.has(&"fog"):
+		fog = true
+		env.fog_light_color = Color(0.62, 0.66, 0.7)
+		env.fog_density = 0.07
+		energy *= 1.0 - float(_moods.fog.get("extra_darkness", 0.14)) * 2.5
+	if _moods.has(&"blood_moon"):
+		color = color.lerp(Color(0.75, 0.16, 0.12), 0.55)
+		if not fog:
+			fog = true
+			env.fog_light_color = Color(0.3, 0.04, 0.03)
+			env.fog_density = 0.008
+	env.fog_enabled = fog
+	env.ambient_light_energy = energy
+	env.ambient_light_color = color
+
+
+func is_open_floor(point: Vector3) -> bool:
+	var tx := floori(point.x)
+	var tz := floori(point.z)
+	for dz in range(-1, 2):
+		for dx in range(-1, 2):
+			if not _is_floor(cell(tx + dx, tz + dz)):
+				return false
+	var area := area_of(point)
+	return area != &"" and is_area_open(area)
+
+
+func station() -> Dictionary:
+	var value: Variant = data.get("station")
+	return value if value is Dictionary else {}
 
 
 func map_id() -> String:
@@ -364,14 +436,68 @@ func _build_machines() -> void:
 					lab.position = at
 
 
-## Painéis do mapa. Por enquanto o disjuntor principal (os outros vêm com os eventos).
+## Painéis do mapa: disjuntor principal, painéis de energia e do alarme (encerram o evento
+## pagando), painel do trem e armadilhas elétricas.
 func _build_interactions() -> void:
 	for item: Dictionary in data.interactions:
-		if item.type == "breaker" and breaker_scene and power:
-			var breaker := breaker_scene.instantiate() as Breaker
-			breaker.setup(power)
-			nav_region.add_child(breaker)
-			breaker.position = Vector3(float(item.tx) + 0.5, 0.0, float(item.ty) + 0.5)
+		var node: Node3D = null
+		match String(item.type):
+			"breaker":
+				if breaker_scene and power:
+					var breaker := breaker_scene.instantiate() as Breaker
+					breaker.setup(power)
+					node = breaker
+			"power", "alarm":
+				var panel := EventSwitch.new()
+				panel.setup(String(item.type))
+				node = panel
+			"train":
+				var train_panel := TrainPanel.new()
+				train_panel.setup()
+				node = train_panel
+			"trap":
+				var trap := ElectricTrap.new()
+				var zone: Dictionary = item.zone
+				trap.setup(Rect2(float(zone.x), float(zone.y), float(zone.w), float(zone.h)))
+				node = trap
+		if node:
+			nav_region.add_child(node)
+			node.position = Vector3(float(item.tx) + 0.5, 0.0, float(item.ty) + 0.5)
+
+
+## Segredos do mapa: ursinhos escondidos, rádio (ou gravador) com a história e a placa.
+func _build_secrets() -> void:
+	var secrets: Variant = data.get("secrets")
+	if not secrets is Dictionary:
+		return
+	var teddies: Array = secrets.get("teddies", [])
+	for i in teddies.size():
+		var teddy := Teddy.new()
+		teddy.name = "Teddy%d" % (i + 1)
+		teddy.set_meta(&"total", teddies.size())
+		teddy.position = Vector3(float(teddies[i].tx) + 0.5, 0.0, float(teddies[i].ty) + 0.5)
+		add_child(teddy)
+	var radio_data: Variant = secrets.get("radio")
+	if radio_data is Dictionary:
+		var radio := LoreRadio.new()
+		radio.setup(String(radio_data.label), float(radio_data.holdMs) / 1000.0, PackedStringArray(secrets.get("loreMessages", [])))
+		radio.position = Vector3(float(radio_data.tx) + 0.5, 0.0, float(radio_data.ty) + 0.5)
+		add_child(radio)
+	var sign_data: Variant = secrets.get("creditsSign")
+	if sign_data is Dictionary:
+		var credits := CreditsSign.new()
+		credits.position = Vector3(float(sign_data.tx) + 0.5, 0.0, float(sign_data.ty) + 0.5)
+		add_child(credits)
+
+
+## Estação de trem (só o Terminal): túneis, semáforos e painel de horários.
+func _build_station() -> void:
+	var value := station()
+	if value.is_empty():
+		return
+	var board := StationBoard.new()
+	board.setup(value)
+	add_child(board)
 
 
 func _build_props() -> void:

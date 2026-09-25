@@ -208,13 +208,19 @@ func take_damage(info: DamageInfo) -> float:
 
 ## Névoa da rodada dos cães: a lanterna fica mais fraca.
 func _on_hound_round(active: bool, config: Dictionary) -> void:
+	set_flashlight_factor(float(config.get("flashlight_factor", 1.0)) if active else 1.0)
+
+
+## Alcance/força da lanterna (névoa dos cães, Neblina): 1 = normal.
+func set_flashlight_factor(factor: float) -> void:
 	var flashlight := pivot.get_node_or_null("Flashlight") as SpotLight3D
 	if flashlight == null:
 		return
 	if not flashlight.has_meta(&"base_energy"):
 		flashlight.set_meta(&"base_energy", flashlight.light_energy)
-	var base: float = flashlight.get_meta(&"base_energy")
-	flashlight.light_energy = base * (float(config.get("flashlight_factor", 1.0)) if active else 1.0)
+		flashlight.set_meta(&"base_range", flashlight.spot_range)
+	flashlight.light_energy = float(flashlight.get_meta(&"base_energy")) * factor
+	flashlight.spot_range = float(flashlight.get_meta(&"base_range")) * lerpf(1.0, factor, 0.7)
 
 
 func _go_down(revive: PerkData) -> void:

@@ -20,6 +20,8 @@ var is_hound_round: bool = false
 ## Round de boss (o round só termina com o boss derrotado).
 var is_boss_round: bool = false
 
+## Eventos do mapa (Alarme, Horda): id → {interval_multiplier, max_alive_bonus}.
+var spawn_modifiers: Dictionary = {}
 var _timer := 0.0
 var _rng := RandomNumberGenerator.new()
 var _spawn_timer := 0.0
@@ -74,6 +76,36 @@ func start_round(number: int) -> void:
 	Events.round_remaining_changed.emit(total)
 
 
+## Liga (ou desliga, com {}) um modificador de spawn de um evento.
+func set_spawn_modifier(id: StringName, modifier: Dictionary) -> void:
+	if modifier.is_empty():
+		spawn_modifiers.erase(id)
+	else:
+		spawn_modifiers[id] = modifier
+
+
+## Zumbis extras nesta wave (Horda).
+func add_enemies(count: int) -> void:
+	if phase != Phase.ACTIVE or count <= 0:
+		return
+	total += count
+	Events.round_remaining_changed.emit(total - killed)
+
+
+func _max_alive() -> int:
+	var bonus := 0
+	for modifier: Dictionary in spawn_modifiers.values():
+		bonus += int(modifier.get("max_alive_bonus", 0))
+	return data.max_alive(round_number) + bonus
+
+
+func _spawn_interval() -> float:
+	var factor := 1.0
+	for modifier: Dictionary in spawn_modifiers.values():
+		factor *= float(modifier.get("spawn_interval_multiplier", 1.0))
+	return data.spawn_interval(round_number) * factor
+
+
 ## Tempo que falta para o próximo round começar (s); 0 durante o round.
 func time_to_next_round() -> float:
 	return maxf(0.0, _timer) if phase == Phase.WAITING or phase == Phase.INTERMISSION else 0.0
@@ -91,7 +123,7 @@ func _try_spawn() -> void:
 	if is_hound_round:
 		_try_spawn_hound()
 		return
-	if spawn_manager.alive_count() >= data.max_alive(round_number):
+	if spawn_manager.alive_count() >= _max_alive():
 		_spawn_timer = 0.25
 		return
 	var map_id := _map_id()
@@ -103,7 +135,7 @@ func _try_spawn() -> void:
 		data.health_multiplier(round_number), data.damage_multiplier(round_number), data.speed_multiplier(round_number), round_number, type)
 	if zombie:
 		spawned += 1
-		_spawn_timer = data.spawn_interval(round_number)
+		_spawn_timer = _spawn_interval()
 	else:
 		_spawn_timer = 0.5
 

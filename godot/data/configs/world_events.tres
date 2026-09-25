@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="WorldEventData" format=3]
+
+[ext_resource type="Script" path="res://scripts/events/world_event_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+events = {
+&"blackout": { "name": "APAGÃO", "hint": "As luzes caíram — use a lanterna", "color": Color(0.561, 0.639, 0.722, 1), "weight": 20, "min_round": 3, "cooldown_rounds": 3 },
+&"emergency_alarm": { "name": "ALARME DE EMERGÊNCIA", "hint": "O barulho atrai mais zumbis", "color": Color(1, 0.267, 0.2, 1), "weight": 18, "min_round": 6, "cooldown_rounds": 3 },
+&"train": { "name": "TREM PASSANDO", "hint": "Saia dos trilhos da plataforma!", "color": Color(1, 0.753, 0.29, 1), "weight": 0, "min_round": 2, "cooldown_rounds": 0 },
+&"horde": { "name": "HORDA", "hint": "Muito mais zumbis nesta wave", "color": Color(0.702, 0.227, 0.227, 1), "weight": 14, "min_round": 5, "cooldown_rounds": 4 },
+&"supply_drop": { "name": "SUPRIMENTOS", "hint": "Uma caixa caiu do céu — segure E para abrir", "color": Color(0.482, 0.839, 0.482, 1), "weight": 22, "min_round": 2, "cooldown_rounds": 2 },
+&"gas_leak": { "name": "VAZAMENTO DE GÁS", "hint": "Fique longe da nuvem verde", "color": Color(0.604, 0.804, 0.196, 1), "weight": 16, "min_round": 4, "cooldown_rounds": 3 },
+&"golden_zombie": { "name": "ZUMBI DOURADO", "hint": "Mate-o antes que fuja: dinheiro e Golden Drop!", "color": Color(1, 0.827, 0.353, 1), "weight": 14, "min_round": 3, "cooldown_rounds": 3 },
+&"blood_moon": { "name": "LUA DE SANGUE", "hint": "Zumbis mais rápidos — dinheiro e pontos em dobro", "color": Color(0.816, 0.204, 0.173, 1), "weight": 12, "min_round": 5, "cooldown_rounds": 4 },
+&"collapse": { "name": "DESABAMENTO", "hint": "O teto está caindo: saia dos círculos vermelhos!", "color": Color(0.784, 0.706, 0.541, 1), "weight": 14, "min_round": 4, "cooldown_rounds": 3 },
+&"fog": { "name": "NEBLINA", "hint": "Você mal enxerga — atenção aos gemidos", "color": Color(0.604, 0.643, 0.678, 1), "weight": 14, "min_round": 3, "cooldown_rounds": 3 }
+}
+schedule = { "first_wave": 2, "chance_per_wave": 0.6, "start_delay_time": [5, 16], "forced": { "first_wave": 15, "every": 10, "id": "horde" } }
+configs = {
+&"emergency_alarm": { "duration_time": 20, "spawn_interval_multiplier": 0.45, "max_alive_bonus": 6 },
+&"blackout": { "duration_time": 25, "extra_darkness": 0.2, "emergency_light_factor": 0.35, "flicker_time": 1.4 },
+&"blood_moon": { "duration_time": 25, "zombie_speed": 1.3, "reward_multiplier": 2, "darkness_tint": 2754054 },
+&"collapse": { "duration_time": 20, "every_time": 1.1, "warning_time": 1.2, "radius": 1.313, "player_damage": 25, "zombie_damage": 220, "spread": 6.875, "aim_at_player_chance": 0.35 },
+&"fog": { "duration_time": 25, "extra_darkness": 0.14, "flashlight_factor": 0.6, "puff_every_time": 0.07 },
+&"gas_leak": { "duration_time": 22, "warning_time": 2.5, "radius": 3.75, "tick_time": 0.4, "player_damage_per_tick": 5, "zombie_damage_per_tick": 12, "distance": [5.313, 11.875] },
+&"golden_zombie": { "escape_time": 20, "health": 450, "health_per_wave": 60, "speed": 4.688, "reward": 1000, "flee_range": 11.875 },
+&"horde": { "extra_enemies_ratio": 0.6, "spawn_interval_multiplier": 0.55, "max_alive_bonus": 8 },
+&"station": { "countdown_from_time": 30, "air_blast": { "range": 1.125, "speed": 2.188 } },
+&"supply_drop": { "open_hold_time": 3, "interrupt_time": 0.5, "lifetime_time": 60, "fall_time": 2.2, "money": 750, "distance": [6.875, 20.313] },
+&"train": { "chance_per_wave": 0.65, "second_pass_chance": 0.4, "delay_time": [4, 22], "warning_time": 4.5, "speed": 46.875, "cars": 5, "car_length": 10, "player_damage": 70 }
+}
+interactions = { "power": { "price": 500, "hold_time": 1.2 }, "alarm": { "price": 750, "hold_time": 1 }, "train": { "price": 1500, "cooldown_time": 90 }, "trap": { "price": 1000, "active_time": 15, "cooldown_time": 45, "tick_time": 0.18 }, "valve": { "hold_time": 1.5 } }
+credits = "TENTANDO SOBREVIVER — feito com Godot + GDScript. Arte e sons 100% gerados por código."

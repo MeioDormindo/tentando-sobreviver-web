@@ -26,10 +26,9 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	# Um drop pode ter sido apagado por fora (fim da partida, testes).
+	_pickups.assign(_pickups.filter(func(item: Variant) -> bool: return is_instance_valid(item)))
 	for pickup: Node3D in _pickups.duplicate():
-		if not is_instance_valid(pickup):
-			_pickups.erase(pickup)
-			continue
 		var age: float = pickup.get_meta(&"age") + delta
 		pickup.set_meta(&"age", age)
 		if age >= data.lifetime:

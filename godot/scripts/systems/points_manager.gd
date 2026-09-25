@@ -10,6 +10,8 @@ var points: int = 0
 var earned: int = 0
 ## Double Cash (power-up).
 var multiplier: float = 1.0
+## Lua de Sangue (evento do mapa).
+var event_multiplier: float = 1.0
 var _guard := AntiCheat.Guard.new(0)
 
 
@@ -19,6 +21,7 @@ func _ready() -> void:
 	add_to_group(&"points_manager")
 	Events.zombie_hit.connect(_on_zombie_hit)
 	Events.zombie_killed.connect(_on_zombie_killed)
+	Events.reward_multiplier_changed.connect(func(value: float) -> void: event_multiplier = value)
 	Events.boss_defeated.connect(func(_id: StringName, _n: String, reward: int, _at: Vector3) -> void: add(reward))
 	Events.round_completed.connect(func(round_number: int) -> void: add(data.round_bonus(round_number)))
 	# Depois que a cena inteira estiver pronta (a HUD fica pronta por último).
@@ -33,7 +36,7 @@ func _emit_initial_state() -> void:
 func add(amount: int, apply_multiplier: bool = true) -> int:
 	if amount <= 0:
 		return 0
-	amount = roundi(amount * (multiplier if apply_multiplier else 1.0))
+	amount = roundi(amount * (multiplier * event_multiplier if apply_multiplier else 1.0))
 	points += amount
 	_guard.set_value(points)
 	earned += amount
