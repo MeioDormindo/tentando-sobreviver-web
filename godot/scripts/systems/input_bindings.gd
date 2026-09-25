@@ -26,6 +26,7 @@ const DEFAULT_BINDINGS: Dictionary = {
 	&"weapon_prev": [["mouse", MOUSE_BUTTON_WHEEL_UP]],
 	&"melee": [["key", KEY_V], ["mouse", MOUSE_BUTTON_RIGHT], ["joy_button", JOY_BUTTON_RIGHT_SHOULDER]],
 	&"jump": [["key", KEY_SPACE], ["joy_button", JOY_BUTTON_B]],
+	&"map": [["key", KEY_TAB], ["joy_button", JOY_BUTTON_BACK]],
 	&"pause": [["key", KEY_ESCAPE], ["key", KEY_P], ["joy_button", JOY_BUTTON_START]],
 }
 

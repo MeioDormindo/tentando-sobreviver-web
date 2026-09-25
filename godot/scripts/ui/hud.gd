@@ -30,7 +30,8 @@ var _timers_label: Label
 var _boss_bar: ProgressBar
 var _boss_label: Label
 var _hit_marker: Label
-var _pause_panel: Control
+var _pause_menu: PauseMenu
+var minimap: Minimap
 var _game_over_panel: Control
 var _game_over_text: Label
 
@@ -81,7 +82,7 @@ func _ready() -> void:
 	Events.max_ammo.connect(func(_at: Vector3) -> void: _show_toast("MAX AMMO"))
 	Events.power_changed.connect(func(on: bool) -> void: if on: _show_banner("ENERGIA LIGADA", GOLD))
 	Events.perks_changed.connect(func(names: Array[String]) -> void: _perks_label.text = "  ·  ".join(names).to_upper())
-	Events.pause_changed.connect(func(paused: bool) -> void: _pause_panel.visible = paused)
+	Events.settings_changed.connect(func() -> void: minimap.apply_settings())
 	Events.game_over.connect(_on_game_over)
 
 
@@ -152,7 +153,12 @@ func _build() -> void:
 	_hit_marker = _label(root, "✕", 26, TEXT, Control.PRESET_TOP_LEFT, HORIZONTAL_ALIGNMENT_CENTER)
 	_hit_marker.modulate.a = 0.0
 
-	_pause_panel = _overlay(root, "PAUSADO", "ESC para continuar")
+	minimap = Minimap.new()
+	minimap.name = "Minimap"
+	root.add_child(minimap)
+	_pause_menu = PauseMenu.new()
+	_pause_menu.name = "PauseMenu"
+	root.add_child(_pause_menu)
 	_game_over_panel = _overlay(root, "GAME OVER", "")
 	_game_over_text = _game_over_panel.get_node("Box/Subtitle") as Label
 

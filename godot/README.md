@@ -25,6 +25,11 @@ de conceitos: ver `docs/analise-typescript.md`.
   (caixa a 10 em todos os locais das áreas abertas) e o raro Golden Drop (arma especial,
   dinheiro, perk grátis ou Fúria); o boss deixa um Golden Drop e um Max Ammo; cronômetros
   dos efeitos na HUD;
+- **arma caída**: ao pegar uma arma com os dois espaços cheios, a arma em mãos cai no chão e
+  pode ser pega de volta por 60s (com a munição e as melhorias dela);
+- **minimapa** no canto (áreas abertas e fechadas, portas, jogador, zumbis, boss, Mystery Box);
+  Tab segurado mostra o mapa grande; liga/desliga e tamanho nas configurações;
+- **menu de pausa** com CONTINUAR, REINICIAR, MENU e as configurações que valem na hora;
 - **visuais do personagem** (tela PERSONAGEM): Sobrevivente, Enfermeiro, Maquinista e Agente,
   liberados por conquistas, com as cores da paleta do jogo web;
 - **código Konami** no menu (↑↑↓↓←→←→BA): libera o modo cabeção;
@@ -121,7 +126,7 @@ passam a ser editados direto no Godot.
 # mapas com portas, barricadas, compras, máquinas e navegação, sorteio da caixa, Weapon Lab,
 # perks, composição por round, rodada dos cães) e, na mesma execução, os testes de cena: as
 # 5 armas especiais, cada tipo de zumbi, a rodada dos cães, os dois bosses nos mapas migrados
-# as telas de menu e os power-ups; e o online contra o servidor real, só com operações que não gravam
+# as telas de menu, os power-ups, a arma caída, o minimapa e a pausa; e o online contra o servidor real, só com operações que não gravam
 # (ler o ranking, envio recusado, login errado). Os testes usam um save de teste (o do
 # jogador não muda) e o bot joga offline (não envia nada ao ranking global):
 Godot --headless --path godot -s res://tests/run_tests.gd
@@ -149,7 +154,8 @@ scripts/systems/session.gd       autoload Session: mapa escolhido para a partida
 scripts/main.gd                  troca o mapa da partida pelo escolhido
 scripts/online/                  autoloads Online (cliente REST) e Account (conta e nuvem),
                                  Leaderboard (ranking global), AntiCheat
-scripts/ui/                      HUD (fim de jogo com ranking), MenuKit e as telas de menu
+scripts/ui/                      HUD (fim de jogo com ranking), Minimap, PauseMenu, SettingsRows
+                                 (configurações do menu e da pausa), MenuKit e as telas de menu
 scripts/systems/input_bindings.gd autoload InputBindings: ações abstratas (teclado, mouse, controle)
 scripts/components/              HealthComponent, Hurtbox (corpo/cabeça), DamageInfo
 scripts/characters/              CharacterBase (CharacterBody3D + vida por composição)
@@ -166,13 +172,13 @@ scripts/weapons/                 Weapon (munição, recarga, raycast, chumbos, p
 scripts/systems/                 PerkSystem (modificadores dos perks), PowerSystem (energia),
                                  BossManager (round de boss), ScoreManager (score do ranking),
                                  AchievementSystem (conquistas), PowerUpSystem +
-                                 PowerUpData (power-ups),
+                                 PowerUpData (power-ups), MinimapFeed (minimapa),
                                  RoundManager + RoundData, SpawnManager, PointsManager +
                                  PointsData, GameManager, AudioManager
 scripts/maps/                    GameWorld (base: spawn do jogador, áreas abertas, spawns ativos),
                                  LayoutMap (mapa migrado do JSON), Arena (mapa de teste)
 scripts/interactables/           tudo que se usa com E (grupo "interactable"): Door, Barricade,
-                                 WallBuy, MysteryBox, WeaponLab, PerkMachine, Breaker (+ os
+                                 WallBuy, MysteryBox, WeaponLab, PerkMachine, Breaker, WeaponDrop (+ os
                                  Resources de dados de cada um)
 scripts/ui/hud.gd                HUD (só escuta Events)
 data/                            .tres: m1911, walker, rounds, points, barramentos de áudio
@@ -201,8 +207,7 @@ Decisões:
 ## Próximas fases (roadmap da especificação)
 
 - **Fase 4 (rounds):** novos tipos de zumbi e composição por round.
-- **Minimapa, pausa com configurações.**
 - **Eventos e extras:** eventos do mapa (trem, apagão...),
-  missão do Hospital, arma caída ao trocar.
+  missão do Hospital.
 - **Fase 7 (polimento):** sons e efeitos, modelos do Blender no lugar das primitivas.
 - **Fase 8 (plataformas):** exportações e controles de toque.

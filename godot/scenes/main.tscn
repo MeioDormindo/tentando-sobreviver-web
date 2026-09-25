@@ -21,6 +21,7 @@
 [ext_resource type="Script" path="res://scripts/systems/achievement_system.gd" id="19_achievements"]
 [ext_resource type="Resource" path="res://data/configs/achievements.tres" id="20_achievement_data"]
 [ext_resource type="Script" path="res://scripts/systems/power_up_system.gd" id="21_powerups"]
+[ext_resource type="Script" path="res://scripts/systems/minimap_feed.gd" id="24_minimap"]
 [ext_resource type="Resource" path="res://data/configs/powerups.tres" id="22_powerup_data"]
 [ext_resource type="Resource" path="res://data/weapons/catalog.tres" id="23_catalog"]
 
@@ -79,6 +80,11 @@ data = ExtResource("22_powerup_data")
 player = NodePath("../Player")
 points_manager = NodePath("../PointsManager")
 weapon_catalog = ExtResource("23_catalog")
+
+[node name="MinimapFeed" type="Node" parent="." node_paths=PackedStringArray("world", "player")]
+script = ExtResource("24_minimap")
+world = NodePath("../World")
+player = NodePath("../Player")
 
 [node name="AchievementSystem" type="Node" parent="." node_paths=PackedStringArray("anti_cheat")]
 script = ExtResource("19_achievements")

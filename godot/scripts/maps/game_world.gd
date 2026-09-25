@@ -52,6 +52,17 @@ func area_display_name(area_id: StringName) -> String:
 	return String(area_id)
 
 
+## Tamanho da grade do minimapa em tiles (zero = mapa sem minimapa).
+func minimap_size() -> Vector2i:
+	return Vector2i.ZERO
+
+
+## Grade do minimapa: um código por tile (0 nada, 1 área aberta, 2 fechada, 3 porta, 4 trem,
+## 5 janela), linha a linha.
+func minimap_cells() -> PackedByteArray:
+	return PackedByteArray()
+
+
 ## Recalcula a navegação (ex.: porta aberta).
 func rebake_navigation() -> void:
 	pass

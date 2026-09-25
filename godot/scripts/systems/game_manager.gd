@@ -28,6 +28,7 @@ func _ready() -> void:
 	Events.zombie_killed.connect(_on_zombie_killed)
 	Events.player_died.connect(_on_player_died)
 	Events.restart_requested.connect(restart)
+	Events.resume_requested.connect(func() -> void: set_paused(false))
 	Events.round_completed.connect(_on_round_completed)
 	Events.shot_fired.connect(func() -> void: shots_fired += 1)
 	Events.zombie_hit.connect(func(_z: Node3D, info: DamageInfo) -> void:
@@ -36,6 +37,8 @@ func _ready() -> void:
 		if info.kind in [DamageInfo.Kind.WEAPON, DamageInfo.Kind.MELEE, DamageInfo.Kind.BURN]:
 			damage_dealt += info.amount)
 	Events.boss_defeated.connect(_on_boss_defeated)
+	# Arma que saiu do inventário cai no chão (pode ser pega de volta por 60s).
+	Events.weapon_dropped.connect(func(weapon: Weapon, at: Vector3) -> void: WeaponDrop.spawn(get_tree(), weapon, at))
 
 
 func _process(delta: float) -> void:

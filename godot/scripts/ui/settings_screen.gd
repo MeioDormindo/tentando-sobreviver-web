@@ -1,6 +1,6 @@
 extends Control
-## Configurações (seção 36): volume, som, música, tremor de tela, tela cheia, nome no ranking
-## e apagar progresso. Tudo fica no save e vale na hora.
+## Configurações (seção 36): as de SettingsRows (volume, som, música, minimapa, tremor, tela
+## cheia), nome no ranking e apagar progresso. Tudo fica no save e vale na hora.
 
 const MENU := "res://scenes/ui/main_menu.tscn"
 
@@ -18,22 +18,7 @@ func _build() -> void:
 	_column = MenuKit.screen(self, 620.0)
 	MenuKit.spacer(_column, 30)
 	MenuKit.title(_column, "CONFIGURAÇÕES", 48)
-	MenuKit.label(_column, "VOLUME", 16, MenuKit.DIM)
-	var volume := HSlider.new()
-	volume.min_value = 0
-	volume.max_value = 100
-	volume.value = float(Save.get_setting("volume")) * 100.0
-	volume.focus_mode = Control.FOCUS_ALL
-	volume.value_changed.connect(func(v: float) -> void:
-		Save.set_setting("volume", v / 100.0)
-		Save.apply_audio())
-	_column.add_child(volume)
-	var first := _toggle("SOM", "muted", true)
-	_toggle("MÚSICA", "musicOn")
-	_toggle("TREMOR DE TELA", "screenShake")
-	_toggle("TELA CHEIA", "fullscreen")
-	if Save.data.secrets.get("konami", false):
-		_toggle("MODO CABEÇÃO", "bigHeads")
+	var first := SettingsRows.add(_column, _build)
 	MenuKit.label(_column, "NOME NO RANKING", 16, MenuKit.DIM)
 	var name_edit := LineEdit.new()
 	name_edit.text = Save.player_name
@@ -46,18 +31,6 @@ func _build() -> void:
 	MenuKit.spacer(_column, 10)
 	MenuKit.button(_column, "VOLTAR", func() -> void: MenuKit.go(self, MENU))
 	first.grab_focus.call_deferred()
-
-
-## Botão liga/desliga. `inverted`: a chave guarda o contrário (som = não mudo).
-func _toggle(text: String, key: String, inverted: bool = false) -> Button:
-	var on := bool(Save.get_setting(key)) != inverted
-	var button := MenuKit.button(_column, "%s: %s" % [text, "LIGADO" if on else "DESLIGADO"], func() -> void:
-		Save.set_setting(key, not bool(Save.get_setting(key)))
-		Save.apply_audio()
-		Save.apply_display()
-		_build.call_deferred(), 20)
-	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	return button
 
 
 func _reset() -> void:

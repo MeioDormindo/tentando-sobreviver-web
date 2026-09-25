@@ -50,6 +50,19 @@ func give(data: WeaponData) -> Weapon:
 	weapon.data = data
 	add_child(weapon)
 	weapon.reset_ammo()
+	return _add(weapon)
+
+
+## Pega de volta uma arma que estava no chão (com a munição e as melhorias dela). Devolve a
+## arma que saiu no lugar (ou null).
+func take_back(weapon: Weapon) -> Weapon:
+	if owns(weapon.data.id):
+		return null
+	add_child(weapon)
+	return _add(weapon)
+
+
+func _add(weapon: Weapon) -> Weapon:
 	var dropped: Weapon = null
 	if weapons.size() < slots:
 		weapons.append(weapon)

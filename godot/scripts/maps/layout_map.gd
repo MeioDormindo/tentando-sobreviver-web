@@ -46,6 +46,8 @@ var height: int = 0
 var _cells: PackedStringArray
 var _materials: Dictionary = {}
 var _area_names: Dictionary = {}
+## Área de cada tile (índice em data.areas, -1 = nenhuma), calculada uma vez para o minimapa.
+var _tile_areas := PackedInt32Array()
 
 @onready var nav_region: NavigationRegion3D = $NavigationRegion3D
 ## Energia do mapa (luzes fracas e máquinas desligadas até o disjuntor).
@@ -135,6 +137,39 @@ func area_display_name(area_id: StringName) -> String:
 func rebake_navigation() -> void:
 	if not nav_region.is_baking():
 		nav_region.bake_navigation_mesh(true)
+
+
+func minimap_size() -> Vector2i:
+	return Vector2i(width, height)
+
+
+func minimap_cells() -> PackedByteArray:
+	if _tile_areas.is_empty():
+		_tile_areas.resize(width * height)
+		_tile_areas.fill(-1)
+		for i in data.areas.size():
+			for r: Dictionary in data.areas[i].rects:
+				for z in range(int(r.y), int(r.y) + int(r.h)):
+					for x in range(int(r.x), int(r.x) + int(r.w)):
+						if x >= 0 and z >= 0 and x < width and z < height and _tile_areas[z * width + x] < 0:
+							_tile_areas[z * width + x] = i
+	var cells := PackedByteArray()
+	cells.resize(width * height)
+	for z in height:
+		for x in width:
+			var ch := cell(x, z)
+			var code := 0
+			if _is_floor(ch):
+				var area := _tile_areas[z * width + x]
+				code = 1 if area >= 0 and is_area_open(StringName(data.areas[area].id)) else 2
+			elif ch == "D":
+				code = 3
+			elif ch == "T":
+				code = 4
+			elif ch == "W":
+				code = 5
+			cells[z * width + x] = code
+	return cells
 
 
 ## Letra da grade no tile (fora do mapa = parede).

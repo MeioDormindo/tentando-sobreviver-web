@@ -66,6 +66,13 @@ signal player_armor_changed(current: float, maximum: float)
 signal mystery_box_rolled(fire_sale: bool)
 ## Uma arma saiu do inventário (vai para o chão por um tempo).
 signal weapon_dropped(weapon: Weapon, at: Vector3)
+## Minimapa: a grade do mapa (códigos por tile) e as posições do que importa (MinimapFeed).
+signal minimap_base(width: int, height: int, cells: PackedByteArray)
+signal minimap_state(state: Dictionary)
+## Uma configuração mudou (menu de pausa): quem depende dela aplica na hora.
+signal settings_changed
+## Botão CONTINUAR do menu de pausa.
+signal resume_requested
 ## Pausa ligada/desligada.
 signal pause_changed(paused: bool)
 ## A HUD pediu para jogar de novo.
