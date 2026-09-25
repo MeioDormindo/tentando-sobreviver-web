@@ -13,11 +13,15 @@ Convenções:
 - personagens: malha única com grupos de vértices presos 100% a um osso (partes rígidas,
   estilo low-poly) e ações: Idle, Walk, Run, Attack, Death (+ Crawl, Roar, Slam, Charge);
 - materiais com nomes de papel (Shirt, Skin, Pants, Eyes, Jacket, Pack, Hair, Fur, Metal,
-  Glow...), que o Godot troca por cor (tipo de zumbi, visual do jogador, cor do perk).
+  Glow...), que o Godot troca por cor (tipo de zumbi, visual do jogador, cor do perk);
+- texturas pixeladas de 64×64 geradas aqui mesmo (tecido, tecido sujo, pele, pele de zumbi,
+  pelo, metal, madeira, couro, cabelo), em tons quase neutros: a cor vem do material
+  (textura × cor), então a troca de cor no Godot continua valendo.
 """
 
 import math
 import os
+import random
 import sys
 
 import bmesh
@@ -35,13 +39,28 @@ FPS = 24
 def reset_scene():
     bpy.ops.wm.read_factory_settings(use_empty=True)
     bpy.context.scene.render.fps = FPS
+    _textures.clear()
 
 
 _materials = {}
+## Estilo do modelo em construção: "zombie" (roupa rasgada e suja, pele podre) ou "human".
+_style = {"value": "human"}
+
+## Textura de cada papel de material (por estilo). Sem entrada = sem textura (olhos, brilho).
+TEXTURE_BY_ROLE = {
+    "Shirt": ("cloth_dirty", "cloth"), "Pants": ("cloth_dirty", "cloth"), "Skin": ("skin_zombie", "skin"),
+    "Shoes": ("leather", "leather"), "Jacket": ("cloth", "cloth"), "Pack": ("canvas", "canvas"),
+    "Hair": ("hair", "hair"), "Belt": ("leather", "leather"), "Cap": ("cloth", "cloth"),
+    "Uniform": ("cloth_dirty", "cloth"), "Gown": ("cloth_dirty", "cloth_dirty"), "Bandage": ("cloth_dirty", "cloth_dirty"),
+    "Tumor": ("skin_zombie", "skin_zombie"), "Fur": ("fur", "fur"), "Metal": ("metal", "metal"),
+    "Grip": ("wood", "wood"), "Wood": ("wood", "wood"), "Trim": ("metal", "metal"), "Body": ("paint", "paint"),
+    "Bench": ("wood", "wood"), "Pouch": ("canvas", "canvas"), "Teeth": ("bone", "bone"), "Bone": ("bone", "bone"),
+}
 
 
 def material(name, color, roughness=0.85, metallic=0.0, emission=None, strength=2.0):
-    """Material Principled com nome de papel (o Godot usa o nome para trocar a cor)."""
+    """Material Principled com nome de papel (o Godot usa o nome para trocar a cor).
+    Com textura: cor base = textura × cor (o exportador glTF guarda a cor como fator)."""
     key = (name, tuple(color), emission is not None)
     mat = bpy.data.materials.get(name)
     if mat is None:
@@ -52,9 +71,29 @@ def material(name, color, roughness=0.85, metallic=0.0, emission=None, strength=
             except Exception:
                 pass
     bsdf = mat.node_tree.nodes.get("Principled BSDF")
+    # As cores do script são sRGB (como no jogo web); o Blender e o glTF usam cor linear.
+    color = tuple(_linear(c) for c in color[:3])
+    if emission is not None:
+        emission = tuple(_linear(c) for c in emission[:3])
     rgba = (color[0], color[1], color[2], 1.0)
     mat.diffuse_color = rgba
-    if bsdf:
+    kinds = TEXTURE_BY_ROLE.get(name)
+    if bsdf and kinds and emission is None:
+        kind = kinds[0] if _style["value"] == "zombie" else kinds[1]
+        nt = mat.node_tree
+        node = nt.nodes.get("Tex") or nt.nodes.new("ShaderNodeTexImage")
+        node.name = "Tex"
+        node.image = texture(kind)
+        node.interpolation = "Closest"
+        mix = nt.nodes.get("Tint") or nt.nodes.new("ShaderNodeMix")
+        mix.name = "Tint"
+        mix.data_type = "RGBA"
+        mix.blend_type = "MULTIPLY"
+        mix.inputs["Factor"].default_value = 1.0
+        mix.inputs[7].default_value = rgba
+        nt.links.new(node.outputs["Color"], mix.inputs[6])
+        nt.links.new(mix.outputs[2], bsdf.inputs["Base Color"])
+    elif bsdf:
         bsdf.inputs["Base Color"].default_value = rgba
         bsdf.inputs["Roughness"].default_value = roughness
         bsdf.inputs["Metallic"].default_value = metallic
@@ -63,6 +102,135 @@ def material(name, color, roughness=0.85, metallic=0.0, emission=None, strength=
             bsdf.inputs["Emission Strength"].default_value = strength
     _materials[key] = mat
     return mat
+
+
+# ───────────────────────── Texturas ─────────────────────────
+
+TEX = 64
+_textures = {}
+
+
+def _noise(rng, cells):
+    """Ruído de valor que repete nas bordas (a textura emenda sem costura)."""
+    grid = [[rng.random() for _ in range(cells)] for _ in range(cells)]
+
+    def sample(x, y):
+        fx = x / TEX * cells
+        fy = y / TEX * cells
+        x0, y0 = int(fx) % cells, int(fy) % cells
+        x1, y1 = (x0 + 1) % cells, (y0 + 1) % cells
+        tx, ty = fx - int(fx), fy - int(fy)
+        tx, ty = tx * tx * (3 - 2 * tx), ty * ty * (3 - 2 * ty)
+        top = grid[y0][x0] * (1 - tx) + grid[y0][x1] * tx
+        bottom = grid[y1][x0] * (1 - tx) + grid[y1][x1] * tx
+        return top * (1 - ty) + bottom * ty
+    return sample
+
+
+def texture(kind):
+    """Textura pixelada 64×64 (tons quase neutros; a cor vem do material)."""
+    if kind in _textures:
+        return _textures[kind]
+    rng = random.Random(sum(ord(c) * 31 ** i for i, c in enumerate(kind)) & 0xFFFFFFFF)
+    fine = _noise(rng, 16)
+    coarse = _noise(rng, 4)
+    px = [[0.9, 0.9, 0.9] for _ in range(TEX * TEX)]
+
+    def at(x, y):
+        return px[(y % TEX) * TEX + (x % TEX)]
+
+    def shade(x, y, f):
+        c = at(x, y)
+        c[0], c[1], c[2] = c[0] * f[0], c[1] * f[1], c[2] * f[2]
+
+    def blob(cx, cy, r, f):
+        for dy in range(-r, r + 1):
+            for dx in range(-r, r + 1):
+                if dx * dx + dy * dy <= r * r * (0.6 + 0.4 * rng.random()):
+                    shade(cx + dx, cy + dy, f)
+
+    for y in range(TEX):
+        for x in range(TEX):
+            n, c = fine(x, y), coarse(x, y)
+            v = 0.9
+            if kind in ("cloth", "cloth_dirty", "canvas"):
+                v = 0.84 + 0.1 * n + 0.05 * c - (0.05 if (x + y) % 4 == 0 else 0) - (0.04 if (x - y) % 4 == 0 and kind == "canvas" else 0)
+            elif kind in ("skin", "skin_zombie", "bone"):
+                v = 0.9 + 0.07 * n + 0.04 * c if kind != "skin_zombie" else 0.8 + 0.14 * n + 0.08 * c
+            elif kind in ("fur", "hair"):
+                v = 0.72 + 0.25 * fine(x * 0.25, y * 2.0) + 0.05 * c
+            elif kind in ("metal", "paint"):
+                v = 0.8 + 0.1 * fine(x * 0.2, y) + 0.08 * c
+            elif kind == "wood":
+                v = 0.72 + 0.18 * (0.5 + 0.5 * math.sin(y * 0.55 + n * 6.0 + c * 3.0))
+                if y % 16 == 0:
+                    v *= 0.6
+            elif kind == "leather":
+                v = 0.8 + 0.12 * n + 0.06 * c
+            px[y * TEX + x] = [v, v, v]
+    # Detalhes de cada tipo.
+    if kind in ("cloth", "cloth_dirty", "canvas"):
+        for y in (0, TEX - 1):
+            for x in range(0, TEX, 2):
+                shade(x, y, (0.7, 0.7, 0.7))  # costura
+    if kind == "cloth_dirty":
+        for _ in range(14):
+            blob(rng.randrange(TEX), rng.randrange(TEX), rng.randrange(2, 6), (0.72, 0.7, 0.66))  # sujeira
+        for _ in range(6):
+            blob(rng.randrange(TEX), rng.randrange(TEX), rng.randrange(2, 5), (0.72, 0.42, 0.4))  # sangue
+        for _ in range(5):  # rasgos
+            x, y = rng.randrange(TEX), rng.randrange(TEX)
+            for i in range(rng.randrange(4, 10)):
+                shade(x, y, (0.3, 0.3, 0.3))
+                x += rng.choice((-1, 0, 1))
+                y += 1
+    if kind == "skin_zombie":
+        for _ in range(8):  # veias
+            x, y = rng.randrange(TEX), rng.randrange(TEX)
+            for i in range(rng.randrange(6, 16)):
+                shade(x, y, (0.78, 0.8, 0.86))
+                x += rng.choice((-1, 0, 1))
+                y += rng.choice((0, 1))
+        for _ in range(5):
+            blob(rng.randrange(TEX), rng.randrange(TEX), rng.randrange(2, 5), (0.75, 0.45, 0.45))  # feridas
+    if kind == "canvas":
+        for x in range(TEX):
+            for y in (20, 21, 44, 45):
+                shade(x, y, (0.75, 0.75, 0.75))  # tiras
+    if kind in ("metal", "paint"):
+        for _ in range(12):  # arranhões
+            x, y = rng.randrange(TEX), rng.randrange(TEX)
+            for i in range(rng.randrange(4, 12)):
+                c = at(x, y)
+                c[0] = c[1] = c[2] = min(1.0, c[0] * 1.2)
+                x += 1
+                y += rng.choice((0, 0, 1))
+        for cx in (4, TEX - 5):
+            for cy in (4, TEX - 5):
+                shade(cx, cy, (0.55, 0.55, 0.55))  # rebites
+    if kind == "paint":
+        for _ in range(6):
+            blob(rng.randrange(TEX), rng.randrange(TEX), rng.randrange(1, 4), (0.62, 0.55, 0.5))  # tinta descascada
+    if kind == "leather":
+        for _ in range(10):
+            x, y = rng.randrange(TEX), rng.randrange(TEX)
+            for i in range(rng.randrange(3, 8)):
+                shade(x, y, (0.8, 0.8, 0.8))
+                x += 1
+    image = bpy.data.images.new("tex_" + kind, TEX, TEX)
+    flat = []
+    for y in range(TEX):
+        for x in range(TEX):
+            c = px[y * TEX + x]
+            flat += [min(1.0, c[0]), min(1.0, c[1]), min(1.0, c[2]), 1.0]
+    image.pixels = flat
+    image.pack()
+    _textures[kind] = image
+    return image
+
+
+def _linear(c):
+    return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
 
 
 def hexcolor(value):
@@ -76,6 +244,7 @@ class Builder:
 
     def __init__(self):
         self.bm = bmesh.new()
+        self.bm.loops.layers.uv.verify()
         self.mats = []
         self.groups = {}
 
@@ -97,18 +266,18 @@ class Builder:
             self.groups.setdefault(group, []).extend(geom_verts)
 
     def box(self, size, loc, mat, group=None, rot=(0, 0, 0)):
-        result = bmesh.ops.create_cube(self.bm, size=1.0)
+        result = bmesh.ops.create_cube(self.bm, size=1.0, calc_uvs=True)
         matrix = Matrix.Translation(loc) @ _euler(rot) @ Matrix.Diagonal((size[0], size[1], size[2], 1.0))
         self._finish(result["verts"], mat, group, matrix)
 
     def cylinder(self, radius, depth, loc, mat, group=None, rot=(0, 0, 0), segments=8, radius2=None):
-        result = bmesh.ops.create_cone(self.bm, cap_ends=True, cap_tris=False, segments=segments,
+        result = bmesh.ops.create_cone(self.bm, cap_ends=True, cap_tris=False, segments=segments, calc_uvs=True,
                                        radius1=radius, radius2=radius if radius2 is None else radius2, depth=depth)
         matrix = Matrix.Translation(loc) @ _euler(rot)
         self._finish(result["verts"], mat, group, matrix)
 
     def sphere(self, radius, loc, mat, group=None, scale=(1, 1, 1), segments=8, rings=6):
-        result = bmesh.ops.create_uvsphere(self.bm, u_segments=segments, v_segments=rings, radius=radius)
+        result = bmesh.ops.create_uvsphere(self.bm, u_segments=segments, v_segments=rings, radius=radius, calc_uvs=True)
         matrix = Matrix.Translation(loc) @ Matrix.Diagonal((scale[0], scale[1], scale[2], 1.0))
         self._finish(result["verts"], mat, group, matrix)
 
@@ -253,6 +422,11 @@ def humanoid(name, torso, sleeve, skin, pants, shoes, eyes, extra=None, bulk=1.0
     b.box((0.2, 0.05, 0.08), (0, 0.14, 1.56), skin, "head")  # queixo
     b.box((0.05, 0.02, 0.04), (0.06, 0.135, 1.68), eyes, "head")
     b.box((0.05, 0.02, 0.04), (-0.06, 0.135, 1.68), eyes, "head")
+    b.box((0.04, 0.05, 0.05), (0, 0.15, 1.62), skin, "head")  # nariz
+    b.box((0.03, 0.07, 0.08), (0.14, 0.0, 1.64), skin, "head")  # orelhas
+    b.box((0.03, 0.07, 0.08), (-0.14, 0.0, 1.64), skin, "head")
+    b.box((0.13, 0.13, 0.08), (0, 0.0, 1.5), skin, "spine")  # pescoço
+    b.box((0.3 * bulk, 0.3 * bulk, 0.05), (0, 0.0, 1.47), torso, "spine")  # gola
     for side, bone in ((1, "arm.L"), (-1, "arm.R")):
         x = side * (0.29 + (w - 0.5) * 0.5)
         b.box((0.13, 0.13, 0.32), (x, 0, 1.3), sleeve, bone)
@@ -407,6 +581,12 @@ def hound():
     b.box((0.04, 0.02, 0.03), (0.06, 0.645, 0.78), eyes, "head")
     b.box((0.04, 0.02, 0.03), (-0.06, 0.645, 0.78), eyes, "head")
     b.box((0.05, 0.4, 0.05), (0, -0.55, 0.73), fur, "tail", rot=(0.4, 0, 0))
+    bone = material("Bone", hexcolor(0xcfc6b0), 0.7)
+    for i in range(5):
+        b.box((0.05, 0.06, 0.1), (0, -0.3 + i * 0.14, 0.8), dark, "body", rot=(-0.4, 0, 0))  # espinhos
+    b.box((0.12, 0.03, 0.03), (0, 0.8, 0.64), bone, "head")  # dentes
+    for i in range(3):
+        b.box((0.02, 0.14, 0.02), (0.171, -0.05 + i * 0.1, 0.6), bone, "body")  # costelas
     for name, x, y in (("leg.FL", 0.13, 0.28), ("leg.FR", -0.13, 0.28), ("leg.BL", 0.13, -0.28), ("leg.BR", -0.13, -0.28)):
         b.box((0.08, 0.1, 0.5), (x, y, 0.3), fur, name)
         b.box((0.09, 0.13, 0.05), (x, y + 0.02, 0.03), dark, name)
@@ -442,6 +622,16 @@ def hound():
 # ───────────────────────── Personagens ─────────────────────────
 
 def zombie():
+    bone = material("Bone", hexcolor(0xcfc6b0), 0.7)
+
+    def rot(b):
+        shirt = material("Shirt", hexcolor(0x5e5343))
+        b.box((0.16, 0.03, 0.14), (0.14, 0.14, 0.93), shirt, "spine", rot=(0.3, 0, 0.25))  # aba rasgada
+        b.box((0.12, 0.03, 0.1), (-0.16, -0.14, 0.95), shirt, "spine", rot=(-0.3, 0, -0.2))
+        for i in range(3):
+            b.box((0.1, 0.02, 0.02), (-0.14, 0.142, 1.15 + i * 0.06), bone, "spine")  # costelas
+        b.box((0.12, 0.02, 0.025), (0, 0.141, 1.575), bone, "head")  # dentes
+
     rig = humanoid(
         "Zombie",
         torso=material("Shirt", hexcolor(0x5e5343)),
@@ -450,6 +640,7 @@ def zombie():
         pants=material("Pants", hexcolor(0x35393a)),
         shoes=material("Shoes", hexcolor(0x1d1b19)),
         eyes=material("Eyes", (1.0, 0.25, 0.15), 0.5, emission=(1.0, 0.25, 0.15), strength=4.0),
+        extra=rot,
     )
     human_actions(rig, zombie=True)
     return rig
@@ -464,7 +655,18 @@ def survivor():
         b.box((0.4, 0.18, 0.46), (0, -0.22, 1.2), pack, "spine")
         b.box((0.28, 0.28, 0.08), (0, -0.01, 1.8), hair, "head")
         b.box((0.28, 0.08, 0.16), (0, -0.13, 1.72), hair, "head")
-        b.box((0.52, 0.3, 0.07), (0, 0, 1.02), material("Belt", hexcolor(0x2a241c)), "hips")
+        belt = material("Belt", hexcolor(0x2a241c))
+        pouch = material("Pouch", hexcolor(0x4a4a38))
+        b.box((0.52, 0.3, 0.07), (0, 0, 1.02), belt, "hips")
+        for x in (-0.14, 0.14):
+            b.box((0.05, 0.3, 0.5), (x, 0.0, 1.24), belt, "spine")  # alças da mochila
+        b.box((0.1, 0.07, 0.1), (0.2, 0.16, 1.0), pouch, "hips")  # bolsos
+        b.box((0.1, 0.07, 0.1), (-0.2, 0.16, 1.0), pouch, "hips")
+        b.box((0.08, 0.08, 0.12), (0.2, -0.12, 0.98), pouch, "hips")  # coldre
+        b.box((0.17, 0.05, 0.1), (0.12, 0.1, 0.55), pouch, "leg.L")  # joelheiras
+        b.box((0.17, 0.05, 0.1), (-0.12, 0.1, 0.55), pouch, "leg.R")
+        b.cylinder(0.035, 0.12, (0.2, 0.12, 1.42), material("Metal", hexcolor(0x2b2d31), 0.4, 0.7), "spine", rot=(math.pi / 2, 0, 0))  # lanterna
+        b.box((0.12, 0.05, 0.12), (0.12, -0.33, 1.3), pouch, "spine")  # bolso da mochila
 
     rig = humanoid(
         "Survivor",
@@ -486,7 +688,15 @@ def conductor():
         b.box((0.3, 0.3, 0.1), (0, 0.01, 1.82), cap, "head")
         b.box((0.3, 0.16, 0.03), (0, 0.18, 1.78), cap, "head")  # aba
         b.box((0.58, 0.32, 0.5), (0, 0, 0.9), material("Uniform", hexcolor(0x2c3a5a)), "hips")  # casaco comprido
-        b.box((0.06, 0.02, 0.06), (0.12, 0.155, 1.34), material("Badge", (0.85, 0.7, 0.25), 0.3, 0.8), "spine")
+        badge = material("Badge", (0.85, 0.7, 0.25), 0.3, 0.8)
+        b.box((0.06, 0.02, 0.06), (0.12, 0.155, 1.34), badge, "spine")
+        for i in range(4):
+            b.box((0.03, 0.02, 0.03), (0, 0.152, 1.08 + i * 0.1), badge, "spine")  # botões
+        b.box((0.14, 0.03, 0.03), (0, 0.145, 1.585), material("Hair", hexcolor(0x5a5a58)), "head")  # bigode
+        metal = material("Metal", hexcolor(0x2b2d31), 0.4, 0.7)
+        b.box((0.12, 0.12, 0.03), (-0.29, 0.02, 0.73), metal, "arm.R")  # lampião
+        b.box((0.1, 0.1, 0.14), (-0.29, 0.02, 0.64), material("Glow", (1.0, 0.7, 0.3), 0.3, emission=(1.0, 0.7, 0.3), strength=4.0), "arm.R")
+        b.box((0.12, 0.12, 0.03), (-0.29, 0.02, 0.56), metal, "arm.R")
 
     rig = humanoid(
         "Conductor",
@@ -506,7 +716,12 @@ def patient_zero():
         b.box((0.66, 0.4, 0.62), (0, 0, 0.95), material("Gown", hexcolor(0x9bb0a8)), "hips")  # avental
         b.box((0.3, 0.3, 0.06), (0, 0.0, 1.47), material("Bandage", hexcolor(0xd8d2c0)), "head")
         b.box((0.08, 0.3, 0.08), (0.36, 0.02, 1.06), material("Bandage", hexcolor(0xd8d2c0)), "arm.L")
-        b.sphere(0.14, (0.16, 0.12, 1.32), material("Tumor", hexcolor(0x8a4b52), 0.7), "spine", scale=(1.0, 0.8, 1.0))
+        tumor = material("Tumor", hexcolor(0x8a4b52), 0.7)
+        b.sphere(0.14, (0.16, 0.12, 1.32), tumor, "spine", scale=(1.0, 0.8, 1.0))
+        b.sphere(0.09, (-0.2, -0.14, 1.4), tumor, "spine")
+        b.sphere(0.07, (0.1, 0.1, 1.72), tumor, "head")
+        b.box((0.13, 0.13, 0.04), (-0.36, 0.0, 0.92), material("Bandage", hexcolor(0xd8d2c0)), "arm.R")  # pulseira
+        b.cylinder(0.012, 0.6, (0.3, -0.12, 1.15), material("Glow", (0.7, 1.0, 0.2), 0.3, emission=(0.7, 1.0, 0.2), strength=2.0), "spine", rot=(0.3, 0, 0))  # tubo
 
     rig = humanoid(
         "PatientZero",
@@ -604,6 +819,9 @@ def weapon(kind):
     else:
         body(0.3)
         handle()
+    if kind not in ("pistol", "akimbo", "revolver", "launcher"):
+        b.box((0.02, 0.04, 0.03), (0, 0.02, 0.13), metal)  # mira traseira
+        b.box((0.03, 0.02, 0.012), (0, 0.02, -0.08), metal)  # guarda-mato
     b.box((0.01, 0.01, 0.01), (0, 0.0, 0.0), metal)  # garante o material Metal
     obj = b.build("Gun_" + kind)
     return obj
@@ -625,6 +843,9 @@ def mystery_box():
     b.box((0.08, 1.16, 0.8), (0.98, 0, 0.4), gold, "base")
     b.box((0.08, 1.16, 0.8), (-0.98, 0, 0.4), gold, "base")
     b.box((0.2, 0.02, 0.3), (0, 0.56, 0.45), glow, "base")  # "?"
+    b.box((0.2, 0.02, 0.3), (0, -0.56, 0.45), glow, "base")
+    for x in (-1.03, 1.03):
+        b.box((0.04, 0.3, 0.06), (x, 0, 0.55), gold, "base")  # alças
     b.box((2.0, 1.1, 0.14), (0, 0, 0.07), wood, "lid")
     b.box((2.06, 1.16, 0.04), (0, 0, 0.02), gold, "lid")
     mesh = b.build("MysteryBox")
@@ -683,7 +904,7 @@ def preview(path, distance=4.0, height=1.0, pose_action=None, frame=0):
     scene = bpy.context.scene
     scene.render.engine = "BLENDER_WORKBENCH"
     scene.display.shading.light = "STUDIO"
-    scene.display.shading.color_type = "MATERIAL"
+    scene.display.shading.color_type = "TEXTURE"
     scene.render.resolution_x = 480
     scene.render.resolution_y = 480
     scene.render.film_transparent = False
@@ -730,6 +951,7 @@ def main():
     for name in names:
         folder, build, distance, height, pose = MODELS[name]
         reset_scene()
+        _style["value"] = "zombie" if name in ("zombie", "hound", "boss_conductor", "boss_patient_zero") else "human"
         build()
         out = os.path.join(ASSETS, folder, name + ".glb")
         export(out)

@@ -19,7 +19,9 @@ var _push_timer: Timer
 
 
 func _ready() -> void:
-	_session = _load_session()
+	# Testes (godot -s res://tests/...) nunca usam a conta do jogador: sem sessão, nada vai
+	# para a nuvem (o save de teste não pode sobrescrever o save de verdade).
+	_session = {} if is_test_run() else _load_session()
 	_push_timer = Timer.new()
 	_push_timer.one_shot = true
 	_push_timer.timeout.connect(_push_later)
@@ -29,6 +31,14 @@ func _ready() -> void:
 			_push_timer.start(Online.data.sync_debounce))
 	if current_user() != "":
 		sync_now.call_deferred()
+
+
+## O jogo foi aberto por um script de teste?
+static func is_test_run() -> bool:
+	for arg in OS.get_cmdline_args():
+		if arg.begins_with("res://tests/"):
+			return true
+	return false
 
 
 ## Nome do usuário logado ("" se ninguém).

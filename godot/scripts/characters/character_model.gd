@@ -125,6 +125,8 @@ func _own_materials() -> void:
 			if not copies.has(original):
 				var copy := original.duplicate() as StandardMaterial3D
 				copy.resource_name = original.resource_name
+				# Texturas pixeladas (como a arte do jogo web).
+				copy.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST_WITH_MIPMAPS
 				copies[original] = copy
 				materials.append(copy)
 			mesh_instance.set_surface_override_material(i, copies[original])

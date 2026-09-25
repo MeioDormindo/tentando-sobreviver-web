@@ -238,6 +238,11 @@ func _show_gun(kind: StringName) -> void:
 	if _gun_model:
 		_gun_model.queue_free()
 	_gun_model = (load(path) as PackedScene).instantiate() as Node3D
+	for mesh: MeshInstance3D in _gun_model.find_children("*", "MeshInstance3D", true, false):
+		for i in mesh.get_surface_override_material_count():
+			var material := mesh.mesh.surface_get_material(i) as StandardMaterial3D
+			if material:
+				material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST_WITH_MIPMAPS
 	_gun_model.name = "GunModel"
 	var hand := $Pivot/Hand as Node3D
 	hand.add_child(_gun_model)
