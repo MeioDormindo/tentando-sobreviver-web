@@ -51,7 +51,11 @@ de conceitos: ver `docs/analise-typescript.md`.
   história do mapa e a placa de créditos;
 - **sons e música do jogo web**: os 142 sons (293 variações) são os mesmos, sintetizados pelo
   código do jogo web e exportados para WAV (`npm run godot:audio`, na raiz do repositório;
-  o Godot comprime em QOA na importação). Tiros, recargas, faca, passos pelo tipo de piso,
+  o Godot comprime em QOA na importação). **Cada sala dos 3 mapas tem a sua música tema** (25 loops sintetizados
+  em `scripts/godot/area-music.ts`, com instrumento, melodia e textura próprios — órgão de estação,
+  monitor cardíaco na UTI, caixinha de música na Pediatria, lira dórica nas Ruínas, tambores no
+  Submundo...): ela é a camada de exploração e troca com crossfade ao mudar de sala, no mesmo
+  compasso das camadas de combate. Tiros, recargas, faca, passos pelo tipo de piso,
   zumbis (gemidos, golpes, mortes, armadura, cuspe), boss, barricadas, máquinas, eventos
   (sirene, gás, trem, avião, caixa), ambiente por área com transição e sons em volta,
   batimento com pouca vida e a música adaptativa em camadas (exploração, round, alta

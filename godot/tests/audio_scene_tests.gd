@@ -33,6 +33,7 @@ func run(tree: SceneTree) -> int:
 	_voices()
 	_weapon_shots()
 	await _game_sounds()
+	await _area_themes()
 	await _music()
 
 	_main.queue_free()
@@ -71,7 +72,7 @@ func _playing(key: String) -> Array[Node]:
 
 func _catalog() -> void:
 	var sounds: Dictionary = _audio.config.get("sounds", {})
-	check(sounds.size() == 146, "catálogo do jogo web + 4 ambientes do Templo: %d sons" % sounds.size())
+	check(sounds.size() == 171, "catálogo do jogo web + 4 ambientes do Templo + 25 temas de sala: %d sons" % sounds.size())
 	var missing: Array[String] = []
 	for key: String in sounds:
 		for v in int(sounds[key]):
@@ -148,6 +149,41 @@ func _game_sounds() -> void:
 	await _tree.create_timer(0.7).timeout
 	var manager := _main.get_node("AudioManager") as AudioManager
 	check(manager._ambience_loop != "" and manager._ambience != null, "ambiente da área: amb_%s" % manager._ambience_loop)
+
+
+## Música tema de cada sala: toda área dos 3 mapas tem a sua; ao mudar de sala o tema troca
+## com crossfade e começa no mesmo compasso das outras camadas.
+func _area_themes() -> void:
+	var missing: Array[String] = []
+	for map_id: String in ["terminal", "map2", "temple"]:
+		var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/maps/%s.json" % map_id))
+		for area: Dictionary in data.areas:
+			if not _audio.has_sound("mus_area_%s" % area.id):
+				missing.append("%s/%s" % [map_id, area.id])
+	check(missing.is_empty(), "toda sala dos 3 mapas tem música tema%s" % ("" if missing.is_empty() else " — faltam: " + ", ".join(missing)))
+	var manager := _main.get_node("AudioManager") as AudioManager
+	var world := _main.get_node("World") as LayoutMap
+	await _tree.create_timer(0.7).timeout
+	var here := String(world.area_of(_player.global_position))
+	check(manager.current_theme() == "mus_area_%s" % here, "tema da sala atual (%s): %s" % [here, manager.current_theme()])
+	# Vai para outra sala: o tema troca, com as duas tocando no crossfade.
+	var other: Dictionary = {}
+	for area: Dictionary in world.data.areas:
+		if String(area.id) != here:
+			other = area
+			break
+	var r: Dictionary = other.rects[0]
+	world.open_area(StringName(other.id))
+	_player.global_position = Vector3(float(r.x) + float(r.w) * 0.5, 0.1, float(r.y) + float(r.h) * 0.5)
+	await _tree.create_timer(0.7).timeout
+	var key := "mus_area_%s" % other.id
+	check(manager.current_theme() == key and manager._pad_players.has(key) and manager._pad_players.has("mus_area_%s" % here), "mudou de sala: crossfade para %s" % key)
+	var pulse: AudioStreamPlayer = manager._layers.get("pulse")
+	var theme: AudioStreamPlayer = manager._pad_players.get(key)
+	var drift := absf(theme.get_playback_position() - pulse.get_playback_position()) if theme and pulse else 99.0
+	check(drift < 0.15 or absf(drift - theme.stream.get_length()) < 0.15, "o tema novo entra no mesmo compasso das outras camadas (%.2f s)" % drift)
+	await _tree.create_timer(AudioManager.THEME_FADE + 0.4).timeout
+	check(not manager._pad_players.has("mus_area_%s" % here) and is_equal_approx(float(manager._pad_weights[key]), 1.0), "o tema anterior sai ao fim do crossfade")
 
 
 func _music() -> void:

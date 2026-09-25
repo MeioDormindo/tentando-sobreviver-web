@@ -30,6 +30,12 @@ var _last_hit_sound := 0.0
 var _clock := 0.0
 var _first_weapon_change := true
 var _layers: Dictionary = {}
+## Música tema da sala (camada de exploração): chave → player e peso (0 a 1) no crossfade.
+## O tema da área atual sobe; os outros descem e somem. Sem tema, a camada "mus_pad" antiga.
+const THEME_FADE := 3.0
+var pad_key := "mus_pad"
+var _pad_players: Dictionary = {}
+var _pad_weights: Dictionary = {}
 var _levels: Dictionary = {"pad": 0.0, "pulse": 0.0, "drive": 0.0, "boss": 0.0}
 var _round_active := false
 var _boss_active := false
@@ -52,6 +58,9 @@ func _ready() -> void:
 		var sound := Audio.loop("mus_" + layer, "music", 0.0)
 		if sound:
 			_layers[layer] = sound
+	if _layers.has("pad"):
+		_pad_players["mus_pad"] = _layers["pad"]
+		_pad_weights["mus_pad"] = 1.0
 	_connect_events()
 
 
@@ -205,6 +214,7 @@ func _update_area(delta: float) -> void:
 	if area == &"" or area == _area:
 		return
 	_area = area
+	set_area_theme(area)
 	var loop_id := String(Audio.config.get("ambience_alias", {}).get(String(area), String(area)))
 	if loop_id == _ambience_loop or not Audio.has_sound("amb_" + loop_id):
 		return
@@ -308,9 +318,59 @@ func _update_music(delta: float) -> void:
 		var goal := float(target.get(layer, 0.0))
 		var current: float = _levels[layer]
 		_levels[layer] = minf(goal, current + step) if current < goal else maxf(goal, current - step)
+		if layer == "pad":
+			continue
 		var sound: AudioStreamPlayer = _layers.get(layer)
 		if sound and is_instance_valid(sound):
 			sound.volume_db = linear_to_db(maxf(0.0001, float(_levels[layer]) * base))
+	# Camada de exploração: o tema da sala (com crossfade entre salas).
+	_update_themes(delta, float(_levels["pad"]), base)
+
+
+## Troca a música de exploração para o tema da área (crossfade de THEME_FADE s, começando na
+## mesma posição das outras camadas: tudo continua no mesmo compasso).
+func set_area_theme(area: StringName) -> void:
+	var key := "mus_area_%s" % area
+	if not Audio.has_sound(key):
+		key = "mus_pad"
+	if key == pad_key:
+		return
+	pad_key = key
+	if not _pad_players.has(key) or not is_instance_valid(_pad_players[key]):
+		var sound := Audio.loop(key, "music", 0.0)
+		if sound == null:
+			return
+		var reference: AudioStreamPlayer = _layers.get("pulse", _layers.get("pad"))
+		if reference and is_instance_valid(reference) and reference.playing and sound.stream:
+			var length := sound.stream.get_length()
+			if length > 0.0:
+				sound.seek(fposmod(reference.get_playback_position(), length))
+		_pad_players[key] = sound
+		_pad_weights[key] = 0.0
+
+
+## Música tema tocando agora (a de maior peso).
+func current_theme() -> String:
+	return pad_key
+
+
+func _update_themes(delta: float, pad_level: float, base: float) -> void:
+	var step := delta / THEME_FADE
+	for key: String in _pad_players.keys():
+		var sound: AudioStreamPlayer = _pad_players[key]
+		var weight: float = _pad_weights.get(key, 0.0)
+		weight = minf(1.0, weight + step) if key == pad_key else maxf(0.0, weight - step)
+		_pad_weights[key] = weight
+		if not is_instance_valid(sound):
+			_pad_players.erase(key)
+			_pad_weights.erase(key)
+			continue
+		if weight <= 0.0 and key != pad_key and key != "mus_pad":
+			sound.queue_free()
+			_pad_players.erase(key)
+			_pad_weights.erase(key)
+			continue
+		sound.volume_db = linear_to_db(maxf(0.0001, pad_level * base * weight))
 
 
 func _sting(key: String, volume: float) -> void:
