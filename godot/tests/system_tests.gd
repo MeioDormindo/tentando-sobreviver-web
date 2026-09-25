@@ -189,8 +189,8 @@ func _test_migrated_data() -> void:
 
 
 func _test_maps(tree: SceneTree) -> void:
-	print("Mapas migrados (Terminal e Hospital)")
-	for info in [["res://scenes/maps/terminal.tscn", 128, 121, 7, &"hall"], ["res://scenes/maps/hospital.tscn", 120, 110, 12, &"reception"]]:
+	print("Mapas redesenhados (Terminal e Hospital)")
+	for info in [["res://scenes/maps/terminal.tscn", 100, 104, 7, &"hall"], ["res://scenes/maps/hospital.tscn", 104, 100, 12, &"reception"]]:
 		var map := (load(info[0]) as PackedScene).instantiate() as LayoutMap
 		tree.root.add_child(map)
 		check(map.width == info[1] and map.height == info[2], "%s: %d×%d tiles" % [map.name, map.width, map.height])
@@ -214,6 +214,16 @@ func _test_maps(tree: SceneTree) -> void:
 		check(breaker.size() == 1 and not map.power.is_on, "%s: disjuntor no mapa, energia começa desligada" % map.name)
 		var nav_polys := map.nav_region.navigation_mesh.get_polygon_count()
 		check(nav_polys > 0, "%s: malha de navegação gerada (%d polígonos)" % [map.name, nav_polys])
+		var lit: Array = map.data.areas.filter(func(a: Dictionary) -> bool: return map.area_lighting(StringName(a.id)) == "lit")
+		check(map.data.areas.all(func(a: Dictionary) -> bool: return String(a.get("lighting", "")) in ["lit", "dim", "dark"]) and not lit.is_empty(),
+			"%s: luz por área, %d bem iluminadas" % [map.name, lit.size()])
+		check(map.find_child("Decor", false, false) != null and map.find_child("Decor", false, false).get_child_count() > 50, "%s: decoração espalhada" % map.name)
+		if map.map_id() == "map2":
+			var spots: Dictionary = map.data.quest.serum
+			var on_floor := spots.values().all(func(s: Dictionary) -> bool: return not "#TDW".contains(map.cell(floori(float(s.tx) + 0.5), floori(float(s.ty) + 0.5))))
+			check(spots.size() == 4 and on_floor, "%s: as 4 peças da missão do Soro no chão do mapa" % map.name)
+			check(map.area_of(Vector3(float(spots.fridge.tx), 0, float(spots.fridge.ty) + 0.5)) == &"icu" and map.area_of(Vector3(float(spots.centrifuge.tx), 0, float(spots.centrifuge.ty))) == &"lab",
+				"%s: geladeira na UTI, centrífuga no Laboratório" % map.name)
 		map.free()
 
 

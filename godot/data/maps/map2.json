@@ -1,7 +1,7 @@
 {
  "id": "map2",
- "width": 120,
- "height": 110,
+ "width": 104,
+ "height": 100,
  "legend": {
   "wall": "#",
   "train": "T",
@@ -20,147 +20,139 @@
   }
  },
  "cells": [
-  "########################################################################################################################",
-  "########################################################################################################################",
-  "########################################################################################################################",
-  "########################################################################################################################",
-  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh##lllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
-  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh##lllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
-  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh##lllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
-  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh##lllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
-  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh##lllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
-  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh##lllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
-  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh##lllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
-  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh##lllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
-  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhhDDlllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
-  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhhDDlllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
-  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhhDDlllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
-  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh##lllllllllllllllll#llllllllllllllll#lllllllllllllllll########",
-  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh##llllllllllllllllllllllllllllllllllllllllllllllllllll########",
-  "########hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhh##llllllllllllllllllllllllllllllllllllllllllllllllllll########",
-  "########hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh##llllllllllllllllllllllllllllllllllllllllllllllllllll########",
-  "########hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh##llllllllllllllllllllllllllllllllllllllllllllllllllll########",
-  "########hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh##llllllllllllllllllllllllllllllllllllllllllllllllllll########",
-  "########hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh##llllllllllllllllllllllllllllllllllllllllllllllllllll########",
-  "########hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh##llllllllllllllllllllllllllllllllllllllllllllllllllll########",
-  "########hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh##llllllllllllllllllllllllllllllllllllllllllllllllllll########",
-  "########hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh##llllllllllllllllllllllllllllllllllllllllllllllllllll########",
-  "########hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh##llllllllllllllllllllllllllllllllllllllllllllllllllll########",
-  "##############################################DDD#######################DDD#############################################",
-  "##############################################DDD#######################DDD#############################################",
-  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
-  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
-  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
-  "################################ccccc#hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh#ccccc################################",
-  "################################cccccWhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhWccccc################################",
-  "################################cccccWhhhhhhhhhhhhhhhh############hhhhhhhhhhhhhhhhWccccc################################",
-  "################################ccccc#hhhhhhhhhhhhhhhh############hhhhhhhhhhhhhhhh#ccccc################################",
-  "################################ccccc#hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh#ccccc################################",
-  "######################################hhhhhh##hhhhhhhhhhhhhhhhhhhhhhhhhhhh##hhhhhh######################################",
-  "######################################hhhhhh##hhhhhhhhhhhhhhhhhhhhhhhhhhhh##hhhhhh######################################",
-  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
-  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
-  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
-  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
-  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
-  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
-  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
-  "################################ccccc#hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh#ccccc################################",
-  "################################cccccWhhhhhh##hhhhhhhhhhhhhhhhhhhhhhhhhhhh##hhhhhhWccccc################################",
-  "################################cccccWhhhhhh##hhhhhhhhhhhhhhhhhhhhhhhhhhhh##hhhhhhWccccc################################",
-  "################################ccccc#hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh#ccccc################################",
-  "################################ccccc#hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh#ccccc################################",
-  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
-  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
-  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
-  "######################################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######################################",
-  "##########################################################DDDD##########################################################",
-  "##########################################################DDDD##########################################################",
-  "########llllllllllllllllllllllllllllllll##llllllll#lllllllllllllllllll#lllllll##llllllllllllllllllllllllllllllll########",
-  "########llllllllllllllllllllllllllllllll##llllllll#lllllllllllllllllll#lllllll##llllllllllllllllllllllllllllllll########",
-  "########llllllllllllllllllllllllllllllll##llllllll#lllllllllllllllllll#lllllll##llllllllllllllllllllllllllllllll########",
-  "##ccccc#llllllllllllllllllllllllllllllll##llllllll#lllllllllllllllllll#lllllll##llllllllllllllllllllllllllllllll#ccccc##",
-  "##cccccWllllllllllllllllllllllllllllllll##llllllll#lllllllllllllllllll#lllllll##llllllllllllllllllllllllllllllllWccccc##",
-  "##cccccWllllllllllllllllllllllllllllllll##llllllll#lllllllllllllllllll#lllllll##llllllllllllllllllllllllllllllllWccccc##",
-  "##ccccc#llllllllllllllllllllllllllllllll##llllllll#lllllllllllllllllll#lllllll##llllllllllllllllllllllllllllllll#ccccc##",
-  "##ccccc#llllllllllllllllllllllllllllllll##llllllll#lllllllllllllllllll#lllllll##llllllllllllllllllllllllllllllll#ccccc##",
-  "########llllllllllllllllllllllllllllllllDDllllllllllllllllllllllllllllllllllllDDllllllllllllllllllllllllllllllll########",
-  "########llllllllllllllllllllllllllllllllDDllllllllllllllllllllllllllllllllllllDDllllllllllllllllllllllllllllllll########",
-  "########llllllllllllllllllllllllllllllllDDllllllllllllllll####llllllllllllllllDDllll##########llll##########llll########",
-  "########llllllllllllllllllllllllllllllll##llllllllllllllll####llllllllllllllll##llllllllllllllllllllllllllllllll########",
-  "##ccccc#llllllllllllllllllllllllllllllll##llllllllllllllll####llllllllllllllll##llllllllllllllllllllllllllllllll#ccccc##",
-  "##cccccWllllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllllWccccc##",
-  "##cccccWllllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllllWccccc##",
-  "##ccccc#llllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllll#ccccc##",
-  "##ccccc#llllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllll#ccccc##",
-  "########llllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllll########",
-  "########llllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllll########",
-  "########llllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllllllll##llllllllllllllllllllllllllllllll########",
-  "####################DDD#################################DDD###################################DDD#######################",
-  "####################DDD#################################DDD###################################DDD#######################",
-  "########llllllllllllllllllllllllllll##gggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
-  "########llllllllllllllllllllllllllll##gggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
-  "########llllllllllllllllllllllllllll##gggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
-  "########llllllllllllllllllllllllllll##gggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
-  "########llllllllllllllllllllllllllll##gggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
-  "########llllllllllllllllllllllllllll##gggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
-  "########llllllllllllllllllllllllllllDDgggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
-  "########llllllllllllllllllllllllllllDDgggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
-  "########llllllllllllllllllllllllllllDDgggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
-  "########llllllllllllllllllllllllllll##gggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
-  "########llllllllllllllllllllllllllll##gggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
-  "########llllllllllllllllllllllllllll##gggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
-  "########llllllllllllllllllllllllllll##gggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
-  "########llllllllllllllllllllllllllll##gggggggggggggggggggggggggggggggggggg##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh########",
-  "##################################################DDD###############################DDD#################################",
-  "##################################################DDD###############################DDD#################################",
-  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
-  "########################################################################################################################",
-  "########################################################################################################################"
+  "########################################################################################################",
+  "########################################################################################################",
+  "########################################################################################################",
+  "######hhhhhhhhhhhhhh#hhhhhhhhhhhhhh#hhhhhhhhhhhhhh####hhhhhhhh#hhhhhhhhh#hhhhhhhhh#hhhhhhhhhhhhhhh######",
+  "######hhhhhhhhhhhhhh#hhhhhhhhhhhhhh#hhhhhhhhhhhhhh####hhhhhhhh#hhhhhhhhh#hhhhhhhhh#hhhhhhhhhhhhhhh######",
+  "######hhhhhhhhhhhhhh#hhhhhhhhhhhhhh#hhhhhhhhhhhhhh####hhhhhhhh#hhhhhhhhh#hhhhhhhhh#hhhhhhhhhhhhhhh######",
+  "######hhhhhhhhhhhhhh#hhhhhhhhhhhhhh#hhhhhhhhhhhhhh####hhhhhhhh#hhhhhhhhh#hhhhhhhhh#hhhhhhhhhhhhhhh######",
+  "######hhhhhhhhhhhhhh#hhhhhhhhhhhhhh#hhhhhhhhhhhhhh####hhhhhhhh#hhhhhhhhh#hhhhhhhhh#hhhhhhhhhhhhhhh######",
+  "######hhhhhhhhhhhhhh#hhhhhhhhhhhhhh#hhhhhhhhhhhhhh####hhhhhhhh#hhhhhhhhh#hhhhhhhhh#hhhhhhhhhhhhhhh######",
+  "######hhhhhhhhhhhhhh#hhhhhhhhhhhhhh#hhhhhhhhhhhhhh####hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######",
+  "###########hhh############hhh##########hhh######hhDDDDhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######",
+  "######hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhDDDDhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######",
+  "######hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhDDDDhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######",
+  "######hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh####hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######",
+  "######hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh####hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######",
+  "######hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh####hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######",
+  "######hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh####hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######",
+  "######hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh####hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######",
+  "######hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh####hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######",
+  "######hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh####hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######",
+  "######hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh####hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######",
+  "######################################DDD#######################DDD#####################################",
+  "######################################DDD#######################DDD#####################################",
+  "######################################DDD#######################DDD#####################################",
+  "##############################llllllllllllllllllllllllllllllllllllllllllll##############################",
+  "##############################llllllllllllllllllllllllllllllllllllllllllll##############################",
+  "########################ccccc#llllllllllllllllllllllllllllllllllllllllllll#ccccc########################",
+  "########################ccccc#llllllllllllllllllllllllllllllllllllllllllll#ccccc########################",
+  "########################cccccWllllllllllllllllllllllllllllllllllllllllllllWccccc########################",
+  "########################cccccWllllll##llllllllllllllllllllllllllll##llllllWccccc########################",
+  "########################ccccc#llllll##llllllllllllllllllllllllllll##llllll#ccccc########################",
+  "##############################llllllllllllllllllllllllllllllllllllllllllll##############################",
+  "##############################llllllllllllllllllllllllllllllllllllllllllll##############################",
+  "##############################llllllllllllllllllllllllllllllllllllllllllll##############################",
+  "##############################llllllllllllllllllllllllllllllllllllllllllll##############################",
+  "##############################llllllllllllllllllllllllllllllllllllllllllll##############################",
+  "########################ccccc#llllllllllllllllllllllllllllllllllllllllllll#ccccc########################",
+  "########################ccccc#llllllllllllllllllllllllllllllllllllllllllll#ccccc########################",
+  "########################cccccWllllll##llllllllllllllllllllllllllll##llllllWccccc########################",
+  "########################cccccWllllll##llllllllllllllllllllllllllll##llllllWccccc########################",
+  "########################ccccc#llllllllllllllllllllllllllllllllllllllllllll#ccccc########################",
+  "##############################llllllllllllllllllllllllllllllllllllllllllll##############################",
+  "##############################llllllllllllllllllllllllllllllllllllllllllll##############################",
+  "##############################llllllllllllllllllllllllllllllllllllllllllll##############################",
+  "##################################################DDDD##################################################",
+  "##################################################DDDD##################################################",
+  "##################################################DDDD##################################################",
+  "########hhhhhhhhhhhhhhhhhhhhhhhh####llllllllll#llllllllll#llllllllll####hhhhhhhhhhhhhhhhhhhhhhhh########",
+  "##ccccc#hhhhhhhhhhhhhhhhhhhhhhhh####llllllllll#llllllllll#llllllllll####hhhhhhhhhhhhhhhhhhhhhhhh#ccccc##",
+  "##ccccc#hhhhhhhhhhhhhhhhhhhhhhhh####llllllllll#llllllllll#llllllllll####hhhhhhhhhhhhhhhhhhhhhhhh#ccccc##",
+  "##cccccWhhhhhhhhhhhhhhhhhhhhhhhh####llllllllll#llllllllll#llllllllll####hhhhhhhhhhhhhhhhhhhhhhhhWccccc##",
+  "##cccccWhhhhhhhhhhhhhhhhhhhhhhhh####llllllllll#llllllllll#llllllllll####hhhhhhhhhhhhhhhhhhhhhhhhWccccc##",
+  "##ccccc#hhhhhhhhhhhhhhhhhhhhhhhh####llllllllll#llllllllll#llllllllll####hhhhhhhhhhhhhhhhhhhhhhhh#ccccc##",
+  "########hhhhhhhhhhhhhhhhhhhhhhhhDDDDllllllllllllllllllllllllllllllllDDDDhhhhhhhhhhhhhhhhhhhhhhhh########",
+  "########hhhhhhhhhhhhhhhhhhhhhhhhDDDDllllllllllllllllllllllllllllllllDDDDhhhhhhhhhhhhhhhhhhhhhhhh########",
+  "########hhhhhhhhhhhhhhhhhhhhhhhhDDDDllllllllllllllllllllllllllllllllDDDDhhhh##############hhhhhh########",
+  "##ccccc#hhhhhhhhhhhhhhhhhhhhhhhh####llllllllllllllllllllllllllllllll####hhhhhhhhhhhhhhhhhhhhhhhh#ccccc##",
+  "##ccccc#hhhhhhhhhhhhhhhhhhhhhhhh####llll####llllllllllllllll####llll####hhhhhhhhhhhhhhhhhhhhhhhh#ccccc##",
+  "##cccccWhhhhhhhhhhhhhhhhhhhhhhhh####llllllllllllllllllllllllllllllll####hhhhhhhhhhhhhhhhhhhhhhhhWccccc##",
+  "##cccccWhhhhhhhhhhhhhhhhhhhhhhhh####llllllllllllllllllllllllllllllll####hhhhhhhhhhhhhhhhhhhhhhhhWccccc##",
+  "##ccccc#hhhhhhhhhhhhhhhhhhhhhhhh####llllllllllllllllllllllllllllllll####hhhhhhhhhhhhhhhhhhhhhhhh#ccccc##",
+  "########hhhhhhhhhhhhhhhhhhhhhhhh####llllllllllllllllllllllllllllllll####hhhhhhhhhhhhhhhhhhhhhhhh########",
+  "########hhhhhhhhhhhhhhhhhhhhhhhh####llllllllllllllllllllllllllllllll####hhhhhhhhhhhhhhhhhhhhhhhh########",
+  "##################DDD#############################DDD#############################DDD###################",
+  "##################DDD#############################DDD#############################DDD###################",
+  "##################DDD#############################DDD#############################DDD###################",
+  "##################DDD#############################DDD#############################DDD###################",
+  "########llllllllllllllllllllllll####gggggggggggggggggggggggggggggggg####llllllllllllllllllllllll########",
+  "########llllllllllllllllllllllll####gggggggggggggggggggggggggggggggg####llllllllllllllllllllllll########",
+  "########llllllllllllllllllllllll####gggggggggggggggggggggggggggggggg####llllllllllllllllllllllll########",
+  "########llllllllllllllllllllllll####gggggggggggggggggggggggggggggggg####llllllllllllllllllllllll########",
+  "########llllllllllllllllllllllll####gggggggggggggggggggggggggggggggg####llllllllllllllllllllllll########",
+  "########llllllllllllllllllllllllDDDDgggggggggggggggggggggggggggggggg####llllllllllllllllllllllll########",
+  "########llllllllllllllllllllllllDDDDgggggggggggggggggggggggggggggggg####llllllllllllllllllllllll########",
+  "########llllllllllllllllllllllllDDDDgggggg#gggggggggggggggggg#gggggg####llllllllllllllllllllllll########",
+  "########llllllllllllllllllllllll####gggggg#gggggggggggggggggg#gggggg####llllllllllllllllllllllll########",
+  "########llllllllllllllllllllllll####gggggg#gggggggggggggggggg#gggggg####llllllllllllllllllllllll########",
+  "########llllllllllllllllllllllll####gggggg#gggggggggggggggggg#gggggg####llllllllllllllllllllllll########",
+  "########llllllllllllllllllllllll####gggggggggggggggggggggggggggggggg####llllllllllllllllllllllll########",
+  "########llllllllllllllllllllllll####gggggggggggggggggggggggggggggggg####llllllllllllllllllllllll########",
+  "########llllllllllllllllllllllll####gggggggggggggggggggggggggggggggg####llllllllllllllllllllllll########",
+  "##############################################DDD#############################DDD#######################",
+  "##############################################DDD#############################DDD#######################",
+  "##############################################DDD#############################DDD#######################",
+  "##############################################DDD#############################DDD#######################",
+  "####################hhhhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhhh####################",
+  "####################hhhhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhhh####################",
+  "####################hhhhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhhh####################",
+  "####################hhhhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhhh####################",
+  "####################hhhhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhhhhhhhhhhhhh#hhhhhhhhhhhhhhhhh####################",
+  "####################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh####################",
+  "####################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh####################",
+  "####################hhhhhhhhhh######hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh######hhhhhhhh####################",
+  "####################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh####################",
+  "####################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh####################",
+  "####################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh####################",
+  "####################hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh####################",
+  "########################################################################################################",
+  "########################################################################################################",
+  "########################################################################################################"
  ],
  "start_area": "reception",
  "player_start": {
-  "x": 60.5,
-  "z": 44.5
+  "x": 52.5,
+  "z": 37.5
  },
  "outside_darkness": 0.84,
  "areas": [
   {
    "id": "reception",
    "name": "Recepção",
-   "darkness": 0.6,
+   "darkness": 0.58,
+   "lighting": "lit",
    "rects": [
     {
-     "x": 38,
-     "y": 28,
+     "x": 30,
+     "y": 24,
      "w": 44,
-     "h": 26
+     "h": 20
     }
    ]
   },
   {
    "id": "surgery",
    "name": "Centro Cirúrgico",
-   "darkness": 0.76,
+   "darkness": 0.74,
+   "lighting": "dim",
    "rects": [
     {
-     "x": 8,
-     "y": 4,
-     "w": 50,
-     "h": 22
+     "x": 6,
+     "y": 3,
+     "w": 44,
+     "h": 18
     }
    ]
   },
@@ -168,38 +160,41 @@
    "id": "icu",
    "name": "UTI",
    "darkness": 0.72,
+   "lighting": "dim",
    "rects": [
     {
-     "x": 60,
-     "y": 4,
-     "w": 52,
-     "h": 22
+     "x": 54,
+     "y": 3,
+     "w": 44,
+     "h": 18
     }
    ]
   },
   {
    "id": "ward",
    "name": "Enfermaria",
-   "darkness": 0.7,
+   "darkness": 0.68,
+   "lighting": "lit",
    "rects": [
     {
      "x": 8,
-     "y": 56,
-     "w": 32,
-     "h": 20
+     "y": 47,
+     "w": 24,
+     "h": 16
     }
    ]
   },
   {
    "id": "radiology",
    "name": "Radiologia",
-   "darkness": 0.78,
+   "darkness": 0.8,
+   "lighting": "dark",
    "rects": [
     {
-     "x": 42,
-     "y": 56,
-     "w": 36,
-     "h": 20
+     "x": 36,
+     "y": 47,
+     "w": 32,
+     "h": 16
     }
    ]
   },
@@ -207,12 +202,13 @@
    "id": "pharmacy",
    "name": "Farmácia",
    "darkness": 0.72,
+   "lighting": "dim",
    "rects": [
     {
-     "x": 80,
-     "y": 56,
-     "w": 32,
-     "h": 20
+     "x": 72,
+     "y": 47,
+     "w": 24,
+     "h": 16
     }
    ]
   },
@@ -220,11 +216,12 @@
    "id": "pediatrics",
    "name": "Pediatria",
    "darkness": 0.8,
+   "lighting": "dark",
    "rects": [
     {
      "x": 8,
-     "y": 78,
-     "w": 28,
+     "y": 67,
+     "w": 24,
      "h": 14
     }
    ]
@@ -233,11 +230,12 @@
    "id": "morgue",
    "name": "Necrotério",
    "darkness": 0.88,
+   "lighting": "dark",
    "rects": [
     {
-     "x": 38,
-     "y": 78,
-     "w": 36,
+     "x": 36,
+     "y": 67,
+     "w": 32,
      "h": 14
     }
    ]
@@ -245,12 +243,13 @@
   {
    "id": "cafeteria",
    "name": "Refeitório",
-   "darkness": 0.74,
+   "darkness": 0.7,
+   "lighting": "lit",
    "rects": [
     {
-     "x": 76,
-     "y": 78,
-     "w": 36,
+     "x": 72,
+     "y": 67,
+     "w": 24,
      "h": 14
     }
    ]
@@ -259,66 +258,39 @@
    "id": "lab",
    "name": "Laboratório",
    "darkness": 0.86,
+   "lighting": "dark",
    "rects": [
     {
-     "x": 24,
-     "y": 94,
-     "w": 72,
-     "h": 14
+     "x": 20,
+     "y": 85,
+     "w": 64,
+     "h": 12
     }
    ]
   }
  ],
  "doors": [
   {
-   "id": "door_reception_radiology",
+   "id": "door_surgery_icu",
    "rect": {
-    "x": 58,
-    "y": 54,
+    "x": 50,
+    "y": 10,
     "w": 4,
-    "h": 2
-   },
-   "cost": 750,
-   "areas": [
-    "reception",
-    "radiology"
-   ]
-  },
-  {
-   "id": "door_radiology_ward",
-   "rect": {
-    "x": 40,
-    "y": 64,
-    "w": 2,
     "h": 3
    },
-   "cost": 1000,
+   "cost": 1250,
    "areas": [
-    "radiology",
-    "ward"
-   ]
-  },
-  {
-   "id": "door_radiology_pharmacy",
-   "rect": {
-    "x": 78,
-    "y": 64,
-    "w": 2,
-    "h": 3
-   },
-   "cost": 1000,
-   "areas": [
-    "radiology",
-    "pharmacy"
+    "surgery",
+    "icu"
    ]
   },
   {
    "id": "door_reception_surgery",
    "rect": {
-    "x": 46,
-    "y": 26,
+    "x": 38,
+    "y": 21,
     "w": 3,
-    "h": 2
+    "h": 3
    },
    "cost": 1500,
    "areas": [
@@ -329,10 +301,10 @@
   {
    "id": "door_reception_icu",
    "rect": {
-    "x": 72,
-    "y": 26,
+    "x": 64,
+    "y": 21,
     "w": 3,
-    "h": 2
+    "h": 3
    },
    "cost": 1500,
    "areas": [
@@ -341,26 +313,54 @@
    ]
   },
   {
-   "id": "door_surgery_icu",
+   "id": "door_radiology_ward",
    "rect": {
-    "x": 58,
-    "y": 12,
-    "w": 2,
+    "x": 32,
+    "y": 53,
+    "w": 4,
     "h": 3
    },
-   "cost": 1250,
+   "cost": 1000,
    "areas": [
-    "surgery",
-    "icu"
+    "radiology",
+    "ward"
+   ]
+  },
+  {
+   "id": "door_reception_radiology",
+   "rect": {
+    "x": 50,
+    "y": 44,
+    "w": 4,
+    "h": 3
+   },
+   "cost": 750,
+   "areas": [
+    "reception",
+    "radiology"
+   ]
+  },
+  {
+   "id": "door_radiology_pharmacy",
+   "rect": {
+    "x": 68,
+    "y": 53,
+    "w": 4,
+    "h": 3
+   },
+   "cost": 1000,
+   "areas": [
+    "radiology",
+    "pharmacy"
    ]
   },
   {
    "id": "door_ward_pediatrics",
    "rect": {
-    "x": 20,
-    "y": 76,
+    "x": 18,
+    "y": 63,
     "w": 3,
-    "h": 2
+    "h": 4
    },
    "cost": 1250,
    "areas": [
@@ -371,10 +371,10 @@
   {
    "id": "door_radiology_morgue",
    "rect": {
-    "x": 56,
-    "y": 76,
+    "x": 50,
+    "y": 63,
     "w": 3,
-    "h": 2
+    "h": 4
    },
    "cost": 2000,
    "areas": [
@@ -383,25 +383,11 @@
    ]
   },
   {
-   "id": "door_pharmacy_cafeteria",
-   "rect": {
-    "x": 94,
-    "y": 76,
-    "w": 3,
-    "h": 2
-   },
-   "cost": 1500,
-   "areas": [
-    "pharmacy",
-    "cafeteria"
-   ]
-  },
-  {
    "id": "door_pediatrics_morgue",
    "rect": {
-    "x": 36,
-    "y": 84,
-    "w": 2,
+    "x": 32,
+    "y": 72,
+    "w": 4,
     "h": 3
    },
    "cost": 1250,
@@ -411,12 +397,26 @@
    ]
   },
   {
+   "id": "door_pharmacy_cafeteria",
+   "rect": {
+    "x": 82,
+    "y": 63,
+    "w": 3,
+    "h": 4
+   },
+   "cost": 1500,
+   "areas": [
+    "pharmacy",
+    "cafeteria"
+   ]
+  },
+  {
    "id": "door_morgue_lab",
    "rect": {
-    "x": 50,
-    "y": 92,
+    "x": 46,
+    "y": 81,
     "w": 3,
-    "h": 2
+    "h": 4
    },
    "cost": 3000,
    "areas": [
@@ -427,10 +427,10 @@
   {
    "id": "door_cafeteria_lab",
    "rect": {
-    "x": 84,
-    "y": 92,
+    "x": 78,
+    "y": 81,
     "w": 3,
-    "h": 2
+    "h": 4
    },
    "cost": 2500,
    "areas": [
@@ -443,8 +443,8 @@
   {
    "id": "win_reception_w1",
    "rect": {
-    "x": 37,
-    "y": 32,
+    "x": 29,
+    "y": 28,
     "w": 1,
     "h": 2
    },
@@ -453,8 +453,8 @@
   {
    "id": "win_reception_w2",
    "rect": {
-    "x": 37,
-    "y": 46,
+    "x": 29,
+    "y": 38,
     "w": 1,
     "h": 2
    },
@@ -463,8 +463,8 @@
   {
    "id": "win_reception_e1",
    "rect": {
-    "x": 82,
-    "y": 32,
+    "x": 74,
+    "y": 28,
     "w": 1,
     "h": 2
    },
@@ -473,8 +473,8 @@
   {
    "id": "win_reception_e2",
    "rect": {
-    "x": 82,
-    "y": 46,
+    "x": 74,
+    "y": 38,
     "w": 1,
     "h": 2
    },
@@ -484,7 +484,7 @@
    "id": "win_ward_1",
    "rect": {
     "x": 7,
-    "y": 60,
+    "y": 50,
     "w": 1,
     "h": 2
    },
@@ -494,7 +494,7 @@
    "id": "win_ward_2",
    "rect": {
     "x": 7,
-    "y": 69,
+    "y": 58,
     "w": 1,
     "h": 2
    },
@@ -503,8 +503,8 @@
   {
    "id": "win_pharmacy_1",
    "rect": {
-    "x": 112,
-    "y": 60,
+    "x": 96,
+    "y": 50,
     "w": 1,
     "h": 2
    },
@@ -513,8 +513,8 @@
   {
    "id": "win_pharmacy_2",
    "rect": {
-    "x": 112,
-    "y": 69,
+    "x": 96,
+    "y": 58,
     "w": 1,
     "h": 2
    },
@@ -523,163 +523,163 @@
  ],
  "spawns": [
   {
-   "id": "R1",
-   "x": 34.5,
-   "z": 33.5,
-   "area": "reception",
-   "min_round": 1
-  },
-  {
-   "id": "R2",
-   "x": 34.5,
-   "z": 47.5,
-   "area": "reception",
-   "min_round": 1
-  },
-  {
-   "id": "R3",
-   "x": 85.5,
-   "z": 33.5,
-   "area": "reception",
-   "min_round": 1
-  },
-  {
-   "id": "R4",
-   "x": 85.5,
-   "z": 47.5,
-   "area": "reception",
-   "min_round": 1
-  },
-  {
-   "id": "W1",
-   "x": 4.5,
-   "z": 61.5,
-   "area": "ward",
-   "min_round": 1
-  },
-  {
-   "id": "W2",
-   "x": 4.5,
-   "z": 70.5,
-   "area": "ward",
-   "min_round": 1
-  },
-  {
-   "id": "F1",
-   "x": 115.5,
-   "z": 61.5,
-   "area": "pharmacy",
-   "min_round": 1
-  },
-  {
-   "id": "F2",
-   "x": 115.5,
-   "z": 70.5,
-   "area": "pharmacy",
-   "min_round": 1
-  },
-  {
    "id": "S1",
-   "x": 9.5,
-   "z": 5.5,
+   "x": 7.5,
+   "z": 4.5,
    "area": "surgery",
    "min_round": 1
   },
   {
    "id": "S2",
    "x": 30.5,
-   "z": 24.5,
+   "z": 20.5,
    "area": "surgery",
    "min_round": 1
   },
   {
    "id": "I1",
-   "x": 110.5,
-   "z": 5.5,
+   "x": 96.5,
+   "z": 4.5,
    "area": "icu",
    "min_round": 1
   },
   {
    "id": "I2",
-   "x": 90.5,
-   "z": 24.5,
+   "x": 70.5,
+   "z": 20.5,
    "area": "icu",
    "min_round": 1
   },
   {
+   "id": "R1",
+   "x": 26.5,
+   "z": 28.5,
+   "area": "reception",
+   "min_round": 1
+  },
+  {
+   "id": "R2",
+   "x": 26.5,
+   "z": 38.5,
+   "area": "reception",
+   "min_round": 1
+  },
+  {
+   "id": "R3",
+   "x": 77.5,
+   "z": 28.5,
+   "area": "reception",
+   "min_round": 1
+  },
+  {
+   "id": "R4",
+   "x": 77.5,
+   "z": 38.5,
+   "area": "reception",
+   "min_round": 1
+  },
+  {
+   "id": "W1",
+   "x": 4.5,
+   "z": 50.5,
+   "area": "ward",
+   "min_round": 1
+  },
+  {
+   "id": "W2",
+   "x": 4.5,
+   "z": 58.5,
+   "area": "ward",
+   "min_round": 1
+  },
+  {
    "id": "X1",
-   "x": 43.5,
-   "z": 57.5,
+   "x": 37.5,
+   "z": 48.5,
    "area": "radiology",
    "min_round": 1
   },
   {
    "id": "X2",
-   "x": 76.5,
-   "z": 57.5,
+   "x": 66.5,
+   "z": 48.5,
    "area": "radiology",
+   "min_round": 1
+  },
+  {
+   "id": "F1",
+   "x": 99.5,
+   "z": 50.5,
+   "area": "pharmacy",
+   "min_round": 1
+  },
+  {
+   "id": "F2",
+   "x": 99.5,
+   "z": 58.5,
+   "area": "pharmacy",
    "min_round": 1
   },
   {
    "id": "P1",
    "x": 9.5,
-   "z": 79.5,
+   "z": 68.5,
    "area": "pediatrics",
    "min_round": 1
   },
   {
    "id": "P2",
-   "x": 34.5,
-   "z": 90.5,
+   "x": 30.5,
+   "z": 80.5,
    "area": "pediatrics",
    "min_round": 1
   },
   {
    "id": "M1",
-   "x": 39.5,
-   "z": 90.5,
+   "x": 37.5,
+   "z": 80.5,
    "area": "morgue",
    "min_round": 1
   },
   {
    "id": "M2",
-   "x": 72.5,
-   "z": 79.5,
+   "x": 66.5,
+   "z": 68.5,
    "area": "morgue",
    "min_round": 1
   },
   {
    "id": "C1",
-   "x": 110.5,
-   "z": 90.5,
+   "x": 94.5,
+   "z": 80.5,
    "area": "cafeteria",
    "min_round": 1
   },
   {
    "id": "C2",
-   "x": 77.5,
-   "z": 79.5,
+   "x": 73.5,
+   "z": 68.5,
    "area": "cafeteria",
    "min_round": 1
   },
   {
    "id": "L1",
-   "x": 25.5,
-   "z": 95.5,
+   "x": 21.5,
+   "z": 86.5,
    "area": "lab",
    "min_round": 1
   },
   {
    "id": "L2",
-   "x": 94.5,
-   "z": 106.5,
+   "x": 82.5,
+   "z": 96.5,
    "area": "lab",
    "min_round": 1
   },
   {
    "id": "L3",
-   "x": 60.5,
-   "z": 106.5,
+   "x": 52.5,
+   "z": 96.5,
    "area": "lab",
    "min_round": 1
   }
@@ -687,460 +687,635 @@
  "stations": [
   {
    "type": "weapon",
+   "weaponId": "barrett",
+   "tx": 76,
+   "ty": 3,
+   "x": 76.5,
+   "z": 3.5
+  },
+  {
+   "type": "weapon",
    "weaponId": "glock",
-   "tx": 52,
-   "ty": 30,
-   "x": 52.5,
-   "z": 30.5
+   "tx": 44,
+   "ty": 24,
+   "x": 44.5,
+   "z": 24.5
+  },
+  {
+   "type": "ammo",
+   "tx": 60,
+   "ty": 24,
+   "x": 60.5,
+   "z": 24.5
   },
   {
    "type": "weapon",
    "weaponId": "magnum",
-   "tx": 40,
-   "ty": 44,
-   "x": 40.5,
-   "z": 44.5
-  },
-  {
-   "type": "weapon",
-   "weaponId": "barrett",
-   "tx": 104,
-   "ty": 22,
-   "x": 104.5,
-   "z": 22.5
-  },
-  {
-   "type": "weapon",
-   "weaponId": "uzi_dual",
-   "tx": 110,
-   "ty": 66,
-   "x": 110.5,
-   "z": 66.5
-  },
-  {
-   "type": "ammo",
-   "tx": 68,
-   "ty": 30,
-   "x": 68.5,
-   "z": 30.5
+   "tx": 31,
+   "ty": 42,
+   "x": 31.5,
+   "z": 42.5
   },
   {
    "type": "weapon",
    "weaponId": "mp5",
-   "tx": 24,
-   "ty": 57,
-   "x": 24.5,
-   "z": 57.5
+   "tx": 20,
+   "ty": 47,
+   "x": 20.5,
+   "z": 47.5
   },
   {
    "type": "weapon",
    "weaponId": "pump",
-   "tx": 66,
-   "ty": 74,
-   "x": 66.5,
-   "z": 74.5
+   "tx": 62,
+   "ty": 47,
+   "x": 62.5,
+   "z": 47.5
   },
   {
    "type": "ammo",
-   "tx": 46,
-   "ty": 74,
-   "x": 46.5,
-   "z": 74.5
+   "tx": 40,
+   "ty": 47,
+   "x": 40.5,
+   "z": 47.5
+  },
+  {
+   "type": "weapon",
+   "weaponId": "uzi_dual",
+   "tx": 84,
+   "ty": 47,
+   "x": 84.5,
+   "z": 47.5
   },
   {
    "type": "ammo",
-   "tx": 104,
-   "ty": 57,
-   "x": 104.5,
-   "z": 57.5
+   "tx": 74,
+   "ty": 47,
+   "x": 74.5,
+   "z": 47.5
   },
   {
    "type": "ammo",
-   "tx": 30,
-   "ty": 90,
-   "x": 30.5,
-   "z": 90.5
+   "tx": 24,
+   "ty": 67,
+   "x": 24.5,
+   "z": 67.5
   },
   {
    "type": "ammo",
-   "tx": 104,
-   "ty": 90,
-   "x": 104.5,
-   "z": 90.5
+   "tx": 88,
+   "ty": 67,
+   "x": 88.5,
+   "z": 67.5
   },
   {
    "type": "ammo",
    "tx": 70,
-   "ty": 106,
+   "ty": 85,
    "x": 70.5,
-   "z": 106.5
+   "z": 85.5
   }
  ],
  "machines": [
   {
-   "type": "mystery_box",
-   "tx": 41,
-   "ty": 30,
-   "x": 41.5,
-   "z": 30.5
-  },
-  {
-   "type": "weapon_lab",
-   "tx": 52,
-   "ty": 106,
-   "x": 52.5,
-   "z": 106.5
-  },
-  {
-   "type": "perk",
-   "perkId": "quick_revive",
-   "tx": 80,
-   "ty": 40,
-   "x": 80.5,
-   "z": 40.5
-  },
-  {
-   "type": "perk",
-   "perkId": "fortify",
-   "tx": 9,
-   "ty": 74,
-   "x": 9.5,
-   "z": 74.5
-  },
-  {
-   "type": "perk",
-   "perkId": "sprint",
-   "tx": 76,
-   "ty": 72,
-   "x": 76.5,
-   "z": 72.5
-  },
-  {
-   "type": "perk",
-   "perkId": "quick_hands",
-   "tx": 110,
-   "ty": 74,
-   "x": 110.5,
-   "z": 74.5
-  },
-  {
    "type": "perk",
    "perkId": "adrenaline",
-   "tx": 10,
-   "ty": 24,
-   "x": 10.5,
-   "z": 24.5
+   "tx": 6,
+   "ty": 17,
+   "x": 6.5,
+   "z": 17.5
   },
   {
    "type": "perk",
    "perkId": "deadeye",
-   "tx": 110,
-   "ty": 20,
-   "x": 110.5,
-   "z": 20.5
+   "tx": 97,
+   "ty": 18,
+   "x": 97.5,
+   "z": 18.5
+  },
+  {
+   "type": "mystery_box",
+   "tx": 52,
+   "ty": 24,
+   "x": 52.5,
+   "z": 24.5
+  },
+  {
+   "type": "perk",
+   "perkId": "quick_revive",
+   "tx": 73,
+   "ty": 34,
+   "x": 73.5,
+   "z": 34.5
+  },
+  {
+   "type": "perk",
+   "perkId": "fortify",
+   "tx": 8,
+   "ty": 54,
+   "x": 8.5,
+   "z": 54.5
+  },
+  {
+   "type": "perk",
+   "perkId": "sprint",
+   "tx": 67,
+   "ty": 59,
+   "x": 67.5,
+   "z": 59.5
+  },
+  {
+   "type": "perk",
+   "perkId": "quick_hands",
+   "tx": 95,
+   "ty": 55,
+   "x": 95.5,
+   "z": 55.5
+  },
+  {
+   "type": "weapon_lab",
+   "tx": 34,
+   "ty": 85,
+   "x": 34.5,
+   "z": 85.5
   },
   {
    "type": "perk",
    "perkId": "overload",
-   "tx": 30,
-   "ty": 106,
-   "x": 30.5,
-   "z": 106.5
+   "tx": 82,
+   "ty": 90,
+   "x": 82.5,
+   "z": 90.5
   }
  ],
  "box_spots": [
   {
-   "x": 41.5,
-   "z": 30.5,
-   "area": "reception"
-  },
-  {
-   "x": 79.5,
-   "z": 52.5,
-   "area": "reception"
-  },
-  {
-   "x": 40.5,
-   "z": 52.5,
-   "area": "reception"
-  },
-  {
-   "x": 32.5,
-   "z": 20.5,
+   "x": 24.5,
+   "z": 19.5,
    "area": "surgery"
   },
   {
    "x": 86.5,
-   "z": 20.5,
+   "z": 19.5,
    "area": "icu"
   },
   {
-   "x": 30.5,
-   "z": 70.5,
+   "x": 52.5,
+   "z": 24.5,
+   "area": "reception"
+  },
+  {
+   "x": 41.5,
+   "z": 43.5,
+   "area": "reception"
+  },
+  {
+   "x": 63.5,
+   "z": 43.5,
+   "area": "reception"
+  },
+  {
+   "x": 10.5,
+   "z": 61.5,
    "area": "ward"
   },
   {
-   "x": 66.5,
-   "z": 70.5,
+   "x": 51.5,
+   "z": 61.5,
    "area": "radiology"
   },
   {
-   "x": 96.5,
-   "z": 70.5,
+   "x": 90.5,
+   "z": 61.5,
    "area": "pharmacy"
   },
   {
-   "x": 20.5,
-   "z": 88.5,
+   "x": 12.5,
+   "z": 80.5,
    "area": "pediatrics"
   },
   {
-   "x": 60.5,
-   "z": 88.5,
+   "x": 46.5,
+   "z": 80.5,
    "area": "morgue"
   },
   {
-   "x": 96.5,
-   "z": 88.5,
+   "x": 90.5,
+   "z": 79.5,
    "area": "cafeteria"
   },
   {
-   "x": 40.5,
-   "z": 106.5,
+   "x": 28.5,
+   "z": 96.5,
    "area": "lab"
   }
  ],
  "boss_spawns": [
   {
-   "x": 60.5,
-   "z": 42.5
+   "x": 52.5,
+   "z": 34.5
   },
   {
-   "x": 50.5,
-   "z": 42.5
-  },
-  {
-   "x": 70.5,
-   "z": 42.5
+   "x": 44.5,
+   "z": 36.5
   },
   {
    "x": 60.5,
-   "z": 48.5
+   "z": 36.5
+  },
+  {
+   "x": 52.5,
+   "z": 41.5
   }
  ],
  "lamps": [
   {
-   "x": 50.5,
-   "z": 38.5,
-   "radius": 6.875,
-   "intensity": 0.72,
+   "x": 13.5,
+   "z": 6.5,
+   "radius": 6.5,
+   "intensity": 0.6,
    "flicker": 0.1,
-   "color": 14216447
+   "color": 15267583,
+   "broken": false
   },
   {
-   "x": 70.5,
-   "z": 38.5,
-   "radius": 6.875,
-   "intensity": 0.7,
-   "flicker": 0.2,
-   "color": 14216447
-  },
-  {
-   "x": 60.5,
-   "z": 50.5,
-   "radius": 7.188,
-   "intensity": 0.72,
-   "flicker": 0.05,
-   "color": 14216447
-  },
-  {
-   "x": 16.5,
-   "z": 20.5,
-   "radius": 5,
-   "intensity": 0.45,
-   "flicker": 0.4,
-   "color": 14216447
-  },
-  {
-   "x": 40.5,
-   "z": 20.5,
-   "radius": 5,
-   "intensity": 0.45,
-   "flicker": 0.2,
-   "color": 14216447
-  },
-  {
-   "x": 68.5,
-   "z": 14.5,
-   "radius": 5.313,
-   "intensity": 0.5,
-   "flicker": 0.3,
-   "color": 14216447
-  },
-  {
-   "x": 86.5,
-   "z": 14.5,
-   "radius": 5.313,
+   "x": 28.5,
+   "z": 6.5,
+   "radius": 6.5,
    "intensity": 0.55,
-   "flicker": 0.1,
-   "color": 14216447
+   "flicker": 0.5,
+   "color": 15267583,
+   "broken": false
   },
   {
-   "x": 104.5,
-   "z": 14.5,
-   "radius": 5.313,
-   "intensity": 0.5,
-   "flicker": 0.6,
-   "color": 14216447
+   "x": 42.5,
+   "z": 6.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": true
   },
   {
    "x": 18.5,
-   "z": 62.5,
-   "radius": 5.625,
-   "intensity": 0.55,
-   "flicker": 0.2,
-   "color": 14216447
-  },
-  {
-   "x": 30.5,
-   "z": 70.5,
-   "radius": 5.625,
+   "z": 15.5,
+   "radius": 6.5,
    "intensity": 0.5,
-   "flicker": 0.5,
-   "color": 14216447
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": false
   },
   {
-   "x": 46.5,
-   "z": 66.5,
-   "radius": 4.688,
-   "intensity": 0.45,
-   "flicker": 0.4,
-   "color": 14216447
+   "x": 40.5,
+   "z": 15.5,
+   "radius": 6.5,
+   "intensity": 0.5,
+   "flicker": 0.3,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 58.5,
+   "z": 6.5,
+   "radius": 6.5,
+   "intensity": 0.5,
+   "flicker": 0.2,
+   "color": 15267583,
+   "broken": false
   },
   {
    "x": 70.5,
-   "z": 70.5,
-   "radius": 4.688,
+   "z": 6.5,
+   "radius": 6.5,
    "intensity": 0.5,
    "flicker": 0.2,
-   "color": 14216447
+   "color": 15267583,
+   "broken": false
+  },
+  {
+   "x": 82.5,
+   "z": 6.5,
+   "radius": 6.5,
+   "intensity": 0.5,
+   "flicker": 0.2,
+   "color": 15267583,
+   "broken": false
+  },
+  {
+   "x": 94.5,
+   "z": 6.5,
+   "radius": 6.5,
+   "intensity": 0.5,
+   "flicker": 0.2,
+   "color": 15267583,
+   "broken": false
+  },
+  {
+   "x": 75.5,
+   "z": 16.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": false
   },
   {
    "x": 90.5,
-   "z": 62.5,
-   "radius": 5.313,
-   "intensity": 0.55,
-   "flicker": 0.2,
-   "color": 14216447
+   "z": 16.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": true
   },
   {
-   "x": 102.5,
-   "z": 70.5,
-   "radius": 5.313,
-   "intensity": 0.5,
-   "flicker": 0.4,
-   "color": 14216447
+   "x": 42.5,
+   "z": 27.5,
+   "radius": 6.5,
+   "intensity": 0.7,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": false
   },
   {
-   "x": 20.5,
-   "z": 84.5,
-   "radius": 5,
-   "intensity": 0.45,
-   "flicker": 0.6,
-   "color": 16766624
+   "x": 62.5,
+   "z": 27.5,
+   "radius": 6.5,
+   "intensity": 0.7,
+   "flicker": 0.15,
+   "color": 16766624,
+   "broken": false
   },
   {
    "x": 52.5,
-   "z": 84.5,
-   "radius": 4.375,
-   "intensity": 0.4,
-   "flicker": 0.7,
-   "color": 14216447
+   "z": 34.5,
+   "radius": 6.5,
+   "intensity": 0.75,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": false
   },
   {
-   "x": 66.5,
-   "z": 88.5,
-   "radius": 3.75,
-   "intensity": 0.35,
+   "x": 42.5,
+   "z": 41.5,
+   "radius": 6.5,
+   "intensity": 0.65,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 62.5,
+   "z": 41.5,
+   "radius": 6.5,
+   "intensity": 0.6,
    "flicker": 0.5,
-   "color": 14216447
+   "color": 16766624,
+   "broken": false
   },
   {
-   "x": 88.5,
-   "z": 84.5,
-   "radius": 5.625,
-   "intensity": 0.55,
+   "x": 14.5,
+   "z": 50.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 26.5,
+   "z": 50.5,
+   "radius": 6.5,
+   "intensity": 0.6,
    "flicker": 0.2,
-   "color": 16766624
+   "color": 16766624,
+   "broken": false
   },
   {
-   "x": 104.5,
-   "z": 88.5,
-   "radius": 5,
+   "x": 20.5,
+   "z": 58.5,
+   "radius": 6.5,
+   "intensity": 0.55,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 41.5,
+   "z": 50.5,
+   "radius": 6.5,
+   "intensity": 0.5,
+   "flicker": 0.4,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 62.5,
+   "z": 50.5,
+   "radius": 6.5,
+   "intensity": 0.45,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 52.5,
+   "z": 58.5,
+   "radius": 6.5,
+   "intensity": 0.5,
+   "flicker": 0.7,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 40.5,
+   "z": 60.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": true
+  },
+  {
+   "x": 78.5,
+   "z": 50.5,
+   "radius": 6.5,
+   "intensity": 0.55,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 90.5,
+   "z": 50.5,
+   "radius": 6.5,
    "intensity": 0.5,
    "flicker": 0.3,
-   "color": 16766624
-  },
-  {
-   "x": 34.5,
-   "z": 100.5,
-   "radius": 5,
-   "intensity": 0.5,
-   "flicker": 0.3,
-   "color": 10289112
-  },
-  {
-   "x": 60.5,
-   "z": 104.5,
-   "radius": 5.313,
-   "intensity": 0.55,
-   "flicker": 0.2,
-   "color": 10289112
+   "color": 16766624,
+   "broken": false
   },
   {
    "x": 84.5,
-   "z": 100.5,
-   "radius": 5,
+   "z": 59.5,
+   "radius": 6.5,
    "intensity": 0.5,
-   "flicker": 0.5,
-   "color": 10289112
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 14.5,
+   "z": 70.5,
+   "radius": 6.5,
+   "intensity": 0.45,
+   "flicker": 0.6,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 26.5,
+   "z": 76.5,
+   "radius": 6.5,
+   "intensity": 0.4,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 14.5,
+   "z": 78.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": true
+  },
+  {
+   "x": 46.5,
+   "z": 71.5,
+   "radius": 6.5,
+   "intensity": 0.4,
+   "flicker": 0.7,
+   "color": 13625599,
+   "broken": false
+  },
+  {
+   "x": 58.5,
+   "z": 76.5,
+   "radius": 6.5,
+   "intensity": 0.4,
+   "flicker": 0.1,
+   "color": 13625599,
+   "broken": false
+  },
+  {
+   "x": 40.5,
+   "z": 78.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": true
+  },
+  {
+   "x": 78.5,
+   "z": 71.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 90.5,
+   "z": 71.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.2,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 84.5,
+   "z": 77.5,
+   "radius": 6.5,
+   "intensity": 0.55,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 28.5,
+   "z": 89.5,
+   "radius": 6.5,
+   "intensity": 0.5,
+   "flicker": 0.1,
+   "color": 13629680,
+   "broken": false
+  },
+  {
+   "x": 52.5,
+   "z": 90.5,
+   "radius": 6.5,
+   "intensity": 0.55,
+   "flicker": 0.3,
+   "color": 13629680,
+   "broken": false
+  },
+  {
+   "x": 74.5,
+   "z": 88.5,
+   "radius": 6.5,
+   "intensity": 0.45,
+   "flicker": 0.6,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 60.5,
+   "z": 95.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": true
   }
  ],
  "interactions": [
   {
-   "type": "breaker",
-   "tx": 72.6,
-   "ty": 81.5
-  },
-  {
-   "type": "power",
-   "tx": 72.6,
-   "ty": 85
-  },
-  {
    "type": "alarm",
-   "tx": 38.6,
-   "ty": 40
+   "tx": 33,
+   "ty": 24.2
   },
   {
    "type": "trap",
-   "tx": 55.4,
-   "ty": 56.6,
+   "tx": 47,
+   "ty": 47.2,
    "zone": {
-    "x": 57,
-    "y": 56,
+    "x": 49,
+    "y": 47,
     "w": 6,
     "h": 3
    }
   },
   {
+   "type": "breaker",
+   "tx": 44,
+   "ty": 67.2
+  },
+  {
+   "type": "power",
+   "tx": 66.6,
+   "ty": 75
+  },
+  {
    "type": "trap",
-   "tx": 46.4,
-   "ty": 94.6,
+   "tx": 43,
+   "ty": 85.2,
    "zone": {
-    "x": 48,
-    "y": 94,
-    "w": 7,
+    "x": 45,
+    "y": 85,
+    "w": 5,
     "h": 2
    }
   }
@@ -1149,27 +1324,27 @@
  "secrets": {
   "teddies": [
    {
-    "tx": 9,
-    "ty": 91
+    "tx": 8,
+    "ty": 80
    },
    {
-    "tx": 111,
-    "ty": 24
+    "tx": 97,
+    "ty": 12
    },
    {
-    "tx": 73,
-    "ty": 91
+    "tx": 72,
+    "ty": 80
    }
   ],
   "radio": {
-   "tx": 88,
-   "ty": 95,
+   "tx": 76,
+   "ty": 96,
    "holdMs": 900,
    "label": "OUVIR O GRAVADOR"
   },
   "creditsSign": {
-   "tx": 66,
-   "ty": 52.4
+   "tx": 58,
+   "ty": 49
   },
   "loreMessages": [
    "📼 \"Diário do Dr. Almeida, dia 3: a amostra do Paciente Zero reagiu ao soro. As células não param de se dividir.\"",
@@ -1178,77 +1353,47 @@
    "📼 \"...se estiver ouvindo isto: não deixe o Paciente Zero chegar à superfície. O soro está na câmara.\""
   ]
  },
+ "quest": {
+  "serum": {
+   "fridge": {
+    "tx": 92,
+    "ty": 3.2
+   },
+   "cabinet": {
+    "tx": 93,
+    "ty": 47.2
+   },
+   "drawer": {
+    "tx": 59,
+    "ty": 67.2
+   },
+   "centrifuge": {
+    "tx": 52,
+    "ty": 89.5
+   }
+  }
+ },
+ "decor": {
+  "seed": "hospital-2d5",
+  "density": {
+   "reception": 1,
+   "surgery": 1,
+   "icu": 1,
+   "ward": 1,
+   "radiology": 1.2,
+   "pharmacy": 1,
+   "pediatrics": 1.2,
+   "morgue": 1.4,
+   "cafeteria": 1,
+   "lab": 1.3
+  }
+ },
  "props": [
   {
-   "type": "waiting_chairs",
-   "x": 47.5,
-   "z": 50.5,
-   "angle": 0,
-   "body": {
-    "w": 2.438,
-    "d": 0.563,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "waiting_chairs",
-   "x": 51.5,
-   "z": 50.5,
-   "angle": 0,
-   "body": {
-    "w": 2.438,
-    "d": 0.563,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "waiting_chairs",
-   "x": 69.5,
-   "z": 50.5,
-   "angle": 0,
-   "body": {
-    "w": 2.438,
-    "d": 0.563,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "waiting_chairs",
-   "x": 73.5,
-   "z": 50.5,
-   "angle": 0,
-   "body": {
-    "w": 2.438,
-    "d": 0.563,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "iv_stand",
-   "x": 57.5,
-   "z": 45.5,
-   "angle": 0,
-   "body": null,
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
    "type": "gurney",
-   "x": 64.5,
-   "z": 44.5,
-   "angle": 20,
+   "x": 13.5,
+   "z": 6.5,
+   "angle": 0,
    "body": {
     "w": 1.813,
     "d": 0.688,
@@ -1259,10 +1404,133 @@
    "light": null
   },
   {
+   "type": "gurney",
+   "x": 28.5,
+   "z": 6.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 0.688,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "gurney",
+   "x": 43.5,
+   "z": 6.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 0.688,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "surgical_light",
+   "x": 13.5,
+   "z": 5.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": {
+    "radius": 4.688,
+    "intensity": 0.6,
+    "color": 15267583
+   }
+  },
+  {
+   "type": "surgical_light",
+   "x": 28.5,
+   "z": 5.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": {
+    "radius": 4.688,
+    "intensity": 0.6,
+    "color": 15267583
+   }
+  },
+  {
+   "type": "iv_stand",
+   "x": 10.5,
+   "z": 5.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "iv_stand",
+   "x": 25.5,
+   "z": 5.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "iv_stand",
+   "x": 40.5,
+   "z": 7.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "med_cabinet",
+   "x": 8.5,
+   "z": 3.5,
+   "angle": 0,
+   "body": {
+    "w": 1.688,
+    "d": 0.625,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "med_cabinet",
+   "x": 23.5,
+   "z": 3.5,
+   "angle": 0,
+   "body": {
+    "w": 1.688,
+    "d": 0.625,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "med_cabinet",
+   "x": 38.5,
+   "z": 3.5,
+   "angle": 0,
+   "body": {
+    "w": 1.688,
+    "d": 0.625,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
    "type": "wheelchair",
-   "x": 49.5,
-   "z": 38.5,
-   "angle": -30,
+   "x": 16.5,
+   "z": 18.5,
+   "angle": 30,
    "body": {
     "w": 0.813,
     "d": 0.813,
@@ -1273,9 +1541,353 @@
    "light": null
   },
   {
-   "type": "vending",
-   "x": 78.5,
+   "type": "wheelchair",
+   "x": 44.5,
+   "z": 14.5,
+   "angle": 0,
+   "body": {
+    "w": 0.813,
+    "d": 0.813,
+    "ox": 0.031,
+    "oz": 0.031
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 48.5,
+   "z": 19.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "hospital_bed",
+   "x": 58.5,
+   "z": 5.5,
+   "angle": 90,
+   "body": {
+    "w": 1,
+    "d": 1.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "hospital_bed",
+   "x": 67.5,
+   "z": 5.5,
+   "angle": 90,
+   "body": {
+    "w": 1,
+    "d": 1.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "hospital_bed",
+   "x": 77.5,
+   "z": 5.5,
+   "angle": 90,
+   "body": {
+    "w": 1,
+    "d": 1.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "hospital_bed",
+   "x": 88.5,
+   "z": 5.5,
+   "angle": 90,
+   "body": {
+    "w": 1,
+    "d": 1.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "iv_stand",
+   "x": 60.5,
+   "z": 4.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "iv_stand",
+   "x": 69.5,
+   "z": 4.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "iv_stand",
+   "x": 79.5,
+   "z": 4.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "iv_stand",
+   "x": 86.5,
+   "z": 4.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "desk_computer",
+   "x": 72.5,
+   "z": 13.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 1.875,
+    "intensity": 0.35,
+    "color": 7323880
+   }
+  },
+  {
+   "type": "desk_computer",
+   "x": 77.5,
+   "z": 13.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 1.875,
+    "intensity": 0.35,
+    "color": 7323880
+   }
+  },
+  {
+   "type": "chair",
+   "x": 72.5,
+   "z": 12.5,
+   "angle": 180,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "chair",
+   "x": 77.5,
+   "z": 12.5,
+   "angle": 180,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "med_cabinet",
+   "x": 75.5,
+   "z": 15.5,
+   "angle": 0,
+   "body": {
+    "w": 1.688,
+    "d": 0.625,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "wheelchair",
+   "x": 92.5,
+   "z": 12.5,
+   "angle": -20,
+   "body": {
+    "w": 0.813,
+    "d": 0.813,
+    "ox": 0.031,
+    "oz": 0.031
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "gurney",
+   "x": 62.5,
+   "z": 18.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 0.688,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "waiting_chairs",
+   "x": 42.5,
+   "z": 35.5,
+   "angle": 0,
+   "body": {
+    "w": 2.438,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "waiting_chairs",
+   "x": 42.5,
+   "z": 38.5,
+   "angle": 0,
+   "body": {
+    "w": 2.438,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "waiting_chairs",
+   "x": 62.5,
+   "z": 35.5,
+   "angle": 0,
+   "body": {
+    "w": 2.438,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "waiting_chairs",
+   "x": 62.5,
+   "z": 38.5,
+   "angle": 0,
+   "body": {
+    "w": 2.438,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "desk_computer",
+   "x": 46.5,
+   "z": 30.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 1.875,
+    "intensity": 0.35,
+    "color": 7323880
+   }
+  },
+  {
+   "type": "desk_computer",
+   "x": 51.5,
+   "z": 30.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 1.875,
+    "intensity": 0.35,
+    "color": 7323880
+   }
+  },
+  {
+   "type": "desk_computer",
+   "x": 56.5,
+   "z": 30.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 1.875,
+    "intensity": 0.35,
+    "color": 7323880
+   }
+  },
+  {
+   "type": "chair",
+   "x": 46.5,
    "z": 29.5,
+   "angle": 180,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "chair",
+   "x": 56.5,
+   "z": 29.5,
+   "angle": 190,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "vending",
+   "x": 31.5,
+   "z": 25.5,
    "angle": 0,
    "body": {
     "w": 1.188,
@@ -1291,9 +1903,92 @@
    }
   },
   {
+   "type": "vending",
+   "x": 72.5,
+   "z": 25.5,
+   "angle": 0,
+   "body": {
+    "w": 1.188,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 2.188,
+    "intensity": 0.4,
+    "color": 12575999
+   }
+  },
+  {
+   "type": "wheelchair",
+   "x": 47.5,
+   "z": 41.5,
+   "angle": 20,
+   "body": {
+    "w": 0.813,
+    "d": 0.813,
+    "ox": 0.031,
+    "oz": 0.031
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "wheelchair",
+   "x": 70.5,
+   "z": 42.5,
+   "angle": -60,
+   "body": {
+    "w": 0.813,
+    "d": 0.813,
+    "ox": 0.031,
+    "oz": 0.031
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "iv_stand",
+   "x": 34.5,
+   "z": 33.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 31.5,
+   "z": 36.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 72.5,
+   "z": 42.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
    "type": "sign_stand",
-   "x": 66.5,
-   "z": 52.9,
+   "x": 52.5,
+   "z": 32.5,
    "angle": 0,
    "body": {
     "w": 1.25,
@@ -1309,191 +2004,13 @@
    }
   },
   {
-   "type": "trash",
-   "x": 39.5,
-   "z": 53.5,
-   "angle": 0,
-   "body": {
-    "w": 0.688,
-    "d": 0.688,
-    "ox": -0.031,
-    "oz": -0.031
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "extinguisher",
-   "x": 81.8,
-   "z": 36.5,
-   "angle": 0,
-   "body": {
-    "w": 0.563,
-    "d": 0.563,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "surgical_light",
-   "x": 16.5,
-   "z": 10.5,
-   "angle": 0,
-   "body": null,
-   "blocks_bullets": false,
-   "light": {
-    "radius": 4.688,
-    "intensity": 0.6,
-    "color": 15267583
-   }
-  },
-  {
-   "type": "surgical_light",
-   "x": 32.5,
-   "z": 10.5,
-   "angle": 0,
-   "body": null,
-   "blocks_bullets": false,
-   "light": {
-    "radius": 4.688,
-    "intensity": 0.6,
-    "color": 15267583
-   }
-  },
-  {
-   "type": "surgical_light",
-   "x": 49.5,
-   "z": 10.5,
-   "angle": 0,
-   "body": null,
-   "blocks_bullets": false,
-   "light": {
-    "radius": 4.688,
-    "intensity": 0.6,
-    "color": 15267583
-   }
-  },
-  {
-   "type": "gurney",
-   "x": 16.5,
-   "z": 12.5,
-   "angle": 0,
-   "body": {
-    "w": 1.813,
-    "d": 0.688,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "gurney",
-   "x": 32.5,
-   "z": 12.5,
-   "angle": 0,
-   "body": {
-    "w": 1.813,
-    "d": 0.688,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "gurney",
-   "x": 49.5,
-   "z": 12.5,
-   "angle": 0,
-   "body": {
-    "w": 1.813,
-    "d": 0.688,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "med_cabinet",
-   "x": 16.5,
-   "z": 5.1,
-   "angle": 0,
-   "body": {
-    "w": 1.688,
-    "d": 0.625,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "med_cabinet",
-   "x": 32.5,
-   "z": 5.1,
-   "angle": 0,
-   "body": {
-    "w": 1.688,
-    "d": 0.625,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "med_cabinet",
-   "x": 49.5,
-   "z": 5.1,
-   "angle": 0,
-   "body": {
-    "w": 1.688,
-    "d": 0.625,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "iv_stand",
-   "x": 20.5,
-   "z": 12.5,
-   "angle": 0,
-   "body": null,
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "iv_stand",
-   "x": 36.5,
-   "z": 12.5,
-   "angle": 0,
-   "body": null,
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "cables",
-   "x": 28.5,
-   "z": 21.5,
-   "angle": 0,
-   "body": null,
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
    "type": "hospital_bed",
-   "x": 68.5,
-   "z": 8.5,
-   "angle": 0,
+   "x": 12.5,
+   "z": 48.5,
+   "angle": 90,
    "body": {
-    "w": 1.938,
-    "d": 1,
+    "w": 1,
+    "d": 1.938,
     "ox": 0,
     "oz": 0
    },
@@ -1502,12 +2019,12 @@
   },
   {
    "type": "hospital_bed",
-   "x": 85.5,
-   "z": 8.5,
-   "angle": 0,
+   "x": 17.5,
+   "z": 48.5,
+   "angle": 90,
    "body": {
-    "w": 1.938,
-    "d": 1,
+    "w": 1,
+    "d": 1.938,
     "ox": 0,
     "oz": 0
    },
@@ -1516,12 +2033,68 @@
   },
   {
    "type": "hospital_bed",
-   "x": 102.5,
-   "z": 8.5,
-   "angle": 0,
+   "x": 22.5,
+   "z": 48.5,
+   "angle": 90,
    "body": {
-    "w": 1.938,
-    "d": 1,
+    "w": 1,
+    "d": 1.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "hospital_bed",
+   "x": 27.5,
+   "z": 48.5,
+   "angle": 90,
+   "body": {
+    "w": 1,
+    "d": 1.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "hospital_bed",
+   "x": 12.5,
+   "z": 59.5,
+   "angle": 90,
+   "body": {
+    "w": 1,
+    "d": 1.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "hospital_bed",
+   "x": 17.5,
+   "z": 59.5,
+   "angle": 90,
+   "body": {
+    "w": 1,
+    "d": 1.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "hospital_bed",
+   "x": 22.5,
+   "z": 59.5,
+   "angle": 90,
+   "body": {
+    "w": 1,
+    "d": 1.938,
     "ox": 0,
     "oz": 0
    },
@@ -1530,8 +2103,8 @@
   },
   {
    "type": "iv_stand",
-   "x": 72.5,
-   "z": 10.5,
+   "x": 14.5,
+   "z": 48.5,
    "angle": 0,
    "body": null,
    "blocks_bullets": false,
@@ -1539,8 +2112,8 @@
   },
   {
    "type": "iv_stand",
-   "x": 89.5,
-   "z": 10.5,
+   "x": 24.5,
+   "z": 48.5,
    "angle": 0,
    "body": null,
    "blocks_bullets": false,
@@ -1548,35 +2121,8 @@
   },
   {
    "type": "iv_stand",
-   "x": 106.5,
-   "z": 10.5,
-   "angle": 0,
-   "body": null,
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "desk_computer",
-   "x": 86.5,
-   "z": 22.5,
-   "angle": 0,
-   "body": {
-    "w": 1.813,
-    "d": 1,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": true,
-   "light": {
-    "radius": 1.875,
-    "intensity": 0.35,
-    "color": 7323880
-   }
-  },
-  {
-   "type": "chair",
-   "x": 86.5,
-   "z": 23.9,
+   "x": 19.5,
+   "z": 60.5,
    "angle": 0,
    "body": null,
    "blocks_bullets": false,
@@ -1584,9 +2130,9 @@
   },
   {
    "type": "wheelchair",
-   "x": 66.5,
-   "z": 20.5,
-   "angle": 40,
+   "x": 28.5,
+   "z": 58.5,
+   "angle": 45,
    "body": {
     "w": 0.813,
     "d": 0.813,
@@ -1597,13 +2143,27 @@
    "light": null
   },
   {
-   "type": "hospital_bed",
-   "x": 13.5,
-   "z": 60.5,
+   "type": "med_cabinet",
+   "x": 30.5,
+   "z": 47.5,
    "angle": 0,
    "body": {
-    "w": 1.938,
-    "d": 1,
+    "w": 1.688,
+    "d": 0.625,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "gurney",
+   "x": 41.5,
+   "z": 50.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 0.688,
     "ox": 0,
     "oz": 0
    },
@@ -1611,13 +2171,13 @@
    "light": null
   },
   {
-   "type": "hospital_bed",
-   "x": 13.5,
-   "z": 64.5,
+   "type": "gurney",
+   "x": 62.5,
+   "z": 50.5,
    "angle": 0,
    "body": {
-    "w": 1.938,
-    "d": 1,
+    "w": 1.813,
+    "d": 0.688,
     "ox": 0,
     "oz": 0
    },
@@ -1625,111 +2185,55 @@
    "light": null
   },
   {
-   "type": "hospital_bed",
-   "x": 13.5,
-   "z": 68.5,
+   "type": "lab_bench",
+   "x": 52.5,
+   "z": 55.5,
    "angle": 0,
    "body": {
-    "w": 1.938,
-    "d": 1,
+    "w": 2.438,
+    "d": 0.875,
     "ox": 0,
     "oz": 0
    },
-   "blocks_bullets": false,
-   "light": null
+   "blocks_bullets": true,
+   "light": {
+    "radius": 2.5,
+    "intensity": 0.4,
+    "color": 7332056
+   }
   },
   {
-   "type": "hospital_bed",
-   "x": 23.5,
-   "z": 61.5,
+   "type": "med_cabinet",
+   "x": 37.5,
+   "z": 58.5,
    "angle": 0,
    "body": {
-    "w": 1.938,
-    "d": 1,
+    "w": 1.688,
+    "d": 0.625,
     "ox": 0,
     "oz": 0
    },
-   "blocks_bullets": false,
+   "blocks_bullets": true,
    "light": null
   },
   {
-   "type": "hospital_bed",
-   "x": 23.5,
-   "z": 65.5,
+   "type": "med_cabinet",
+   "x": 66.5,
+   "z": 55.5,
    "angle": 0,
    "body": {
-    "w": 1.938,
-    "d": 1,
+    "w": 1.688,
+    "d": 0.625,
     "ox": 0,
     "oz": 0
    },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "hospital_bed",
-   "x": 23.5,
-   "z": 69.5,
-   "angle": 0,
-   "body": {
-    "w": 1.938,
-    "d": 1,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "hospital_bed",
-   "x": 33.5,
-   "z": 60.5,
-   "angle": 0,
-   "body": {
-    "w": 1.938,
-    "d": 1,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "hospital_bed",
-   "x": 33.5,
-   "z": 68.5,
-   "angle": 0,
-   "body": {
-    "w": 1.938,
-    "d": 1,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "iv_stand",
-   "x": 16.5,
-   "z": 60.5,
-   "angle": 0,
-   "body": null,
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "iv_stand",
-   "x": 26.5,
-   "z": 65.5,
-   "angle": 0,
-   "body": null,
-   "blocks_bullets": false,
+   "blocks_bullets": true,
    "light": null
   },
   {
    "type": "wheelchair",
-   "x": 18.5,
-   "z": 73.5,
+   "x": 45.5,
+   "z": 61.5,
    "angle": 70,
    "body": {
     "w": 0.813,
@@ -1741,78 +2245,9 @@
    "light": null
   },
   {
-   "type": "gurney",
-   "x": 46.5,
-   "z": 62.5,
-   "angle": 0,
-   "body": {
-    "w": 1.813,
-    "d": 0.688,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "wheelchair",
-   "x": 66.5,
-   "z": 62.5,
-   "angle": -20,
-   "body": {
-    "w": 0.813,
-    "d": 0.813,
-    "ox": 0.031,
-    "oz": 0.031
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "desk_computer",
-   "x": 54.5,
-   "z": 58.5,
-   "angle": 0,
-   "body": {
-    "w": 1.813,
-    "d": 1,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": true,
-   "light": {
-    "radius": 1.875,
-    "intensity": 0.35,
-    "color": 7323880
-   }
-  },
-  {
-   "type": "cables",
-   "x": 60.5,
-   "z": 70.5,
-   "angle": 0,
-   "body": null,
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "locker",
-   "x": 74.5,
-   "z": 74.9,
-   "angle": 0,
-   "body": {
-    "w": 1.625,
-    "d": 0.688,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
    "type": "med_cabinet",
-   "x": 84.5,
-   "z": 57.1,
+   "x": 78.5,
+   "z": 47.5,
    "angle": 0,
    "body": {
     "w": 1.688,
@@ -1825,22 +2260,8 @@
   },
   {
    "type": "med_cabinet",
-   "x": 90.5,
-   "z": 57.1,
-   "angle": 0,
-   "body": {
-    "w": 1.688,
-    "d": 0.625,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "med_cabinet",
-   "x": 97.5,
-   "z": 57.1,
+   "x": 81.5,
+   "z": 47.5,
    "angle": 0,
    "body": {
     "w": 1.688,
@@ -1854,7 +2275,7 @@
   {
    "type": "med_cabinet",
    "x": 88.5,
-   "z": 74.9,
+   "z": 47.5,
    "angle": 0,
    "body": {
     "w": 1.688,
@@ -1867,8 +2288,8 @@
   },
   {
    "type": "med_cabinet",
-   "x": 102.5,
-   "z": 74.9,
+   "x": 78.5,
+   "z": 51.5,
    "angle": 0,
    "body": {
     "w": 1.688,
@@ -1880,18 +2301,91 @@
    "light": null
   },
   {
-   "type": "chair",
-   "x": 89.5,
-   "z": 68.5,
+   "type": "med_cabinet",
+   "x": 82.5,
+   "z": 51.5,
    "angle": 0,
-   "body": null,
-   "blocks_bullets": false,
+   "body": {
+    "w": 1.688,
+    "d": 0.625,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
    "light": null
   },
   {
+   "type": "med_cabinet",
+   "x": 86.5,
+   "z": 51.5,
+   "angle": 0,
+   "body": {
+    "w": 1.688,
+    "d": 0.625,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "desk_computer",
+   "x": 80.5,
+   "z": 56.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 1.875,
+    "intensity": 0.35,
+    "color": 7323880
+   }
+  },
+  {
+   "type": "desk_computer",
+   "x": 86.5,
+   "z": 56.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 1.875,
+    "intensity": 0.35,
+    "color": 7323880
+   }
+  },
+  {
+   "type": "vending",
+   "x": 73.5,
+   "z": 60.5,
+   "angle": 0,
+   "body": {
+    "w": 1.188,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 2.188,
+    "intensity": 0.4,
+    "color": 12575999
+   }
+  },
+  {
    "type": "trash",
-   "x": 81.5,
-   "z": 74.5,
+   "x": 94.5,
+   "z": 62.5,
    "angle": 0,
    "body": {
     "w": 0.688,
@@ -1904,12 +2398,12 @@
   },
   {
    "type": "hospital_bed",
-   "x": 14.5,
-   "z": 81.5,
-   "angle": 0,
+   "x": 12.5,
+   "z": 68.5,
+   "angle": 90,
    "body": {
-    "w": 1.938,
-    "d": 1,
+    "w": 1,
+    "d": 1.938,
     "ox": 0,
     "oz": 0
    },
@@ -1918,12 +2412,26 @@
   },
   {
    "type": "hospital_bed",
-   "x": 26.5,
-   "z": 81.5,
+   "x": 27.5,
+   "z": 68.5,
+   "angle": 90,
+   "body": {
+    "w": 1,
+    "d": 1.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "waiting_chairs",
+   "x": 20.5,
+   "z": 75.5,
    "angle": 0,
    "body": {
-    "w": 1.938,
-    "d": 1,
+    "w": 2.438,
+    "d": 0.563,
     "ox": 0,
     "oz": 0
    },
@@ -1932,9 +2440,9 @@
   },
   {
    "type": "wheelchair",
-   "x": 16.5,
-   "z": 88.5,
-   "angle": 10,
+   "x": 24.5,
+   "z": 79.5,
+   "angle": 20,
    "body": {
     "w": 0.813,
     "d": 0.813,
@@ -1945,9 +2453,9 @@
    "light": null
   },
   {
-   "type": "chair",
-   "x": 24.5,
-   "z": 87.5,
+   "type": "iv_stand",
+   "x": 14.5,
+   "z": 68.5,
    "angle": 0,
    "body": null,
    "blocks_bullets": false,
@@ -1955,8 +2463,8 @@
   },
   {
    "type": "morgue_drawers",
-   "x": 44.5,
-   "z": 79.1,
+   "x": 39.5,
+   "z": 67.5,
    "angle": 0,
    "body": {
     "w": 2.938,
@@ -1969,8 +2477,22 @@
   },
   {
    "type": "morgue_drawers",
-   "x": 64.5,
-   "z": 79.1,
+   "x": 55.5,
+   "z": 67.5,
+   "angle": 0,
+   "body": {
+    "w": 2.938,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "morgue_drawers",
+   "x": 63.5,
+   "z": 67.5,
    "angle": 0,
    "body": {
     "w": 2.938,
@@ -1984,7 +2506,7 @@
   {
    "type": "gurney",
    "x": 48.5,
-   "z": 86.5,
+   "z": 74.5,
    "angle": 0,
    "body": {
     "w": 1.813,
@@ -1997,9 +2519,9 @@
   },
   {
    "type": "gurney",
-   "x": 64.5,
-   "z": 86.5,
-   "angle": -10,
+   "x": 55.5,
+   "z": 74.5,
+   "angle": 0,
    "body": {
     "w": 1.813,
     "d": 0.688,
@@ -2010,46 +2532,65 @@
    "light": null
   },
   {
-   "type": "iv_stand",
-   "x": 55.5,
-   "z": 89.5,
+   "type": "gurney",
+   "x": 51.5,
+   "z": 78.5,
    "angle": 0,
-   "body": null,
+   "body": {
+    "w": 1.813,
+    "d": 0.688,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 67.5,
+   "z": 80.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "bench",
+   "x": 77.5,
+   "z": 72.5,
+   "angle": 0,
+   "body": {
+    "w": 2,
+    "d": 0.75,
+    "ox": -0.031,
+    "oz": -0.047
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bench",
+   "x": 77.5,
+   "z": 75.5,
+   "angle": 0,
+   "body": {
+    "w": 2,
+    "d": 0.75,
+    "ox": -0.031,
+    "oz": -0.047
+   },
    "blocks_bullets": false,
    "light": null
   },
   {
    "type": "bench",
    "x": 84.5,
-   "z": 82.5,
-   "angle": 0,
-   "body": {
-    "w": 2,
-    "d": 0.75,
-    "ox": -0.031,
-    "oz": -0.047
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "bench",
-   "x": 92.5,
-   "z": 82.5,
-   "angle": 0,
-   "body": {
-    "w": 2,
-    "d": 0.75,
-    "ox": -0.031,
-    "oz": -0.047
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "bench",
-   "x": 100.5,
-   "z": 82.5,
+   "z": 72.5,
    "angle": 0,
    "body": {
     "w": 2,
@@ -2063,7 +2604,7 @@
   {
    "type": "bench",
    "x": 84.5,
-   "z": 87.5,
+   "z": 75.5,
    "angle": 0,
    "body": {
     "w": 2,
@@ -2076,8 +2617,8 @@
   },
   {
    "type": "bench",
-   "x": 92.5,
-   "z": 87.5,
+   "x": 91.5,
+   "z": 73.5,
    "angle": 0,
    "body": {
     "w": 2,
@@ -2090,8 +2631,8 @@
   },
   {
    "type": "vending",
-   "x": 110.5,
-   "z": 84.5,
+   "x": 74.5,
+   "z": 67.5,
    "angle": 0,
    "body": {
     "w": 1.188,
@@ -2108,8 +2649,8 @@
   },
   {
    "type": "vending",
-   "x": 110.5,
-   "z": 86.9,
+   "x": 94.5,
+   "z": 67.5,
    "angle": 0,
    "body": {
     "w": 1.188,
@@ -2126,8 +2667,22 @@
   },
   {
    "type": "trash",
-   "x": 77.5,
-   "z": 90.5,
+   "x": 73.5,
+   "z": 80.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 95.5,
+   "z": 76.5,
    "angle": 0,
    "body": {
     "w": 0.688,
@@ -2140,8 +2695,8 @@
   },
   {
    "type": "lab_bench",
-   "x": 32.5,
-   "z": 97.5,
+   "x": 24.5,
+   "z": 88.5,
    "angle": 0,
    "body": {
     "w": 2.438,
@@ -2158,8 +2713,8 @@
   },
   {
    "type": "lab_bench",
-   "x": 32.5,
-   "z": 102.5,
+   "x": 58.5,
+   "z": 87.5,
    "angle": 0,
    "body": {
     "w": 2.438,
@@ -2176,8 +2731,8 @@
   },
   {
    "type": "lab_bench",
-   "x": 70.5,
-   "z": 97.5,
+   "x": 72.5,
+   "z": 95.5,
    "angle": 0,
    "body": {
     "w": 2.438,
@@ -2193,36 +2748,37 @@
    }
   },
   {
-   "type": "lab_bench",
-   "x": 88.5,
-   "z": 99.5,
+   "type": "med_cabinet",
+   "x": 42.5,
+   "z": 85.5,
    "angle": 0,
    "body": {
-    "w": 2.438,
-    "d": 0.875,
+    "w": 1.688,
+    "d": 0.625,
     "ox": 0,
     "oz": 0
    },
    "blocks_bullets": true,
-   "light": {
-    "radius": 2.5,
-    "intensity": 0.4,
-    "color": 7332056
-   }
+   "light": null
   },
   {
-   "type": "cables",
-   "x": 60.5,
-   "z": 103.5,
+   "type": "med_cabinet",
+   "x": 62.5,
+   "z": 85.5,
    "angle": 0,
-   "body": null,
-   "blocks_bullets": false,
+   "body": {
+    "w": 1.688,
+    "d": 0.625,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
    "light": null
   },
   {
    "type": "crate",
-   "x": 94.5,
-   "z": 101.5,
+   "x": 21.5,
+   "z": 95.5,
    "angle": 0,
    "body": {
     "w": 0.938,
@@ -2234,17 +2790,26 @@
    "light": null
   },
   {
-   "type": "barrel",
-   "x": 26.5,
-   "z": 99.5,
+   "type": "crate",
+   "x": 22.5,
+   "z": 96.5,
    "angle": 0,
    "body": {
-    "w": 0.781,
-    "d": 0.781,
+    "w": 0.938,
+    "d": 0.938,
     "ox": -0.031,
     "oz": -0.031
    },
    "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "iv_stand",
+   "x": 45.5,
+   "z": 93.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
    "light": null
   }
  ]

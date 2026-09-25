@@ -1,7 +1,7 @@
 {
  "id": "terminal",
- "width": 128,
- "height": 121,
+ "width": 100,
+ "height": 104,
  "legend": {
   "wall": "#",
   "train": "T",
@@ -20,145 +20,129 @@
   }
  },
  "cells": [
-  "################################################################################################################################",
-  "################################################################################################################################",
-  "################################################################################################################################",
-  "################################################################################################################################",
-  "################rrrrrrrrTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTrrrrrrrr################",
-  "################rrrrrrrrTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTwwwwwwwwwwwwTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTrrrrrrrr################",
-  "################rrrrrrrrTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTwwwwwwwwwwwwTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTrrrrrrrr################",
-  "################rrrrrrrrTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTwwwwwwwwwwwwTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTrrrrrrrr################",
-  "################rrrrrrrrTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTwwwTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTrrrrrrrr################",
-  "################cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc################",
-  "################cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc################",
-  "################cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc################",
-  "################rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr################",
-  "################rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr################",
-  "################rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr################",
-  "################rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr################",
-  "################cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc################",
-  "################cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc################",
-  "################cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc################",
-  "################cccccccccccc##cccccccccccccc##cccccccccccccccccccccccccccccccccccc##cccccccccccccc##cccccccccccc################",
-  "################cccccccccccc##cccccccccccccc##cccccccccccccccccccccccccccccccccccc##cccccccccccccc##cccccccccccc################",
-  "################cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc################",
-  "################cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc################",
-  "################cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc################",
-  "################cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc################",
-  "################cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc################",
-  "##############################################################DDDD##############################################################",
-  "##############################################################DDDD##############################################################",
-  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
-  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
-  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
-  "##################################ccccc#tttttttttttttttttttttttttttttttttttttttttttttttt#ccccc##################################",
-  "##################################cccccWttttttttttttttttttttttttttttttttttttttttttttttttWccccc##################################",
-  "##################################cccccWtttttttt##tttttttttttttttttttttttttttt##ttttttttWccccc##################################",
-  "##################################ccccc#tttttttt##tttttttttt########tttttttttt##tttttttt#ccccc##################################",
-  "##################################ccccc#tttttttttttttttttttt########tttttttttttttttttttt#ccccc##################################",
-  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
-  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
-  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
-  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
-  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
-  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
-  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
-  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
-  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
-  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
-  "##################################ccccc#tttttttttttttttttttttttttttttttttttttttttttttttt#ccccc##################################",
-  "##################################cccccWttttttttttttttttttttttttttttttttttttttttttttttttWccccc##################################",
-  "##################################cccccWtttttttt##tttttttttttttttttttttttttttt##ttttttttWccccc##################################",
-  "##################################ccccc#tttttttt##tttttttttttttttttttttttttttt##tttttttt#ccccc##################################",
-  "##################################ccccc#tttttttttttttttttttttttttttttttttttttttttttttttt#ccccc##################################",
-  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
-  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
-  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
-  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
-  "########################################tttttttttttttttttttttttttttttttttttttttttttttttt########################################",
-  "#########################################DDD########################################DDD#########################################",
-  "#########################################DDD########################################DDD#########################################",
-  "############tttttttttttttttttttttttttttttttt########################################tttttttttt#ttttttttt#ttttttttttt############",
-  "############tttttttttttttttttttttttttttttttt########################################tttttttttt#ttttttttt#ttttttttttt############",
-  "############tttttttttttttttttttttttttttttttt########################################tttttttttttttttttttttttttttttttt############",
-  "######ccccc#tttttttttttttttttttttttttttttttt########################################tttttttttttttttttttttttttttttttt#ccccc######",
-  "######cccccWtttttttttttttttttttttttttttttttt########################################tttttttttt#ttttttttt#tttttttttttWccccc######",
-  "######cccccWtttttttttttttttttttttttttttttttt########################################tttttttttt#ttttttttt#tttttttttttWccccc######",
-  "######ccccc#tttttttttttttttttttttttttttttttt########################################tttttttttt#ttttttttt#ttttttttttt#ccccc######",
-  "######ccccc#tttt######t#######t######ttttttt########################################tttttttttt#ttttttttt#ttttttttttt#ccccc######",
-  "############tttttttttttttttttttttttttttttttt########################################tttttttttt#ttttttttt#ttttttttttt############",
-  "############tttttttttttttttttttttttttttttttt########################################tttttttttt#ttttttttt#ttttttttttt############",
-  "############tttttttttttttttttttttttttttttttt############################################tt########tt########tt##################",
-  "############tttttttttttttttttttttttttttttttt########################################tttttttttttttttttttttttttttttttt############",
-  "######ccccc#tttttttttttttttttttttttttttttttt########################################tttttttttttttttttttttttttttttttt#ccccc######",
-  "######cccccWtttttttttttttttttttttttttttttttt########################################ttttttttttttttttttttttttttttttttWccccc######",
-  "######cccccWtttttttttttttttttttttttttttttttt########################################ttttttttttttttttttttttttttttttttWccccc######",
-  "######ccccc#tttttttttttttttttttttttttttttttt########################################tttttttttttttttttttttttttttttttt#ccccc######",
-  "######ccccc#tttttttttttttttttttttttttttttttt########################################tttttttttttttttttttttttttttttttt#ccccc######",
-  "############tttttttttttttttttttttttttttttttt########################################tttttttttttttttttttttttttttttttt############",
-  "############tttttttttttttttttttttttttttttttt########################################tttttttttttttttttttttttttttttttt############",
-  "############tttttttttttttttttttttttttttttttt########################################tttttttttttttttttttttttttttttttt############",
-  "##############################DDD###############################################################DDD#############################",
-  "##############################DDD###############################################################DDD#############################",
-  "##############################DDD###############################################################DDD#############################",
-  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmm########mmmmmmmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmm#mmm########mmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
-  "########################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm########################",
-  "##############################################################DDD###############################################################",
-  "##############################################################DDD###############################################################",
-  "##############################################################DDD###############################################################",
-  "################uuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu################",
-  "################uuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu################",
-  "################uuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu################",
-  "################uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu################",
-  "########################uuu#######################uuu#######################uuu#####################uuu#########################",
-  "################uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuu################",
-  "################uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuu################",
-  "################uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuu################",
-  "################uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuu################",
-  "################uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu################",
-  "######################################################################################DDD#######################################",
-  "######################################################################################DDD#######################################",
-  "####################################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm####################################",
-  "####################################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm####################################",
-  "####################################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm####################################",
-  "####################################mmmmmmmmmm##mmmmmmmmmmmm########mmmmmmmmmmmm##mmmmmmmmmm####################################",
-  "####################################mmmmmmmmmm##mmmmmmmmmmmm########mmmmmmmmmmmm##mmmmmmmmmm####################################",
-  "####################################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm####################################",
-  "####################################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm####################################",
-  "####################################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm####################################",
-  "####################################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm####################################",
-  "################################################################################################################################",
-  "################################################################################################################################"
+  "####################################################################################################",
+  "####################################################################################################",
+  "####rrrrrrrrrrrrTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTrrrrrrrrrrrr####",
+  "####rrrrrrrrrrrrTTTTTTTTTTTTTTTTTTTTTTTTTTTTrrrrrrrrrrrrTTTTTTTTTTTTTTTTTTTTTTTTTTTTrrrrrrrrrrrr####",
+  "####rrrrrrrrrrrrTTTTTTTTTTTTTTTTTTTTTTTTTTTTrrrrrrrrrrrrTTTTTTTTTTTTTTTTTTTTTTTTTTTTrrrrrrrrrrrr####",
+  "####rrrrrrrrrrrrTTTTTTTTTTTTTTTTTTTTTTTTTTTTrrrrrrrrrrrrTTTTTTTTTTTTTTTTTTTTTTTTTTTTrrrrrrrrrrrr####",
+  "####rrrrrrrrrrrrTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTrrrTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTrrrrrrrrrrrr####",
+  "####cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc####",
+  "####cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc####",
+  "####cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc####",
+  "####rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr####",
+  "####rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr####",
+  "####rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr####",
+  "####rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr####",
+  "####cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc####",
+  "####cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc####",
+  "####cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc####",
+  "####cccccccccccc##cccccccccccccc##cccccccccccccccccccccccccccccccc##cccccccccccccc##cccccccccccc####",
+  "####cccccccccccc##cccccccccccccc##cccccccccccccccccccccccccccccccc##cccccccccccccc##cccccccccccc####",
+  "####cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc####",
+  "####cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc####",
+  "####cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc####",
+  "################################################DDDD################################################",
+  "################################################DDDD################################################",
+  "##############################tttttttttttttttttttttttttttttttttttttttt##############################",
+  "########################ccccc#tttttttttttttttttttttttttttttttttttttttt#ccccc########################",
+  "########################ccccc#tttttttttttttttttttttttttttttttttttttttt#ccccc########################",
+  "########################cccccWttttttttttttttttttttttttttttttttttttttttWccccc########################",
+  "########################cccccWttttttttttttttttttttttttttttttttttttttttWccccc########################",
+  "########################ccccc#ttttt##tttttttttttttttttttttttttt##ttttt#ccccc########################",
+  "##############################ttttt##tttttttttttttttttttttttttt##ttttt##############################",
+  "##############################tttttttttttttttttttttttttttttttttttttttt##############################",
+  "##############################tttttttttttttttttttttttttttttttttttttttt##############################",
+  "##############################tttttttttttttttttttttttttttttttttttttttt##############################",
+  "##############################tttttttttttttttttttttttttttttttttttttttt##############################",
+  "##############################tttttttttttttttttttttttttttttttttttttttt##############################",
+  "##############################tttttttttttttttttttttttttttttttttttttttt##############################",
+  "########################ccccc#tttttttttttttttttttttttttttttttttttttttt#ccccc########################",
+  "########################ccccc#ttttt##tttttttttttttttttttttttttt##ttttt#ccccc########################",
+  "########################cccccWttttt##tttttttttttttttttttttttttt##tttttWccccc########################",
+  "########################cccccWttttttttttttttttttttttttttttttttttttttttWccccc########################",
+  "########################ccccc#tttttttttttttttttttttttttttttttttttttttt#ccccc########################",
+  "##############################tttttttttttttttttttttttttttttttttttttttt##############################",
+  "##############################tttttttttttttttttttttttttttttttttttttttt##############################",
+  "#################################DDD############################DDD#################################",
+  "#################################DDD############################DDD#################################",
+  "########tttttttttttttttttttttttttttttttt####################tttttttttt#tttttttttt#tttttttttt########",
+  "##ccccc#tttttttttttttttttttttttttttttttt####################tttttttttt#tttttttttt#tttttttttt#ccccc##",
+  "##ccccc#tttttttttttttttttttttttttttttttt####################tttttttttt#tttttttttt#tttttttttt#ccccc##",
+  "##cccccWtttttttttttttttttttttttttttttttt####################tttttttttt#tttttttttt#ttttttttttWccccc##",
+  "##cccccWtttttttttttttttttttttttttttttttt####################tttttttttt#tttttttttt#ttttttttttWccccc##",
+  "##ccccc#tttttttttttttttttttttttttttttttt####################tttttttttt#tttttttttt#tttttttttt#ccccc##",
+  "########tt#######tt#######tt#######ttttt####################tttttttttt#tttttttttt#tttttttttt########",
+  "########tttttttttttttttttttttttttttttttt########################ttt########ttt########ttt###########",
+  "########tttttttttttttttttttttttttttttttt####################cccccccccccccccccccccccccccccccc########",
+  "##ccccc#tttttttttttttttttttttttttttttttt####################cccccccccccccccccccccccccccccccc#ccccc##",
+  "##ccccc#tttttttttttttttttttttttttttttttt####################cccccccccccccccccccccccccccccccc#ccccc##",
+  "##cccccWtttttttttttttttttttttttttttttttt####################ccccccccccccccccccccccccccccccccWccccc##",
+  "##cccccWtttttttttttttttttttttttttttttttt####################ccccccccccccccccccccccccccccccccWccccc##",
+  "##ccccc#tttttttttttttttttttttttttttttttt####################cccccccccccccccccccccccccccccccc#ccccc##",
+  "########tttttttttttttttttttttttttttttttt####################cccccccccccccccccccccccccccccccc########",
+  "########tttttttttttttttttttttttttttttttt####################cccccccccccccccccccccccccccccccc########",
+  "########################DDD###############################################DDD#######################",
+  "########################DDD###############################################DDD#######################",
+  "########################DDD###############################################DDD#######################",
+  "############mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm############",
+  "############mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm############",
+  "############mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm############",
+  "############mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm############",
+  "############mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm############",
+  "############mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmm#mmmmmmmmmmmmm#mmmmmmmmmmmmmmmmm############",
+  "############mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmm#mmmmmmmmmmmmm#mmmmmmmmmmmmmmmmm############",
+  "############mmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmm#mmmmmmmmmmm#mmm######mmmm#mmmmmmmmmmmmmmmmm############",
+  "############mmmmmmmmmmmmmmmmmmmm########mmmm#mmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmm############",
+  "############mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmm############",
+  "############mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmm############",
+  "############mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmm############",
+  "############mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmmmmmmmmmm#mmmmmmmmmmmmmmmmm############",
+  "#################################################DDD################################################",
+  "#################################################DDD################################################",
+  "#################################################DDD################################################",
+  "########uuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu########",
+  "########uuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu########",
+  "########uuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu########",
+  "########uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu########",
+  "################uu######################uu################uu##################uu####################",
+  "########uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuu########",
+  "########uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuu########",
+  "########uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuu########",
+  "########uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu########",
+  "##################################################################DDD###############################",
+  "##################################################################DDD###############################",
+  "##################################################################DDD###############################",
+  "############################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm############################",
+  "############################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm############################",
+  "############################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm############################",
+  "############################mmmmmmmmmm##mmmmmmmmmmmmmmmmmmmm##mmmmmmmmmm############################",
+  "############################mmmmmmmmmm##mmmmmmmmmmmmmmmmmmmm##mmmmmmmmmm############################",
+  "############################mmmmmmmmmmmmmmmmmmm######mmmmmmmmmmmmmmmmmmm############################",
+  "############################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm############################",
+  "############################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm############################",
+  "############################mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm############################",
+  "####################################################################################################",
+  "####################################################################################################"
  ],
  "start_area": "hall",
  "player_start": {
-  "x": 64.5,
-  "z": 42.5
+  "x": 50.5,
+  "z": 37.5
  },
  "outside_darkness": 0.82,
  "areas": [
   {
    "id": "hall",
    "name": "Hall Central",
-   "darkness": 0.64,
+   "darkness": 0.6,
+   "lighting": "lit",
    "rects": [
     {
-     "x": 40,
-     "y": 28,
-     "w": 48,
-     "h": 28
+     "x": 30,
+     "y": 24,
+     "w": 40,
+     "h": 20
     }
    ]
   },
@@ -166,51 +150,55 @@
    "id": "platform",
    "name": "Plataforma Norte",
    "darkness": 0.68,
+   "lighting": "dim",
    "rects": [
     {
-     "x": 16,
-     "y": 4,
-     "w": 96,
-     "h": 22
+     "x": 4,
+     "y": 2,
+     "w": 92,
+     "h": 20
     }
    ]
   },
   {
    "id": "ticket",
    "name": "Bilheteria",
-   "darkness": 0.72,
+   "darkness": 0.7,
+   "lighting": "dim",
    "rects": [
     {
-     "x": 12,
-     "y": 58,
+     "x": 8,
+     "y": 46,
      "w": 32,
-     "h": 20
+     "h": 16
     }
    ]
   },
   {
    "id": "shops",
    "name": "Lojas",
-   "darkness": 0.8,
+   "darkness": 0.78,
+   "lighting": "dim",
    "rects": [
     {
-     "x": 84,
-     "y": 58,
+     "x": 60,
+     "y": 46,
      "w": 32,
-     "h": 20
+     "h": 16
     }
    ]
   },
   {
    "id": "tech",
    "name": "Área Técnica",
-   "darkness": 0.78,
+   "darkness": 0.8,
+   "lighting": "dark",
    "rects": [
     {
-     "x": 24,
-     "y": 81,
-     "w": 80,
-     "h": 14
+     "x": 12,
+     "y": 65,
+     "w": 76,
+     "h": 13
     }
    ]
   },
@@ -218,24 +206,26 @@
    "id": "tunnels",
    "name": "Túneis",
    "darkness": 0.9,
+   "lighting": "dark",
    "rects": [
     {
-     "x": 16,
-     "y": 98,
-     "w": 96,
-     "h": 10
+     "x": 8,
+     "y": 81,
+     "w": 84,
+     "h": 9
     }
    ]
   },
   {
    "id": "maintenance",
    "name": "Manutenção",
-   "darkness": 0.8,
+   "darkness": 0.82,
+   "lighting": "dark",
    "rects": [
     {
-     "x": 36,
-     "y": 110,
-     "w": 56,
+     "x": 28,
+     "y": 93,
+     "w": 44,
      "h": 9
     }
    ]
@@ -243,10 +233,24 @@
  ],
  "doors": [
   {
+   "id": "door_hall_platform",
+   "rect": {
+    "x": 48,
+    "y": 22,
+    "w": 4,
+    "h": 2
+   },
+   "cost": 1500,
+   "areas": [
+    "hall",
+    "platform"
+   ]
+  },
+  {
    "id": "door_hall_ticket",
    "rect": {
-    "x": 41,
-    "y": 56,
+    "x": 33,
+    "y": 44,
     "w": 3,
     "h": 2
    },
@@ -259,8 +263,8 @@
   {
    "id": "door_hall_shops",
    "rect": {
-    "x": 84,
-    "y": 56,
+    "x": 64,
+    "y": 44,
     "w": 3,
     "h": 2
    },
@@ -271,24 +275,10 @@
    ]
   },
   {
-   "id": "door_hall_platform",
-   "rect": {
-    "x": 62,
-    "y": 26,
-    "w": 4,
-    "h": 2
-   },
-   "cost": 1500,
-   "areas": [
-    "hall",
-    "platform"
-   ]
-  },
-  {
    "id": "door_ticket_tech",
    "rect": {
-    "x": 30,
-    "y": 78,
+    "x": 24,
+    "y": 62,
     "w": 3,
     "h": 3
    },
@@ -301,8 +291,8 @@
   {
    "id": "door_shops_tech",
    "rect": {
-    "x": 96,
-    "y": 78,
+    "x": 74,
+    "y": 62,
     "w": 3,
     "h": 3
    },
@@ -315,8 +305,8 @@
   {
    "id": "door_tech_tunnels",
    "rect": {
-    "x": 62,
-    "y": 95,
+    "x": 49,
+    "y": 78,
     "w": 3,
     "h": 3
    },
@@ -329,10 +319,10 @@
   {
    "id": "door_tunnels_maint",
    "rect": {
-    "x": 86,
-    "y": 108,
+    "x": 66,
+    "y": 90,
     "w": 3,
-    "h": 2
+    "h": 3
    },
    "cost": 3000,
    "areas": [
@@ -345,8 +335,8 @@
   {
    "id": "win_hall_w1",
    "rect": {
-    "x": 39,
-    "y": 32,
+    "x": 29,
+    "y": 27,
     "w": 1,
     "h": 2
    },
@@ -355,8 +345,8 @@
   {
    "id": "win_hall_w2",
    "rect": {
-    "x": 39,
-    "y": 47,
+    "x": 29,
+    "y": 39,
     "w": 1,
     "h": 2
    },
@@ -365,8 +355,8 @@
   {
    "id": "win_hall_e1",
    "rect": {
-    "x": 88,
-    "y": 32,
+    "x": 70,
+    "y": 27,
     "w": 1,
     "h": 2
    },
@@ -375,8 +365,8 @@
   {
    "id": "win_hall_e2",
    "rect": {
-    "x": 88,
-    "y": 47,
+    "x": 70,
+    "y": 39,
     "w": 1,
     "h": 2
    },
@@ -385,8 +375,8 @@
   {
    "id": "win_ticket_1",
    "rect": {
-    "x": 11,
-    "y": 62,
+    "x": 7,
+    "y": 49,
     "w": 1,
     "h": 2
    },
@@ -395,8 +385,8 @@
   {
    "id": "win_ticket_2",
    "rect": {
-    "x": 11,
-    "y": 71,
+    "x": 7,
+    "y": 57,
     "w": 1,
     "h": 2
    },
@@ -405,8 +395,8 @@
   {
    "id": "win_shops_1",
    "rect": {
-    "x": 116,
-    "y": 62,
+    "x": 92,
+    "y": 49,
     "w": 1,
     "h": 2
    },
@@ -415,8 +405,8 @@
   {
    "id": "win_shops_2",
    "rect": {
-    "x": 116,
-    "y": 71,
+    "x": 92,
+    "y": 57,
     "w": 1,
     "h": 2
    },
@@ -425,170 +415,170 @@
  ],
  "spawns": [
   {
-   "id": "H1",
-   "x": 36.5,
-   "z": 33.5,
-   "area": "hall",
-   "min_round": 1
-  },
-  {
-   "id": "H2",
-   "x": 36.5,
-   "z": 48.5,
-   "area": "hall",
-   "min_round": 1
-  },
-  {
-   "id": "H3",
-   "x": 91.5,
-   "z": 33.5,
-   "area": "hall",
-   "min_round": 1
-  },
-  {
-   "id": "H4",
-   "x": 91.5,
-   "z": 48.5,
-   "area": "hall",
-   "min_round": 1
-  },
-  {
    "id": "P1",
-   "x": 17.5,
-   "z": 13.5,
+   "x": 5.5,
+   "z": 11.5,
    "area": "platform",
    "min_round": 1
   },
   {
    "id": "P2",
-   "x": 110.5,
-   "z": 14.5,
+   "x": 94.5,
+   "z": 12.5,
    "area": "platform",
    "min_round": 1
   },
   {
    "id": "P3",
-   "x": 18.5,
-   "z": 6.5,
+   "x": 5.5,
+   "z": 4.5,
    "area": "platform",
    "min_round": 1
   },
   {
    "id": "P4",
-   "x": 109.5,
-   "z": 6.5,
+   "x": 94.5,
+   "z": 4.5,
    "area": "platform",
    "min_round": 1
   },
   {
+   "id": "H1",
+   "x": 26.5,
+   "z": 27.5,
+   "area": "hall",
+   "min_round": 1
+  },
+  {
+   "id": "H2",
+   "x": 26.5,
+   "z": 39.5,
+   "area": "hall",
+   "min_round": 1
+  },
+  {
+   "id": "H3",
+   "x": 73.5,
+   "z": 27.5,
+   "area": "hall",
+   "min_round": 1
+  },
+  {
+   "id": "H4",
+   "x": 73.5,
+   "z": 39.5,
+   "area": "hall",
+   "min_round": 1
+  },
+  {
    "id": "B1",
-   "x": 8.5,
-   "z": 63.5,
+   "x": 4.5,
+   "z": 49.5,
    "area": "ticket",
    "min_round": 1
   },
   {
    "id": "B2",
-   "x": 8.5,
-   "z": 72.5,
+   "x": 4.5,
+   "z": 57.5,
    "area": "ticket",
    "min_round": 1
   },
   {
    "id": "L1",
-   "x": 119.5,
-   "z": 63.5,
+   "x": 95.5,
+   "z": 49.5,
    "area": "shops",
    "min_round": 1
   },
   {
    "id": "L2",
-   "x": 119.5,
-   "z": 72.5,
+   "x": 95.5,
+   "z": 57.5,
    "area": "shops",
    "min_round": 1
   },
   {
    "id": "T1",
-   "x": 25.5,
-   "z": 82.5,
+   "x": 13.5,
+   "z": 66.5,
    "area": "tech",
    "min_round": 1
   },
   {
    "id": "T2",
-   "x": 102.5,
-   "z": 82.5,
+   "x": 86.5,
+   "z": 76.5,
    "area": "tech",
    "min_round": 1
   },
   {
    "id": "T3",
-   "x": 26.5,
-   "z": 93.5,
+   "x": 13.5,
+   "z": 76.5,
    "area": "tech",
    "min_round": 1
   },
   {
    "id": "T4",
-   "x": 101.5,
-   "z": 93.5,
+   "x": 87.5,
+   "z": 70.5,
    "area": "tech",
    "min_round": 1
   },
   {
    "id": "U1",
-   "x": 18.5,
-   "z": 100.5,
+   "x": 9.5,
+   "z": 82.5,
    "area": "tunnels",
    "min_round": 1
   },
   {
    "id": "U2",
-   "x": 109.5,
-   "z": 100.5,
+   "x": 90.5,
+   "z": 82.5,
    "area": "tunnels",
    "min_round": 1
   },
   {
    "id": "U3",
-   "x": 18.5,
-   "z": 105.5,
+   "x": 9.5,
+   "z": 88.5,
    "area": "tunnels",
    "min_round": 1
   },
   {
    "id": "U4",
-   "x": 109.5,
-   "z": 105.5,
+   "x": 90.5,
+   "z": 88.5,
    "area": "tunnels",
    "min_round": 1
   },
   {
    "id": "U5",
-   "x": 44.5,
-   "z": 100.5,
+   "x": 34.5,
+   "z": 82.5,
    "area": "tunnels",
    "min_round": 1
   },
   {
    "id": "U6",
-   "x": 84.5,
-   "z": 105.5,
+   "x": 76.5,
+   "z": 88.5,
    "area": "tunnels",
    "min_round": 1
   },
   {
    "id": "M1",
-   "x": 38.5,
-   "z": 111.5,
+   "x": 29.5,
+   "z": 94.5,
    "area": "maintenance",
    "min_round": 1
   },
   {
    "id": "M2",
-   "x": 89.5,
-   "z": 117.5,
+   "x": 70.5,
+   "z": 100.5,
    "area": "maintenance",
    "min_round": 1
   }
@@ -596,528 +586,646 @@
  "stations": [
   {
    "type": "weapon",
-   "weaponId": "glock",
-   "tx": 56,
-   "ty": 40,
-   "x": 56.5,
-   "z": 40.5
-  },
-  {
-   "type": "ammo",
-   "tx": 71,
-   "ty": 40,
-   "x": 71.5,
-   "z": 40.5
-  },
-  {
-   "type": "weapon",
-   "weaponId": "mp5",
-   "tx": 26,
-   "ty": 74,
-   "x": 26.5,
-   "z": 74.5
-  },
-  {
-   "type": "weapon",
-   "weaponId": "pump",
-   "tx": 18,
-   "ty": 60,
-   "x": 18.5,
-   "z": 60.5
-  },
-  {
-   "type": "weapon",
-   "weaponId": "vector",
-   "tx": 99,
-   "ty": 62,
-   "x": 99.5,
-   "z": 62.5
-  },
-  {
-   "type": "weapon",
-   "weaponId": "m4",
-   "tx": 110,
-   "ty": 74,
-   "x": 110.5,
-   "z": 74.5
-  },
-  {
-   "type": "ammo",
-   "tx": 90,
-   "ty": 74,
-   "x": 90.5,
-   "z": 74.5
-  },
-  {
-   "type": "weapon",
    "weaponId": "ak",
-   "tx": 52,
-   "ty": 22,
-   "x": 52.5,
-   "z": 22.5
+   "tx": 30,
+   "ty": 7,
+   "x": 30.5,
+   "z": 7.5
   },
   {
    "type": "ammo",
-   "tx": 76,
-   "ty": 22,
-   "x": 76.5,
-   "z": 22.5
+   "tx": 70,
+   "ty": 7,
+   "x": 70.5,
+   "z": 7.5
   },
   {
    "type": "weapon",
    "weaponId": "combat_shotgun",
-   "tx": 66.5,
-   "ty": 6,
-   "x": 67,
-   "z": 6.5
+   "tx": 46,
+   "ty": 3,
+   "x": 46.5,
+   "z": 3.5
+  },
+  {
+   "type": "weapon",
+   "weaponId": "glock",
+   "tx": 38,
+   "ty": 24,
+   "x": 38.5,
+   "z": 24.5
   },
   {
    "type": "ammo",
-   "tx": 48,
-   "ty": 92,
-   "x": 48.5,
-   "z": 92.5
+   "tx": 62,
+   "ty": 24,
+   "x": 62.5,
+   "z": 24.5
+  },
+  {
+   "type": "weapon",
+   "weaponId": "mp5",
+   "tx": 14,
+   "ty": 46,
+   "x": 14.5,
+   "z": 46.5
+  },
+  {
+   "type": "weapon",
+   "weaponId": "pump",
+   "tx": 26,
+   "ty": 46,
+   "x": 26.5,
+   "z": 46.5
+  },
+  {
+   "type": "weapon",
+   "weaponId": "vector",
+   "tx": 74,
+   "ty": 46,
+   "x": 74.5,
+   "z": 46.5
+  },
+  {
+   "type": "weapon",
+   "weaponId": "m4",
+   "tx": 86,
+   "ty": 46,
+   "x": 86.5,
+   "z": 46.5
+  },
+  {
+   "type": "ammo",
+   "tx": 61,
+   "ty": 54,
+   "x": 61.5,
+   "z": 54.5
+  },
+  {
+   "type": "ammo",
+   "tx": 38,
+   "ty": 65,
+   "x": 38.5,
+   "z": 65.5
   }
  ],
  "machines": [
   {
-   "type": "mystery_box",
-   "tx": 69,
-   "ty": 30,
-   "x": 69.5,
-   "z": 30.5
+   "type": "perk",
+   "perkId": "deadeye",
+   "tx": 5,
+   "ty": 16,
+   "x": 5.5,
+   "z": 16.5
   },
   {
-   "type": "weapon_lab",
+   "type": "mystery_box",
    "tx": 56,
-   "ty": 111,
+   "ty": 24,
    "x": 56.5,
-   "z": 111.5
+   "z": 24.5
   },
   {
    "type": "perk",
    "perkId": "fortify",
-   "tx": 42,
-   "ty": 40,
-   "x": 42.5,
-   "z": 40.5
+   "tx": 30,
+   "ty": 34,
+   "x": 30.5,
+   "z": 34.5
   },
   {
    "type": "perk",
    "perkId": "quick_revive",
-   "tx": 85,
-   "ty": 40,
-   "x": 85.5,
-   "z": 40.5
+   "tx": 69,
+   "ty": 34,
+   "x": 69.5,
+   "z": 34.5
   },
   {
    "type": "perk",
    "perkId": "quick_hands",
-   "tx": 41,
-   "ty": 69,
-   "x": 41.5,
-   "z": 69.5
+   "tx": 39,
+   "ty": 57,
+   "x": 39.5,
+   "z": 57.5
   },
   {
    "type": "perk",
    "perkId": "sprint",
-   "tx": 108,
-   "ty": 59,
-   "x": 108.5,
-   "z": 59.5
-  },
-  {
-   "type": "perk",
-   "perkId": "deadeye",
-   "tx": 18,
-   "ty": 20,
-   "x": 18.5,
-   "z": 20.5
+   "tx": 91,
+   "ty": 60,
+   "x": 91.5,
+   "z": 60.5
   },
   {
    "type": "perk",
    "perkId": "adrenaline",
    "tx": 82,
-   "ty": 82,
+   "ty": 65,
    "x": 82.5,
-   "z": 82.5
+   "z": 65.5
+  },
+  {
+   "type": "weapon_lab",
+   "tx": 44,
+   "ty": 93,
+   "x": 44.5,
+   "z": 93.5
   },
   {
    "type": "perk",
    "perkId": "overload",
-   "tx": 90,
-   "ty": 112,
-   "x": 90.5,
-   "z": 112.5
+   "tx": 71,
+   "ty": 98,
+   "x": 71.5,
+   "z": 98.5
   }
  ],
  "box_spots": [
   {
-   "x": 69.5,
-   "z": 30.5,
-   "area": "hall"
-  },
-  {
-   "x": 53.5,
-   "z": 30.1,
-   "area": "hall"
-  },
-  {
-   "x": 85.5,
-   "z": 36.5,
-   "area": "hall"
-  },
-  {
-   "x": 64.5,
-   "z": 54.5,
-   "area": "hall"
-  },
-  {
-   "x": 46.5,
-   "z": 21.5,
+   "x": 58.5,
+   "z": 20.5,
    "area": "platform"
   },
   {
-   "x": 35.5,
-   "z": 74.5,
+   "x": 56.5,
+   "z": 24.5,
+   "area": "hall"
+  },
+  {
+   "x": 43.5,
+   "z": 43.5,
+   "area": "hall"
+  },
+  {
+   "x": 57.5,
+   "z": 43.5,
+   "area": "hall"
+  },
+  {
+   "x": 15.5,
+   "z": 60.5,
    "area": "ticket"
   },
   {
-   "x": 108.5,
-   "z": 71.5,
+   "x": 76.5,
+   "z": 60.5,
    "area": "shops"
   },
   {
-   "x": 80.5,
-   "z": 89,
+   "x": 62.5,
+   "z": 76.5,
    "area": "tech"
   },
   {
-   "x": 58.5,
-   "z": 100,
+   "x": 24.5,
+   "z": 88.5,
    "area": "tunnels"
   },
   {
-   "x": 64.5,
-   "z": 111.5,
+   "x": 56.5,
+   "z": 100.5,
    "area": "maintenance"
   }
  ],
  "boss_spawns": [
   {
-   "x": 64.5,
-   "z": 44.5
+   "x": 50.5,
+   "z": 35.5
   },
   {
-   "x": 55.5,
-   "z": 42.5
+   "x": 42.5,
+   "z": 36.5
   },
   {
-   "x": 73.5,
-   "z": 42.5
+   "x": 58.5,
+   "z": 36.5
   },
   {
-   "x": 64.5,
-   "z": 49.5
+   "x": 50.5,
+   "z": 41.5
   }
  ],
  "lamps": [
   {
-   "x": 52.5,
-   "z": 38.5,
-   "radius": 6.563,
-   "intensity": 0.72,
-   "flicker": 0.1,
-   "color": 16766624
-  },
-  {
-   "x": 76.5,
-   "z": 38.5,
-   "radius": 6.563,
-   "intensity": 0.7,
-   "flicker": 0.2,
-   "color": 16766624
-  },
-  {
-   "x": 64.5,
-   "z": 50.5,
-   "radius": 7.188,
-   "intensity": 0.75,
-   "flicker": 0.05,
-   "color": 16766624
-  },
-  {
-   "x": 64.5,
-   "z": 30.5,
-   "radius": 5,
-   "intensity": 0.5,
-   "flicker": 0.5,
-   "color": 16766624
-  },
-  {
-   "x": 30.5,
-   "z": 21.5,
-   "radius": 6.25,
-   "intensity": 0.65,
-   "flicker": 0.2,
-   "color": 16766624
-  },
-  {
-   "x": 52.5,
-   "z": 21.5,
-   "radius": 6.25,
-   "intensity": 0.6,
-   "flicker": 0.1,
-   "color": 16766624
-  },
-  {
-   "x": 76.5,
-   "z": 21.5,
-   "radius": 6.25,
-   "intensity": 0.6,
-   "flicker": 0.5,
-   "color": 16766624
-  },
-  {
-   "x": 98.5,
-   "z": 21.5,
-   "radius": 6.25,
-   "intensity": 0.65,
+   "x": 10.5,
+   "z": 18.5,
+   "radius": 6.5,
+   "intensity": 0.55,
    "flicker": 0.15,
-   "color": 16766624
+   "color": 16766624,
+   "broken": false
   },
   {
-   "x": 34.5,
-   "z": 10.5,
-   "radius": 5.313,
-   "intensity": 0.5,
-   "flicker": 0.3,
-   "color": 16766624
-  },
-  {
-   "x": 64.5,
-   "z": 10.5,
-   "radius": 5.313,
+   "x": 26.5,
+   "z": 18.5,
+   "radius": 6.5,
    "intensity": 0.55,
-   "flicker": 0.1,
-   "color": 16766624
+   "flicker": 0.15,
+   "color": 16766624,
+   "broken": false
   },
   {
-   "x": 94.5,
-   "z": 10.5,
-   "radius": 5.313,
-   "intensity": 0.5,
-   "flicker": 0.6,
-   "color": 16766624
-  },
-  {
-   "x": 20.5,
-   "z": 61.5,
-   "radius": 5.313,
+   "x": 42.5,
+   "z": 18.5,
+   "radius": 6.5,
    "intensity": 0.55,
-   "flicker": 0.3,
-   "color": 16766624
+   "flicker": 0.15,
+   "color": 16766624,
+   "broken": false
   },
   {
-   "x": 34.5,
-   "z": 72.5,
-   "radius": 5.625,
-   "intensity": 0.6,
-   "flicker": 0.6,
-   "color": 16766624
-  },
-  {
-   "x": 89.5,
-   "z": 62.5,
-   "radius": 4.375,
-   "intensity": 0.5,
-   "flicker": 0.2,
-   "color": 16766624
-  },
-  {
-   "x": 99.5,
-   "z": 62.5,
-   "radius": 4.375,
-   "intensity": 0.45,
-   "flicker": 0.8,
-   "color": 16766624
-  },
-  {
-   "x": 109.5,
-   "z": 62.5,
-   "radius": 4.375,
-   "intensity": 0.5,
-   "flicker": 0.3,
-   "color": 16766624
-  },
-  {
-   "x": 100.5,
-   "z": 73.5,
-   "radius": 5.625,
-   "intensity": 0.5,
-   "flicker": 0.4,
-   "color": 16766624
-  },
-  {
-   "x": 32.5,
-   "z": 84.5,
-   "radius": 4.688,
+   "x": 58.5,
+   "z": 18.5,
+   "radius": 6.5,
    "intensity": 0.55,
-   "flicker": 0.2,
-   "color": 16766624
+   "flicker": 0.15,
+   "color": 16766624,
+   "broken": false
   },
   {
-   "x": 64.5,
-   "z": 88.5,
-   "radius": 5,
-   "intensity": 0.6,
-   "flicker": 0.6,
-   "color": 16766624
+   "x": 74.5,
+   "z": 18.5,
+   "radius": 6.5,
+   "intensity": 0.55,
+   "flicker": 0.15,
+   "color": 16766624,
+   "broken": false
   },
   {
-   "x": 96.5,
-   "z": 84.5,
-   "radius": 4.688,
-   "intensity": 0.5,
-   "flicker": 0.3,
-   "color": 16766624
+   "x": 90.5,
+   "z": 18.5,
+   "radius": 6.5,
+   "intensity": 0.55,
+   "flicker": 0.15,
+   "color": 16766624,
+   "broken": false
   },
   {
-   "x": 40.5,
-   "z": 100.5,
-   "radius": 3.75,
-   "intensity": 0.45,
-   "flicker": 0.7,
-   "color": 16766624
-  },
-  {
-   "x": 88.5,
-   "z": 105.5,
-   "radius": 3.75,
-   "intensity": 0.45,
+   "x": 24.5,
+   "z": 8.5,
+   "radius": 6.5,
+   "intensity": 0.4,
    "flicker": 0.5,
-   "color": 16766624
+   "color": 16766624,
+   "broken": false
   },
   {
    "x": 50.5,
-   "z": 114.5,
-   "radius": 5.625,
-   "intensity": 0.6,
-   "flicker": 0.2,
-   "color": 16766624
+   "z": 8.5,
+   "radius": 6.5,
+   "intensity": 0.45,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": false
   },
   {
-   "x": 78.5,
-   "z": 114.5,
-   "radius": 5.625,
+   "x": 76.5,
+   "z": 8.5,
+   "radius": 6.5,
    "intensity": 0.6,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": true
+  },
+  {
+   "x": 40.5,
+   "z": 27.5,
+   "radius": 6.5,
+   "intensity": 0.7,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 60.5,
+   "z": 27.5,
+   "radius": 6.5,
+   "intensity": 0.7,
+   "flicker": 0.2,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 50.5,
+   "z": 34.5,
+   "radius": 6.5,
+   "intensity": 0.75,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 40.5,
+   "z": 41.5,
+   "radius": 6.5,
+   "intensity": 0.65,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 60.5,
+   "z": 41.5,
+   "radius": 6.5,
+   "intensity": 0.65,
    "flicker": 0.4,
-   "color": 16766624
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 14.5,
+   "z": 49.5,
+   "radius": 6.5,
+   "intensity": 0.55,
+   "flicker": 0.3,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 28.5,
+   "z": 49.5,
+   "radius": 6.5,
+   "intensity": 0.55,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 20.5,
+   "z": 57.5,
+   "radius": 6.5,
+   "intensity": 0.5,
+   "flicker": 0.6,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 33.5,
+   "z": 58.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": true
+  },
+  {
+   "x": 65.5,
+   "z": 49.5,
+   "radius": 6.5,
+   "intensity": 0.5,
+   "flicker": 0.2,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 76.5,
+   "z": 49.5,
+   "radius": 6.5,
+   "intensity": 0.45,
+   "flicker": 0.8,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 86.5,
+   "z": 49.5,
+   "radius": 6.5,
+   "intensity": 0.5,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 68.5,
+   "z": 58.5,
+   "radius": 6.5,
+   "intensity": 0.45,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 84.5,
+   "z": 58.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": true
+  },
+  {
+   "x": 20.5,
+   "z": 68.5,
+   "radius": 6.5,
+   "intensity": 0.5,
+   "flicker": 0.2,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 36.5,
+   "z": 68.5,
+   "radius": 6.5,
+   "intensity": 0.5,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 50.5,
+   "z": 74.5,
+   "radius": 6.5,
+   "intensity": 0.55,
+   "flicker": 0.6,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 63.5,
+   "z": 67.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": true
+  },
+  {
+   "x": 80.5,
+   "z": 72.5,
+   "radius": 6.5,
+   "intensity": 0.5,
+   "flicker": 0.3,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 20.5,
+   "z": 83.5,
+   "radius": 6.5,
+   "intensity": 0.45,
+   "flicker": 0.7,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 52.5,
+   "z": 87.5,
+   "radius": 6.5,
+   "intensity": 0.45,
+   "flicker": 0.4,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 70.5,
+   "z": 83.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": true
+  },
+  {
+   "x": 86.5,
+   "z": 87.5,
+   "radius": 6.5,
+   "intensity": 0.4,
+   "flicker": 0.5,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 36.5,
+   "z": 99.5,
+   "radius": 6.5,
+   "intensity": 0.55,
+   "flicker": 0.2,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 50.5,
+   "z": 95.5,
+   "radius": 6.5,
+   "intensity": 0.6,
+   "flicker": 0.1,
+   "color": 16766624,
+   "broken": false
+  },
+  {
+   "x": 64.5,
+   "z": 99.5,
+   "radius": 6.5,
+   "intensity": 0.55,
+   "flicker": 0.4,
+   "color": 16766624,
+   "broken": false
   }
  ],
  "interactions": [
   {
-   "type": "breaker",
-   "tx": 64,
-   "ty": 86.4
-  },
-  {
-   "type": "power",
-   "tx": 32.4,
-   "ty": 86
+   "type": "train",
+   "tx": 40,
+   "ty": 14.3
   },
   {
    "type": "alarm",
-   "tx": 46,
-   "ty": 28.7
-  },
-  {
-   "type": "train",
-   "tx": 55,
-   "ty": 16.4
+   "tx": 41,
+   "ty": 24.2
   },
   {
    "type": "trap",
-   "tx": 60,
-   "ty": 28.7,
+   "tx": 45,
+   "ty": 24.2,
    "zone": {
-    "x": 61,
-    "y": 28,
+    "x": 47,
+    "y": 24,
     "w": 6,
     "h": 2
    }
   },
   {
+   "type": "breaker",
+   "tx": 50,
+   "ty": 65.2
+  },
+  {
+   "type": "power",
+   "tx": 12.4,
+   "ty": 70
+  },
+  {
    "type": "trap",
-   "tx": 41.4,
-   "ty": 103.3,
+   "tx": 41,
+   "ty": 86.2,
    "zone": {
-    "x": 45,
-    "y": 103,
+    "x": 44,
+    "y": 86,
     "w": 5,
-    "h": 5
+    "h": 3
    }
   }
  ],
  "station": {
   "area": "platform",
   "lane": {
-   "y": 12,
+   "y": 10,
    "h": 4
   },
   "span": {
-   "from": 16,
-   "to": 112
+   "from": 4,
+   "to": 96
   },
   "tunnels": [
    {
-    "y": 4,
+    "y": 2,
     "h": 5
    },
    {
-    "y": 12,
+    "y": 10,
     "h": 4
    }
   ],
   "signals": [
    {
-    "tx": 16.8,
-    "ty": 16.4
+    "tx": 4.8,
+    "ty": 14.4
    },
    {
-    "tx": 110.2,
-    "ty": 16.4
+    "tx": 94.2,
+    "ty": 14.4
    }
   ],
   "board": {
-   "tx": 72,
-   "ty": 17.1
+   "tx": 60,
+   "ty": 14.1
   }
  },
  "secrets": {
   "teddies": [
    {
-    "tx": 115,
-    "ty": 58
+    "tx": 91,
+    "ty": 46
    },
    {
-    "tx": 12,
-    "ty": 77
+    "tx": 8,
+    "ty": 61
    },
    {
-    "tx": 111,
-    "ty": 106
+    "tx": 91,
+    "ty": 89
    }
   ],
   "radio": {
-   "tx": 37.4,
-   "ty": 110.2,
+   "tx": 28.4,
+   "ty": 93.2,
    "holdMs": 900,
    "label": "SINTONIZAR O RÁDIO"
   },
   "creditsSign": {
-   "tx": 57.5,
-   "ty": 30.5
+   "tx": 53.5,
+   "ty": 26
   },
   "loreMessages": [
    "📻 \"...controle da Estação Central. O trem das 23h40 NÃO deve parar. Repito: não parem o trem...\"",
@@ -1126,11 +1234,24 @@
    "📻 \"...se alguém ouvir isto: tentem sobreviver. O resgate chega ao amanhecer. Talvez.\""
   ]
  },
+ "quest": null,
+ "decor": {
+  "seed": "terminal-2d5",
+  "density": {
+   "hall": 1,
+   "platform": 1,
+   "ticket": 1,
+   "shops": 1.3,
+   "tech": 1.2,
+   "tunnels": 1.5,
+   "maintenance": 1.3
+  }
+ },
  "props": [
   {
    "type": "bench",
-   "x": 52.5,
-   "z": 46.5,
+   "x": 24.5,
+   "z": 19.5,
    "angle": 0,
    "body": {
     "w": 2,
@@ -1143,8 +1264,8 @@
   },
   {
    "type": "bench",
-   "x": 76.5,
-   "z": 46.5,
+   "x": 42.5,
+   "z": 19.5,
    "angle": 0,
    "body": {
     "w": 2,
@@ -1158,7 +1279,7 @@
   {
    "type": "bench",
    "x": 58.5,
-   "z": 52.5,
+   "z": 19.5,
    "angle": 0,
    "body": {
     "w": 2,
@@ -1171,87 +1292,8 @@
   },
   {
    "type": "bench",
-   "x": 70.5,
-   "z": 52.5,
-   "angle": 0,
-   "body": {
-    "w": 2,
-    "d": 0.75,
-    "ox": -0.031,
-    "oz": -0.047
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "trash",
-   "x": 45.5,
-   "z": 30.5,
-   "angle": 0,
-   "body": {
-    "w": 0.688,
-    "d": 0.688,
-    "ox": -0.031,
-    "oz": -0.031
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "trash",
-   "x": 83.5,
-   "z": 30.5,
-   "angle": 0,
-   "body": {
-    "w": 0.688,
-    "d": 0.688,
-    "ox": -0.031,
-    "oz": -0.031
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "trash",
-   "x": 45.5,
-   "z": 54.5,
-   "angle": 0,
-   "body": {
-    "w": 0.688,
-    "d": 0.688,
-    "ox": -0.031,
-    "oz": -0.031
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "trash",
-   "x": 83.5,
-   "z": 54.5,
-   "angle": 0,
-   "body": {
-    "w": 0.688,
-    "d": 0.688,
-    "ox": -0.031,
-    "oz": -0.031
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "suitcase",
-   "x": 60.5,
-   "z": 45.5,
-   "angle": 25,
-   "body": null,
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "bench",
-   "x": 36.5,
-   "z": 23.5,
+   "x": 74.5,
+   "z": 19.5,
    "angle": 0,
    "body": {
     "w": 2,
@@ -1264,64 +1306,156 @@
   },
   {
    "type": "bench",
-   "x": 88.5,
-   "z": 23.5,
-   "angle": 0,
-   "body": {
-    "w": 2,
-    "d": 0.75,
-    "ox": -0.031,
-    "oz": -0.047
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "bench",
-   "x": 104.5,
-   "z": 23.5,
-   "angle": 0,
-   "body": {
-    "w": 2,
-    "d": 0.75,
-    "ox": -0.031,
-    "oz": -0.047
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "trash",
-   "x": 24.5,
-   "z": 24.5,
-   "angle": 0,
-   "body": {
-    "w": 0.688,
-    "d": 0.688,
-    "ox": -0.031,
-    "oz": -0.031
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "trash",
-   "x": 70.5,
-   "z": 24.5,
-   "angle": 0,
-   "body": {
-    "w": 0.688,
-    "d": 0.688,
-    "ox": -0.031,
-    "oz": -0.031
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "suitcase",
    "x": 40.5,
+   "z": 8.5,
+   "angle": 0,
+   "body": {
+    "w": 2,
+    "d": 0.75,
+    "ox": -0.031,
+    "oz": -0.047
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bench",
+   "x": 62.5,
+   "z": 8.5,
+   "angle": 0,
+   "body": {
+    "w": 2,
+    "d": 0.75,
+    "ox": -0.031,
+    "oz": -0.047
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 10.5,
    "z": 20.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 50.5,
+   "z": 20.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 90.5,
+   "z": 20.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 34.5,
+   "z": 8.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "barrier",
+   "x": 8.5,
+   "z": 14.5,
+   "angle": 0,
+   "body": {
+    "w": 1.875,
+    "d": 0.438,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "barrier",
+   "x": 92.5,
+   "z": 14.5,
+   "angle": 0,
+   "body": {
+    "w": 1.875,
+    "d": 0.438,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "sign_stand",
+   "x": 24.5,
+   "z": 15.5,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 0.375,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 2.188,
+    "intensity": 0.4,
+    "color": 6086794
+   }
+  },
+  {
+   "type": "sign_stand",
+   "x": 76.5,
+   "z": 15.5,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 0.375,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 2.188,
+    "intensity": 0.4,
+    "color": 6086794
+   }
+  },
+  {
+   "type": "suitcase",
+   "x": 46.5,
+   "z": 17.5,
    "angle": -30,
    "body": null,
    "blocks_bullets": false,
@@ -1329,16 +1463,34 @@
   },
   {
    "type": "suitcase",
-   "x": 90.5,
-   "z": 21.5,
+   "x": 88.5,
+   "z": 17.5,
    "angle": 60,
    "body": null,
    "blocks_bullets": false,
    "light": null
   },
   {
+   "type": "suitcase",
+   "x": 70.5,
+   "z": 8.5,
+   "angle": 15,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
    "type": "wagon_seat",
-   "x": 60,
+   "x": 45.5,
+   "z": 4.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "wagon_seat",
+   "x": 45.5,
    "z": 5.5,
    "angle": 0,
    "body": null,
@@ -1347,8 +1499,8 @@
   },
   {
    "type": "wagon_seat",
-   "x": 60,
-   "z": 7.5,
+   "x": 54.5,
+   "z": 4.5,
    "angle": 0,
    "body": null,
    "blocks_bullets": false,
@@ -1356,17 +1508,115 @@
   },
   {
    "type": "wagon_seat",
-   "x": 69,
-   "z": 7.5,
+   "x": 54.5,
+   "z": 5.5,
    "angle": 0,
    "body": null,
    "blocks_bullets": false,
    "light": null
   },
   {
+   "type": "luggage_cart",
+   "x": 86.5,
+   "z": 20.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "extinguisher",
+   "x": 4.5,
+   "z": 20.5,
+   "angle": 0,
+   "body": {
+    "w": 0.563,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "extinguisher",
+   "x": 95.5,
+   "z": 20.5,
+   "angle": 0,
+   "body": {
+    "w": 0.563,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bench",
+   "x": 41.5,
+   "z": 35.5,
+   "angle": 90,
+   "body": {
+    "w": 0.75,
+    "d": 2,
+    "ox": -0.047,
+    "oz": -0.031
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bench",
+   "x": 59.5,
+   "z": 35.5,
+   "angle": 90,
+   "body": {
+    "w": 0.75,
+    "d": 2,
+    "ox": -0.047,
+    "oz": -0.031
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bench",
+   "x": 46.5,
+   "z": 39.5,
+   "angle": 0,
+   "body": {
+    "w": 2,
+    "d": 0.75,
+    "ox": -0.031,
+    "oz": -0.047
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "bench",
+   "x": 54.5,
+   "z": 39.5,
+   "angle": 0,
+   "body": {
+    "w": 2,
+    "d": 0.75,
+    "ox": -0.031,
+    "oz": -0.047
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
    "type": "trash",
-   "x": 14.5,
-   "z": 76.5,
+   "x": 31.5,
+   "z": 25.5,
    "angle": 0,
    "body": {
     "w": 0.688,
@@ -1379,8 +1629,337 @@
   },
   {
    "type": "trash",
-   "x": 42.5,
-   "z": 76.5,
+   "x": 68.5,
+   "z": 25.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 31.5,
+   "z": 42.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 68.5,
+   "z": 42.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "desk_computer",
+   "x": 47.5,
+   "z": 31.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 1.875,
+    "intensity": 0.35,
+    "color": 7323880
+   }
+  },
+  {
+   "type": "desk_computer",
+   "x": 52.5,
+   "z": 31.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 1.875,
+    "intensity": 0.35,
+    "color": 7323880
+   }
+  },
+  {
+   "type": "chair",
+   "x": 47.5,
+   "z": 30.5,
+   "angle": 180,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "chair",
+   "x": 52.5,
+   "z": 30.5,
+   "angle": 170,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "waiting_chairs",
+   "x": 50.5,
+   "z": 27.5,
+   "angle": 0,
+   "body": {
+    "w": 2.438,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "luggage_cart",
+   "x": 38.5,
+   "z": 42.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "suitcase",
+   "x": 47.5,
+   "z": 36.5,
+   "angle": 25,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "suitcase",
+   "x": 62.5,
+   "z": 33.5,
+   "angle": -40,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "sign_stand",
+   "x": 62.5,
+   "z": 42.5,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 0.375,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 2.188,
+    "intensity": 0.4,
+    "color": 6086794
+   }
+  },
+  {
+   "type": "extinguisher",
+   "x": 30.5,
+   "z": 30.5,
+   "angle": 0,
+   "body": {
+    "w": 0.563,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "extinguisher",
+   "x": 69.5,
+   "z": 30.5,
+   "angle": 0,
+   "body": {
+    "w": 0.563,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "cables",
+   "x": 56.5,
+   "z": 41.5,
+   "angle": 4,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "desk_computer",
+   "x": 13.5,
+   "z": 51.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 1.875,
+    "intensity": 0.35,
+    "color": 7323880
+   }
+  },
+  {
+   "type": "desk_computer",
+   "x": 22.5,
+   "z": 51.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 1.875,
+    "intensity": 0.35,
+    "color": 7323880
+   }
+  },
+  {
+   "type": "desk_computer",
+   "x": 31.5,
+   "z": 51.5,
+   "angle": 0,
+   "body": {
+    "w": 1.813,
+    "d": 1,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 1.875,
+    "intensity": 0.35,
+    "color": 7323880
+   }
+  },
+  {
+   "type": "chair",
+   "x": 13.5,
+   "z": 49.5,
+   "angle": 180,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "chair",
+   "x": 22.5,
+   "z": 49.5,
+   "angle": 170,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "chair",
+   "x": 31.5,
+   "z": 49.5,
+   "angle": 190,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "chair",
+   "x": 11.5,
+   "z": 58.5,
+   "angle": 40,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "waiting_chairs",
+   "x": 22.5,
+   "z": 56.5,
+   "angle": 0,
+   "body": {
+    "w": 2.438,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "waiting_chairs",
+   "x": 22.5,
+   "z": 59.5,
+   "angle": 0,
+   "body": {
+    "w": 2.438,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 9.5,
+   "z": 61.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 38.5,
+   "z": 47.5,
    "angle": 0,
    "body": {
     "w": 0.688,
@@ -1394,7 +1973,7 @@
   {
    "type": "suitcase",
    "x": 30.5,
-   "z": 70.5,
+   "z": 56.5,
    "angle": 10,
    "body": null,
    "blocks_bullets": false,
@@ -1415,9 +1994,81 @@
    "light": null
   },
   {
+   "type": "sign_stand",
+   "x": 36.5,
+   "z": 53.5,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 0.375,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 2.188,
+    "intensity": 0.4,
+    "color": 6086794
+   }
+  },
+  {
+   "type": "vitrine",
+   "x": 62.5,
+   "z": 51.5,
+   "angle": 0,
+   "body": {
+    "w": 1.875,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 2.344,
+    "intensity": 0.4,
+    "color": 16769192
+   }
+  },
+  {
+   "type": "vitrine",
+   "x": 77.5,
+   "z": 51.5,
+   "angle": 0,
+   "body": {
+    "w": 1.875,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 2.344,
+    "intensity": 0.4,
+    "color": 16769192
+   }
+  },
+  {
+   "type": "vitrine",
+   "x": 88.5,
+   "z": 51.5,
+   "angle": 0,
+   "body": {
+    "w": 1.875,
+    "d": 0.938,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 2.344,
+    "intensity": 0.4,
+    "color": 16769192
+   }
+  },
+  {
    "type": "crate",
-   "x": 86.5,
-   "z": 59.5,
+   "x": 61.5,
+   "z": 47.5,
    "angle": 0,
    "body": {
     "w": 0.938,
@@ -1430,8 +2081,8 @@
   },
   {
    "type": "crate",
-   "x": 87.7,
-   "z": 60.7,
+   "x": 68.5,
+   "z": 47.5,
    "angle": 0,
    "body": {
     "w": 0.938,
@@ -1444,8 +2095,8 @@
   },
   {
    "type": "crate",
-   "x": 113.5,
-   "z": 59.5,
+   "x": 69.5,
+   "z": 48.5,
    "angle": 0,
    "body": {
     "w": 0.938,
@@ -1457,23 +2108,41 @@
    "light": null
   },
   {
-   "type": "trash",
-   "x": 100.5,
-   "z": 76.5,
+   "type": "crate",
+   "x": 90.5,
+   "z": 47.5,
    "angle": 0,
    "body": {
-    "w": 0.688,
-    "d": 0.688,
+    "w": 0.938,
+    "d": 0.938,
     "ox": -0.031,
     "oz": -0.031
    },
    "blocks_bullets": true,
    "light": null
+  },
+  {
+   "type": "vending",
+   "x": 72.5,
+   "z": 55.5,
+   "angle": 0,
+   "body": {
+    "w": 1.188,
+    "d": 0.813,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": {
+    "radius": 2.188,
+    "intensity": 0.4,
+    "color": 12575999
+   }
   },
   {
    "type": "bench",
-   "x": 104.5,
-   "z": 74.5,
+   "x": 80.5,
+   "z": 59.5,
    "angle": 0,
    "body": {
     "w": 2,
@@ -1485,9 +2154,51 @@
    "light": null
   },
   {
+   "type": "trash",
+   "x": 60.5,
+   "z": 61.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "trash",
+   "x": 88.5,
+   "z": 55.5,
+   "angle": 0,
+   "body": {
+    "w": 0.688,
+    "d": 0.688,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "extinguisher",
+   "x": 60.5,
+   "z": 58.5,
+   "angle": 0,
+   "body": {
+    "w": 0.563,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
    "type": "generator",
-   "x": 30.5,
-   "z": 86.5,
+   "x": 18.5,
+   "z": 72.5,
    "angle": 0,
    "body": {
     "w": 1.5,
@@ -1500,8 +2211,8 @@
   },
   {
    "type": "generator",
-   "x": 62.5,
-   "z": 84.5,
+   "x": 48.5,
+   "z": 67.5,
    "angle": 0,
    "body": {
     "w": 1.5,
@@ -1514,8 +2225,8 @@
   },
   {
    "type": "generator",
-   "x": 94.5,
-   "z": 90.5,
+   "x": 84.5,
+   "z": 74.5,
    "angle": 0,
    "body": {
     "w": 1.5,
@@ -1528,10 +2239,228 @@
   },
   {
    "type": "crate",
-   "x": 48.5,
+   "x": 34.5,
+   "z": 66.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "crate",
+   "x": 35.5,
+   "z": 67.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "crate",
+   "x": 76.5,
+   "z": 76.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "crate",
+   "x": 66.5,
+   "z": 76.5,
+   "angle": 0,
+   "body": {
+    "w": 0.938,
+    "d": 0.938,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "barrel",
+   "x": 52.5,
+   "z": 76.5,
+   "angle": 0,
+   "body": {
+    "w": 0.781,
+    "d": 0.781,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "barrel",
+   "x": 53.5,
+   "z": 75.5,
+   "angle": 0,
+   "body": {
+    "w": 0.781,
+    "d": 0.781,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "barrel",
+   "x": 20.5,
+   "z": 76.5,
+   "angle": 0,
+   "body": {
+    "w": 0.781,
+    "d": 0.781,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "locker",
+   "x": 31.5,
+   "z": 65.5,
+   "angle": 0,
+   "body": {
+    "w": 1.625,
+    "d": 0.688,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "locker",
+   "x": 60.5,
+   "z": 65.5,
+   "angle": 0,
+   "body": {
+    "w": 1.625,
+    "d": 0.688,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "locker",
+   "x": 72.5,
+   "z": 65.5,
+   "angle": 0,
+   "body": {
+    "w": 1.625,
+    "d": 0.688,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "cables",
+   "x": 38.5,
+   "z": 75.5,
+   "angle": -8,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "cables",
+   "x": 78.5,
+   "z": 69.5,
+   "angle": 12,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "floor_pipe",
+   "x": 64.5,
+   "z": 70.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "floor_pipe",
+   "x": 22.5,
+   "z": 67.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "extinguisher",
+   "x": 57.5,
+   "z": 67.5,
+   "angle": 0,
+   "body": {
+    "w": 0.563,
+    "d": 0.563,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "barrel",
+   "x": 26.5,
    "z": 82.5,
    "angle": 0,
    "body": {
+    "w": 0.781,
+    "d": 0.781,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "barrel",
+   "x": 86.5,
+   "z": 88.5,
+   "angle": 0,
+   "body": {
+    "w": 0.781,
+    "d": 0.781,
+    "ox": -0.031,
+    "oz": -0.031
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "crate",
+   "x": 56.5,
+   "z": 88.5,
+   "angle": 0,
+   "body": {
     "w": 0.938,
     "d": 0.938,
     "ox": -0.031,
@@ -1541,11 +2470,108 @@
    "light": null
   },
   {
-   "type": "crate",
-   "x": 49.7,
+   "type": "barrier",
+   "x": 44.5,
    "z": 83.5,
    "angle": 0,
    "body": {
+    "w": 1.875,
+    "d": 0.438,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "barrier",
+   "x": 82.5,
+   "z": 82.5,
+   "angle": 0,
+   "body": {
+    "w": 1.875,
+    "d": 0.438,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "cables",
+   "x": 64.5,
+   "z": 82.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "cables",
+   "x": 30.5,
+   "z": 88.5,
+   "angle": 180,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "floor_pipe",
+   "x": 12.5,
+   "z": 83.5,
+   "angle": 0,
+   "body": null,
+   "blocks_bullets": false,
+   "light": null
+  },
+  {
+   "type": "generator",
+   "x": 54.5,
+   "z": 100.5,
+   "angle": 0,
+   "body": {
+    "w": 1.5,
+    "d": 0.938,
+    "ox": -0.062,
+    "oz": -0.062
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "pallet",
+   "x": 31.5,
+   "z": 100.5,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 1.25,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "pallet",
+   "x": 66.5,
+   "z": 95.5,
+   "angle": 0,
+   "body": {
+    "w": 1.25,
+    "d": 1.25,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": true,
+   "light": null
+  },
+  {
+   "type": "crate",
+   "x": 57.5,
+   "z": 94.5,
+   "angle": 0,
+   "body": {
     "w": 0.938,
     "d": 0.938,
     "ox": -0.031,
@@ -1556,8 +2582,8 @@
   },
   {
    "type": "crate",
-   "x": 80.5,
-   "z": 92.5,
+   "x": 58.5,
+   "z": 95.5,
    "angle": 0,
    "body": {
     "w": 0.938,
@@ -1569,50 +2595,22 @@
    "light": null
   },
   {
-   "type": "barrel",
-   "x": 66.5,
-   "z": 92.5,
+   "type": "locker",
+   "x": 34.5,
+   "z": 93.5,
    "angle": 0,
    "body": {
-    "w": 0.781,
-    "d": 0.781,
-    "ox": -0.031,
-    "oz": -0.031
+    "w": 1.625,
+    "d": 0.688,
+    "ox": 0,
+    "oz": 0
    },
    "blocks_bullets": true,
    "light": null
   },
   {
    "type": "barrel",
-   "x": 67.6,
-   "z": 91.5,
-   "angle": 0,
-   "body": {
-    "w": 0.781,
-    "d": 0.781,
-    "ox": -0.031,
-    "oz": -0.031
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "barrel",
-   "x": 100.5,
-   "z": 86.5,
-   "angle": 0,
-   "body": {
-    "w": 0.781,
-    "d": 0.781,
-    "ox": -0.031,
-    "oz": -0.031
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "barrel",
-   "x": 30.5,
+   "x": 42.5,
    "z": 100.5,
    "angle": 0,
    "body": {
@@ -1625,527 +2623,9 @@
    "light": null
   },
   {
-   "type": "barrel",
-   "x": 98.5,
-   "z": 105.5,
-   "angle": 0,
-   "body": {
-    "w": 0.781,
-    "d": 0.781,
-    "ox": -0.031,
-    "oz": -0.031
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "crate",
-   "x": 58.5,
-   "z": 105.5,
-   "angle": 0,
-   "body": {
-    "w": 0.938,
-    "d": 0.938,
-    "ox": -0.031,
-    "oz": -0.031
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "generator",
-   "x": 54.5,
-   "z": 116.5,
-   "angle": 0,
-   "body": {
-    "w": 1.5,
-    "d": 0.938,
-    "ox": -0.062,
-    "oz": -0.062
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "crate",
-   "x": 70.5,
-   "z": 111.5,
-   "angle": 0,
-   "body": {
-    "w": 0.938,
-    "d": 0.938,
-    "ox": -0.031,
-    "oz": -0.031
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "crate",
-   "x": 71.7,
-   "z": 112.5,
-   "angle": 0,
-   "body": {
-    "w": 0.938,
-    "d": 0.938,
-    "ox": -0.031,
-    "oz": -0.031
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "barrel",
-   "x": 86.5,
-   "z": 116.5,
-   "angle": 0,
-   "body": {
-    "w": 0.781,
-    "d": 0.781,
-    "ox": -0.031,
-    "oz": -0.031
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "luggage_cart",
-   "x": 47,
-   "z": 51.5,
-   "angle": 0,
-   "body": {
-    "w": 1.813,
-    "d": 0.938,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "luggage_cart",
-   "x": 82,
-   "z": 42.5,
-   "angle": 0,
-   "body": {
-    "w": 1.813,
-    "d": 0.938,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "sign_stand",
-   "x": 58,
-   "z": 31,
-   "angle": 0,
-   "body": {
-    "w": 1.25,
-    "d": 0.375,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": {
-    "radius": 2.188,
-    "intensity": 0.4,
-    "color": 6086794
-   }
-  },
-  {
-   "type": "sign_stand",
-   "x": 83.5,
-   "z": 51,
-   "angle": 0,
-   "body": {
-    "w": 1.25,
-    "d": 0.375,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": {
-    "radius": 2.188,
-    "intensity": 0.4,
-    "color": 6086794
-   }
-  },
-  {
-   "type": "extinguisher",
-   "x": 40.8,
-   "z": 44.5,
-   "angle": 0,
-   "body": {
-    "w": 0.563,
-    "d": 0.563,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "extinguisher",
-   "x": 87.7,
-   "z": 38.5,
-   "angle": 0,
-   "body": {
-    "w": 0.563,
-    "d": 0.563,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "cables",
-   "x": 72.5,
-   "z": 54.9,
-   "angle": 4,
-   "body": null,
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "barrier",
-   "x": 20,
-   "z": 17.1,
-   "angle": 0,
-   "body": {
-    "w": 1.875,
-    "d": 0.438,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "barrier",
-   "x": 108,
-   "z": 17.1,
-   "angle": 0,
-   "body": {
-    "w": 1.875,
-    "d": 0.438,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "sign_stand",
-   "x": 36.5,
-   "z": 18,
-   "angle": 0,
-   "body": {
-    "w": 1.25,
-    "d": 0.375,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": {
-    "radius": 2.188,
-    "intensity": 0.4,
-    "color": 6086794
-   }
-  },
-  {
-   "type": "sign_stand",
-   "x": 92.5,
-   "z": 18,
-   "angle": 0,
-   "body": {
-    "w": 1.25,
-    "d": 0.375,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": {
-    "radius": 2.188,
-    "intensity": 0.4,
-    "color": 6086794
-   }
-  },
-  {
-   "type": "bench",
-   "x": 40.5,
-   "z": 10.5,
-   "angle": 0,
-   "body": {
-    "w": 2,
-    "d": 0.75,
-    "ox": -0.031,
-    "oz": -0.047
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "bench",
-   "x": 88.5,
-   "z": 10.5,
-   "angle": 0,
-   "body": {
-    "w": 2,
-    "d": 0.75,
-    "ox": -0.031,
-    "oz": -0.047
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "trash",
+   "type": "floor_pipe",
    "x": 50.5,
-   "z": 10.1,
-   "angle": 0,
-   "body": {
-    "w": 0.688,
-    "d": 0.688,
-    "ox": -0.031,
-    "oz": -0.031
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "suitcase",
-   "x": 78.5,
-   "z": 10.7,
-   "angle": 15,
-   "body": null,
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "extinguisher",
-   "x": 16.8,
-   "z": 24.5,
-   "angle": 0,
-   "body": {
-    "w": 0.563,
-    "d": 0.563,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "desk_computer",
-   "x": 26,
-   "z": 62.8,
-   "angle": 0,
-   "body": {
-    "w": 1.813,
-    "d": 1,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": true,
-   "light": {
-    "radius": 1.875,
-    "intensity": 0.35,
-    "color": 7323880
-   }
-  },
-  {
-   "type": "desk_computer",
-   "x": 34,
-   "z": 62.8,
-   "angle": 0,
-   "body": {
-    "w": 1.813,
-    "d": 1,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": true,
-   "light": {
-    "radius": 1.875,
-    "intensity": 0.35,
-    "color": 7323880
-   }
-  },
-  {
-   "type": "chair",
-   "x": 26,
-   "z": 60.8,
-   "angle": 180,
-   "body": null,
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "chair",
-   "x": 34,
-   "z": 60.9,
-   "angle": 170,
-   "body": null,
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "chair",
-   "x": 16.5,
-   "z": 70.5,
-   "angle": 40,
-   "body": null,
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "sign_stand",
-   "x": 21.5,
-   "z": 77,
-   "angle": 0,
-   "body": {
-    "w": 1.25,
-    "d": 0.375,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": {
-    "radius": 2.188,
-    "intensity": 0.4,
-    "color": 6086794
-   }
-  },
-  {
-   "type": "vitrine",
-   "x": 89.5,
-   "z": 66.5,
-   "angle": 0,
-   "body": {
-    "w": 1.875,
-    "d": 0.938,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": {
-    "radius": 2.344,
-    "intensity": 0.4,
-    "color": 16769192
-   }
-  },
-  {
-   "type": "vitrine",
-   "x": 99.5,
-   "z": 66.5,
-   "angle": 0,
-   "body": {
-    "w": 1.875,
-    "d": 0.938,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": {
-    "radius": 2.344,
-    "intensity": 0.4,
-    "color": 16769192
-   }
-  },
-  {
-   "type": "vitrine",
-   "x": 111.5,
-   "z": 66.5,
-   "angle": 0,
-   "body": {
-    "w": 1.875,
-    "d": 0.938,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": {
-    "radius": 2.344,
-    "intensity": 0.4,
-    "color": 16769192
-   }
-  },
-  {
-   "type": "extinguisher",
-   "x": 84.8,
-   "z": 71.5,
-   "angle": 0,
-   "body": {
-    "w": 0.563,
-    "d": 0.563,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "locker",
-   "x": 35,
-   "z": 81.9,
-   "angle": 0,
-   "body": {
-    "w": 1.625,
-    "d": 0.688,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "locker",
-   "x": 67.5,
-   "z": 81.9,
-   "angle": 0,
-   "body": {
-    "w": 1.625,
-    "d": 0.688,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "cables",
-   "x": 50.5,
-   "z": 91.5,
-   "angle": -8,
-   "body": null,
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "cables",
-   "x": 84.5,
-   "z": 89,
-   "angle": 12,
-   "body": null,
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "floor_pipe",
-   "x": 64.5,
-   "z": 94.9,
-   "angle": 0,
-   "body": null,
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "floor_pipe",
-   "x": 97.5,
-   "z": 94.9,
+   "z": 101.5,
    "angle": 0,
    "body": null,
    "blocks_bullets": false,
@@ -2153,119 +2633,8 @@
   },
   {
    "type": "extinguisher",
-   "x": 57.8,
-   "z": 82.5,
-   "angle": 0,
-   "body": {
-    "w": 0.563,
-    "d": 0.563,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "barrier",
-   "x": 44.5,
-   "z": 106,
-   "angle": 0,
-   "body": {
-    "w": 1.875,
-    "d": 0.438,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "barrier",
-   "x": 86.5,
-   "z": 100,
-   "angle": 0,
-   "body": {
-    "w": 1.875,
-    "d": 0.438,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "cables",
-   "x": 70.5,
-   "z": 101,
-   "angle": 0,
-   "body": null,
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "cables",
-   "x": 30.5,
-   "z": 106.5,
-   "angle": 180,
-   "body": null,
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "pallet",
-   "x": 41,
-   "z": 117,
-   "angle": 0,
-   "body": {
-    "w": 1.25,
-    "d": 1.25,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "pallet",
-   "x": 76.5,
-   "z": 117,
-   "angle": 0,
-   "body": {
-    "w": 1.25,
-    "d": 1.25,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "locker",
-   "x": 47,
-   "z": 111.1,
-   "angle": 0,
-   "body": {
-    "w": 1.625,
-    "d": 0.688,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": true,
-   "light": null
-  },
-  {
-   "type": "floor_pipe",
-   "x": 64.5,
-   "z": 118.1,
-   "angle": 0,
-   "body": null,
-   "blocks_bullets": false,
-   "light": null
-  },
-  {
-   "type": "extinguisher",
-   "x": 36.8,
-   "z": 113.5,
+   "x": 28.5,
+   "z": 97.5,
    "angle": 0,
    "body": {
     "w": 0.563,

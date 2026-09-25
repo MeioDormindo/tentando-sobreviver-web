@@ -257,15 +257,7 @@ func minimap_size() -> Vector2i:
 
 
 func minimap_cells() -> PackedByteArray:
-	if _tile_areas.is_empty():
-		_tile_areas.resize(width * height)
-		_tile_areas.fill(-1)
-		for i in data.areas.size():
-			for r: Dictionary in data.areas[i].rects:
-				for z in range(int(r.y), int(r.y) + int(r.h)):
-					for x in range(int(r.x), int(r.x) + int(r.w)):
-						if x >= 0 and z >= 0 and x < width and z < height and _tile_areas[z * width + x] < 0:
-							_tile_areas[z * width + x] = i
+	_index_tile_areas()
 	var cells := PackedByteArray()
 	cells.resize(width * height)
 	for z in height:
@@ -283,6 +275,37 @@ func minimap_cells() -> PackedByteArray:
 				code = 5
 			cells[z * width + x] = code
 	return cells
+
+
+## Índice da área de cada tile (-1 = fora das áreas), montado uma vez.
+func _index_tile_areas() -> void:
+	if not _tile_areas.is_empty():
+		return
+	_tile_areas.resize(width * height)
+	_tile_areas.fill(-1)
+	for i in data.areas.size():
+		for r: Dictionary in data.areas[i].rects:
+			for z in range(int(r.y), int(r.y) + int(r.h)):
+				for x in range(int(r.x), int(r.x) + int(r.w)):
+					if x >= 0 and z >= 0 and x < width and z < height and _tile_areas[z * width + x] < 0:
+						_tile_areas[z * width + x] = i
+
+
+## Luz da área ("lit", "dim" ou "dark"): nas bem iluminadas a lanterna sobra.
+func area_lighting(area_id: StringName) -> String:
+	for area: Dictionary in data.areas:
+		if StringName(area.id) == area_id:
+			return String(area.get("lighting", "dim"))
+	return "dark"
+
+
+## Densidade da decoração no tile (por área, do mapa; fora das áreas = 1).
+func _decor_density(x: int, z: int) -> float:
+	var area := _tile_areas[z * width + x] if x >= 0 and z >= 0 and x < width and z < height else -1
+	if area < 0:
+		return 1.0
+	var density: Dictionary = data.get("decor", {}).get("density", {})
+	return float(density.get(String(data.areas[area].id), 1.0))
 
 
 ## Letra da grade no tile (fora do mapa = parede).
@@ -606,14 +629,16 @@ var _decor_materials: Dictionary = {}
 
 
 ## Decoração em pixel art (npm run godot:scenery): nas faces de parede que a câmera vê
-## (leste e sul) e decalques no chão. Mesma semente por mapa: sai igual toda partida.
+## (as viradas para o sul, de frente para ela) e decalques no chão, mais densos nas áreas
+## largadas (densidade por área no mapa). Mesma semente por mapa: sai igual toda partida.
 func _build_decor() -> void:
 	var index_path := "res://assets/tiles/decor.json"
 	if not FileAccess.file_exists(index_path):
 		return
 	var index: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(index_path))
 	var rng := RandomNumberGenerator.new()
-	rng.seed = hash(map_id() + "_decor")
+	rng.seed = hash(String(data.get("decor", {}).get("seed", map_id() + "_decor")))
+	_index_tile_areas()
 	var group := Node3D.new()
 	group.name = "Decor"
 	add_child(group)
@@ -622,8 +647,8 @@ func _build_decor() -> void:
 		for x in width:
 			if cell(x, z) != "#":
 				continue
-			# Faces visíveis: leste (+X) e sul (+Z), com chão do outro lado.
-			for dir: Vector2i in [Vector2i(1, 0), Vector2i(0, 1)]:
+			# Face visível: a do sul (+Z), com chão na frente.
+			for dir: Vector2i in [Vector2i(0, 1)]:
 				var floor_ch := cell(x + dir.x, z + dir.y)
 				if not _is_floor(floor_ch):
 					continue
@@ -636,9 +661,10 @@ func _build_decor() -> void:
 				if (running and rng.randf() < 0.85) or rng.randf() < 0.05:
 					pipe_run[key + ("x" if dir.x != 0 else "z")] = along
 					_add_decor(group, index.wall, "pipes", face + Vector3.UP * 2.78, normal, 1.0)
+				var density := _decor_density(x + dir.x, z + dir.y)
 				for decor_name: String in WALL_DECOR:
 					var entry: Array = WALL_DECOR[decor_name]
-					if rng.randf() < float(entry[0]):
+					if rng.randf() < float(entry[0]) * density:
 						_add_decor(group, index.wall, decor_name, face + Vector3.UP * float(entry[1]), normal)
 						break
 	# Chão: decalques espalhados (fora das portas).
@@ -647,7 +673,7 @@ func _build_decor() -> void:
 		total += float(FLOOR_DECOR[decor_name])
 	for z in height:
 		for x in width:
-			if not _is_floor(cell(x, z)) or rng.randf() >= FLOOR_DECOR_CHANCE:
+			if not _is_floor(cell(x, z)) or rng.randf() >= FLOOR_DECOR_CHANCE * _decor_density(x, z):
 				continue
 			var roll := rng.randf() * total
 			var chosen := ""
@@ -695,6 +721,9 @@ func _add_decor(group: Node3D, table: Dictionary, decor_name: String, at: Vector
 
 func _build_lamps() -> void:
 	for lamp: Dictionary in data.lamps:
+		# Luminária quebrada: só o escuro (a Fase de luz desenha a peça apagada).
+		if lamp.get("broken", false):
+			continue
 		_add_light(Vector3(lamp.x, LAMP_HEIGHT, lamp.z), lamp.radius, lamp.intensity, int(lamp.color))
 
 

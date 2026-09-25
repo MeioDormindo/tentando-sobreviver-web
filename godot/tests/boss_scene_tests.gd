@@ -46,7 +46,7 @@ func _conductor() -> void:
 	check(boss.health.current == hp, "invulnerável durante o rugido")
 	await _tree.create_timer(1.3).timeout
 	# Longe e com linha de visão: prepara a investida.
-	_player.global_position = boss.global_position + Vector3(0, 0, 10)
+	_player.global_position = boss.global_position + _clear_direction(map, boss.global_position, 10.0)
 	var modes := await _watch(boss, 2.0)
 	check(modes.has(Boss.Mode.CHARGE_WINDUP) or modes.has(Boss.Mode.CHARGING), "investida quando o jogador está a média distância")
 	await _wait_chase(boss)
@@ -155,6 +155,22 @@ func _teardown() -> void:
 
 
 ## Modos pelos quais o boss passou durante `seconds`.
+## Direção (com a distância) em que o caminho a partir de `from` é todo chão livre, sem
+## paredes, colunas nem móveis no meio — a linha de visão da investida.
+func _clear_direction(map: LayoutMap, from: Vector3, distance: float) -> Vector3:
+	var space := map.get_world_3d().direct_space_state
+	for dir: Vector3 in [Vector3.BACK, Vector3.FORWARD, Vector3.RIGHT, Vector3.LEFT, Vector3(1, 0, 1).normalized(), Vector3(-1, 0, 1).normalized()]:
+		var clear := true
+		for step in range(1, int(distance) + 1):
+			if not map.is_open_floor(from + dir * step):
+				clear = false
+				break
+		var ray := PhysicsRayQueryParameters3D.create(from + Vector3.UP, from + dir * distance + Vector3.UP, PhysicsLayers.WORLD | PhysicsLayers.PROPS)
+		if clear and space.intersect_ray(ray).is_empty():
+			return dir * distance
+	return Vector3.BACK * distance
+
+
 func _watch(boss: Boss, seconds: float) -> Dictionary:
 	var modes := {}
 	var t := 0.0

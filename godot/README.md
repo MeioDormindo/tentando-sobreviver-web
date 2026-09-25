@@ -51,8 +51,8 @@ de conceitos: ver `docs/analise-typescript.md`.
   intensidade, boss) com vinhetas de vitória e de fim de jogo. Som posicional como no jogo
   web (volume pela distância, pan pela tela) e limite de vozes por categoria, cada uma no
   seu barramento;
-- **visual 2.5D em pixel art** (especificação 2.5D pixel): câmera isométrica (45°, inclinada
-  40°, ~20 m de largura) com movimento relativo à tela; paredes que abrem um círculo
+- **visual 2.5D em pixel art** (especificação 2.5D pixel): câmera reta como no jogo web
+  (inclinada 60°, ~20 m de largura); paredes que abrem um círculo
   pontilhado quando o jogador passa atrás delas; tudo desenhado por código:
   - personagens "Pixar em pixel" (`npm run godot:sprites`): renderizador por pixel de formas
     arredondadas, 6 tons com sombra fria e luz quente, 8 direções na vista da câmera — os 7
@@ -150,9 +150,15 @@ reais do jogo web (`src/config`) e gera os `.tres` de `data/`:
 - online (servidor, temporada, regras de usuário e senha) e anti-trapaça;
 - conquistas e visuais (as cores saem de `scripts/art/characters.mjs`);
 - power-ups, eventos do mapa, painéis e armadilhas, segredos e a missão do Soro;
-- os mapas (`data/maps/terminal.json` e `map2.json`): a grade de tiles montada na mesma ordem do
-  jogo web, com áreas, portas, janelas, spawns por área, luzes, props, máquinas e compras na
-  parede.
+
+Os **mapas** são só do Godot (o jogo web continua com os dele): `npm run godot:maps` gera
+`data/maps/terminal.json` e `map2.json` a partir da DSL em `scripts/godot/maps/` (um arquivo
+por mapa: `room`, `solid`, `door`, `window`, `spawn`, `weapon`, `perk`, `lamp`, `prop`...).
+O gerador confere o desenho (tudo em chão, portas ligando as áreas certas, toda área alcançável)
+e grava uma prévia em `build/maps/<id>.png`. Além da grade, áreas, portas, janelas, spawns,
+máquinas, luzes e objetos, cada mapa traz a luz por área (`lit`, `dim`, `dark`), luminárias
+quebradas, a densidade da decoração por área e, no Hospital, as posições da missão do Soro.
+Os ids dos mapas e das áreas são os do jogo web (save, ranking, som ambiente e missão).
 
 Conversão: 32 px = 1 m, ms → s. O script é `scripts/godot/export-data.ts`. Enquanto o jogo web
 for a referência, mude os valores lá e rode de novo. Quando o Godot virar a fonte, os `.tres`
@@ -219,7 +225,7 @@ scripts/systems/                 PerkSystem (modificadores dos perks), PowerSyst
                                  RoundManager + RoundData, SpawnManager, PointsManager +
                                  PointsData, GameManager, AudioManager (sons da partida e música adaptativa)
 scripts/maps/                    GameWorld (base: spawn do jogador, áreas abertas, spawns ativos),
-                                 LayoutMap (mapa migrado do JSON), Arena (mapa de teste),
+                                 LayoutMap (mapa do JSON gerado pela DSL), Arena (mapa de teste),
                                  StationBoard (túneis, semáforos, horários do trem)
 scripts/characters/character_sprite.gd CharacterSprite: folha de pixel art, 8 direções, animações
 scripts/maps/prop_factory.gd     PropFactory: objetos 2.5D a partir das receitas (props.json)
@@ -260,5 +266,6 @@ Decisões:
 
 ## Próximas fases (roadmap da especificação)
 
-- **Mapas redesenhados** para o isométrico, luz e lanterna opcional, HUD em fonte pixel.
+- **Luz e lanterna opcional** (liga/desliga; dispensável nas áreas bem iluminadas) e HUD em
+  fonte pixel.
 - **Fase 8 (plataformas):** exportações e controles de toque.

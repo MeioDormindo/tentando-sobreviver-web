@@ -47,7 +47,14 @@ func _ready() -> void:
 func _start() -> void:
 	if world == null or world.map_id() != MAP_ID or data == null:
 		return
-	cfg = data.serum
+	cfg = data.serum.duplicate(true)
+	# Onde fica cada peça vem do mapa (seção "quest"); tempos e regras, do quests.tres.
+	var quest: Variant = (world as LayoutMap).data.get("quest") if world is LayoutMap else null
+	var spots: Dictionary = quest.get("serum", {}) if quest is Dictionary else {}
+	for key: String in spots:
+		var entry: Dictionary = cfg.get(key, {})
+		entry.merge(spots[key], true)
+		cfg[key] = entry
 	Events.boss_defeated.connect(func(id: StringName, _n: String, _r: int, at: Vector3) -> void:
 		if id == &"patient_zero" and boss_round > 0:
 			boss_down = at)

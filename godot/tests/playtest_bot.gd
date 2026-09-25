@@ -139,8 +139,10 @@ func _buy_door(main: Node, player: Player) -> void:
 	if _door_step == 0:
 		_platform_spawns_before = world.active_spawn_points(99).size()
 		(main.get_node("PointsManager") as PointsManager).add(2000)
-		player.global_position = Vector3(64.0, 0.1, 29.6)
-		player.aim_point = Vector3(64.0, 1.2, 26.0)
+		# Em frente à porta, do lado do Hall (a porta fica no alto da tela).
+		var door_at := (world.find_child("door_hall_platform", true, false) as Node3D).global_position
+		player.global_position = Vector3(door_at.x, 0.1, door_at.z + 2.6)
+		player.aim_point = Vector3(door_at.x, 1.2, door_at.z - 1.0)
 		_door_step = 1
 		return
 	var door := world.find_child("door_hall_platform", true, false)
