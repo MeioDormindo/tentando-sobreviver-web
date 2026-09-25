@@ -51,12 +51,17 @@ de conceitos: ver `docs/analise-typescript.md`.
   intensidade, boss) com vinhetas de vitória e de fim de jogo. Som posicional como no jogo
   web (volume pela distância, pan pela tela) e limite de vozes por categoria, cada uma no
   seu barramento;
-- **modelos 3D do Blender** (low-poly, gerados só com código em `tools/blender/build_models.py`):
-  sobrevivente (cores do visual escolhido), zumbi (as cores de cada tipo, maior no tanque,
-  rastejando no rastejante, capacete e colete no blindado), cão, os dois bosses, uma arma por
-  tipo (14) e as máquinas (Mystery Box com tampa que abre, máquina de perk na cor do perk,
-  Weapon Lab). Animações: parado, andar, correr, golpe, morte, rastejar e, nos bosses, rugido,
-  murro no chão e investida. As máquinas ficam de frente para o chão livre;
+- **visual 2.5D em pixel art** (especificação 2.5D pixel): câmera isométrica (45°, inclinada
+  40°, ~20 m de largura) com movimento relativo à tela; paredes que abrem um círculo
+  pontilhado quando o jogador passa atrás delas; tudo desenhado por código:
+  - personagens "Pixar em pixel" (`npm run godot:sprites`): renderizador por pixel de formas
+    arredondadas, 6 tons com sombra fria e luz quente, 8 direções na vista da câmera — os 7
+    zumbis, o cão, os 2 bosses, o jogador nos 4 visuais e as 19 armas (Mk II e Mk III
+    visíveis), com ícones e efeitos em pixel (clarão, faíscas, sangue, explosão, plasma,
+    granada, chama, vento);
+  - cenário (`npm run godot:scenery`): pisos e paredes, 32 objetos 2.5D montados pela
+    PropFactory (caixas, barris, bancos, macas, máquinas de perk na cor do perk, Mystery
+    Box com tampa que abre...) e decoração de parede e de chão espalhada por semente;
 - **menu de pausa** com CONTINUAR, REINICIAR, MENU e as configurações que valem na hora;
 - **visuais do personagem** (tela PERSONAGEM): Sobrevivente, Enfermeiro, Maquinista e Agente,
   liberados por conquistas, com as cores da paleta do jogo web;
@@ -129,9 +134,9 @@ Já mapeado para as próximas fases: pular (Espaço / B).
 ## Migração do jogo web
 
 Sons: `npm run godot:audio` gera os WAV de `assets/audio/` com o mesmo código de síntese do
-jogo web. Modelos: `E:ToolsBlenderlender-5.2.2-windows-x64lender.exe -b --factory-startup
--P godot/tools/blender/build_models.py -- --preview` gera os `.glb` de `assets/` (e prévias em
-`tests/output/models/`); o Blender portátil (5.2.2 LTS) veio do site oficial.
+jogo web. Arte: `npm run godot:sprites` (personagens, armas, ícones e efeitos) e
+`npm run godot:scenery` (pisos, paredes, objetos e decoração), tudo gerado por código em
+`scripts/godot/pixel/`.
 
 Os dados não são copiados à mão: `npm run godot:data` (na raiz do repositório) lê as configs
 reais do jogo web (`src/config`) e gera os `.tres` de `data/`:
@@ -162,7 +167,7 @@ passam a ser editados direto no Godot.
 # perks, composição por round, rodada dos cães) e, na mesma execução, os testes de cena: as
 # 5 armas especiais, cada tipo de zumbi, a rodada dos cães, os dois bosses nos mapas migrados
 # as telas de menu, os power-ups, a arma caída, o minimapa, a pausa e os eventos, painéis,
-# armadilhas e segredos, a missão do Soro de ponta a ponta, o áudio e os modelos; e o online contra o servidor real, só com operações que não gravam
+# armadilhas e segredos, a missão do Soro de ponta a ponta, o áudio e os sprites; e o online contra o servidor real, só com operações que não gravam
 # (ler o ranking, envio recusado, login errado). Os testes usam um save de teste (o do
 # jogador não muda) e o bot joga offline (não envia nada ao ranking global):
 Godot --headless --path godot -s res://tests/run_tests.gd
@@ -216,8 +221,9 @@ scripts/systems/                 PerkSystem (modificadores dos perks), PowerSyst
 scripts/maps/                    GameWorld (base: spawn do jogador, áreas abertas, spawns ativos),
                                  LayoutMap (mapa migrado do JSON), Arena (mapa de teste),
                                  StationBoard (túneis, semáforos, horários do trem)
-scripts/characters/character_model.gd CharacterModel: instancia o glb, animações, cores por material
-tools/blender/build_models.py    gera os .glb (personagens, armas, máquinas) no Blender 5.2
+scripts/characters/character_sprite.gd CharacterSprite: folha de pixel art, 8 direções, animações
+scripts/maps/prop_factory.gd     PropFactory: objetos 2.5D a partir das receitas (props.json)
+scripts/weapons/pixel_fx.gd      PixelFx: efeitos e decalques em pixel art
 scripts/audio/audio_service.gd   autoload Audio: catálogo, play/play_at/loop_at, vozes, barramentos
 scripts/quests/                  QuestSystem (etapas, HUD, minimapa), QuestStep, QuestSpot,
                                  SerumQuest (missão do Hospital), QuestData
@@ -254,6 +260,5 @@ Decisões:
 
 ## Próximas fases (roadmap da especificação)
 
-- **Fase 7 (polimento):** texturas e mais detalhes nos modelos, cenário (paredes, trem, props)
-  do Blender.
+- **Mapas redesenhados** para o isométrico, luz e lanterna opcional, HUD em fonte pixel.
 - **Fase 8 (plataformas):** exportações e controles de toque.
