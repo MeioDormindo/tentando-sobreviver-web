@@ -311,6 +311,7 @@ export class MapBuilder {
 
   build(): Record<string, unknown> {
     const g = this.grid();
+    this.settle(g);
     this.validate(g);
     return {
       id: this.id,
@@ -417,6 +418,246 @@ export class MapBuilder {
       if (seen.has(`${p.rect.x},${p.rect.y}`)) errors.push(`bolsão ${JSON.stringify(p.rect)} alcançável sem janela`);
     }
 
+    this.checkGaps(g, errors);
+
     if (errors.length) throw new Error(`${this.id}: desenho com problemas:\n  ${errors.join('\n  ')}`);
+  }
+
+  // ── Frestas (onde o jogador ou os zumbis ficam presos) ──
+
+  /** Corpos sólidos do mapa: props com corpo, colunas da praça, altares, estátuas e pedestal. */
+  private bodies(): Array<{ name: string; x0: number; z0: number; x1: number; z1: number }> {
+    const out: Array<{ name: string; x0: number; z0: number; x1: number; z1: number }> = [];
+    const add = (name: string, cx: number, cz: number, w: number, d: number): void => {
+      out.push({ name, x0: cx - w / 2, z0: cz - d / 2, x1: cx + w / 2, z1: cz + d / 2 });
+    };
+    for (const p of this.propList) {
+      const b = p.body as { w: number; d: number; ox: number; oz: number } | null;
+      if (b) add(`prop ${String(p.type)} (${Number(p.x) - 0.5}, ${Number(p.z) - 0.5})`, Number(p.x) + b.ox, Number(p.z) + b.oz, b.w, b.d);
+    }
+    const tiles = (key: string, w: number, d: number): void => {
+      for (const t of (this.extras[key] as Array<{ tx: number; ty: number }> | undefined) ?? []) add(`${key} (${t.tx}, ${t.ty})`, t.tx + 0.5, t.ty + 0.5, w, d);
+    };
+    tiles('pillars', 0.9, 0.9);
+    tiles('altars', 1.3, 0.9);
+    const statues = (this.secretsData?.statues as Array<{ god: string; tx: number; ty: number }> | undefined) ?? [];
+    for (const st of statues) add(`estátua ${st.god} (${st.tx}, ${st.ty})`, st.tx + 0.5, st.ty + 0.5, 1.0, 1.0);
+    const bow = (this.extras.sanctuary as { bow?: { tx: number; ty: number } } | undefined)?.bow;
+    if (bow) add(`pedestal (${bow.tx}, ${bow.ty})`, bow.tx + 0.5, bow.ty + 0.5, 0.9, 0.9);
+    return out;
+  }
+
+  /**
+   * Regra das frestas: todo corpo fica encostado (≤ 0,1 m) ou a pelo menos 1,4 m da parede, da
+   * lava e dos outros corpos — uma fresta entre 0,1 e 1,4 m deixa o jogador entrar mas não tem
+   * navmesh (os zumbis não entram e o jogador fica preso). Spawns, início, pontos de boss e da
+   * Mystery Box ficam livres dos corpos.
+   */
+  private checkGaps(g: string[][], errors: string[]): void {
+    const MIN = 0.1, MAX = 1.4;
+    const blocked = (x: number, z: number): boolean => {
+      const ch = g[Math.floor(z)]?.[Math.floor(x)] ?? '#';
+      return ch === '#' || ch === 'T' || ch === 'V' || ch === 'W';
+    };
+    const bodies = this.bodies();
+    const bad = (gap: number): boolean => gap > MIN + 1e-6 && gap < MAX - 1e-6;
+    for (const b of bodies) {
+      // Até a parede/lava em cada lado (amostras ao longo da face).
+      const sides: Array<[string, (t: number) => [number, number], number, number]> = [
+        ['oeste', (t) => [b.x0 - t, 0], b.z0, b.z1], ['leste', (t) => [b.x1 + t, 0], b.z0, b.z1],
+        ['norte', (t) => [0, b.z0 - t], b.x0, b.x1], ['sul', (t) => [0, b.z1 + t], b.x0, b.x1],
+      ];
+      for (const [side, at, a0, a1] of sides) {
+        let worst = -1;
+        for (const k of [0.15, 0.5, 0.85]) {
+          const along = a0 + (a1 - a0) * k;
+          let gap = 99;
+          for (let t = 0.02; t <= MAX + 0.1; t += 0.05) {
+            const [px, pz] = at(t);
+            const x = side === 'oeste' || side === 'leste' ? px : along;
+            const z = side === 'oeste' || side === 'leste' ? along : pz;
+            if (blocked(x, z)) { gap = t - 0.02; break; }
+          }
+          if (gap < 99) worst = Math.max(worst, gap);
+        }
+        if (worst >= 0 && bad(worst)) errors.push(`fresta de ${worst.toFixed(2)} m entre ${b.name} e a parede (${side})`);
+      }
+    }
+    for (let i = 0; i < bodies.length; i++) {
+      for (let j = i + 1; j < bodies.length; j++) {
+        const a = bodies[i], c = bodies[j];
+        const gx = Math.max(c.x0 - a.x1, a.x0 - c.x1), gz = Math.max(c.z0 - a.z1, a.z0 - c.z1);
+        const overlapX = gx < 0, overlapZ = gz < 0;
+        let gap = -1;
+        if (overlapX && !overlapZ) gap = gz;
+        else if (overlapZ && !overlapX) gap = gx;
+        else if (!overlapX && !overlapZ) gap = Math.hypot(gx, gz);
+        if (gap >= 0 && bad(gap)) errors.push(`fresta de ${gap.toFixed(2)} m entre ${a.name} e ${c.name}`);
+      }
+    }
+    const clearOf = (what: string, x: number, z: number, need: number): void => {
+      for (const b of bodies) {
+        const dx = Math.max(b.x0 - x, 0, x - b.x1), dz = Math.max(b.z0 - z, 0, z - b.z1);
+        if (Math.hypot(dx, dz) < need) errors.push(`${what} em (${x}, ${z}) a ${Math.hypot(dx, dz).toFixed(2)} m de ${b.name}`);
+      }
+    };
+    // Corredor de 1 tile (parede, trem ou lava dos dois lados): o jogador entra, os zumbis não.
+    const solid = (x: number, z: number): boolean => {
+      const ch = g[z]?.[x] ?? '#';
+      return ch === '#' || ch === 'T' || ch === 'V';
+    };
+    for (let z = 1; z < this.height - 1; z++) {
+      for (let x = 1; x < this.width - 1; x++) {
+        const ch = g[z][x];
+        if (ch === '#' || ch === 'T' || ch === 'V' || ch === 'W' || ch === 'D') continue;
+        const pocket = !this.areas.some((a) => a.rects.some((r) => x >= r.x && x < r.x + r.w && z >= r.y && z < r.y + r.h));
+        if (pocket) continue;
+        if ((solid(x - 1, z) && solid(x + 1, z)) || (solid(x, z - 1) && solid(x, z + 1))) errors.push(`corredor de 1 tile em (${x}, ${z})`);
+      }
+    }
+    // Máquinas e painéis na parede: encostados num canto (ou a mais de 2 tiles dele); um tile
+    // livre entre eles e a parede do lado vira fresta.
+    const onWall: Array<[string, number, number]> = [
+      ...this.machines.map((m) => [`máquina ${String(m.perkId ?? m.type)}`, Number(m.tx), Number(m.ty)] as [string, number, number]),
+      ...this.interactions.map((i) => [`painel ${String(i.type)}`, Number(i.tx), Number(i.ty)] as [string, number, number]),
+    ];
+    for (const [what, tx, ty] of this.machines.map((m) => [`máquina ${String(m.perkId ?? m.type)}`, Number(m.tx), Number(m.ty)] as [string, number, number])) {
+      const x = Math.floor(tx), z = Math.floor(ty);
+      if (String(what) !== 'máquina mystery_box' && ![[0, -1], [0, 1], [-1, 0], [1, 0]].some(([dx, dz]) => solid(x + dx, z + dz))) errors.push(`${what} em (${tx}, ${ty}) não está colada numa parede`);
+    }
+    for (const [what, tx, ty] of onWall) {
+      // O jogo encosta a máquina na parede mais próxima: simula esse encaixe (até 2 tiles).
+      let x = Math.floor(tx), z = Math.floor(ty);
+      if (![[0, -1], [0, 1], [-1, 0], [1, 0]].some(([dx, dz]) => solid(x + dx, z + dz))) {
+        let best: [number, number] | null = null;
+        for (const [dx, dz] of [[0, -1], [0, 1], [-1, 0], [1, 0]] as Array<[number, number]>) {
+          for (let k = 1; k <= 3; k++) if (solid(x + dx * (k + 1), z + dz * (k + 1)) && (!best || k < Math.abs(best[0] - x) + Math.abs(best[1] - z))) { best = [x + dx * k, z + dz * k]; break; }
+        }
+        if (best) [x, z] = best;
+      }
+      const wallNS = solid(x, z - 1) || solid(x, z + 1);
+      const along: Array<[number, number]> = wallNS ? [[-1, 0], [1, 0]] : [[0, -1], [0, 1]];
+      for (const [dx, dz] of along) {
+        if (!solid(x + dx, z + dz) && solid(x + 2 * dx, z + 2 * dz)) errors.push(`${what} em (${tx}, ${ty}) deixa fresta de 1 tile até a parede`);
+      }
+    }
+    clearOf('início', this.start.x, this.start.z, 1.0);
+    for (const sp of this.spawns) clearOf(`spawn ${sp.id}`, sp.x, sp.z, 1.0);
+    for (const bp of this.bossSpawns) clearOf('boss', bp.x, bp.z, 1.4);
+    for (const bx of this.boxSpots) {
+      clearOf('lugar da caixa', bx.x, bx.z, 1.8);
+      for (let dz = -2; dz <= 2; dz++) for (let dx = -2; dx <= 2; dx++) {
+        if (g[Math.floor(bx.z) + dz]?.[Math.floor(bx.x) + dx] === 'V') { errors.push(`lugar da caixa em (${bx.x}, ${bx.z}) colado na lava`); dz = 3; break; }
+      }
+    }
+  }
+
+  /**
+   * Acomoda o desenho antes de conferir (evita frestas onde se fica preso):
+   * - objeto a menos de 1,4 m de uma parede/lava encosta nela;
+   * - objeto a menos de 1,4 m de outro encosta nele;
+   * - spawn, início, ponto de boss e da caixa colados num objeto vão para o tile livre mais
+   *   perto (mesma área ou bolsão).
+   */
+  private settle(g: string[][]): void {
+    const MIN = 0.1, MAX = 1.4;
+    const blocked = (x: number, z: number): boolean => {
+      const ch = g[Math.floor(z)]?.[Math.floor(x)] ?? '#';
+      return ch === '#' || ch === 'T' || ch === 'V' || ch === 'W';
+    };
+    type Movable = { x0: number; z0: number; x1: number; z1: number; move: (dx: number, dz: number) => void };
+    const movables = (): Movable[] => {
+      const out: Movable[] = [];
+      for (const p of this.propList) {
+        const b = p.body as { w: number; d: number; ox: number; oz: number } | null;
+        if (!b) continue;
+        const cx = Number(p.x) + b.ox, cz = Number(p.z) + b.oz;
+        out.push({ x0: cx - b.w / 2, z0: cz - b.d / 2, x1: cx + b.w / 2, z1: cz + b.d / 2, move: (dx, dz) => { p.x = r3(Number(p.x) + dx); p.z = r3(Number(p.z) + dz); } });
+      }
+      const tiles = (list: Array<{ tx: number; ty: number }> | undefined, w: number, d: number): void => {
+        for (const t of list ?? []) {
+          const cx = t.tx + 0.5, cz = t.ty + 0.5;
+          out.push({ x0: cx - w / 2, z0: cz - d / 2, x1: cx + w / 2, z1: cz + d / 2, move: (dx, dz) => { t.tx = r3(t.tx + dx); t.ty = r3(t.ty + dz); } });
+        }
+      };
+      tiles(this.extras.pillars as Array<{ tx: number; ty: number }> | undefined, 0.9, 0.9);
+      tiles(this.extras.altars as Array<{ tx: number; ty: number }> | undefined, 1.3, 0.9);
+      tiles(this.secretsData?.statues as Array<{ tx: number; ty: number }> | undefined, 1.0, 1.0);
+      const bow = (this.extras.sanctuary as { bow?: { tx: number; ty: number } } | undefined)?.bow;
+      if (bow) tiles([bow], 0.9, 0.9);
+      return out;
+    };
+    const wallGap = (b: Movable, side: 0 | 1 | 2 | 3): number => {
+      let worst = -1;
+      for (const k of [0.15, 0.5, 0.85]) {
+        let gap = 99;
+        for (let t = 0.02; t <= MAX + 0.1; t += 0.05) {
+          const x = side === 0 ? b.x0 - t : side === 1 ? b.x1 + t : b.x0 + (b.x1 - b.x0) * k;
+          const z = side === 2 ? b.z0 - t : side === 3 ? b.z1 + t : b.z0 + (b.z1 - b.z0) * k;
+          if (blocked(x, z)) { gap = t - 0.02; break; }
+        }
+        if (gap < 99) worst = Math.max(worst, gap);
+      }
+      return worst;
+    };
+    for (let pass = 0; pass < 3; pass++) {
+      // Paredes: encosta no lado da fresta (o menor, se houver dois).
+      for (const b of movables()) {
+        const gaps = ([0, 1, 2, 3] as const).map((side) => wallGap(b, side));
+        let best = -1;
+        for (let side = 0; side < 4; side++) if (gaps[side] > MIN && gaps[side] < MAX && (best < 0 || gaps[side] < gaps[best])) best = side;
+        if (best < 0) continue;
+        const d = gaps[best];
+        b.move(best === 0 ? -d : best === 1 ? d : 0, best === 2 ? -d : best === 3 ? d : 0);
+      }
+      // Entre objetos: o segundo encosta no primeiro.
+      const list = movables();
+      for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {
+        const a = list[i], c = list[j];
+        const gx = Math.max(c.x0 - a.x1, a.x0 - c.x1), gz = Math.max(c.z0 - a.z1, a.z0 - c.z1);
+        if (gx < 0 && gz > MIN && gz < MAX) c.move(0, c.z0 > a.z1 ? -gz : gz);
+        else if (gz < 0 && gx > MIN && gx < MAX) c.move(c.x0 > a.x1 ? -gx : gx, 0);
+        else if (gx >= 0 && gz >= 0 && Math.hypot(gx, gz) > MIN && Math.hypot(gx, gz) < MAX) {
+          // Na diagonal: afasta o segundo até 1,4 m no eixo de menor esforço.
+          if (gx >= gz) c.move(c.x0 > a.x1 ? MAX - gx + 0.05 : -(MAX - gx + 0.05), 0);
+          else c.move(0, c.z0 > a.z1 ? MAX - gz + 0.05 : -(MAX - gz + 0.05));
+        }
+      }
+    }
+    // Pontos colados em objetos: vão para o tile livre mais perto.
+    const bodies = movables();
+    const clear = (x: number, z: number, need: number): boolean => {
+      if (blocked(x, z) || (g[Math.floor(z)]?.[Math.floor(x)] ?? '#') === 'D') return false;
+      return bodies.every((b) => Math.hypot(Math.max(b.x0 - x, 0, x - b.x1), Math.max(b.z0 - z, 0, z - b.z1)) >= need);
+    };
+    const region = (x: number, z: number): string =>
+      this.areas.find((a) => a.rects.some((r) => x >= r.x && x < r.x + r.w && z >= r.y && z < r.y + r.h))?.id ?? 'pocket';
+    const open8 = (x: number, z: number): boolean => {
+      for (let dz = -1; dz <= 1; dz++) for (let dx = -1; dx <= 1; dx++) if (blocked(x + dx, z + dz)) return false;
+      return true;
+    };
+    const relocate = (pt: { x: number; z: number }, need: number): void => {
+      if (clear(pt.x, pt.z, need)) return;
+      const home0 = region(pt.x, pt.z);
+      for (let rad = 1; rad <= 6; rad++) {
+        for (let dz = -rad; dz <= rad; dz++) for (let dx = -rad; dx <= rad; dx++) {
+          if (Math.max(Math.abs(dx), Math.abs(dz)) !== rad) continue;
+          const x = pt.x + dx, z = pt.z + dz;
+          if (region(x, z) === home0 && open8(x, z) && clear(x, z, need)) { pt.x = x; pt.z = z; return; }
+        }
+      }
+      const home = region(pt.x, pt.z);
+      for (let rad = 1; rad <= 6; rad++) {
+        for (let dz = -rad; dz <= rad; dz++) for (let dx = -rad; dx <= rad; dx++) {
+          if (Math.max(Math.abs(dx), Math.abs(dz)) !== rad) continue;
+          const x = pt.x + dx, z = pt.z + dz;
+          if (region(x, z) === home && clear(x, z, need)) { pt.x = x; pt.z = z; return; }
+        }
+      }
+    };
+    relocate(this.start, 1.0);
+    for (const sp of this.spawns) relocate(sp, 1.0);
+    for (const bp of this.bossSpawns) relocate(bp, 1.4);
+    for (const bx of this.boxSpots) relocate(bx, 1.8);
   }
 }

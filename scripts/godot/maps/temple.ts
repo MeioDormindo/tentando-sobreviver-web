@@ -35,7 +35,7 @@ export function temple(): MapBuilder {
   m.perk('quick_revive', 81, 56);
   m.lamp(44, 44, { torch: true }).lamp(76, 44, { torch: true }).lamp(44, 62, { torch: true }).lamp(76, 62, { torch: true })
     .lamp(60, 47, { intensity: 0.5, color: 0xffe0b0 });
-  m.props('brazier', [[50, 40], [70, 40], [50, 66], [70, 66]])
+  m.props('brazier', [[46, 45], [74, 45], [50, 66], [70, 66]])
     .props('column_broken', [[39, 39], [81, 39], [39, 50], [81, 50]])
     .props('column_fallen', [[46, 57, 20], [73, 48, -15]])
     .props('amphora', [[42, 39], [43, 40], [78, 65], [52, 66]])
@@ -66,8 +66,8 @@ export function temple(): MapBuilder {
     .solid(rect(11, 3, 1, 18), rect(19, 10, 1, 20), rect(27, 3, 1, 18), rect(35, 10, 1, 20))
     .door('door_necropolis_labyrinth', rect(14, 30, 3, 4), 1500, 'necropolis', 'labyrinth');
   m.spawn('L1', 5, 4, 'labyrinth').spawn('L2', 40, 4, 'labyrinth').spawn('L3', 31, 28, 'labyrinth');
-  m.weapon('stg44', 23, 3).perk('adrenaline', 5, 28).boxSpot(39, 28, 'labyrinth');
-  m.trap(29, 3.2, rect(29, 4, 5, 3));
+  m.weapon('stg44', 23, 3).perk('adrenaline', 8, 29).boxSpot(39, 28, 'labyrinth');
+  m.trap(31, 3.2, rect(29, 4, 5, 3));
   m.lamp(7, 12, { torch: true, intensity: 0.4 }).lamp(15, 22, { torch: true, intensity: 0.4 }).lamp(23, 12, { torch: true, intensity: 0.4 })
     .lamp(31, 22, { torch: true, intensity: 0.4 }).lamp(39, 14, { torch: true, intensity: 0.4 });
   m.props('bones', [[6, 20], [22, 26], [38, 8]]).props('column_broken', [[15, 4], [31, 4]]).props('rock', [[8, 26], [24, 6]]);
@@ -115,16 +115,16 @@ export function temple(): MapBuilder {
     .floor(rect(36, 80, 4, 3), 'stone').floor(rect(58, 80, 4, 3), 'stone')
     .door('gate_underworld', rect(58, 68, 4, 4), 0, 'ruins', 'underworld', 'quest');
   m.spawn('U1', 21, 73, 'underworld').spawn('U2', 82, 92, 'underworld').spawn('U3', 48, 92, 'underworld').spawn('U4', 76, 74, 'underworld');
-  m.weapon('bren', 40, 93).ammo(66, 93).perk('overload', 83, 76).boxSpot(30, 92, 'underworld');
+  m.weapon('bren', 40, 93).ammo(66, 93).perk('overload', 83, 76).boxSpot(40, 76, 'underworld');
   m.lamp(30, 75, { torch: true, color: 0xff6a2a }).lamp(74, 76, { torch: true, color: 0xff6a2a }).lamp(50, 90, { intensity: 0.5, color: 0xa06aff, flicker: 0.4 });
   m.props('chains', [[24, 74], [44, 74], [80, 90]])
     .props('soul_crystal', [[22, 92], [56, 76], [80, 84]])
     .props('bones', [[34, 90], [64, 76], [46, 85]])
-    .props('column_broken', [[21, 85], [82, 74]]);
+    .props('column_broken', [[21, 85], [70, 76]]);
 
   // ── Arena Final: círculo de pedra vulcânica com poços de lava nos cantos.
   m.room('arena', rect(30, 98, 48, 14), 'volcanic')
-    .lava(rect(31, 99, 5, 3), rect(72, 99, 5, 3), rect(31, 108, 5, 3), rect(72, 108, 5, 3))
+    .lava(rect(30, 98, 6, 4), rect(72, 98, 6, 4), rect(30, 108, 6, 4), rect(72, 108, 6, 4))
     .door('door_underworld_arena', rect(52, 94, 4, 4), 3000, 'underworld', 'arena');
   m.spawn('A1', 40, 110, 'arena').spawn('A2', 68, 110, 'arena').spawn('A3', 40, 100, 'arena');
   m.boxSpot(64, 110, 'arena');
@@ -135,7 +135,7 @@ export function temple(): MapBuilder {
   // Esqueleto que o carrega).
   m.quest({ gate: { fragments: { necropolis: { tx: 6, ty: 36 }, forest: { tx: 113, ty: 67 } }, arena: { tx: 54, ty: 104 } } });
   const statueSpots: Array<[number, number]> = [
-    [40, 66], [80, 40], [5, 66], [32, 35], [5, 4], [40, 20], [47, 32], [74, 16], [88, 68], [114, 41], [82, 73], [31, 104],
+    [40, 66], [80, 40], [5, 66], [32, 35], [5, 4], [40, 20], [47, 32], [74, 16], [88, 68], [114, 41], [56, 92], [31, 104],
   ];
   m.secrets({
     // As 12 estátuas dos deuses (segredo): ativar todas abre a passagem do Santuário.

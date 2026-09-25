@@ -332,8 +332,8 @@ func _schedule_revive() -> void:
 			return
 		var risen := ZombieFactory.create(data, target, 1.0, 1.0, 1.0)
 		risen.set_meta(&"revived", true)
+		risen.position = parent.to_local(SpawnManager.safe_point(target.get_world_3d(), at, data.body_radius) + Vector3.UP * 0.05)
 		parent.add_child(risen)
-		risen.global_position = at
 		risen.health.reset(health)
 		PixelFx.spawn(tree, "dust", at + Vector3.UP * 0.5, 1.2)
 		risen.flash(Color(0.8, 0.9, 1.0)))

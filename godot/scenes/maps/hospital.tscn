@@ -19,7 +19,7 @@
 geometry_parsed_geometry_type = 1
 geometry_collision_mask = 33
 agent_height = 1.75
-agent_radius = 0.5
+agent_radius = 0.4
 agent_max_climb = 0.25
 
 [sub_resource type="Environment" id="Env"]

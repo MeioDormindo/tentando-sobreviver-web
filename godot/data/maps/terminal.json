@@ -110,12 +110,12 @@
   "#################################################DDD################################################",
   "########uuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu########",
   "########uuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu########",
-  "########uuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu########",
+  "########uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu########",
   "########uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu########",
   "################uu######################uu################uu##################uu####################",
   "########uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuu########",
   "########uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuu########",
-  "########uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu#uuuuuuuuuuuuuuuuuuu########",
+  "########uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu########",
   "########uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu########",
   "##################################################################DDD###############################",
   "##################################################################DDD###############################",
@@ -681,9 +681,9 @@
   {
    "type": "perk",
    "perkId": "deadeye",
-   "tx": 5,
+   "tx": 4,
    "ty": 16,
-   "x": 5.5,
+   "x": 4.5,
    "z": 16.5
   },
   {
@@ -721,9 +721,9 @@
    "type": "perk",
    "perkId": "sprint",
    "tx": 91,
-   "ty": 60,
+   "ty": 61,
    "x": 91.5,
-   "z": 60.5
+   "z": 61.5
   },
   {
    "type": "perk",
@@ -751,8 +751,8 @@
  ],
  "box_spots": [
   {
-   "x": 58.5,
-   "z": 20.5,
+   "x": 55.5,
+   "z": 17.5,
    "area": "platform"
   },
   {
@@ -792,7 +792,7 @@
   },
   {
    "x": 56.5,
-   "z": 100.5,
+   "z": 99.5,
    "area": "maintenance"
   }
  ],
@@ -802,12 +802,12 @@
    "z": 35.5
   },
   {
-   "x": 42.5,
-   "z": 36.5
+   "x": 43.5,
+   "z": 35.5
   },
   {
-   "x": 58.5,
-   "z": 36.5
+   "x": 57.5,
+   "z": 35.5
   },
   {
    "x": 50.5,
@@ -1365,7 +1365,7 @@
   {
    "type": "bench",
    "x": 40.5,
-   "z": 8.5,
+   "z": 7.4,
    "angle": 0,
    "body": {
     "w": 2,
@@ -1379,7 +1379,7 @@
   {
    "type": "bench",
    "x": 62.5,
-   "z": 8.5,
+   "z": 7.4,
    "angle": 0,
    "body": {
     "w": 2,
@@ -1393,7 +1393,7 @@
   {
    "type": "trash",
    "x": 10.5,
-   "z": 20.5,
+   "z": 21.7,
    "angle": 0,
    "body": {
     "w": 0.688,
@@ -1421,7 +1421,7 @@
   {
    "type": "trash",
    "x": 90.5,
-   "z": 20.5,
+   "z": 21.7,
    "angle": 0,
    "body": {
     "w": 0.688,
@@ -1435,7 +1435,7 @@
   {
    "type": "trash",
    "x": 34.5,
-   "z": 8.5,
+   "z": 7.35,
    "angle": 0,
    "body": {
     "w": 0.688,
@@ -1576,7 +1576,7 @@
   {
    "type": "luggage_cart",
    "x": 86.5,
-   "z": 20.5,
+   "z": 21.55,
    "angle": 0,
    "body": {
     "w": 1.813,
@@ -1589,8 +1589,8 @@
   },
   {
    "type": "extinguisher",
-   "x": 4.5,
-   "z": 20.5,
+   "x": 4.3,
+   "z": 21.7,
    "angle": 0,
    "body": {
     "w": 0.563,
@@ -1603,8 +1603,8 @@
   },
   {
    "type": "extinguisher",
-   "x": 95.5,
-   "z": 20.5,
+   "x": 95.7,
+   "z": 21.7,
    "angle": 0,
    "body": {
     "w": 0.563,
@@ -1673,8 +1673,8 @@
   },
   {
    "type": "trash",
-   "x": 31.5,
-   "z": 25.5,
+   "x": 30.35,
+   "z": 24.35,
    "angle": 0,
    "body": {
     "w": 0.688,
@@ -1687,8 +1687,8 @@
   },
   {
    "type": "trash",
-   "x": 68.5,
-   "z": 25.5,
+   "x": 69.7,
+   "z": 24.35,
    "angle": 0,
    "body": {
     "w": 0.688,
@@ -1701,8 +1701,8 @@
   },
   {
    "type": "trash",
-   "x": 31.5,
-   "z": 42.5,
+   "x": 30.35,
+   "z": 43.7,
    "angle": 0,
    "body": {
     "w": 0.688,
@@ -1715,8 +1715,8 @@
   },
   {
    "type": "trash",
-   "x": 68.5,
-   "z": 42.5,
+   "x": 69.7,
+   "z": 43.7,
    "angle": 0,
    "body": {
     "w": 0.688,
@@ -1798,7 +1798,7 @@
   {
    "type": "luggage_cart",
    "x": 38.5,
-   "z": 42.5,
+   "z": 43.55,
    "angle": 0,
    "body": {
     "w": 1.813,
@@ -1830,7 +1830,7 @@
   {
    "type": "sign_stand",
    "x": 62.5,
-   "z": 42.5,
+   "z": 43.8,
    "angle": 0,
    "body": {
     "w": 1.25,
@@ -1847,7 +1847,7 @@
   },
   {
    "type": "extinguisher",
-   "x": 30.5,
+   "x": 30.3,
    "z": 30.5,
    "angle": 0,
    "body": {
@@ -1861,7 +1861,7 @@
   },
   {
    "type": "extinguisher",
-   "x": 69.5,
+   "x": 69.7,
    "z": 30.5,
    "angle": 0,
    "body": {
@@ -2002,8 +2002,8 @@
   },
   {
    "type": "trash",
-   "x": 9.5,
-   "z": 61.5,
+   "x": 8.35,
+   "z": 61.7,
    "angle": 0,
    "body": {
     "w": 0.688,
@@ -2016,8 +2016,8 @@
   },
   {
    "type": "trash",
-   "x": 38.5,
-   "z": 47.5,
+   "x": 39.7,
+   "z": 46.35,
    "angle": 0,
    "body": {
     "w": 0.688,
@@ -2039,8 +2039,8 @@
   },
   {
    "type": "barrel",
-   "x": 38.5,
-   "z": 60.5,
+   "x": 39.65,
+   "z": 61.65,
    "angle": 0,
    "body": {
     "w": 0.781,
@@ -2072,7 +2072,7 @@
   {
    "type": "vitrine",
    "x": 62.5,
-   "z": 51.5,
+   "z": 52.55,
    "angle": 0,
    "body": {
     "w": 1.875,
@@ -2090,7 +2090,7 @@
   {
    "type": "vitrine",
    "x": 77.5,
-   "z": 51.5,
+   "z": 52.55,
    "angle": 0,
    "body": {
     "w": 1.875,
@@ -2108,7 +2108,7 @@
   {
    "type": "vitrine",
    "x": 88.5,
-   "z": 51.5,
+   "z": 52.55,
    "angle": 0,
    "body": {
     "w": 1.875,
@@ -2125,8 +2125,8 @@
   },
   {
    "type": "crate",
-   "x": 61.5,
-   "z": 47.5,
+   "x": 60.5,
+   "z": 46.5,
    "angle": 0,
    "body": {
     "w": 0.938,
@@ -2139,8 +2139,8 @@
   },
   {
    "type": "crate",
-   "x": 68.5,
-   "z": 47.5,
+   "x": 69.55,
+   "z": 46.5,
    "angle": 0,
    "body": {
     "w": 0.938,
@@ -2154,7 +2154,7 @@
   {
    "type": "crate",
    "x": 69.5,
-   "z": 48.5,
+   "z": 48.888,
    "angle": 0,
    "body": {
     "w": 0.938,
@@ -2167,8 +2167,8 @@
   },
   {
    "type": "crate",
-   "x": 90.5,
-   "z": 47.5,
+   "x": 91.55,
+   "z": 46.5,
    "angle": 0,
    "body": {
     "w": 0.938,
@@ -2182,7 +2182,7 @@
   {
    "type": "vending",
    "x": 72.5,
-   "z": 55.5,
+   "z": 54.4,
    "angle": 0,
    "body": {
     "w": 1.188,
@@ -2213,8 +2213,8 @@
   },
   {
    "type": "trash",
-   "x": 60.5,
-   "z": 61.5,
+   "x": 60.35,
+   "z": 61.7,
    "angle": 0,
    "body": {
     "w": 0.688,
@@ -2241,7 +2241,7 @@
   },
   {
    "type": "extinguisher",
-   "x": 60.5,
+   "x": 60.3,
    "z": 58.5,
    "angle": 0,
    "body": {
@@ -2298,7 +2298,7 @@
   {
    "type": "crate",
    "x": 34.5,
-   "z": 66.5,
+   "z": 65.5,
    "angle": 0,
    "body": {
     "w": 0.938,
@@ -2312,7 +2312,7 @@
   {
    "type": "crate",
    "x": 35.5,
-   "z": 67.5,
+   "z": 67.888,
    "angle": 0,
    "body": {
     "w": 0.938,
@@ -2326,7 +2326,7 @@
   {
    "type": "crate",
    "x": 76.5,
-   "z": 76.5,
+   "z": 77.55,
    "angle": 0,
    "body": {
     "w": 0.938,
@@ -2340,7 +2340,7 @@
   {
    "type": "crate",
    "x": 66.5,
-   "z": 76.5,
+   "z": 77.55,
    "angle": 0,
    "body": {
     "w": 0.938,
@@ -2354,7 +2354,7 @@
   {
    "type": "barrel",
    "x": 52.5,
-   "z": 76.5,
+   "z": 77.65,
    "angle": 0,
    "body": {
     "w": 0.781,
@@ -2368,7 +2368,7 @@
   {
    "type": "barrel",
    "x": 53.5,
-   "z": 75.5,
+   "z": 75.419,
    "angle": 0,
    "body": {
     "w": 0.781,
@@ -2382,7 +2382,7 @@
   {
    "type": "barrel",
    "x": 20.5,
-   "z": 76.5,
+   "z": 77.65,
    "angle": 0,
    "body": {
     "w": 0.781,
@@ -2396,7 +2396,7 @@
   {
    "type": "locker",
    "x": 31.5,
-   "z": 65.5,
+   "z": 65.35,
    "angle": 0,
    "body": {
     "w": 1.625,
@@ -2410,7 +2410,7 @@
   {
    "type": "locker",
    "x": 60.5,
-   "z": 65.5,
+   "z": 65.35,
    "angle": 0,
    "body": {
     "w": 1.625,
@@ -2424,7 +2424,7 @@
   {
    "type": "locker",
    "x": 72.5,
-   "z": 65.5,
+   "z": 65.35,
    "angle": 0,
    "body": {
     "w": 1.625,
@@ -2473,7 +2473,7 @@
   },
   {
    "type": "extinguisher",
-   "x": 57.5,
+   "x": 57.3,
    "z": 67.5,
    "angle": 0,
    "body": {
@@ -2488,7 +2488,7 @@
   {
    "type": "barrel",
    "x": 26.5,
-   "z": 82.5,
+   "z": 81.4,
    "angle": 0,
    "body": {
     "w": 0.781,
@@ -2502,7 +2502,7 @@
   {
    "type": "barrel",
    "x": 86.5,
-   "z": 88.5,
+   "z": 89.65,
    "angle": 0,
    "body": {
     "w": 0.781,
@@ -2516,7 +2516,7 @@
   {
    "type": "crate",
    "x": 56.5,
-   "z": 88.5,
+   "z": 89.55,
    "angle": 0,
    "body": {
     "w": 0.938,
@@ -2530,7 +2530,7 @@
   {
    "type": "barrier",
    "x": 44.5,
-   "z": 83.5,
+   "z": 84.8,
    "angle": 0,
    "body": {
     "w": 1.875,
@@ -2544,7 +2544,7 @@
   {
    "type": "barrier",
    "x": 82.5,
-   "z": 82.5,
+   "z": 81.2,
    "angle": 0,
    "body": {
     "w": 1.875,
@@ -2585,7 +2585,7 @@
   {
    "type": "generator",
    "x": 54.5,
-   "z": 100.5,
+   "z": 101.6,
    "angle": 0,
    "body": {
     "w": 1.5,
@@ -2599,7 +2599,7 @@
   {
    "type": "pallet",
    "x": 31.5,
-   "z": 100.5,
+   "z": 101.4,
    "angle": 0,
    "body": {
     "w": 1.25,
@@ -2627,7 +2627,7 @@
   {
    "type": "crate",
    "x": 57.5,
-   "z": 94.5,
+   "z": 93.5,
    "angle": 0,
    "body": {
     "w": 0.938,
@@ -2640,8 +2640,8 @@
   },
   {
    "type": "crate",
-   "x": 58.5,
-   "z": 95.5,
+   "x": 59.55,
+   "z": 95.888,
    "angle": 0,
    "body": {
     "w": 0.938,
@@ -2655,7 +2655,7 @@
   {
    "type": "locker",
    "x": 34.5,
-   "z": 93.5,
+   "z": 93.35,
    "angle": 0,
    "body": {
     "w": 1.625,
@@ -2669,7 +2669,7 @@
   {
    "type": "barrel",
    "x": 42.5,
-   "z": 100.5,
+   "z": 101.65,
    "angle": 0,
    "body": {
     "w": 0.781,
@@ -2691,7 +2691,7 @@
   },
   {
    "type": "extinguisher",
-   "x": 28.5,
+   "x": 28.3,
    "z": 97.5,
    "angle": 0,
    "body": {

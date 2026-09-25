@@ -311,3 +311,6 @@ func _appear_at(spot: Vector3) -> void:
 	collision_layer = PhysicsLayers.WORLD
 	state = State.IDLE
 	add_to_group(&"interactable")
+	# O lugar antigo fica livre e o novo, ocupado: a navegação dos zumbis acompanha.
+	if world:
+		world.rebake_navigation()

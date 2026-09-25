@@ -43,6 +43,10 @@ var petrification := 0.0
 var _stone_until := 0.0
 var _last_gazed := -99.0
 var _stone_tint := false
+## Desenroscar: tempo tentando andar sem sair do lugar e a posição de referência.
+const UNSTUCK_TIME := 1.0
+var _stuck_time := 0.0
+var _stuck_from := Vector3.ZERO
 const HIT_SLOW_FACTOR := 0.6
 const HIT_SLOW_TIME := 0.7
 var _slow_factor := 1.0
@@ -183,6 +187,7 @@ func _physics_process(delta: float) -> void:
 	_update_interaction()
 	_move(delta)
 	_face_aim()
+	_check_unstuck(delta)
 
 
 ## Olhar da Górgona: soma à petrificação. Estágios: lento → cinza (metade) → pedra (inteira).
@@ -219,6 +224,28 @@ func _update_petrify(delta: float) -> void:
 	if model and (grey > 0.0 or _stone_tint):
 		model.tint(Color.WHITE.lerp(STONE_COLOR, grey))
 		_stone_tint = grey > 0.0
+
+
+## Preso: tentando andar há UNSTUCK_TIME sem sair do lugar e encostado no cenário ou fora do
+## navmesh (numa fresta) — volta para o ponto livre mais próximo. Zumbis em volta não contam.
+func _check_unstuck(delta: float) -> void:
+	if move_input.length() < 0.2 or melee.lunge_left > 0.0:
+		_stuck_time = 0.0
+		_stuck_from = global_position
+		return
+	if global_position.distance_to(_stuck_from) > 0.08:
+		_stuck_time = 0.0
+		_stuck_from = global_position
+		return
+	_stuck_time += delta
+	if _stuck_time < UNSTUCK_TIME:
+		return
+	_stuck_time = 0.0
+	var world3d := get_world_3d()
+	if SpawnManager.is_free(world3d, global_position, 0.3) and not SpawnManager.off_navmesh(world3d, global_position, 0.6):
+		return
+	global_position = SpawnManager.safe_point(world3d, global_position, 0.4) + Vector3.UP * 0.05
+	_stuck_from = global_position
 
 
 ## Pega uma arma (compra, Mystery Box...). Devolve a arma que saiu do inventário.

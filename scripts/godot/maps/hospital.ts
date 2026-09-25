@@ -155,7 +155,7 @@ export function hospital(): MapBuilder {
     .door('door_morgue_lab', rect(46, 81, 3, 4), 3000, 'morgue', 'lab')
     .door('door_cafeteria_lab', rect(78, 81, 3, 4), 2500, 'cafeteria', 'lab');
   m.spawn('L1', 21, 86, 'lab').spawn('L2', 82, 96, 'lab').spawn('L3', 52, 96, 'lab');
-  m.ammo(70, 85).weaponLab(34, 85).perk('overload', 82, 90).boxSpot(28, 96, 'lab');
+  m.ammo(70, 85).weaponLab(34, 85).perk('overload', 83, 90).boxSpot(28, 96, 'lab');
   m.trap(43, 85.2, rect(45, 85, 5, 2));
   m.lamp(28, 89, { intensity: 0.5, color: 0xcff8f0 }).lamp(52, 90, { intensity: 0.55, flicker: 0.3, color: 0xcff8f0 })
     .lamp(74, 88, { intensity: 0.45, flicker: 0.6 }).lamp(60, 95, { broken: true });

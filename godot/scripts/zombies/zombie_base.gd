@@ -163,6 +163,23 @@ func _chase(to_target: Vector3, delta: float) -> void:
 	direction = direction.normalized()
 	if _abilities:
 		direction = _abilities.steer(direction, delta)
+	# Emperrado numa quina (porta, coluna): recalcula o caminho e escorrega ao longo da parede.
+	if stuck_time > 0.8 and get_slide_collision_count() > 0:
+		# A colisão com a parede (não com o chão): a primeira lateral.
+		var normal := Vector3.ZERO
+		for i in get_slide_collision_count():
+			var n := get_slide_collision(i).get_normal()
+			if absf(n.y) < 0.5:
+				normal = Vector3(n.x, 0.0, n.z)
+				break
+		if normal.length() > 0.1:
+			var slid := direction.slide(normal.normalized())
+			direction = (slid if slid.length() > 0.2 else normal.normalized().rotated(Vector3.UP, PI * 0.5 * signf(float(get_instance_id() % 2) - 0.5))).normalized()
+		if _repath_left > 0.05:
+			_repath_left = 0.05
+	# Emperrado há mais tempo (quina com a horda empurrando): vai variando a direção para sair.
+	if stuck_time > 2.5:
+		direction = direction.rotated(Vector3.UP, sin(stuck_time * 2.7 + float(get_instance_id() % 13)) * 1.2).normalized()
 	var chill := (_chill_factor if _chill_left > 0.0 else 1.0) * (FLINCH_SPEED if _flinch_left > 0.0 else 1.0)
 	velocity.x = direction.x * move_speed * event_speed * chill
 	velocity.z = direction.z * move_speed * event_speed * chill

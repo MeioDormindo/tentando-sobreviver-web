@@ -76,6 +76,8 @@ func spawn_zombie(health_mult: float, damage_mult: float, speed_mult: float, rou
 	# física, a colisão o empurraria para fora de onde estivesse sobreposto.
 	# Pequeno desvio para não empilhar zumbis no mesmo ponto.
 	var spot := points[index] + Vector3(randf_range(-0.6, 0.6), 0.0, randf_range(-0.6, 0.6))
+	# Nunca dentro de parede, objeto ou estátua: encaixa num ponto livre do navmesh.
+	spot = safe_point(target.get_world_3d(), spot, zombie.data.body_radius)
 	zombie.position = container.to_local(spot)
 	container.add_child(zombie)
 	return zombie
@@ -116,22 +118,72 @@ func spawn_near_player(type: StringName, min_distance: float, max_distance: floa
 	return null
 
 
-## Leva para um ponto de spawn ativo os zumbis presos longe do jogador (a parede no caminho,
-## um canto sem saída): assim o round sempre termina.
+## Zumbis presos: longe do jogador (parede no caminho, canto sem saída) vão para um ponto de
+## spawn ativo; perto dele, se estiverem fora do navmesh (numa fresta ou dentro de um objeto),
+## voltam para o ponto livre mais próximo. Assim ninguém fica entalado e o round sempre termina.
+const STUCK_NEAR_TIME := 6.0
+
 func _relocate_stuck() -> void:
 	if world == null or target == null:
 		return
+	var world3d := target.get_world_3d()
 	for child in container.get_children():
 		var zombie := child as ZombieBase
-		if zombie == null or not zombie.is_alive() or zombie.stuck_time < stuck_timeout:
+		if zombie == null or not zombie.is_alive():
+			continue
+		if zombie.stuck_time >= STUCK_NEAR_TIME and off_navmesh(world3d, zombie.global_position):
+			zombie.global_position = safe_point(world3d, zombie.global_position, zombie.data.body_radius) + Vector3.UP * 0.05
+			zombie.reset_stuck()
+			continue
+		if zombie.stuck_time < stuck_timeout:
 			continue
 		if zombie.global_position.distance_to(target.global_position) < stuck_min_distance:
 			continue
 		var points := world.active_spawn_points(99)
 		var index := pick_spawn_index(points, target.global_position, min_player_distance)
 		if index >= 0:
-			zombie.global_position = points[index]
+			zombie.global_position = safe_point(world3d, points[index], zombie.data.body_radius) + Vector3.UP * 0.05
 			zombie.reset_stuck()
+
+
+## Ponto livre perto de `at`: no navmesh e sem parede/objeto sobreposto a uma cápsula de raio
+## `radius`. Procura em anéis em volta; sem navmesh ainda, devolve `at` se estiver livre.
+static func safe_point(world3d: World3D, at: Vector3, radius := 0.4) -> Vector3:
+	var nav_map := world3d.navigation_map
+	var has_nav := NavigationServer3D.map_get_iteration_id(nav_map) > 0
+	for ring: float in [0.0, 0.8, 1.6, 2.4, 3.2]:
+		var steps := 1 if ring == 0.0 else 8
+		for k in steps:
+			var candidate := at + Vector3(cos(k * TAU / steps), 0.0, sin(k * TAU / steps)) * ring
+			var spot := candidate
+			if has_nav:
+				spot = NavigationServer3D.map_get_closest_point(nav_map, candidate)
+				if spot.distance_to(Vector3(candidate.x, spot.y, candidate.z)) > 1.0:
+					continue
+			if is_free(world3d, spot, radius):
+				return Vector3(spot.x, maxf(spot.y, 0.0), spot.z)
+	return NavigationServer3D.map_get_closest_point(nav_map, at) if has_nav else at
+
+
+## Uma cápsula de raio `radius` em `at` não encosta em parede nem objeto (WORLD|PROPS)?
+static func is_free(world3d: World3D, at: Vector3, radius := 0.4) -> bool:
+	var shape := CapsuleShape3D.new()
+	shape.radius = radius
+	shape.height = 1.6
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = shape
+	query.transform = Transform3D(Basis(), Vector3(at.x, 0.95, at.z))
+	query.collision_mask = PhysicsLayers.WORLD | PhysicsLayers.PROPS
+	return world3d.direct_space_state.intersect_shape(query, 1).is_empty()
+
+
+## Longe do navmesh (numa fresta ou dentro de algo)?
+static func off_navmesh(world3d: World3D, at: Vector3, tolerance := 0.45) -> bool:
+	var nav_map := world3d.navigation_map
+	if NavigationServer3D.map_get_iteration_id(nav_map) == 0:
+		return false
+	var spot := NavigationServer3D.map_get_closest_point(nav_map, at)
+	return Vector2(spot.x - at.x, spot.z - at.z).length() > tolerance
 
 
 ## Escolhe um ponto (função pura): um dos que estão a pelo menos `min_distance` do jogador,

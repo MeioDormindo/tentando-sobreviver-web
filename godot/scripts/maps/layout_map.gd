@@ -69,6 +69,7 @@ var _base_env: Dictionary = {}
 var _hound: Dictionary = {}
 var _moods: Dictionary = {}
 var _clock := 0.0
+var _rebake_pending := false
 
 # ── Luz por área (seção "lighting" das áreas do mapa) ──
 ## Luz → [multiplicador da luz ambiente, quanto puxa para o tom quente das lâmpadas].
@@ -282,9 +283,26 @@ func area_display_name(area_id: StringName) -> String:
 	return _area_names.get(area_id, String(area_id))
 
 
+## Refaz a navegação (porta aberta, coluna caída, caixa que mudou de lugar). Se já estiver
+## refazendo, guarda o pedido e refaz de novo quando terminar (nenhuma mudança se perde).
 func rebake_navigation() -> void:
-	if not nav_region.is_baking():
-		nav_region.bake_navigation_mesh(true)
+	if nav_region.is_baking():
+		_rebake_pending = true
+		if not nav_region.bake_finished.is_connected(_on_bake_finished):
+			nav_region.bake_finished.connect(_on_bake_finished)
+		return
+	nav_region.bake_navigation_mesh(true)
+
+
+func _on_bake_finished() -> void:
+	if _rebake_pending:
+		_rebake_pending = false
+		nav_region.bake_navigation_mesh.call_deferred(true)
+
+
+## Um pedido de refazer a navegação chegou durante outro.
+func has_pending_rebake() -> bool:
+	return _rebake_pending
 
 
 func minimap_size() -> Vector2i:

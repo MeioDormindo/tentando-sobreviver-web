@@ -5,6 +5,8 @@ extends RefCounted
 
 const BLAST_COLOR := Color(0.84, 0.23, 0.16)
 const ACID_COLOR := Color(0.61, 0.81, 0.16)
+## Distância mínima do jogador para um escombro do Minotauro ficar no chão.
+const RUBBLE_CLEAR := 1.4
 ## Chamas (Cérbero, Entidade do Submundo) e esferas de alma.
 const FIRE_COLOR := Color(1.0, 0.45, 0.12)
 const SOUL_COLOR := Color(0.7, 0.45, 1.0)
@@ -53,7 +55,9 @@ static func area(tree: SceneTree, target_at: Vector3, cfg: Dictionary, acid: boo
 				ZombieAbilities._spawn_pool_at(root, cfg.pool, FIRE_COLOR if fire else ACID_COLOR, point)
 			else:
 				SpecialFire.flash(tree, point, radius, BLAST_COLOR)
-			if float(cfg.get("rubble_time", 0.0)) > 0.0:
+			# Escombro nunca cai em cima do jogador nem de outro objeto (senão prende).
+			if float(cfg.get("rubble_time", 0.0)) > 0.0 and (player == null or Vector2(player.global_position.x - point.x, player.global_position.z - point.z).length() >= RUBBLE_CLEAR) \
+					and SpawnManager.is_free(tree.root.get_world_3d(), point, 0.7):
 				_rubble(root, point, float(cfg.rubble_time))
 			if player and player.is_alive():
 				var offset := player.global_position - point

@@ -125,20 +125,20 @@
   "####################################################DDDD################################################################",
   "####################################################DDDD################################################################",
   "####################################################DDDD################################################################",
-  "##############################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##########################################",
-  "##############################vVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVv##########################################",
-  "##############################vVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVv##########################################",
-  "##############################vVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVv##########################################",
-  "##############################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##########################################",
-  "##############################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##########################################",
+  "##############################VVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVV##########################################",
+  "##############################VVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVV##########################################",
+  "##############################VVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVV##########################################",
+  "##############################VVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVV##########################################",
   "##############################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##########################################",
   "##############################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##########################################",
   "##############################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##########################################",
   "##############################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##########################################",
-  "##############################vVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVv##########################################",
-  "##############################vVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVv##########################################",
-  "##############################vVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVv##########################################",
   "##############################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##########################################",
+  "##############################vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv##########################################",
+  "##############################VVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVV##########################################",
+  "##############################VVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVV##########################################",
+  "##############################VVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVV##########################################",
+  "##############################VVVVVVvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvVVVVVV##########################################",
   "########################################################################################################################",
   "########################################################################################################################",
   "########################################################################################################################",
@@ -458,7 +458,7 @@
   {
    "id": "R3",
    "x": 39.5,
-   "z": 66.5,
+   "z": 65.5,
    "area": "ruins",
    "min_round": 1
   },
@@ -499,7 +499,7 @@
   },
   {
    "id": "L1",
-   "x": 5.5,
+   "x": 6.5,
    "z": 4.5,
    "area": "labyrinth",
    "min_round": 1
@@ -563,21 +563,21 @@
   {
    "id": "F4",
    "x": 87.5,
-   "z": 68.5,
+   "z": 67.5,
    "area": "forest",
    "min_round": 1
   },
   {
    "id": "S1",
    "x": 99.5,
-   "z": 90.5,
+   "z": 87.5,
    "area": "sanctuary",
    "min_round": 1
   },
   {
    "id": "S2",
-   "x": 114.5,
-   "z": 90.5,
+   "x": 113.5,
+   "z": 89.5,
    "area": "sanctuary",
    "min_round": 1
   },
@@ -737,10 +737,10 @@
   {
    "type": "perk",
    "perkId": "adrenaline",
-   "tx": 5,
-   "ty": 28,
-   "x": 5.5,
-   "z": 28.5
+   "tx": 8,
+   "ty": 29,
+   "x": 8.5,
+   "z": 29.5
   },
   {
    "type": "weapon_lab",
@@ -810,22 +810,22 @@
   },
   {
    "x": 48.5,
-   "z": 32.5,
+   "z": 31.5,
    "area": "gorgon_temple"
   },
   {
-   "x": 100.5,
-   "z": 68.5,
+   "x": 101.5,
+   "z": 67.5,
    "area": "forest"
   },
   {
-   "x": 30.5,
-   "z": 92.5,
+   "x": 40.5,
+   "z": 76.5,
    "area": "underworld"
   },
   {
-   "x": 64.5,
-   "z": 110.5,
+   "x": 63.5,
+   "z": 109.5,
    "area": "arena"
   }
  ],
@@ -1157,7 +1157,7 @@
   },
   {
    "type": "trap",
-   "tx": 29,
+   "tx": 31,
    "ty": 3.2,
    "zone": {
     "x": 29,
@@ -1173,61 +1173,61 @@
    {
     "god": "zeus",
     "tx": 40,
-    "ty": 66
+    "ty": 67
    },
    {
     "god": "hera",
-    "tx": 80,
-    "ty": 40
+    "tx": 81,
+    "ty": 38.019
    },
    {
     "god": "poseidon",
-    "tx": 5,
-    "ty": 66
+    "tx": 4,
+    "ty": 67
    },
    {
     "god": "demeter",
-    "tx": 32,
-    "ty": 35
+    "tx": 33,
+    "ty": 34
    },
    {
     "god": "athena",
-    "tx": 5,
-    "ty": 4
+    "tx": 4,
+    "ty": 3
    },
    {
     "god": "apollo",
-    "tx": 40,
+    "tx": 41,
     "ty": 20
    },
    {
     "god": "artemis",
-    "tx": 47,
-    "ty": 32
+    "tx": 46,
+    "ty": 33
    },
    {
     "god": "ares",
-    "tx": 74,
+    "tx": 75,
     "ty": 16
    },
    {
     "god": "aphrodite",
     "tx": 88,
-    "ty": 68
+    "ty": 69
    },
    {
     "god": "hephaestus",
-    "tx": 114,
-    "ty": 41
+    "tx": 115,
+    "ty": 40
    },
    {
     "god": "hermes",
-    "tx": 82,
-    "ty": 73
+    "tx": 56,
+    "ty": 93
    },
    {
     "god": "dionysus",
-    "tx": 31,
+    "tx": 30,
     "ty": 104
    }
   ],
@@ -1278,8 +1278,44 @@
  "props": [
   {
    "type": "brazier",
+   "x": 46.5,
+   "z": 45.5,
+   "angle": 0,
+   "body": {
+    "w": 0.75,
+    "d": 0.75,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 4.688,
+    "intensity": 0.75,
+    "color": 16751162
+   }
+  },
+  {
+   "type": "brazier",
+   "x": 74.5,
+   "z": 45.5,
+   "angle": 0,
+   "body": {
+    "w": 0.75,
+    "d": 0.75,
+    "ox": 0,
+    "oz": 0
+   },
+   "blocks_bullets": false,
+   "light": {
+    "radius": 4.688,
+    "intensity": 0.75,
+    "color": 16751162
+   }
+  },
+  {
+   "type": "brazier",
    "x": 50.5,
-   "z": 40.5,
+   "z": 67.65,
    "angle": 0,
    "body": {
     "w": 0.75,
@@ -1297,43 +1333,7 @@
   {
    "type": "brazier",
    "x": 70.5,
-   "z": 40.5,
-   "angle": 0,
-   "body": {
-    "w": 0.75,
-    "d": 0.75,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": {
-    "radius": 4.688,
-    "intensity": 0.75,
-    "color": 16751162
-   }
-  },
-  {
-   "type": "brazier",
-   "x": 50.5,
-   "z": 66.5,
-   "angle": 0,
-   "body": {
-    "w": 0.75,
-    "d": 0.75,
-    "ox": 0,
-    "oz": 0
-   },
-   "blocks_bullets": false,
-   "light": {
-    "radius": 4.688,
-    "intensity": 0.75,
-    "color": 16751162
-   }
-  },
-  {
-   "type": "brazier",
-   "x": 70.5,
-   "z": 66.5,
+   "z": 67.65,
    "angle": 0,
    "body": {
     "w": 0.75,
@@ -1350,8 +1350,8 @@
   },
   {
    "type": "column_broken",
-   "x": 39.5,
-   "z": 39.5,
+   "x": 38.45,
+   "z": 38.45,
    "angle": 0,
    "body": {
     "w": 0.938,
@@ -1365,7 +1365,7 @@
   {
    "type": "column_broken",
    "x": 81.5,
-   "z": 39.5,
+   "z": 38.45,
    "angle": 0,
    "body": {
     "w": 0.938,
@@ -1378,7 +1378,7 @@
   },
   {
    "type": "column_broken",
-   "x": 39.5,
+   "x": 38.45,
    "z": 50.5,
    "angle": 0,
    "body": {
@@ -1435,7 +1435,7 @@
   {
    "type": "amphora",
    "x": 42.5,
-   "z": 39.5,
+   "z": 38.25,
    "angle": 0,
    "body": {
     "w": 0.5,
@@ -1476,8 +1476,8 @@
   },
   {
    "type": "amphora",
-   "x": 52.5,
-   "z": 66.5,
+   "x": 51.125,
+   "z": 67.75,
    "angle": 0,
    "body": {
     "w": 0.5,
@@ -1767,7 +1767,7 @@
   {
    "type": "column_broken",
    "x": 15.5,
-   "z": 4.5,
+   "z": 3.45,
    "angle": 0,
    "body": {
     "w": 0.938,
@@ -1781,7 +1781,7 @@
   {
    "type": "column_broken",
    "x": 31.5,
-   "z": 4.5,
+   "z": 3.45,
    "angle": 0,
    "body": {
     "w": 0.938,
@@ -2005,7 +2005,7 @@
   {
    "type": "altar",
    "x": 61.5,
-   "z": 7.5,
+   "z": 6.55,
    "angle": 0,
    "body": {
     "w": 1.75,
@@ -2023,7 +2023,7 @@
   {
    "type": "brazier",
    "x": 57.5,
-   "z": 7.5,
+   "z": 6.35,
    "angle": 0,
    "body": {
     "w": 0.75,
@@ -2041,7 +2041,7 @@
   {
    "type": "brazier",
    "x": 65.5,
-   "z": 7.5,
+   "z": 6.35,
    "angle": 0,
    "body": {
     "w": 0.75,
@@ -2184,7 +2184,7 @@
   },
   {
    "type": "dead_tree",
-   "x": 114.5,
+   "x": 115.65,
    "z": 50.5,
    "angle": 0,
    "body": {
@@ -2322,7 +2322,7 @@
   },
   {
    "type": "column",
-   "x": 114.5,
+   "x": 115.55,
    "z": 76.5,
    "angle": 0,
    "body": {
@@ -2350,7 +2350,7 @@
   },
   {
    "type": "column",
-   "x": 114.5,
+   "x": 115.55,
    "z": 89.5,
    "angle": 0,
    "body": {
@@ -2475,7 +2475,7 @@
   },
   {
    "type": "column_broken",
-   "x": 21.5,
+   "x": 20.45,
    "z": 85.5,
    "angle": 0,
    "body": {
@@ -2489,8 +2489,8 @@
   },
   {
    "type": "column_broken",
-   "x": 82.5,
-   "z": 74.5,
+   "x": 70.5,
+   "z": 76.5,
    "angle": 0,
    "body": {
     "w": 0.938,
@@ -2560,7 +2560,7 @@
   {
    "type": "brazier",
    "x": 54.5,
-   "z": 110.5,
+   "z": 111.65,
    "angle": 0,
    "body": {
     "w": 0.75,
@@ -2610,23 +2610,23 @@
   {
    "id": "zeus",
    "tx": 53,
-   "ty": 39
+   "ty": 37.95
   },
   {
    "id": "poseidon",
    "tx": 66,
-   "ty": 39
+   "ty": 37.95
   },
   {
    "id": "hades",
    "tx": 71,
-   "ty": 39
+   "ty": 37.95
   }
  ],
  "sanctuary": {
   "bow": {
    "tx": 107,
-   "ty": 84
+   "ty": 82.982
   }
  }
 }

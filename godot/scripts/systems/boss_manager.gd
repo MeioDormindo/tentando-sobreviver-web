@@ -52,6 +52,8 @@ func _spawn(data: BossData, extra_health_mult: float) -> void:
 	for point in points:
 		if point.distance_to(player.global_position) > at.distance_to(player.global_position):
 			at = point
+	# Nasce num ponto livre (o boss é largo: nada de nascer dentro de banco ou coluna).
+	at = SpawnManager.safe_point(player.get_world_3d(), at, data.body_radius)
 	boss = data.scene.instantiate() as Boss
 	boss.setup(data, player, (1.0 + data.health_per_appearance * appearance) * extra_health_mult, _summon)
 	boss.position = spawn_manager.container.to_local(at + Vector3.UP * 0.1)

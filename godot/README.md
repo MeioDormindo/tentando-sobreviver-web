@@ -234,7 +234,9 @@ reais do jogo web (`src/config`) e gera os `.tres` de `data/`:
 Os **mapas** são só do Godot (o jogo web continua com os dele): `npm run godot:maps` gera
 `data/maps/terminal.json`, `map2.json` e `temple.json` a partir da DSL em `scripts/godot/maps/` (um arquivo
 por mapa: `room`, `solid`, `door`, `window`, `spawn`, `weapon`, `perk`, `lamp`, `prop`...).
-O gerador confere o desenho (tudo em chão, portas ligando as áreas certas, toda área alcançável)
+O gerador confere o desenho (tudo em chão, portas ligando as áreas certas, toda área alcançável,
+nenhuma fresta de 0,1 a 1,4 m entre objeto e parede — os objetos encostam sozinhos —, nenhum corredor
+de 1 tile, máquinas coladas na parede e spawns longe de objetos)
 e grava uma prévia em `build/maps/<id>.png`. Além da grade, áreas, portas, janelas, spawns,
 máquinas, luzes e objetos, cada mapa traz a luz por área (`lit`, `dim`, `dark`), luminárias
 quebradas, a densidade da decoração por área e, no Hospital, as posições da missão do Soro.

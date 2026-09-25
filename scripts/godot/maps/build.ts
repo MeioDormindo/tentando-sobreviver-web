@@ -78,6 +78,7 @@ function thumbnail(data: Record<string, any>): Buffer {
   return encodePng(w, h, rgba);
 }
 
+const failures: string[] = [];
 for (const make of [terminal, hospital, temple] as Array<() => MapBuilder>) {
   const map = make();
   const data = map.build() as Record<string, any>;

@@ -36,7 +36,7 @@ export function terminal(): MapBuilder {
   });
   m.spawn('P1', 5, 11, 'platform').spawn('P2', 94, 12, 'platform').spawn('P3', 5, 4, 'platform').spawn('P4', 94, 4, 'platform');
   m.weapon('ak', 30, 7).ammo(70, 7).weapon('combat_shotgun', 46, 3);
-  m.perk('deadeye', 5, 16).boxSpot(58, 20, 'platform').trainPanel(40, 14.3);
+  m.perk('deadeye', 4, 16).boxSpot(58, 20, 'platform').trainPanel(40, 14.3);
   m.lampRow(10, 90, 18, 16, { intensity: 0.55, flicker: 0.15 })
     .lamp(24, 8, { intensity: 0.4, flicker: 0.5 }).lamp(50, 8, { intensity: 0.45 }).lamp(76, 8, { broken: true });
   m.props('bench', [[24, 19], [42, 19], [58, 19], [74, 19], [40, 8], [62, 8]])
@@ -98,7 +98,7 @@ export function terminal(): MapBuilder {
     .door('door_hall_shops', rect(64, 44, 3, 2), 1000, 'hall', 'shops')
     .pocket(rect(93, 47, 5, 5)).window('win_shops_1', rect(92, 49, 1, 2), 'shops').spawn('L1', 95, 49, 'shops')
     .pocket(rect(93, 55, 5, 5)).window('win_shops_2', rect(92, 57, 1, 2), 'shops').spawn('L2', 95, 57, 'shops');
-  m.weapon('vector', 74, 46).weapon('m4', 86, 46).ammo(61, 54).perk('sprint', 91, 60).boxSpot(76, 60, 'shops');
+  m.weapon('vector', 74, 46).weapon('m4', 86, 46).ammo(61, 54).perk('sprint', 91, 61).boxSpot(76, 60, 'shops');
   m.lamp(65, 49, { intensity: 0.5, flicker: 0.2 }).lamp(76, 49, { intensity: 0.45, flicker: 0.8 }).lamp(86, 49, { intensity: 0.5 })
     .lamp(68, 58, { intensity: 0.45 }).lamp(84, 58, { broken: true });
   m.props('vitrine', [[62, 51], [77, 51], [88, 51]])
@@ -128,7 +128,7 @@ export function terminal(): MapBuilder {
   // ── Túneis: dois corredores de serviço com travessias.
   m.room('tunnels', rect(8, 81, 84, 9), 'tunnel')
     .solid(rect(8, 85, 8, 1), rect(18, 85, 22, 1), rect(42, 85, 16, 1), rect(60, 85, 18, 1), rect(80, 85, 12, 1))
-    .solid(rect(30, 81, 1, 3), rect(72, 86, 1, 3))
+    .solid(rect(30, 81, 1, 2), rect(72, 86, 1, 2))
     .door('door_tech_tunnels', rect(49, 78, 3, 3), 2500, 'tech', 'tunnels');
   m.spawn('U1', 9, 82, 'tunnels').spawn('U2', 90, 82, 'tunnels').spawn('U3', 9, 88, 'tunnels')
     .spawn('U4', 90, 88, 'tunnels').spawn('U5', 34, 82, 'tunnels').spawn('U6', 76, 88, 'tunnels');
