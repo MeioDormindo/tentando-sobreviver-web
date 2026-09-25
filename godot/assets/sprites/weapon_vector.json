@@ -10,7 +10,7 @@
  "columns": 44,
  "directions": 8,
  "direction_angle": "dir = round(atan2(facing.x, facing.z) / 45°) mod 8; 0 = olhando para a câmera (+Z), 2 = leste (+X)",
- "pitch": 40,
+ "pitch": 60,
  "pixels_per_meter": 48,
  "animations": {
   "Idle": {
@@ -72,7 +72,7 @@
   false,
   false,
   false,
-  true,
+  false,
   true,
   true,
   true,
