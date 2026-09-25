@@ -13,7 +13,8 @@
     "godot:audio": "esbuild scripts/godot/export-audio.ts --bundle --platform=node --format=esm --log-level=warning --alias:phaser=./scripts/godot/phaser-stub.ts --outfile=node_modules/.cache/godot-audio.mjs && node node_modules/.cache/godot-audio.mjs",
     "godot:sprites": "node scripts/godot/pixel/build.mjs",
     "godot:scenery": "node scripts/godot/pixel/scenery.mjs",
-    "godot:maps": "esbuild scripts/godot/maps/build.ts --bundle --platform=node --format=esm --log-level=warning --outfile=node_modules/.cache/godot-maps.mjs && node node_modules/.cache/godot-maps.mjs"
+    "godot:maps": "esbuild scripts/godot/maps/build.ts --bundle --platform=node --format=esm --log-level=warning --outfile=node_modules/.cache/godot-maps.mjs && node node_modules/.cache/godot-maps.mjs",
+    "godot:font": "node scripts/godot/pixel/font.mjs"
   },
   "dependencies": {
     "phaser": "^3.90.0"

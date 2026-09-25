@@ -42,6 +42,9 @@ var _game_over_panel: Control
 const VIGNETTE := {"lit": 0.3, "dim": 0.5, "dark": 0.75}
 var _vignette: ColorRect
 var _flashlight_label: Label
+var _ammo_box: VBoxContainer
+## Rótulos dos painéis que somem quando ficam vazios.
+var _auto_hide: Array[Label] = []
 var _flashlight_on := true
 var _lighting := "dim"
 var _game_over_text: Label
@@ -58,8 +61,6 @@ func _ready() -> void:
 	Events.ammo_changed.connect(_on_ammo_changed)
 	Events.weapon_visual_changed.connect(func(weapon_id: StringName, level: int, other_id: StringName, other_level: int) -> void:
 		_set_icon(_weapon_icon, weapon_id, level)
-		# A reserva fica logo acima da arma em mãos.
-		_other_weapon_icon.set_meta(&"offset", Vector2(-MARGIN, -100.0 - _weapon_icon.size.y - 10.0))
 		_set_icon(_other_weapon_icon, other_id, other_level))
 	Events.weapon_changed.connect(func(_current: String, other: String) -> void: _other_weapon_label.text = ("[Q] " + other.to_upper()) if other != "" else "")
 	Events.interaction_prompt.connect(func(text: String) -> void: _prompt_label.text = text)
@@ -70,7 +71,7 @@ func _ready() -> void:
 	Events.toast.connect(_show_toast)
 	Events.cheat_detected.connect(_on_cheat_detected)
 	Events.player_armor_changed.connect(func(current: float, maximum: float) -> void:
-		_armor_bar.visible = current > 0.0
+		_armor_bar.get_parent().visible = current > 0.0
 		_armor_bar.max_value = maximum
 		_armor_bar.value = current)
 	Events.power_up_timers.connect(func(active: Dictionary, definitions: Dictionary) -> void:
@@ -124,13 +125,25 @@ func _ready() -> void:
 		_flashlight_on = on
 		_update_flashlight_label())
 	Events.lighting_changed.connect(_on_lighting_changed)
+	# O jogador pode ter anunciado a arma antes de a HUD existir: pede de novo.
+	(func() -> void:
+		var player := get_tree().get_first_node_in_group(&"player")
+		if player and player.has_method(&"announce_weapon"):
+			player.announce_weapon()).call_deferred()
 
 
 func _process(_delta: float) -> void:
+	for label in _auto_hide:
+		label.visible = label.text != ""
+	# Ícones das armas empilhados acima do painel de munição (a altura dele muda).
+	var screen := get_viewport().get_visible_rect().size
+	var icons_top := screen.y - 12.0 - (_ammo_box.get_parent() as Control).size.y - 8.0
+	_weapon_icon.position = Vector2(screen.x - 12.0 - _weapon_icon.size.x, icons_top - _weapon_icon.size.y)
+	_other_weapon_icon.position = Vector2(screen.x - 12.0 - _other_weapon_icon.size.x, _weapon_icon.position.y - 8.0 - _other_weapon_icon.size.y)
 	if _quest_title.text != "":
-		var top := Minimap.CORNER.y + minimap.screen_height() + 24.0 if minimap.visible and not minimap.expanded else Minimap.CORNER.y
+		var top := Minimap.CORNER.y + minimap.screen_height() + 36.0 if minimap.visible and not minimap.expanded else Minimap.CORNER.y
 		_quest_title.position = Vector2(MARGIN, top)
-		_quest_text.position = Vector2(MARGIN, top + 18.0)
+		_quest_text.position = Vector2(MARGIN, top + 28.0)
 	# O marcador de acerto acompanha a mira do mouse.
 	_hit_marker.position = get_viewport().get_mouse_position() - _hit_marker.size * 0.5
 
@@ -153,44 +166,38 @@ func _build() -> void:
 	_vignette.material = vignette_material
 	root.add_child(_vignette)
 
-	_round_label = _label(root, "ROUND", 54, RED, Control.PRESET_TOP_LEFT, HORIZONTAL_ALIGNMENT_LEFT, -8)
-	_remaining_label = _label(root, "", 16, TEXT, Control.PRESET_TOP_LEFT, HORIZONTAL_ALIGNMENT_LEFT, 62)
+	# Cantos em painéis de pixel art (como a referência): ROUND, PONTOS, VIDA e MUNIÇÃO.
+	var round_box := _corner_panel(root, Control.PRESET_TOP_LEFT)
+	_round_label = _text(round_box, "ROUND", 39, RED)
+	_remaining_label = _text(round_box, "", 26, TEXT)
 
-	_points_label = _label(root, "0", 40, GOLD, Control.PRESET_TOP_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, -6)
-	_points_delta = _label(root, "", 18, GOLD, Control.PRESET_TOP_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, 44)
-	_score_label = _label(root, "SCORE 0", 16, TEXT, Control.PRESET_TOP_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, 70)
-	_invalid_label = _label(root, "", 14, RED, Control.PRESET_TOP_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, 92)
+	var points_box := _corner_panel(root, Control.PRESET_TOP_RIGHT)
+	_points_label = _text(points_box, "0", 39, GOLD, HORIZONTAL_ALIGNMENT_RIGHT)
+	_score_label = _text(points_box, "SCORE 0", 26, DIM, HORIZONTAL_ALIGNMENT_RIGHT)
+	_invalid_label = _text(points_box, "", 26, RED, HORIZONTAL_ALIGNMENT_RIGHT)
+	# Ganho de pontos: fora do painel, logo abaixo (some sozinho).
+	_points_delta = _label(root, "", 26, GOLD, Control.PRESET_TOP_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, 108)
 
-	_health_bar = ProgressBar.new()
-	_health_bar.show_percentage = false
-	_health_bar.custom_minimum_size = Vector2(240, 14)
-	_health_bar.add_theme_stylebox_override(&"fill", _flat(RED))
-	_health_bar.add_theme_stylebox_override(&"background", _flat(Color(0.1, 0.1, 0.1, 0.8)))
-	root.add_child(_health_bar)
-	_health_bar.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT, Control.PRESET_MODE_KEEP_SIZE, MARGIN)
-	_health_label = _label(root, "VIDA", 15, TEXT, Control.PRESET_BOTTOM_LEFT, HORIZONTAL_ALIGNMENT_LEFT, -22)
-	_perks_label = _label(root, "", 14, GOLD, Control.PRESET_BOTTOM_LEFT, HORIZONTAL_ALIGNMENT_LEFT, -62)
-	_flashlight_label = _label(root, "", 14, GOLD, Control.PRESET_BOTTOM_LEFT, HORIZONTAL_ALIGNMENT_LEFT, -2)
-	_flashlight_label.offset_left += 256.0
-	_flashlight_label.offset_right += 256.0
+	var health_box := _corner_panel(root, Control.PRESET_BOTTOM_LEFT)
+	_perks_label = _text(health_box, "", 26, GOLD)
+	_health_label = _text(health_box, "VIDA", 26, TEXT)
+	var health: Array = PixelSkin.bar(RED, 260.0)
+	health_box.add_child(health[0])
+	_health_bar = health[1]
+	var armor: Array = PixelSkin.bar(Color(0.24, 0.56, 0.84), 260.0, 6.0)
+	health_box.add_child(armor[0])
+	_armor_bar = armor[1]
+	(armor[0] as Control).visible = false
+	_flashlight_label = _text(health_box, "", 26, GOLD)
 	_update_flashlight_label()
-	_armor_bar = ProgressBar.new()
-	_armor_bar.show_percentage = false
-	_armor_bar.custom_minimum_size = Vector2(240, 6)
-	_armor_bar.add_theme_stylebox_override(&"fill", _flat(Color(0.24, 0.56, 0.84)))
-	_armor_bar.add_theme_stylebox_override(&"background", _flat(Color(0.1, 0.1, 0.1, 0.6)))
-	root.add_child(_armor_bar)
-	_armor_bar.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT, Control.PRESET_MODE_KEEP_SIZE, MARGIN)
-	_armor_bar.offset_top -= 18
-	_armor_bar.offset_bottom -= 18
-	_armor_bar.visible = false
 	_timers_label = _label(root, "", 16, TEXT, Control.PRESET_CENTER_BOTTOM, HORIZONTAL_ALIGNMENT_CENTER, -70)
 	_event_label = _label(root, "", 18, TEXT, Control.PRESET_CENTER_TOP, HORIZONTAL_ALIGNMENT_CENTER, 48)
 
-	_weapon_label = _label(root, "", 18, TEXT, Control.PRESET_BOTTOM_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, -46)
-	_ammo_label = _label(root, "", 36, TEXT, Control.PRESET_BOTTOM_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT)
-	_other_weapon_label = _label(root, "", 14, DIM, Control.PRESET_BOTTOM_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, -70)
-	# Ícones em pixel art da arma em mãos (grande) e da reserva (pequeno, apagado).
+	_ammo_box = _corner_panel(root, Control.PRESET_BOTTOM_RIGHT)
+	_other_weapon_label = _text(_ammo_box, "", 26, DIM, HORIZONTAL_ALIGNMENT_RIGHT)
+	_weapon_label = _text(_ammo_box, "", 26, TEXT, HORIZONTAL_ALIGNMENT_RIGHT)
+	_ammo_label = _text(_ammo_box, "", 39, TEXT, HORIZONTAL_ALIGNMENT_RIGHT)
+	# Ícones em pixel art da arma em mãos (grande) e da reserva (pequeno, apagado), acima do painel.
 	_weapon_icon = _icon_rect(root, 2.0, Vector2(-MARGIN, -100))
 	_other_weapon_icon = _icon_rect(root, 1.0, Vector2(-MARGIN, -100))
 	_other_weapon_icon.modulate = Color(1, 1, 1, 0.55)
@@ -201,15 +208,16 @@ func _build() -> void:
 	_banner.modulate.a = 0.0
 	_toast = _label(root, "", 20, GOLD, Control.PRESET_CENTER_TOP, HORIZONTAL_ALIGNMENT_CENTER, 220)
 	_boss_label = _label(root, "", 18, RED, Control.PRESET_CENTER_TOP, HORIZONTAL_ALIGNMENT_CENTER, 4)
-	_boss_bar = ProgressBar.new()
-	_boss_bar.show_percentage = false
-	_boss_bar.custom_minimum_size = Vector2(420, 12)
-	_boss_bar.add_theme_stylebox_override(&"fill", _flat(RED))
-	_boss_bar.add_theme_stylebox_override(&"background", _flat(Color(0.1, 0.1, 0.1, 0.8)))
-	root.add_child(_boss_bar)
-	_boss_bar.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP, Control.PRESET_MODE_KEEP_SIZE, MARGIN)
-	_boss_bar.offset_top += 28
-	_boss_bar.offset_bottom += 28
+	var boss: Array = PixelSkin.bar(RED, 420.0)
+	var boss_frame := boss[0] as Control
+	root.add_child(boss_frame)
+	boss_frame.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP, Control.PRESET_MODE_MINSIZE, MARGIN)
+	boss_frame.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	boss_frame.offset_top += 34
+	boss_frame.offset_bottom += 34
+	_boss_bar = boss[1]
+	_boss_bar.visibility_changed.connect(func() -> void: boss_frame.visible = _boss_bar.visible)
+	boss_frame.visible = false
 	_boss_bar.visible = false
 	_toast.modulate.a = 0.0
 
@@ -251,10 +259,39 @@ func _set_icon(rect: TextureRect, weapon_id: StringName, level: int) -> void:
 		return
 	rect.texture = load(path)
 	var size: Vector2 = rect.texture.get_size() * float(rect.get_meta(&"zoom"))
-	var offset: Vector2 = rect.get_meta(&"offset")
 	rect.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
 	rect.size = size
-	rect.position = get_viewport().get_visible_rect().size + offset - size
+
+
+## Painel de pixel art preso a um canto (cresce para dentro da tela); devolve a coluna.
+func _corner_panel(root: Control, preset: Control.LayoutPreset) -> VBoxContainer:
+	var panel := PanelContainer.new()
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_theme_stylebox_override(&"panel", PixelSkin.panel(false, 10.0))
+	root.add_child(panel)
+	panel.set_anchors_and_offsets_preset(preset, Control.PRESET_MODE_MINSIZE, 12)
+	if preset in [Control.PRESET_TOP_RIGHT, Control.PRESET_BOTTOM_RIGHT]:
+		panel.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	if preset in [Control.PRESET_BOTTOM_LEFT, Control.PRESET_BOTTOM_RIGHT]:
+		panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override(&"separation", 2)
+	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_child(column)
+	return column
+
+
+## Texto dentro de um painel (some sozinho quando fica vazio).
+func _text(parent: Control, text: String, size: int, color: Color, align: HorizontalAlignment = HORIZONTAL_ALIGNMENT_LEFT) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.horizontal_alignment = align
+	label.add_theme_font_size_override(&"font_size", MenuKit.px(size))
+	label.add_theme_color_override(&"font_color", color)
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	parent.add_child(label)
+	_auto_hide.append(label)
+	return label
 
 
 ## Rótulo preso a um canto (preset) com a margem padrão; `dy` desloca na vertical.
@@ -262,7 +299,7 @@ func _label(parent: Control, text: String, size: int, color: Color, preset: Cont
 	var label := Label.new()
 	label.text = text
 	label.horizontal_alignment = align
-	label.add_theme_font_size_override(&"font_size", size)
+	label.add_theme_font_size_override(&"font_size", MenuKit.px(size))
 	label.add_theme_color_override(&"font_color", color)
 	label.add_theme_color_override(&"font_outline_color", Color.BLACK)
 	label.add_theme_constant_override(&"outline_size", maxi(4, size / 8))
@@ -291,14 +328,14 @@ func _overlay(parent: Control, title: String, subtitle: String) -> Control:
 	var title_label := Label.new()
 	title_label.text = title
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title_label.add_theme_font_size_override(&"font_size", 64)
+	title_label.add_theme_font_size_override(&"font_size", MenuKit.px(64))
 	title_label.add_theme_color_override(&"font_color", RED)
 	box.add_child(title_label)
 	var subtitle_label := Label.new()
 	subtitle_label.name = "Subtitle"
 	subtitle_label.text = subtitle
 	subtitle_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	subtitle_label.add_theme_font_size_override(&"font_size", 20)
+	subtitle_label.add_theme_font_size_override(&"font_size", MenuKit.px(20))
 	subtitle_label.add_theme_color_override(&"font_color", TEXT)
 	box.add_child(subtitle_label)
 	return panel
@@ -357,7 +394,7 @@ func _on_ammo_changed(weapon_name: String, magazine: int, reserve: int, reloadin
 func _on_game_over(summary: Dictionary) -> void:
 	var box := _game_over_panel.get_node("Box") as VBoxContainer
 	_game_over_text.text = "SCORE %d" % summary.score
-	_game_over_text.add_theme_font_size_override(&"font_size", 32)
+	_game_over_text.add_theme_font_size_override(&"font_size", MenuKit.px(32))
 	var accuracy := roundi(100.0 * summary.shots_hit / summary.shots_fired) if summary.shots_fired > 0 else 0
 	var rows := [
 		["ROUND", str(summary.round)], ["ZUMBIS ABATIDOS", str(summary.kills)], ["HEADSHOTS", str(summary.headshots)],
@@ -373,14 +410,14 @@ func _on_game_over(summary: Dictionary) -> void:
 		for i in 2:
 			var cell := Label.new()
 			cell.text = row[i]
-			cell.add_theme_font_size_override(&"font_size", 15 if i == 0 else 17)
+			cell.add_theme_font_size_override(&"font_size", MenuKit.px(15 if i == 0 else 17))
 			cell.add_theme_color_override(&"font_color", DIM if i == 0 else TEXT)
 			grid.add_child(cell)
 	box.add_child(grid)
 	var record := Label.new()
 	record.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	record.text = "NOVO RECORDE!" if summary.new_record else "RECORDE: %d PONTOS · ROUND %d" % [summary.best_score, summary.best_wave]
-	record.add_theme_font_size_override(&"font_size", 26 if summary.new_record else 15)
+	record.add_theme_font_size_override(&"font_size", MenuKit.px(26 if summary.new_record else 15))
 	record.add_theme_color_override(&"font_color", GOLD if summary.new_record else DIM)
 	box.add_child(record)
 	if summary.cheat_taunt != "":
@@ -389,7 +426,7 @@ func _on_game_over(summary: Dictionary) -> void:
 		var taunt := Label.new()
 		taunt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		taunt.text = summary.cheat_taunt
-		taunt.add_theme_font_size_override(&"font_size", 26)
+		taunt.add_theme_font_size_override(&"font_size", MenuKit.px(26))
 		taunt.add_theme_color_override(&"font_color", Color(1.0, 0.48, 0.36))
 		box.add_child(taunt)
 	elif summary.score > 0 and (summary.rank_eligible or Online.is_configured()):
@@ -435,6 +472,7 @@ func _add_ranking_entry(box: VBoxContainer, summary: Dictionary) -> void:
 	hint.add_theme_color_override(&"font_color", GOLD)
 	line.add_child(hint)
 	var edit := LineEdit.new()
+	MenuKit.style_edit(edit)
 	edit.name = "RankName"
 	edit.text = Account.current_user().to_upper().substr(0, Save.catalog.player_name_max) if Account.current_user() != "" else Save.player_name
 	edit.max_length = Save.catalog.player_name_max
@@ -475,6 +513,7 @@ func _menu_button(parent: Control, text: String, on_press: Callable) -> Button:
 	var button := Button.new()
 	button.text = text
 	button.custom_minimum_size = Vector2(180, 44)
+	MenuKit.style_button(button)
 	button.pressed.connect(on_press)
 	parent.add_child(button)
 	return button

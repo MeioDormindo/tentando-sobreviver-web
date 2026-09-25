@@ -110,7 +110,7 @@ func _draw() -> void:
 	draw_rect(Rect2(Vector2(-3, -3), size + Vector2(6, 6)), Color(0, 0, 0, 0.55))
 	draw_rect(Rect2(Vector2(-3, -3), size + Vector2(6, 6)), Color8(106, 109, 100, 230), false, 1.0)
 	draw_texture_rect(_texture, Rect2(Vector2.ZERO, size), false)
-	draw_string(get_theme_default_font(), Vector2(0, size.y + 14), "MAPA", HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color8(138, 141, 132))
+	draw_string(get_theme_default_font(), Vector2(0, size.y + 24), "MAPA", HORIZONTAL_ALIGNMENT_LEFT, -1, 26, Color8(138, 141, 132))
 	if _state.is_empty():
 		return
 	var zoom := 2.4 if expanded else 1.0

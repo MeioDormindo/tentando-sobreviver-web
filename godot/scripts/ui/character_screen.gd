@@ -34,10 +34,7 @@ func _build() -> void:
 		var card := VBoxContainer.new()
 		card.custom_minimum_size = Vector2(170, 0)
 		row.add_child(card)
-		var swatch := ColorRect.new()
-		swatch.custom_minimum_size = Vector2(170, 110)
-		swatch.color = skin.jacket if is_unlocked(skin) else Color(0.16, 0.17, 0.18)
-		card.add_child(swatch)
+		card.add_child(_portrait(skin))
 		var status := "EM USO" if skin.id == selected else ("USAR" if is_unlocked(skin) else "TRANCADO")
 		var button := MenuKit.button(card, "%s\n%s" % [String(skin.name).to_upper(), status], _choose.bind(skin), 16)
 		if skin.id == selected:
@@ -48,6 +45,43 @@ func _build() -> void:
 	MenuKit.spacer(column, 12)
 	MenuKit.button(column, "VOLTAR", func() -> void: MenuKit.go(self, MENU))
 	first.grab_focus.call_deferred()
+
+
+## Retrato: o sprite do visual (parado, de frente, com a pistola) num painel pixel; os
+## trancados aparecem em silhueta. Sem a folha, a cor da jaqueta.
+func _portrait(skin: Dictionary) -> Control:
+	var frame := PanelContainer.new()
+	frame.custom_minimum_size = Vector2(170, 190)
+	frame.add_theme_stylebox_override(&"panel", PixelSkin.panel(false, 6.0))
+	var sheet := "player_%s" % skin.id
+	var meta_path := "res://assets/sprites/%s.json" % sheet
+	if not ResourceLoader.exists("res://assets/sprites/%s.png" % sheet) or not FileAccess.file_exists(meta_path):
+		var swatch := ColorRect.new()
+		swatch.color = skin.jacket if is_unlocked(skin) else Color(0.16, 0.17, 0.18)
+		frame.add_child(swatch)
+		return frame
+	var meta: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(meta_path))
+	var size := Vector2(meta.frame[0], meta.frame[1])
+	var stack := Control.new()
+	stack.custom_minimum_size = size * 2.0
+	frame.add_child(stack)
+	var idle: int = int(meta.animations.get("Idle_pistol", meta.animations.Idle).start)
+	for layer: String in [sheet, "weapon_m1911"]:
+		if not ResourceLoader.exists("res://assets/sprites/%s.png" % layer):
+			continue
+		var atlas := AtlasTexture.new()
+		atlas.atlas = load("res://assets/sprites/%s.png" % layer)
+		atlas.region = Rect2(Vector2(idle * size.x, 0.0), size)
+		var picture := TextureRect.new()
+		picture.texture = atlas
+		picture.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		picture.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		if not is_unlocked(skin):
+			picture.modulate = Color(0.05, 0.05, 0.06)
+		stack.add_child(picture)
+	return frame
 
 
 func _choose(skin: Dictionary) -> void:

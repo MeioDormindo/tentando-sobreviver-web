@@ -24,6 +24,7 @@ func run(tree: SceneTree) -> int:
 	_test_barricade(tree)
 	_test_mystery_box()
 	_test_weapon_lab()
+	_test_pixel_font()
 	_test_perks()
 	_test_composition()
 	_test_save()
@@ -268,6 +269,20 @@ func _test_mystery_box() -> void:
 			wind_on_hospital = true
 			break
 	check(wind_on_hospital, "Canhão de Vento pode sair no Hospital")
+
+
+func _test_pixel_font() -> void:
+	print("Fonte pixel e molduras")
+	var font := load("res://assets/fonts/pixel.fnt") as FontFile
+	check(font != null and ProjectSettings.get_setting("gui/theme/custom_font") == "res://assets/fonts/pixel.fnt", "fonte pixel é a padrão do projeto")
+	var needed := "ABCXYZabcxyz0123456789ÁÃÂÇÉÊÍÓÔÕÚáãâçéêíóôõú·—◆×←↑→↓⚠✕📻📼[]%/:!?"
+	var missing := []
+	for i in needed.length():
+		if not font.has_char(needed.unicode_at(i)):
+			missing.append(needed[i])
+	check(missing.is_empty(), "todos os caracteres da interface na fonte (faltam: %s)" % str(missing))
+	check(MenuKit.px(16) == 26 and MenuKit.px(40) == 39 and MenuKit.px(54) == 52, "tamanhos em múltiplos inteiros da célula (2×, 3×, 4×)")
+	check(PixelSkin.panel() is StyleBoxTexture and ResourceLoader.exists("res://assets/ui/bar_segment.png"), "molduras pixel geradas")
 
 
 func _test_weapon_lab() -> void:

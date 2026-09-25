@@ -8,6 +8,14 @@ const TEXT := Color(0.91, 0.89, 0.78)
 const DIM := Color(0.6, 0.6, 0.56)
 const GOLD := Color(0.89, 0.78, 0.48)
 const RED := Color(0.72, 0.18, 0.16)
+## Altura da célula da fonte pixel (npm run godot:font): os tamanhos são múltiplos dela.
+const FONT_CELL := 13
+
+
+## Tamanho de fonte nítido para a fonte pixel (escala inteira): o múltiplo da célula mais
+## perto do tamanho pedido, no mínimo 2× (1× fica miúdo demais na tela).
+static func px(size: int) -> int:
+	return maxi(2, roundi(float(size) / float(FONT_CELL))) * FONT_CELL
 
 
 ## Fundo escuro de tela cheia + coluna central com rolagem; devolve a coluna.
@@ -41,7 +49,7 @@ static func label(parent: Control, text: String, size: int = 18, color: Color = 
 	l.text = text
 	l.horizontal_alignment = align
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	l.add_theme_font_size_override(&"font_size", size)
+	l.add_theme_font_size_override(&"font_size", px(size))
 	l.add_theme_color_override(&"font_color", color)
 	parent.add_child(l)
 	return l
@@ -50,17 +58,39 @@ static func label(parent: Control, text: String, size: int = 18, color: Color = 
 static func button(parent: Control, text: String, on_press: Callable, size: int = 24) -> Button:
 	var b := Button.new()
 	b.text = text
-	b.flat = true
-	b.focus_mode = Control.FOCUS_ALL
-	b.add_theme_font_size_override(&"font_size", size)
-	b.add_theme_color_override(&"font_color", TEXT)
-	b.add_theme_color_override(&"font_hover_color", GOLD)
-	b.add_theme_color_override(&"font_focus_color", GOLD)
-	b.add_theme_color_override(&"font_disabled_color", DIM)
+	style_button(b, size)
 	b.pressed.connect(func() -> void: Audio.play("ui_beep", "ui", 0.8, 0.0))
 	b.pressed.connect(on_press)
 	parent.add_child(b)
 	return b
+
+
+## Visual pixel dos botões: texto em escala inteira, moldura dourada no foco e ao passar o
+## mouse, painel escuro ao apertar; sem fundo no resto.
+static func style_button(b: Button, size: int = 24) -> void:
+	b.focus_mode = Control.FOCUS_ALL
+	b.add_theme_font_size_override(&"font_size", px(size))
+	b.add_theme_color_override(&"font_color", TEXT)
+	b.add_theme_color_override(&"font_hover_color", GOLD)
+	b.add_theme_color_override(&"font_focus_color", GOLD)
+	b.add_theme_color_override(&"font_pressed_color", GOLD)
+	b.add_theme_color_override(&"font_disabled_color", DIM)
+	var empty := StyleBoxEmpty.new()
+	empty.set_content_margin_all(10.0)
+	b.add_theme_stylebox_override(&"normal", empty)
+	b.add_theme_stylebox_override(&"disabled", empty)
+	b.add_theme_stylebox_override(&"hover", PixelSkin.panel(true, 10.0))
+	b.add_theme_stylebox_override(&"focus", PixelSkin.panel(true, 10.0))
+	b.add_theme_stylebox_override(&"pressed", PixelSkin.panel(false, 10.0))
+
+
+## Campo de texto com moldura pixel (dourada quando em foco).
+static func style_edit(e: LineEdit, size: int = 24) -> void:
+	e.add_theme_font_size_override(&"font_size", px(size))
+	e.add_theme_color_override(&"font_color", TEXT)
+	e.add_theme_color_override(&"font_placeholder_color", DIM)
+	e.add_theme_stylebox_override(&"normal", PixelSkin.panel(false, 10.0))
+	e.add_theme_stylebox_override(&"focus", PixelSkin.panel(true, 10.0))
 
 
 static func spacer(parent: Control, height: float) -> void:

@@ -48,11 +48,13 @@ func _logged_in() -> void:
 func _login_form() -> void:
 	MenuKit.label(_column, "USUÁRIO", 15, MenuKit.DIM)
 	var user := LineEdit.new()
+	MenuKit.style_edit(user)
 	user.name = "User"
 	user.max_length = 16
 	_column.add_child(user)
 	MenuKit.label(_column, "SENHA", 15, MenuKit.DIM)
 	var password := LineEdit.new()
+	MenuKit.style_edit(password)
 	password.name = "Password"
 	password.secret = true
 	password.max_length = Online.data.password_max

@@ -32,6 +32,12 @@ window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
+[gui]
+
+; Fonte pixel do jogo (npm run godot:font): padrão de toda a interface e dos textos no mundo.
+theme/custom_font="res://assets/fonts/pixel.fnt"
+theme/default_font_size=26
+
 [layer_names]
 
 3d_physics/layer_1="world"
@@ -48,6 +54,8 @@ window/stretch/aspect="expand"
 ; bem em celulares. Pode ser trocado por plataforma quando o visual pedir.
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+; Pixels nítidos na interface (fonte e ícones em pixel art).
+textures/canvas_textures/default_texture_filter=0
 
 [shader_globals]
 

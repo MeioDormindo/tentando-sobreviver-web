@@ -251,6 +251,13 @@ func _show_gun(_kind: StringName = &"") -> void:
 	if sheet == _gun_sheet:
 		return
 	_gun_sheet = sheet
+	announce_weapon()
+
+
+## Avisa a HUD da arma em mãos e da reserva (também quando a HUD fica pronta depois do jogador).
+func announce_weapon() -> void:
+	if weapon == null:
+		return
 	var other := inventory.other()
 	Events.weapon_visual_changed.emit(weapon.data.id, weapon.level, other.data.id if other else &"", other.level if other else 0)
 

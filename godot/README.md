@@ -59,6 +59,11 @@ de conceitos: ver `docs/analise-typescript.md`.
     zumbis, o cão, os 2 bosses, o jogador nos 4 visuais e as 19 armas (Mk II e Mk III
     visíveis), com ícones e efeitos em pixel (clarão, faíscas, sangue, explosão, plasma,
     granada, chama, vento);
+  - interface (`npm run godot:font`): fonte pixel 5×7 desenhada em código (acentos do
+    português, símbolos e contorno embutido, em BMFont), padrão do projeto em escala inteira
+    (2×, 3×, 4×...), e molduras 9-slice; HUD em painéis nos cantos (ROUND, pontos, vida com
+    barra segmentada, munição com o ícone da arma), botões e campos com moldura dourada no
+    foco, retratos dos visuais na tela PERSONAGEM;
   - cenário (`npm run godot:scenery`): pisos, paredes, portões das portas e o trem, 41
     objetos 2.5D montados pela PropFactory (caixas, barris, bancos, macas, máquinas de perk
     na cor do perk, Mystery Box com tampa que abre, painéis de alarme, energia, armadilha e
@@ -149,7 +154,8 @@ Já mapeado para as próximas fases: pular (Espaço / B).
 
 Sons: `npm run godot:audio` gera os WAV de `assets/audio/` com o mesmo código de síntese do
 jogo web. Arte: `npm run godot:sprites` (personagens, armas, ícones e efeitos) e
-`npm run godot:scenery` (pisos, paredes, objetos e decoração), tudo gerado por código em
+`npm run godot:scenery` (pisos, paredes, objetos e decoração) e `npm run godot:font` (fonte
+pixel e molduras da interface), tudo gerado por código em
 `scripts/godot/pixel/`.
 
 Os dados não são copiados à mão: `npm run godot:data` (na raiz do repositório) lê as configs
@@ -280,5 +286,4 @@ Decisões:
 
 ## Próximas fases (roadmap da especificação)
 
-- **HUD em fonte pixel** (fonte gerada por código, barras e molduras no estilo da referência).
 - **Fase 8 (plataformas):** exportações e controles de toque.

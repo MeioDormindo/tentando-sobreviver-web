@@ -21,6 +21,7 @@ func _build() -> void:
 	var first := SettingsRows.add(_column, _build)
 	MenuKit.label(_column, "NOME NO RANKING", 16, MenuKit.DIM)
 	var name_edit := LineEdit.new()
+	MenuKit.style_edit(name_edit)
 	name_edit.text = Save.player_name
 	name_edit.max_length = Save.catalog.player_name_max
 	name_edit.text_changed.connect(func(t: String) -> void: Save.set_setting("playerName", t.strip_edges().to_upper() if t.strip_edges() != "" else "SOBREVIVENTE"))
