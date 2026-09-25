@@ -27,6 +27,7 @@ const DEFAULT_BINDINGS: Dictionary = {
 	&"melee": [["key", KEY_V], ["mouse", MOUSE_BUTTON_RIGHT], ["joy_button", JOY_BUTTON_RIGHT_SHOULDER]],
 	&"jump": [["key", KEY_SPACE], ["joy_button", JOY_BUTTON_B]],
 	&"map": [["key", KEY_TAB], ["joy_button", JOY_BUTTON_BACK]],
+	&"flashlight": [["key", KEY_F], ["joy_button", JOY_BUTTON_DPAD_UP]],
 	&"pause": [["key", KEY_ESCAPE], ["key", KEY_P], ["joy_button", JOY_BUTTON_START]],
 }
 

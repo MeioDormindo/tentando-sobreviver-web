@@ -49,6 +49,7 @@ func run(tree: SceneTree) -> int:
 	await _train()
 	await _trap()
 	await _secrets()
+	await _lighting()
 
 	ZombieBase.event_speed = 1.0
 	_main.queue_free()
@@ -264,6 +265,38 @@ func _trap() -> void:
 	await _tree.create_timer(0.4).timeout
 	check(not is_instance_valid(zombie) or not zombie.is_alive(), "armadilha ligada mata o zumbi na grade")
 	check(electric.get_interaction_prompt(_player).begins_with("ARMADILHA ELÉTRICA LIGADA"), "aviso: %s" % electric.get_interaction_prompt(_player))
+
+
+## Luz por área (Fase 5): a luz ambiente segue a área do jogador; a lanterna liga/desliga.
+func _lighting() -> void:
+	var env := (_world.get_node("WorldEnvironment") as WorldEnvironment).environment
+	var changes: Array[String] = []
+	var on_change := func(lighting: String) -> void: changes.append(lighting)
+	Events.lighting_changed.connect(on_change)
+	_world.open_area(&"tech")
+	var hall_at := _world.get_player_spawn()
+	_player.global_position = hall_at
+	await _tree.create_timer(2.5).timeout
+	var lit_energy := env.ambient_light_energy
+	check(_world.lighting == "lit", "Hall: bem iluminado (%s)" % _world.lighting)
+	var tech: Dictionary = _world.data.areas.filter(func(a: Dictionary) -> bool: return a.id == "tech")[0]
+	var r: Dictionary = tech.rects[0]
+	_player.global_position = Vector3(float(r.x) + 2.5, 0.1, float(r.y) + 1.5)
+	await _tree.create_timer(2.5).timeout
+	check(_world.lighting == "dark" and changes.has("dark"), "Área Técnica: escura, com aviso da mudança")
+	check(env.ambient_light_energy < lit_energy * 0.5, "no escuro a luz ambiente cai (%.2f → %.2f)" % [lit_energy, env.ambient_light_energy])
+	Events.lighting_changed.disconnect(on_change)
+	var flashlight := _player.get_node("Pivot/Flashlight") as SpotLight3D
+	var toggled: Array[bool] = []
+	var on_toggle := func(on: bool) -> void: toggled.append(on)
+	Events.flashlight_toggled.connect(on_toggle)
+	_player.toggle_flashlight()
+	check(not _player.flashlight_on and not flashlight.visible and toggled == [false], "lanterna desliga (F)")
+	_player.toggle_flashlight()
+	check(_player.flashlight_on and flashlight.visible and toggled == [false, true], "lanterna liga de novo")
+	Events.flashlight_toggled.disconnect(on_toggle)
+	check(InputMap.has_action(&"flashlight"), "ação da lanterna no mapa de controles")
+	_player.global_position = hall_at
 
 
 func _secrets() -> void:

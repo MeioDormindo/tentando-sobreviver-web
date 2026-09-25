@@ -38,6 +38,12 @@ var _hit_marker: Label
 var _pause_menu: PauseMenu
 var minimap: Minimap
 var _game_over_panel: Control
+## Vinheta (mais forte no escuro) e o indicador da lanterna.
+const VIGNETTE := {"lit": 0.3, "dim": 0.5, "dark": 0.75}
+var _vignette: ColorRect
+var _flashlight_label: Label
+var _flashlight_on := true
+var _lighting := "dim"
 var _game_over_text: Label
 
 
@@ -59,7 +65,7 @@ func _ready() -> void:
 	Events.interaction_prompt.connect(func(text: String) -> void: _prompt_label.text = text)
 	Events.zombie_hit.connect(func(_z: Node3D, info: DamageInfo) -> void: if info.kind != DamageInfo.Kind.BURN: _flash_hit(TEXT))
 	Events.zombie_killed.connect(func(_z: Node3D, info: DamageInfo) -> void: _flash_hit(RED if info.is_headshot else GOLD))
-	Events.area_opened.connect(func(_id: StringName, area_name: String) -> void: _show_banner(area_name.to_upper() + " ABERTA", GOLD))
+	Events.area_opened.connect(func(_id: StringName, area_name: String) -> void: _show_banner("ÁREA LIBERADA: " + area_name.to_upper(), GOLD))
 	Events.purchase_denied.connect(func() -> void: _flash_points_denied())
 	Events.toast.connect(_show_toast)
 	Events.cheat_detected.connect(_on_cheat_detected)
@@ -114,6 +120,10 @@ func _ready() -> void:
 		_show_toast(subtitle))
 	Events.settings_changed.connect(func() -> void: minimap.apply_settings())
 	Events.game_over.connect(_on_game_over)
+	Events.flashlight_toggled.connect(func(on: bool) -> void:
+		_flashlight_on = on
+		_update_flashlight_label())
+	Events.lighting_changed.connect(_on_lighting_changed)
 
 
 func _process(_delta: float) -> void:
@@ -133,6 +143,16 @@ func _build() -> void:
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(root)
 
+	# Vinheta atrás de tudo da HUD.
+	_vignette = ColorRect.new()
+	_vignette.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_vignette.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var vignette_material := ShaderMaterial.new()
+	vignette_material.shader = load("res://shaders/vignette.gdshader")
+	vignette_material.set_shader_parameter(&"strength", VIGNETTE.dim)
+	_vignette.material = vignette_material
+	root.add_child(_vignette)
+
 	_round_label = _label(root, "ROUND", 54, RED, Control.PRESET_TOP_LEFT, HORIZONTAL_ALIGNMENT_LEFT, -8)
 	_remaining_label = _label(root, "", 16, TEXT, Control.PRESET_TOP_LEFT, HORIZONTAL_ALIGNMENT_LEFT, 62)
 
@@ -150,6 +170,10 @@ func _build() -> void:
 	_health_bar.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT, Control.PRESET_MODE_KEEP_SIZE, MARGIN)
 	_health_label = _label(root, "VIDA", 15, TEXT, Control.PRESET_BOTTOM_LEFT, HORIZONTAL_ALIGNMENT_LEFT, -22)
 	_perks_label = _label(root, "", 14, GOLD, Control.PRESET_BOTTOM_LEFT, HORIZONTAL_ALIGNMENT_LEFT, -62)
+	_flashlight_label = _label(root, "", 14, GOLD, Control.PRESET_BOTTOM_LEFT, HORIZONTAL_ALIGNMENT_LEFT, -2)
+	_flashlight_label.offset_left += 256.0
+	_flashlight_label.offset_right += 256.0
+	_update_flashlight_label()
 	_armor_bar = ProgressBar.new()
 	_armor_bar.show_percentage = false
 	_armor_bar.custom_minimum_size = Vector2(240, 6)
@@ -463,6 +487,21 @@ func _show_banner(text: String, color: Color) -> void:
 	tween.tween_property(_banner, "modulate:a", 1.0, 0.3)
 	tween.tween_interval(1.6)
 	tween.tween_property(_banner, "modulate:a", 0.0, 0.6)
+
+
+func _update_flashlight_label() -> void:
+	_flashlight_label.text = "LANTERNA %s  [F]" % ("LIGADA" if _flashlight_on else "DESLIGADA")
+	_flashlight_label.modulate = GOLD if _flashlight_on else DIM
+
+
+## Luz da área mudou: vinheta mais forte no escuro e, com a lanterna desligada, o aviso.
+func _on_lighting_changed(lighting: String) -> void:
+	var was := _lighting
+	_lighting = lighting
+	var tween := create_tween()
+	tween.tween_property(_vignette.material, "shader_parameter/strength", float(VIGNETTE.get(lighting, VIGNETTE.dim)), 1.2)
+	if lighting == "dark" and was != "dark" and not _flashlight_on:
+		_show_toast("ESTÁ ESCURO — [F] LIGA A LANTERNA")
 
 
 func _show_toast(text: String) -> void:

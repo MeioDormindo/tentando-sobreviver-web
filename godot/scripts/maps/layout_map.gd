@@ -61,6 +61,20 @@ var _base_env: Dictionary = {}
 var _hound: Dictionary = {}
 var _moods: Dictionary = {}
 var _clock := 0.0
+
+# ── Luz por área (seção "lighting" das áreas do mapa) ──
+## Luz → [multiplicador da luz ambiente, quanto puxa para o tom quente das lâmpadas].
+const AREA_LIGHT := {"lit": [1.6, 0.55], "dim": [0.85, 0.18], "dark": [0.26, 0.0]}
+const WARM_LIGHT := Color(0.66, 0.55, 0.4)
+## Luz da área onde o jogador está agora.
+var lighting := "dim"
+var _light_energy := 1.0
+var _light_warm := 0.18
+var _light_check := 0.0
+## Luminárias que falham: [luz, chance]. Quebradas: onde soltam faísca.
+var _flickers: Array = []
+var _broken: Array[Vector3] = []
+var _spark_in := 3.0
 ## Área de cada tile (índice em data.areas, -1 = nenhuma), calculada uma vez para o minimapa.
 var _tile_areas := PackedInt32Array()
 ## Letra do piso → tipo (legenda do mapa), para os passos.
@@ -119,10 +133,12 @@ func set_event_mood(id: StringName, on: bool, config: Dictionary) -> void:
 
 func _process(delta: float) -> void:
 	_clock += delta
+	_update_area_light(delta)
+	_update_lamps(delta)
 	if _moods.has(&"emergency_alarm"):
 		var env := _environment()
 		if env:
-			var base: Color = _base_env.get("color", env.ambient_light_color)
+			var base: Color = _base_env.get("area_color", _base_env.get("color", env.ambient_light_color))
 			env.ambient_light_color = base.lerp(Color(1.0, 0.12, 0.08), 0.35 + 0.35 * sin(_clock * 6.0))
 
 
@@ -160,8 +176,10 @@ func _apply_environment() -> void:
 			env.fog_light_color = Color(0.3, 0.04, 0.03)
 			env.fog_density = 0.008
 	env.fog_enabled = fog
-	env.ambient_light_energy = energy
-	env.ambient_light_color = color
+	# Luz da área do jogador: salas bem iluminadas mais claras e quentes, escuras mais fundas.
+	env.ambient_light_energy = energy * _light_energy
+	env.ambient_light_color = color.lerp(WARM_LIGHT, _light_warm)
+	_base_env["area_color"] = env.ambient_light_color
 
 
 func is_open_floor(point: Vector3) -> bool:
@@ -297,6 +315,66 @@ func area_lighting(area_id: StringName) -> String:
 		if StringName(area.id) == area_id:
 			return String(area.get("lighting", "dim"))
 	return "dark"
+
+
+## Acompanha a área do jogador: avisa quando a luz muda e ajusta o ambiente aos poucos
+## (como os olhos se acostumando).
+func _update_area_light(delta: float) -> void:
+	_light_check -= delta
+	if _light_check <= 0.0:
+		_light_check = 0.25
+		var player := get_tree().get_first_node_in_group(&"player") as Node3D
+		if player:
+			var area := area_of(player.global_position)
+			var now := area_lighting(area) if area != &"" else "dark"
+			if now != lighting:
+				lighting = now
+				Events.lighting_changed.emit(now)
+	var target: Array = AREA_LIGHT.get(lighting, AREA_LIGHT.dim)
+	var k := clampf(delta * 1.6, 0.0, 1.0)
+	var energy := lerpf(_light_energy, float(target[0]), k)
+	var warm := lerpf(_light_warm, float(target[1]), k)
+	if absf(energy - _light_energy) > 0.001 or absf(warm - _light_warm) > 0.001:
+		_light_energy = energy
+		_light_warm = warm
+		_apply_environment()
+
+
+## Luminárias que falham piscam de vez em quando; as quebradas soltam faísca perto do jogador.
+func _update_lamps(delta: float) -> void:
+	for entry: Array in _flickers:
+		var light := entry[0] as OmniLight3D
+		if is_instance_valid(light) and light.visible and randf() < float(entry[1]) * delta * 0.5:
+			_blink(light)
+	_spark_in -= delta
+	if _spark_in > 0.0 or _broken.is_empty():
+		return
+	_spark_in = randf_range(2.0, 6.0)
+	var player := get_tree().get_first_node_in_group(&"player") as Node3D
+	var at := _broken[randi() % _broken.size()]
+	if player == null or Vector2(at.x - player.global_position.x, at.z - player.global_position.z).length() > 16.0:
+		return
+	PixelFx.spawn(get_tree(), "spark", at + Vector3.UP * 2.7, 0.8)
+	var flash := OmniLight3D.new()
+	flash.light_color = Color(0.75, 0.88, 1.0)
+	flash.light_energy = 1.6
+	flash.omni_range = 3.5
+	add_child(flash)
+	flash.position = at + Vector3.UP * 2.6
+	get_tree().create_timer(0.08).timeout.connect(flash.queue_free)
+
+
+## Falha da lâmpada: apaga por um instante (às vezes duas vezes seguidas).
+func _blink(light: OmniLight3D) -> void:
+	light.visible = false
+	var tween := create_tween()
+	tween.tween_interval(randf_range(0.04, 0.12))
+	tween.tween_callback(func() -> void: light.visible = true)
+	if randf() < 0.5:
+		tween.tween_interval(0.06)
+		tween.tween_callback(func() -> void: light.visible = false)
+		tween.tween_interval(randf_range(0.04, 0.1))
+		tween.tween_callback(func() -> void: light.visible = true)
 
 
 ## Densidade da decoração no tile (por área, do mapa; fora das áreas = 1).
@@ -721,13 +799,16 @@ func _add_decor(group: Node3D, table: Dictionary, decor_name: String, at: Vector
 
 func _build_lamps() -> void:
 	for lamp: Dictionary in data.lamps:
-		# Luminária quebrada: só o escuro (a Fase de luz desenha a peça apagada).
+		# Luminária quebrada: não acende, só solta faísca de vez em quando.
 		if lamp.get("broken", false):
+			_broken.append(Vector3(lamp.x, 0.0, lamp.z))
 			continue
-		_add_light(Vector3(lamp.x, LAMP_HEIGHT, lamp.z), lamp.radius, lamp.intensity, int(lamp.color))
+		var light := _add_light(Vector3(lamp.x, LAMP_HEIGHT, lamp.z), lamp.radius, lamp.intensity, int(lamp.color))
+		if float(lamp.get("flicker", 0.0)) >= 0.3:
+			_flickers.append([light, float(lamp.flicker)])
 
 
-func _add_light(position_3d: Vector3, radius: float, intensity: float, color_hex: int) -> void:
+func _add_light(position_3d: Vector3, radius: float, intensity: float, color_hex: int) -> OmniLight3D:
 	var light := OmniLight3D.new()
 	light.light_color = Color.hex((color_hex << 8) | 0xff)
 	light.light_energy = intensity * 2.4
@@ -736,6 +817,7 @@ func _add_light(position_3d: Vector3, radius: float, intensity: float, color_hex
 	light.position = position_3d
 	if power:
 		power.register_light(light)
+	return light
 
 
 func _build_spawns() -> void:

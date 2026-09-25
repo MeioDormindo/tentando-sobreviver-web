@@ -102,3 +102,7 @@ signal weapon_visual_changed(weapon_id: StringName, level: int, other_id: String
 signal pause_changed(paused: bool)
 ## A HUD pediu para jogar de novo.
 signal restart_requested()
+## Luz da área onde o jogador está mudou ("lit", "dim" ou "dark").
+signal lighting_changed(lighting: String)
+## Lanterna ligada/desligada pelo jogador.
+signal flashlight_toggled(on: bool)

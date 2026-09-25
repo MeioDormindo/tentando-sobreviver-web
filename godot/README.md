@@ -71,6 +71,10 @@ de conceitos: ver `docs/analise-typescript.md`.
     feixe; cuspe ácido, poças borbulhando, nuvem de gás, onda de choque e marcas no chão em
     pixel; power-ups com os ícones do jogo web; personagens puxados para perto da câmera no
     shader (pernas não entram no chão nem nos objetos);
+- **luz por área**: a luz ambiente acompanha a área do jogador (bem iluminada, meia-luz ou
+  escura, do mapa), quente nas salas iluminadas e funda nas escuras, com vinheta que acompanha;
+  **lanterna** que liga e desliga (F), com aviso na HUD e dica ao entrar no escuro sem ela;
+  luminárias que falham piscando e as quebradas soltando faíscas;
 - **menu de pausa** com CONTINUAR, REINICIAR, MENU e as configurações que valem na hora;
 - **visuais do personagem** (tela PERSONAGEM): Sobrevivente, Enfermeiro, Maquinista e Agente,
   liberados por conquistas, com as cores da paleta do jogo web;
@@ -135,6 +139,7 @@ de conceitos: ver `docs/analise-typescript.md`.
 | Faca | V / botão direito | RB |
 | Comprar / abrir porta | E | A |
 | Consertar barricada, ligar o disjuntor | segurar E | segurar A |
+| Lanterna (liga/desliga) | F | direcional ↑ |
 | Mapa grande | segurar Tab | Back |
 | Pausar | ESC / P | Start |
 
@@ -275,6 +280,5 @@ Decisões:
 
 ## Próximas fases (roadmap da especificação)
 
-- **Luz e lanterna opcional** (liga/desliga; dispensável nas áreas bem iluminadas) e HUD em
-  fonte pixel.
+- **HUD em fonte pixel** (fonte gerada por código, barras e molduras no estilo da referência).
 - **Fase 8 (plataformas):** exportações e controles de toque.

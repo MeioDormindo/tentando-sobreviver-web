@@ -306,6 +306,20 @@ func _on_hound_round(active: bool, config: Dictionary) -> void:
 
 
 ## Alcance/força da lanterna (névoa dos cães, Neblina): 1 = normal.
+## Lanterna ligada? Começa ligada; nas salas bem iluminadas dá para desligar.
+var flashlight_on := true
+
+
+## Liga/desliga a lanterna (F / direcional para cima), com clique.
+func toggle_flashlight(on: Variant = null) -> void:
+	flashlight_on = (not flashlight_on) if on == null else bool(on)
+	var flashlight := pivot.get_node_or_null("Flashlight") as SpotLight3D
+	if flashlight:
+		flashlight.visible = flashlight_on
+	Audio.play("weapon_switch", "player", 0.45, 0.0, 1.6 if flashlight_on else 1.3)
+	Events.flashlight_toggled.emit(flashlight_on)
+
+
 func set_flashlight_factor(factor: float) -> void:
 	var flashlight := pivot.get_node_or_null("Flashlight") as SpotLight3D
 	if flashlight == null:
@@ -363,6 +377,8 @@ func _read_input() -> void:
 		hold_interact(get_physics_process_delta_time())
 	if Input.is_action_just_pressed(&"melee"):
 		knife()
+	if Input.is_action_just_pressed(&"flashlight"):
+		toggle_flashlight()
 	if Input.is_action_just_pressed(&"switch_weapon") or Input.is_action_just_pressed(&"weapon_next") or Input.is_action_just_pressed(&"weapon_prev"):
 		inventory.switch_next()
 	elif Input.is_action_just_pressed(&"weapon_1"):
