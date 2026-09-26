@@ -53,6 +53,16 @@ func _physics_process(delta: float) -> void:
 		Events.power_up_timers.emit(active.duplicate(), data.power_ups)
 
 
+## Caminho do ícone (jogo web, 40px; no Templo alguns têm visual grego — Ares, Hermes, Hefesto,
+## Zeus). Fúria é um resultado do Golden Drop, não tem ícone próprio: usa o do golden.
+static func icon_path(id: StringName) -> String:
+	var real_id := &"golden" if id == &"fury" else id
+	var themed := "res://assets/sprites/powerups/%s_%s.png" % [real_id, Session.map_id]
+	if ResourceLoader.exists(themed):
+		return themed
+	return "res://assets/web/powerups/%s.png" % real_id
+
+
 ## Cria um power-up no chão (também usado por eventos, bosses e testes).
 func spawn_drop(id: StringName, at: Vector3) -> Node3D:
 	var info: Dictionary = data.power_ups.get(id, {})
@@ -63,15 +73,11 @@ func spawn_drop(id: StringName, at: Vector3) -> Node3D:
 	pickup.set_meta(&"age", 0.0)
 	# Ícone do jogo web em pixel art (40 px, filtro nearest), voltado para a câmera; sem o
 	# ícone, uma esfera na cor do power-up.
-	var icon_path := "res://assets/web/powerups/%s.png" % id
-	# No Templo, alguns têm visual grego (Ares, Hermes, Hefesto, Zeus).
-	var themed := "res://assets/sprites/powerups/%s_%s.png" % [id, Session.map_id]
-	if ResourceLoader.exists(themed):
-		icon_path = themed
+	var path := icon_path(id)
 	var orb: Node3D
-	if ResourceLoader.exists(icon_path):
+	if ResourceLoader.exists(path):
 		var sprite := Sprite3D.new()
-		sprite.texture = load(icon_path)
+		sprite.texture = load(path)
 		sprite.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
 		sprite.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 		sprite.shaded = false

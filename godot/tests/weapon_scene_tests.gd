@@ -79,7 +79,10 @@ func _plasma() -> void:
 func _flame() -> void:
 	var zombies := _spawn([Vector3(0, 0, -2.5)])
 	var zombie: ZombieBase = zombies[0]
+	var tracers_before := _tree.root.get_children().filter(func(n: Node) -> bool: return n is Tracer).size()
 	await _shoot(&"flamethrower", Vector3(0, 1.2, -2.5), 0.1)
+	var tracers_after := _tree.root.get_children().filter(func(n: Node) -> bool: return n is Tracer).size()
+	check(tracers_after == tracers_before, "lança-chamas: nunca solta bala/tracer, só as línguas de fogo (%d tracer(es))" % (tracers_after - tracers_before))
 	var after_shot := zombie.health.current
 	await _tree.create_timer(1.0).timeout
 	check(zombie.health.current < after_shot, "lança-chamas: o zumbi continua queimando depois do tiro (%.0f → %.0f)" % [after_shot, zombie.health.current])

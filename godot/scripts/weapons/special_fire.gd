@@ -27,7 +27,8 @@ static func fire(weapon: Weapon, space: PhysicsDirectSpaceState3D, origin: Vecto
 			var hits: Array[DamageInfo] = []
 			for pellet in maxi(1, data.pellets):
 				var dir := direction.rotated(Vector3.UP, deg_to_rad(randf_range(-data.spread_degrees, data.spread_degrees)))
-				hits.append_array(weapon.trace(space, origin, dir, exclude, shooter))
+				# Sem bala/tracer: só as línguas de fogo abaixo representam o disparo.
+				hits.append_array(weapon.trace(space, origin, dir, exclude, shooter, Color(0, 0, 0, 0), false))
 			# Bolas de fogo avançando no jato.
 			var reach := minf(data.max_range, 6.0)
 			for i in 3:

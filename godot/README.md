@@ -402,6 +402,16 @@ Decisões:
   `mini(shots_hit, shots_fired)` escondia isso mostrando sempre ~100%. Agora conta uma vez
   por disparo que acertou algo (`Events.shot_connected`, emitido em `Player.fire()`; granada e
   plasma emitem no `WeaponProjectile`, quando o projétil acerta ou explode em alguém).
+- **Lança-chamas sem "balas".** Cada língua de fogo usava `Weapon.trace()` (o mesmo raio dos
+  tiros normais), que sempre soltava um `Tracer` — a "bala" luminosa que acompanha uma arma de
+  fogo. Ficava mais visível depois do Mk III (`mk3_pellet_multiplier` dobra as línguas de fogo).
+  `trace()` ganhou o parâmetro `show_tracer` (`false` só no lança-chamas): agora só os jatos de
+  fogo (`PixelFx "flame"`) representam o disparo, nunca um projétil.
+- **Ícone por power-up ativo, no lugar do texto.** A lista de baixo (`_timers_label`, texto tipo
+  "MAX AMMO 8s   DOUBLE CASH 12s") virou uma fileira de ícones com a contagem embaixo de cada um
+  (pisca nos últimos 5s) — como no jogo web, bem menos poluído. Ícone de cada power-up:
+  `PowerUpSystem.icon_path()` (mesma lógica do power-up no chão, incluindo as variantes gregas
+  do Templo; Fúria usa o ícone do Golden Drop).
 
 ## Próximas fases (roadmap da especificação)
 

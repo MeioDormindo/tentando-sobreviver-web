@@ -160,7 +160,9 @@ func shoot(space: PhysicsDirectSpaceState3D, origin: Vector3, target: Vector3, e
 
 
 ## Um projétil instantâneo: segue até a parede, o alcance ou acertar `1 + pierce` alvos diferentes.
-func trace(space: PhysicsDirectSpaceState3D, origin: Vector3, direction: Vector3, exclude: Array[RID], shooter: Node, color: Color = Color(0, 0, 0, 0)) -> Array[DamageInfo]:
+## `show_tracer`: falso nas línguas do lança-chamas (elas já têm o visual de fogo; sem isto,
+## cada uma delas também soltava uma "bala" luminosa, como se fossem projéteis de verdade).
+func trace(space: PhysicsDirectSpaceState3D, origin: Vector3, direction: Vector3, exclude: Array[RID], shooter: Node, color: Color = Color(0, 0, 0, 0), show_tracer: bool = true) -> Array[DamageInfo]:
 	var hits: Array[DamageInfo] = []
 	var skip: Array[RID] = exclude.duplicate()
 	var struck: Array[HealthComponent] = []
@@ -176,7 +178,7 @@ func trace(space: PhysicsDirectSpaceState3D, origin: Vector3, direction: Vector3
 		if hurtbox == null:
 			end = hit.position  # parede
 			# Faíscas quando a bala (Tracer) chega na parede, não no disparo.
-			if is_inside_tree():
+			if show_tracer and is_inside_tree():
 				var tree := get_tree()
 				var at := end
 				tree.create_timer(origin.distance_to(end) / Tracer.SPEED).timeout.connect(func() -> void: PixelFx.spawn(tree, "spark", at, 0.5))
@@ -191,7 +193,8 @@ func trace(space: PhysicsDirectSpaceState3D, origin: Vector3, direction: Vector3
 		if struck.size() > data.pierce:
 			end = hit.position
 			break
-	spawn_tracer(origin, end, color if color.a > 0.0 else data.tracer_color)
+	if show_tracer:
+		spawn_tracer(origin, end, color if color.a > 0.0 else data.tracer_color)
 	return hits
 
 

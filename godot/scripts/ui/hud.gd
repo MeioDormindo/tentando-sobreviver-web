@@ -29,7 +29,10 @@ var _toast: Label
 var _perks_label: Label
 var _blessing_label: Label
 var _armor_bar: ProgressBar
-var _timers_label: Label
+## Ícones dos power-ups com tempo ativos (id → ícone + contagem), no lugar do texto antigo:
+## bem menos poluído, igual ao jogo web.
+var _power_row: HBoxContainer
+var _power_icons: Dictionary
 var _event_label: Label
 var _quest_title: Label
 var _quest_text: Label
@@ -77,12 +80,7 @@ func _ready() -> void:
 		_armor_bar.get_parent().visible = current > 0.0
 		_armor_bar.max_value = maximum
 		_armor_bar.value = current)
-	Events.power_up_timers.connect(func(active: Dictionary, definitions: Dictionary) -> void:
-		var parts: Array[String] = []
-		for id: StringName in active:
-			var info: Dictionary = definitions.get(id, {"name": "Fúria"})
-			parts.append("%s %ds" % [String(info.get("name", id)).to_upper(), ceili(float(active[id]))])
-		_timers_label.text = "   ".join(parts))
+	Events.power_up_timers.connect(_on_power_up_timers)
 	Events.power_up_collected.connect(func(_id: StringName, power_up_name: String, color: Color, detail: String) -> void:
 		_show_banner(power_up_name.to_upper(), color)
 		if detail != "":
@@ -224,7 +222,14 @@ func _build() -> void:
 	(armor[0] as Control).visible = false
 	_flashlight_label = _text(health_box, "", 26, GOLD)
 	_update_flashlight_label()
-	_timers_label = _label(root, "", 16, TEXT, Control.PRESET_CENTER_BOTTOM, HORIZONTAL_ALIGNMENT_CENTER, -70)
+	_power_row = HBoxContainer.new()
+	_power_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_power_row.add_theme_constant_override(&"separation", 10)
+	root.add_child(_power_row)
+	_power_row.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM, Control.PRESET_MODE_KEEP_SIZE, MARGIN)
+	_power_row.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	_power_row.offset_top -= 84
+	_power_row.offset_bottom -= 84
 	_event_label = _label(root, "", 18, TEXT, Control.PRESET_CENTER_TOP, HORIZONTAL_ALIGNMENT_CENTER, 48)
 
 	_ammo_box = _corner_panel(root, Control.PRESET_BOTTOM_RIGHT)
@@ -418,6 +423,62 @@ func _on_health_changed(current: float, maximum: float) -> void:
 	_health_bar.max_value = maximum
 	_health_bar.value = current
 	_health_label.text = "VIDA  %d / %d" % [roundi(current), roundi(maximum)]
+
+
+## Um ícone por power-up ativo (Max Ammo, Fúria...), com a contagem regressiva e piscando nos
+## últimos 5s — mesmo padrão do jogo web. Só cria/remove ícone quando o conjunto muda; a cada
+## chamada (a cada física, enquanto algo estiver ativo) só atualiza o número.
+func _on_power_up_timers(active: Dictionary, definitions: Dictionary) -> void:
+	for id: StringName in _power_icons.keys():
+		if not active.has(id):
+			(_power_icons[id].icon as Control).queue_free()
+			_power_icons.erase(id)
+	for id: StringName in active:
+		if not _power_icons.has(id):
+			_power_icons[id] = _power_icon(id, definitions)
+		var seconds := ceili(float(active[id]))
+		var slot: Dictionary = _power_icons[id]
+		(slot.label as Label).text = str(seconds)
+		var icon := slot.icon as Control
+		icon.modulate.a = (0.45 if seconds % 2 == 0 else 1.0) if seconds <= 5 else 1.0
+
+
+## Monta um ícone (ou um círculo na cor do power-up, sem ícone) com o número por cima.
+func _power_icon(id: StringName, definitions: Dictionary) -> Dictionary:
+	var info: Dictionary = definitions.get(id, {"name": "Fúria", "color": GOLD})
+	var box := VBoxContainer.new()
+	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	box.alignment = BoxContainer.ALIGNMENT_CENTER
+	box.add_theme_constant_override(&"separation", 0)
+	var icon := Control.new()
+	icon.custom_minimum_size = Vector2(36, 36)
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	box.add_child(icon)
+	var path := PowerUpSystem.icon_path(id)
+	if ResourceLoader.exists(path):
+		var rect := TextureRect.new()
+		rect.texture = load(path)
+		rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		icon.add_child(rect)
+	else:
+		var panel := ColorRect.new()
+		panel.color = Color(info.get("color", GOLD), 0.85)
+		panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		icon.add_child(panel)
+	# A fonte pixel só fica nítida em múltiplos de 13px (mínimo 26): não cabe como selo
+	# minúsculo no canto do ícone, então o número fica embaixo, colado nele.
+	var label := Label.new()
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override(&"font_size", MenuKit.px(14))
+	label.add_theme_color_override(&"font_color", TEXT)
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	box.add_child(label)
+	_power_row.add_child(box)
+	return {"icon": box, "label": label}
 
 
 func _on_ammo_changed(weapon_name: String, magazine: int, reserve: int, reloading: bool) -> void:
