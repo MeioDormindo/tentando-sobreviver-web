@@ -5,6 +5,12 @@ Especificação completa: GDD (`Terminal_Outbreak_GDD_v0.1.md`).
 
 Stack: TypeScript + Phaser 3 + Vite.
 
+> **A partir da Fase 8, o site publicado (https://meiodormindo.github.io/tentando-sobreviver-web/)
+> serve a versão Godot** (`godot/`, ver `godot/README.md`), com controles de toque, exportação
+> Android e o mesmo save/ranking/conta desta versão. Este README continua documentando o código
+> TypeScript + Phaser abaixo, que segue no repositório (os geradores de dados/arte/áudio do Godot
+> leem `src/config`) mas não é mais o que fica no ar.
+
 ## Comandos
 
 ```bash

@@ -405,6 +405,6 @@ Decisões:
 
 ## Próximas fases (roadmap da especificação)
 
-- **Fase 8 (plataformas):** controles de toque (8.1), exportação Web (8.2) e Android (8.3) feitos; falta
-  publicar a versão Web no lugar do jogo web antigo (8.4)
+- **Fase 8 (plataformas):** concluída: controles de toque (8.1), exportação Web (8.2), Android (8.3) e o site
+  publicado trocado para esta versão (8.4, `.github/workflows/deploy.yml`).
   e a troca do site publicado.

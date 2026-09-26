@@ -14,24 +14,59 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
+env:
+  GODOT_VERSION: 4.7.2-stable
+  # Nome da pasta de templates ("4.7.2.stable"): o Godot troca o último "-" por ".".
+  GODOT_TEMPLATE_DIR: 4.7.2.stable
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Cache do Godot (editor + templates de exportação)
+        id: godot-cache
+        uses: actions/cache@v4
         with:
-          node-version: 22
-          cache: npm
+          path: |
+            ~/godot-bin
+            ~/.local/share/godot/export_templates
+          key: godot-${{ env.GODOT_VERSION }}
 
-      - run: npm ci
-      - run: npm run build
+      - name: Baixar o Godot (editor headless + templates), se não estiver em cache
+        if: steps.godot-cache.outputs.cache-hit != 'true'
+        run: |
+          set -e
+          mkdir -p ~/godot-bin
+          cd ~/godot-bin
+          curl -fsSLO "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}_linux.x86_64.zip"
+          unzip -q "Godot_v${GODOT_VERSION}_linux.x86_64.zip"
+          rm "Godot_v${GODOT_VERSION}_linux.x86_64.zip"
+          curl -fsSLO "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}_export_templates.tpz"
+          mkdir -p ~/.local/share/godot/export_templates/"$GODOT_TEMPLATE_DIR"
+          unzip -q "Godot_v${GODOT_VERSION}_export_templates.tpz" -d /tmp/godot-templates
+          mv /tmp/godot-templates/templates/* ~/.local/share/godot/export_templates/"$GODOT_TEMPLATE_DIR"/
+          rm -rf /tmp/godot-templates "Godot_v${GODOT_VERSION}_export_templates.tpz"
+
+      - name: Reimportar os recursos
+        working-directory: godot
+        run: ~/godot-bin/Godot_v${GODOT_VERSION}_linux.x86_64 --headless --path . --import
+
+      - name: Testes (suíte unit, sem cena nem GPU) — trava do deploy
+        working-directory: godot
+        run: ~/godot-bin/Godot_v${GODOT_VERSION}_linux.x86_64 --headless --path . -s res://tests/run_tests.gd -- --only=unit
+
+      - name: Exportar Web
+        working-directory: godot
+        run: |
+          mkdir -p build/web
+          ~/godot-bin/Godot_v${GODOT_VERSION}_linux.x86_64 --headless --path . --export-release "Web" build/web/index.html
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: godot/build/web
 
   deploy:
     needs: build
