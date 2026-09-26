@@ -8,6 +8,8 @@ signal status_changed()
 
 const SESSION_PATH := "user://session.json"
 const NO_SESSION := "sem sessão"
+## Sessão do jogo web antigo no localStorage (a mesma conta; tokens em camelCase, validade em ms).
+const LEGACY_WEB_SESSION_KEY := "ts-session-v1"
 
 ## Última sincronização concluída (unix), erro e se está sincronizando.
 var last_sync: float = 0.0
@@ -193,11 +195,26 @@ func _set_status(p_busy: bool, p_error: String) -> void:
 
 func _load_session() -> Dictionary:
 	if not FileAccess.file_exists(SESSION_PATH):
-		return {}
+		# Primeira vez no navegador: continua logado com a conta do jogo web antigo.
+		var legacy := session_from_web(SaveStore.web_storage(LEGACY_WEB_SESSION_KEY))
+		if not legacy.is_empty():
+			_store_session(legacy)
+		return legacy
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(SESSION_PATH))
 	if parsed is Dictionary and parsed.get("access_token") is String and parsed.get("refresh_token") is String and parsed.get("username") is String:
 		return parsed
 	return {}
+
+
+## Sessão do jogo web ({accessToken, refreshToken, expiresAt em ms, username}) no formato
+## deste cliente, ou {} se faltar algo.
+static func session_from_web(text: String) -> Dictionary:
+	var raw: Variant = SaveStore.parse_legacy(text)
+	if not raw is Dictionary or not raw.get("accessToken") is String or not raw.get("refreshToken") is String \
+			or not raw.get("username") is String or not (raw.get("expiresAt") is float or raw.get("expiresAt") is int):
+		return {}
+	return {"access_token": raw.accessToken, "refresh_token": raw.refreshToken,
+		"expires_at": float(raw.expiresAt) / 1000.0, "username": raw.username}
 
 
 func _store_session(session: Dictionary) -> void:

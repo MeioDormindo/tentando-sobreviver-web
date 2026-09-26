@@ -50,6 +50,9 @@ theme/default_font_size=26
 
 [rendering]
 
+; Texturas comprimidas também em ETC2/ASTC (celular: Android e navegador do celular).
+textures/vram_compression/import_etc2_astc=true
+
 ; Compatibility em todas as plataformas: é o único renderizador da exportação Web e roda
 ; bem em celulares. Pode ser trocado por plataforma quando o visual pedir.
 renderer/rendering_method="gl_compatibility"

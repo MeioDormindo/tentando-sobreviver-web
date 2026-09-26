@@ -9,6 +9,8 @@ signal changed()
 
 const VERSION := 1
 const DEFAULT_PATH := "user://save.json"
+## Save do jogo web antigo (Phaser) no localStorage do navegador: mesmo site, mesmo formato.
+const LEGACY_WEB_KEY := "ts-save-v1"
 
 var data: Dictionary = {}
 var catalog: MapCatalog
@@ -27,10 +29,29 @@ func load_from(path: String) -> void:
 	var raw: Variant = null
 	if FileAccess.file_exists(path):
 		raw = JSON.parse_string(FileAccess.get_file_as_string(path))
+	elif path == DEFAULT_PATH and OS.has_feature("web"):
+		# Primeira vez no navegador: traz recordes, ranking e conquistas do jogo web antigo.
+		raw = parse_legacy(web_storage(LEGACY_WEB_KEY))
 	data = sanitize(raw)
 	_persist()
 	apply_audio()
 	apply_display()
+
+
+## Texto de um save antigo (JSON) → dados crus para o sanitize, ou null se vazio/inválido.
+static func parse_legacy(text: String) -> Variant:
+	if text.strip_edges() == "":
+		return null
+	var json := JSON.new()
+	return json.data if json.parse(text) == OK else null
+
+
+## Valor do localStorage do navegador ("" fora da Web ou se não existir).
+static func web_storage(key: String) -> String:
+	if not OS.has_feature("web"):
+		return ""
+	var value: Variant = JavaScriptBridge.eval("window.localStorage.getItem(%s) || ''" % JSON.stringify(key), true)
+	return String(value) if value is String else ""
 
 
 ## Volta tudo ao padrão (apagar progresso).
@@ -51,9 +72,9 @@ func apply_audio() -> void:
 		AudioServer.set_bus_mute(music, not bool(data.settings.musicOn))
 
 
-## Tela cheia (não vale na Web nem sem janela).
+## Tela cheia (sem janela não vale; na Web o navegador aplica no próximo toque/clique).
 func apply_display() -> void:
-	if DisplayServer.get_name() == "headless" or OS.has_feature("web"):
+	if DisplayServer.get_name() == "headless":
 		return
 	var want := DisplayServer.WINDOW_MODE_FULLSCREEN if bool(data.settings.get("fullscreen", false)) else DisplayServer.WINDOW_MODE_WINDOWED
 	if DisplayServer.window_get_mode() != want:

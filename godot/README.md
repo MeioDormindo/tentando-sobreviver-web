@@ -231,6 +231,19 @@ segurar ATIRAR gira a mira para o zumbi mais perto num cone de 22° até 9 m (mi
 
 Já mapeado para as próximas fases: pular (Espaço / B).
 
+## Exportar
+
+| Plataforma | Preset | Saída | Comando (na pasta `godot/`) |
+|---|---|---|---|
+| Windows | `Windows` | `build/windows/TentandoSobreviver.exe` (pck embutido) | `godot --headless --path . --export-release "Windows" build/windows/TentandoSobreviver.exe` |
+| Web | `Web` | `build/web/index.html` (+ `.wasm`, `.pck`) | `godot --headless --path . --export-release "Web" build/web/index.html` |
+
+- **Web:** template **sem threads** (o GitHub Pages não envia os cabeçalhos COOP/COEP). Testar
+  localmente com `npx http-server build/web`. Na primeira vez no navegador o jogo importa o save e
+  a sessão do jogo web antigo (`localStorage` `ts-save-v1` / `ts-session-v1`, mesmo site), então
+  quem já jogava continua com recordes, ranking, conquistas e login.
+- Texturas também em ETC2/ASTC (`import_etc2_astc`), exigido pelo celular.
+
 ## Migração do jogo web
 
 Sons: `npm run godot:audio` gera os WAV de `assets/audio/` com o mesmo código de síntese do
@@ -379,5 +392,5 @@ Decisões:
 
 ## Próximas fases (roadmap da especificação)
 
-- **Fase 8 (plataformas):** controles de toque feitos (8.1); faltam as exportações Web e Android
+- **Fase 8 (plataformas):** controles de toque (8.1) e exportação Web (8.2) feitos; faltam o Android
   e a troca do site publicado.

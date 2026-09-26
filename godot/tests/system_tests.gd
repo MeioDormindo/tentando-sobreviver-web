@@ -391,6 +391,15 @@ func _test_save() -> void:
 	var broken := Save.sanitize({"settings": "lixo", "records": [1, 2], "ranking": {"terminal": [{"sem_nome": 1}]}, "lifetime": {"totalKills": "muitos"}})
 	check(broken.settings.playerName == "SOBREVIVENTE" and broken.ranking.terminal.is_empty() and broken.lifetime.totalKills == 0, "save corrompido vira o padrão, campo a campo")
 	check(Save.sanitize(null).unlockedMaps == ["terminal"], "save vazio: só o Terminal liberado")
+	# Web: save e sessão do jogo antigo vêm do localStorage (aqui como texto, sem navegador).
+	var legacy := Save.sanitize(SaveStore.parse_legacy(JSON.stringify(web)))
+	check(legacy.records.terminal.bestScore == 42000 and legacy.ranking.terminal[0].name == "MARIA", "save do jogo web antigo (localStorage) é importado")
+	check(SaveStore.parse_legacy("") == null and SaveStore.parse_legacy("{lixo") == null and SaveStore.web_storage("ts-save-v1") == "",
+		"save antigo vazio ou quebrado vira null; fora da Web não lê localStorage")
+	var session: Dictionary = Account.session_from_web(JSON.stringify({"accessToken": "a", "refreshToken": "r", "expiresAt": 1790000000000, "username": "maria"}))
+	check(session.get("access_token") == "a" and session.get("username") == "maria" and is_equal_approx(float(session.get("expires_at", 0)), 1790000000.0),
+		"sessão do jogo web vira a do Godot (validade de ms para s)")
+	check(Account.session_from_web(JSON.stringify({"accessToken": "a"})).is_empty() and Account.session_from_web("").is_empty(), "sessão antiga incompleta é ignorada")
 	Save.reset()
 	for i in 12:
 		Save.add_ranking("terminal", "j%d" % i, 1000 + i * 10, 3, 20)
