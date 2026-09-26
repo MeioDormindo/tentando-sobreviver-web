@@ -17,6 +17,7 @@ const BADGE_RING := "res://assets/sprites/ui/badge_ring.png"
 const BADGE_BACK := "res://assets/sprites/ui/badge_back.png"
 const POWER_BADGE_SIZE := 40.0
 const PERK_BADGE_SIZE := 32.0
+const BLESSING_BADGE_SIZE := 36.0
 
 var _round_label: Label
 var _remaining_label: Label
@@ -36,8 +37,14 @@ var _banner: Label
 var _toast: Label
 ## Ícones dos perks comprados (não expiram: sem contagem, ao contrário dos power-ups).
 var _perks_row: HBoxContainer
-var _blessing_label: Label
 var _armor_bar: ProgressBar
+## Faixa embaixo-centro (bênção, power-ups, prompt de interação), um VBoxContainer só — antes
+## cada um tinha seu próprio deslocamento fixo "no olho" e podiam se sobrepor.
+var _bottom_center: VBoxContainer
+## Bênção ativa (Templo dos Mortos): selo do deus (troca a cada bênção) + texto.
+var _blessing_row: HBoxContainer
+var _blessing_label: Label
+var _blessing_badge: Control
 ## Ícones dos power-ups com tempo ativos (id → ícone + contagem), no lugar do texto antigo:
 ## bem menos poluído, igual ao jogo web.
 var _power_row: HBoxContainer
@@ -109,10 +116,17 @@ func _ready() -> void:
 	Events.max_ammo.connect(func(_at: Vector3) -> void: _show_toast("MAX AMMO"))
 	Events.power_changed.connect(func(on: bool) -> void: if on: _show_banner("ENERGIA LIGADA", GOLD))
 	Events.perks_changed.connect(_on_perks_changed)
-	Events.blessing_changed.connect(func(_god: StringName, text: String, color: Color) -> void:
-		_blessing_label.visible = text != ""
+	Events.blessing_changed.connect(func(god: StringName, text: String, color: Color) -> void:
+		_blessing_row.visible = text != ""
 		_blessing_label.text = "BÊNÇÃO DE " + text
-		_blessing_label.add_theme_color_override(&"font_color", color))
+		_blessing_label.add_theme_color_override(&"font_color", color)
+		if _blessing_badge:
+			_blessing_badge.queue_free()
+			_blessing_badge = null
+		if text != "":
+			_blessing_badge = _badge(BLESSING_BADGE_SIZE, color, "res://assets/sprites/blessings/blessing_%s.png" % god)
+			_blessing_row.add_child(_blessing_badge)
+			_blessing_row.move_child(_blessing_badge, 0))
 	Events.world_event_started.connect(func(_id: StringName, event_name: String, hint: String, color: Color) -> void:
 		_show_banner(event_name, color)
 		_show_toast(hint))
@@ -222,8 +236,6 @@ func _build() -> void:
 	_perks_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_perks_row.add_theme_constant_override(&"separation", 6)
 	health_box.add_child(_perks_row)
-	_blessing_label = _text(health_box, "", 26, GOLD)
-	_blessing_label.visible = false
 	_health_label = _text(health_box, "VIDA", 26, TEXT)
 	var health: Array = PixelSkin.bar(RED, 260.0)
 	health_box.add_child(health[0])
@@ -234,14 +246,35 @@ func _build() -> void:
 	(armor[0] as Control).visible = false
 	_flashlight_label = _text(health_box, "", 26, GOLD)
 	_update_flashlight_label()
+
+	# Faixa embaixo-centro: bênção, power-ups e prompt de interação, um por baixo do outro num
+	# VBoxContainer só — cada um empilha pela altura de verdade dos outros, sem números fixos
+	# "no olho" que podiam se sobrepor (o power-up e o prompt já tinham colidido assim antes).
+	_bottom_center = VBoxContainer.new()
+	_bottom_center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_bottom_center.alignment = BoxContainer.ALIGNMENT_CENTER
+	_bottom_center.add_theme_constant_override(&"separation", 6)
+	root.add_child(_bottom_center)
+	_bottom_center.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM, Control.PRESET_MODE_KEEP_SIZE, MARGIN)
+	_bottom_center.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	_bottom_center.grow_vertical = Control.GROW_DIRECTION_BEGIN
+
+	_blessing_row = HBoxContainer.new()
+	_blessing_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_blessing_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	_blessing_row.add_theme_constant_override(&"separation", 8)
+	_blessing_row.visible = false
+	_bottom_center.add_child(_blessing_row)
+	_blessing_label = _text(_blessing_row, "", 26, GOLD, HORIZONTAL_ALIGNMENT_CENTER)
+
 	_power_row = HBoxContainer.new()
 	_power_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_power_row.alignment = BoxContainer.ALIGNMENT_CENTER
 	_power_row.add_theme_constant_override(&"separation", 10)
-	root.add_child(_power_row)
-	_power_row.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM, Control.PRESET_MODE_KEEP_SIZE, MARGIN)
-	_power_row.grow_horizontal = Control.GROW_DIRECTION_BOTH
-	_power_row.offset_top -= 84
-	_power_row.offset_bottom -= 84
+	_bottom_center.add_child(_power_row)
+
+	_prompt_label = _text(_bottom_center, "", 20, TEXT, HORIZONTAL_ALIGNMENT_CENTER)
+
 	_event_label = _label(root, "", 18, TEXT, Control.PRESET_CENTER_TOP, HORIZONTAL_ALIGNMENT_CENTER, 48)
 
 	_ammo_box = _corner_panel(root, Control.PRESET_BOTTOM_RIGHT)
@@ -252,8 +285,6 @@ func _build() -> void:
 	_weapon_icon = _icon_rect(root, 2.0, Vector2(-MARGIN, -100))
 	_other_weapon_icon = _icon_rect(root, 1.0, Vector2(-MARGIN, -100))
 	_other_weapon_icon.modulate = Color(1, 1, 1, 0.55)
-
-	_prompt_label = _label(root, "", 20, TEXT, Control.PRESET_CENTER_BOTTOM, HORIZONTAL_ALIGNMENT_CENTER, -110)
 
 	_banner = _label(root, "", 36, RED, Control.PRESET_CENTER_TOP, HORIZONTAL_ALIGNMENT_CENTER, 130)
 	_banner.modulate.a = 0.0

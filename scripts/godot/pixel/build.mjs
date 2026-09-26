@@ -252,3 +252,10 @@ if (ONLY.length === 0 || ONLY.includes('badge')) import('./badge.mjs').then(({ b
   mkdirSync(dir, { recursive: true });
   buildBadge((name, px) => writeFileSync(join(dir, `${name}.png`), encodePng(px.width, px.height, px.data)));
 });
+
+// Ícones das Bênçãos dos Deuses (Templo dos Mortos), pro selo de bênção na HUD.
+if (ONLY.length === 0 || ONLY.includes('blessings')) import('./blessing_icons.mjs').then(({ build: buildBlessings }) => {
+  const dir = join(OUT, 'blessings');
+  mkdirSync(dir, { recursive: true });
+  buildBlessings((name, px) => writeFileSync(join(dir, `${name}.png`), encodePng(px.width, px.height, px.data)));
+});
