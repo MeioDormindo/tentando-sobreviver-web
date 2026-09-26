@@ -30,9 +30,10 @@ func _ready() -> void:
 	Events.resume_requested.connect(func() -> void: set_paused(false))
 	Events.round_completed.connect(_on_round_completed)
 	Events.shot_fired.connect(func() -> void: shots_fired += 1)
+	# Um disparo conta como acerto se atingiu ao menos um alvo, não um por zumbi (escopeta e
+	# armas perfurantes acertam vários zumbis num só disparo).
+	Events.shot_connected.connect(func() -> void: shots_hit += 1)
 	Events.zombie_hit.connect(func(_z: Node3D, info: DamageInfo) -> void:
-		if info.kind == DamageInfo.Kind.WEAPON:
-			shots_hit += 1
 		if info.kind in [DamageInfo.Kind.WEAPON, DamageInfo.Kind.MELEE, DamageInfo.Kind.BURN]:
 			damage_dealt += info.amount)
 	Events.boss_defeated.connect(_on_boss_defeated)

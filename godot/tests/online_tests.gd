@@ -13,6 +13,9 @@ func run(tree: SceneTree) -> int:
 	var account := tree.root.get_node("Account")
 	check(account.call(&"username_error", "a'; drop table scores--") != "", "usuário com SQL é recusado no cliente")
 	check(account.call(&"username_error", "jogador_1") == "" and account.call(&"password_error", "123") != "", "valida usuário e tamanho da senha")
+	var catalog := load("res://data/configs/maps.tres") as MapCatalog
+	var missing := Array(catalog.order).filter(func(id: String) -> bool: return not Leaderboard.MAPS.has(id))
+	check(missing.is_empty(), "todo mapa jogável é aceito no ranking global%s" % ("" if missing.is_empty() else " — faltam " + str(missing)))
 	var top: Variant = await Leaderboard.fetch_top(online, "terminal")
 	if top == null:
 		print("  (sem conexão com o servidor: testes de rede pulados)")

@@ -360,6 +360,15 @@ Decisões:
 - **Munição:** como no jogo web, vem das compras na parede. O reabastecimento automático no fim do
   round (`RoundData.refill_ammo_on_round_end`) ficou desligado.
 - **Nenhum addon externo.**
+- **Ranking global aceita os 3 mapas.** O Templo dos Mortos (`temple`) foi liberado na
+  restrição `scores_map_check` do Supabase (antes só aceitava `terminal`/`map2`, e toda
+  pontuação do Templo era recusada). A lista fica espelhada em `Leaderboard.MAPS`
+  (`scripts/online/leaderboard.gd`) e um teste em `online_tests.gd` garante que todo mapa
+  jogável está nela.
+- **Precisão corrigida.** `shots_hit` contava um acerto por zumbi atingido, então escopeta
+  (vários chumbos) e armas perfurantes inflavam o número muito além dos disparos e o
+  `mini(shots_hit, shots_fired)` escondia isso mostrando sempre ~100%. Agora conta uma vez
+  por disparo que acertou algo (`Events.shot_connected`, emitido em `Player.fire()`).
 
 ## Próximas fases (roadmap da especificação)
 

@@ -51,6 +51,8 @@ signal zombies_summoned(count: int)
 signal score_changed(total: int, delta: int)
 ## O jogador disparou (estatística de precisão).
 signal shot_fired()
+## O disparo acertou pelo menos um alvo (um por disparo, mesmo com vários chumbos ou perfurante).
+signal shot_connected()
 ## Um mapa foi liberado (fica salvo).
 signal map_unlocked(map_id: String, map_name: String)
 ## Anti-trapaça: a partida foi invalidada (zoeira e aviso).

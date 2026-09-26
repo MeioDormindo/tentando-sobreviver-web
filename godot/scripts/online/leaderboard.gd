@@ -3,6 +3,10 @@ extends RefCounted
 ## Ranking global (o mesmo do jogo web): temporadas de 15 dias calculadas igual ao servidor;
 ## a view `leaderboard` guarda a melhor pontuação de cada nome por temporada e mapa.
 
+## Mapas aceitos pelo servidor (check `scores_map_check` em supabase/schema.sql). Mapa novo
+## precisa entrar aqui E no banco, senão o envio é recusado.
+const MAPS := ["terminal", "map2", "temple"]
+
 
 ## Temporada atual: blocos de 15 dias desde 1970 (a mesma conta do servidor).
 static func current_season(online: Node) -> int:
@@ -26,6 +30,8 @@ static func submit(online: Node, map_id: String, player: String, score: int, wav
 	if int(result.status) == 0:
 		return "sem conexão"
 	var message := String(result.message)
+	if message.containsn("scores_map_check"):
+		return "mapa ainda não aceito no ranking global"
 	if message.containsn("check constraint") or message.containsn("row-level security"):
 		return "pontuação recusada"
 	return message

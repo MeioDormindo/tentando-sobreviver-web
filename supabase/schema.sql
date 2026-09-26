@@ -6,13 +6,18 @@
 create table if not exists public.scores (
   id bigint generated always as identity primary key,
   season int not null default (floor(extract(epoch from now()) / 1296000))::int,
-  map text not null check (map in ('terminal', 'map2')),
+  map text not null check (map in ('terminal', 'map2', 'temple')),
   name text not null check (char_length(name) between 1 and 14),
   score int not null check (score between 0 and 5000000),
   wave int not null check (wave between 1 and 500),
   kills int not null check (kills between 0 and 100000),
   created_at timestamptz not null default now()
 );
+
+-- Migração: mapas aceitos (o Templo dos Mortos, "temple", entrou depois). Manter igual a
+-- Leaderboard.MAPS no Godot.
+alter table public.scores drop constraint if exists scores_map_check;
+alter table public.scores add constraint scores_map_check check (map in ('terminal', 'map2', 'temple'));
 
 create index if not exists scores_season_map_score on public.scores (season, map, score desc);
 

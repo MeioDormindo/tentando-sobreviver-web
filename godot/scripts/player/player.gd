@@ -268,7 +268,10 @@ func fire() -> Array[DamageInfo]:
 		return []
 	_firing = true
 	_face_aim()
-	return weapon.shoot(get_world_3d().direct_space_state, muzzle.global_position, aim_point, [get_rid()], self)
+	var hits := weapon.shoot(get_world_3d().direct_space_state, muzzle.global_position, aim_point, [get_rid()], self)
+	if not hits.is_empty():
+		Events.shot_connected.emit()
+	return hits
 
 
 ## Usa o interagível mais perto (tecla E). Devolve true se algo aconteceu.
