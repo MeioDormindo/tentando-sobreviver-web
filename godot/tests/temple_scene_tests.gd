@@ -392,6 +392,8 @@ func _quest_flow() -> void:
 	for key in ["necropolis", "forest"]:
 		var spot := _spot("Fragment_%s" % key)
 		check(spot != null and _hold(spot, TempleQuest.FRAGMENT_HOLD), "pegou o fragmento (%s)" % key)
+		await _tree.create_timer(0.4).timeout
+		check(not is_instance_valid(spot), "o fragmento (%s) some ao ser pego" % key)
 	await _frames(3)
 	await _tree.create_timer(TempleQuest.RETRY + 0.3).timeout
 	var carrier := _quest.carrier
@@ -437,6 +439,15 @@ func _quest_flow() -> void:
 
 func _statues() -> void:
 	var statues := _tree.get_nodes_in_group(&"god_statues")
+	var free_areas := [&"ruins", &"necropolis", &"labyrinth", &"forest"]
+	var gated := statues.filter(func(st: Node) -> bool: return not free_areas.has(_world.area_of((st as Node3D).global_position)))
+	check(gated.is_empty(), "as 12 estátuas ficam em áreas de porta comum (nenhuma atrás dos portões da missão)")
+	var nav := _world.get_world_3d().navigation_map
+	var unreachable := statues.filter(func(st: Node) -> bool:
+		var at := (st as Node3D).global_position
+		var p := NavigationServer3D.map_get_closest_point(nav, at)
+		return p.y > SpawnManager.FLOOR_MAX_Y or Vector2(p.x - at.x, p.z - at.z).length() > (st as GodStatue).interaction_radius)
+	check(unreachable.is_empty(), "dá para chegar perto de todas as 12 estátuas")
 	var first := statues[0] as GodStatue
 	check(_hold(first, GodStatue.HOLD_TIME) and first.lit, "segurar E acende a estátua (%s)" % first.god)
 	for statue: GodStatue in statues:

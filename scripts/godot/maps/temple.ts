@@ -137,7 +137,7 @@ export function temple(): MapBuilder {
   // Esqueleto que o carrega).
   m.quest({ gate: { fragments: { necropolis: { tx: 6, ty: 36 }, forest: { tx: 113, ty: 67 } }, arena: { tx: 54, ty: 104 } } });
   const statueSpots: Array<[number, number]> = [
-    [40, 66], [80, 40], [5, 66], [32, 35], [5, 4], [40, 20], [47, 32], [74, 16], [88, 68], [114, 41], [56, 92], [31, 104],
+    [40, 66], [80, 40], [5, 66], [32, 35], [5, 4], [40, 20], [106, 44], [26, 64], [88, 68], [114, 41], [45, 48], [31, 14],
   ];
   m.secrets({
     // As 12 estátuas dos deuses (segredo): ativar todas abre a passagem do Santuário.

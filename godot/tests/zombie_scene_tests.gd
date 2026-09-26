@@ -31,6 +31,7 @@ func run(tree: SceneTree) -> int:
 	await _hound_round()
 	await _flinch()
 	await _hit_slow()
+	await _blood_and_corpses()
 
 	_player.queue_free()
 	_arena.queue_free()
@@ -158,6 +159,33 @@ func _hit_slow() -> void:
 	check(_player.slow_factor() < 0.7, "Golpe de zumbi: jogador fica lento (×%.2f)" % _player.slow_factor())
 	await _tree.create_timer(Player.HIT_SLOW_TIME + 0.2).timeout
 	check(is_equal_approx(_player.slow_factor(), 1.0), "Golpe de zumbi: a lentidão passa")
+
+
+## Sangue (opção, desligado por padrão) e corpos que ficam no chão.
+func _fx_count(fx_name: String) -> int:
+	return _tree.root.find_children("Fx_" + fx_name, "Sprite3D", true, false).filter(func(n: Node) -> bool: return not n.is_queued_for_deletion()).size()
+
+
+func _blood_and_corpses() -> void:
+	check(not bool(Save.get_setting("blood")), "sangue vem desligado por padrão")
+	var zombie := _spawn(&"walker", Vector3(3, 0, -10), 0.0)
+	zombie.health.reset(100000.0)
+	await _tree.physics_frame
+	var body := zombie.get_node("BodyHurtbox") as Hurtbox
+	var before := _fx_count("blood_splat")
+	body.receive_hit(5.0, 1.0, DamageInfo.Kind.WEAPON, _player, zombie.global_position + Vector3.UP)
+	check(_fx_count("blood_splat") == before, "sem sangue: o acerto não espirra sangue")
+	Save.set_setting("blood", true)
+	for i in 14:
+		body.receive_hit(5.0, 1.0, DamageInfo.Kind.WEAPON, _player, zombie.global_position + Vector3.UP)
+	check(_fx_count("blood_splat") > before and _fx_count("blood_pool") > 0, "com sangue: espirra e pinga no chão (%d jatos, %d gotas)" % [_fx_count("blood_splat") - before, _fx_count("blood_pool")])
+	zombie.take_damage(DamageInfo.new(999999.0, DamageInfo.Kind.WEAPON, _player))
+	await _tree.create_timer(3.0).timeout
+	check(is_instance_valid(zombie) and not zombie.is_alive() and zombie.pivot.position.y > -0.1, "o corpo continua no chão")
+	Save.set_setting("blood", false)
+	zombie._sink()
+	await _tree.create_timer(ZombieBase.CORPSE_TIME + 0.3).timeout
+	check(not is_instance_valid(zombie), "o corpo afunda e some no fim")
 
 
 ## Rodada dos cães no Hospital migrado: só cães, perto do jogador, névoa; o último deixa munição.

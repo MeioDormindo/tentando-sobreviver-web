@@ -14,6 +14,8 @@ var enabled: Callable
 ## Segurar E por este tempo (s); 0 = tocar E.
 var hold_time: float = 0.0
 var on_done: Callable
+## Some ao ser usado (item que se pega: fragmento, chave).
+var vanish_on_done := false
 var interaction_radius: float = 1.6
 var used := false
 
@@ -94,3 +96,8 @@ func finish() -> void:
 	remove_from_group(&"interactable")
 	if on_done.is_valid():
 		on_done.call()
+	if vanish_on_done and is_inside_tree():
+		SpecialFire.flash(get_tree(), global_position + Vector3.UP * 0.8, 1.0, Color(0.7, 0.6, 1.0))
+		var tween := create_tween()
+		tween.tween_property(self, "scale", Vector3.ONE * 0.05, 0.25)
+		tween.tween_callback(queue_free)

@@ -36,6 +36,7 @@ static func add(column: VBoxContainer, rebuild: Callable, button_size: int = 20)
 	size_button.name = "MinimapSize"
 	size_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	_toggle(column, rebuild, button_size, "TREMOR DE TELA", "screenShake")
+	_toggle(column, rebuild, button_size, "SANGUE", "blood")
 	_toggle(column, rebuild, button_size, "TELA CHEIA", "fullscreen")
 	if Save.data.secrets.get("konami", false):
 		_toggle(column, rebuild, button_size, "MODO CABEÇÃO", "bigHeads")

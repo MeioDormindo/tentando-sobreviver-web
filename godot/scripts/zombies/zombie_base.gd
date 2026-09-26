@@ -9,6 +9,11 @@ enum State { CHASE, ATTACK, BREAK_BARRICADE, DEAD }
 
 ## Tempo (s) até o corpo sumir depois de morrer.
 const CORPSE_TIME := 1.6
+## Os corpos ficam no chão por um bom tempo (o mapa vai acumulando os mortos); passando do
+## limite, o mais antigo afunda.
+const CORPSE_STAY := 45.0
+const MAX_CORPSES := 40
+static var _corpses: Array[ZombieBase] = []
 
 @export var data: ZombieData
 @export var repath_interval: float = 0.25
@@ -85,7 +90,7 @@ func _ready() -> void:
 		Events.zombie_hit.emit(self, info)
 		if info.kind in [DamageInfo.Kind.WEAPON, DamageInfo.Kind.MELEE] and is_inside_tree():
 			var at: Vector3 = info.hit_position if info.hit_position != Vector3.ZERO else global_position + Vector3.UP * 1.2
-			PixelFx.spawn(get_tree(), "blood_splat", at, 0.7)
+			_hit_fx(at)
 			_flinch(info))
 	# Espalha o recálculo de caminho entre os zumbis (nem todos no mesmo frame).
 	_repath_left = randf() * repath_interval
@@ -459,8 +464,8 @@ func _on_health_died(info: DamageInfo) -> void:
 	for child in get_children():
 		if child is Hurtbox:
 			(child as Hurtbox).disable()
-	if not data.burns_on_death and is_inside_tree():
-		PixelFx.decal(get_tree(), "blood_pool", global_position, 0.9 * data.model_scale)
+	if not data.burns_on_death and is_inside_tree() and blood_enabled():
+		PixelFx.decal(get_tree(), "blood_pool", global_position, 1.1 * data.model_scale, CORPSE_STAY)
 	if data.burns_on_death:
 		# Cão: pega fogo e some, sem corpo.
 		flash(Color(1.0, 0.45, 0.1))
@@ -474,6 +479,39 @@ func _on_health_died(info: DamageInfo) -> void:
 		tween.tween_interval(0.35)
 	else:
 		tween.tween_property(pivot, "rotation:x", deg_to_rad(-85.0), 0.35)
-	tween.tween_interval(CORPSE_TIME * 0.5)
-	tween.tween_property(pivot, "position:y", -1.0, CORPSE_TIME * 0.5)
+	# O corpo fica no chão; depois de CORPSE_STAY (ou quando há corpos demais) afunda.
+	tween.tween_interval(CORPSE_STAY)
+	tween.tween_callback(_sink)
+	_corpses.append(self)
+	_corpses.assign(_corpses.filter(func(c: ZombieBase) -> bool: return is_instance_valid(c)))
+	while _corpses.size() > MAX_CORPSES:
+		var oldest: ZombieBase = _corpses.pop_front()
+		if is_instance_valid(oldest):
+			oldest._sink()
+
+
+## O corpo afunda no chão e some.
+func _sink() -> void:
+	if is_queued_for_deletion() or has_meta(&"sinking"):
+		return
+	set_meta(&"sinking", true)
+	_corpses.erase(self)
+	var tween := create_tween()
+	tween.tween_property(pivot, "position:y", -1.0, CORPSE_TIME)
 	tween.tween_callback(queue_free)
+
+
+## Sangue ligado nas configurações (desligado por padrão).
+static func blood_enabled() -> bool:
+	return bool(Save.get_setting("blood"))
+
+
+## Efeito do acerto: com sangue, um jato e gotas no chão; sem, só um estalo de poeira.
+func _hit_fx(at: Vector3) -> void:
+	if blood_enabled():
+		PixelFx.spawn(get_tree(), "blood_splat", at, 0.9)
+		if randf() < 0.45:
+			var drop := at + Vector3(randf_range(-0.5, 0.5), 0.0, randf_range(-0.5, 0.5))
+			PixelFx.decal(get_tree(), "blood_pool", drop, randf_range(0.25, 0.45), CORPSE_STAY)
+	else:
+		PixelFx.spawn(get_tree(), "dust", at, 0.45)

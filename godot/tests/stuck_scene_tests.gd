@@ -126,6 +126,38 @@ func _map(path: String, label: String) -> void:
 				pinch.append("(%d, %d)%s" % [x, z, _blocker(world3d, at, 0.9)])
 	check(pinch.is_empty(), "%s: nenhuma fresta sem navegação (%d%s)" % [label, pinch.size(), "" if pinch.is_empty() else ": " + ", ".join(pinch)])
 
+	# 2b. O encaixe nunca usa o topo de parede ou de móvel (zumbi nascendo em cima do muro).
+	var on_top := 0
+	for z in range(0, map.height, 3):
+		for x in range(0, map.width, 3):
+			if map.cell(x, z) == "#":
+				var p := SpawnManager.safe_point(world3d, Vector3(x + 0.5, 0.0, z + 0.5), 0.4)
+				if p.y > SpawnManager.FLOOR_MAX_Y:
+					on_top += 1
+	check(on_top == 0, "%s: pontos de encaixe nunca em cima das paredes (%d)" % [label, on_top])
+	var spawner := SpawnManager.new()
+	spawner.world = map
+	spawner.target = player
+	var holder := Node3D.new()
+	_add(holder)
+	spawner.container = holder
+	spawner.zombie_data = load("res://data/zombies/walker.tres")
+	spawner.min_player_distance = 0.0
+	_add(spawner)
+	var wrong: Array[String] = []
+	for i in 60:
+		var zombie := spawner.spawn_zombie(1.0, 0.0, 0.0, 99)
+		if zombie == null:
+			continue
+		var at := zombie.global_position
+		if at.y > SpawnManager.FLOOR_MAX_Y or not map._is_floor(map.cell(floori(at.x), floori(at.z))):
+			wrong.append("(%.1f, %.1f, %.1f)" % [at.x, at.y, at.z])
+		zombie.queue_free()
+	check(wrong.is_empty(), "%s: 60 spawns, todos no chão%s" % [label, "" if wrong.is_empty() else " — " + ", ".join(wrong)])
+	holder.queue_free()
+	spawner.queue_free()
+	await _tree.physics_frame
+
 	# 3. De cada spawn há caminho até o início.
 	var no_path: Array[String] = []
 	for sp: Dictionary in data.spawns:

@@ -541,7 +541,11 @@ function eventValue(key: string, v: unknown): string {
 }
 
 function exportWorldEvents(): void {
-  const { worldEvents, eventScheduleConfig, ...configs } = eventsConfig;
+  const { worldEvents, eventScheduleConfig: webSchedule, ...configs } = eventsConfig;
+  // Godot: eventos com mais frequência (quase todo round a partir do 2º, começando mais cedo)
+  // e o trem passando muito mais (quase todo round, e muitas vezes duas).
+  const eventScheduleConfig = { ...webSchedule, chancePerWave: 0.9, startDelayMs: [3000, 10000] } as typeof webSchedule;
+  const godotTrain = { chancePerWave: 0.95, secondPassChance: 0.8, delayMs: [2000, 12000] };
   const defs = Object.entries(worldEvents).map(([id, e]) =>
     `&"${id}": { "name": ${JSON.stringify(e.name)}, "hint": ${JSON.stringify(e.hint)}, "color": ${color(e.color).raw}, "weight": ${e.weight}, "min_round": ${e.minWave}, "cooldown_rounds": ${e.cooldownWaves} }`);
   // blackoutConfig → &"blackout", emergency_alarm usa alarmConfig, etc.
@@ -552,7 +556,7 @@ function exportWorldEvents(): void {
   };
   const cfg = Object.entries(configs)
     .filter(([k]) => configIds[k])
-    .map(([k, v]) => `&"${configIds[k]}": ${eventValue(k, v)}`);
+    .map(([k, v]) => `&"${configIds[k]}": ${eventValue(k, k === 'trainConfig' ? { ...(v as object), ...godotTrain } : v)}`);
   // Godot: os eventos do Templo dos Mortos.
   for (const [id, e] of Object.entries(TEMPLE_EVENTS)) {
     defs.push(`&"${id}": { "name": ${JSON.stringify(e.name)}, "hint": ${JSON.stringify(e.hint)}, "color": ${color(e.color).raw}, "weight": ${e.weight}, "min_round": ${e.min_round}, "cooldown_rounds": ${e.cooldown_rounds} }`);

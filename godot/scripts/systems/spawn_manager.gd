@@ -87,8 +87,10 @@ func spawn_zombie(health_mult: float, damage_mult: float, speed_mult: float, rou
 func spawn_at(type: StringName, at: Vector3) -> ZombieBase:
 	var nav_map := target.get_world_3d().navigation_map
 	var spot := NavigationServer3D.map_get_closest_point(nav_map, at)
-	if spot.distance_to(at) > 2.5:
-		return null
+	if spot.y > FLOOR_MAX_Y or Vector2(spot.x - at.x, spot.z - at.z).length() > 2.5:
+		spot = safe_point(target.get_world_3d(), at, 0.4)
+		if Vector2(spot.x - at.x, spot.z - at.z).length() > 3.5:
+			return null
 	var zombie := ZombieFactory.create(type_data(type), target, round_multipliers[0], round_multipliers[1], round_multipliers[2])
 	if zombie == null:
 		return null
@@ -106,7 +108,7 @@ func spawn_near_player(type: StringName, min_distance: float, max_distance: floa
 		var candidate := target.global_position + Vector3(cos(angle), 0.0, sin(angle)) * randf_range(min_distance, max_distance)
 		var spot := NavigationServer3D.map_get_closest_point(nav_map, candidate)
 		var distance := spot.distance_to(target.global_position)
-		if spot.distance_to(candidate) > 1.5 or distance < min_distance * 0.8:
+		if spot.y > FLOOR_MAX_Y or spot.distance_to(candidate) > 1.5 or distance < min_distance * 0.8:
 			continue
 		var zombie := ZombieFactory.create(type_data(type), target, health_mult, damage_mult, speed_mult)
 		if zombie == null:
@@ -158,11 +160,17 @@ static func safe_point(world3d: World3D, at: Vector3, radius := 0.4) -> Vector3:
 			var spot := candidate
 			if has_nav:
 				spot = NavigationServer3D.map_get_closest_point(nav_map, candidate)
-				if spot.distance_to(Vector3(candidate.x, spot.y, candidate.z)) > 1.0:
+				# Só no chão (nunca em cima de parede ou móvel).
+				if spot.y > FLOOR_MAX_Y or spot.distance_to(Vector3(candidate.x, spot.y, candidate.z)) > 1.0:
 					continue
 			if is_free(world3d, spot, radius):
 				return Vector3(spot.x, maxf(spot.y, 0.0), spot.z)
-	return NavigationServer3D.map_get_closest_point(nav_map, at) if has_nav else at
+	var fallback := NavigationServer3D.map_get_closest_point(nav_map, at) if has_nav else at
+	return fallback if fallback.y <= FLOOR_MAX_Y else Vector3(at.x, 0.0, at.z)
+
+
+## Altura máxima de um ponto de navegação "no chão" (acima disso é topo de parede ou móvel).
+const FLOOR_MAX_Y := 1.0
 
 
 ## Uma cápsula de raio `radius` em `at` não encosta em parede nem objeto (WORLD|PROPS)?
@@ -173,7 +181,8 @@ static func is_free(world3d: World3D, at: Vector3, radius := 0.4) -> bool:
 	var query := PhysicsShapeQueryParameters3D.new()
 	query.shape = shape
 	query.transform = Transform3D(Basis(), Vector3(at.x, 0.95, at.z))
-	query.collision_mask = PhysicsLayers.WORLD | PhysicsLayers.PROPS
+	# Parede, móvel, janela e tábuas: ninguém nasce dentro delas.
+	query.collision_mask = PhysicsLayers.WORLD | PhysicsLayers.PROPS | PhysicsLayers.PLAYER_ONLY | PhysicsLayers.BARRICADES
 	return world3d.direct_space_state.intersect_shape(query, 1).is_empty()
 
 
@@ -183,7 +192,7 @@ static func off_navmesh(world3d: World3D, at: Vector3, tolerance := 0.45) -> boo
 	if NavigationServer3D.map_get_iteration_id(nav_map) == 0:
 		return false
 	var spot := NavigationServer3D.map_get_closest_point(nav_map, at)
-	return Vector2(spot.x - at.x, spot.z - at.z).length() > tolerance
+	return spot.y > FLOOR_MAX_Y or Vector2(spot.x - at.x, spot.z - at.z).length() > tolerance
 
 
 ## Escolhe um ponto (função pura): um dos que estão a pelo menos `min_distance` do jogador,

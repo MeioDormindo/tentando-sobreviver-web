@@ -107,6 +107,7 @@ func _fragments_enter() -> void:
 	for key: String in spots:
 		var spot := _spot("PEGAR O FRAGMENTO DE ALMA", _at(spots[key]), _collect.bind(key), FRAGMENT_HOLD)
 		spot.name = "Fragment_%s" % key
+		spot.vanish_on_done = true
 		spot.add_prop(Vector3(0.3, 0.45, 0.3), SOUL, 1.2, PropFactory.create("soul_fragment"))
 
 
@@ -125,6 +126,7 @@ func _fragments_update(delta: float) -> bool:
 			carrier = null
 			_carrier_spot = _spot("PEGAR O FRAGMENTO DE ALMA", _carrier_last, _collect.bind("carrier"), FRAGMENT_HOLD)
 			_carrier_spot.name = "Fragment_carrier"
+			_carrier_spot.vanish_on_done = true
 			_carrier_spot.add_prop(Vector3(0.3, 0.45, 0.3), SOUL, 1.2, PropFactory.create("soul_fragment"))
 		else:
 			_next_carrier -= delta
@@ -175,6 +177,7 @@ func _key_enter() -> void:
 		has_key = true
 		Events.toast.emit("CHAVE DO SUBMUNDO — abra o portão ao sul das Ruínas"), 1.0)
 	spot.name = "UnderworldKey"
+	spot.vanish_on_done = true
 	spot.interaction_radius = 2.2
 	spot.add_prop(Vector3(0.3, 0.6, 0.1), Color(1.0, 0.5, 0.2), 1.2, PropFactory.create("underworld_key"))
 

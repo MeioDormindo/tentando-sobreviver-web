@@ -5,6 +5,9 @@ projeto). O jogo web em TypeScript (raiz deste repositório) continua no ar e se
 de conceitos: ver `docs/analise-typescript.md`.
 
 **Estado: combate, mapas, loja, máquinas, inimigos e progressão local migrados do jogo web.** Tem:
+- **sangue** opcional (Configurações → SANGUE, desligado por padrão): jato no acerto, gotas e poça no
+  chão; os **corpos ficam no chão** por 45 s (até 40 de uma vez, o mais antigo afunda);
+- eventos com mais frequência (quase todo round) e o trem passando quase todo round, muitas vezes duas;
 - **menu principal**, escolha de mapa (o Hospital libera ao vencer o boss do round 10 no
   Terminal; o Templo dos Mortos, ao concluir a missão do Terminal ou a do Hospital), ranking local por mapa, configurações (volume, som, música, tremor, tela cheia,
   nome, apagar progresso);
