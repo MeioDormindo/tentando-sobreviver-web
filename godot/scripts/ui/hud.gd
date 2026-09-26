@@ -32,6 +32,11 @@ var _ammo_label: Label
 var _other_weapon_label: Label
 var _weapon_icon: TextureRect
 var _other_weapon_icon: TextureRect
+## Moldura atrás dos ícones de arma (antes ficavam pelados) — acompanha o tamanho de cada
+## arma (a arte já vem recortada rente à silhueta, então o tamanho varia por arma).
+var _weapon_icon_bg: Panel
+var _other_weapon_icon_bg: Panel
+const WEAPON_ICON_PAD := 6.0
 var _prompt_label: Label
 var _banner: Label
 var _toast: Label
@@ -178,6 +183,8 @@ func _process(_delta: float) -> void:
 	var icons_top := ammo_panel.position.y - 8.0
 	_weapon_icon.position = Vector2(screen.x - 12.0 - _weapon_icon.size.x, icons_top - _weapon_icon.size.y)
 	_other_weapon_icon.position = Vector2(screen.x - 12.0 - _other_weapon_icon.size.x, _weapon_icon.position.y - 8.0 - _other_weapon_icon.size.y)
+	_frame_icon(_weapon_icon_bg, _weapon_icon)
+	_frame_icon(_other_weapon_icon_bg, _other_weapon_icon)
 	if _quest_title.text != "":
 		var top := Minimap.CORNER.y + minimap.screen_height() + 36.0 if minimap.visible and not minimap.expanded else Minimap.CORNER.y
 		_quest_title.position = Vector2(MARGIN, top)
@@ -281,8 +288,11 @@ func _build() -> void:
 	_other_weapon_label = _text(_ammo_box, "", 26, DIM, HORIZONTAL_ALIGNMENT_RIGHT)
 	_weapon_label = _text(_ammo_box, "", 26, TEXT, HORIZONTAL_ALIGNMENT_RIGHT)
 	_ammo_label = _text(_ammo_box, "", 39, TEXT, HORIZONTAL_ALIGNMENT_RIGHT)
-	# Ícones em pixel art da arma em mãos (grande) e da reserva (pequeno, apagado), acima do painel.
+	# Ícones em pixel art da arma em mãos (grande) e da reserva (pequeno, apagado), acima do
+	# painel, cada um com uma moldura atrás (como os selos e os cantos da HUD).
+	_weapon_icon_bg = _icon_panel(root)
 	_weapon_icon = _icon_rect(root, 2.0, Vector2(-MARGIN, -100))
+	_other_weapon_icon_bg = _icon_panel(root)
 	_other_weapon_icon = _icon_rect(root, 1.0, Vector2(-MARGIN, -100))
 	_other_weapon_icon.modulate = Color(1, 1, 1, 0.55)
 
@@ -326,6 +336,17 @@ func _build() -> void:
 
 
 ## Ícone pixel art (sem suavização) preso ao canto de baixo à direita.
+## Moldura atrás de um ícone de arma (painel de pixel art, como os cantos da HUD); o tamanho e
+## a posição são ajustados a cada quadro em _process(), porque cada arma tem um tamanho.
+func _icon_panel(root: Control) -> Panel:
+	var panel := Panel.new()
+	panel.add_theme_stylebox_override(&"panel", PixelSkin.panel(false, 6.0))
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.visible = false
+	root.add_child(panel)
+	return panel
+
+
 func _icon_rect(root: Control, zoom: float, offset: Vector2) -> TextureRect:
 	var rect := TextureRect.new()
 	rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -336,6 +357,15 @@ func _icon_rect(root: Control, zoom: float, offset: Vector2) -> TextureRect:
 	rect.set_meta(&"offset", offset)
 	root.add_child(rect)
 	return rect
+
+
+## Encaixa a moldura no ícone (some junto quando não há arma, ex. sem arma reserva).
+func _frame_icon(panel: Panel, icon: TextureRect) -> void:
+	panel.visible = icon.texture != null
+	if not panel.visible:
+		return
+	panel.position = icon.position - Vector2.ONE * WEAPON_ICON_PAD
+	panel.size = icon.size + Vector2.ONE * WEAPON_ICON_PAD * 2.0
 
 
 func _set_icon(rect: TextureRect, weapon_id: StringName, level: int) -> void:
