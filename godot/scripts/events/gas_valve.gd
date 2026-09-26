@@ -23,7 +23,11 @@ func _ready() -> void:
 
 
 func get_interaction_prompt(_player: Node3D) -> String:
-	return "" if closed else "[SEGURE E] FECHAR A VÁLVULA%s" % MapPanel.progress_bar(_progress / hold_time)
+	return "" if closed else "[SEGURE E] FECHAR A VÁLVULA"
+
+
+func get_interaction_progress(_player: Node3D) -> float:
+	return -1.0 if closed else _progress / hold_time
 
 
 func interact(_player: Node3D) -> bool:

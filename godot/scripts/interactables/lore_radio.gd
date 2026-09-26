@@ -53,7 +53,11 @@ func _process(delta: float) -> void:
 func get_interaction_prompt(_player: Node3D) -> String:
 	if _busy > 0.0:
 		return "RÁDIO — CHIADO..."
-	return "[SEGURE E] %s%s" % [label, MapPanel.progress_bar(_progress / hold_time)]
+	return "[SEGURE E] %s" % label
+
+
+func get_interaction_progress(_player: Node3D) -> float:
+	return -1.0 if _busy > 0.0 else _progress / hold_time
 
 
 func interact(_player: Node3D) -> bool:

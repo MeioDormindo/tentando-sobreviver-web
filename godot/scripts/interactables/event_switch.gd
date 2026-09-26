@@ -40,7 +40,11 @@ func get_interaction_prompt(_player: Node3D) -> String:
 	if not _active():
 		_progress = 0.0
 		return idle_text
-	return "[SEGURE E] %s  ·  %d pontos%s" % [action_text, price, progress_bar(_progress / hold_time)]
+	return "[SEGURE E] %s  ·  %d pontos" % [action_text, price]
+
+
+func get_interaction_progress(_player: Node3D) -> float:
+	return _progress / hold_time if _active() else -1.0
 
 
 func hold_interact(_player: Node3D, delta: float) -> bool:

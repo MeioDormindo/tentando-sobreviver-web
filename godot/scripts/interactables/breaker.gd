@@ -61,7 +61,11 @@ func _process(delta: float) -> void:
 func get_interaction_prompt(_player: Node3D) -> String:
 	if power.is_on:
 		return ""
-	return "[SEGURE E] LIGAR A ENERGIA  (%d%%)" % roundi(_progress / power.data.breaker_hold_time * 100.0)
+	return "[SEGURE E] LIGAR A ENERGIA"
+
+
+func get_interaction_progress(_player: Node3D) -> float:
+	return -1.0 if power.is_on else _progress / power.data.breaker_hold_time
 
 
 func interact(_player: Node3D) -> bool:

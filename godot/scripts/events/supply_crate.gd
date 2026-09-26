@@ -81,7 +81,11 @@ func _process(delta: float) -> void:
 func get_interaction_prompt(_player: Node3D) -> String:
 	if not landed or is_open:
 		return ""
-	return "[SEGURE E] ABRIR SUPRIMENTOS%s" % MapPanel.progress_bar(_progress / hold_time)
+	return "[SEGURE E] ABRIR SUPRIMENTOS"
+
+
+func get_interaction_progress(_player: Node3D) -> float:
+	return -1.0 if (not landed or is_open) else _progress / hold_time
 
 
 func interact(_player: Node3D) -> bool:

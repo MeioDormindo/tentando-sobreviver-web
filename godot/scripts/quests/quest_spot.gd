@@ -68,8 +68,12 @@ func get_interaction_prompt(_player: Node3D) -> String:
 	if not available():
 		return locked_label
 	if hold_time > 0.0:
-		return "[SEGURE E] %s%s" % [label, MapPanel.progress_bar(_progress / hold_time)]
+		return "[SEGURE E] %s" % label
 	return "[E] " + label
+
+
+func get_interaction_progress(_player: Node3D) -> float:
+	return _progress / hold_time if (hold_time > 0.0 and not used and available()) else -1.0
 
 
 func interact(_player: Node3D) -> bool:

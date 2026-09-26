@@ -467,7 +467,7 @@ func set_flashlight_factor(factor: float) -> void:
 func _go_down(revive: PerkData) -> void:
 	is_down = true
 	health.invulnerable = true
-	Events.interaction_prompt.emit("", "")
+	Events.interaction_prompt.emit("", "", -1.0)
 	Events.toast.emit("QUICK REVIVE!")
 	var tween := create_tween()
 	tween.tween_property(pivot, "rotation:z", deg_to_rad(70.0), 0.3)
@@ -567,12 +567,18 @@ func _update_interaction() -> void:
 			best = distance
 			_interactable = target
 	var prompt: String = _interactable.call(&"get_interaction_prompt", self) if _interactable else ""
-	if prompt != _last_prompt:
-		_last_prompt = prompt
-		var icon := ""
-		if _interactable and _interactable.has_method(&"get_interaction_icon"):
+	var icon := ""
+	var progress := -1.0
+	if _interactable:
+		if _interactable.has_method(&"get_interaction_icon"):
 			icon = _interactable.call(&"get_interaction_icon", self)
-		Events.interaction_prompt.emit(prompt, icon)
+		if _interactable.has_method(&"get_interaction_progress"):
+			progress = _interactable.call(&"get_interaction_progress", self)
+	# A barra muda a cada quadro enquanto segura E, mesmo com o texto igual (por isso não fica
+	# só atrás do "if prompt != _last_prompt", que existe pra não gastar toa quando nada muda).
+	if prompt != _last_prompt or progress >= 0.0:
+		_last_prompt = prompt
+		Events.interaction_prompt.emit(prompt, icon, progress)
 
 
 func _regenerate(delta: float) -> void:
@@ -720,7 +726,7 @@ func _on_health_died(info: DamageInfo) -> void:
 		_go_down(revive)
 		return
 	super(info)
-	Events.interaction_prompt.emit("", "")
+	Events.interaction_prompt.emit("", "", -1.0)
 	# Cai de lado.
 	create_tween().tween_property(pivot, "rotation:z", deg_to_rad(80.0), 0.4)
 	Events.player_died.emit()

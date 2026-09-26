@@ -43,7 +43,11 @@ func _process(delta: float) -> void:
 func get_interaction_prompt(_player: Node3D) -> String:
 	if lit:
 		return ""
-	return "[SEGURE E] ACENDER A ESTÁTUA DE %s  (%d%%)" % [NAMES.get(god, String(god).to_upper()), roundi(_hold / HOLD_TIME * 100.0)]
+	return "[SEGURE E] ACENDER A ESTÁTUA DE %s" % NAMES.get(god, String(god).to_upper())
+
+
+func get_interaction_progress(_player: Node3D) -> float:
+	return -1.0 if lit else _hold / HOLD_TIME
 
 
 func interact(_player: Node3D) -> bool:

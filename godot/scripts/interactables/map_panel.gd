@@ -84,7 +84,3 @@ func pay(amount: int) -> bool:
 
 func interact(_player: Node3D) -> bool:
 	return false
-
-
-static func progress_bar(progress: float) -> String:
-	return "  (%d%%)" % roundi(clampf(progress, 0.0, 1.0) * 100.0) if progress > 0.0 else ""

@@ -85,6 +85,12 @@ func get_interaction_prompt(_player: Node3D) -> String:
 	return "[SEGURE E] CONSERTAR BARRICADA  ·  +%d por tábua" % data.repair_reward
 
 
+func get_interaction_progress(_player: Node3D) -> float:
+	if planks >= data.max_planks:
+		return -1.0
+	return _repair_progress / data.repair_time
+
+
 func interact(_player: Node3D) -> bool:
 	return false
 
