@@ -147,6 +147,15 @@ func get_interaction_prompt(player: Node3D) -> String:
 	return _base_prompt(p) + _element_text(p)
 
 
+## Ícone da arma (a que está sendo comprada, ou a munição da que já está em mãos).
+func get_interaction_icon(player: Node3D) -> String:
+	var p := player as Player
+	if p == null:
+		return ""
+	var id: StringName = weapon_data.id if weapon_data else p.weapon.data.id
+	return "res://assets/sprites/icons/%s.png" % Player.gun_sheet(id, 0)
+
+
 func _base_prompt(p: Player) -> String:
 	if weapon_data == null:
 		var current := p.weapon

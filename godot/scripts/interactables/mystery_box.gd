@@ -146,6 +146,12 @@ func get_interaction_prompt(player: Node3D) -> String:
 	return ""
 
 
+func get_interaction_icon(_player: Node3D) -> String:
+	if state == State.READY:
+		return "res://assets/sprites/icons/%s.png" % Player.gun_sheet(result.id, 0)
+	return "res://assets/web/machines/mystery_box.png"
+
+
 func interact(player: Node3D) -> bool:
 	var p := player as Player
 	if p == null:

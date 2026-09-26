@@ -37,7 +37,10 @@ var _other_weapon_icon: TextureRect
 var _weapon_icon_bg: Panel
 var _other_weapon_icon_bg: Panel
 const WEAPON_ICON_PAD := 6.0
+var _prompt_row: HBoxContainer
 var _prompt_label: Label
+var _prompt_icon: TextureRect
+const PROMPT_ICON_SIZE := 26.0
 var _banner: Label
 var _toast: Label
 ## Ícones dos perks comprados (não expiram: sem contagem, ao contrário dos power-ups).
@@ -90,7 +93,11 @@ func _ready() -> void:
 		_set_icon(_weapon_icon, weapon_id, level)
 		_set_icon(_other_weapon_icon, other_id, other_level))
 	Events.weapon_changed.connect(func(_current: String, other: String) -> void: _other_weapon_label.text = ("[Q] " + other.to_upper()) if other != "" else "")
-	Events.interaction_prompt.connect(func(text: String) -> void: _prompt_label.text = text)
+	Events.interaction_prompt.connect(func(text: String, icon: String) -> void:
+		_prompt_label.text = text
+		_prompt_icon.visible = icon != "" and ResourceLoader.exists(icon)
+		if _prompt_icon.visible:
+			_prompt_icon.texture = load(icon))
 	Events.zombie_hit.connect(func(_z: Node3D, info: DamageInfo) -> void: if info.kind != DamageInfo.Kind.BURN: _flash_hit(TEXT))
 	Events.zombie_killed.connect(func(_z: Node3D, info: DamageInfo) -> void: _flash_hit(RED if info.is_headshot else GOLD))
 	Events.area_opened.connect(func(_id: StringName, area_name: String) -> void: _show_banner("ÁREA LIBERADA: " + area_name.to_upper(), GOLD))
@@ -280,7 +287,20 @@ func _build() -> void:
 	_power_row.add_theme_constant_override(&"separation", 10)
 	_bottom_center.add_child(_power_row)
 
-	_prompt_label = _text(_bottom_center, "", 20, TEXT, HORIZONTAL_ALIGNMENT_CENTER)
+	_prompt_row = HBoxContainer.new()
+	_prompt_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_prompt_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	_prompt_row.add_theme_constant_override(&"separation", 6)
+	_bottom_center.add_child(_prompt_row)
+	_prompt_icon = TextureRect.new()
+	_prompt_icon.custom_minimum_size = Vector2(PROMPT_ICON_SIZE, PROMPT_ICON_SIZE)
+	_prompt_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_prompt_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_prompt_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_prompt_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_prompt_icon.visible = false
+	_prompt_row.add_child(_prompt_icon)
+	_prompt_label = _text(_prompt_row, "", 20, TEXT, HORIZONTAL_ALIGNMENT_CENTER)
 
 	_event_label = _label(root, "", 18, TEXT, Control.PRESET_CENTER_TOP, HORIZONTAL_ALIGNMENT_CENTER, 48)
 

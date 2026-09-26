@@ -87,6 +87,10 @@ func get_interaction_prompt(player: Node3D) -> String:
 	return "[E] %s — %s  ·  %d pontos" % [perk.display_name.to_upper(), perk.description, perk.price]
 
 
+func get_interaction_icon(_player: Node3D) -> String:
+	return "res://assets/web/machines/perk_%s.png" % perk.id
+
+
 func interact(player: Node3D) -> bool:
 	var p := player as Player
 	if p == null or not _powered() or not p.perks.can_buy(perk):

@@ -76,6 +76,10 @@ func get_interaction_prompt(player: Node3D) -> String:
 	return "[E] BÊNÇÃO DE %s — %s: %s  ·  %s" % [info.name, String(info.title).to_upper(), info.hint, "DE GRAÇA" if is_free() else "%d pontos" % PRICE]
 
 
+func get_interaction_icon(_player: Node3D) -> String:
+	return "res://assets/sprites/blessings/blessing_%s.png" % god
+
+
 func interact(player: Node3D) -> bool:
 	var blessings := _blessings(player)
 	if blessings == null or blessings.active == god:

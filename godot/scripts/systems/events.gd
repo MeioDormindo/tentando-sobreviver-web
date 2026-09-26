@@ -23,7 +23,8 @@ signal round_remaining_changed(remaining: int)
 ## Round terminou (todos os zumbis abatidos).
 signal round_completed(round_number: int)
 ## Texto de interação na HUD (vazio = esconder).
-signal interaction_prompt(text: String)
+## `icon`: caminho do ícone pra mostrar ao lado do texto (arma, perk, caixa...), ou "" sem ícone.
+signal interaction_prompt(text: String, icon: String)
 ## Fim de jogo com o resumo da partida.
 signal game_over(summary: Dictionary)
 ## Uma área do mapa foi aberta (porta comprada).

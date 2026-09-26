@@ -467,7 +467,7 @@ func set_flashlight_factor(factor: float) -> void:
 func _go_down(revive: PerkData) -> void:
 	is_down = true
 	health.invulnerable = true
-	Events.interaction_prompt.emit("")
+	Events.interaction_prompt.emit("", "")
 	Events.toast.emit("QUICK REVIVE!")
 	var tween := create_tween()
 	tween.tween_property(pivot, "rotation:z", deg_to_rad(70.0), 0.3)
@@ -569,7 +569,10 @@ func _update_interaction() -> void:
 	var prompt: String = _interactable.call(&"get_interaction_prompt", self) if _interactable else ""
 	if prompt != _last_prompt:
 		_last_prompt = prompt
-		Events.interaction_prompt.emit(prompt)
+		var icon := ""
+		if _interactable and _interactable.has_method(&"get_interaction_icon"):
+			icon = _interactable.call(&"get_interaction_icon", self)
+		Events.interaction_prompt.emit(prompt, icon)
 
 
 func _regenerate(delta: float) -> void:
@@ -717,7 +720,7 @@ func _on_health_died(info: DamageInfo) -> void:
 		_go_down(revive)
 		return
 	super(info)
-	Events.interaction_prompt.emit("")
+	Events.interaction_prompt.emit("", "")
 	# Cai de lado.
 	create_tween().tween_property(pivot, "rotation:z", deg_to_rad(80.0), 0.4)
 	Events.player_died.emit()
