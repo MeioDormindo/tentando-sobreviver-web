@@ -368,7 +368,8 @@ Decisões:
 - **Precisão corrigida.** `shots_hit` contava um acerto por zumbi atingido, então escopeta
   (vários chumbos) e armas perfurantes inflavam o número muito além dos disparos e o
   `mini(shots_hit, shots_fired)` escondia isso mostrando sempre ~100%. Agora conta uma vez
-  por disparo que acertou algo (`Events.shot_connected`, emitido em `Player.fire()`).
+  por disparo que acertou algo (`Events.shot_connected`, emitido em `Player.fire()`; granada e
+  plasma emitem no `WeaponProjectile`, quando o projétil acerta ou explode em alguém).
 
 ## Próximas fases (roadmap da especificação)
 

@@ -29,6 +29,7 @@ func run(tree: SceneTree) -> int:
 	await _arc()
 	await _gust()
 	await _knife_single()
+	await _accuracy()
 
 	_player.queue_free()
 	_arena.queue_free()
@@ -108,6 +109,33 @@ func _gust() -> void:
 
 
 ## Zumbis parados (velocidade 0) com vida alta, em posições relativas ao jogador (-Z = à frente).
+## Precisão: um acerto por disparo (não por zumbi/chumbo), e granada conta quando explode.
+func _accuracy() -> void:
+	var count := {"fired": 0, "hit": 0, "pellets": 0}
+	var on_fired := func() -> void: count.fired += 1
+	var on_hit := func() -> void: count.hit += 1
+	var on_pellet := func(_z: Node3D, info: DamageInfo) -> void:
+		if info.kind == DamageInfo.Kind.WEAPON:
+			count.pellets += 1
+	Events.shot_fired.connect(on_fired)
+	Events.shot_connected.connect(on_hit)
+	Events.zombie_hit.connect(on_pellet)
+	var zombies := _spawn([Vector3(0, 0, -4), Vector3(0.6, 0, -4.4), Vector3(-0.6, 0, -4.4)])
+	await _shoot(&"combat_shotgun", Vector3(0, 1.2, -4), 0.3)
+	# Antes cada chumbo que acertava contava como um "acerto" (precisão acima de 100%).
+	check(count.fired == 1 and count.hit == 1 and count.pellets > 1,
+		"escopeta: %d chumbos acertaram, mas conta 1 disparo e 1 acerto (%d / %d)" % [count.pellets, count.fired, count.hit])
+	await _shoot(&"glock", Vector3(0, 1.2, 8), 0.3)
+	check(count.fired == 2 and count.hit == 1, "tiro no vazio não conta acerto (%d / %d)" % [count.fired, count.hit])
+	await _shoot(&"grenade_launcher", Vector3(0, 1.2, -4), 1.5)
+	check(count.fired == 3 and count.hit == 2, "granada conta o acerto quando explode (%d / %d)" % [count.fired, count.hit])
+	Events.shot_fired.disconnect(on_fired)
+	Events.shot_connected.disconnect(on_hit)
+	Events.zombie_hit.disconnect(on_pellet)
+	_clear(zombies)
+	await _frames(2)
+
+
 func _spawn(offsets: Array) -> Array:
 	var data := load("res://data/zombies/walker.tres") as ZombieData
 	var zombies: Array = []

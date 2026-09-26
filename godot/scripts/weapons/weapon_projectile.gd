@@ -16,6 +16,8 @@ var _is_plasma := false
 var _done := false
 ## Arma que disparou (elemento na explosão); pode ter saído do inventário.
 var _weapon: Weapon
+## Já contou o acerto deste disparo (precisão: um por projétil).
+var _connected := false
 
 
 func setup(weapon: Weapon, direction: Vector3, exclude: Array[RID], shooter: Node) -> void:
@@ -57,6 +59,7 @@ func _physics_process(delta: float) -> void:
 		if hurtbox.health in _struck:
 			continue
 		_struck.append(hurtbox.health)
+		_connect_once()
 		hurtbox.receive_hit(_weapon_data.damage * _damage_multiplier, _weapon_data.headshot_multiplier, DamageInfo.Kind.WEAPON, _shooter, hit.position)
 		if not _is_plasma:
 			_explode(hit.position)
@@ -72,8 +75,18 @@ func _explode(at: Vector3) -> void:
 	var params := _weapon_data.special_params
 	var hits := SpecialFire.blast(get_tree(), at, float(params.get("blast_radius", 0)), float(params.get("blast_damage", 0)) * _damage_multiplier,
 		float(params.get("stun_time", 0)), _shooter, SpecialFire.PLASMA_COLOR if _is_plasma else SpecialFire.EXPLOSION_COLOR)
+	if not hits.is_empty():
+		_connect_once()
 	# Elemento da arma (a Mystery Box pode dar elemento até às especiais).
 	if is_instance_valid(_weapon):
 		for info in hits:
 			ElementEffects.apply(_weapon, info, _shooter, 1.0 / float(maxi(1, hits.size())))
 	queue_free()
+
+
+## O disparo acertou algo: conta uma vez para a precisão (o Player.fire() recebe [] do projétil).
+func _connect_once() -> void:
+	if _connected or not _shooter is Player:
+		return
+	_connected = true
+	Events.shot_connected.emit()
