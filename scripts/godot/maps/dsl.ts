@@ -440,6 +440,7 @@ export class MapBuilder {
     };
     tiles('pillars', 0.9, 0.9);
     tiles('altars', 1.3, 0.9);
+    tiles('blessings', 1.75, 1.06);
     const statues = (this.secretsData?.statues as Array<{ god: string; tx: number; ty: number }> | undefined) ?? [];
     for (const st of statues) add(`estátua ${st.god} (${st.tx}, ${st.ty})`, st.tx + 0.5, st.ty + 0.5, 1.0, 1.0);
     const bow = (this.extras.sanctuary as { bow?: { tx: number; ty: number } } | undefined)?.bow;
@@ -582,6 +583,7 @@ export class MapBuilder {
       };
       tiles(this.extras.pillars as Array<{ tx: number; ty: number }> | undefined, 0.9, 0.9);
       tiles(this.extras.altars as Array<{ tx: number; ty: number }> | undefined, 1.3, 0.9);
+      tiles(this.extras.blessings as Array<{ tx: number; ty: number }> | undefined, 1.75, 1.06);
       tiles(this.secretsData?.statues as Array<{ tx: number; ty: number }> | undefined, 1.0, 1.0);
       const bow = (this.extras.sanctuary as { bow?: { tx: number; ty: number } } | undefined)?.bow;
       if (bow) tiles([bow], 0.9, 0.9);

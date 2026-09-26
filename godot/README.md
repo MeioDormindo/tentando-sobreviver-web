@@ -134,6 +134,14 @@ de conceitos: ver `docs/analise-typescript.md`.
     Esqueleto que carrega o terceiro) → os 3 altares → o Minotauro → a chave → o portão → o
     Cérbero → selar o portão no altar da Arena Final. Prêmio:
     todos os perks e o Raio de Zeus no Mk II;
+  - **Bênçãos dos Deuses**: 3 altares com um deus cada (sorteado a cada round, 1500 pontos); uma
+    bênção por vez, perdida ao cair — Zeus (raios que saltam), Ares (abates seguidos somam dano),
+    Atena (mira e crítico), Hermes (mais rápido em tudo), Poseidon (tiros empurram) e Hades
+    (abatidos voltam como espíritos aliados);
+  - eventos do Templo: Ira de Zeus (raios), Levante dos Mortos (sarcófagos soltam esqueletos),
+    Caçada de Artemis (sátiros e lobos), Portão do Submundo (portal que solta criaturas; destruído,
+    deixa o Tridente de Poseidon) e Sangue dos Deuses (bênçãos de graça no round); power-ups com
+    visual grego (Ares, Hermes, Hefesto, Zeus);
   - personagem do mapa: a arqueóloga (Arqueóloga, Caçadora do Labirinto, Sacerdotisa do Olimpo,
     Andarilha do Submundo), com as conquistas do Templo;
 - **tela de fim**: estatísticas, recorde, nome no ranking e botões de jogar de novo, ranking e

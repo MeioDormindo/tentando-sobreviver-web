@@ -27,6 +27,7 @@ var _prompt_label: Label
 var _banner: Label
 var _toast: Label
 var _perks_label: Label
+var _blessing_label: Label
 var _armor_bar: ProgressBar
 var _timers_label: Label
 var _event_label: Label
@@ -99,6 +100,10 @@ func _ready() -> void:
 	Events.max_ammo.connect(func(_at: Vector3) -> void: _show_toast("MAX AMMO"))
 	Events.power_changed.connect(func(on: bool) -> void: if on: _show_banner("ENERGIA LIGADA", GOLD))
 	Events.perks_changed.connect(func(names: Array[String]) -> void: _perks_label.text = "  ·  ".join(names).to_upper())
+	Events.blessing_changed.connect(func(_god: StringName, text: String, color: Color) -> void:
+		_blessing_label.visible = text != ""
+		_blessing_label.text = "BÊNÇÃO DE " + text
+		_blessing_label.add_theme_color_override(&"font_color", color))
 	Events.world_event_started.connect(func(_id: StringName, event_name: String, hint: String, color: Color) -> void:
 		_show_banner(event_name, color)
 		_show_toast(hint))
@@ -185,6 +190,8 @@ func _build() -> void:
 
 	var health_box := _corner_panel(root, Control.PRESET_BOTTOM_LEFT)
 	_perks_label = _text(health_box, "", 26, GOLD)
+	_blessing_label = _text(health_box, "", 26, GOLD)
+	_blessing_label.visible = false
 	_health_label = _text(health_box, "VIDA", 26, TEXT)
 	var health: Array = PixelSkin.bar(RED, 260.0)
 	health_box.add_child(health[0])

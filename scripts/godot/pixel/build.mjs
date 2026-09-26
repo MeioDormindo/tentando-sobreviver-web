@@ -238,3 +238,10 @@ import('./fx.mjs').then(({ buildFx }) => {
   }
   console.log('  efeitos:', Object.keys(buildFx()).join(', '));
 });
+
+// Power-ups com visual grego no Templo dos Mortos (moedas com o símbolo do deus).
+if (ONLY.length === 0 || ONLY.includes('powerups')) import('./powerup_icons.mjs').then(({ build: buildIcons }) => {
+  const dir = join(OUT, 'powerups');
+  mkdirSync(dir, { recursive: true });
+  buildIcons(dir, (name, px) => writeFileSync(join(dir, `${name}.png`), encodePng(px.width, px.height, px.data)));
+});

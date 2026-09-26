@@ -46,6 +46,8 @@ func run(tree: SceneTree) -> int:
 	await _bosses()
 	await _quest_flow()
 	await _statues()
+	await _blessings()
+	await _temple_events()
 
 	Events.quest_state.disconnect(_on_state)
 	_main.queue_free()
@@ -447,3 +449,124 @@ func _statues() -> void:
 		if node is PrizePedestal:
 			pedestal = node
 	check(pedestal != null and _hold(pedestal, PrizePedestal.HOLD_TIME) and _player.inventory.find(&"artemis_bow") != null, "Arco de Artemis no pedestal do Santuário")
+
+
+# ── Bênçãos dos Deuses ──
+
+func _hit_info(amount: float) -> DamageInfo:
+	return DamageInfo.new(amount, DamageInfo.Kind.WEAPON, _player, false, _player.global_position)
+
+
+func _blessings() -> void:
+	var altars := _tree.get_nodes_in_group(&"blessing_altars")
+	var gods := {}
+	for altar: BlessingAltar in altars:
+		gods[altar.god] = true
+	check(altars.size() == 3 and gods.size() == 3, "3 altares de bênção, cada um com um deus (%s)" % ", ".join(gods.keys()))
+	var blessings := _player.get_node("Blessings") as BlessingSystem
+	var points := _main.get_node("PointsManager") as PointsManager
+	points.add(3000, false)
+	var altar := altars[0] as BlessingAltar
+	var before: int = points.points
+	check(altar.interact(_player) and blessings.active == altar.god and points.points == before - BlessingAltar.PRICE, "altar dá a bênção de %s por %d pontos" % [altar.god, BlessingAltar.PRICE])
+	check(not altar.interact(_player), "a mesma bênção não se compra de novo")
+	# Atena: mira precisa e crítico.
+	blessings.grant(&"athena")
+	check(is_equal_approx(_player.weapon.spread_multiplier, BlessingSystem.ATHENA_SPREAD) and is_equal_approx(_player.weapon.crit_chance, BlessingSystem.ATHENA_CRIT), "Atena: menos dispersão e chance de crítico")
+	# Hermes: mais rápido em tudo.
+	blessings.grant(&"hermes")
+	check(is_equal_approx(_player.blessing_speed, BlessingSystem.HERMES_BONUS) and _player.weapon.reload_multiplier < 1.0 and is_equal_approx(_player.weapon.spread_multiplier, 1.0), "Hermes: anda e recarrega mais rápido (Atena saiu)")
+	# Ares: abates seguidos somam dano e zeram sem abater.
+	blessings.grant(&"ares")
+	var dummy := _spawn(&"walker", Vector3(0, 0, -5), 0.0)
+	for i in 3:
+		Events.zombie_killed.emit(dummy, _hit_info(10))
+	check(is_equal_approx(_player.blessing_damage, 1.0 + 3 * BlessingSystem.ARES_STEP) and _player.weapon.damage_multiplier > 1.2, "Ares: 3 abates seguidos = +24% de dano")
+	await _tree.create_timer(BlessingSystem.ARES_WINDOW + 0.3).timeout
+	check(is_equal_approx(_player.blessing_damage, 1.0), "Ares: sem abater, o bônus zera")
+	# Poseidon: o tiro empurra.
+	blessings.grant(&"poseidon")
+	Events.zombie_hit.emit(dummy, _hit_info(10))
+	check(dummy._knockback.length() > 1.0, "Poseidon: os tiros empurram os zumbis")
+	# Zeus: raios saltam para os vizinhos.
+	blessings.grant(&"zeus")
+	var near := [_spawn(&"walker", Vector3(1.5, 0, -5), 0.0), _spawn(&"walker", Vector3(-1.5, 0, -5), 0.0)]
+	near[0].health.reset(99999.0)
+	near[1].health.reset(99999.0)
+	await _frames(2)
+	for i in 80:
+		Events.zombie_hit.emit(dummy, _hit_info(40))
+	check(near.any(func(z: ZombieBase) -> bool: return z.health.current < z.health.max_health), "Zeus: raios saltam entre os zumbis")
+	# Hades: abatidos voltam como aliados.
+	blessings.grant(&"hades")
+	for i in 60:
+		Events.zombie_killed.emit(dummy, _hit_info(10))
+	check(not _tree.get_nodes_in_group(&"ally_spirits").is_empty(), "Hades: espíritos aliados surgem (%d)" % _tree.get_nodes_in_group(&"ally_spirits").size())
+	blessings.clear()
+	check(blessings.active == &"" and is_equal_approx(_player.blessing_speed, 1.0), "sem bênção, tudo normal")
+	for z in near:
+		z.queue_free()
+	dummy.queue_free()
+	for spirit in _tree.get_nodes_in_group(&"ally_spirits"):
+		spirit.queue_free()
+	await _frames(2)
+
+
+# ── Eventos do Templo ──
+
+func _temple_events() -> void:
+	var events := _main.get_node("WorldEventSystem") as WorldEventSystem
+	for id: StringName in [&"zeus_wrath", &"rise_of_dead", &"artemis_hunt", &"underworld_portal", &"blood_of_gods"]:
+		check(events.events.has(id) and not events.data.info(id).is_empty(), "evento %s registrado com dados" % id)
+	# Ira de Zeus: raios ferem.
+	var before := _player.health.current
+	check(events.trigger(&"zeus_wrath"), "Ira de Zeus começa")
+	for i in 80:
+		await _tree.create_timer(0.1).timeout
+		if _player.health.current < before:
+			break
+	check(_player.health.current < before, "raio de Zeus fere quem está no círculo")
+	events.stop()
+	# Levante dos Mortos: esqueletos saem dos sarcófagos.
+	_world.open_area(&"necropolis")
+	var skeletons := func() -> int: return _tree.get_nodes_in_group(&"zombies").filter(func(z: Node) -> bool: return z is ZombieBase and String((z as ZombieBase).data.id).begins_with("skeleton")).size()
+	var count: int = skeletons.call()
+	check(events.trigger(&"rise_of_dead"), "Levante dos Mortos começa (sarcófagos na Necrópole)")
+	await _tree.create_timer(3.5).timeout
+	check(skeletons.call() > count, "esqueletos saem dos sarcófagos (%d)" % (skeletons.call() - count))
+	events.stop()
+	# Caçada de Artemis: sátiros e lobos.
+	var hunters := func() -> int: return _tree.get_nodes_in_group(&"zombies").filter(func(z: Node) -> bool: return z is ZombieBase and (z as ZombieBase).data.id in [&"satyr", &"hellwolf"]).size()
+	count = hunters.call()
+	check(events.trigger(&"artemis_hunt"), "Caçada de Artemis começa")
+	await _tree.create_timer(3.0).timeout
+	check(hunters.call() > count, "sátiros e lobos surgem perto do jogador")
+	events.stop()
+	# Portão do Submundo: solta criaturas; destruído, deixa o Tridente.
+	check(events.trigger(&"underworld_portal"), "Portão do Submundo se abre")
+	var portal := events.running as UnderworldPortalEvent
+	check(portal != null and is_instance_valid(portal.portal), "portal no chão")
+	await _tree.create_timer(2.0).timeout
+	portal.health.apply_damage(DamageInfo.new(999999.0, DamageInfo.Kind.WEAPON, _player))
+	await _frames(3)
+	var pedestal: PrizePedestal = null
+	for node in _tree.root.find_children("*", "", true, false):
+		if node is PrizePedestal and (node as PrizePedestal).weapon_path.ends_with("poseidon_trident.tres"):
+			pedestal = node
+	check(portal.destroyed and pedestal != null, "portal destruído deixa o Tridente de Poseidon")
+	if pedestal:
+		check(_hold(pedestal, PrizePedestal.HOLD_TIME) and _player.inventory.find(&"poseidon_trident") != null, "pegou o Tridente de Poseidon")
+	events.stop()
+	# Sangue dos Deuses: bênção de graça.
+	check(events.trigger(&"blood_of_gods"), "Sangue dos Deuses começa")
+	var altar := _tree.get_nodes_in_group(&"blessing_altars")[1] as BlessingAltar
+	var points := _main.get_node("PointsManager") as PointsManager
+	var total: int = points.points
+	check(altar.is_free() and altar.interact(_player) and points.points == total, "no Sangue dos Deuses a bênção sai de graça")
+	events.stop()
+	check(not altar.is_free(), "acabou o evento, volta a custar")
+	# Power-ups com visual grego.
+	check(ResourceLoader.exists("res://assets/sprites/powerups/insta_kill_temple.png"), "Insta-kill com o símbolo de Ares no Templo")
+	for node in _tree.get_nodes_in_group(&"zombies"):
+		node.queue_free()
+	await _frames(2)

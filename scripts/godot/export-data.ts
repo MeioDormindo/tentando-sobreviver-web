@@ -33,7 +33,7 @@ import { secretsConfig } from '../../src/config/secrets.config';
 import { serumQuestConfig } from '../../src/config/quests.config';
 import {
   TEMPLE_MAP, TEMPLE_WEAPONS, TEMPLE_ZOMBIES, TEMPLE_COMPOSITION, TEMPLE_TYPE_CAPS, TEMPLE_BOSSES, TEMPLE_BOSS_ROTATION,
-  TEMPLE_SKINS, TEMPLE_ACHIEVEMENTS, type GdValue,
+  TEMPLE_SKINS, TEMPLE_ACHIEVEMENTS, TEMPLE_EVENTS, type GdValue,
 } from './temple-data';
 
 const OUT = 'godot/data';
@@ -553,6 +553,11 @@ function exportWorldEvents(): void {
   const cfg = Object.entries(configs)
     .filter(([k]) => configIds[k])
     .map(([k, v]) => `&"${configIds[k]}": ${eventValue(k, v)}`);
+  // Godot: os eventos do Templo dos Mortos.
+  for (const [id, e] of Object.entries(TEMPLE_EVENTS)) {
+    defs.push(`&"${id}": { "name": ${JSON.stringify(e.name)}, "hint": ${JSON.stringify(e.hint)}, "color": ${color(e.color).raw}, "weight": ${e.weight}, "min_round": ${e.min_round}, "cooldown_rounds": ${e.cooldown_rounds} }`);
+    cfg.push(`&"${id}": ${gdValue(e.config)}`);
+  }
   write('configs/world_events.tres', tres('WorldEventData', 'res://scripts/events/world_event_data.gd', {
     events: raw(`{\n${defs.join(',\n')}\n}`),
     schedule: raw(eventValue('schedule', eventScheduleConfig)),

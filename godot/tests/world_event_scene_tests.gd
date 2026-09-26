@@ -37,7 +37,8 @@ func run(tree: SceneTree) -> int:
 	_player.health.reset(5000.0)
 	_rounds.stop()
 
-	check(_system.events.size() == 10, "10 eventos do jogo web registrados")
+	check(_system.events.size() == 15, "10 eventos do jogo web + 5 do Templo registrados")
+	check([&"zeus_wrath", &"rise_of_dead", &"artemis_hunt", &"underworld_portal", &"blood_of_gods"].all(func(id: StringName) -> bool: return not _system.events[id].can_start()), "eventos do Templo não acontecem fora dele")
 	await _horde()
 	await _blackout_and_panel()
 	await _alarm_and_panel()

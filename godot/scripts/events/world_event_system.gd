@@ -33,8 +33,11 @@ func _ready() -> void:
 	add_to_group(&"world_events")
 	if data == null:
 		data = WorldEventData.shared()
-	for script: GDScript in [BlackoutEvent, AlarmEvent, TrainEvent, HordeEvent, SupplyDropEvent, GasLeakEvent,
-			GoldenZombieEvent, BloodMoonEvent, CollapseEvent, FogEvent]:
+	var scripts: Array = [BlackoutEvent, AlarmEvent, TrainEvent, HordeEvent, SupplyDropEvent, GasLeakEvent,
+			GoldenZombieEvent, BloodMoonEvent, CollapseEvent, FogEvent]
+	# Os do Templo dos Mortos (só começam no mapa "temple").
+	scripts.append_array(TempleEvents.SCRIPTS)
+	for script: GDScript in scripts:
 		var event: WorldEvent = script.new()
 		event.system = self
 		event.config = data.config(event.id)

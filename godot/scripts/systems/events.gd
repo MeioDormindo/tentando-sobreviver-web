@@ -82,6 +82,8 @@ signal reward_multiplier_changed(multiplier: float)
 signal train_run_over(count: int)
 ## Ursinho escondido achado (found de total).
 signal teddy_found(found: int, total: int)
+## Bênção dos Deuses recebida (id vazio = perdeu), com o nome para a HUD e a cor do deus.
+signal blessing_changed(god: StringName, text: String, color: Color)
 ## Estátua de deus acesa no Templo (segredo das 12).
 signal statue_lit(found: int, total: int)
 ## Tremor de tela (a câmera obedece à configuração).

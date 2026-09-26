@@ -27,6 +27,12 @@ var _invulnerable_until := 0.0
 var armor: float = 0.0
 ## Speed Boost (power-up) e Fúria (Golden Drop: dano das armas multiplicado).
 var speed_buff: float = 1.0
+## Bênção dos Deuses ativa (BlessingSystem): dano, velocidade, recarga, dispersão e crítico.
+var blessing_damage := 1.0
+var blessing_speed := 1.0
+var blessing_reload := 1.0
+var blessing_spread := 1.0
+var blessing_crit := 0.0
 var fury_multiplier: float = 1.0:
 	set(value):
 		fury_multiplier = value
@@ -96,6 +102,9 @@ func _ready() -> void:
 		_play_action(&"Knife", 0.36)
 		Events.knife_swung.emit())
 	perks.perks_changed.connect(_on_perks_changed)
+	var blessings := BlessingSystem.new()
+	blessings.player = self
+	add_child(blessings)
 	Events.max_ammo.connect(func(_at: Vector3) -> void:
 		for w in inventory.weapons:
 			w.reset_ammo())
@@ -488,7 +497,7 @@ func _read_input() -> void:
 	if Input.is_action_just_pressed(&"interact"):
 		interact()
 	elif Input.is_action_pressed(&"interact"):
-		hold_interact(get_physics_process_delta_time())
+		hold_interact(get_physics_process_delta_time() * blessing_speed)
 	if Input.is_action_just_pressed(&"melee"):
 		knife()
 	if Input.is_action_just_pressed(&"flashlight"):
@@ -504,7 +513,7 @@ func _read_input() -> void:
 func _move(delta: float) -> void:
 	var direction := Vector3(move_input.x, 0.0, move_input.y)
 	var slow := slow_factor()
-	var speed := data.move_speed * _speed_factor(direction) * perks.speed_multiplier * slow * speed_buff
+	var speed := data.move_speed * _speed_factor(direction) * perks.speed_multiplier * slow * speed_buff * blessing_speed
 	var target := direction * speed
 	if melee.lunge_left > 0.0:
 		target = melee.lunge_velocity
@@ -614,9 +623,16 @@ func _on_perks_changed() -> void:
 
 func _apply_weapon_modifiers() -> void:
 	for w in inventory.weapons:
-		w.damage_multiplier = perks.damage_multiplier * fury_multiplier
+		w.damage_multiplier = perks.damage_multiplier * fury_multiplier * blessing_damage
 		w.headshot_bonus = perks.headshot_bonus
-		w.reload_multiplier = perks.reload_multiplier
+		w.reload_multiplier = perks.reload_multiplier * blessing_reload
+		w.spread_multiplier = blessing_spread
+		w.crit_chance = blessing_crit
+
+
+## Reaplica os multiplicadores nas armas (bênçãos, perks, Fúria).
+func refresh_weapon_modifiers() -> void:
+	_apply_weapon_modifiers()
 
 
 func _on_weapon_changed(current: Weapon, other: Weapon) -> void:

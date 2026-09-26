@@ -14,7 +14,12 @@ events = {
 &"golden_zombie": { "name": "ZUMBI DOURADO", "hint": "Mate-o antes que fuja: dinheiro e Golden Drop!", "color": Color(1, 0.827, 0.353, 1), "weight": 14, "min_round": 3, "cooldown_rounds": 3 },
 &"blood_moon": { "name": "LUA DE SANGUE", "hint": "Zumbis mais rápidos — dinheiro e pontos em dobro", "color": Color(0.816, 0.204, 0.173, 1), "weight": 12, "min_round": 5, "cooldown_rounds": 4 },
 &"collapse": { "name": "DESABAMENTO", "hint": "O teto está caindo: saia dos círculos vermelhos!", "color": Color(0.784, 0.706, 0.541, 1), "weight": 14, "min_round": 4, "cooldown_rounds": 3 },
-&"fog": { "name": "NEBLINA", "hint": "Você mal enxerga — atenção aos gemidos", "color": Color(0.604, 0.643, 0.678, 1), "weight": 14, "min_round": 3, "cooldown_rounds": 3 }
+&"fog": { "name": "NEBLINA", "hint": "Você mal enxerga — atenção aos gemidos", "color": Color(0.604, 0.643, 0.678, 1), "weight": 14, "min_round": 3, "cooldown_rounds": 3 },
+&"zeus_wrath": { "name": "IRA DE ZEUS", "hint": "Raios caem do céu: saia dos círculos azuis!", "color": Color(0.561, 0.816, 1, 1), "weight": 14, "min_round": 4, "cooldown_rounds": 3 },
+&"rise_of_dead": { "name": "LEVANTE DOS MORTOS", "hint": "Os sarcófagos se abrem — esqueletos saindo!", "color": Color(0.812, 0.776, 0.667, 1), "weight": 16, "min_round": 3, "cooldown_rounds": 2 },
+&"artemis_hunt": { "name": "CAÇADA DE ARTEMIS", "hint": "Sátiros e lobos infernais estão caçando você", "color": Color(0.478, 0.824, 0.478, 1), "weight": 14, "min_round": 6, "cooldown_rounds": 3 },
+&"underworld_portal": { "name": "PORTÃO DO SUBMUNDO", "hint": "Um portal solta criaturas — destrua-o a tiros", "color": Color(0.651, 0.416, 1, 1), "weight": 10, "min_round": 8, "cooldown_rounds": 4 },
+&"blood_of_gods": { "name": "SANGUE DOS DEUSES", "hint": "Neste round as bênçãos dos altares são de graça", "color": Color(1, 0.29, 0.227, 1), "weight": 10, "min_round": 5, "cooldown_rounds": 4 }
 }
 schedule = { "first_wave": 2, "chance_per_wave": 0.6, "start_delay_time": [5, 16], "forced": { "first_wave": 15, "every": 10, "id": "horde" } }
 configs = {
@@ -28,7 +33,12 @@ configs = {
 &"horde": { "extra_enemies_ratio": 0.6, "spawn_interval_multiplier": 0.55, "max_alive_bonus": 8 },
 &"station": { "countdown_from_time": 30, "air_blast": { "range": 1.125, "speed": 2.188 } },
 &"supply_drop": { "open_hold_time": 3, "interrupt_time": 0.5, "lifetime_time": 60, "fall_time": 2.2, "money": 750, "distance": [6.875, 20.313] },
-&"train": { "chance_per_wave": 0.65, "second_pass_chance": 0.4, "delay_time": [4, 22], "warning_time": 4.5, "speed": 46.875, "cars": 5, "car_length": 10, "player_damage": 70 }
+&"train": { "chance_per_wave": 0.65, "second_pass_chance": 0.4, "delay_time": [4, 22], "warning_time": 4.5, "speed": 46.875, "cars": 5, "car_length": 10, "player_damage": 70 },
+&"zeus_wrath": { "duration_time": 18, "every_time": 1, "warning_time": 0.9, "radius": 1.6, "player_damage": 22, "zombie_damage": 260, "spread": 8, "aim_at_player_chance": 0.4 },
+&"rise_of_dead": { "tombs": 4, "per_tomb": 2, "every_time": 1.4, "archer_chance": 0.25 },
+&"artemis_hunt": { "duration_time": 25, "satyrs": 8, "wolves": 3, "every_time": 2.2, "min_distance": 7, "max_distance": 14 },
+&"underworld_portal": { "duration_time": 60, "every_time": 4, "health": 600, "health_per_wave": 60, "min_distance": 10, "max_distance": 18 },
+&"blood_of_gods": {  }
 }
 interactions = { "power": { "price": 500, "hold_time": 1.2 }, "alarm": { "price": 750, "hold_time": 1 }, "train": { "price": 1500, "cooldown_time": 90 }, "trap": { "price": 1000, "active_time": 15, "cooldown_time": 45, "tick_time": 0.18 }, "valve": { "hold_time": 1.5 } }
 credits = "TENTANDO SOBREVIVER — feito com Godot + GDScript. Arte e sons 100% gerados por código."

@@ -229,3 +229,19 @@ export const TEMPLE_ACHIEVEMENTS = [
   { id: 'cerberus', name: 'Guardião dos Três', description: 'Derrote o Cérbero', icon: 'res://assets/sprites/icons/weapon_hephaestus_spear.png' },
   { id: 'the_door', name: 'A Porta', description: 'Derrote a Entidade do Submundo', icon: 'res://assets/sprites/icons/weapon_poseidon_trident.png' },
 ];
+
+// ───────────────────────── Eventos ─────────────────────────
+
+/** Eventos do Templo (só começam no mapa "temple"): nome, dica, cor, peso e os números. */
+export const TEMPLE_EVENTS: Record<string, { name: string; hint: string; color: number; weight: number; min_round: number; cooldown_rounds: number; config: Record<string, GdValue> }> = {
+  zeus_wrath: { name: 'IRA DE ZEUS', hint: 'Raios caem do céu: saia dos círculos azuis!', color: 0x8fd0ff, weight: 14, min_round: 4, cooldown_rounds: 3,
+    config: { duration_time: 18, every_time: 1.0, warning_time: 0.9, radius: 1.6, player_damage: 22, zombie_damage: 260, spread: 8, aim_at_player_chance: 0.4 } },
+  rise_of_dead: { name: 'LEVANTE DOS MORTOS', hint: 'Os sarcófagos se abrem — esqueletos saindo!', color: 0xcfc6aa, weight: 16, min_round: 3, cooldown_rounds: 2,
+    config: { tombs: 4, per_tomb: 2, every_time: 1.4, archer_chance: 0.25 } },
+  artemis_hunt: { name: 'CAÇADA DE ARTEMIS', hint: 'Sátiros e lobos infernais estão caçando você', color: 0x7ad27a, weight: 14, min_round: 6, cooldown_rounds: 3,
+    config: { duration_time: 25, satyrs: 8, wolves: 3, every_time: 2.2, min_distance: 7, max_distance: 14 } },
+  underworld_portal: { name: 'PORTÃO DO SUBMUNDO', hint: 'Um portal solta criaturas — destrua-o a tiros', color: 0xa66aff, weight: 10, min_round: 8, cooldown_rounds: 4,
+    config: { duration_time: 60, every_time: 4, health: 600, health_per_wave: 60, min_distance: 10, max_distance: 18 } },
+  blood_of_gods: { name: 'SANGUE DOS DEUSES', hint: 'Neste round as bênçãos dos altares são de graça', color: 0xff4a3a, weight: 10, min_round: 5, cooldown_rounds: 4,
+    config: {} },
+};

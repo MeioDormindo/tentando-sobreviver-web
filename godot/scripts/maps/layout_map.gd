@@ -805,6 +805,10 @@ func _build_temple() -> void:
 		pillar.world = self
 		pillar.position = Vector3(float(spot.tx) + 0.5, 0.0, float(spot.ty) + 0.5)
 		group.add_child(pillar)
+	for spot: Dictionary in data.get("blessings", []):
+		var blessing := BlessingAltar.new()
+		blessing.position = Vector3(float(spot.tx) + 0.5, 0.0, float(spot.ty) + 0.5)
+		group.add_child(blessing)
 	for spot: Dictionary in data.get("altars", []):
 		var altar := SoulAltar.new()
 		altar.god = StringName(spot.id)

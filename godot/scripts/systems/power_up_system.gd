@@ -64,6 +64,10 @@ func spawn_drop(id: StringName, at: Vector3) -> Node3D:
 	# Ícone do jogo web em pixel art (40 px, filtro nearest), voltado para a câmera; sem o
 	# ícone, uma esfera na cor do power-up.
 	var icon_path := "res://assets/web/powerups/%s.png" % id
+	# No Templo, alguns têm visual grego (Ares, Hermes, Hefesto, Zeus).
+	var themed := "res://assets/sprites/powerups/%s_%s.png" % [id, Session.map_id]
+	if ResourceLoader.exists(themed):
+		icon_path = themed
 	var orb: Node3D
 	if ResourceLoader.exists(icon_path):
 		var sprite := Sprite3D.new()

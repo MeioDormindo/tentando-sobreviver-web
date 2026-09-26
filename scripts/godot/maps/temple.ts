@@ -45,6 +45,8 @@ export function temple(): MapBuilder {
   m.extra('pillars', [[52, 52], [68, 52], [60, 45], [54, 47], [66, 47], [54, 58], [66, 58]].map(([tx, ty]) => ({ tx, ty })));
   // Portão do Templo: os 3 altares (um Fragmento de Alma em cada) ficam ao lado dele.
   m.extra('altars', [{ id: 'zeus', tx: 53, ty: 39 }, { id: 'poseidon', tx: 66, ty: 39 }, { id: 'hades', tx: 71, ty: 39 }]);
+  // Altares de bênção (Bênçãos dos Deuses): um deus por altar, sorteado a cada round.
+  m.extra('blessings', [{ tx: 44, ty: 58 }, { tx: 18, ty: 38 }, { tx: 100, ty: 47 }]);
 
   // ── Necrópole: túmulos em fileiras, sarcófagos e o disjuntor do gerador dos arqueólogos.
   m.room('necropolis', rect(4, 34, 30, 34), 'catacomb')

@@ -25,6 +25,9 @@ var element: StringName = &""
 var damage_multiplier: float = 1.0
 var headshot_bonus: float = 0.0
 var reload_multiplier: float = 1.0
+## Bênção de Atena: dispersão reduzida e chance de crítico (dano ×2).
+var spread_multiplier: float = 1.0
+var crit_chance: float = 0.0
 
 var _cooldown := 0.0
 var _reload_left := 0.0
@@ -135,7 +138,7 @@ func shoot(space: PhysicsDirectSpaceState3D, origin: Vector3, target: Vector3, e
 	var aim := (target - origin).normalized()
 	if aim.is_zero_approx():
 		aim = -global_basis.z
-	var deviation := data.spread_degrees + _recoil
+	var deviation := (data.spread_degrees + _recoil) * spread_multiplier
 	if data.special_type != &"":
 		# Granada, plasma, chama, raio, vento (special_fire.gd).
 		var special_dir := aim.rotated(Vector3.UP, deg_to_rad(randf_range(-deviation, deviation))) if data.special_type != &"flame" else aim
@@ -183,7 +186,8 @@ func trace(space: PhysicsDirectSpaceState3D, origin: Vector3, direction: Vector3
 		if hurtbox.health in struck:
 			continue
 		struck.append(hurtbox.health)
-		hits.append(hurtbox.receive_hit(data.damage * damage_multiplier, data.headshot_multiplier + headshot_bonus, DamageInfo.Kind.WEAPON, shooter, hit.position))
+		var crit := 2.0 if crit_chance > 0.0 and randf() < crit_chance else 1.0
+		hits.append(hurtbox.receive_hit(data.damage * damage_multiplier * crit, data.headshot_multiplier + headshot_bonus, DamageInfo.Kind.WEAPON, shooter, hit.position))
 		if struck.size() > data.pierce:
 			end = hit.position
 			break
