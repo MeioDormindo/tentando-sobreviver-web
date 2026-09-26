@@ -14,6 +14,9 @@ const KONAMI := [KEY_UP, KEY_UP, KEY_DOWN, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_LE
 var _konami_step := 0
 var _secret_label: Label
 const GAME := "res://scenes/main.tscn"
+const KEYBOARD_HINT := "WASD mover · mouse mirar · clique atirar · R recarregar · Q trocar arma · V faca · E usar · ESC pausa"
+## Mesma dica do jogo web para o celular.
+const TOUCH_HINT := "Analógico esquerdo: mover · Analógico direito: mirar · ATIRAR: atira para onde você aponta · FACA: golpe corpo a corpo"
 
 
 func _ready() -> void:
@@ -34,7 +37,8 @@ func _ready() -> void:
 	if not OS.has_feature("web"):
 		MenuKit.button(column, "SAIR", func() -> void: get_tree().quit())
 	MenuKit.spacer(column, 30)
-	MenuKit.label(column, "WASD mover · mouse mirar · clique atirar · R recarregar · Q trocar arma · V faca · E usar · ESC pausa",
+	var touch := InputBindings.touch_wanted(String(Save.get_setting("touchMode")), InputBindings.is_touch_device())
+	MenuKit.label(column, TOUCH_HINT if touch else KEYBOARD_HINT,
 		13, MenuKit.DIM, HORIZONTAL_ALIGNMENT_CENTER)
 	_secret_label = MenuKit.label(column, "", 18, Color(0.72, 0.88, 0.29), HORIZONTAL_ALIGNMENT_CENTER)
 	play.grab_focus()

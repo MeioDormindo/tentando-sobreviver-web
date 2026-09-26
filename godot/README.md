@@ -209,19 +209,25 @@ de conceitos: ver `docs/analise-typescript.md`.
 3. F5 abre o menu (`scenes/ui/main_menu.tscn`); a partida é `scenes/main.tscn`, que carrega o
    mapa escolhido.
 
-| Controle | Teclado + mouse | Controle |
-|---|---|---|
-| Mover | WASD / setas | analógico esquerdo |
-| Mirar | mouse (sobre a cabeça do zumbi = headshot) | analógico direito |
-| Atirar | botão esquerdo | RT |
-| Recarregar | R | X |
-| Trocar arma | Q, 1 / 2, roda do mouse | Y |
-| Faca | V / botão direito | RB |
-| Comprar / abrir porta | E | A |
-| Consertar barricada, ligar o disjuntor | segurar E | segurar A |
-| Lanterna (liga/desliga) | F | direcional ↑ |
-| Mapa grande | segurar Tab | Back |
-| Pausar | ESC / P | Start |
+| Controle | Teclado + mouse | Controle | Toque (celular) |
+|---|---|---|---|
+| Mover | WASD / setas | analógico esquerdo | analógico esquerdo (metade esquerda da tela) |
+| Mirar | mouse (sobre a cabeça do zumbi = headshot) | analógico direito | analógico direito (metade direita) |
+| Atirar | botão esquerdo | RT | segurar ATIRAR (mira assistida) |
+| Recarregar | R | X | RECARR. |
+| Trocar arma | Q, 1 / 2, roda do mouse | Y | TROCAR |
+| Faca | V / botão direito | RB | FACA |
+| Comprar / abrir porta | E | A | USAR |
+| Consertar barricada, ligar o disjuntor | segurar E | segurar A | segurar USAR |
+| Lanterna (liga/desliga) | F | direcional ↑ | — |
+| Mapa grande | segurar Tab | Back | segurar MAPA |
+| Pausar | ESC / P | Start | II |
+
+**Controles de toque** (`scripts/ui/touch_controls.gd`, como os do jogo web): aparecem sozinhos no
+celular e no navegador do celular (Configurações → CONTROLES DE TOQUE: AUTO / LIGADO / DESLIGADO).
+Os analógicos são flutuantes (nascem onde o dedo encosta) e os botões só acionam as mesmas ações
+do teclado/controle. No modo toque o mouse emulado sai das ações (tocar no analógico não atira) e
+segurar ATIRAR gira a mira para o zumbi mais perto num cone de 22° até 9 m (mira assistida).
 
 Já mapeado para as próximas fases: pular (Espaço / B).
 
@@ -373,4 +379,5 @@ Decisões:
 
 ## Próximas fases (roadmap da especificação)
 
-- **Fase 8 (plataformas):** exportações e controles de toque.
+- **Fase 8 (plataformas):** controles de toque feitos (8.1); faltam as exportações Web e Android
+  e a troca do site publicado.

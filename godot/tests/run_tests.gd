@@ -25,6 +25,7 @@ const SCENE_SUITES := {
 	"elements": "res://tests/element_scene_tests.gd",
 	"temple": "res://tests/temple_scene_tests.gd",
 	"stuck": "res://tests/stuck_scene_tests.gd",
+	"touch": "res://tests/touch_scene_tests.gd",
 }
 
 

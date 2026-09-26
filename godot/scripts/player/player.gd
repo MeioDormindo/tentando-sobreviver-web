@@ -13,6 +13,13 @@ extends CharacterBase
 @export var muzzle_height: float = 1.2
 ## Distância da mira com o analógico (m).
 @export var stick_aim_distance: float = 8.0
+## Mira assistida dos controles de toque (mesmos valores do touchConfig do jogo web): cone em
+## volta da mira (graus para cada lado), alcance (m) e quanto gira por frame a 60 fps.
+const ASSIST_CONE_DEG := 22.0
+const ASSIST_RANGE := 9.0
+const ASSIST_TURN := 0.35
+## Direção da mira no chão (mantida quando o analógico é solto, no toque).
+var _aim_dir := Vector3.FORWARD
 @export var acceleration: float = 45.0
 
 ## false = controlado por código (bot/teste).
@@ -588,7 +595,20 @@ func screen_to_world(input: Vector2) -> Vector2:
 func _update_aim_from_input() -> void:
 	var stick := screen_to_world(Input.get_vector(&"aim_left", &"aim_right", &"aim_up", &"aim_down"))
 	if stick.length() > 0.3:
-		aim_point = global_position + Vector3(stick.x, 0.0, stick.y).normalized() * stick_aim_distance
+		_aim_dir = Vector3(stick.x, 0.0, stick.y).normalized()
+		aim_point = global_position + _aim_dir * stick_aim_distance
+		aim_point.y = muzzle_height
+		return
+	if InputBindings.touch_active:
+		# Toque: o dedo não é mira (o mouse emulado é ignorado); mantém a última direção e, ao
+		# atirar, gira para o zumbi mais perto do cone.
+		var target := assist_target() if Input.is_action_pressed(&"fire") else null
+		if target:
+			var to_target := target.global_position - global_position
+			to_target.y = 0.0
+			var turn := 1.0 - pow(1.0 - ASSIST_TURN, get_physics_process_delta_time() * 60.0)
+			_aim_dir = _aim_dir.slerp(to_target.normalized(), turn).normalized()
+		aim_point = global_position + _aim_dir * stick_aim_distance
 		aim_point.y = muzzle_height
 		return
 	if camera == null:
@@ -607,6 +627,25 @@ func _update_aim_from_input() -> void:
 	var on_plane: Variant = Plane(Vector3.UP, muzzle_height).intersects_ray(from, direction)
 	if on_plane != null:
 		aim_point = on_plane
+
+
+## Mira assistida: o inimigo vivo mais perto dentro do cone da mira e do alcance (ou null).
+func assist_target() -> Node3D:
+	var best: Node3D = null
+	var best_distance := ASSIST_RANGE
+	var cone := deg_to_rad(ASSIST_CONE_DEG)
+	for node in get_tree().get_nodes_in_group(&"zombies"):
+		var enemy := node as Node3D
+		if enemy == null or (enemy.has_method(&"is_alive") and not enemy.call(&"is_alive")):
+			continue
+		var offset := enemy.global_position - global_position
+		offset.y = 0.0
+		var distance := offset.length()
+		if distance < 0.01 or distance > best_distance or absf(_aim_dir.signed_angle_to(offset, Vector3.UP)) > cone:
+			continue
+		best = enemy
+		best_distance = distance
+	return best
 
 
 ## Perks mudaram: vida máxima e os modificadores de todas as armas.

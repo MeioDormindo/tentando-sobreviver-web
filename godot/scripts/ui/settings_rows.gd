@@ -7,6 +7,9 @@ extends RefCounted
 
 const MINIMAP_SIZES: Array[String] = ["small", "medium", "large"]
 const MINIMAP_LABELS := {"small": "PEQUENO", "medium": "MÉDIO", "large": "GRANDE"}
+## Controles de toque: auto (celular), sempre ou nunca (a mesma chave do jogo web).
+const TOUCH_MODES: Array[String] = ["auto", "on", "off"]
+const TOUCH_LABELS := {"auto": "AUTO", "on": "LIGADO", "off": "DESLIGADO"}
 
 
 ## Adiciona as linhas à coluna; devolve o primeiro controle (para o foco).
@@ -38,6 +41,14 @@ static func add(column: VBoxContainer, rebuild: Callable, button_size: int = 20)
 	_toggle(column, rebuild, button_size, "TREMOR DE TELA", "screenShake")
 	_toggle(column, rebuild, button_size, "SANGUE", "blood")
 	_toggle(column, rebuild, button_size, "TELA CHEIA", "fullscreen")
+	var touch_key := String(Save.get_setting("touchMode"))
+	var touch_button := MenuKit.button(column, "CONTROLES DE TOQUE: %s" % TOUCH_LABELS.get(touch_key, "AUTO"), func() -> void:
+		var index := TOUCH_MODES.find(String(Save.get_setting("touchMode")))
+		Save.set_setting("touchMode", TOUCH_MODES[(index + 1) % TOUCH_MODES.size()])
+		Events.settings_changed.emit()
+		rebuild.call_deferred(), button_size)
+	touch_button.name = "TouchMode"
+	touch_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	if Save.data.secrets.get("konami", false):
 		_toggle(column, rebuild, button_size, "MODO CABEÇÃO", "bigHeads")
 	return volume

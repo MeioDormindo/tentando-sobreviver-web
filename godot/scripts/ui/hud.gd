@@ -49,6 +49,8 @@ var _auto_hide: Array[Label] = []
 var _flashlight_on := true
 var _lighting := "dim"
 var _game_over_text: Label
+## Controles de toque (celular); ficam escondidos no PC.
+var touch: TouchControls
 
 
 func _ready() -> void:
@@ -145,9 +147,14 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	for label in _auto_hide:
 		label.visible = label.text != ""
-	# Ícones das armas empilhados acima do painel de munição (a altura dele muda).
 	var screen := get_viewport().get_visible_rect().size
-	var icons_top := screen.y - 12.0 - (_ammo_box.get_parent() as Control).size.y - 8.0
+	_update_touch()
+	# Painel de munição no canto; com os controles de toque, sobe para cima dos botões.
+	var ammo_panel := _ammo_box.get_parent() as Control
+	var ammo_bottom := touch.buttons_top() - 8.0 if touch.visible else screen.y - 12.0
+	ammo_panel.position.y = ammo_bottom - ammo_panel.size.y
+	# Ícones das armas empilhados acima do painel de munição (a altura dele muda).
+	var icons_top := ammo_panel.position.y - 8.0
 	_weapon_icon.position = Vector2(screen.x - 12.0 - _weapon_icon.size.x, icons_top - _weapon_icon.size.y)
 	_other_weapon_icon.position = Vector2(screen.x - 12.0 - _other_weapon_icon.size.x, _weapon_icon.position.y - 8.0 - _other_weapon_icon.size.y)
 	if _quest_title.text != "":
@@ -156,6 +163,21 @@ func _process(_delta: float) -> void:
 		_quest_text.position = Vector2(MARGIN, top + 28.0)
 	# O marcador de acerto acompanha a mira do mouse.
 	_hit_marker.position = get_viewport().get_mouse_position() - _hit_marker.size * 0.5
+
+
+func _exit_tree() -> void:
+	InputBindings.set_touch_active(false)
+
+
+## Controles de toque: aparecem conforme a configuração (auto = celular) e somem na pausa,
+## na morte e no fim de jogo (soltando tudo).
+func _update_touch() -> void:
+	var wanted := InputBindings.touch_wanted(String(Save.get_setting("touchMode")), InputBindings.is_touch_device())
+	if wanted != InputBindings.touch_active:
+		InputBindings.set_touch_active(wanted)
+		_update_flashlight_label()  # sem o atalho [F] no toque
+	var player := get_tree().get_first_node_in_group(&"player") as Player
+	touch.visible = wanted and not get_tree().paused and player != null and player.is_alive() and not _game_over_panel.visible
 
 
 # ───────────────────────── Montagem ─────────────────────────
@@ -239,6 +261,10 @@ func _build() -> void:
 	minimap = Minimap.new()
 	minimap.name = "Minimap"
 	root.add_child(minimap)
+	touch = TouchControls.new()
+	touch.name = "TouchControls"
+	touch.visible = false
+	root.add_child(touch)
 	# Missão principal: logo abaixo do minimapa.
 	_quest_title = _label(root, "", 13, GOLD, Control.PRESET_TOP_LEFT)
 	_quest_text = _label(root, "", 15, TEXT, Control.PRESET_TOP_LEFT)
@@ -545,7 +571,7 @@ func _show_banner(text: String, color: Color) -> void:
 
 
 func _update_flashlight_label() -> void:
-	_flashlight_label.text = "LANTERNA %s  [F]" % ("LIGADA" if _flashlight_on else "DESLIGADA")
+	_flashlight_label.text = "LANTERNA %s%s" % ["LIGADA" if _flashlight_on else "DESLIGADA", "" if InputBindings.touch_active else "  [F]"]
 	_flashlight_label.modulate = GOLD if _flashlight_on else DIM
 
 

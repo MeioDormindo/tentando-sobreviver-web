@@ -32,8 +32,35 @@ const DEFAULT_BINDINGS: Dictionary = {
 }
 
 
+## Controles de toque ativos na partida: o toque também gera cliques de mouse (emulação), então
+## os atalhos de mouse saem das ações (senão tocar no analógico atiraria) e a mira ignora o mouse.
+var touch_active := false
+
+
 func _ready() -> void:
 	apply_bindings(DEFAULT_BINDINGS)
+
+
+## Liga/desliga o modo toque (a HUD chama quando os controles de toque aparecem ou somem).
+func set_touch_active(active: bool) -> void:
+	if active == touch_active:
+		return
+	touch_active = active
+	var bindings := {}
+	for action: StringName in DEFAULT_BINDINGS:
+		bindings[action] = (DEFAULT_BINDINGS[action] as Array).filter(func(b: Array) -> bool: return not active or b[0] != "mouse")
+	apply_bindings(bindings)
+
+
+## Mostrar os controles de toque? "on"/"off" forçam; "auto" segue o aparelho (celular ou
+## navegador de celular), como o device.ts do jogo web.
+static func touch_wanted(mode: String, touch_device: bool) -> bool:
+	return mode == "on" or (mode != "off" and touch_device)
+
+
+## Aparelho de toque (Android, iOS ou navegador de celular). PC com tela de toque não conta.
+static func is_touch_device() -> bool:
+	return OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios")
 
 
 ## Registra (ou substitui) os atalhos das ações no InputMap.
