@@ -464,6 +464,7 @@ func _badge(size: float, color: Color, icon_path: String) -> Control:
 	var back := TextureRect.new()
 	back.texture = load(BADGE_BACK)
 	back.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	back.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	back.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	back.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	box.add_child(back)
@@ -471,6 +472,7 @@ func _badge(size: float, color: Color, icon_path: String) -> Control:
 		var icon := TextureRect.new()
 		icon.texture = load(icon_path)
 		icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		icon.anchor_left = 0.5; icon.anchor_right = 0.5; icon.anchor_top = 0.5; icon.anchor_bottom = 0.5
@@ -481,6 +483,7 @@ func _badge(size: float, color: Color, icon_path: String) -> Control:
 	ring.name = &"Ring"
 	ring.texture = load(BADGE_RING)
 	ring.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	ring.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	ring.self_modulate = color
 	ring.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	ring.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -488,6 +491,7 @@ func _badge(size: float, color: Color, icon_path: String) -> Control:
 	var frame := TextureRect.new()
 	frame.texture = load(BADGE_FRAME)
 	frame.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	box.add_child(frame)
