@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_script")
-max_planks = 5
-repair_reward = 10
+max_planks = 7
+repair_reward = 25
 repair_time = 1
 repair_interrupt = 0.6

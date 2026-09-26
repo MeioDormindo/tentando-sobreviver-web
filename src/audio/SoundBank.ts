@@ -82,6 +82,7 @@ export const SOUND_DEFS: SoundDef[] = [
   { key: 'plasma_burst', variants: 1, sr: MID, make: plasmaBurst },
   { key: 'wood_break', variants: 3, sr: MID, make: world.woodBreak },
   { key: 'hammer', variants: 3, sr: MID, make: world.hammer },
+  { key: 'barricade_down', variants: 2, sr: MID, make: world.barricadeDown },
   { key: 'door_open', variants: 1, sr: MID, make: world.doorOpen },
   { key: 'purchase', variants: 1, sr: MID, make: ui.purchase },
   { key: 'denied', variants: 1, sr: MID, make: ui.denied },

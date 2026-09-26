@@ -149,6 +149,20 @@ export function hammer(sr: number, r: Rng): Float32Array {
   return fadeEdges(normalize(out, 0.7), sr);
 }
 
+/** Barricada cai de vez (a última tábua): mais estalos que o wood_break de uma tábua só, com
+ * um impacto grave de queda e uma cauda de reverb — pra soar como o fim, não só mais um golpe. */
+export function barricadeDown(sr: number, r: Rng): Float32Array {
+  const out = buffer(sr, 0.9);
+  for (let i = 0; i < 10; i++) {
+    const crack = resonantHit(sr, r, [{ f: range(r, 350, 950), q: 3, gain: 1 }, { f: range(r, 1600, 2800), q: 5, gain: 0.5 }], 0.12, 0.004);
+    mixInto(out, crack, sr, i * range(r, 0.01, 0.04), range(r, 0.35, 1));
+  }
+  mixInto(out, thud(sr, 90, 0.12, 1), sr, 0.3, 1);
+  mixInto(out, thud(sr, 65, 0.2, 0.6), sr, 0.42, 0.7);
+  reverb(out, sr, 0.5, 0.25);
+  return fadeEdges(normalize(out, 0.85), sr);
+}
+
 /** Porta de enrolar subindo: chocalho metálico + motor. */
 export function doorOpen(sr: number, r: Rng): Float32Array {
   const dur = 1.3;

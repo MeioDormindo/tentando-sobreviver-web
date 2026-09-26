@@ -95,6 +95,7 @@
   "plasma_burst": 1,
   "wood_break": 3,
   "hammer": 3,
+  "barricade_down": 2,
   "door_open": 1,
   "purchase": 1,
   "denied": 1,

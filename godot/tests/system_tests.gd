@@ -252,9 +252,9 @@ func _test_barricade(tree: SceneTree) -> void:
 	var data := load("res://data/configs/barricade.tres") as BarricadeData
 	barricade.setup(&"w", Vector2(1, 2), Vector3.RIGHT, data)
 	tree.root.add_child(barricade)
-	check(barricade.planks == 5 and barricade.collision_layer & PhysicsLayers.BARRICADES, "começa com 5 tábuas e bloqueia os zumbis")
+	check(barricade.planks == data.max_planks and barricade.collision_layer & PhysicsLayers.BARRICADES, "começa com %d tábuas e bloqueia os zumbis" % data.max_planks)
 	check(barricade.is_outside(Vector3(-2, 0, 0)) and not barricade.is_outside(Vector3(2, 0, 0)), "sabe o lado de fora")
-	for i in 5:
+	for i in data.max_planks:
 		barricade.take_hit(1)
 	check(not barricade.is_intact() and not (barricade.collision_layer & PhysicsLayers.BARRICADES), "sem tábuas: zumbis passam")
 	check(barricade.collision_layer & PhysicsLayers.PLAYER_ONLY, "o jogador nunca passa pela janela")

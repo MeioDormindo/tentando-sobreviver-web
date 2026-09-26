@@ -76,6 +76,8 @@ func take_hit(amount: int) -> void:
 	planks = maxi(0, planks - amount)
 	if amount > 0:
 		Audio.play_at("wood_break", global_position, "world", 0.9)
+		if planks <= 0:
+			Audio.play_at("barricade_down", global_position, "world", 1.0)
 	_update()
 
 
