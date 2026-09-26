@@ -40,14 +40,16 @@ export function templeFloors(S) {
   let r;
 
   // Mosaico grego: pastilhas bege com a faixa de "chave grega" em volta de cada painel de 2 m.
+  // O painel é uma unidade decorativa de tamanho real fixo (2 m) — ao contrário da sujeira, ela
+  // deve repetir com essa frequência mesmo num piso maior, senão vira um único painel gigante.
   r = rng('mosaic');
   const mo = base(S, S, hex(0x9a8a6a), r, { amount: 0.08 });
   for (let y = 0; y < S; y += 4) for (let x = 0; x < S; x += 4) {
     const k = 1 + (r() - 0.5) * 0.18;
     for (let j = 0; j < 4; j++) for (let i = 0; i < 4; i++) mo.set(x + i, y + j, (i === 3 || j === 3) ? hex(0x6a5c44) : scale(mo.rgb(x + i, y + j), k));
   }
-  const P = S / 2;
-  for (const [ox, oy] of [[0, 0], [P, 0], [0, P], [P, P]]) {
+  const P = 96;  // 2 m, sempre — não escala com S.
+  for (let oy = 0; oy < S; oy += P) for (let ox = 0; ox < S; ox += P) {
     for (let t = 0; t < P; t += 12) {
       // Meandro (chave grega) em terracota, no contorno do painel.
       for (const [x0, y0, horiz] of [[ox + t, oy + 4, true], [ox + t, oy + P - 12, true], [ox + 4, oy + t, false], [ox + P - 12, oy + t, false]]) {
@@ -63,62 +65,62 @@ export function templeFloors(S) {
       if (d < 10 + 7 * Math.abs(Math.cos(a * 4))) mo.set(cx + x, cy + y, d < 6 ? hex(0xc8a24a) : hex(0x2e3e58));
     }
   }
-  grime(mo, r, 10, 0.4, 12);
-  for (let i = 0; i < 18; i++) { const x = r.int(0, S - 1), y = r.int(0, S - 1); rect(mo, x, y, 4, 4, hex(0x4a4234)); }  // pastilhas faltando
-  cracks(mo, r, 3, 24);
+  grime(mo, r, 60, 0.4, 12);
+  for (let i = 0; i < 110; i++) { const x = r.int(0, S - 1), y = r.int(0, S - 1); rect(mo, x, y, 4, 4, hex(0x4a4234)); }  // pastilhas faltando
+  cracks(mo, r, 18, 24);
   out.floor_mosaic = mo;
 
   // Pedra: lajes cinzentas desgastadas, com musgo nas juntas.
   r = rng('stone');
   const st = base(S, S, hex(0x6e6a60), r, { amount: 0.12, cells: 6 });
   slabs(st, r, 24, 20, 44, hex(0x3a372f), 0.1);
-  for (let i = 0; i < 260; i++) { const x = r.int(0, S - 1), y = r.int(0, S - 1); if (st.rgb(x, y)[0] < 70) st.set(x, y, hex(0x3e5a2a)); }
-  grime(st, r, 8, 0.35);
-  cracks(st, r, 3, 20);
+  for (let i = 0; i < 1625; i++) { const x = r.int(0, S - 1), y = r.int(0, S - 1); if (st.rgb(x, y)[0] < 70) st.set(x, y, hex(0x3e5a2a)); }
+  grime(st, r, 50, 0.35);
+  cracks(st, r, 19, 20);
   out.floor_stone = st;
 
   // Mármore: placas claras com veios cinza e juntas finas (templos).
   r = rng('marble');
   const ma = base(S, S, hex(0xb8b4a8), r, { amount: 0.05 });
-  for (let v = 0; v < 7; v++) {  // veios
+  for (let v = 0; v < 18; v++) {  // veios
     let x = r() * S, y = r() * S;
-    for (let i = 0; i < 160; i++) {
+    for (let i = 0; i < 400; i++) {
       x += Math.cos(i * 0.07 + v) * 0.9 + 0.5; y += Math.sin(i * 0.05 + v * 2) * 0.9;
       ma.set(wrap(Math.round(x), S), wrap(Math.round(y), S), hex(0x8a877e));
     }
   }
   for (let y = 0; y < S; y += 48) hline(ma, y, hex(0x8e8a80));
   for (let x = 0; x < S; x += 48) vline(ma, x, hex(0x8e8a80));
-  grime(ma, r, 7, 0.3, 14);
-  stain(ma, r, r() * S, r() * S, 10, hex(0x5a1a14), 0.4);
-  cracks(ma, r, 2, 26);
+  grime(ma, r, 44, 0.3, 14);
+  for (let i = 0; i < 3; i++) stain(ma, r, r() * S, r() * S, 10, hex(0x5a1a14), 0.4);
+  cracks(ma, r, 13, 26);
   out.floor_marble = ma;
 
   // Catacumba: terra batida escura com ossinhos e lajes soltas.
   r = rng('catacomb');
   const ca = base(S, S, hex(0x4a4438), r, { amount: 0.16, cells: 5 });
-  for (let i = 0; i < 9; i++) { const x = r.int(0, S - 30), y = r.int(0, S - 30); rect(ca, x, y, 26, 18, hex(0x5a5446)); bevel(ca, x, y, 26, 18, hex(0x6a6454), hex(0x2e2a22)); }
-  for (let i = 0; i < 40; i++) {  // ossinhos
+  for (let i = 0; i < 56; i++) { const x = r.int(0, S - 30), y = r.int(0, S - 30); rect(ca, x, y, 26, 18, hex(0x5a5446)); bevel(ca, x, y, 26, 18, hex(0x6a6454), hex(0x2e2a22)); }
+  for (let i = 0; i < 200; i++) {  // ossinhos
     const x = r.int(2, S - 8), y = r.int(2, S - 4);
     hline(ca, y, hex(0xcfc6aa), x, x + 5); ca.set(x - 1, y - 1, hex(0xcfc6aa)); ca.set(x + 6, y + 1, hex(0xcfc6aa));
   }
-  grime(ca, r, 14, 0.45, 16);
+  grime(ca, r, 70, 0.45, 16);
   out.floor_catacomb = ca;
 
   // Grama: tufos verde-escuros com terra aparecendo e folhas caídas.
   r = rng('grass');
   const gr = base(S, S, hex(0x344a26), r, { amount: 0.2, cells: 8 });
-  for (let i = 0; i < 2600; i++) { const x = r.int(0, S - 1), y = r.int(0, S - 2); gr.set(x, y, r() < 0.5 ? hex(0x4e6a34) : hex(0x243618)); if (r() < 0.3) gr.set(x, y + 1, hex(0x5e7a3e)); }
-  for (let i = 0; i < 10; i++) stain(gr, r, r() * S, r() * S, 6 + r() * 10, hex(0x4a3a24), 0.55);  // terra
-  for (let i = 0; i < 60; i++) gr.set(r.int(0, S - 1), r.int(0, S - 1), r() < 0.5 ? hex(0x8a5a24) : hex(0x6a3a1e));  // folhas
+  for (let i = 0; i < 16250; i++) { const x = r.int(0, S - 1), y = r.int(0, S - 2); gr.set(x, y, r() < 0.5 ? hex(0x4e6a34) : hex(0x243618)); if (r() < 0.3) gr.set(x, y + 1, hex(0x5e7a3e)); }
+  for (let i = 0; i < 62; i++) stain(gr, r, r() * S, r() * S, 6 + r() * 10, hex(0x4a3a24), 0.55);  // terra
+  for (let i = 0; i < 375; i++) gr.set(r.int(0, S - 1), r.int(0, S - 1), r() < 0.5 ? hex(0x8a5a24) : hex(0x6a3a1e));  // folhas
   out.floor_grass = gr;
 
   // Rocha vulcânica: basalto escuro com rachaduras que brilham em laranja.
   r = rng('volcanic');
   const vo = base(S, S, hex(0x33282a), r, { amount: 0.14, cells: 6 });
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < 18; i++) {
     let x = r() * S, y = r() * S, dx = r() - 0.5, dy = r() - 0.5;
-    for (let k = 0; k < 70; k++) {
+    for (let k = 0; k < 175; k++) {
       dx += (r() - 0.5) * 0.7; dy += (r() - 0.5) * 0.7;
       const l = Math.hypot(dx, dy) || 1; x += dx / l; y += dy / l;
       const xx = wrap(Math.round(x), S), yy = wrap(Math.round(y), S);
@@ -126,7 +128,7 @@ export function templeFloors(S) {
       vo.set(wrap(xx + 1, S), yy, hex(0x1e1416));
     }
   }
-  grime(vo, r, 8, 0.35);
+  grime(vo, r, 50, 0.35);
   out.floor_volcanic = vo;
   return out;
 }
@@ -146,9 +148,9 @@ export function templeWalls(W, H) {
     hline(t, 5, c, x, x + 9); vline(t, x + 9, c, 5, 12); hline(t, 12, c, x + 3, x + 9); vline(t, x + 3, c, 8, 12);
   }
   rect(t, 0, H - 10, W, 10, hex(0x3e3a32)); hline(t, H - 10, hex(0x5e584c));
-  for (let i = 0; i < 5; i++) stain(t, r, r() * W, 30 + r() * 100, 5 + r() * 10, GRIME, 0.4);
-  for (let i = 0; i < 90; i++) { const x = r.int(0, W - 1), y = r.int(H - 40, H - 11); if (dither(x, y, 0.4)) t.set(x, y, hex(0x3e5a2a)); }  // musgo embaixo
-  crack(t, r, r() * W, 30, 26, hex(0x2a2620));
+  for (let i = 0; i < 15; i++) stain(t, r, r() * W, 30 + r() * 100, 5 + r() * 10, GRIME, 0.4);
+  for (let i = 0; i < 270; i++) { const x = r.int(0, W - 1), y = r.int(H - 40, H - 11); if (dither(x, y, 0.4)) t.set(x, y, hex(0x3e5a2a)); }  // musgo embaixo
+  for (let i = 0; i < 3; i++) crack(t, r, r() * W, 30, 26, hex(0x2a2620));
   out.wall_temple = t;
 
   // Lava: lateral (a margem baixa) e topo (rio brilhante com crosta).

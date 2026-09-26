@@ -47,11 +47,14 @@ export function hex(value) {
 /** Tela com uma cor base e variação de ruído em degraus (pixel art). */
 export function base(w, h, color, r, { cells = 8, amount = 0.12, steps = 4 } = {}) {
   const px = new Pixels(w, h);
+  // Três escalas: manchas grandes e suaves (desgaste irregular pelo espaço), o ruído médio de
+  // sempre e o grão fino — sem a macro, texturas grandes liam como "papel de parede" repetindo.
+  const macro = noise2(r, w, h, Math.max(2, Math.round(cells / 3)));
   const n = noise2(r, w, h, cells);
   const fine = noise2(r, w, h, Math.max(2, Math.round(w / 3)));
   for (let y = 0; y < h; y++) {
     for (let x = 0; x < w; x++) {
-      const v = (n(x, y) * 0.7 + fine(x, y) * 0.3 - 0.5) * 2 * amount;
+      const v = (macro(x, y) * 0.4 + n(x, y) * 0.4 + fine(x, y) * 0.2 - 0.5) * 2 * amount;
       const q = Math.round(v * steps) / steps;
       px.set(x, y, scale(color, 1 + q));
     }
