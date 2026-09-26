@@ -113,17 +113,23 @@ func _minimap() -> void:
 	Events.settings_changed.emit()
 
 
-## Cada perk comprado vira um ícone (assets/web/machines/perk_<id>.png), nunca texto.
+## Cada perk comprado vira um selo hexagonal (assets/web/machines/perk_<id>.png + badge.mjs),
+## tingido na cor do próprio perk, nunca texto.
 func _perk_icons() -> void:
 	var hud := _main.get_node("HUD") as Hud
 	var row: HBoxContainer = hud.get(&"_perks_row")
 	check(row.get_child_count() == 0, "sem perk: nenhum ícone")
 	_player.perks.grant(load("res://data/perks/deadeye.tres") as PerkData)
-	_player.perks.grant(load("res://data/perks/quick_revive.tres") as PerkData)
+	var revive := load("res://data/perks/quick_revive.tres") as PerkData
+	_player.perks.grant(revive)
 	await _tree.process_frame
-	check(row.get_child_count() == 2, "2 perks comprados: 2 ícones (%d)" % row.get_child_count())
-	var icons_ok := row.get_children().all(func(c: TextureRect) -> bool: return c.texture != null)
-	check(icons_ok, "cada ícone carregou a textura do perk")
+	check(row.get_child_count() == 2, "2 perks comprados: 2 selos (%d)" % row.get_child_count())
+	var icons_ok := row.get_children().all(func(badge: Control) -> bool:
+		return badge.find_children("*", "TextureRect", true, false).all(func(t: TextureRect) -> bool: return t.texture != null))
+	check(icons_ok, "cada selo carregou moldura, anel e ícone do perk")
+	var revive_badge := row.get_children()[-1] as Control
+	var ring := revive_badge.find_child("Ring", true, false) as TextureRect
+	check(ring != null and ring.self_modulate.is_equal_approx(revive.color), "o anel do selo usa a cor do próprio perk")
 
 
 func _pause_menu() -> void:

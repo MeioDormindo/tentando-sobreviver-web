@@ -16,7 +16,7 @@ var _secret_label: Label
 const GAME := "res://scenes/main.tscn"
 const KEYBOARD_HINT := "WASD mover · mouse mirar · clique atirar · R recarregar · Q trocar arma · V faca · E usar · ESC pausa"
 ## Mesma dica do jogo web para o celular.
-const TOUCH_HINT := "Analógico esquerdo: mover · Analógico direito: mirar · ATIRAR: atira para onde você aponta · FACA: golpe corpo a corpo"
+const TOUCH_HINT := "Analógico: mover · ATIRAR: mira sozinho no zumbi mais perto e atira · FACA: golpe corpo a corpo"
 
 
 func _ready() -> void:

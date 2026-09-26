@@ -600,14 +600,18 @@ func _update_aim_from_input() -> void:
 		aim_point.y = muzzle_height
 		return
 	if InputBindings.touch_active:
-		# Toque: o dedo não é mira (o mouse emulado é ignorado); mantém a última direção e, ao
-		# atirar, gira para o zumbi mais perto do cone.
+		# Toque: só mover e atirar, sem analógico de mira. Ao atirar, gira sozinho para o zumbi
+		# mais perto do cone (mira assistida); sem alvo, vira pra direção em que anda.
+		var turn := 1.0 - pow(1.0 - ASSIST_TURN, get_physics_process_delta_time() * 60.0)
 		var target := assist_target() if Input.is_action_pressed(&"fire") else null
 		if target:
 			var to_target := target.global_position - global_position
 			to_target.y = 0.0
-			var turn := 1.0 - pow(1.0 - ASSIST_TURN, get_physics_process_delta_time() * 60.0)
 			_aim_dir = _aim_dir.slerp(to_target.normalized(), turn).normalized()
+		else:
+			var move_dir := screen_to_world(Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down"))
+			if move_dir.length() > 0.1:
+				_aim_dir = _aim_dir.slerp(Vector3(move_dir.x, 0.0, move_dir.y).normalized(), turn).normalized()
 		aim_point = global_position + _aim_dir * stick_aim_distance
 		aim_point.y = muzzle_height
 		return

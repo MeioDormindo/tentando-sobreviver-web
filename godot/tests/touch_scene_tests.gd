@@ -69,25 +69,25 @@ func _visibility() -> void:
 
 
 func _sticks() -> void:
+	# Controles simplificados: um analógico só (mover), tela toda fora dos botões e do topo —
+	# não existe mais analógico de mira (a mira é sempre assistida, ver _assist()).
 	var r := _touch.radius
 	var left := Vector2(_touch.size.x * 0.2, _touch.size.y * 0.7)
 	_press(0, left)
 	_drag(0, left + Vector2(r * 2.0, 0.0))
 	await _frames(1)
 	var movement := Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down")
-	check(movement.x > 0.95 and absf(movement.y) < 0.05, "analógico esquerdo para a direita: move para a direita (%.2f)" % movement.x)
-	var right := Vector2(_touch.size.x * 0.6, _touch.size.y * 0.6)
+	check(movement.x > 0.95 and absf(movement.y) < 0.05, "analógico para a direita: move para a direita (%.2f)" % movement.x)
+	check(Input.get_vector(&"aim_left", &"aim_right", &"aim_up", &"aim_down") == Vector2.ZERO, "não existe mais analógico de mira")
+	var right := Vector2(_touch.size.x * 0.8, _touch.size.y * 0.6)
 	_press(1, right)
 	_drag(1, right + Vector2(0.0, -r * 0.5))
 	await _frames(1)
-	var aim := Input.get_vector(&"aim_left", &"aim_right", &"aim_up", &"aim_down")
-	check(aim.y < -0.95, "analógico direito para cima: mira para cima com força total (%.2f)" % aim.y)
-	check(Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down").x > 0.95, "dois dedos ao mesmo tempo: mover continua")
+	check(Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down").x > 0.95, "segundo dedo (já tem analógico ativo): mover continua com o primeiro")
 	_release(0)
 	_release(1)
 	await _frames(1)
-	check(Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down") == Vector2.ZERO
-		and Input.get_vector(&"aim_left", &"aim_right", &"aim_up", &"aim_down") == Vector2.ZERO, "soltar os dedos zera mover e mirar")
+	check(Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down") == Vector2.ZERO, "soltar o dedo zera o movimento")
 	_press(2, Vector2(_touch.size.x * 0.2, _touch.size.y * 0.05))
 	_drag(2, Vector2(_touch.size.x * 0.2 + r, _touch.size.y * 0.05))
 	await _frames(1)
@@ -148,6 +148,25 @@ func _assist() -> void:
 	check(_player.assist_target() == null, "zumbi no cone mas longe demais é ignorado")
 	outside.queue_free()
 	far.queue_free()
+	await _frames(1)
+	await _face_movement_without_target()
+
+
+## Sem analógico de mira: parado (sem zumbi no cone, sem ATIRAR), o personagem vira sozinho
+## para a direção em que o analógico de mover está sendo empurrado.
+func _face_movement_without_target() -> void:
+	_player.set(&"_aim_dir", Vector3.BACK)
+	_player.controlled = true
+	var finger := 9
+	var at := Vector2(_touch.size.x * 0.2, _touch.size.y * 0.7)
+	_press(finger, at)
+	_drag(finger, at + Vector2(_touch.radius * 2.0, 0.0))
+	await _frames(12)
+	var dir: Vector3 = _player.get(&"_aim_dir")
+	check(dir.x > 0.5, "sem zumbi perto: vira pra direção em que anda (%.2f, %.2f)" % [dir.x, dir.z])
+	_release(finger)
+	_player.controlled = false
+	await _frames(1)
 
 
 func _zombie(data: ZombieData, arena: Node3D, offset: Vector3) -> ZombieBase:

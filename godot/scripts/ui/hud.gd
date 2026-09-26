@@ -10,6 +10,14 @@ const TEXT := Color(0.91, 0.89, 0.78)
 const DIM := Color(0.6, 0.6, 0.56)
 const MARGIN := 24
 
+## Selo hexagonal dos ícones de power-up/perk (scripts/godot/pixel/badge.mjs): moldura metálica
+## neutra + anel tingido na cor do power-up/perk + placa escura onde o ícone entra por cima.
+const BADGE_FRAME := "res://assets/sprites/ui/badge_frame.png"
+const BADGE_RING := "res://assets/sprites/ui/badge_ring.png"
+const BADGE_BACK := "res://assets/sprites/ui/badge_back.png"
+const POWER_BADGE_SIZE := 40.0
+const PERK_BADGE_SIZE := 32.0
+
 var _round_label: Label
 var _remaining_label: Label
 var _points_label: Label
@@ -447,32 +455,53 @@ func _on_power_up_timers(active: Dictionary, definitions: Dictionary) -> void:
 		icon.modulate.a = (0.45 if seconds % 2 == 0 else 1.0) if seconds <= 5 else 1.0
 
 
-## Monta um ícone (ou um círculo na cor do power-up, sem ícone) com o número por cima.
+## Selo hexagonal (badge.mjs): moldura + anel tingido em `color` + o ícone (se existir) centrado
+## na placa escura. Sem ícone, a placa fica só com o anel colorido (ainda dá pra identificar).
+func _badge(size: float, color: Color, icon_path: String) -> Control:
+	var box := Control.new()
+	box.custom_minimum_size = Vector2(size, size)
+	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var back := TextureRect.new()
+	back.texture = load(BADGE_BACK)
+	back.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	back.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	back.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	box.add_child(back)
+	if icon_path != "" and ResourceLoader.exists(icon_path):
+		var icon := TextureRect.new()
+		icon.texture = load(icon_path)
+		icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		icon.anchor_left = 0.5; icon.anchor_right = 0.5; icon.anchor_top = 0.5; icon.anchor_bottom = 0.5
+		var half := size * 0.28
+		icon.offset_left = -half; icon.offset_right = half; icon.offset_top = -half; icon.offset_bottom = half
+		box.add_child(icon)
+	var ring := TextureRect.new()
+	ring.name = &"Ring"
+	ring.texture = load(BADGE_RING)
+	ring.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	ring.self_modulate = color
+	ring.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	ring.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	box.add_child(ring)
+	var frame := TextureRect.new()
+	frame.texture = load(BADGE_FRAME)
+	frame.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	box.add_child(frame)
+	return box
+
+
+## Monta o selo do power-up com o número por cima.
 func _power_icon(id: StringName, definitions: Dictionary) -> Dictionary:
 	var info: Dictionary = definitions.get(id, {"name": "Fúria", "color": GOLD})
 	var box := VBoxContainer.new()
 	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	box.alignment = BoxContainer.ALIGNMENT_CENTER
 	box.add_theme_constant_override(&"separation", 0)
-	var icon := Control.new()
-	icon.custom_minimum_size = Vector2(36, 36)
-	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	box.add_child(icon)
-	var path := PowerUpSystem.icon_path(id)
-	if ResourceLoader.exists(path):
-		var rect := TextureRect.new()
-		rect.texture = load(path)
-		rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-		rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		icon.add_child(rect)
-	else:
-		var panel := ColorRect.new()
-		panel.color = Color(info.get("color", GOLD), 0.85)
-		panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		icon.add_child(panel)
+	box.add_child(_badge(POWER_BADGE_SIZE, info.get("color", GOLD), PowerUpSystem.icon_path(id)))
 	# A fonte pixel só fica nítida em múltiplos de 13px (mínimo 26): não cabe como selo
 	# minúsculo no canto do ícone, então o número fica embaixo, colado nele.
 	var label := Label.new()
@@ -485,21 +514,17 @@ func _power_icon(id: StringName, definitions: Dictionary) -> Dictionary:
 	return {"icon": box, "label": label}
 
 
-## Um ícone por perk comprado (Quick Revive, Deadeye...), sem texto — eles não expiram, então
-## sem contagem, só o ícone (`assets/web/machines/perk_<id>.png`, mesmo do jogo web).
+## Um selo por perk comprado (Quick Revive, Deadeye...), na cor do próprio perk (PerkData.color)
+## — eles não expiram, então sem contagem, só o ícone (`assets/web/machines/perk_<id>.png`).
 func _on_perks_changed(ids: Array[StringName]) -> void:
 	for child in _perks_row.get_children():
 		child.queue_free()
 	for id: StringName in ids:
-		var icon := TextureRect.new()
-		icon.custom_minimum_size = Vector2(28, 28)
-		icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		var path := "res://assets/web/machines/perk_%s.png" % id
-		if ResourceLoader.exists(path):
-			icon.texture = load(path)
-		_perks_row.add_child(icon)
+		var color := GOLD
+		var data_path := "res://data/perks/%s.tres" % id
+		if ResourceLoader.exists(data_path):
+			color = (load(data_path) as PerkData).color
+		_perks_row.add_child(_badge(PERK_BADGE_SIZE, color, "res://assets/web/machines/perk_%s.png" % id))
 
 
 func _on_ammo_changed(weapon_name: String, magazine: int, reserve: int, reloading: bool) -> void:

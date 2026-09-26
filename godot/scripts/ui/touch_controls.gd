@@ -1,9 +1,9 @@
 class_name TouchControls
 extends Control
-## Controles de toque (celular), como no jogo web (src/ui/TouchControls.ts):
-## - analógico esquerdo (metade esquerda da tela) move;
-## - analógico direito (metade direita) mira; o tiro sai para onde o jogador aponta;
-## - ATIRAR (segurar) atira, com mira assistida no zumbi mais perto do cone da mira;
+## Controles de toque (celular), simplificados: só mover e atirar.
+## - analógico único (qualquer toque fora dos botões, tela toda) move;
+## - ATIRAR (segurar) atira com mira assistida — gira sozinho para o zumbi mais perto do cone
+##   (Player._update_aim_from_input); sem zumbi perto, o personagem vira pra onde anda;
 ## - USAR (segurar conserta), RECARR., TROCAR, FACA, MAPA (segurar) e pausa.
 ## Não conhece o jogador: só aciona as mesmas ações do teclado/controle (InputEventAction).
 
@@ -32,7 +32,6 @@ const BUTTONS := [
 ]
 
 var move := Stick.new()
-var aim := Stick.new()
 ## ação → {pos, r, finger}
 var buttons := {}
 var radius := 60.0
@@ -78,7 +77,6 @@ func _layout() -> void:
 		buttons[action].pos = place[action][0]
 		buttons[action].r = place[action][1]
 	_reset(move, _move_home())
-	_reset(aim, _aim_home())
 	queue_redraw()
 
 
@@ -94,10 +92,6 @@ func _move_home() -> Vector2:
 	return Vector2(radius * 1.7, size.y - radius * 1.7)
 
 
-func _aim_home() -> Vector2:
-	return Vector2(size.x * 0.62, size.y - radius * 1.5)
-
-
 func _input(event: InputEvent) -> void:
 	if not is_visible_in_tree():
 		return
@@ -109,10 +103,9 @@ func _input(event: InputEvent) -> void:
 			_on_up(touch.index)
 	elif event is InputEventScreenDrag:
 		var drag := event as InputEventScreenDrag
-		for stick: Stick in [move, aim]:
-			if stick.finger == drag.index:
-				stick.at = drag.position
-				_apply()
+		if move.finger == drag.index:
+			move.at = drag.position
+			_apply()
 
 
 func _on_down(finger: int, at: Vector2) -> void:
@@ -125,12 +118,11 @@ func _on_down(finger: int, at: Vector2) -> void:
 			return
 	if at.y < size.y * TOP_RESERVED:
 		return
-	var stick := move if at.x < size.x * 0.5 else aim
-	if stick.finger != -1:
+	if move.finger != -1:
 		return
-	stick.finger = finger
-	stick.base = at
-	stick.at = at
+	move.finger = finger
+	move.base = at
+	move.at = at
 	_apply()
 
 
@@ -142,8 +134,6 @@ func _on_up(finger: int) -> void:
 			_send(action, 0.0)
 	if move.finger == finger:
 		_reset(move, _move_home())
-	if aim.finger == finger:
-		_reset(aim, _aim_home())
 	_apply()
 
 
@@ -154,7 +144,6 @@ func release_all() -> void:
 			_send(action, 0.0)
 		buttons[action].finger = -1
 	_reset(move, _move_home())
-	_reset(aim, _aim_home())
 	_apply()
 
 
@@ -174,16 +163,12 @@ func vector(stick: Stick) -> Vector2:
 	return v.limit_length(1.0)
 
 
-## Converte os analógicos nas ações de eixo (as mesmas do controle).
+## Converte o analógico na ação de eixo (a mesma do controle). A mira não é mais manual: o
+## jogador gira sozinho (mira assistida) enquanto ATIRAR está segurado — ver Player.
 func _apply() -> void:
 	var m := vector(move)
 	_axis(&"move_left", &"move_right", m.x)
 	_axis(&"move_up", &"move_down", m.y)
-	var a := vector(aim)
-	if a != Vector2.ZERO:
-		a = a.normalized()  # mira: só a direção importa
-	_axis(&"aim_left", &"aim_right", a.x)
-	_axis(&"aim_up", &"aim_down", a.y)
 	queue_redraw()
 
 
@@ -209,15 +194,11 @@ func _send(action: StringName, strength: float) -> void:
 
 func _draw() -> void:
 	var font := get_theme_default_font()
-	for stick: Stick in [move, aim]:
-		var active := stick.finger != -1
-		# O analógico de mira só aparece enquanto está sendo usado.
-		if stick == aim and not active:
-			continue
-		var v := vector(stick)
-		draw_circle(stick.base, radius, Color(0, 0, 0, 0.3 if active else 0.15))
-		draw_arc(stick.base, radius, 0.0, TAU, 48, Color(LIGHT, 0.55 if active else 0.25), 2.0)
-		draw_circle(stick.base + v * radius, radius * 0.42, Color(LIGHT, 0.6 if active else 0.3))
+	var active := move.finger != -1
+	var v := vector(move)
+	draw_circle(move.base, radius, Color(0, 0, 0, 0.3 if active else 0.15))
+	draw_arc(move.base, radius, 0.0, TAU, 48, Color(LIGHT, 0.55 if active else 0.25), 2.0)
+	draw_circle(move.base + v * radius, radius * 0.42, Color(LIGHT, 0.6 if active else 0.3))
 	for def in BUTTONS:
 		var b: Dictionary = buttons[def[0]]
 		var color: Color = def[2]

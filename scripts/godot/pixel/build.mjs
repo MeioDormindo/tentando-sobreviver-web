@@ -245,3 +245,10 @@ if (ONLY.length === 0 || ONLY.includes('powerups')) import('./powerup_icons.mjs'
   mkdirSync(dir, { recursive: true });
   buildIcons(dir, (name, px) => writeFileSync(join(dir, `${name}.png`), encodePng(px.width, px.height, px.data)));
 });
+
+// Selo hexagonal da HUD (power-ups e perks): moldura + anel (tingido no Godot) + placa do ícone.
+if (ONLY.length === 0 || ONLY.includes('badge')) import('./badge.mjs').then(({ build: buildBadge }) => {
+  const dir = join(OUT, 'ui');
+  mkdirSync(dir, { recursive: true });
+  buildBadge((name, px) => writeFileSync(join(dir, `${name}.png`), encodePng(px.width, px.height, px.data)));
+});
