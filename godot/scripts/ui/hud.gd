@@ -44,7 +44,13 @@ var _prompt_bar_frame: Control
 var _prompt_bar: ProgressBar
 const PROMPT_ICON_SIZE := 26.0
 var _banner: Label
+var _toast_row: HBoxContainer
 var _toast: Label
+var _toast_icon: TextureRect
+var _boss_row: HBoxContainer
+var _event_row: HBoxContainer
+var _event_badge: Control
+const SMALL_BADGE_SIZE := 20.0
 ## Ícones dos perks comprados (não expiram: sem contagem, ao contrário dos power-ups).
 var _perks_row: HBoxContainer
 var _armor_bar: ProgressBar
@@ -118,8 +124,10 @@ func _ready() -> void:
 		_show_banner(power_up_name.to_upper(), color)
 		if detail != "":
 			_show_toast(detail))
-	Events.achievement_unlocked.connect(func(_id: String, achievement_name: String, _d: String) -> void:
-		_show_toast("CONQUISTA DESBLOQUEADA: " + achievement_name.to_upper()))
+	Events.achievement_unlocked.connect(func(id: String, achievement_name: String, _d: String) -> void:
+		var catalog := load("res://data/configs/achievements.tres") as AchievementCatalog
+		var info := catalog.find(id) if catalog else {}
+		_show_toast("CONQUISTA DESBLOQUEADA: " + achievement_name.to_upper(), String(info.get("icon", ""))))
 	Events.score_changed.connect(func(total: int, _delta: int) -> void: _score_label.text = "SCORE %d" % total)
 	Events.map_unlocked.connect(func(_id: String, map_name: String) -> void: _show_banner(map_name.to_upper() + " DESBLOQUEADO!", GOLD))
 	Events.boss_incoming.connect(func(boss_name: String) -> void: _show_banner(boss_name.to_upper() + " SE APROXIMA", RED))
@@ -127,6 +135,7 @@ func _ready() -> void:
 	Events.boss_phase.connect(func(_n: String, phase: int) -> void: _show_toast("FASE %d" % phase))
 	Events.boss_defeated.connect(func(_id: StringName, boss_name: String, reward: int, _at: Vector3) -> void:
 		_boss_bar.visible = false
+		_boss_row.visible = false
 		_boss_label.text = ""
 		_show_banner("%s DERROTADO  +%d" % [boss_name.to_upper(), reward], GOLD))
 	Events.hound_round_changed.connect(_on_hound_round)
@@ -148,12 +157,16 @@ func _ready() -> void:
 		_show_banner(event_name, color)
 		_show_toast(hint))
 	Events.world_event_state.connect(func(state: Dictionary) -> void:
+		_event_row.visible = not state.is_empty()
 		if state.is_empty():
 			_event_label.text = ""
 			return
 		var remaining := float(state.remaining)
 		_event_label.text = String(state.name) + ("  %ds" % ceili(remaining) if remaining >= 0.0 else "")
-		_event_label.add_theme_color_override(&"font_color", state.color))
+		_event_label.add_theme_color_override(&"font_color", state.color)
+		var ring := _event_badge.find_child("Ring", true, false) as TextureRect
+		if ring:
+			ring.self_modulate = state.color)
 	Events.quest_state.connect(func(state: Dictionary) -> void:
 		if state.is_empty():
 			_quest_title.text = ""
@@ -314,7 +327,11 @@ func _build() -> void:
 	_bottom_center.add_child(_prompt_bar_frame)
 	_prompt_bar = prompt_bar[1]
 
-	_event_label = _label(root, "", 18, TEXT, Control.PRESET_CENTER_TOP, HORIZONTAL_ALIGNMENT_CENTER, 48)
+	_event_row = _label_row(root, Control.PRESET_CENTER_TOP, 48)
+	_event_row.visible = false
+	_event_badge = _badge(SMALL_BADGE_SIZE, TEXT, "")
+	_event_row.add_child(_event_badge)
+	_event_label = _text(_event_row, "", 18, TEXT, HORIZONTAL_ALIGNMENT_CENTER)
 
 	_ammo_box = _corner_panel(root, Control.PRESET_BOTTOM_RIGHT)
 	_other_weapon_label = _text(_ammo_box, "", 26, DIM, HORIZONTAL_ALIGNMENT_RIGHT)
@@ -330,8 +347,21 @@ func _build() -> void:
 
 	_banner = _label(root, "", 36, RED, Control.PRESET_CENTER_TOP, HORIZONTAL_ALIGNMENT_CENTER, 130)
 	_banner.modulate.a = 0.0
-	_toast = _label(root, "", 20, GOLD, Control.PRESET_CENTER_TOP, HORIZONTAL_ALIGNMENT_CENTER, 220)
-	_boss_label = _label(root, "", 18, RED, Control.PRESET_CENTER_TOP, HORIZONTAL_ALIGNMENT_CENTER, 4)
+	_toast_row = _label_row(root, Control.PRESET_CENTER_TOP, 220)
+	_toast_icon = TextureRect.new()
+	_toast_icon.custom_minimum_size = Vector2(22.0, 22.0)
+	_toast_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_toast_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_toast_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_toast_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_toast_icon.visible = false
+	_toast_row.add_child(_toast_icon)
+	_toast = _text(_toast_row, "", 20, GOLD, HORIZONTAL_ALIGNMENT_CENTER)
+
+	_boss_row = _label_row(root, Control.PRESET_CENTER_TOP, 4)
+	_boss_row.visible = false
+	_boss_row.add_child(_badge(SMALL_BADGE_SIZE, RED, ""))
+	_boss_label = _text(_boss_row, "", 18, RED, HORIZONTAL_ALIGNMENT_CENTER)
 	var boss: Array = PixelSkin.bar(RED, 420.0)
 	var boss_frame := boss[0] as Control
 	root.add_child(boss_frame)
@@ -343,7 +373,7 @@ func _build() -> void:
 	_boss_bar.visibility_changed.connect(func() -> void: boss_frame.visible = _boss_bar.visible)
 	boss_frame.visible = false
 	_boss_bar.visible = false
-	_toast.modulate.a = 0.0
+	_toast_row.modulate.a = 0.0
 
 	_hit_marker = _label(root, "✕", 26, TEXT, Control.PRESET_TOP_LEFT, HORIZONTAL_ALIGNMENT_CENTER)
 	_hit_marker.modulate.a = 0.0
@@ -460,6 +490,20 @@ func _label(parent: Control, text: String, size: int, color: Color, preset: Cont
 	return label
 
 
+## Uma linha (selo + texto) presa a um canto, como _label() — pra grudar um ícone/selo ao lado
+## de um texto que hoje é preso direto num canto (banner de boss/evento, toast).
+func _label_row(parent: Control, preset: Control.LayoutPreset, dy: float = 0.0) -> HBoxContainer:
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_theme_constant_override(&"separation", 6)
+	parent.add_child(row)
+	row.set_anchors_and_offsets_preset(preset, Control.PRESET_MODE_KEEP_SIZE, MARGIN)
+	row.offset_top += dy
+	row.offset_bottom += dy
+	return row
+
+
 func _overlay(parent: Control, title: String, subtitle: String) -> Control:
 	var panel := ColorRect.new()
 	panel.color = Color(0, 0, 0, 0.72)
@@ -506,6 +550,7 @@ func _on_boss_state(boss_name: String, current: float, maximum: float, phase: in
 	_boss_bar.visible = current > 0.0
 	_boss_bar.max_value = maximum
 	_boss_bar.value = current
+	_boss_row.visible = current > 0.0
 	_boss_label.text = "%s  ·  FASE %d" % [boss_name.to_upper(), phase] if current > 0.0 else ""
 
 
@@ -789,13 +834,16 @@ func _on_lighting_changed(lighting: String) -> void:
 		_show_toast("ESTÁ ESCURO — [F] LIGA A LANTERNA")
 
 
-func _show_toast(text: String) -> void:
+func _show_toast(text: String, icon := "") -> void:
 	_toast.text = text
+	_toast_icon.visible = icon != "" and ResourceLoader.exists(icon)
+	if _toast_icon.visible:
+		_toast_icon.texture = load(icon)
 	create_tween().kill()
 	var tween := create_tween()
-	tween.tween_property(_toast, "modulate:a", 1.0, 0.2)
+	tween.tween_property(_toast_row, "modulate:a", 1.0, 0.2)
 	tween.tween_interval(2.4)
-	tween.tween_property(_toast, "modulate:a", 0.0, 0.5)
+	tween.tween_property(_toast_row, "modulate:a", 0.0, 0.5)
 
 
 func _flash_points_denied() -> void:
