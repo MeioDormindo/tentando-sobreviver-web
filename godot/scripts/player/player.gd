@@ -657,10 +657,10 @@ func _on_perks_changed() -> void:
 		health.current = clampf(health.current + maxf(0.0, gained), 0.0, new_max)
 		health.health_changed.emit(health.current, health.max_health)
 	_apply_weapon_modifiers()
-	var names: Array[String] = []
+	var ids: Array[StringName] = []
 	for perk in perks.owned:
-		names.append(perk.display_name)
-	Events.perks_changed.emit(names)
+		ids.append(perk.id)
+	Events.perks_changed.emit(ids)
 
 
 func _apply_weapon_modifiers() -> void:

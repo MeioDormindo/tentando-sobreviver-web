@@ -412,6 +412,11 @@ Decisões:
   (pisca nos últimos 5s) — como no jogo web, bem menos poluído. Ícone de cada power-up:
   `PowerUpSystem.icon_path()` (mesma lógica do power-up no chão, incluindo as variantes gregas
   do Templo; Fúria usa o ícone do Golden Drop).
+- **Perks comprados também viram ícone.** A lista "QUICK REVIVE · DEADEYE" (`_perks_label`)
+  virou uma fileira de ícones sem texto (`assets/web/machines/perk_<id>.png`, mesmo do jogo
+  web) — perks não expiram, então sem contagem, só o ícone. `Events.perks_changed` passa a
+  levar os ids dos perks, não mais os nomes (só a HUD usava o nome; achievements e áudio só
+  contavam o total).
 
 ## Próximas fases (roadmap da especificação)
 

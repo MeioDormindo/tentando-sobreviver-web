@@ -35,7 +35,8 @@ signal toast(text: String)
 ## Energia do mapa ligada/desligada.
 signal power_changed(on: bool)
 ## Perks ativos do jogador (nomes).
-signal perks_changed(names: Array[String])
+## Ids dos perks comprados (não os nomes: a HUD mostra ícone, não texto).
+signal perks_changed(ids: Array[StringName])
 ## Começou/acabou uma rodada dos cães (config da névoa quando começa).
 signal hound_round_changed(active: bool, config: Dictionary)
 ## Munição cheia para todas as armas (último cão, power-up Max Ammo).

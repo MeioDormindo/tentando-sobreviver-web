@@ -128,7 +128,7 @@ func _connect_events() -> void:
 			Audio.play("purchase", "ui", 0.8))
 	Events.purchase_denied.connect(func() -> void: Audio.play("denied", "ui"))
 	Events.power_up_collected.connect(func(_id: StringName, _n: String, _c: Color, _d: String) -> void: Audio.play("powerup", "ui", 0.9))
-	Events.perks_changed.connect(func(_names: Array[String]) -> void: Audio.play("perk", "ui", 0.8, 0.0))
+	Events.perks_changed.connect(func(_ids: Array[StringName]) -> void: Audio.play("perk", "ui", 0.8, 0.0))
 	Events.power_changed.connect(func(on: bool) -> void:
 		if on:
 			Audio.play("evt_power_up", "world", 0.9, 0.0))

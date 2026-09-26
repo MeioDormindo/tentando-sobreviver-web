@@ -32,8 +32,8 @@ func _ready() -> void:
 			unlock("cerberus")
 		elif id == &"entity":
 			unlock("the_door"))
-	Events.perks_changed.connect(func(names: Array[String]) -> void:
-		if names.size() >= 7:
+	Events.perks_changed.connect(func(ids: Array[StringName]) -> void:
+		if ids.size() >= 7:
 			unlock("collector"))
 	Events.ammo_changed.connect(func(weapon_name: String, _m: int, _r: int, _l: bool) -> void:
 		if weapon_name == "Tornado":

@@ -26,7 +26,8 @@ var _other_weapon_icon: TextureRect
 var _prompt_label: Label
 var _banner: Label
 var _toast: Label
-var _perks_label: Label
+## Ícones dos perks comprados (não expiram: sem contagem, ao contrário dos power-ups).
+var _perks_row: HBoxContainer
 var _blessing_label: Label
 var _armor_bar: ProgressBar
 ## Ícones dos power-ups com tempo ativos (id → ícone + contagem), no lugar do texto antigo:
@@ -99,7 +100,7 @@ func _ready() -> void:
 	Events.hound_round_changed.connect(_on_hound_round)
 	Events.max_ammo.connect(func(_at: Vector3) -> void: _show_toast("MAX AMMO"))
 	Events.power_changed.connect(func(on: bool) -> void: if on: _show_banner("ENERGIA LIGADA", GOLD))
-	Events.perks_changed.connect(func(names: Array[String]) -> void: _perks_label.text = "  ·  ".join(names).to_upper())
+	Events.perks_changed.connect(_on_perks_changed)
 	Events.blessing_changed.connect(func(_god: StringName, text: String, color: Color) -> void:
 		_blessing_label.visible = text != ""
 		_blessing_label.text = "BÊNÇÃO DE " + text
@@ -209,7 +210,10 @@ func _build() -> void:
 	_points_delta = _label(root, "", 26, GOLD, Control.PRESET_TOP_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, 108)
 
 	var health_box := _corner_panel(root, Control.PRESET_BOTTOM_LEFT)
-	_perks_label = _text(health_box, "", 26, GOLD)
+	_perks_row = HBoxContainer.new()
+	_perks_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_perks_row.add_theme_constant_override(&"separation", 6)
+	health_box.add_child(_perks_row)
 	_blessing_label = _text(health_box, "", 26, GOLD)
 	_blessing_label.visible = false
 	_health_label = _text(health_box, "VIDA", 26, TEXT)
@@ -479,6 +483,23 @@ func _power_icon(id: StringName, definitions: Dictionary) -> Dictionary:
 	box.add_child(label)
 	_power_row.add_child(box)
 	return {"icon": box, "label": label}
+
+
+## Um ícone por perk comprado (Quick Revive, Deadeye...), sem texto — eles não expiram, então
+## sem contagem, só o ícone (`assets/web/machines/perk_<id>.png`, mesmo do jogo web).
+func _on_perks_changed(ids: Array[StringName]) -> void:
+	for child in _perks_row.get_children():
+		child.queue_free()
+	for id: StringName in ids:
+		var icon := TextureRect.new()
+		icon.custom_minimum_size = Vector2(28, 28)
+		icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var path := "res://assets/web/machines/perk_%s.png" % id
+		if ResourceLoader.exists(path):
+			icon.texture = load(path)
+		_perks_row.add_child(icon)
 
 
 func _on_ammo_changed(weapon_name: String, magazine: int, reserve: int, reloading: bool) -> void:

@@ -25,6 +25,7 @@ func run(tree: SceneTree) -> int:
 	await _weapon_drop()
 	await _minimap()
 	await _pause_menu()
+	await _perk_icons()
 
 	tree.paused = false
 	_main.queue_free()
@@ -110,6 +111,19 @@ func _minimap() -> void:
 	Save.set_setting("minimap", true)
 	Save.set_setting("minimapSize", "medium")
 	Events.settings_changed.emit()
+
+
+## Cada perk comprado vira um ícone (assets/web/machines/perk_<id>.png), nunca texto.
+func _perk_icons() -> void:
+	var hud := _main.get_node("HUD") as Hud
+	var row: HBoxContainer = hud.get(&"_perks_row")
+	check(row.get_child_count() == 0, "sem perk: nenhum ícone")
+	_player.perks.grant(load("res://data/perks/deadeye.tres") as PerkData)
+	_player.perks.grant(load("res://data/perks/quick_revive.tres") as PerkData)
+	await _tree.process_frame
+	check(row.get_child_count() == 2, "2 perks comprados: 2 ícones (%d)" % row.get_child_count())
+	var icons_ok := row.get_children().all(func(c: TextureRect) -> bool: return c.texture != null)
+	check(icons_ok, "cada ícone carregou a textura do perk")
 
 
 func _pause_menu() -> void:
