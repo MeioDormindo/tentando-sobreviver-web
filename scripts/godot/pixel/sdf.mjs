@@ -16,7 +16,7 @@ function frameOf(part) {
     ax: axes[0], ay: axes[1], az: axes[2],
     hx: half[0], hy: half[1], hz: half[2],
     radius: Math.hypot(half[0], half[1], half[2]),
-    round: part.shape === 'ellipsoid' ? 0 : Math.min(smallest * 0.95, part.round ?? smallest * 0.55),
+    round: part.shape === 'ellipsoid' ? 0 : Math.min(smallest * 0.95, part.round ?? smallest * 0.3),
     ellipsoid: part.shape === 'ellipsoid',
     color: part.color,
     flat: part.flat,
@@ -46,7 +46,7 @@ function smin(a, b, k) {
   return Math.min(a, b) - h * h * k * 0.25;
 }
 
-const SMOOTH = 0.02;
+const SMOOTH = 0.008;
 
 function sceneDistance(list, px, py, pz) {
   let d = Infinity;

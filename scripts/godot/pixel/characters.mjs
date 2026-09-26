@@ -161,7 +161,8 @@ function stanceAnimations(stance, suffix) {
   });
   const walk = (phase) => ({ ...aim(), 'leg.R': { swing: 0.4 * phase }, 'leg.L': { swing: -0.4 * phase }, spine: { lean: 0.05 } });
   return [
-    { name: 'Idle', frames: 4, fps: 3, loop: true, keys: [key(0, { ...aim(), spine: { lean: 0.02 } }), key(0.5, { ...aim(-0.3), spine: { lean: 0.05 }, head: { lean: 0.04 } }), key(1, { ...aim(), spine: { lean: 0.02 } })] },
+    // Câmera bem de cima (60°): sem inclinar a cabeça para trás, o rosto quase não aparece.
+    { name: 'Idle', frames: 4, fps: 3, loop: true, keys: [key(0, { ...aim(), spine: { lean: -0.05 }, head: { lean: -0.2 } }), key(0.5, { ...aim(-0.3), spine: { lean: -0.02 }, head: { lean: -0.16 } }), key(1, { ...aim(), spine: { lean: -0.05 }, head: { lean: -0.2 } })] },
     { name: 'Walk', frames: 8, fps: 8, loop: true, keys: [key(0, walk(1)), key(0.25, walk(0)), key(0.5, walk(-1)), key(0.75, walk(0)), key(1, walk(1))] },
     { name: 'Run', frames: 6, fps: 12, loop: true, keys: [key(0, run(1)), key(0.5, run(-1)), key(1, run(1))] },
     { name: 'Shoot', frames: 3, fps: 20, loop: false, keys: [key(0, { ...aim(1), spine: { lean: -0.06 } }), key(1, { ...aim() })] },

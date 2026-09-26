@@ -114,7 +114,7 @@ export class Pixels {
   }
 
   /** Contorno de 1 px por fora da silhueta, com a cor vizinha bem escurecida. */
-  outline(factor = 0.28) {
+  outline(factor = 0.22) {
     const marks = [];
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
