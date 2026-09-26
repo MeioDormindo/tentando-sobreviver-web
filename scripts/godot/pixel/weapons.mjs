@@ -38,6 +38,26 @@ export function weaponShape(id, level = 0) {
   const receiver = (len, h = 0.1, w = 0.06, color = metal) => add([0, len / 2 - 0.06, 0.06], [w, len, h], color);
   const sight = (y, z = 0.14) => add([0, y, z], [0.015, 0.03, 0.035], DARK);
   const scope = (y, len = 0.2) => add([0, y, 0.15], [0.045, len, 0.045], DARK, { shape: 'ellipsoid' });
+  // Trilho picatinny: barra baixa com dentes curtos (marcas de fixação de acessório).
+  const rail = (y0, len, z, color = DARK) => {
+    add([0, y0 + len / 2, z], [0.05, len, 0.012], color, { round: 0.003 });
+    const teeth = Math.max(3, Math.round(len / 0.045));
+    for (let i = 0; i < teeth; i++) add([0, y0 + 0.015 + (i * (len - 0.03)) / (teeth - 1), z + 0.011], [0.05, 0.012, 0.009], color, { round: 0.002 });
+  };
+  // Correia de couro: dois pontos de fixação (argolas) — a tira em si não cabe nessa escala.
+  // z alto o bastante (meia altura 0.05) para sempre encostar na coronha/receptor, que ficam
+  // por volta de z=0.03–0.08 em quase toda arma — sem isso, a argola nasce solta no ar.
+  const sling = (yBack, yFront, color = hex(0x3a2c1c)) => {
+    add([0.036, yBack, 0.02], [0.018, 0.022, 0.1], color, { round: 0.007 });
+    add([0.036, yFront, 0.02], [0.018, 0.022, 0.1], color, { round: 0.007 });
+  };
+  // Alavanca seletora: peça fina e comprida na lateral do receptor.
+  const selector = (y, color = metal) => add([0.04, y, 0.045], [0.01, 0.055, 0.018], color, { round: 0.004, rot: [0, 0, 0.35] });
+  // Veio da madeira: 1-2 estrias mais claras/escuras sobre uma peça de madeira já colocada
+  // (só em peças sem rotação — numa peça girada o decalque plano não acompanha o ângulo).
+  const grain = (at, size, color) => add(at, size, color, { flat: true, round: Math.min(...size) * 0.4 });
+  // Serrilhado do ferrolho: riscos finos perto da parte de trás do corpo/corrediça.
+  const serrations = (y, z, color = DARK) => { for (let i = 0; i < 4; i++) add([0, y + i * 0.013, z], [0.05, 0.006, 0.012], color, { flat: true }); };
 
   switch (id) {
     case 'conductor_lantern':
@@ -63,31 +83,39 @@ export function weaponShape(id, level = 0) {
       break;
     case 'm1911':
       add([0, 0.07, 0.075], [0.045, 0.22, 0.06], metal); grip(-0.005, WOOD); sight(0.16, 0.11);
+      serrations(0.14, 0.107);
       break;
     case 'glock':
       add([0, 0.065, 0.075], [0.05, 0.2, 0.065], POLY); grip(0, POLY); add([0, 0.14, 0.05], [0.04, 0.05, 0.02], DARK);
+      serrations(0.13, 0.109);
       break;
     case 'beretta':
       // Beretta 92 (pistola inicial do Hospital): ferrolho vazado com o cano à mostra.
       add([0, 0.07, 0.078], [0.046, 0.23, 0.058], metal); add([0, 0.12, 0.078], [0.03, 0.08, 0.03], DARK);
       grip(-0.005, POLY); sight(0.17, 0.112);
+      serrations(0.15, 0.11);
       break;
     case 'nailgun':
       // Pistola de pregos: corpo amarelo de ferramenta, pente de pregos embaixo, bico curto.
       add([0, 0.06, 0.08], [0.07, 0.22, 0.09], hex(0xd8b02a)); add([0, 0.06, 0.13], [0.05, 0.14, 0.025], DARK);
       add([0, 0.19, 0.06], [0.035, 0.06, 0.035], metal); add([0, 0.1, 0.0], [0.03, 0.2, 0.05], hex(0x9aa0a4), { rot: [0.15, 0, 0] });
       grip(-0.02, DARK);
+      add([0, 0.02, 0.126], [0.05, 0.05, 0.006], hex(0x1c1d21), { flat: true });  // faixa de aviso
       break;
     case 'p90':
       // P90: corpo arredondado de polímero, pente em cima, empunhadura vazada.
       add([0, 0.08, 0.06], [0.07, 0.36, 0.11], POLY, { round: 0.03 }); add([0, 0.09, 0.135], [0.05, 0.26, 0.03], hex(0x6a6d68));
       add([0, 0.05, -0.02], [0.04, 0.08, 0.1], DARK); barrel(0.26, 0.06, 0.028); sight(0.02, 0.16);
+      selector(0.16); sling(-0.06, 0.24);
       break;
     case 'sawed_off':
       // Cano serrado: dois canos curtos lado a lado e coronha de madeira cortada.
       add([0, 0.02, 0.06], [0.07, 0.12, 0.08], metal); grip(-0.02, WOOD); stock(0.12, WOOD, 0.03);
       for (const x of [-0.022, 0.022]) add([x, 0.2, 0.07], [0.04, 0.26, 0.04], DARK, { round: 0.015 });
       add([0, 0.14, 0.03], [0.07, 0.1, 0.04], WOOD);
+      grain([0, -0.11, 0.076], [0.045, 0.08, 0.01], hex(0x84582e));
+      grain([0, 0.14, 0.048], [0.05, 0.07, 0.01], hex(0x84582e));
+      sling(-0.15, 0.16);
       break;
     case 'magnum':
       add([0, 0.03, 0.065], [0.05, 0.12, 0.08], metal); add([0, 0.03, 0.06], [0.075, 0.07, 0.075], metal, { shape: 'ellipsoid' });
@@ -102,41 +130,57 @@ export function weaponShape(id, level = 0) {
       break;
     case 'mp5':
       receiver(0.3, 0.09); grip(); mag(0.12, 0.17, DARK, 0.3); barrel(0.24, 0.1, 0.03); stock(0.16, DARK); sight(0.02);
+      rail(-0.03, 0.24, 0.11); selector(0.05); sling(-0.18, 0.2);
       break;
     case 'vector':
       receiver(0.3, 0.14, 0.07, POLY); add([0, 0.1, -0.06], [0.05, 0.08, 0.14], DARK, { rot: [0.2, 0, 0] }); grip(0.02); stock(0.18, POLY); barrel(0.24, 0.06, 0.03);
+      rail(-0.03, 0.24, 0.135); selector(0.05); sling(-0.2, 0.22);
       break;
     case 'm4':
       receiver(0.36, 0.1); add([0, 0.12, 0.14], [0.04, 0.12, 0.03], DARK); grip(); mag(0.14, 0.18, DARK); barrel(0.3, 0.3, 0.032); stock(0.22, POLY); add([0, 0.36, 0.07], [0.06, 0.16, 0.07], POLY);
+      rail(0.0, 0.34, 0.115); selector(0.05); sling(-0.22, 0.3);
       break;
     case 'ak':
       receiver(0.34, 0.1); grip(0, WOOD); mag(0.14, 0.2, DARK, 0.4); barrel(0.32, 0.26, 0.032); stock(0.22, WOOD, 0.03); add([0, 0.36, 0.05], [0.055, 0.18, 0.06], WOOD);
+      rail(0.05, 0.28, 0.115); selector(0.02); sling(-0.14, 0.44);
+      grain([0, -0.13, 0.06], [0.052, 0.14, 0.014], hex(0x84582e));
+      grain([0, 0.36, 0.075], [0.056, 0.15, 0.012], hex(0x84582e));
       break;
     case 'rpk':
       receiver(0.38, 0.1); grip(0, WOOD); mag(0.16, 0.22, DARK, 0.4); barrel(0.36, 0.42, 0.036); stock(0.24, WOOD, 0.03);
       add([0.03, 0.66, -0.05], [0.015, 0.02, 0.16], DARK, { rot: [0, 0.4, 0] }); add([-0.03, 0.66, -0.05], [0.015, 0.02, 0.16], DARK, { rot: [0, -0.4, 0] });  // bipé
+      rail(0.02, 0.36, 0.115); selector(0.05);
+      grain([0, -0.17, 0.076], [0.048, 0.18, 0.012], hex(0x84582e));
       break;
     case 'rail':
       receiver(0.5, 0.12, 0.07, DARK); grip(0.02); stock(0.2, DARK);
       for (let i = 0; i < 4; i++) add([0, 0.12 + i * 0.1, 0.07], [0.09, 0.03, 0.09], accent, { flat: true });
       barrel(0.46, 0.3, 0.04, 0.07, metal);
+      sling(-0.2, 0.1);
       break;
     case 'barrett':
       receiver(0.5, 0.12, 0.07); grip(); mag(0.2, 0.12); stock(0.26, DARK); barrel(0.44, 0.5, 0.04); add([0, 0.96, 0.07], [0.07, 0.06, 0.06], DARK); scope(0.2, 0.26);
+      rail(0.02, 0.42, 0.135); sling(-0.25, 0.4);
       break;
     case 'pump':
       receiver(0.3, 0.1, 0.065); grip(0, WOOD); stock(0.24, WOOD, 0.03); barrel(0.26, 0.42, 0.045, 0.08); add([0, 0.4, 0.02], [0.06, 0.16, 0.06], WOOD);
+      grain([0, -0.17, 0.076], [0.048, 0.18, 0.012], hex(0x84582e));
+      grain([0, 0.4, 0.046], [0.05, 0.12, 0.01], hex(0x84582e));
+      sling(-0.24, 0.34);
       break;
     case 'combat_shotgun':
       receiver(0.34, 0.12, 0.07, POLY); grip(); mag(0.16, 0.14, DARK); stock(0.2, POLY); barrel(0.3, 0.34, 0.05, 0.08); sight(0.3, 0.15);
+      rail(0.0, 0.26, 0.125); sling(-0.2, 0.28);
       break;
     case 'grenade_launcher':
       add([0, 0.1, 0.07], [0.16, 0.14, 0.16], metal, { shape: 'ellipsoid' });  // tambor
       barrel(0.16, 0.3, 0.09, 0.08, DARK); grip(-0.02); stock(0.18, POLY); add([0, 0.47, 0.08], [0.1, 0.03, 0.1], accent, { flat: true });
+      sling(-0.19, 0.05);
       break;
     case 'flamethrower':
       receiver(0.46, 0.09); grip(0.02); add([0, 0.12, -0.1], [0.1, 0.3, 0.1], hex(0x9a3b22), { shape: 'ellipsoid' });  // tanque
       barrel(0.4, 0.22, 0.05, 0.07); add([0, 0.63, 0.07], [0.04, 0.02, 0.04], accent, { flat: true });
+      sling(-0.04, 0.35);
       break;
     case 'arc_gun':
       receiver(0.4, 0.12, 0.08, DARK); grip(0.02);
@@ -163,39 +207,53 @@ export function weaponShape(id, level = 0) {
     case 'makarov':
       // Makarov PM: ferrolho curto e liso, cabo de baquelite marrom.
       add([0, 0.06, 0.075], [0.044, 0.19, 0.058], metal); grip(-0.005, hex(0x4a2e1e)); sight(0.14, 0.108);
+      serrations(0.13, 0.105);
       break;
     case 'mauser_c96':
       // Mauser C96 "Broomhandle": pente na frente do gatilho, cano longo, cabo cabo-de-vassoura.
       add([0, 0.06, 0.08], [0.05, 0.2, 0.07], metal); barrel(0.16, 0.16, 0.03, 0.08); add([0, 0.1, 0.0], [0.04, 0.07, 0.12], DARK);
       add([0, -0.03, -0.06], [0.045, 0.06, 0.15], WOOD, { rot: [-0.25, 0, 0], shape: 'ellipsoid' });
+      serrations(0.08, 0.11);
       break;
     case 'thompson':
       // Thompson M1928: coronha e punho frontal de madeira, carregador de tambor, aletas no cano.
       receiver(0.32, 0.1); grip(0, WOOD); stock(0.2, WOOD, 0.04); add([0, 0.28, 0.02], [0.05, 0.07, 0.1], WOOD);
       add([0, 0.12, -0.05], [0.05, 0.16, 0.16], DARK, { shape: 'ellipsoid' });  // tambor
       barrel(0.26, 0.16, 0.034); for (let i = 0; i < 4; i++) add([0, 0.28 + i * 0.03, 0.07], [0.05, 0.012, 0.05], metal);
+      grain([0, -0.15, 0.086], [0.045, 0.14, 0.012], hex(0x84582e));
+      sling(-0.22, 0.3);
       break;
     case 'lupara':
       // Lupara: espingarda siciliana de cano duplo serrado e coronha curta.
       add([0, 0.02, 0.06], [0.07, 0.12, 0.08], metal); grip(-0.02, WOOD); stock(0.16, WOOD, 0.03);
       for (const x of [-0.022, 0.022]) add([x, 0.22, 0.07], [0.04, 0.3, 0.04], DARK, { round: 0.015 });
+      grain([0, -0.13, 0.076], [0.045, 0.1, 0.012], hex(0x84582e));
+      sling(-0.16, 0.15);
       break;
     case 'lee_enfield':
       // Lee-Enfield: fuzil de ferrolho com madeira até perto da ponta, alça do ferrolho e baioneta.
       receiver(0.34, 0.09, 0.06); grip(0, WOOD); stock(0.28, WOOD, 0.03); mag(0.12, 0.08);
       add([0, 0.34, 0.05], [0.06, 0.42, 0.07], WOOD); barrel(0.52, 0.16, 0.03); add([0.05, 0.02, 0.1], [0.04, 0.02, 0.02], metal);
       if (level >= 1) scope(0.14, 0.2);
+      grain([0, -0.19, 0.076], [0.05, 0.2, 0.012], hex(0x84582e));
+      grain([0, 0.34, 0.086], [0.05, 0.3, 0.012], hex(0x84582e));
+      sling(-0.28, 0.4);
       break;
     case 'stg44':
       // StG 44: receptor de chapa estampada, carregador curvo comprido e coronha de madeira.
       receiver(0.36, 0.1); grip(0, WOOD); mag(0.14, 0.22, DARK, 0.25); stock(0.24, WOOD, 0.03); barrel(0.34, 0.24, 0.03);
       add([0, 0.3, 0.1], [0.04, 0.06, 0.04], DARK);
+      selector(0.03);
+      grain([0, -0.17, 0.076], [0.048, 0.18, 0.012], hex(0x84582e));
+      sling(-0.26, 0.28);
       break;
     case 'winchester_1887':
       // Winchester 1887: espingarda de alavanca, cano longo sobre o tubo, madeira clara.
       receiver(0.2, 0.11, 0.065); grip(0, hex(0x8a5a32)); stock(0.26, hex(0x8a5a32), 0.03);
       barrel(0.14, 0.46, 0.042, 0.09); barrel(0.14, 0.4, 0.03, 0.05, DARK);
       add([0, 0.0, -0.05], [0.03, 0.14, 0.05], metal, { rot: [0.2, 0, 0] });  // alavanca
+      grain([0, -0.18, 0.076], [0.05, 0.2, 0.012], hex(0xa0723e));
+      sling(-0.3, 0.35);
       break;
     case 'bren':
       // Bren: carregador curvo em cima, cano com alça de transporte e bipé.
@@ -203,6 +261,7 @@ export function weaponShape(id, level = 0) {
       add([0, 0.14, 0.2], [0.04, 0.1, 0.16], DARK, { rot: [-0.4, 0, 0] });  // carregador
       add([0, 0.44, 0.13], [0.03, 0.08, 0.04], metal);
       add([0.03, 0.66, -0.05], [0.015, 0.02, 0.16], DARK, { rot: [0, 0.4, 0] }); add([-0.03, 0.66, -0.05], [0.015, 0.02, 0.16], DARK, { rot: [0, -0.4, 0] });
+      sling(-0.3, 0.2);
       break;
     case 'hephaestus_spear':
       // Lança de Hefesto: haste de bronze com ponta em brasa e as tenazes da forja no cabo.
