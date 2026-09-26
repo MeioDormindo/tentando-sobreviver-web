@@ -244,6 +244,10 @@ Já mapeado para as próximas fases: pular (Espaço / B).
   a sessão do jogo web antigo (`localStorage` `ts-save-v1` / `ts-session-v1`, mesmo site), então
   quem já jogava continua com recordes, ranking, conquistas e login.
 - Texturas também em ETC2/ASTC (`import_etc2_astc`), exigido pelo celular.
+- **Web: sem gzip na requisição HTTP.** O Supabase comprime as respostas REST; na Web o
+  navegador já entrega o corpo descompactado, então o Godot não pode pedir gzip de novo
+  (`accept_gzip`), senão a leitura falha (`RESULT_BODY_DECOMPRESS_FAILED`) e a conta mostra
+  "Sem conexão" mesmo com o servidor respondendo. Fora da Web nada muda.
 - **Android:** precisa do JDK 17 e do Android SDK (platform-tools, build-tools 36.0.0,
   platforms android-36), apontados nas *Editor Settings* do Godot (`export/android/java_sdk_path` e
   `android_sdk_path`); nesta máquina: `C:/Program Files/Microsoft/jdk-17.0.20.101-hotspot` e

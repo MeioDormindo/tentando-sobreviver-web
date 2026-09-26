@@ -16,6 +16,12 @@ func run(tree: SceneTree) -> int:
 	var catalog := load("res://data/configs/maps.tres") as MapCatalog
 	var missing := Array(catalog.order).filter(func(id: String) -> bool: return not Leaderboard.MAPS.has(id))
 	check(missing.is_empty(), "todo mapa jogável é aceito no ranking global%s" % ("" if missing.is_empty() else " — faltam " + str(missing)))
+	var http: HTTPRequest = online.call(&"make_http", 5.0)
+	check(http.accept_gzip and is_equal_approx(http.timeout, 5.0), "fora da Web o cliente pede gzip (na Web não: o navegador já descompacta)")
+	http.free()
+	check(online.call(&"result_text", HTTPRequest.RESULT_BODY_DECOMPRESS_FAILED) == "falha ao descompactar a resposta"
+		and online.call(&"result_text", HTTPRequest.RESULT_TIMEOUT) == "tempo esgotado"
+		and online.call(&"result_text", HTTPRequest.RESULT_CANT_CONNECT) == "não conectou ao servidor", "falha de rede mostra o motivo")
 	var top: Variant = await Leaderboard.fetch_top(online, "terminal")
 	if top == null:
 		print("  (sem conexão com o servidor: testes de rede pulados)")

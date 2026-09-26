@@ -95,7 +95,9 @@ func _refresh_status() -> void:
 	if Account.busy:
 		_message.text = "Sincronizando..."
 	elif Account.error != "":
-		_message.text = Account.error
+		# Falha de rede: mostra também o motivo técnico (ajuda a achar a causa, ex.: na Web).
+		var detail: String = Online.last_error if Account.error.begins_with("Sem conexão") else ""
+		_message.text = Account.error + ("\n(%s)" % detail if detail != "" else "")
 	elif Account.last_sync > 0.0:
 		_message.text = "Progresso salvo na nuvem · %s" % Time.get_time_string_from_unix_time(int(Account.last_sync))
 	else:
