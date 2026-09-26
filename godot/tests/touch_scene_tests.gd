@@ -125,6 +125,11 @@ func _pause() -> void:
 	(_main.get_node("GameManager") as GameManager).set_paused(false)
 	await _frames(2)
 	check(_touch.visible, "controles voltam ao despausar")
+	InputBindings.press_back()
+	await _frames(2)
+	check(_tree.paused, "botão voltar do Android pausa a partida (como ESC)")
+	(_main.get_node("GameManager") as GameManager).set_paused(false)
+	await _frames(2)
 
 
 func _assist() -> void:

@@ -237,12 +237,21 @@ Já mapeado para as próximas fases: pular (Espaço / B).
 |---|---|---|---|
 | Windows | `Windows` | `build/windows/TentandoSobreviver.exe` (pck embutido) | `godot --headless --path . --export-release "Windows" build/windows/TentandoSobreviver.exe` |
 | Web | `Web` | `build/web/index.html` (+ `.wasm`, `.pck`) | `godot --headless --path . --export-release "Web" build/web/index.html` |
+| Android | `Android` | `build/android/TentandoSobreviver.apk` (arm64, assinado) | `godot --headless --path . --export-release "Android" build/android/TentandoSobreviver.apk` |
 
 - **Web:** template **sem threads** (o GitHub Pages não envia os cabeçalhos COOP/COEP). Testar
   localmente com `npx http-server build/web`. Na primeira vez no navegador o jogo importa o save e
   a sessão do jogo web antigo (`localStorage` `ts-save-v1` / `ts-session-v1`, mesmo site), então
   quem já jogava continua com recordes, ranking, conquistas e login.
 - Texturas também em ETC2/ASTC (`import_etc2_astc`), exigido pelo celular.
+- **Android:** precisa do JDK 17 e do Android SDK (platform-tools, build-tools 36.0.0,
+  platforms android-36), apontados nas *Editor Settings* do Godot (`export/android/java_sdk_path` e
+  `android_sdk_path`); nesta máquina: `C:/Program Files/Microsoft/jdk-17.0.20.101-hotspot` e
+  `E:/Tools/Android/Sdk`. APK `com.meiodormindo.tentandosobreviver`, sempre deitado
+  (`sensor_landscape`), tela imersiva, permissão de internet (ranking e conta). A keystore de release
+  fica **fora do repositório** (`E:/Tools/keys/`), com a senha só em `.godot/export_credentials.cfg`
+  (ignorado pelo git) — guarde backup das duas: sem elas não dá para atualizar o app. O botão voltar
+  do Android age como ESC (pausa / volta de tela) em vez de fechar o jogo.
 
 ## Migração do jogo web
 
@@ -392,5 +401,6 @@ Decisões:
 
 ## Próximas fases (roadmap da especificação)
 
-- **Fase 8 (plataformas):** controles de toque (8.1) e exportação Web (8.2) feitos; faltam o Android
+- **Fase 8 (plataformas):** controles de toque (8.1), exportação Web (8.2) e Android (8.3) feitos; falta
+  publicar a versão Web no lugar do jogo web antigo (8.4)
   e a troca do site publicado.

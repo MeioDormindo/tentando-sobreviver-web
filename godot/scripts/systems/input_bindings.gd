@@ -41,6 +41,20 @@ func _ready() -> void:
 	apply_bindings(DEFAULT_BINDINGS)
 
 
+## Botão voltar do Android: age como ESC (pausa na partida, volta nas telas do menu).
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
+		press_back()
+
+
+func press_back() -> void:
+	for pressed in [true, false]:
+		var event := InputEventAction.new()
+		event.action = &"pause"
+		event.pressed = pressed
+		Input.parse_input_event(event)
+
+
 ## Liga/desliga o modo toque (a HUD chama quando os controles de toque aparecem ou somem).
 func set_touch_active(active: bool) -> void:
 	if active == touch_active:
