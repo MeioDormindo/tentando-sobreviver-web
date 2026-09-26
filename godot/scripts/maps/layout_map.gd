@@ -547,13 +547,18 @@ func _build_wall_buys() -> void:
 		buy.position = Vector3(spot.tile.x + 0.5, 0.0, spot.tile.y + 0.5)
 
 
+## Raio de busca da parede (em tiles): salas pequenas (Terminal/Hospital) resolvem bem dentro
+## disso; salas grandes do Templo (até 44×34) precisam de mais alcance pra achar a parede de
+## cima — sem isso a compra cai numa parede lateral/de baixo, que a câmera não vê de frente.
+const WALL_SEARCH_RADIUS := 32
+
 ## Como no jogo web: a compra vai para o chão livre mais perto, encostado numa parede
 ## (de preferência a de cima, que a câmera vê de frente). Devolve o tile e a normal da parede.
 func _wall_spot(start: Vector2i, taken: Array[Vector2i]) -> Dictionary:
 	var sides := [Vector2i.UP, Vector2i.LEFT, Vector2i.RIGHT, Vector2i.DOWN]
 	var best := {"tile": start, "normal": Vector3.BACK, "cost": INF}
-	for dz in range(-8, 9):
-		for dx in range(-8, 9):
+	for dz in range(-WALL_SEARCH_RADIUS, WALL_SEARCH_RADIUS + 1):
+		for dx in range(-WALL_SEARCH_RADIUS, WALL_SEARCH_RADIUS + 1):
 			var tile := start + Vector2i(dx, dz)
 			if not _is_floor(cell(tile.x, tile.y)) or tile in taken or _near_opening(tile):
 				continue
