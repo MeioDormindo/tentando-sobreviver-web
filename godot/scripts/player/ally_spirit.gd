@@ -14,6 +14,8 @@ var owner_player: Node3D
 var _left := LIFETIME
 var _bite_in := 0.0
 var _model: CharacterSprite
+var _light: OmniLight3D
+var _pulse := 0.0
 
 
 static func summon(tree: SceneTree, at: Vector3, player: Node3D) -> AllySpirit:
@@ -34,9 +36,19 @@ func _ready() -> void:
 		_model.play(&"Walk")
 	else:
 		add_child(EventFx.box(Vector3(0.4, 1.6, 0.3), EventFx.glow(GLOW, 0.6, 1.0)))
-	var light := EventFx.light(GLOW, 0.8, 3.0)
-	light.position.y = 1.2
-	add_child(light)
+	_light = EventFx.light(GLOW, 1.6, 3.5)
+	_light.position.y = 1.2
+	add_child(_light)
+	# Rótulo flutuante: nunca confundir com um zumbi de verdade.
+	var label := Label3D.new()
+	label.text = "ALIADO"
+	label.outline_size = 0
+	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	label.pixel_size = 0.0045
+	label.font_size = 44
+	label.modulate = GLOW
+	label.position.y = 2.1
+	add_child(label)
 
 
 func _process(delta: float) -> void:
@@ -45,6 +57,9 @@ func _process(delta: float) -> void:
 		SpecialFire.flash(get_tree(), global_position + Vector3.UP, 1.0, GLOW)
 		queue_free()
 		return
+	_pulse += delta * 4.0
+	if _light:
+		_light.light_energy = 1.6 + sin(_pulse) * 0.5
 	var target := _nearest_zombie()
 	if target == null:
 		return

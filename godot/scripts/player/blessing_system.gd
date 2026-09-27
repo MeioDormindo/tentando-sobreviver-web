@@ -7,7 +7,7 @@ extends Node
 ##   Atena — Sabedoria: −40% de dispersão e 15% de chance de crítico (dano ×2).
 ##   Hermes — Velocidade: anda, recarrega e interage 20% mais rápido.
 ##   Poseidon — Maré: os tiros empurram os zumbis.
-##   Hades — Pacto dos Mortos: 10% dos abatidos voltam como espírito aliado por 10 s.
+##   Hades — Pacto dos Mortos: 20% dos abatidos voltam como espírito aliado por 10 s.
 
 const GODS := {
 	&"zeus": {"name": "ZEUS", "title": "Fúria do Trovão", "hint": "12% dos tiros soltam um raio", "color": Color(0.6, 0.85, 1.0)},
@@ -27,7 +27,7 @@ const ATHENA_SPREAD := 0.6
 const ATHENA_CRIT := 0.15
 const HERMES_BONUS := 1.2
 const POSEIDON_PUSH := 5.0
-const HADES_CHANCE := 0.10
+const HADES_CHANCE := 0.20
 
 var player: Player
 var active: StringName = &""
@@ -111,3 +111,5 @@ func _on_killed(zombie: Node3D, info: DamageInfo) -> void:
 		&"hades":
 			if randf() < HADES_CHANCE and is_instance_valid(zombie):
 				AllySpirit.summon(get_tree(), zombie.global_position, player)
+				Events.toast.emit("HADES: um espírito aliado se levanta para lutar")
+				Audio.play_at("powerup", zombie.global_position, "world", 0.9)
