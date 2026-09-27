@@ -32,6 +32,9 @@ func run(tree: SceneTree) -> int:
 	await _flinch()
 	await _hit_slow()
 	await _walker_grab()
+	await _runner_dash()
+	await _tank_stomp()
+	await _hoplite_reach()
 	await _blood_and_corpses()
 
 	_player.queue_free()
@@ -172,6 +175,42 @@ func _walker_grab() -> void:
 		await _tree.create_timer(0.1).timeout
 	check(min_slow < 0.5, "Agarrão: o Walker às vezes prende mais forte que o golpe comum (×%.2f)" % min_slow)
 	zombie.queue_free()
+	await _tree.physics_frame
+
+
+## Investida (Runner): fecha distância de repente antes do ataque normal.
+func _runner_dash() -> void:
+	var zombie := _spawn(&"runner", Vector3(0, 0, -5.5), 1.0)
+	await _tree.physics_frame
+	var start := zombie.global_position.distance_to(_player.global_position)
+	await _tree.create_timer(0.3).timeout
+	var after := zombie.global_position.distance_to(_player.global_position)
+	check(start - after > 2.0, "Investida: o Runner fecha distância de repente (%.1f m → %.1f m em 0.3s)" % [start, after])
+	zombie.queue_free()
+	await _tree.physics_frame
+
+
+## Pisão em área (Tank): de vez em quando, colado no jogador, atordoa mais forte que o golpe comum.
+func _tank_stomp() -> void:
+	var zombie := _spawn(&"tank", Vector3(0, 0, -1.0), 0.0)
+	var min_slow := 1.0
+	for i in 130:
+		min_slow = minf(min_slow, _player.slow_factor())
+		await _tree.create_timer(0.1).timeout
+	check(min_slow < 0.3, "Pisão: o Tank às vezes atordoa quem fica colado nele (×%.2f)" % min_slow)
+	zombie.queue_free()
+	await _tree.physics_frame
+
+
+## Lança (Hoplita comum): alcança de mais longe que o Walker (mesma distância do jogador).
+func _hoplite_reach() -> void:
+	var walker := _spawn(&"walker", Vector3(-0.6, 0, -1.5), 0.0)
+	var hoplite := _spawn(&"hoplite", Vector3(0.6, 0, -1.5), 0.0)
+	await _tree.create_timer(0.5).timeout
+	check(walker.state != ZombieBase.State.ATTACK, "de 1.6 m, o Walker não alcança")
+	check(hoplite.state == ZombieBase.State.ATTACK, "Lança: o Hoplita alcança de 1.6 m, o Walker não")
+	walker.queue_free()
+	hoplite.queue_free()
 	await _tree.physics_frame
 
 

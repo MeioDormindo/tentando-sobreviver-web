@@ -22,3 +22,4 @@ shirt_color = Color(0.239, 0.29, 0.345, 1)
 skin_color = Color(0.467, 0.502, 0.42, 1)
 model_scale = 0.92
 crawls = false
+dash = { "range": 6.0, "speed": 9.5, "duration": 0.35, "cooldown": 3.5 }

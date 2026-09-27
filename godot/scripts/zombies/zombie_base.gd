@@ -55,6 +55,10 @@ var _wander_clock := 0.0
 ## de andar e atacar em lockstep perfeito.
 var _attack_interval_jitter := 1.0
 var _walk_anim_started := false
+## Investida (Runner): tempo restante do dash, sua direção e o resfriamento até o próximo.
+var _dash_left := 0.0
+var _dash_cooldown := 0.0
+var _dash_dir := Vector3.ZERO
 var _attack_cooldown := 0.0
 ## Atordoado (raio, plasma): não anda nem ataca.
 var _stun_left := 0.0
@@ -145,8 +149,14 @@ func _physics_process(delta: float) -> void:
 	var to_target := target.global_position - global_position
 	to_target.y = 0.0
 	_attack_cooldown = maxf(0.0, _attack_cooldown - delta)
+	_dash_cooldown = maxf(0.0, _dash_cooldown - delta)
 	var barricade := _blocking_barricade()
-	if _abilities and _abilities.override_movement(delta, to_target):
+	if _dash_left > 0.0:
+		_dash_left -= delta
+		velocity.x = _dash_dir.x * float(data.dash.get("speed", move_speed))
+		velocity.z = _dash_dir.z * float(data.dash.get("speed", move_speed))
+		_face(_dash_dir)
+	elif _abilities and _abilities.override_movement(delta, to_target):
 		# A habilidade pode mover o zumbi (investida, recuo, mergulho) ou só pará-lo.
 		var moved: Variant = _abilities.move_velocity
 		velocity.x = (moved as Vector3).x if moved is Vector3 else 0.0
@@ -154,6 +164,15 @@ func _physics_process(delta: float) -> void:
 		_face(to_target if not moved is Vector3 or (moved as Vector3).length() < 0.1 or _abilities.face_target else moved)
 	elif flee_goal == null and to_target.length() <= data.attack_range:
 		_attack(to_target)
+	elif flee_goal == null and not data.dash.is_empty() and _dash_cooldown <= 0.0 and to_target.length() <= float(data.dash.get("range", 6.0)):
+		# Investida (Runner): fecha distância de repente antes do ataque normal.
+		state = State.CHASE
+		_dash_left = float(data.dash.get("duration", 0.3))
+		_dash_cooldown = float(data.dash.get("cooldown", 3.5))
+		_dash_dir = to_target.normalized()
+		velocity.x = _dash_dir.x * float(data.dash.get("speed", move_speed))
+		velocity.z = _dash_dir.z * float(data.dash.get("speed", move_speed))
+		_face(_dash_dir)
 	elif barricade:
 		_break(barricade)
 	else:
@@ -240,8 +259,12 @@ func _attack(to_target: Vector3) -> void:
 		var applied := target.take_damage(DamageInfo.new(attack_damage, DamageInfo.Kind.ZOMBIE, self, false, global_position))
 		if applied > 0.0 and not data.grab.is_empty() and target.has_method(&"slow") and randf() < float(data.grab.get("chance", 0.0)):
 			target.call(&"slow", float(data.grab.get("slow_factor", 0.4)), float(data.grab.get("slow_time", 0.9)))
-		# Investida curta do golpe.
-		var lunge := -pivot.basis.z * 0.25
+		if applied > 0.0 and not data.stomp.is_empty() and to_target.length() <= float(data.stomp.get("radius", 1.15)) and randf() < float(data.stomp.get("chance", 1.0)):
+			if target.has_method(&"slow"):
+				target.call(&"slow", float(data.stomp.get("slow_factor", 0.25)), float(data.stomp.get("slow_time", 1.2)))
+			Events.screen_shake.emit(float(data.stomp.get("shake_duration", 0.15)), float(data.stomp.get("shake_strength", 0.1)))
+		# Investida curta do golpe (mais longa no Hoplita: estocada de lança).
+		var lunge := -pivot.basis.z * data.lunge_reach
 		lunge.y = 0.0
 		var tween := create_tween()
 		tween.tween_property(pivot, "position", lunge, 0.08)

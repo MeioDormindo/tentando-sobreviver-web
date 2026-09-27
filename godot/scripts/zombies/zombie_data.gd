@@ -54,6 +54,12 @@ extends Resource
 ## Agarrão (Walker): chance de, ao acertar o golpe normal, prender o jogador (lentidão mais
 ## forte que a de um golpe comum) por um instante — chance, slow_factor, slow_time.
 @export var grab: Dictionary = {}
+## Investida (Runner): dash curto pra fechar distância antes do ataque normal — range (até onde
+## dispara), speed, duration, cooldown.
+@export var dash: Dictionary = {}
+## Pisão em área (Tank): golpe que atordoa se o jogador estiver colado nele (raio menor que o
+## alcance normal de ataque) — radius, chance, slow_factor, slow_time, shake_duration, shake_strength.
+@export var stomp: Dictionary = {}
 
 @export_group("Aparência (provisória)")
 @export var shirt_color: Color = Color(0.37, 0.33, 0.26)
@@ -61,5 +67,7 @@ extends Resource
 @export var model_scale: float = 1.0
 ## Anda rastejando (corpo e cabeça baixos).
 @export var crawls: bool = false
+## Quanto o corpo avança no golpe (m). Maior no Hoplita (estocada de lança).
+@export var lunge_reach: float = 0.25
 ## Modelo do gerador de sprites (build.mjs) quando não é o zumbi comum: hoplite, skeleton...
 @export var art: StringName = &""
