@@ -51,6 +51,9 @@ extends Resource
 ## Olhar que petrifica (Górgona): range, windup_time, gaze_time, cooldown_time, rate,
 ## facing_deg, vulnerable_time, vulnerable_factor.
 @export var gaze: Dictionary = {}
+## Agarrão (Walker): chance de, ao acertar o golpe normal, prender o jogador (lentidão mais
+## forte que a de um golpe comum) por um instante — chance, slow_factor, slow_time.
+@export var grab: Dictionary = {}
 
 @export_group("Aparência (provisória)")
 @export var shirt_color: Color = Color(0.37, 0.33, 0.26)

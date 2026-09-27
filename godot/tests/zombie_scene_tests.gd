@@ -31,6 +31,7 @@ func run(tree: SceneTree) -> int:
 	await _hound_round()
 	await _flinch()
 	await _hit_slow()
+	await _walker_grab()
 	await _blood_and_corpses()
 
 	_player.queue_free()
@@ -159,6 +160,19 @@ func _hit_slow() -> void:
 	check(_player.slow_factor() < 0.7, "Golpe de zumbi: jogador fica lento (×%.2f)" % _player.slow_factor())
 	await _tree.create_timer(Player.HIT_SLOW_TIME + 0.2).timeout
 	check(is_equal_approx(_player.slow_factor(), 1.0), "Golpe de zumbi: a lentidão passa")
+
+
+## Agarrão (Walker): de vez em quando, o golpe prende o jogador mais forte que o golpe comum
+## (×0.6 de sempre) — em ~9s de ataques (chance de 35% cada) é bem improvável não acontecer.
+func _walker_grab() -> void:
+	var zombie := _spawn(&"walker", Vector3(0, 0, -1.0), 0.0)
+	var min_slow := 1.0
+	for i in 130:
+		min_slow = minf(min_slow, _player.slow_factor())
+		await _tree.create_timer(0.1).timeout
+	check(min_slow < 0.5, "Agarrão: o Walker às vezes prende mais forte que o golpe comum (×%.2f)" % min_slow)
+	zombie.queue_free()
+	await _tree.physics_frame
 
 
 ## Sangue (opção, desligado por padrão) e corpos que ficam no chão.

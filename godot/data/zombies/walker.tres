@@ -22,3 +22,4 @@ shirt_color = Color(0.369, 0.325, 0.263, 1)
 skin_color = Color(0.424, 0.463, 0.373, 1)
 model_scale = 1
 crawls = false
+grab = { "chance": 0.35, "slow_factor": 0.4, "slow_time": 0.9 }

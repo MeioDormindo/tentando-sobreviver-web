@@ -237,7 +237,9 @@ func _attack(to_target: Vector3) -> void:
 		if model and not data.crawls:
 			model.play_once(&"Attack")
 			_attack_anim_left = 0.55
-		target.take_damage(DamageInfo.new(attack_damage, DamageInfo.Kind.ZOMBIE, self, false, global_position))
+		var applied := target.take_damage(DamageInfo.new(attack_damage, DamageInfo.Kind.ZOMBIE, self, false, global_position))
+		if applied > 0.0 and not data.grab.is_empty() and target.has_method(&"slow") and randf() < float(data.grab.get("chance", 0.0)):
+			target.call(&"slow", float(data.grab.get("slow_factor", 0.4)), float(data.grab.get("slow_time", 0.9)))
 		# Investida curta do golpe.
 		var lunge := -pivot.basis.z * 0.25
 		lunge.y = 0.0
