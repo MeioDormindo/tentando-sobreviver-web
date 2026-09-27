@@ -71,6 +71,10 @@ var _burn_left := 0.0
 var _burn_source: Node
 ## Tempo sem se aproximar do alvo (o SpawnManager realoca zumbis presos).
 var stuck_time: float = 0.0
+## Tempo seguido colidindo com parede/objeto sem progresso (quina emperrada) — diferente de só
+## "longe e sem chegar perto": o SpawnManager usa isto pra saber quando vale um empurrão local
+## mesmo perto do jogador (fila da horda, que segue progredindo aos poucos, não conta).
+var wall_jam_time: float = 0.0
 var _best_distance := INF
 var _abilities: ZombieAbilities
 var _materials: Array[StandardMaterial3D] = []
@@ -207,7 +211,9 @@ func _chase(to_target: Vector3, delta: float) -> void:
 	else:
 		direction = _wander(direction, delta)
 	# Emperrado numa quina (porta, coluna): recalcula o caminho e escorrega ao longo da parede.
-	if stuck_time > 0.8 and get_slide_collision_count() > 0:
+	var jammed := stuck_time > 0.8 and get_slide_collision_count() > 0
+	wall_jam_time = wall_jam_time + delta if jammed else 0.0
+	if jammed:
 		# A colisão com a parede (não com o chão): a primeira lateral.
 		var normal := Vector3.ZERO
 		for i in get_slide_collision_count():
@@ -332,6 +338,7 @@ func apply_knockback(push: Vector3) -> void:
 func reset_stuck() -> void:
 	stuck_time = 0.0
 	_best_distance = INF
+	wall_jam_time = 0.0
 
 
 ## Linha de visão até o alvo (paredes bloqueiam).

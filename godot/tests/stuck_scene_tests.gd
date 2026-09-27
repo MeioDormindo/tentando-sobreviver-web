@@ -126,7 +126,7 @@ func _map(path: String, label: String) -> void:
 				pinch.append("(%d, %d)%s" % [x, z, _blocker(world3d, at, 0.9)])
 	check(pinch.is_empty(), "%s: nenhuma fresta sem navegação (%d%s)" % [label, pinch.size(), "" if pinch.is_empty() else ": " + ", ".join(pinch)])
 
-	# 2b. O encaixe nunca usa o topo de parede ou de móvel (zumbi nascendo em cima do muro).
+	# 2b. O encaixe nunca usa o topo de parede ou de móvel (zumbi nascendo em cima do muro/banco).
 	var on_top := 0
 	for z in range(0, map.height, 3):
 		for x in range(0, map.width, 3):
@@ -134,7 +134,14 @@ func _map(path: String, label: String) -> void:
 				var p := SpawnManager.safe_point(world3d, Vector3(x + 0.5, 0.0, z + 0.5), 0.4)
 				if p.y > SpawnManager.FLOOR_MAX_Y:
 					on_top += 1
-	check(on_top == 0, "%s: pontos de encaixe nunca em cima das paredes (%d)" % [label, on_top])
+	for prop: Dictionary in data.props:
+		var body_data: Variant = prop.body
+		if not (body_data is Dictionary):
+			continue
+		var center := Vector3(float(prop.x) + float(body_data.get("ox", 0.0)), 0.0, float(prop.z) + float(body_data.get("oz", 0.0)))
+		if SpawnManager.safe_point(world3d, center, 0.4).y > SpawnManager.FLOOR_MAX_Y:
+			on_top += 1
+	check(on_top == 0, "%s: pontos de encaixe nunca em cima das paredes ou móveis (%d)" % [label, on_top])
 	var spawner := SpawnManager.new()
 	spawner.world = map
 	spawner.target = player
@@ -280,6 +287,16 @@ func _runtime() -> void:
 	zombie.stuck_time = SpawnManager.STUCK_NEAR_TIME + 1.0
 	await _tree.create_timer(1.3).timeout
 	check(SpawnManager.is_free(world3d, zombie.global_position, 0.3), "zumbi preso dentro de objeto é tirado de lá")
+	# Zumbi entalado numa quina, mesmo perto do jogador (a fila da horda ao redor não conta pra
+	# isso, só quem está de fato colidindo sem progresso — daí o campo ser forçado direto aqui).
+	var jam_zombie := ZombieFactory.create(spawner.zombie_data, player, 1.0, 0.0, 0.0)
+	jam_zombie.position = container.to_local(player.global_position + Vector3(1.0, 0, 0))
+	container.add_child(jam_zombie)
+	await _tree.physics_frame
+	jam_zombie.wall_jam_time = SpawnManager.WALL_JAM_TIME + 0.5
+	await _tree.create_timer(1.3).timeout
+	check(jam_zombie.wall_jam_time == 0.0, "zumbi entalado numa quina perto do jogador se destrava sozinho (perto de você não bloqueia mais isso)")
+	jam_zombie.queue_free()
 	# Escombros do Minotauro: nunca em cima do jogador.
 	var cfg := {"count": 1, "radius": 1.0, "telegraph_time": 0.05, "damage": 0, "spread": 0.0, "rubble_time": 2.0}
 	BossAttacks.area(_tree, player.global_position, cfg, false, player)

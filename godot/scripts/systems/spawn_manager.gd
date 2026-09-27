@@ -124,6 +124,10 @@ func spawn_near_player(type: StringName, min_distance: float, max_distance: floa
 ## spawn ativo; perto dele, se estiverem fora do navmesh (numa fresta ou dentro de um objeto),
 ## voltam para o ponto livre mais próximo. Assim ninguém fica entalado e o round sempre termina.
 const STUCK_NEAR_TIME := 6.0
+## Colidindo com parede/objeto sem progresso por tanto tempo seguido: vale um empurrão local
+## pequeno mesmo perto do jogador (a fila da horda ao seu redor não aciona isto, porque ela vai
+## progredindo aos poucos à medida que os da frente morrem).
+const WALL_JAM_TIME := 5.0
 
 func _relocate_stuck() -> void:
 	if world == null or target == null:
@@ -134,6 +138,10 @@ func _relocate_stuck() -> void:
 		if zombie == null or not zombie.is_alive():
 			continue
 		if zombie.stuck_time >= STUCK_NEAR_TIME and off_navmesh(world3d, zombie.global_position):
+			zombie.global_position = safe_point(world3d, zombie.global_position, zombie.data.body_radius) + Vector3.UP * 0.05
+			zombie.reset_stuck()
+			continue
+		if zombie.wall_jam_time >= WALL_JAM_TIME:
 			zombie.global_position = safe_point(world3d, zombie.global_position, zombie.data.body_radius) + Vector3.UP * 0.05
 			zombie.reset_stuck()
 			continue
@@ -170,7 +178,11 @@ static func safe_point(world3d: World3D, at: Vector3, radius := 0.4) -> Vector3:
 
 
 ## Altura máxima de um ponto de navegação "no chão" (acima disso é topo de parede ou móvel).
-const FLOOR_MAX_Y := 1.0
+## Móveis com colisão (banco, caixa, armário) têm 0.9m (`PROP_HEIGHT`, layout_map.gd) — o 1.0
+## antigo deixava o topo deles passar como chão válido. O bake do navmesh quantiza a altura do
+## chão de verdade (Templo assa a 0.5m, Terminal/Hospital mais perto de 0) — 0.65 cobre os três
+## com folga e ainda fica bem abaixo do topo de um móvel.
+const FLOOR_MAX_Y := 0.65
 
 
 ## Uma cápsula de raio `radius` em `at` não encosta em parede nem objeto (WORLD|PROPS)?
