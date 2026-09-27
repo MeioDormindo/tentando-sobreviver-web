@@ -37,6 +37,8 @@ func _ready() -> void:
 			GoldenZombieEvent, BloodMoonEvent, CollapseEvent, FogEvent]
 	# Os do Templo dos Mortos (só começam no mapa "temple").
 	scripts.append_array(TempleEvents.SCRIPTS)
+	# O do Hospital (só começa no mapa "map2").
+	scripts.append_array(HospitalEvents.SCRIPTS)
 	for script: GDScript in scripts:
 		var event: WorldEvent = script.new()
 		event.system = self

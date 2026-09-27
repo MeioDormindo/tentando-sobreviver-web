@@ -37,11 +37,12 @@ func run(tree: SceneTree) -> int:
 	_player.health.reset(5000.0)
 	_rounds.stop()
 
-	check(_system.events.size() == 15, "10 eventos do jogo web + 5 do Templo registrados")
+	check(_system.events.size() == 16, "10 eventos do jogo web + 5 do Templo + 1 do Hospital registrados")
 	var base := WorldEventData.shared()
 	check(float(base.schedule.chance_per_wave) >= 0.9 and float(base.config(&"train").chance_per_wave) >= 0.95 and float(base.config(&"train").second_pass_chance) >= 0.8,
 		"eventos mais frequentes e o trem quase todo round")
 	check([&"zeus_wrath", &"rise_of_dead", &"artemis_hunt", &"underworld_portal", &"blood_of_gods"].all(func(id: StringName) -> bool: return not _system.events[id].can_start()), "eventos do Templo não acontecem fora dele")
+	check(not _system.events[&"containment_breach"].can_start(), "Contenção Rompida não acontece fora do Hospital")
 	await _horde()
 	await _blackout_and_panel()
 	await _alarm_and_panel()
@@ -54,6 +55,7 @@ func run(tree: SceneTree) -> int:
 	await _trap()
 	await _secrets()
 	await _lighting()
+	await _containment_breach()
 
 	ZombieBase.event_speed = 1.0
 	_main.queue_free()
@@ -321,3 +323,46 @@ func _secrets() -> void:
 	check(radio != null and _hold(radio, radio.hold_time + 0.1) and not toasts.is_empty(), "rádio conta a história: %s" % (toasts[0].left(40) if not toasts.is_empty() else ""))
 	var credits := _world.find_child("CreditsSign", true, false) as CreditsSign
 	check(credits != null and credits.interact(_player) and toasts.back().contains("Godot"), "placa de créditos")
+
+
+## Contenção Rompida (evento exclusivo do Hospital): cena própria (o Terminal não tem UTI nem
+## Enfermaria). Luz de emergência, sirene e reforço de zumbis pelos pontos de isolamento.
+func _containment_breach() -> void:
+	var map := (load("res://scenes/maps/hospital.tscn") as PackedScene).instantiate() as LayoutMap
+	_tree.root.add_child(map)
+	# UTI e Enfermaria abertas (pontos de isolamento só contam com a área acessível).
+	map.open_area(&"icu")
+	map.open_area(&"ward")
+	var player := (load("res://scenes/player/player.tscn") as PackedScene).instantiate() as Player
+	player.position = map.get_player_spawn()
+	_tree.root.add_child(player)
+	player.controlled = false
+	var container := Node3D.new()
+	_tree.root.add_child(container)
+	var spawner := SpawnManager.new()
+	spawner.world = map
+	spawner.container = container
+	spawner.target = player
+	spawner.zombie_data = load("res://data/zombies/walker.tres")
+	_tree.root.add_child(spawner)
+	var system := WorldEventSystem.new()
+	system.player = player
+	system.world = map
+	system.spawn_manager = spawner
+	_tree.root.add_child(system)
+	await _tree.create_timer(0.4).timeout
+	check(system.events[&"containment_breach"].can_start(), "Contenção Rompida: pode começar no Hospital")
+	var env := (map.get_node("WorldEnvironment") as WorldEnvironment).environment
+	var before_energy := env.ambient_light_energy
+	var summoned := [0]
+	Events.zombies_summoned.connect(func(c: int) -> void: summoned[0] += c, CONNECT_ONE_SHOT)
+	check(system.trigger(&"containment_breach"), "Contenção Rompida: dispara")
+	await _tree.physics_frame
+	check(summoned[0] > 0, "reforço de zumbis pelos pontos de isolamento (%d)" % summoned[0])
+	check(env.ambient_light_energy < before_energy, "luz de emergência (mais escuro que o normal)")
+	await _tree.create_timer(system.events[&"containment_breach"].duration + 0.3).timeout
+	check(system.running == null, "Contenção Rompida termina sozinha")
+	check(env.ambient_light_energy >= before_energy - 0.01, "a luz volta ao normal com o fim do evento")
+	for node in [system, spawner, container, player, map]:
+		node.queue_free()
+	await _tree.physics_frame

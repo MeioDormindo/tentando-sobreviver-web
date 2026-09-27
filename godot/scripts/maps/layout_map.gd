@@ -175,6 +175,9 @@ func _apply_environment() -> void:
 		energy *= 1.0 - float(_hound.get("fog_darkness", 0.0)) * 3.0
 	if _moods.has(&"blackout"):
 		energy *= 1.0 - float(_moods.blackout.get("extra_darkness", 0.2)) * 2.5
+	# Contenção Rompida (Hospital): mesma luz de emergência do Apagão.
+	if _moods.has(&"containment_breach"):
+		energy *= 1.0 - float(_moods.containment_breach.get("extra_darkness", 0.2)) * 2.5
 	if _moods.has(&"fog"):
 		fog = true
 		env.fog_light_color = Color(0.62, 0.66, 0.7)

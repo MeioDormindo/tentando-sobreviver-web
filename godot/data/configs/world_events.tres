@@ -19,7 +19,8 @@ events = {
 &"rise_of_dead": { "name": "LEVANTE DOS MORTOS", "hint": "Os sarcófagos se abrem — esqueletos saindo!", "color": Color(0.812, 0.776, 0.667, 1), "weight": 16, "min_round": 3, "cooldown_rounds": 2 },
 &"artemis_hunt": { "name": "CAÇADA DE ARTEMIS", "hint": "Sátiros e lobos infernais estão caçando você", "color": Color(0.478, 0.824, 0.478, 1), "weight": 14, "min_round": 6, "cooldown_rounds": 3 },
 &"underworld_portal": { "name": "PORTÃO DO SUBMUNDO", "hint": "Um portal solta criaturas — destrua-o a tiros", "color": Color(0.651, 0.416, 1, 1), "weight": 10, "min_round": 8, "cooldown_rounds": 4 },
-&"blood_of_gods": { "name": "SANGUE DOS DEUSES", "hint": "Neste round as bênçãos dos altares são de graça", "color": Color(1, 0.29, 0.227, 1), "weight": 10, "min_round": 5, "cooldown_rounds": 4 }
+&"blood_of_gods": { "name": "SANGUE DOS DEUSES", "hint": "Neste round as bênçãos dos altares são de graça", "color": Color(1, 0.29, 0.227, 1), "weight": 10, "min_round": 5, "cooldown_rounds": 4 },
+&"containment_breach": { "name": "CONTENÇÃO ROMPIDA", "hint": "Zumbis entrando pelos pontos de isolamento!", "color": Color(1, 0.522, 0.106, 1), "weight": 16, "min_round": 4, "cooldown_rounds": 3 }
 }
 schedule = { "first_wave": 2, "chance_per_wave": 0.9, "start_delay_time": [3, 10], "forced": { "first_wave": 15, "every": 10, "id": "horde" } }
 configs = {
@@ -38,7 +39,8 @@ configs = {
 &"rise_of_dead": { "tombs": 4, "per_tomb": 2, "every_time": 1.4, "archer_chance": 0.25 },
 &"artemis_hunt": { "duration_time": 25, "satyrs": 8, "wolves": 3, "every_time": 2.2, "min_distance": 7, "max_distance": 14 },
 &"underworld_portal": { "duration_time": 60, "every_time": 4, "health": 600, "health_per_wave": 60, "min_distance": 10, "max_distance": 18 },
-&"blood_of_gods": {  }
+&"blood_of_gods": {  },
+&"containment_breach": { "duration_time": 25, "extra_darkness": 0.2, "flicker_time": 1.4, "count": 5, "types": [&"walker", &"walker", &"runner"] }
 }
 interactions = { "power": { "price": 500, "hold_time": 1.2 }, "alarm": { "price": 750, "hold_time": 1 }, "train": { "price": 1500, "cooldown_time": 90 }, "trap": { "price": 1000, "active_time": 15, "cooldown_time": 45, "tick_time": 0.18 }, "valve": { "hold_time": 1.5 } }
 credits = "TENTANDO SOBREVIVER — feito com Godot + GDScript. Arte e sons 100% gerados por código."
