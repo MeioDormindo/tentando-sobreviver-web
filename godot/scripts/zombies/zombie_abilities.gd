@@ -320,16 +320,21 @@ func blocks(source: Node) -> bool:
 ## vida (entra na conta do round como um zumbi a mais; só uma vez).
 func _schedule_revive() -> void:
 	var tree := zombie.get_tree()
-	var parent := zombie.get_parent()
+	# IDs em vez do nó/alvo direto: se a partida acabar (ou o teste derrubar tudo) antes do
+	# temporizador disparar, capturar o Node já congelado no closure quebra o lambda ao chamar
+	# (erro do motor, "Lambda capture was freed") mesmo com o is_instance_valid dentro dele.
+	var parent_id := zombie.get_parent().get_instance_id()
 	var at := zombie.global_position
 	var params := zombie.data.revive
 	var data := zombie.data
-	var target := zombie.target
+	var target_id := zombie.target.get_instance_id()
 	var health := zombie.health.max_health * float(params.get("health_factor", 0.5))
 	Events.zombies_summoned.emit(1)
 	tree.create_timer(float(params.get("delay_time", 2.0))).timeout.connect(func() -> void:
-		if not is_instance_valid(parent) or not is_instance_valid(target):
+		if not is_instance_id_valid(parent_id) or not is_instance_id_valid(target_id):
 			return
+		var parent := instance_from_id(parent_id) as Node
+		var target := instance_from_id(target_id) as CharacterBase
 		var risen := ZombieFactory.create(data, target, 1.0, 1.0, 1.0)
 		risen.set_meta(&"revived", true)
 		risen.position = parent.to_local(SpawnManager.safe_point(target.get_world_3d(), at, data.body_radius) + Vector3.UP * 0.05)
@@ -359,14 +364,18 @@ func _shoot_arrow(to_target: Vector3) -> void:
 	arrow.look_at(land, Vector3.UP)
 	var flight := maxf(0.08, from.distance_to(land) / float(params.get("projectile_speed", 18.0)))
 	var damage := float(params.get("damage", 12)) * (zombie.attack_damage / maxf(1.0, zombie.data.damage))
-	var shooter := zombie
+	# ID em vez do zumbi direto: se ele já tiver sido desmontado (ou a partida acabado) quando a
+	# flecha chegar, capturar o Node ainda vivo no closure quebra o lambda ao chamar (erro do
+	# motor, "Lambda capture was freed") mesmo com o is_instance_valid dentro dele.
+	var shooter_id := zombie.get_instance_id()
 	var tween := arrow.create_tween()
 	tween.tween_property(arrow, "global_position", land, flight)
 	tween.tween_callback(func() -> void:
 		for node in arrow.get_tree().get_nodes_in_group(&"player"):
 			var player := node as CharacterBase
 			if player and Vector2(player.global_position.x - land.x, player.global_position.z - land.z).length() <= ARROW_HIT_RADIUS:
-				player.take_damage(DamageInfo.new(damage, DamageInfo.Kind.ZOMBIE, shooter if is_instance_valid(shooter) else null, false, land))
+				var shooter: Node = instance_from_id(shooter_id) if is_instance_id_valid(shooter_id) else null
+				player.take_damage(DamageInfo.new(damage, DamageInfo.Kind.ZOMBIE, shooter, false, land))
 		arrow.queue_free())
 	_spit_cooldown = float(params.get("cooldown_time", 2.6))
 

@@ -18,6 +18,9 @@ func run(tree: SceneTree) -> int:
 	print("Bosses (cena)")
 	await _conductor()
 	await _patient_zero()
+	await _minotaur()
+	await _cerberus()
+	await _entity()
 	print("\n%d ok, %d falharam (bosses)" % [_passed, _failed])
 	return _failed
 
@@ -94,6 +97,14 @@ func _patient_zero() -> void:
 	var boss := _bosses.boss
 	check(is_instance_valid(boss) and boss.data.id == &"patient_zero", "Hospital: o boss é o Paciente Zero")
 	await _wait_chase(boss)
+	# Corpo a corpo: cada mordida envenena, e morder de novo antes de passar intensifica.
+	_player.global_position = boss.global_position + Vector3(1.2, 0, 0)
+	await _tree.create_timer(1.0).timeout
+	var first_dps := _player._poison_dps
+	check(_player._clock < _player._poison_until and first_dps > 0.0, "Mordida infecciosa: envenena ao morder")
+	await _tree.create_timer(1.6).timeout
+	check(_player._poison_dps > first_dps, "Mordida infecciosa: morder de novo antes de passar intensifica (%.0f → %.0f dps)" % [first_dps, _player._poison_dps])
+	await _wait_chase(boss)
 	_player.global_position = boss.global_position + Vector3(0, 0, 5.0)
 	await _tree.create_timer(2.0).timeout
 	check(_tree.get_nodes_in_group(&"hazards").size() > 0, "vômito ácido deixa poças")
@@ -108,6 +119,78 @@ func _patient_zero() -> void:
 			slowed = true
 			break
 	check(slowed, "grito (fase 2) deixa o jogador lento")
+	await _teardown()
+
+
+## Fúria (Minotauro): na fase 2+, a investida atravessa colunas — quebrar uma dá um bônus
+## temporário de dano/velocidade.
+func _minotaur() -> void:
+	var map := await _setup("res://scenes/maps/terminal.tscn")
+	_bosses.start(&"minotaur")
+	await _tree.create_timer(BossManager.WARNING_TIME + 0.4).timeout
+	var boss := _bosses.boss
+	check(is_instance_valid(boss) and boss.data.id == &"minotaur", "Minotauro nasceu")
+	await _wait_chase(boss)
+	boss.take_damage(DamageInfo.new(boss.health.max_health * 0.4, DamageInfo.Kind.WEAPON, _player))
+	check(boss.phase == 2, "fase 2 aos 66% de vida (colunas passam a desabar na investida)")
+	await _wait_chase(boss)
+	# Força a investida numa direção com um pilar no caminho (a decisão de quando investir já é
+	# coberta pelo teste do Conductor; aqui o que importa é a reação ao quebrar o pilar).
+	var dir := _clear_direction(map, boss.global_position, 10.0).normalized()
+	var pillar := BreakablePillar.new()
+	_add(pillar)
+	pillar.global_position = boss.global_position + dir * 3.0
+	boss.mode = Boss.Mode.CHARGING
+	boss._charge_dir = dir
+	boss._charge_start = boss.global_position
+	boss._charge_hit = false
+	var t := 0.0
+	while t < 2.0 and is_instance_valid(pillar) and not pillar.broken:
+		await _tree.physics_frame
+		t += 1.0 / 60.0
+	check(is_instance_valid(pillar) and pillar.broken, "a investida do Minotauro quebra o pilar no caminho")
+	check(boss._fury_active(), "Fúria: bônus de dano/velocidade logo depois de quebrar o pilar")
+	await _teardown()
+
+
+## Sopro triplo (Cérbero): cone largo de fogo das 3 cabeças, fere na hora (diferente das poças
+## que o vômito deixa).
+func _cerberus() -> void:
+	var map := await _setup("res://scenes/maps/terminal.tscn")
+	_bosses.start(&"cerberus")
+	await _tree.create_timer(BossManager.WARNING_TIME + 0.4).timeout
+	var boss := _bosses.boss
+	check(is_instance_valid(boss) and boss.data.id == &"cerberus", "Cérbero nasceu")
+	await _wait_chase(boss)
+	_player.global_position = boss.global_position + _clear_direction(map, boss.global_position, 5.0)
+	var before := _player.health.current
+	await _tree.create_timer(1.5).timeout
+	check(_player.health.current < before, "Sopro triplo: o cone de fogo das 3 cabeças fere de perto")
+	await _teardown()
+
+
+## Ruptura (Entidade do Submundo): só na fase 3 (monstruosa), some e reaparece perto do jogador
+## com um golpe.
+func _entity() -> void:
+	var map := await _setup("res://scenes/maps/terminal.tscn")
+	_bosses.start(&"entity")
+	await _tree.create_timer(BossManager.WARNING_TIME + 0.4).timeout
+	var boss := _bosses.boss
+	check(is_instance_valid(boss) and boss.data.id == &"entity", "Entidade do Submundo nasceu")
+	await _wait_chase(boss)
+	boss.take_damage(DamageInfo.new(boss.health.max_health * 0.7, DamageInfo.Kind.WEAPON, _player))
+	await _tree.create_timer(1.6).timeout
+	check(boss.phase == 3, "fase 3 (monstruosa) aos 33% de vida")
+	await _wait_chase(boss)
+	_player.global_position = boss.global_position + _clear_direction(map, boss.global_position, 3.5)
+	var start_pos := boss.global_position
+	var teleported := false
+	for i in 240:
+		await _tree.physics_frame
+		if boss.global_position.distance_to(start_pos) > 0.6:
+			teleported = true
+			break
+	check(teleported, "Ruptura: a Entidade some e reaparece perto do jogador na fase 3")
 	await _teardown()
 
 

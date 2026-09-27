@@ -67,6 +67,10 @@ var _slow_until := 0.0
 ## Ofuscado (clarão do Conductor): mira menos precisa por um tempo (>1 = mais dispersão).
 var _blind_factor := 1.0
 var _blind_until := 0.0
+## Mordida infecciosa (Paciente Zero): veneno por segundo até passar o tempo; morder de novo
+## antes de passar intensifica (soma o dps) em vez de só renovar o tempo.
+var _poison_dps := 0.0
+var _poison_until := 0.0
 var _last_hurt_at := -INF
 var _was_reloading := false
 ## Pixel art (npm run godot:sprites): o corpo do visual escolhido e a arma na mão por tipo.
@@ -203,6 +207,8 @@ func _physics_process(delta: float) -> void:
 	if controlled:
 		_read_input()
 	_regenerate(delta)
+	_tick_poison(delta)
+	_tick_blind()
 	_update_interaction()
 	_move(delta)
 	_face_aim()
@@ -328,12 +334,34 @@ func blind(factor: float, seconds: float) -> void:
 	_blind_factor = factor
 	_blind_until = _clock + seconds
 	_apply_weapon_modifiers()
-	get_tree().create_timer(seconds).timeout.connect(_apply_weapon_modifiers)
 
 
 ## Fator de dispersão do ofuscamento valendo agora (1 = mira normal).
 func blind_factor() -> float:
 	return _blind_factor if _clock < _blind_until else 1.0
+
+
+## Sem timer avulso (que poderia disparar depois do jogador já ter sido liberado): reaplica
+## o multiplicador enquanto o ofuscamento estiver valendo e desliga sozinho quando passar.
+func _tick_blind() -> void:
+	if _clock < _blind_until:
+		_apply_weapon_modifiers()
+	elif _blind_factor != 1.0:
+		_blind_factor = 1.0
+		_apply_weapon_modifiers()
+
+
+## Mordida infecciosa (Paciente Zero): envenena por `seconds`; se já envenenado, soma o `dps`
+## em vez de trocar (cada mordida antes do veneno passar piora o efeito).
+func infect(dps: float, seconds: float) -> void:
+	_poison_dps = _poison_dps + dps if _clock < _poison_until else dps
+	_poison_until = _clock + seconds
+
+
+func _tick_poison(delta: float) -> void:
+	if _clock >= _poison_until:
+		return
+	take_damage(DamageInfo.new(_poison_dps * delta, DamageInfo.Kind.ENVIRONMENT, null, false, global_position))
 
 
 ## Levou dano nos últimos `seconds` segundos?

@@ -33,13 +33,16 @@ var _telegraph: MeshInstance3D
 ## golpe — trava a ação por um instante em vez de simplesmente ignorar.
 var _hesitate_left := 0.0
 const HEADSHOT_HESITATE := 0.16
+## Fúria (Minotauro): buff temporário de dano/velocidade ao quebrar um pilar com a investida.
+var _fury_until := 0.0
+var _fury_tinted := false
 var _body_material: StandardMaterial3D
 var _body_color := Color(0.3, 0.26, 0.22)
 ## Sprite em pixel art (null = formas simples da cena) e a ação em andamento (animação).
 var model: CharacterSprite
 var _action_id: StringName = &""
 ## Animação de cada ação.
-const ACTION_ANIMS := {&"shockwave": &"Slam", &"scream": &"Roar", &"summon": &"Roar", &"vomit": &"Attack", &"volley": &"Attack"}
+const ACTION_ANIMS := {&"shockwave": &"Slam", &"scream": &"Roar", &"summon": &"Roar", &"vomit": &"Attack", &"volley": &"Attack", &"breath": &"Attack", &"rupture": &"Charge"}
 
 @onready var agent: NavigationAgent3D = $NavigationAgent3D
 @onready var pivot: Node3D = $Pivot
@@ -111,6 +114,16 @@ func is_invulnerable() -> bool:
 	return mode == Mode.ROAR
 
 
+## Fúria ativa agora (Minotauro, após quebrar um pilar na investida)?
+func _fury_active() -> bool:
+	return _clock < _fury_until
+
+
+## Dano com o bônus da Fúria aplicado, se estiver ativa.
+func _fury_damage(base: float) -> float:
+	return base * float(data.fury.get("damage_mult", 1.3)) if _fury_active() else base
+
+
 ## Fogo, atordoamento e empurrão das armas: o boss só queima (não para nem sai do lugar).
 func apply_burn(dps: float, seconds: float, source: Node) -> void:
 	if not is_alive():
@@ -148,6 +161,10 @@ func _physics_process(delta: float) -> void:
 	if mode == Mode.DEAD:
 		return
 	apply_gravity(delta)
+	if _fury_tinted and not _fury_active():
+		_fury_tinted = false
+		if model:
+			model.tint(Color.WHITE)
 	if _hesitate_left > 0.0 and mode not in [Mode.ROAR, Mode.CHARGING, Mode.STUNNED]:
 		_hesitate_left -= delta
 		_stop()
@@ -168,7 +185,9 @@ func _physics_process(delta: float) -> void:
 			if _pending_at >= 0.0 and _clock >= _pending_at:
 				_pending_at = -1.0
 				if target.is_alive() and distance <= float(data.melee.get("range", 2.0)) + 0.45:
-					target.take_damage(DamageInfo.new(float(data.melee.get("damage", 35)), DamageInfo.Kind.ZOMBIE, self, false, global_position))
+					target.take_damage(DamageInfo.new(_fury_damage(float(data.melee.get("damage", 35))), DamageInfo.Kind.ZOMBIE, self, false, global_position))
+					if not data.infect.is_empty() and target.has_method(&"infect"):
+						target.call(&"infect", float(data.infect.get("dps", 9.0)), float(data.infect.get("duration", 4.5)))
 			if _clock >= _mode_until:
 				_to_chase()
 		Mode.CHARGE_WINDUP:
@@ -202,14 +221,20 @@ func _charging(distance: float) -> void:
 	velocity.z = _charge_dir.z * speed
 	if not _charge_hit and target.is_alive() and distance <= data.body_radius + 0.6:
 		_charge_hit = true
-		target.take_damage(DamageInfo.new(float(data.charge.get("damage", 45)), DamageInfo.Kind.ZOMBIE, self, false, global_position))
+		target.take_damage(DamageInfo.new(_fury_damage(float(data.charge.get("damage", 45))), DamageInfo.Kind.ZOMBIE, self, false, global_position))
 	move_and_slide()
 	# Bateu na parede: fica atordoado (janela para o jogador atacar).
 	for i in get_slide_collision_count():
 		var collider := get_slide_collision(i).get_collider()
-		# Minotauro na Fúria (fase 2+): atravessa as colunas da praça, que desabam.
+		# Minotauro na Fúria (fase 2+): atravessa as colunas da praça, que desabam, e ganha um
+		# bônus temporário de dano/velocidade por ter quebrado uma.
 		if collider is BreakablePillar and bool(data.extras.get("breaks_pillars", false)) and phase >= 2:
 			(collider as BreakablePillar).collapse()
+			if not data.fury.is_empty():
+				_fury_until = _clock + float(data.fury.get("duration", 4.0))
+				_fury_tinted = true
+				if model:
+					model.tint(Color(1.0, 0.55, 0.35))
 			continue
 		if collider is StaticBody3D and absf(get_slide_collision(i).get_normal().y) < 0.5:
 			mode = Mode.STUNNED
@@ -237,6 +262,8 @@ func _chase(delta: float, to_target: Vector3) -> void:
 		direction = to_target
 	direction = direction.normalized()
 	var speed := data.move_speed * data.phase_speed[phase - 1]
+	if _fury_active():
+		speed *= float(data.fury.get("speed_mult", 1.25))
 	velocity.x = direction.x * speed
 	velocity.z = direction.z * speed
 	_face(direction)
@@ -259,6 +286,17 @@ func _try_attack(distance: float, to_target: Vector3) -> bool:
 		_start_action(float(data.blind.get("windup_time", 0.4)) + 0.3, float(data.blind.cooldown_time), &"blind")
 		_pending_at = _clock + float(data.blind.get("windup_time", 0.4))
 		_pending_action = &"blind"
+		return true
+	if _can(data.breath, &"breath") and distance <= float(data.breath.get("range", 7.0)) and _line_of_sight():
+		_face(to_target)
+		_start_action(float(data.breath.get("windup_time", 0.4)) + 0.3, float(data.breath.cooldown_time), &"breath")
+		_pending_at = _clock + float(data.breath.get("windup_time", 0.4))
+		_pending_action = &"breath"
+		return true
+	if _can(data.rupture, &"rupture") and distance <= float(data.rupture.get("range", 14.0)) and distance > float(data.melee.get("range", 2.0)):
+		_start_action(float(data.rupture.get("windup_time", 0.35)) + 0.35, float(data.rupture.cooldown_time), &"rupture")
+		_pending_at = _clock + float(data.rupture.get("windup_time", 0.35))
+		_pending_action = &"rupture"
 		return true
 	if _can(data.area, &"area"):
 		_start_action(0.65, float(data.area.cooldown_time), &"area")
@@ -314,7 +352,7 @@ func _can(attack: Dictionary, id: StringName) -> bool:
 
 
 ## Som de cada ação do boss (como no jogo web).
-const ACTION_SOUNDS := {&"scream": "boss_roar", &"shockwave": "boss_slam", &"summon": "boss_summon", &"vomit": "boss_area", &"blind": "boss_stun"}
+const ACTION_SOUNDS := {&"scream": "boss_roar", &"shockwave": "boss_slam", &"summon": "boss_summon", &"vomit": "boss_area", &"blind": "boss_stun", &"breath": "boss_area", &"rupture": "boss_charge"}
 
 
 func _start_action(duration: float, cooldown: float, id: StringName) -> void:
@@ -341,7 +379,31 @@ func _resolve_pending() -> void:
 			BossAttacks.shockwave(get_tree(), global_position, data.shockwave, target)
 		&"blind":
 			BossAttacks.blind(get_tree(), global_position, data.blind, target)
+		&"breath":
+			BossAttacks.triple_breath(get_tree(), global_position, -pivot.global_basis.z, data.breath, target)
+		&"rupture":
+			_rupture()
 	_pending_action = &""
+
+
+## Ruptura (Entidade, fase 3): some e reaparece perto do jogador com um golpe.
+func _rupture() -> void:
+	var cfg: Dictionary = data.rupture
+	var reach := float(cfg.get("teleport_range", 1.6))
+	var world3d := get_world_3d()
+	var landing := global_position
+	for i in 6:
+		var angle := randf() * TAU
+		var candidate := target.global_position + Vector3(cos(angle), 0.0, sin(angle)) * reach
+		if SpawnManager.is_free(world3d, candidate, data.body_radius):
+			landing = candidate
+			break
+	SpecialFire.flash(get_tree(), global_position, 2.2, Color(0.7, 0.35, 1.0))
+	global_position = landing
+	SpecialFire.flash(get_tree(), global_position, 2.2, Color(0.7, 0.35, 1.0))
+	_face(target.global_position - global_position)
+	if target.is_alive() and global_position.distance_to(target.global_position) <= reach + 0.6:
+		target.take_damage(DamageInfo.new(float(cfg.get("damage", 55)), DamageInfo.Kind.ZOMBIE, self, false, global_position))
 
 
 func _summon(types: Array, count: int) -> void:

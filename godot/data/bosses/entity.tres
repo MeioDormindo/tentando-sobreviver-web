@@ -24,6 +24,7 @@ area = { "from_phase": 2, "count": 4, "radius": 1.8, "telegraph_time": 1.1, "dam
 summon = { "from_phase": 1, "count": 3, "types": [&"skeleton", &"skeleton", &"skeleton_archer"], "cooldown_time": 14 }
 shockwave = { "from_phase": 3, "radius": 7, "expand_time": 0.6, "damage": 32, "cooldown_time": 7, "windup_time": 0.5 }
 charge = { "windup_time": 0.7, "speed": 15, "max_distance": 20, "damage": 50, "cooldown_time": 6, "stun_time": 1.2, "min_range": 5, "max_range": 16 }
+rupture = { "from_phase": 3, "range": 14, "teleport_range": 1.6, "damage": 55, "windup_time": 0.35, "cooldown_time": 9 }
 area_acid = true
 escort_ratio = 0.2
 extras = { "fire_pools": true, "charge_from_phase": 3, "phase_sheets": { "3": "boss_entity_monstrous" }, "lore": "O templo não era uma prisão. Era uma porta... e ela está se abrindo." }

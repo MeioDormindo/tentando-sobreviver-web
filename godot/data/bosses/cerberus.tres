@@ -22,6 +22,7 @@ melee = { "range": 2.6, "damage": 35, "cooldown_time": 0.9 }
 charge = { "windup_time": 0.55, "speed": 17, "max_distance": 20, "damage": 45, "cooldown_time": 5, "stun_time": 1, "min_range": 4, "max_range": 16 }
 vomit = { "from_phase": 1, "range": 8, "arc_deg": 45, "count": 6, "windup_time": 0.6, "cooldown_time": 6, "pool": { "radius": 1.3, "duration_time": 4, "dps": 16 } }
 summon = { "from_phase": 3, "count": 3, "types": [&"hound", &"hound", &"hound"], "cooldown_time": 12 }
+breath = { "range": 7, "arc_deg": 70, "damage": 42, "windup_time": 0.4, "cooldown_time": 7 }
 area_acid = false
 escort_ratio = 0.25
 extras = { "fire_pools": true, "combo_bite": true }

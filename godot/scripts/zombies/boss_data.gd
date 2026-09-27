@@ -44,6 +44,18 @@ extends Resource
 ## Ofuscar (The Conductor): clarão da lanterna que atrapalha a mira — from_phase, range,
 ## windup_time, spread_factor, blind_time, cooldown_time.
 @export var blind: Dictionary = {}
+## Mordida infecciosa (Paciente Zero): todo golpe corpo a corpo também envenena, intensificando
+## se morder de novo antes do veneno passar — dps, duration.
+@export var infect: Dictionary = {}
+## Fúria (Minotauro): buff temporário de dano/velocidade ao quebrar um pilar com a investida —
+## damage_mult, speed_mult, duration.
+@export var fury: Dictionary = {}
+## Sopro triplo (Cérbero): cone largo de fogo simultâneo das 3 cabeças, fere na hora (diferente
+## das poças que o vômito deixa) — from_phase, range, arc_deg, damage, windup_time, cooldown_time.
+@export var breath: Dictionary = {}
+## Ruptura (Entidade do Submundo, só na fase monstruosa): some e reaparece perto do jogador com
+## um golpe — from_phase, range, teleport_range, damage, windup_time, cooldown_time.
+@export var rupture: Dictionary = {}
 
 @export_group("Outros")
 ## Lanterna acesa na mão (The Conductor).

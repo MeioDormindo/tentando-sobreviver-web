@@ -23,5 +23,6 @@ area = { "from_phase": 3, "count": 5, "radius": 1.625, "telegraph_time": 1.1, "d
 area_acid = true
 vomit = { "from_phase": 1, "range": 8.125, "arc_deg": 50, "count": 5, "windup_time": 0.65, "cooldown_time": 6.5, "pool": { "radius": 1.313, "duration_time": 5, "dps": 18 } }
 scream = { "from_phase": 2, "radius": 16.25, "slow_time": 2.5, "slow_factor": 0.55, "cooldown_time": 12, "summon_count": 4, "types": [&"crawler", &"crawler", &"spitter"] }
+infect = { "dps": 9, "duration": 4.5 }
 lantern = false
 escort_ratio = 0.3
