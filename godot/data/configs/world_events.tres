@@ -22,7 +22,7 @@ events = {
 &"blood_of_gods": { "name": "SANGUE DOS DEUSES", "hint": "Neste round as bênçãos dos altares são de graça", "color": Color(1, 0.29, 0.227, 1), "weight": 10, "min_round": 5, "cooldown_rounds": 4 },
 &"containment_breach": { "name": "CONTENÇÃO ROMPIDA", "hint": "Zumbis entrando pelos pontos de isolamento!", "color": Color(1, 0.522, 0.106, 1), "weight": 16, "min_round": 4, "cooldown_rounds": 3 }
 }
-schedule = { "first_wave": 2, "chance_per_wave": 0.9, "start_delay_time": [3, 10], "forced": { "first_wave": 15, "every": 10, "id": "horde" } }
+schedule = { "first_wave": 2, "interval_time": [20, 40], "start_delay_time": [3, 10], "forced": { "first_wave": 15, "every": 10, "id": "horde" } }
 configs = {
 &"emergency_alarm": { "duration_time": 20, "spawn_interval_multiplier": 0.45, "max_alive_bonus": 6 },
 &"blackout": { "duration_time": 25, "extra_darkness": 0.2, "emergency_light_factor": 0.35, "flicker_time": 1.4 },

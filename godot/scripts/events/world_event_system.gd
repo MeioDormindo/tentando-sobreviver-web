@@ -1,9 +1,14 @@
 class_name WorldEventSystem
 extends Node
-## Eventos do mapa (como no jogo web): quando um round começa, pode sortear um evento (um de
-## cada vez), respeitando round mínimo, espera entre repetições e as condições de cada um. A
-## Horda começa junto com o round; os outros, depois de um atraso. O trem tem agenda própria e
-## roda junto com qualquer outro evento. Nada acontece em rounds de cães ou de boss.
+## Eventos do mapa (como no jogo web, com escalonamento próprio do Godot): soltos por um
+## temporizador de jogo corrido (a cada `interval_time`, não mais uma vez por round), até
+## `MAX_CONCURRENT_EVENTS` de sala ao mesmo tempo, respeitando round mínimo, espera entre
+## repetições e as condições de cada um. A Horda forçada (a cada `forced.every` rounds) e o
+## bloqueio em round de cães/boss são regras especiais que continuam por round, não pelo
+## temporizador. O trem tem agenda própria e roda junto com qualquer evento de sala.
+
+## Quantos eventos "de sala" (fora o trem) podem rodar ao mesmo tempo.
+const MAX_CONCURRENT_EVENTS := 2
 
 @export var data: WorldEventData
 @export var player: Player
@@ -14,8 +19,10 @@ extends Node
 
 ## id → WorldEvent.
 var events: Dictionary = {}
-var running: WorldEvent
-var running_time := 0.0
+## Eventos de sala em andamento agora (até MAX_CONCURRENT_EVENTS; fora o trem).
+var running: Array[WorldEvent] = []
+## Tempo decorrido de cada evento em `running` (id → segundos).
+var _running_time: Dictionary = {}
 ## Round em que cada evento aconteceu por último.
 var last_round: Dictionary = {}
 
@@ -27,6 +34,8 @@ var _train_passes := 0
 var _round := 0
 var _active := false
 var _state_key := ""
+## Até a próxima tentativa de soltar um evento novo (negativo = ainda não sorteado).
+var _next_event_in := -1.0
 
 
 func _ready() -> void:
@@ -56,52 +65,85 @@ func _physics_process(delta: float) -> void:
 		if _pending_in <= 0.0:
 			var id := _pending_id
 			_pending_id = &""
-			if _active and running == null:
+			if _active:
 				trigger(id)
-	if running:
-		running_time += delta
-		var expired := running.duration >= 0.0 and running_time >= running.duration
-		if expired or not running.update(delta):
-			stop()
+	if _active and not _round_blocks_events() and _round >= int(data.schedule.get("first_wave", 2)):
+		if _next_event_in < 0.0:
+			_next_event_in = _next_event_delay()
+		_next_event_in -= delta
+		if _next_event_in <= 0.0:
+			_next_event_in = _next_event_delay()
+			if running.size() < MAX_CONCURRENT_EVENTS:
+				var id := _pick()
+				if id != &"":
+					trigger(id)
+	for event: WorldEvent in running.duplicate():
+		var elapsed: float = float(_running_time.get(event.id, 0.0)) + delta
+		_running_time[event.id] = elapsed
+		var expired: bool = event.duration >= 0.0 and elapsed >= event.duration
+		if expired or not event.update(delta):
+			stop_event(event)
 	_update_train(delta)
 	_emit_state()
 
 
-## Evento em andamento (fora o trem), ou vazio.
+func _round_blocks_events() -> bool:
+	return round_manager != null and (round_manager.is_hound_round or round_manager.is_boss_round)
+
+
+func _next_event_delay() -> float:
+	var interval: Array = data.schedule.get("interval_time", [20.0, 40.0])
+	return randf_range(float(interval[0]), float(interval[1]))
+
+
+## Nome do "primeiro" evento de sala em andamento (fora o trem), ou vazio. Com dois ao mesmo
+## tempo, use `is_running(id)` para saber se um específico está ativo.
 func active_id() -> StringName:
-	return running.id if running else &""
+	return running[0].id if not running.is_empty() else &""
 
 
-## Inicia um evento agora (também usado por painéis e testes). Devolve false se não pôde.
+func is_running(id: StringName) -> bool:
+	return running.any(func(event: WorldEvent) -> bool: return event.id == id)
+
+
+## Inicia um evento agora (também usado por painéis e testes). Devolve false se não pôde
+## (já rodando, no limite de eventos simultâneos, ou can_start() recusou).
 func trigger(id: StringName) -> bool:
 	if id == &"train":
 		return call_train()
-	if running or not events.has(id):
+	if not events.has(id) or is_running(id) or running.size() >= MAX_CONCURRENT_EVENTS:
 		return false
 	var event: WorldEvent = events[id]
 	if not event.can_start():
 		return false
-	running = event
-	running_time = 0.0
+	running.append(event)
+	_running_time[id] = 0.0
 	last_round[id] = _round
 	event.start()
 	_announce(id)
 	return true
 
 
-## Encerra o evento em andamento se for `id` (painéis de energia e alarme).
+## Encerra o evento `id` se estiver rodando (painéis de energia e alarme).
 func end_event(id: StringName) -> bool:
-	if running == null or running.id != id:
-		return false
-	stop()
-	return true
+	for event in running:
+		if event.id == id:
+			stop_event(event)
+			return true
+	return false
 
 
+## Encerra todos os eventos de sala em andamento (round de cães, evento forçado que assume).
 func stop() -> void:
-	if running == null:
+	for event: WorldEvent in running.duplicate():
+		stop_event(event)
+
+
+func stop_event(event: WorldEvent) -> void:
+	if not running.has(event):
 		return
-	var event := running
-	running = null
+	running.erase(event)
+	_running_time.erase(event.id)
 	event.end()
 	_emit_state()
 
@@ -184,21 +226,17 @@ func _on_round_started(number: int) -> void:
 	if number >= int(train_info.get("min_round", 2)) and not boss_round and events[&"train"].can_start() \
 			and randf() < float(data.config(&"train").get("chance_per_wave", 0.0)):
 		_schedule_train()
-	var schedule := data.schedule
-	if number < int(schedule.get("first_wave", 2)) or boss_round:
+	if boss_round:
 		return
+	# Horda forçada (a cada `forced.every` rounds): regra especial por round, não pelo
+	# temporizador — tem prioridade e assume o lugar do que estiver rodando.
+	var schedule := data.schedule
 	var forced: Dictionary = schedule.get("forced", {})
 	var is_forced := number >= int(forced.get("first_wave", 15)) and (number - int(forced.get("first_wave", 15))) % int(forced.get("every", 10)) == 0
-	# O evento especial do round tem prioridade sobre um que ainda esteja em andamento.
-	if is_forced:
-		stop()
-	if running:
+	if not is_forced:
 		return
-	if not is_forced and randf() >= float(schedule.get("chance_per_wave", 0.6)):
-		return
-	var id := StringName(forced.get("id", "horde")) if is_forced else _pick()
-	if id == &"":
-		return
+	stop()
+	var id := StringName(forced.get("id", "horde"))
 	if (events[id] as WorldEvent).at_round_start:
 		trigger(id)
 	else:
@@ -211,8 +249,9 @@ func _on_round_ended() -> void:
 	_active = false
 	_pending_id = &""
 	_train_in = -1.0
-	if running and running.ends_with_round:
-		stop()
+	for event: WorldEvent in running.duplicate():
+		if event.ends_with_round:
+			stop_event(event)
 
 
 ## Sorteio pelos pesos entre os eventos que podem acontecer neste round.
@@ -220,6 +259,8 @@ func _pick() -> StringName:
 	var eligible: Array[StringName] = []
 	var total := 0.0
 	for id: StringName in events:
+		if is_running(id):
+			continue
 		var info := data.info(id)
 		var weight := float(info.get("weight", 0))
 		if weight <= 0.0 or _round < int(info.get("min_round", 1)):
@@ -262,25 +303,40 @@ func _announce(id: StringName) -> void:
 	_state_key = "#"
 
 
-## Indicador da HUD (nome e segundos que faltam), enviado quando o segundo exibido muda.
+## Indicador da HUD (nome e segundos que faltam), enviado quando o segundo exibido muda. Com
+## dois eventos de sala ao mesmo tempo (+ talvez o trem), mostra o que muda primeiro (menos
+## tempo restante) e junta o nome dos outros do lado — nenhum some da HUD.
 func _emit_state() -> void:
-	var event := running if running else _train
-	if event == null:
+	if running.is_empty() and _train == null:
 		if _state_key != "":
 			_state_key = ""
 			Events.world_event_state.emit({})
 		return
-	var remaining := -1.0
-	if event == running and running.duration >= 0.0:
-		remaining = maxf(0.0, running.duration - running_time)
-	var with_train := _train != null and event != _train
-	var key := "%s|%s|%d" % [event.id, with_train, ceili(remaining)]
+	var primary: WorldEvent = null
+	var primary_remaining := INF
+	for event in running:
+		var elapsed: float = float(_running_time.get(event.id, 0.0))
+		var remaining: float = (event.duration - elapsed) if event.duration >= 0.0 else INF
+		if primary == null or remaining < primary_remaining:
+			primary = event
+			primary_remaining = remaining
+	var showing_train := primary == null
+	if showing_train:
+		primary = _train
+	var others: Array[String] = []
+	for event in running:
+		if event != primary:
+			others.append(String(data.info(event.id).get("name", event.id)))
+	if _train and not showing_train:
+		others.append(String(data.info(&"train").get("name", "TREM")))
+	var remaining := primary_remaining if primary_remaining < INF else -1.0
+	var key := "%s|%s|%d" % [primary.id, ",".join(others), ceili(maxf(remaining, 0.0))]
 	if key == _state_key:
 		return
 	_state_key = key
-	var info := data.info(event.id)
-	var event_name := String(info.get("name", event.id))
-	if with_train:
-		event_name += " + " + String(data.info(&"train").get("name", "TREM"))
-	Events.world_event_state.emit({"id": event.id, "name": event_name, "color": info.get("color", Color.WHITE),
-		"remaining": remaining, "total": running.duration if event == running else -1.0})
+	var info := data.info(primary.id)
+	var event_name := String(info.get("name", primary.id))
+	for extra in others:
+		event_name += " + " + extra
+	Events.world_event_state.emit({"id": primary.id, "name": event_name, "color": info.get("color", Color.WHITE),
+		"remaining": remaining, "total": primary.duration if not showing_train else -1.0})

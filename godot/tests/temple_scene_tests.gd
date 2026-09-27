@@ -555,7 +555,7 @@ func _temple_events() -> void:
 	events.stop()
 	# Portão do Submundo: solta criaturas; destruído, deixa o Tridente.
 	check(events.trigger(&"underworld_portal"), "Portão do Submundo se abre")
-	var portal := events.running as UnderworldPortalEvent
+	var portal := events.events[&"underworld_portal"] as UnderworldPortalEvent
 	check(portal != null and is_instance_valid(portal.portal), "portal no chão")
 	await _tree.create_timer(2.0).timeout
 	portal.health.apply_damage(DamageInfo.new(999999.0, DamageInfo.Kind.WEAPON, _player))

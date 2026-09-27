@@ -33,7 +33,7 @@ func setup(kind: String) -> void:
 
 func _active() -> bool:
 	var events := world_events()
-	return events != null and events.active_id() == event_id
+	return events != null and events.is_running(event_id)
 
 
 func get_interaction_prompt(_player: Node3D) -> String:

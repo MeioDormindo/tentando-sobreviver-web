@@ -39,8 +39,9 @@ func run(tree: SceneTree) -> int:
 
 	check(_system.events.size() == 16, "10 eventos do jogo web + 5 do Templo + 1 do Hospital registrados")
 	var base := WorldEventData.shared()
-	check(float(base.schedule.chance_per_wave) >= 0.9 and float(base.config(&"train").chance_per_wave) >= 0.95 and float(base.config(&"train").second_pass_chance) >= 0.8,
-		"eventos mais frequentes e o trem quase todo round")
+	var interval: Array = base.schedule.interval_time
+	check(float(interval[0]) > 0.0 and float(interval[1]) >= float(interval[0]) and float(base.config(&"train").chance_per_wave) >= 0.95 and float(base.config(&"train").second_pass_chance) >= 0.8,
+		"eventos soltos por tempo corrido (%.0f-%.0fs) e o trem quase todo round" % [interval[0], interval[1]])
 	check([&"zeus_wrath", &"rise_of_dead", &"artemis_hunt", &"underworld_portal", &"blood_of_gods"].all(func(id: StringName) -> bool: return not _system.events[id].can_start()), "eventos do Templo não acontecem fora dele")
 	check(not _system.events[&"containment_breach"].can_start(), "Contenção Rompida não acontece fora do Hospital")
 	await _horde()
@@ -56,6 +57,7 @@ func run(tree: SceneTree) -> int:
 	await _secrets()
 	await _lighting()
 	await _containment_breach()
+	await _concurrent_events()
 
 	ZombieBase.event_speed = 1.0
 	_main.queue_free()
@@ -361,8 +363,36 @@ func _containment_breach() -> void:
 	check(summoned[0] > 0, "reforço de zumbis pelos pontos de isolamento (%d)" % summoned[0])
 	check(env.ambient_light_energy < before_energy, "luz de emergência (mais escuro que o normal)")
 	await _tree.create_timer(system.events[&"containment_breach"].duration + 0.3).timeout
-	check(system.running == null, "Contenção Rompida termina sozinha")
+	check(system.running.is_empty(), "Contenção Rompida termina sozinha")
 	check(env.ambient_light_energy >= before_energy - 0.01, "a luz volta ao normal com o fim do evento")
 	for node in [system, spawner, container, player, map]:
 		node.queue_free()
 	await _tree.physics_frame
+
+
+## Escalonamento por tempo corrido (não mais uma vez por round): até MAX_CONCURRENT_EVENTS
+## eventos de sala ao mesmo tempo, e o temporizador solta um novo sozinho, sem esperar o round.
+func _concurrent_events() -> void:
+	check(_system.trigger(&"blackout"), "1º evento de sala começa")
+	check(_system.trigger(&"gas_leak"), "2º evento de sala ao mesmo tempo (%d rodando)" % _system.running.size())
+	check(_system.running.size() == 2, "os dois ficam ativos juntos")
+	check(not _system.trigger(&"collapse"), "um 3º não começa (limite de %d)" % WorldEventSystem.MAX_CONCURRENT_EVENTS)
+	var state := [{}]
+	Events.world_event_state.connect(func(s: Dictionary) -> void: state[0] = s, CONNECT_ONE_SHOT)
+	await _frames(2)
+	check(String(state[0].get("name", "")).contains(" + "), "a HUD mostra os dois eventos juntos: %s" % state[0].get("name", "(nada)"))
+	_system.stop()
+	check(_system.running.is_empty(), "os dois terminam")
+	_rounds.start_round(7)
+	_system._next_event_in = 0.02
+	await _tree.create_timer(0.2).timeout
+	check(not _system.running.is_empty(), "o temporizador solta um evento sozinho, sem esperar o round")
+	_system.stop()
+	_rounds.stop()
+	# Round de boss: regra especial que continua bloqueando o sorteio normal.
+	_rounds.start_round(10)
+	check(_rounds.is_boss_round, "round 10 é de boss (pré-condição do teste)")
+	_system._next_event_in = 0.02
+	await _tree.create_timer(0.2).timeout
+	check(_system.running.is_empty(), "round de boss continua bloqueando o sorteio normal")
+	_rounds.stop()
