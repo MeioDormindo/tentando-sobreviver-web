@@ -29,6 +29,10 @@ var _charge_dir := Vector3.ZERO
 var _charge_start := Vector3.ZERO
 var _charge_hit := false
 var _telegraph: MeshInstance3D
+## Hesitação (raio, plasma, headshot): boss grande demais pra ser empurrado, mas ainda sente o
+## golpe — trava a ação por um instante em vez de simplesmente ignorar.
+var _hesitate_left := 0.0
+const HEADSHOT_HESITATE := 0.16
 var _body_material: StandardMaterial3D
 var _body_color := Color(0.3, 0.26, 0.22)
 ## Sprite em pixel art (null = formas simples da cena) e a ação em andamento (animação).
@@ -120,12 +124,23 @@ func apply_burn(dps: float, seconds: float, source: Node) -> void:
 				take_damage(DamageInfo.new(dps * 0.25, DamageInfo.Kind.BURN, source, false, global_position)))
 
 
-func stun(_seconds: float) -> void:
-	pass
+## Grande demais para ser derrubado ou atordoado de verdade (raio, plasma): mas trava a ação
+## por uma hesitação breve, com o mesmo pisca do flinch dos zumbis comuns.
+func stun(seconds: float) -> void:
+	if not is_alive() or mode in [Mode.ROAR, Mode.CHARGING, Mode.STUNNED, Mode.DEAD]:
+		return
+	_hesitate_left = maxf(_hesitate_left, seconds)
+	if model:
+		model.flash(Color(1.0, 0.92, 0.9))
 
 
+## Sem empurrão de posição (grande demais pra isso fazer sentido), mas ainda pisca ao ser
+## atingido — hoje reviver empurrado e rajada de vento passavam batido nele.
 func apply_knockback(_push: Vector3) -> void:
-	pass
+	if not is_alive() or mode == Mode.DEAD:
+		return
+	if model:
+		model.flash(Color(1.0, 0.92, 0.9))
 
 
 func _physics_process(delta: float) -> void:
@@ -133,6 +148,11 @@ func _physics_process(delta: float) -> void:
 	if mode == Mode.DEAD:
 		return
 	apply_gravity(delta)
+	if _hesitate_left > 0.0 and mode not in [Mode.ROAR, Mode.CHARGING, Mode.STUNNED]:
+		_hesitate_left -= delta
+		_stop()
+		move_and_slide()
+		return
 	var to_target := target.global_position - global_position if target else Vector3.ZERO
 	to_target.y = 0.0
 	var distance := to_target.length()
@@ -336,6 +356,10 @@ func _line_of_sight() -> bool:
 
 func _on_damaged(info: DamageInfo, current: float) -> void:
 	Events.zombie_hit.emit(self, info)
+	if info.is_headshot and is_alive() and mode not in [Mode.ROAR, Mode.CHARGING, Mode.STUNNED, Mode.DEAD]:
+		_hesitate_left = maxf(_hesitate_left, HEADSHOT_HESITATE)
+		if model:
+			model.flash(Color(1.0, 0.92, 0.9))
 	var ratio := current / health.max_health
 	var new_phase := 1
 	for threshold in data.phase_thresholds:

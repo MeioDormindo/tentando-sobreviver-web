@@ -143,6 +143,15 @@ func play_once(anim_name: StringName, _blend := 0.08, speed := 1.0) -> void:
 	_apply_frame()
 
 
+## Começa a animação atual num quadro aleatório do ciclo (zumbis do mesmo tipo, nascendo
+## juntos, param de andar em lockstep perfeito).
+func randomize_phase() -> void:
+	var anim: Dictionary = _meta.get("animations", {}).get(String(playing), {})
+	if not anim.is_empty() and bool(anim.get("loop", false)):
+		_frame = randf() * float(anim.count)
+		_apply_frame()
+
+
 ## A animação atual (que não repete) chegou ao fim?
 func finished() -> bool:
 	var anim: Dictionary = _meta.animations.get(String(playing), {})

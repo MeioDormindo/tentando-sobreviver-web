@@ -38,8 +38,23 @@ var _knockback := Vector3.ZERO
 const FLINCH_TIME := 0.12
 const FLINCH_SPEED := 0.35
 const FLINCH_PUSH := 1.6
+## Na cabeça, o tranco é mais forte (reação maior, mais visível).
+const HEADSHOT_FLINCH_TIME := 0.22
+const HEADSHOT_FLINCH_PUSH := 2.6
+## Desvio lateral leve dos tipos sem habilidade própria (Walker, Runner, Tank, Hoplita comum),
+## para não andarem em fileira reta como clones (mesma técnica do zigue-zague do Sátiro, com
+## amplitude bem menor).
+const WANDER_AMPLITUDE := 0.16
+const WANDER_FREQUENCY := 1.4
+## Esqueletos usam poeira/estilhaço no lugar de sangue, sempre (não é carne).
+const BONE_TYPES: Array[StringName] = [&"skeleton", &"skeleton_archer"]
 var _flinch_left := 0.0
 var _flinch_frame := -1
+var _wander_clock := 0.0
+## Jitter por instância em move_speed/attack_interval (±8%), para zumbis do mesmo tipo pararem
+## de andar e atacar em lockstep perfeito.
+var _attack_interval_jitter := 1.0
+var _walk_anim_started := false
 var _attack_cooldown := 0.0
 ## Atordoado (raio, plasma): não anda nem ataca.
 var _stun_left := 0.0
@@ -76,7 +91,9 @@ func setup(p_data: ZombieData, p_target: CharacterBase, health_mult: float = 1.0
 func _ready() -> void:
 	super()
 	health.reset(data.max_health * _health_mult)
-	move_speed = data.move_speed * _speed_mult
+	var jitter := randf_range(0.92, 1.08)
+	move_speed = data.move_speed * _speed_mult * jitter
+	_attack_interval_jitter = randf_range(0.92, 1.08)
 	attack_damage = data.damage * _damage_mult
 	add_to_group(&"zombies")
 	_apply_look()
@@ -168,6 +185,8 @@ func _chase(to_target: Vector3, delta: float) -> void:
 	direction = direction.normalized()
 	if _abilities:
 		direction = _abilities.steer(direction, delta)
+	else:
+		direction = _wander(direction, delta)
 	# Emperrado numa quina (porta, coluna): recalcula o caminho e escorrega ao longo da parede.
 	if stuck_time > 0.8 and get_slide_collision_count() > 0:
 		# A colisão com a parede (não com o chão): a primeira lateral.
@@ -191,6 +210,14 @@ func _chase(to_target: Vector3, delta: float) -> void:
 	_face(direction)
 
 
+## Desvio lateral leve dos tipos sem habilidade própria (ver WANDER_AMPLITUDE).
+func _wander(direction: Vector3, delta: float) -> Vector3:
+	_wander_clock += delta
+	var side := Vector3(-direction.z, 0.0, direction.x)
+	var wave := sin(_wander_clock * WANDER_FREQUENCY + float(get_instance_id() % 11)) * WANDER_AMPLITUDE
+	return (direction + side * wave).normalized()
+
+
 ## No ar (Harpia fora do mergulho): a faca não alcança.
 func is_airborne() -> bool:
 	return _abilities != null and _abilities.airborne()
@@ -205,7 +232,7 @@ func _attack(to_target: Vector3) -> void:
 	velocity.z = 0.0
 	_face(to_target)
 	if _attack_cooldown <= 0.0:
-		_attack_cooldown = data.attack_interval
+		_attack_cooldown = data.attack_interval * _attack_interval_jitter
 		Events.zombie_attacked.emit(self)
 		if model and not data.crawls:
 			model.play_once(&"Attack")
@@ -242,7 +269,7 @@ func _break(barricade: Barricade) -> void:
 	to_barricade.y = 0.0
 	_face(to_barricade)
 	if _attack_cooldown <= 0.0:
-		_attack_cooldown = data.attack_interval
+		_attack_cooldown = data.attack_interval * _attack_interval_jitter
 		barricade.take_hit(data.plank_damage)
 
 
@@ -298,13 +325,14 @@ func _flinch(info: DamageInfo) -> void:
 	if frame == _flinch_frame or not is_alive():
 		return
 	_flinch_frame = frame
-	_flinch_left = FLINCH_TIME
+	var push_strength := HEADSHOT_FLINCH_PUSH if info.is_headshot else FLINCH_PUSH
+	_flinch_left = HEADSHOT_FLINCH_TIME if info.is_headshot else FLINCH_TIME
 	var source := info.source as Node3D
 	if source and is_instance_valid(source):
 		var push := global_position - source.global_position
 		push.y = 0.0
-		if push.length() > 0.01 and _knockback.length() < FLINCH_PUSH:
-			apply_knockback(push.normalized() * FLINCH_PUSH)
+		if push.length() > 0.01 and _knockback.length() < push_strength:
+			apply_knockback(push.normalized() * push_strength)
 	if model:
 		model.flash(Color(1.0, 0.92, 0.9))
 
@@ -441,7 +469,12 @@ func _process(delta: float) -> void:
 		model.play(&"Crawl", 0.2, clampf(speed / 1.2, 0.3, 1.6))
 	elif speed > 0.2:
 		var running: bool = speed > 3.2 and model.has_animation(&"Run")
-		model.play(&"Run" if running else &"Walk", 0.2, clampf(speed / (4.5 if running else 1.3), 0.5, 1.8))
+		var anim := &"Run" if running else &"Walk"
+		var starting := model.current != anim
+		model.play(anim, 0.2, clampf(speed / (4.5 if running else 1.3), 0.5, 1.8))
+		if starting and not _walk_anim_started:
+			_walk_anim_started = true
+			model.randomize_phase()
 	else:
 		model.play(&"Idle")
 
@@ -456,6 +489,7 @@ func _on_health_died(info: DamageInfo) -> void:
 	remove_from_group(&"zombies")
 	super(info)
 	Events.zombie_killed.emit(self, info)
+	Events.screen_shake.emit(0.12 if info.is_headshot else 0.06, 0.08 if info.is_headshot else 0.035)
 	if _abilities:
 		_abilities.on_death(info)
 	# Não bloqueia mais ninguém nem recebe tiros; cai e afunda no chão.
@@ -464,7 +498,7 @@ func _on_health_died(info: DamageInfo) -> void:
 	for child in get_children():
 		if child is Hurtbox:
 			(child as Hurtbox).disable()
-	if not data.burns_on_death and is_inside_tree() and blood_enabled():
+	if not data.burns_on_death and is_inside_tree() and blood_enabled() and data.id not in BONE_TYPES:
 		PixelFx.decal(get_tree(), "blood_pool", global_position, 1.1 * data.model_scale, CORPSE_STAY)
 	if data.burns_on_death:
 		# Cão: pega fogo e some, sem corpo.
@@ -478,7 +512,8 @@ func _on_health_died(info: DamageInfo) -> void:
 		model.play_once(&"Death", 0.05)
 		tween.tween_interval(0.35)
 	else:
-		tween.tween_property(pivot, "rotation:x", deg_to_rad(-85.0), 0.35)
+		_face_away_from_hit(info)
+		tween.tween_property(pivot, "rotation:x", deg_to_rad(randf_range(-92.0, -78.0)), randf_range(0.3, 0.4))
 	# O corpo fica no chão; depois de CORPSE_STAY (ou quando há corpos demais) afunda.
 	tween.tween_interval(CORPSE_STAY)
 	tween.tween_callback(_sink)
@@ -488,6 +523,17 @@ func _on_health_died(info: DamageInfo) -> void:
 		var oldest: ZombieBase = _corpses.pop_front()
 		if is_instance_valid(oldest):
 			oldest._sink()
+
+
+## Vira o corpo para o lado de onde veio o golpe antes de cair (mesmo vetor do knockback):
+## em vez do tombo sempre igual, cada morte cai na direção do impacto que a matou.
+func _face_away_from_hit(info: DamageInfo) -> void:
+	var source := info.source as Node3D
+	if source and is_instance_valid(source):
+		var to_source := source.global_position - global_position
+		to_source.y = 0.0
+		if to_source.length() > 0.05:
+			_face(to_source)
 
 
 ## O corpo afunda no chão e some.
@@ -506,9 +552,10 @@ static func blood_enabled() -> bool:
 	return bool(Save.get_setting("blood"))
 
 
-## Efeito do acerto: com sangue, um jato e gotas no chão; sem, só um estalo de poeira.
+## Efeito do acerto: com sangue, um jato e gotas no chão; sem (ou esqueleto, que é osso, não
+## carne), só um estalo de poeira.
 func _hit_fx(at: Vector3) -> void:
-	if blood_enabled():
+	if blood_enabled() and data.id not in BONE_TYPES:
 		PixelFx.spawn(get_tree(), "blood_splat", at, 0.9)
 		if randf() < 0.45:
 			var drop := at + Vector3(randf_range(-0.5, 0.5), 0.0, randf_range(-0.5, 0.5))
