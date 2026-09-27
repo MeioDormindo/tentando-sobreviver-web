@@ -41,6 +41,9 @@ extends Resource
 ## Esferas de alma em leque (Entidade do Submundo): from_phase, count, spread_deg, speed,
 ## range, damage, windup_time, cooldown_time.
 @export var volley: Dictionary = {}
+## Ofuscar (The Conductor): clarão da lanterna que atrapalha a mira — from_phase, range,
+## windup_time, spread_factor, blind_time, cooldown_time.
+@export var blind: Dictionary = {}
 
 @export_group("Outros")
 ## Lanterna acesa na mão (The Conductor).

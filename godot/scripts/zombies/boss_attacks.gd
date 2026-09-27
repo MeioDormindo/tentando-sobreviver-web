@@ -160,3 +160,13 @@ static func scream(at: Vector3, cfg: Dictionary, player: CharacterBase) -> void:
 		return
 	if player.global_position.distance_to(at) <= float(cfg.get("radius", 16.0)):
 		player.call(&"slow", float(cfg.get("slow_factor", 0.55)), float(cfg.get("slow_time", 2.5)))
+
+
+## Ofuscar (The Conductor): clarão da lanterna que atrapalha a mira por um tempo (a arma
+## espalha mais os tiros), se o jogador estiver no raio.
+static func blind(tree: SceneTree, at: Vector3, cfg: Dictionary, player: CharacterBase) -> void:
+	SpecialFire.flash(tree, at + Vector3.UP * 1.6, float(cfg.get("range", 7.0)) * 0.35, Color(1.0, 0.86, 0.55))
+	if player == null or not player.has_method(&"blind"):
+		return
+	if player.global_position.distance_to(at) <= float(cfg.get("range", 7.0)):
+		player.call(&"blind", float(cfg.get("spread_factor", 2.2)), float(cfg.get("blind_time", 2.5)))

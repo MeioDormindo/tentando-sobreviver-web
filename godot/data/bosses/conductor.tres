@@ -22,6 +22,7 @@ charge = { "windup_time": 0.75, "speed": 14.688, "max_distance": 20, "damage": 4
 shockwave = { "from_phase": 2, "radius": 7.188, "expand_time": 0.65, "damage": 30, "cooldown_time": 7.5, "windup_time": 0.52 }
 summon = { "from_phase": 3, "count": 4, "types": [&"walker", &"walker", &"runner"], "cooldown_time": 11 }
 area = { "from_phase": 4, "count": 3, "radius": 2, "telegraph_time": 1, "damage": 35, "cooldown_time": 6, "spread": 4.688 }
+blind = { "range": 7, "windup_time": 0.45, "spread_factor": 2.2, "blind_time": 2.5, "cooldown_time": 8 }
 area_acid = false
 lantern = true
 escort_ratio = 0.3

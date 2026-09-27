@@ -64,6 +64,9 @@ const HIT_SLOW_FACTOR := 0.6
 const HIT_SLOW_TIME := 0.7
 var _slow_factor := 1.0
 var _slow_until := 0.0
+## Ofuscado (clarão do Conductor): mira menos precisa por um tempo (>1 = mais dispersão).
+var _blind_factor := 1.0
+var _blind_until := 0.0
 var _last_hurt_at := -INF
 var _was_reloading := false
 ## Pixel art (npm run godot:sprites): o corpo do visual escolhido e a arma na mão por tipo.
@@ -314,6 +317,23 @@ func slow(factor: float, seconds: float) -> void:
 ## Fator de lentidão valendo agora (1 = velocidade normal).
 func slow_factor() -> float:
 	return _slow_factor if _clock < _slow_until else 1.0
+
+
+## Ofusca por `seconds` (clarão do Conductor): a mira espalha mais os tiros (factor > 1).
+## Vale o ofuscamento mais forte dos que estão valendo agora.
+func blind(factor: float, seconds: float) -> void:
+	if _clock < _blind_until and _blind_factor > factor:
+		_blind_until = maxf(_blind_until, _clock + seconds)
+		return
+	_blind_factor = factor
+	_blind_until = _clock + seconds
+	_apply_weapon_modifiers()
+	get_tree().create_timer(seconds).timeout.connect(_apply_weapon_modifiers)
+
+
+## Fator de dispersão do ofuscamento valendo agora (1 = mira normal).
+func blind_factor() -> float:
+	return _blind_factor if _clock < _blind_until else 1.0
 
 
 ## Levou dano nos últimos `seconds` segundos?
@@ -681,7 +701,7 @@ func _apply_weapon_modifiers() -> void:
 		w.damage_multiplier = perks.damage_multiplier * fury_multiplier * blessing_damage
 		w.headshot_bonus = perks.headshot_bonus
 		w.reload_multiplier = perks.reload_multiplier * blessing_reload
-		w.spread_multiplier = blessing_spread
+		w.spread_multiplier = blessing_spread * blind_factor()
 		w.crit_chance = blessing_crit
 
 

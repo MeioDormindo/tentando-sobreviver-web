@@ -254,6 +254,12 @@ func _try_attack(distance: float, to_target: Vector3) -> bool:
 		_pending_at = _clock + MELEE_HIT_DELAY
 		_cooldown(&"melee", float(data.melee.cooldown_time))
 		return true
+	if _can(data.blind, &"blind") and distance <= float(data.blind.get("range", 7.0)) and distance > float(data.melee.get("range", 2.0)) and _line_of_sight():
+		_face(to_target)
+		_start_action(float(data.blind.get("windup_time", 0.4)) + 0.3, float(data.blind.cooldown_time), &"blind")
+		_pending_at = _clock + float(data.blind.get("windup_time", 0.4))
+		_pending_action = &"blind"
+		return true
 	if _can(data.area, &"area"):
 		_start_action(0.65, float(data.area.cooldown_time), &"area")
 		# Minotauro (Colapso): as pedras que caem ficam como escombro por alguns segundos.
@@ -308,7 +314,7 @@ func _can(attack: Dictionary, id: StringName) -> bool:
 
 
 ## Som de cada ação do boss (como no jogo web).
-const ACTION_SOUNDS := {&"scream": "boss_roar", &"shockwave": "boss_slam", &"summon": "boss_summon", &"vomit": "boss_area"}
+const ACTION_SOUNDS := {&"scream": "boss_roar", &"shockwave": "boss_slam", &"summon": "boss_summon", &"vomit": "boss_area", &"blind": "boss_stun"}
 
 
 func _start_action(duration: float, cooldown: float, id: StringName) -> void:
@@ -333,6 +339,8 @@ func _resolve_pending() -> void:
 			BossAttacks.volley(get_tree(), global_position + Vector3.UP * 1.4, (target.global_position - global_position), data.volley, target, self)
 		&"shockwave":
 			BossAttacks.shockwave(get_tree(), global_position, data.shockwave, target)
+		&"blind":
+			BossAttacks.blind(get_tree(), global_position, data.blind, target)
 	_pending_action = &""
 
 

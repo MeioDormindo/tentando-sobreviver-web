@@ -45,6 +45,11 @@ func _conductor() -> void:
 	boss.take_damage(DamageInfo.new(500.0, DamageInfo.Kind.WEAPON, _player))
 	check(boss.health.current == hp, "invulnerável durante o rugido")
 	await _tree.create_timer(1.3).timeout
+	# Perto o bastante para o clarão (fora do alcance da investida) e com linha de visão.
+	_player.global_position = boss.global_position + _clear_direction(map, boss.global_position, 4.0)
+	await _tree.create_timer(1.0).timeout
+	check(_player._clock < _player._blind_until, "Ofuscar: o clarão do Conductor atrapalha a mira de perto")
+	await _wait_chase(boss)
 	# Longe e com linha de visão: prepara a investida.
 	_player.global_position = boss.global_position + _clear_direction(map, boss.global_position, 10.0)
 	var modes := await _watch(boss, 2.0)
