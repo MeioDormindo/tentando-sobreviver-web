@@ -21,6 +21,8 @@ var _body_turn := false
 ## Munição cheia ao começar o round 2 (reabastecimento do MVP).
 var _refilled := false
 var _bought_glock := false
+## Forçou a reserva a zero uma vez (não repete) e confirmou a compra na parede.
+var _ammo_forced := false
 var _bought_ammo := false
 var _saw_break := false
 var _repaired := false
@@ -165,15 +167,22 @@ func _wall_buy(player: Player, weapon_id: StringName) -> WallBuy:
 ## Munição na parede quando acaba; confere zumbis quebrando tábuas e o conserto (+pontos).
 func _shop_and_barricades(main: Node, player: Player) -> void:
 	var points := main.get_node("PointsManager") as PointsManager
-	# Uma vez: esvazia a reserva para conferir a compra de munição (não depende da sorte).
-	if not _bought_ammo and _game_time > 20.0 and not player.inventory.is_switching():
+	# Uma vez: esvazia a reserva para conferir a compra de munição não depende da sorte do
+	# combate. A retentativa abaixo continua sempre ativa depois disso (igual ao jogo normal)
+	# — senão, trocar de arma depois desse teste e zerar a munição de novo nunca mais seria
+	# reabastecido pelo bot, travando o resto da partida.
+	if not _ammo_forced and _game_time > 20.0 and not player.inventory.is_switching():
 		player.weapon.reserve = 0
+		_ammo_forced = true
 	if player.weapon.reserve == 0 and not player.weapon.reloading:
 		points.add(player.weapon.data.ammo_price)
 		var own := _wall_buy(player, player.weapon.data.id)
 		var buy := own if own else _wall_buy(player, &"")
-		if buy.interact(player):
-			_bought_ammo = true
+		buy.interact(player)
+	# Fora do `if` acima: parede com elemento à venda resolve a compra num toque adiado (alguns
+	# quadros depois de interact()), quadro em que reserve>0 já não entra mais nele.
+	if _ammo_forced and player.weapon.reserve > 0:
+		_bought_ammo = true
 	for node in player.get_tree().get_nodes_in_group(&"barricades"):
 		var barricade := node as Barricade
 		if barricade.planks < barricade.data.max_planks:

@@ -177,10 +177,14 @@ func interact(player: Node3D) -> bool:
 	# Elemento à venda: espera para saber se é toque (compra) ou segurar (elemento).
 	var element_weapon := element_target(p)
 	if element_weapon and element_weapon.element == &"":
-		_pending_tap = p
-		_held = 0.0
-		_bought_this_press = false
-		_since_hold = 0.0
+		# Só reinicia a espera numa pressionada nova — um segundo interact() com o toque ainda
+		# pendente (ex.: chamado todo frame por um bot de teste) não pode empurrar `_since_hold`
+		# pra sempre, senão o toque nunca resolve e a compra trava.
+		if _pending_tap != p:
+			_pending_tap = p
+			_held = 0.0
+			_bought_this_press = false
+			_since_hold = 0.0
 		return true
 	return _buy(p)
 
