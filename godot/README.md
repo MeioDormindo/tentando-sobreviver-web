@@ -72,7 +72,18 @@ de conceitos: ver `docs/analise-typescript.md`.
     arredondadas, 6 tons com sombra fria e luz quente, 8 direções na vista da câmera — os 7
     zumbis, o cão, os 2 bosses, o jogador nos 4 visuais e as 19 armas (Mk II e Mk III
     visíveis), com ícones e efeitos em pixel (clarão, faíscas, sangue, explosão, plasma,
-    granada, chama, vento);
+    granada, chama, vento); cada quadro é recortado no seu próprio contorno e empacotado
+    (shelf packing, `scripts/godot/pixel/pack.mjs`) em vez de uma grade de célula única, cada um
+    num espaço de múltiplos de 4 px (a compressão de GPU codifica blocos de 4×4; um bloco
+    dividido entre dois quadros vazava a borda do vizinho como lasquinhas ao lado do
+    personagem) — lido em runtime com um `AtlasTexture` por quadro que é só o recorte, mais um
+    `Sprite3D.offset` por quadro que põe esse recorte no lugar certo em relação aos pés
+    (`CharacterSprite._set_frame_texture`; sem `margin`: no Godot o tamanho do AtlasTexture é
+    region + margin, e um quadro fixo cortaria as armas compridas); os imports em
+    `assets/sprites/*.png.import` usam VRAM Compressed (`npm run godot:sprites:vram`, ETC2/ASTC
+    no mobile via `textures/vram_compression/import_etc2_astc` do projeto, S3TC/BPTC no
+    desktop) por cima disso — sprite novo nasce sem essa compressão até rodar o script de novo;
+    ~5× menos VRAM no total só com o recorte+empacotamento (mais uns 4× da compressão de GPU);
   - interface (`npm run godot:font`): fonte pixel 5×7 desenhada em código (acentos do
     português, símbolos e contorno embutido, em BMFont), padrão do projeto em escala inteira
     (2×, 3×, 4×...), e molduras 9-slice; HUD em painéis nos cantos (ROUND, pontos, vida com
@@ -83,9 +94,17 @@ de conceitos: ver `docs/analise-typescript.md`.
     na cor do perk, Mystery Box com tampa que abre, painéis de alarme, energia, armadilha e
     trem, disjuntor, caixa de suprimentos, geladeira de amostras, cano de gás, entulho...) e
     decoração de parede e de chão espalhada por semente;
-  - jogador com cotovelos e duas posturas: fuzil (mão no cabo, a outra sob o cano) e pistola
-    (as duas mãos juntas); a faca aparece na mão no golpe; a arma é desenhada junto com o
-    corpo (a mão cobre o cabo) e a folha grava a ponta do cano, de onde sai o tiro;
+  - jogador com cotovelos e três posturas, definidas por onde cada mão fica e resolvidas por IK
+    de braço no gerador (`reach` em `scripts/godot/pixel/characters.mjs`, sem `spread` no ombro
+    pra não encurvar de frente): fuzil (mão no cabo, a outra ~19 cm à frente, embaixo do
+    guarda-mão — serve de SMG a Barrett, lança e tridente pela haste; o Arco de Ártemis fica na
+    mão da frente com a corda puxada até a de trás), pistola (braços à frente, as duas mãos
+    juntas no cabo) e dupla (Uzi dupla, uma em cada mão; peças com `hand: 'L'` presas à mão
+    esquerda); a arma é uma camada própria com os mesmos quadros do corpo (acompanha
+    a mão no tiro, na recarga e no golpe), desenhada sempre inteira — sem recorte por oclusão
+    3D, que gerava fragmentos soltos em ângulos específicos — e fica atrás do corpo de verdade
+    (profundidade real, `weapon_behind`) quando o personagem olha pra longe da câmera; a folha
+    grava a ponta do cano, de onde sai o tiro e o clarão;
   - tiros como balas luminosas que voam até o alvo (faíscas quando chegam), raio e vento em
     feixe; cuspe ácido, poças borbulhando, nuvem de gás, onda de choque e marcas no chão em
     pixel; power-ups com os ícones do jogo web; personagens puxados para perto da câmera no

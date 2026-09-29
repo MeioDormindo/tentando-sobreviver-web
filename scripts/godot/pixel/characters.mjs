@@ -3,7 +3,7 @@
 import { hex } from './raster.mjs';
 const scale = (c, k) => c.map((v) => Math.max(0, Math.min(255, Math.round(v * k))));
 import { mul, translate, rotX } from './raster.mjs';
-import { weaponShape } from './weapons.mjs';
+import { weaponShape, SUPPORT_REACH } from './weapons.mjs';
 
 // ───────────────────────── Humanoide ─────────────────────────
 
@@ -126,31 +126,97 @@ function deathAnimation() {
   ] }];
 }
 
+// Braço: ombro → cotovelo (HUMAN_BONES) e cotovelo → ponto da mão (a mão em humanoid()).
+const UPPER_ARM = 0.30;
+const FOREARM = 0.34;
+
 /**
- * Posturas do jogador (ângulos achados levando cada mão ao ponto certo):
- * - fuzil ('rifle'): mão direita no cabo, na frente do peito, cotovelo junto ao corpo; a
- *   esquerda por baixo do cano;
- * - pistola ('pistol'): braços para a frente, as duas mãos juntas no cabo, na altura do peito.
+ * IK do braço: ângulos que levam o ponto da mão (`side` 1 = direita) ao `target` (m, espaço do
+ * tronco: x direita, y frente, z cima). Sem `spread` — de frente ele levanta o ombro e o
+ * personagem parece encurvado —, o braço converge pro centro girando em torno do vertical
+ * (`twist`) e o cotovelo dobra pra frente. Alvo fora do alcance fica no limite (braço esticado).
  */
+function reach(side, target) {
+  const arm = side > 0 ? 'arm.R' : 'arm.L';
+  const fore = side > 0 ? 'fore.R' : 'fore.L';
+  const shoulder = HUMAN_BONES.find((b) => b.name === arm).pivot;
+  const toTarget = target.map((v, i) => v - shoulder[i]);
+  const length = Math.hypot(...toTarget);
+  const dist = Math.min(UPPER_ARM + FOREARM - 1e-3, Math.max(Math.abs(UPPER_ARM - FOREARM) + 1e-3, length));
+  const elbow = Math.acos((dist * dist - UPPER_ARM ** 2 - FOREARM ** 2) / (2 * UPPER_ARM * FOREARM));
+  // Ombro → mão com o cotovelo dobrado, antes de girar o braço (y frente, z cima).
+  const handY = FOREARM * Math.sin(elbow), handZ = -UPPER_ARM - FOREARM * Math.cos(elbow);
+  const [dx, dy, dz] = toTarget.map((v) => (v * dist) / length);
+  return {
+    [arm]: { swing: Math.atan2(dz, Math.hypot(dx, dy)) - Math.atan2(handZ, handY), twist: Math.atan2(-dx, dy) },
+    [fore]: { swing: elbow },
+  };
+}
+
+const hands = (right, left) => ({ ...reach(1, right), ...reach(-1, left) });
+const plus = (a, b, k = 1) => a.map((v, i) => v + b[i] * k);
+
+/**
+ * Posturas do jogador, por onde cada mão fica (espaço do tronco). `aim(k)`: k = 1 é o recuo do
+ * tiro, negativo relaxa (respiração, dano); `reload`: os dois quadros-chave do meio da recarga.
+ * - fuzil ('rifle'): mão direita no cabo, à direita do peito, cotovelo junto ao corpo; a
+ *   esquerda à frente, embaixo do guarda-mão (SUPPORT_REACH, o mesmo que o arco usa);
+ * - pistola ('pistol'): braços para a frente, as duas mãos juntas no cabo, na altura do peito;
+ * - dupla ('dual'): braços para a frente, paralelos, uma arma em cada mão.
+ */
+const RIFLE_GRIP = [0.07, 0.24, 1.14];
+const PISTOL_GRIP = [0.05, 0.5, 1.18];
+const PISTOL_SUPPORT = [-0.01, 0.49, 1.15];
+const DUAL_RIGHT = [0.2, 0.56, 1.18];
+const DUAL_LEFT = [-0.2, 0.56, 1.18];
 const STANCES = {
   rifle: {
-    aim: (k = 0) => ({ 'arm.R': { swing: 0.05 * k, spread: -0.5 }, 'fore.R': { swing: 1.35 + 0.1 * k }, 'arm.L': { swing: 0.75 + 0.05 * k, spread: -0.9 }, 'fore.L': { swing: 0.05 } }),
+    aim: (k = 0) => {
+      const recoil = [0, -0.04, 0.02];
+      return hands(plus(RIFLE_GRIP, recoil, k), plus(plus(RIFLE_GRIP, SUPPORT_REACH), recoil, k));
+    },
     reload: [
-      { 'arm.R': { swing: 0, spread: -0.35 }, 'fore.R': { swing: 0.65 }, 'arm.L': { swing: 0.35, spread: -0.7 }, 'fore.L': { swing: 0.05 }, head: { lean: 0.35 } },
-      { 'arm.R': { swing: 0, spread: -0.35 }, 'fore.R': { swing: 0.65 }, 'arm.L': { swing: 0.2, spread: -0.4 }, 'fore.L': { swing: 0.9 }, head: { lean: 0.3 } },
+      { ...hands(plus(RIFLE_GRIP, [0, -0.02, -0.04]), [-0.12, 0.14, 0.98]), head: { lean: 0.35 } },
+      { ...hands(plus(RIFLE_GRIP, [0, -0.02, -0.04]), [0.07, 0.36, 0.98]), head: { lean: 0.3 } },
     ],
   },
   pistol: {
-    aim: (k = 0) => ({ 'arm.R': { swing: 0.6 + 0.12 * k, spread: -0.85 }, 'fore.R': { swing: 0.8 - 0.1 * k }, 'arm.L': { swing: 0.55 + 0.12 * k, spread: -0.9 }, 'fore.L': { swing: 0.55 - 0.1 * k } }),
+    aim: (k = 0) => {
+      const recoil = [0, -0.03, 0.05];
+      return hands(plus(PISTOL_GRIP, recoil, k), plus(PISTOL_SUPPORT, recoil, k));
+    },
     reload: [
-      { 'arm.R': { swing: 0, spread: -0.45 }, 'fore.R': { swing: 1.1 }, 'arm.L': { swing: 0.05, spread: -0.6 }, 'fore.L': { swing: 0.6 }, head: { lean: 0.35 } },
-      { 'arm.R': { swing: 0, spread: -0.45 }, 'fore.R': { swing: 1.1 }, 'arm.L': { swing: 0.1, spread: -0.2 }, 'fore.L': { swing: 1.2 }, head: { lean: 0.3 } },
+      { ...hands([0.05, 0.4, 1.08], [-0.16, 0.1, 0.98]), head: { lean: 0.3 } },
+      { ...hands([0.05, 0.4, 1.08], [0.03, 0.38, 0.99]), head: { lean: 0.25 } },
+    ],
+  },
+  dual: {
+    aim: (k = 0) => {
+      const recoil = [0, -0.03, 0.05];
+      return hands(plus(DUAL_RIGHT, recoil, k), plus(DUAL_LEFT, recoil, k));
+    },
+    reload: [
+      { ...hands([0.17, 0.3, 1.0], [-0.17, 0.3, 1.0]), head: { lean: 0.35 } },
+      { ...hands([0.1, 0.32, 1.02], [-0.1, 0.32, 1.02]), head: { lean: 0.3 } },
     ],
   },
 };
 
-/** Armas que se seguram como pistola (uma mão no cabo, a outra por cima). */
-export const PISTOLS = ['m1911', 'glock', 'magnum', 'uzi_dual', 'beretta', 'nailgun', 'makarov', 'mauser_c96'];
+/** Armas que se seguram como pistola (uma mão no cabo, a outra envolvendo). */
+export const PISTOLS = ['m1911', 'glock', 'magnum', 'beretta', 'nailgun', 'makarov', 'mauser_c96'];
+/** Armas de uma em cada mão. */
+export const DUALS = ['uzi_dual'];
+
+/** Postura da arma `id`: 'knife', 'pistol', 'dual' ou 'rifle'. */
+export function stanceOf(id) {
+  if (id === 'knife') return 'knife';
+  if (PISTOLS.includes(id)) return 'pistol';
+  if (DUALS.includes(id)) return 'dual';
+  return 'rifle';
+}
+
+/** Sufixo das animações da postura (Idle_pistol...); fuzil e faca usam as normais. */
+export const STANCE_SUFFIX = { pistol: '_pistol', dual: '_dual', rifle: '', knife: '' };
 
 /** Animações que dependem da postura: nomes com o sufixo dela (Idle_pistol...). */
 function stanceAnimations(stance, suffix) {
@@ -189,6 +255,7 @@ export function playerAnimations() {
     ] },
     ...deathAnimation(),
     ...stanceAnimations('pistol', '_pistol'),
+    ...stanceAnimations('dual', '_dual'),
   ];
 }
 
@@ -328,18 +395,19 @@ export function patientModel(look) {
 // ───────────────────────── Armas (camada à parte) ─────────────────────────
 
 /**
- * Peças da arma `id` (nível 0–2) presas à mão direita (camada 'weapon'). Armas de fogo
- * apontam para a frente do tronco, paralelas ao chão; a faca segue o antebraço (lâmina para
- * a frente da mão).
+ * Peças da arma `id` (nível 0–2) presas à mão direita, ou à esquerda com `hand: 'L'` (camada
+ * 'weapon'). Armas de fogo apontam para a frente do tronco, paralelas ao chão; a faca segue o
+ * antebraço (lâmina para a frente da mão).
  */
 export function weaponParts(id, level = 0) {
-  const hand = [0.29, 0.0, 0.8];
   const knife = id === 'knife';
   return weaponShape(id, level).map((part) => ({
     ...part,
     layer: 'weapon',
     attach: (bones) => {
-      const arm = bones['fore.R'];
+      const left = part.hand === 'L';
+      const hand = left ? [-0.29, 0.0, 0.8] : [0.29, 0.0, 0.8];
+      const arm = bones[left ? 'fore.L' : 'fore.R'];
       if (knife) {
         const at = [arm[0] * hand[0] + arm[1] * hand[1] + arm[2] * hand[2] + arm[3],
           arm[4] * hand[0] + arm[5] * hand[1] + arm[6] * hand[2] + arm[7],

@@ -2,21 +2,23 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7q6y5jab2xyk"
-path="res://.godot/imported/weapon_grenade_launcher_mk2.png-8ccc5d598578178e4d2bc6e12821596f.ctex"
+uid="uid://ddynuxahxb8n1"
+path.bptc="res://.godot/imported/weapon_grenade_launcher_mk2.png-8ccc5d598578178e4d2bc6e12821596f.bptc.ctex"
+path.astc="res://.godot/imported/weapon_grenade_launcher_mk2.png-8ccc5d598578178e4d2bc6e12821596f.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/weapon_grenade_launcher_mk2.png"
-dest_files=["res://.godot/imported/weapon_grenade_launcher_mk2.png-8ccc5d598578178e4d2bc6e12821596f.ctex"]
+dest_files=["res://.godot/imported/weapon_grenade_launcher_mk2.png-8ccc5d598578178e4d2bc6e12821596f.bptc.ctex", "res://.godot/imported/weapon_grenade_launcher_mk2.png-8ccc5d598578178e4d2bc6e12821596f.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

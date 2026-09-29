@@ -2,21 +2,23 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bmc45uk8v78je"
-path="res://.godot/imported/weapon_thompson_mk3.png-910fdd08565a98cfa99a3b1571c5cb67.ctex"
+uid="uid://pny2nd6mknix"
+path.bptc="res://.godot/imported/weapon_thompson_mk3.png-910fdd08565a98cfa99a3b1571c5cb67.bptc.ctex"
+path.astc="res://.godot/imported/weapon_thompson_mk3.png-910fdd08565a98cfa99a3b1571c5cb67.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/weapon_thompson_mk3.png"
-dest_files=["res://.godot/imported/weapon_thompson_mk3.png-910fdd08565a98cfa99a3b1571c5cb67.ctex"]
+dest_files=["res://.godot/imported/weapon_thompson_mk3.png-910fdd08565a98cfa99a3b1571c5cb67.bptc.ctex", "res://.godot/imported/weapon_thompson_mk3.png-910fdd08565a98cfa99a3b1571c5cb67.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

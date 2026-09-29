@@ -6,7 +6,8 @@ extends Node3D
 ## olha). Mesma API usada antes com os modelos 3D: play, play_once, current, has_animation.
 ## Camada extra opcional (a arma do jogador), no mesmo quadro, na frente ou atrás do corpo.
 ## A camada diz a postura ("stance" no JSON): com uma pistola, as animações que existem com o
-## sufixo _pistol (Idle_pistol, Walk_pistol...) tomam o lugar das normais.
+## sufixo _pistol (Idle_pistol, Walk_pistol...) tomam o lugar das normais; com uma arma em cada
+## mão (Uzi dupla), as de sufixo _dual.
 
 const SPRITES := "res://assets/sprites/%s"
 const PIXELS_PER_METER := 32.0
@@ -18,7 +19,7 @@ var sheet_name := ""
 var current: StringName = &""
 ## Animação da folha que está tocando (a atual, com o sufixo da postura se houver).
 var playing: StringName = &""
-## Sufixo da postura da arma ("" = fuzil, "_pistol").
+## Sufixo da postura da arma ("" = fuzil, "_pistol", "_dual").
 var stance_suffix := ""
 ## Dados da folha da camada (postura, ponta do cano...); vazio sem camada.
 var layer_meta: Dictionary = {}
@@ -45,7 +46,7 @@ static func create(sheet: String) -> CharacterSprite:
 	node.name = "Sprite"
 	node._meta = meta
 	node.sheet_name = sheet
-	node._body = node._make_sprite(sheet, "Body")
+	node._body = node._make_sprite(sheet, "Body", meta)
 	node.add_child(node._body)
 	node.play(&"Idle", 0.0)
 	return node
@@ -71,7 +72,7 @@ func set_sheet(sheet: String) -> void:
 	var old := _body
 	old.name = "OldBody"
 	sheet_name = sheet
-	_body = _make_sprite(sheet, "Body")
+	_body = _make_sprite(sheet, "Body", meta)
 	add_child(_body)
 	old.queue_free()
 	if _glow.a > 0.0:
@@ -88,15 +89,17 @@ func set_layer(sheet: String) -> void:
 	layer_meta = {}
 	if sheet == "" or not exists(sheet):
 		return
-	_layer = _make_sprite(sheet, "Layer")
-	add_child(_layer)
 	var meta := _read_meta(sheet)
+	_layer = _make_sprite(sheet, "Layer", meta)
+	add_child(_layer)
 	layer_meta = meta
 	_layer_behind = meta.get("weapon_behind", [])
 	# A faca não muda a postura (o golpe é o mesmo com qualquer arma).
 	match String(meta.get("stance", "")):
 		"pistol":
 			_set_stance("_pistol")
+		"dual":
+			_set_stance("_dual")
 		"rifle":
 			_set_stance("")
 	_apply_frame()
@@ -117,6 +120,16 @@ func _resolve(anim_name: StringName) -> StringName:
 
 func has_animation(anim_name: StringName) -> bool:
 	return _meta.get("animations", {}).has(String(anim_name))
+
+
+## A camada da arma está de fato visível no quadro atual? (falso no recorte mínimo de
+## fallback, usado quando o quadro não tem nenhum pixel da arma — ver `trims` em
+## scripts/godot/pixel/rig.mjs.)
+func layer_visible() -> bool:
+	if _layer == null:
+		return false
+	var atlas := _layer.texture as AtlasTexture
+	return atlas != null and atlas.region.size.x > 2.0 and atlas.region.size.y > 2.0
 
 
 ## Toca se já não for a atual (uma que não repete fica parada no último quadro).
@@ -212,11 +225,13 @@ func _apply_frame() -> void:
 	var anim: Dictionary = _meta.get("animations", {}).get(String(playing), {})
 	if anim.is_empty():
 		return
-	var columns := int(_meta.columns)
-	var index := direction * columns + int(anim.start) + mini(int(_frame), int(anim.count) - 1)
-	_body.frame = index
+	var per_dir := int(_meta.frames_per_direction)
+	var index := direction * per_dir + int(anim.start) + mini(int(_frame), int(anim.count) - 1)
+	_set_frame_texture(_body, index)
 	if _layer:
-		_layer.frame = index
+		# A camada da arma acompanha os mesmos quadros do corpo (mesmo índice) — a folha da arma
+		# tem o layout idêntico ao da folha do corpo, só desenhada sem oclusão.
+		_set_frame_texture(_layer, index)
 		# Arma à frente ou atrás do corpo, conforme a direção (sem brigar pela profundidade).
 		var camera := get_viewport().get_camera_3d() if is_inside_tree() else null
 		if camera:
@@ -225,24 +240,71 @@ func _apply_frame() -> void:
 			_layer.global_position = global_position + to_camera * (-LAYER_GAP if behind else LAYER_GAP)
 
 
-func _make_sprite(sheet: String, sprite_name: String) -> Sprite3D:
+## Troca pro AtlasTexture pré-construído daquele índice (sem custo se já for o atual), com o
+## offset que põe aquele recorte no lugar certo em relação aos pés.
+func _set_frame_texture(sprite: Sprite3D, index: int) -> void:
+	var atlases: Array = sprite.get_meta(&"atlases")
+	var next: AtlasTexture = atlases[index]
+	if sprite.texture != next:
+		sprite.texture = next
+		sprite.offset = (sprite.get_meta(&"offsets") as PackedVector2Array)[index]
+
+
+## Um AtlasTexture por quadro, só com a região recortada: `cells[i]` = [x, y, w, h, x_no_quadro,
+## y_no_quadro]. Sem `margin`: no Godot o tamanho do AtlasTexture é region.size + margin.size, e
+## um quadro lógico fixo cortaria as armas compridas que passam dele.
+static func make_atlas(meta: Dictionary, texture: Texture2D, index: int) -> AtlasTexture:
+	var c: Array = meta.cells[index]
+	var atlas := AtlasTexture.new()
+	atlas.atlas = texture
+	atlas.region = Rect2(c[0], c[1], c[2], c[3])
+	return atlas
+
+
+static func _build_atlases(meta: Dictionary, texture: Texture2D) -> Array:
+	var out: Array = []
+	var cells: Array = meta.cells
+	out.resize(cells.size())
+	for i in cells.size():
+		out[i] = make_atlas(meta, texture, i)
+	return out
+
+
+## Canto do recorte de cada quadro em relação aos pés (pivô), no espaço do Sprite3D sem
+## `centered` (y para cima): corpo e arma caem no mesmo lugar porque os dois usam o mesmo pivô.
+static func _build_offsets(meta: Dictionary) -> PackedVector2Array:
+	var pivot: Array = meta.pivot
+	var out := PackedVector2Array()
+	for c: Array in meta.cells:
+		out.append(Vector2(float(c[4]) - float(pivot[0]), float(pivot[1]) - float(c[5]) - float(c[3])))
+	return out
+
+
+## `meta` é sempre o da PRÓPRIA folha (`sheet`) — nunca reusar `_meta` aqui: corpo e camada da
+## arma são empacotados de forma independente, cada um com seu próprio `cells`, então usar o
+## meta errado aponta pra região/posição de outra folha.
+func _make_sprite(sheet: String, sprite_name: String, meta: Dictionary) -> Sprite3D:
 	var sprite := Sprite3D.new()
 	sprite.name = sprite_name
-	sprite.texture = load((SPRITES % sheet) + ".png")
-	sprite.hframes = int(_meta.columns)
-	sprite.vframes = int(_meta.directions)
-	sprite.pixel_size = 1.0 / float(_meta.get("pixels_per_meter", PIXELS_PER_METER))
+	# Textura crua (a folha empacotada inteira) — é ela que o shader amostra pelo uniform
+	# `tex`, não o AtlasTexture ativo (o Godot gera a UV do quadro a partir do AtlasTexture,
+	# mas o fragment shader sempre lê a imagem base).
+	var raw_texture: Texture2D = load((SPRITES % sheet) + ".png")
+	var atlases := _build_atlases(meta, raw_texture)
+	var offsets := _build_offsets(meta)
+	sprite.set_meta(&"atlases", atlases)
+	sprite.set_meta(&"offsets", offsets)
+	sprite.centered = false
+	sprite.texture = atlases[0]
+	sprite.offset = offsets[0]
+	sprite.pixel_size = 1.0 / float(meta.get("pixels_per_meter", PIXELS_PER_METER))
 	sprite.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	sprite.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	sprite.alpha_cut = SpriteBase3D.ALPHA_CUT_DISCARD
 	sprite.shaded = true
 	sprite.double_sided = false
 	sprite.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
-	sprite.material_override = _material(sheet, sprite.texture)
-	# Pés (pivô da folha) na origem do nó; o y do offset do Sprite3D cresce para cima.
-	var frame_size: Array = _meta.frame
-	var pivot: Array = _meta.pivot
-	sprite.offset = Vector2(float(frame_size[0]) * 0.5 - float(pivot[0]), float(pivot[1]) - float(frame_size[1]) * 0.5)
+	sprite.material_override = _material(sheet, raw_texture)
 	return sprite
 
 

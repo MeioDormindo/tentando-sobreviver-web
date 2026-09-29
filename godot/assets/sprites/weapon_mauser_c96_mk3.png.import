@@ -2,21 +2,23 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bv3emuvyp3mcj"
-path="res://.godot/imported/weapon_mauser_c96_mk3.png-f9085d5114c1e73e0215cf7bf51e66a4.ctex"
+uid="uid://di33xkuhbehqk"
+path.bptc="res://.godot/imported/weapon_mauser_c96_mk3.png-f9085d5114c1e73e0215cf7bf51e66a4.bptc.ctex"
+path.astc="res://.godot/imported/weapon_mauser_c96_mk3.png-f9085d5114c1e73e0215cf7bf51e66a4.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/weapon_mauser_c96_mk3.png"
-dest_files=["res://.godot/imported/weapon_mauser_c96_mk3.png-f9085d5114c1e73e0215cf7bf51e66a4.ctex"]
+dest_files=["res://.godot/imported/weapon_mauser_c96_mk3.png-f9085d5114c1e73e0215cf7bf51e66a4.bptc.ctex", "res://.godot/imported/weapon_mauser_c96_mk3.png-f9085d5114c1e73e0215cf7bf51e66a4.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

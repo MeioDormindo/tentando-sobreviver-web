@@ -2,21 +2,23 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://badjq1bm1d3gh"
-path="res://.godot/imported/weapon_makarov_mk2.png-de5bfaf2204f13dd86a00bff823e2d1d.ctex"
+uid="uid://b68xbfcbbwxsk"
+path.bptc="res://.godot/imported/weapon_makarov_mk2.png-de5bfaf2204f13dd86a00bff823e2d1d.bptc.ctex"
+path.astc="res://.godot/imported/weapon_makarov_mk2.png-de5bfaf2204f13dd86a00bff823e2d1d.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/weapon_makarov_mk2.png"
-dest_files=["res://.godot/imported/weapon_makarov_mk2.png-de5bfaf2204f13dd86a00bff823e2d1d.ctex"]
+dest_files=["res://.godot/imported/weapon_makarov_mk2.png-de5bfaf2204f13dd86a00bff823e2d1d.bptc.ctex", "res://.godot/imported/weapon_makarov_mk2.png-de5bfaf2204f13dd86a00bff823e2d1d.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

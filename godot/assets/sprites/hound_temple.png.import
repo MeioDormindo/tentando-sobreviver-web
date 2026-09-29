@@ -3,20 +3,22 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://jc2kn0svgeqx"
-path="res://.godot/imported/hound_temple.png-4cd4dae02510c7bd6af2e9781059ee7c.ctex"
+path.bptc="res://.godot/imported/hound_temple.png-4cd4dae02510c7bd6af2e9781059ee7c.bptc.ctex"
+path.astc="res://.godot/imported/hound_temple.png-4cd4dae02510c7bd6af2e9781059ee7c.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/hound_temple.png"
-dest_files=["res://.godot/imported/hound_temple.png-4cd4dae02510c7bd6af2e9781059ee7c.ctex"]
+dest_files=["res://.godot/imported/hound_temple.png-4cd4dae02510c7bd6af2e9781059ee7c.bptc.ctex", "res://.godot/imported/hound_temple.png-4cd4dae02510c7bd6af2e9781059ee7c.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

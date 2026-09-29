@@ -3,20 +3,22 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bid1em5ib77b8"
-path="res://.godot/imported/player_conductor.png-0272a1574a5c2c8942ef810ef034a371.ctex"
+path.bptc="res://.godot/imported/player_conductor.png-0272a1574a5c2c8942ef810ef034a371.bptc.ctex"
+path.astc="res://.godot/imported/player_conductor.png-0272a1574a5c2c8942ef810ef034a371.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/player_conductor.png"
-dest_files=["res://.godot/imported/player_conductor.png-0272a1574a5c2c8942ef810ef034a371.ctex"]
+dest_files=["res://.godot/imported/player_conductor.png-0272a1574a5c2c8942ef810ef034a371.bptc.ctex", "res://.godot/imported/player_conductor.png-0272a1574a5c2c8942ef810ef034a371.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

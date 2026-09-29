@@ -68,26 +68,32 @@ func _portrait(skin: Dictionary) -> Control:
 		frame.add_child(swatch)
 		return frame
 	var meta: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(meta_path))
+	const PORTRAIT_SCALE := 2.0
 	var size := Vector2(meta.frame[0], meta.frame[1])
 	var stack := Control.new()
-	stack.custom_minimum_size = size * 2.0
+	stack.custom_minimum_size = size * PORTRAIT_SCALE
 	frame.add_child(stack)
-	var idle: int = int(meta.animations.get("Idle_pistol", meta.animations.Idle).start)
 	# Com a pistola inicial do mapa do visual (M1911 no Terminal, Beretta no Hospital,
 	# Makarov no Templo), lida do mapa.
 	var pistol := "weapon_%s" % start_weapon(String(skin.get("map", "terminal")))
 	for layer: String in [sheet, pistol]:
-		if not ResourceLoader.exists("res://assets/sprites/%s.png" % layer):
+		var layer_meta_path := "res://assets/sprites/%s.json" % layer
+		if not ResourceLoader.exists("res://assets/sprites/%s.png" % layer) or not FileAccess.file_exists(layer_meta_path):
 			continue
-		var atlas := AtlasTexture.new()
-		atlas.atlas = load("res://assets/sprites/%s.png" % layer)
-		atlas.region = Rect2(Vector2(idle * size.x, 0.0), size)
+		# Corpo e arma têm o mesmo layout de quadros: Idle_pistol na direção 0 (de frente) é o
+		# mesmo índice nas duas folhas.
+		var layer_meta: Dictionary = meta if layer == sheet else JSON.parse_string(FileAccess.get_file_as_string(layer_meta_path))
+		var layer_index := int(layer_meta.animations.get("Idle_pistol", layer_meta.animations.Idle).start)
+		var cell: Array = layer_meta.cells[layer_index]
+		var atlas := CharacterSprite.make_atlas(layer_meta, load("res://assets/sprites/%s.png" % layer), layer_index)
 		var picture := TextureRect.new()
 		picture.texture = atlas
 		picture.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-		picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		picture.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		# O AtlasTexture é só o recorte; `cell[4..5]` é onde ele fica dentro do quadro (o mesmo
+		# pras duas camadas), igual o offset por quadro do CharacterSprite no 3D.
+		picture.stretch_mode = TextureRect.STRETCH_SCALE
+		picture.position = Vector2(cell[4], cell[5]) * PORTRAIT_SCALE
+		picture.size = Vector2(cell[2], cell[3]) * PORTRAIT_SCALE
 		if not is_unlocked(skin):
 			picture.modulate = Color(0.05, 0.05, 0.06)
 		stack.add_child(picture)

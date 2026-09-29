@@ -2,21 +2,23 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c6grawnhayvo3"
-path="res://.godot/imported/weapon_pump_mk2.png-a2b537ba8234720af02d44341b2e8954.ctex"
+uid="uid://bi2u5h3n6bfo1"
+path.bptc="res://.godot/imported/weapon_pump_mk2.png-a2b537ba8234720af02d44341b2e8954.bptc.ctex"
+path.astc="res://.godot/imported/weapon_pump_mk2.png-a2b537ba8234720af02d44341b2e8954.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/weapon_pump_mk2.png"
-dest_files=["res://.godot/imported/weapon_pump_mk2.png-a2b537ba8234720af02d44341b2e8954.ctex"]
+dest_files=["res://.godot/imported/weapon_pump_mk2.png-a2b537ba8234720af02d44341b2e8954.bptc.ctex", "res://.godot/imported/weapon_pump_mk2.png-a2b537ba8234720af02d44341b2e8954.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

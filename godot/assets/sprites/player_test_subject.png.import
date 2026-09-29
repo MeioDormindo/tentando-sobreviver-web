@@ -3,20 +3,22 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://r7w8fbx1y7rb"
-path="res://.godot/imported/player_test_subject.png-92af4c74dfad22852c6cbc8c728d8a54.ctex"
+path.bptc="res://.godot/imported/player_test_subject.png-92af4c74dfad22852c6cbc8c728d8a54.bptc.ctex"
+path.astc="res://.godot/imported/player_test_subject.png-92af4c74dfad22852c6cbc8c728d8a54.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/player_test_subject.png"
-dest_files=["res://.godot/imported/player_test_subject.png-92af4c74dfad22852c6cbc8c728d8a54.ctex"]
+dest_files=["res://.godot/imported/player_test_subject.png-92af4c74dfad22852c6cbc8c728d8a54.bptc.ctex", "res://.godot/imported/player_test_subject.png-92af4c74dfad22852c6cbc8c728d8a54.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

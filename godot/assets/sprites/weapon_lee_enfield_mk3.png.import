@@ -2,21 +2,23 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bh0cfscqrbimw"
-path="res://.godot/imported/weapon_lee_enfield_mk3.png-5f012ef26e4de93b199ac5ce8e16f167.ctex"
+uid="uid://d2kxgg0nqvnui"
+path.bptc="res://.godot/imported/weapon_lee_enfield_mk3.png-5f012ef26e4de93b199ac5ce8e16f167.bptc.ctex"
+path.astc="res://.godot/imported/weapon_lee_enfield_mk3.png-5f012ef26e4de93b199ac5ce8e16f167.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/weapon_lee_enfield_mk3.png"
-dest_files=["res://.godot/imported/weapon_lee_enfield_mk3.png-5f012ef26e4de93b199ac5ce8e16f167.ctex"]
+dest_files=["res://.godot/imported/weapon_lee_enfield_mk3.png-5f012ef26e4de93b199ac5ce8e16f167.bptc.ctex", "res://.godot/imported/weapon_lee_enfield_mk3.png-5f012ef26e4de93b199ac5ce8e16f167.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

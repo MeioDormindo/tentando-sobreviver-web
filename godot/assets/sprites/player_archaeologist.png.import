@@ -3,20 +3,22 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bpfk77uwc6d1k"
-path="res://.godot/imported/player_archaeologist.png-edd5b4ac91773430e9fd0f22c4e8f3ae.ctex"
+path.bptc="res://.godot/imported/player_archaeologist.png-edd5b4ac91773430e9fd0f22c4e8f3ae.bptc.ctex"
+path.astc="res://.godot/imported/player_archaeologist.png-edd5b4ac91773430e9fd0f22c4e8f3ae.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/player_archaeologist.png"
-dest_files=["res://.godot/imported/player_archaeologist.png-edd5b4ac91773430e9fd0f22c4e8f3ae.ctex"]
+dest_files=["res://.godot/imported/player_archaeologist.png-edd5b4ac91773430e9fd0f22c4e8f3ae.bptc.ctex", "res://.godot/imported/player_archaeologist.png-edd5b4ac91773430e9fd0f22c4e8f3ae.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

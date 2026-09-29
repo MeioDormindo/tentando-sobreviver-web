@@ -2,21 +2,23 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bn4mtj535u3bm"
-path="res://.godot/imported/weapon_mp5_mk3.png-5579247883e73b4b8f25f171050a6004.ctex"
+uid="uid://kilkv5gjqugn"
+path.bptc="res://.godot/imported/weapon_mp5_mk3.png-5579247883e73b4b8f25f171050a6004.bptc.ctex"
+path.astc="res://.godot/imported/weapon_mp5_mk3.png-5579247883e73b4b8f25f171050a6004.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/weapon_mp5_mk3.png"
-dest_files=["res://.godot/imported/weapon_mp5_mk3.png-5579247883e73b4b8f25f171050a6004.ctex"]
+dest_files=["res://.godot/imported/weapon_mp5_mk3.png-5579247883e73b4b8f25f171050a6004.bptc.ctex", "res://.godot/imported/weapon_mp5_mk3.png-5579247883e73b4b8f25f171050a6004.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

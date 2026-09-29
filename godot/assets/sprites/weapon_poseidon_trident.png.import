@@ -2,21 +2,23 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2bs2ymum25y3"
-path="res://.godot/imported/weapon_poseidon_trident.png-9da0d5a34f1b9eea5fac171a3cc22dc6.ctex"
+uid="uid://orrpvbg108c4"
+path.bptc="res://.godot/imported/weapon_poseidon_trident.png-9da0d5a34f1b9eea5fac171a3cc22dc6.bptc.ctex"
+path.astc="res://.godot/imported/weapon_poseidon_trident.png-9da0d5a34f1b9eea5fac171a3cc22dc6.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/weapon_poseidon_trident.png"
-dest_files=["res://.godot/imported/weapon_poseidon_trident.png-9da0d5a34f1b9eea5fac171a3cc22dc6.ctex"]
+dest_files=["res://.godot/imported/weapon_poseidon_trident.png-9da0d5a34f1b9eea5fac171a3cc22dc6.bptc.ctex", "res://.godot/imported/weapon_poseidon_trident.png-9da0d5a34f1b9eea5fac171a3cc22dc6.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

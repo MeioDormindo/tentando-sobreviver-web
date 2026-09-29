@@ -2,21 +2,23 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dsa0i3w7gpdd"
-path="res://.godot/imported/weapon_flamethrower.png-6d786a9795f0bd6df722db2ecda9701b.ctex"
+uid="uid://cvy047o2fd60b"
+path.bptc="res://.godot/imported/weapon_flamethrower.png-6d786a9795f0bd6df722db2ecda9701b.bptc.ctex"
+path.astc="res://.godot/imported/weapon_flamethrower.png-6d786a9795f0bd6df722db2ecda9701b.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/weapon_flamethrower.png"
-dest_files=["res://.godot/imported/weapon_flamethrower.png-6d786a9795f0bd6df722db2ecda9701b.ctex"]
+dest_files=["res://.godot/imported/weapon_flamethrower.png-6d786a9795f0bd6df722db2ecda9701b.bptc.ctex", "res://.godot/imported/weapon_flamethrower.png-6d786a9795f0bd6df722db2ecda9701b.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

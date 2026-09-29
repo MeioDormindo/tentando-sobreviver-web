@@ -12,7 +12,7 @@ import { rmSync } from 'node:fs';
 import { hex } from './raster.mjs';
 import {
   zombieModel, zombieAnimations, playerModel, patientModel, playerAnimations, weaponParts,
-  houndModel, houndAnimations, PISTOLS, conductorModel, patientZeroModel, bossAnimations,
+  houndModel, houndAnimations, stanceOf, STANCE_SUFFIX, conductorModel, patientZeroModel, bossAnimations,
 } from './characters.mjs';
 import { TEMPLE_LOOKS, TEMPLE_HOUND, hopliteModel, skeletonModel, minotaurModel, archaeologistModel, cerberusModel, cerberusAnimations, entityModel, satyrModel, hellwolfLook, harpyModel, gorgonModel } from './temple_characters.mjs';
 
@@ -53,7 +53,10 @@ function write(name, result) {
     writeFileSync(join(OUT, `${file}.png`), encodePng(sheet.width, sheet.height, sheet.data));
   }
   writeFileSync(join(OUT, `${name}.json`), JSON.stringify(result.meta, null, 1) + '\n');
-  console.log(`  ${name}: quadro ${result.meta.frame.join('×')}, ${result.meta.columns} quadros × 8 direções`);
+  const { frame, frames_per_direction: perDir, sheet } = result.meta;
+  const uniform = frame[0] * perDir * frame[1] * 8;
+  const packed = sheet[0] * sheet[1];
+  console.log(`  ${name}: quadro ${frame.join('×')}, ${perDir} quadros × 8 direções — folha ${sheet.join('×')} (${(uniform / packed).toFixed(1)}× menor que grade uniforme)`);
 }
 
 const GLOWS = { exploder: hex(0xffa23a), spitter: hex(0xa8ff4a) };
@@ -148,8 +151,13 @@ for (const line of skins.split('\n')) {
   emit(`player_${id[1]}`, () => buildSheet(model, playerAnimations(), { pitch: PITCH, fixedFrame: PLAYER_FRAME, layers: { body: null } }));
 }
 
-// Armas: uma folha por arma e por nível do Weapon Lab (weapon_<id>, _mk2, _mk3), na mesma
-// pose e quadro do jogador (e se ela fica atrás do corpo), e o ícone de perfil de cada uma.
+// Armas: uma folha por arma e por nível do Weapon Lab (weapon_<id>, _mk2, _mk3) e o ícone de
+// perfil de cada uma. A folha da arma acompanha os mesmos quadros (8 direções × poses) da
+// folha do corpo, quadro a quadro — mesmo índice serve pras duas — mas sem `occlude`: a arma é
+// desenhada sempre inteira (não "assada"/recortada por oclusão 3D dentro do corpo). Isso combina
+// os dois lados: a arma acompanha a mão em toda animação (Reload/Shoot/Knife/Hurt, não só
+// Idle/Walk/Run) e nunca aparece como um fragmento minúsculo solto (que era o problema da
+// oclusão por pixel).
 if (ONLY.length === 0) for (const file of readdirSync(OUT)) if (file.startsWith('weapon_')) rmSync(join(OUT, file));
 mkdirSync(join(OUT, 'icons'), { recursive: true });
 const base = playerModel({ jacket: [0, 0, 0], pack: [0, 0, 0], hair: [0, 0, 0] });
@@ -161,15 +169,16 @@ for (const id of weaponIds) {
   for (const level of id === 'knife' ? [0] : [0, 1, 2]) {
     if (!want(`weapon_${id}`)) continue;
     const model = { ...base, parts: [...base.parts, ...weaponParts(id, level)] };
-    // Desenhada com o corpo na frente: só os pixels da arma que aparecem (a mão cobre o cabo),
-    // e a camada vai sempre por cima do corpo.
+    const stance = stanceOf(id);
+    // Sem `occlude`: renderiza só a arma (filtro `layer==='weapon'`), sempre visível — e isso
+    // ativa de graça o cálculo de `weapon_behind` em rig.mjs (compara a profundidade real da
+    // arma vs. o corpo por direção), que a chamada antiga com `occlude:true` nunca disparava.
     const sheet = buildSheet(model, playerAnimations(), {
-      pitch: PITCH, fixedFrame: PLAYER_FRAME, occlude: true,
+      pitch: PITCH, fixedFrame: PLAYER_FRAME,
       layers: { weapon: (p) => p.layer === 'weapon' },
     });
-    // Postura do corpo com essa arma (animações com sufixo _pistol ou as normais).
-    sheet.meta.stance = id === 'knife' ? 'knife' : PISTOLS.includes(id) ? 'pistol' : 'rifle';
-    sheet.meta.muzzle = muzzleOf(id, level, sheet.meta.stance);
+    sheet.meta.stance = stance;
+    sheet.meta.muzzle = muzzleOf(id, level, stance);
     write(`weapon_${id}${level ? `_mk${level + 1}` : ''}`, sheet);
     const icon = renderIcon(weaponShape(id, level));
     writeFileSync(join(OUT, 'icons', `weapon_${id}${level ? `_mk${level + 1}` : ''}.png`), encodePng(icon.width, icon.height, icon.data));
@@ -184,9 +193,10 @@ function muzzleOf(id, level, stance) {
   const parts = weaponParts(id, level);
   const tipY = Math.max(...parts.map((q) => q.at[1] + q.size[1] / 2));
   const barrel = parts.reduce((best, q) => (q.at[1] + q.size[1] / 2 >= tipY - 0.001 ? q : best), parts[0]);
-  const idle = playerAnimations().find((a) => a.name === (stance === 'pistol' ? 'Idle_pistol' : 'Idle'));
+  const idle = playerAnimations().find((a) => a.name === `Idle${STANCE_SUFFIX[stance]}`);
   const bones = solve(base.bones, sample(idle.keys, 0));
-  const [x, y, z] = apply(parts[0].attach(bones), [0, tipY, barrel.at[2]]);
+  // Na mão que segura o cano (a Uzi da direita; o arco inteiro fica na esquerda).
+  const [x, y, z] = apply(barrel.attach(bones), [0, tipY, barrel.at[2]]);
   return [x, z, -y].map((v) => Math.round(v * 1000) / 1000);
 }
 

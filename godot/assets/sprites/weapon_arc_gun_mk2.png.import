@@ -2,21 +2,23 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bc2utbq0jqnh"
-path="res://.godot/imported/weapon_arc_gun_mk2.png-ec7c4ed02ee1cfd86458bd7644982249.ctex"
+uid="uid://b6iufq11dxr85"
+path.bptc="res://.godot/imported/weapon_arc_gun_mk2.png-ec7c4ed02ee1cfd86458bd7644982249.bptc.ctex"
+path.astc="res://.godot/imported/weapon_arc_gun_mk2.png-ec7c4ed02ee1cfd86458bd7644982249.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/weapon_arc_gun_mk2.png"
-dest_files=["res://.godot/imported/weapon_arc_gun_mk2.png-ec7c4ed02ee1cfd86458bd7644982249.ctex"]
+dest_files=["res://.godot/imported/weapon_arc_gun_mk2.png-ec7c4ed02ee1cfd86458bd7644982249.bptc.ctex", "res://.godot/imported/weapon_arc_gun_mk2.png-ec7c4ed02ee1cfd86458bd7644982249.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

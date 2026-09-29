@@ -436,8 +436,11 @@ func announce_weapon() -> void:
 	Events.weapon_visual_changed.emit(weapon.data.id, weapon.level, other.data.id if other else &"", other.level if other else 0)
 
 
-## Clarão do disparo: sprite de fogo e luz rápida na boca da arma.
+## Clarão do disparo: sprite de fogo e luz rápida na boca da arma. Nada se o quadro da arma
+## estiver vazio (sem nenhum pixel dela) — clarão sem arma visível pareceria saindo do nada.
 func _muzzle_flash() -> void:
+	if model != null and not model.layer_visible():
+		return
 	var at := muzzle.global_position
 	PixelFx.spawn(get_tree(), "muzzle", at, 0.55, 1.4)
 	var light := OmniLight3D.new()

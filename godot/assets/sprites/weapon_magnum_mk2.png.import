@@ -2,21 +2,23 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bbvh2hq5pn363"
-path="res://.godot/imported/weapon_magnum_mk2.png-ba44f169e86172224c23132d42f11493.ctex"
+uid="uid://cplp706mfwfj3"
+path.bptc="res://.godot/imported/weapon_magnum_mk2.png-ba44f169e86172224c23132d42f11493.bptc.ctex"
+path.astc="res://.godot/imported/weapon_magnum_mk2.png-ba44f169e86172224c23132d42f11493.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/weapon_magnum_mk2.png"
-dest_files=["res://.godot/imported/weapon_magnum_mk2.png-ba44f169e86172224c23132d42f11493.ctex"]
+dest_files=["res://.godot/imported/weapon_magnum_mk2.png-ba44f169e86172224c23132d42f11493.bptc.ctex", "res://.godot/imported/weapon_magnum_mk2.png-ba44f169e86172224c23132d42f11493.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

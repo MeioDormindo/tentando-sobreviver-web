@@ -2,21 +2,23 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://co3udbaqnapvp"
-path="res://.godot/imported/weapon_knife.png-b4e683270e1581fac6b3dd22d6bc4859.ctex"
+uid="uid://bfgnsi3msgyj"
+path.bptc="res://.godot/imported/weapon_knife.png-b4e683270e1581fac6b3dd22d6bc4859.bptc.ctex"
+path.astc="res://.godot/imported/weapon_knife.png-b4e683270e1581fac6b3dd22d6bc4859.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/weapon_knife.png"
-dest_files=["res://.godot/imported/weapon_knife.png-b4e683270e1581fac6b3dd22d6bc4859.ctex"]
+dest_files=["res://.godot/imported/weapon_knife.png-b4e683270e1581fac6b3dd22d6bc4859.bptc.ctex", "res://.godot/imported/weapon_knife.png-b4e683270e1581fac6b3dd22d6bc4859.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

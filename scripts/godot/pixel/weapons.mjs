@@ -23,8 +23,15 @@ const BRONZE = hex(0xb07a32);
 const MARBLE = hex(0xd8d4c6);
 
 /**
+ * Onde a mão de apoio fica em relação à mão do gatilho na postura de fuzil (m; x direita,
+ * y frente, z cima): embaixo do guarda-mão, até onde o braço esquerdo alcança.
+ */
+export const SUPPORT_REACH = [-0.02, 0.19, -0.02];
+
+/**
  * Peças da arma `id` no nível `level` (0 = original, 1 = Mk II, 2 = Mk III).
- * Cada peça: { at, size, color, flat?, shape?, round? }.
+ * Cada peça: { at, size, color, flat?, shape?, round?, hand? } — `hand: 'L'` prende a peça à
+ * mão esquerda (sem ele, à direita).
  */
 export function weaponShape(id, level = 0) {
   const p = [];
@@ -122,10 +129,12 @@ export function weaponShape(id, level = 0) {
       barrel(0.09, 0.2, 0.04, 0.08); grip(-0.02, WOOD);
       break;
     case 'uzi_dual':
-      for (const x of [-0.11, 0.11]) {
-        p.push({ at: [x, 0.07, 0.07], size: [0.05, 0.18, 0.08], color: POLY, round: 0.012 });
-        p.push({ at: [x, 0.02, -0.06], size: [0.04, 0.05, 0.16], color: DARK, round: 0.01 });
-        p.push({ at: [x, 0.19, 0.08], size: [0.025, 0.06, 0.025], color: metal, round: 0.01 });
+      // Uma Uzi em cada mão (postura 'dual'). A da direita vem por último: é a ponta dela que o
+      // muzzleOf pega (tiro e clarão).
+      for (const hand of ['L', 'R']) {
+        p.push({ at: [0, 0.07, 0.07], size: [0.05, 0.18, 0.08], color: POLY, round: 0.012, hand });
+        p.push({ at: [0, 0.02, -0.06], size: [0.04, 0.05, 0.16], color: DARK, round: 0.01, hand });
+        p.push({ at: [0, 0.19, 0.08], size: [0.025, 0.06, 0.025], color: metal, round: 0.01, hand });
       }
       break;
     case 'mp5':
@@ -264,11 +273,12 @@ export function weaponShape(id, level = 0) {
       sling(-0.3, 0.2);
       break;
     case 'hephaestus_spear':
-      // Lança de Hefesto: haste de bronze com ponta em brasa e as tenazes da forja no cabo.
-      add([0, 0.2, 0.07], [0.04, 0.8, 0.04], BRONZE, { round: 0.015 });
-      add([0, 0.66, 0.07], [0.09, 0.16, 0.03], accent, { flat: true });
-      add([0, 0.6, 0.07], [0.12, 0.04, 0.05], hex(0x6a3a1a));
-      grip(-0.02, hex(0x3a2a1e)); add([0, -0.12, 0.07], [0.06, 0.08, 0.06], BRONZE);
+      // Lança de Hefesto: haste de bronze com ponta em brasa e as tenazes da forja no cabo. A
+      // haste passa pelas duas mãos (z = 0), com a empunhadura enrolada nela.
+      add([0, 0.2, 0], [0.04, 0.8, 0.04], BRONZE, { round: 0.015 });
+      add([0, 0.66, 0], [0.09, 0.16, 0.03], accent, { flat: true });
+      add([0, 0.6, 0], [0.12, 0.04, 0.05], hex(0x6a3a1a));
+      add([0, -0.02, 0], [0.055, 0.1, 0.055], hex(0x3a2a1e)); add([0, -0.12, 0], [0.06, 0.08, 0.06], BRONZE);
       break;
     case 'zeus_bolt':
       // Raio de Zeus: um raio de ouro e mármore, com o núcleo azul aceso.
@@ -276,36 +286,53 @@ export function weaponShape(id, level = 0) {
       for (let i = 0; i < 4; i++) add([i % 2 ? 0.03 : -0.03, 0.22 + i * 0.09, 0.07], [0.05, 0.1, 0.05], hex(0xf0c040), { rot: [0, 0, i % 2 ? 0.5 : -0.5] });
       add([0, 0.1, 0.07], [0.06, 0.08, 0.14], accent, { flat: true, shape: 'ellipsoid' });
       break;
-    case 'artemis_bow':
-      // Arco de Artemis: arco prateado em crescente com a corda luminosa e a flecha apoiada.
-      for (let i = -3; i <= 3; i++) add([0, 0.08 - Math.abs(i) * 0.02, 0.07 + i * 0.07], [0.03, 0.03, 0.08], hex(0xd8e0e8), { round: 0.01 });
-      add([0, 0.0, 0.07], [0.008, 0.008, 0.46], accent, { flat: true });
-      add([0, 0.2, 0.07], [0.015, 0.4, 0.015], hex(0x6a4a2a)); add([0, 0.41, 0.07], [0.04, 0.04, 0.03], hex(0xe8f0ff));
-      grip(0, hex(0x5a6a7a));
+    case 'artemis_bow': {
+      // Arco de Artemis: arco prateado em crescente, na mão da frente (a esquerda, na postura de
+      // fuzil); a corda luminosa puxada até a mão direita, com a flecha encaixada nela.
+      const nock = SUPPORT_REACH.map((v) => -v);  // mão direita, vista da esquerda
+      for (let i = -3; i <= 3; i++) add([0, 0.02 - Math.abs(i) * 0.02, i * 0.07], [0.03, 0.03, 0.08], hex(0xd8e0e8), { round: 0.01, hand: 'L' });
+      for (const tip of [-0.22, 0.22]) {
+        const dy = nock[1] + 0.04, dz = nock[2] - tip;
+        add([nock[0] / 2, (nock[1] - 0.04) / 2, (nock[2] + tip) / 2], [0.008, 0.008, Math.hypot(dy, dz)], accent, { flat: true, hand: 'L', rot: [Math.atan2(-dy, dz), 0, 0] });
+      }
+      add([nock[0] / 2, (nock[1] + 0.14) / 2, nock[2] / 2], [0.015, 0.14 - nock[1], 0.015], hex(0x6a4a2a), { hand: 'L' });
+      add([0, 0.16, 0], [0.04, 0.04, 0.03], hex(0xe8f0ff), { hand: 'L' });
+      add([0, 0, -0.02], [0.045, 0.06, 0.1], hex(0x5a6a7a), { hand: 'L' });
       break;
+    }
     case 'poseidon_trident':
-      // Tridente de Poseidon: haste de bronze e as três pontas de coral-azul.
-      add([0, 0.2, 0.07], [0.04, 0.7, 0.04], BRONZE, { round: 0.015 });
-      add([0, 0.54, 0.07], [0.2, 0.04, 0.04], BRONZE);
-      for (const x of [-0.09, 0, 0.09]) add([x, 0.63, 0.07], [0.03, 0.16, 0.03], accent, { round: 0.01 });
-      grip(-0.02, hex(0x2a4a5a));
+      // Tridente de Poseidon: haste de bronze e as três pontas de coral-azul. A haste passa
+      // pelas duas mãos (z = 0), com a empunhadura enrolada nela.
+      add([0, 0.2, 0], [0.04, 0.7, 0.04], BRONZE, { round: 0.015 });
+      add([0, 0.54, 0], [0.2, 0.04, 0.04], BRONZE);
+      for (const x of [-0.09, 0, 0.09]) add([x, 0.63, 0], [0.03, 0.16, 0.03], accent, { round: 0.01 });
+      add([0, -0.02, 0], [0.055, 0.1, 0.055], hex(0x2a4a5a));
       break;
     default:
       receiver(0.3); grip();
   }
 
   // Melhorias do Weapon Lab.
+  const beforeUpgrades = p.length;
+  const leftHanded = p.every((q) => q.hand === 'L');  // arco: a arma toda na mão esquerda
+  // Altura do cano: a da peça mais à frente (0.07 nas armas de fogo; 0 na lança e no tridente).
+  const tip = p.reduce((best, q) => (q.at[1] + q.size[1] / 2 > best.at[1] + best.size[1] / 2 ? q : best), p[0]);
+  const axis = tip.at[2];
   if (level >= 1) {
     const top = Math.max(...p.map((q) => q.at[2] + q.size[2] / 2));
     const front = Math.max(...p.map((q) => q.at[1] + q.size[1] / 2));
     if (!['uzi_dual', 'minigun', 'grenade_launcher', 'barrett'].includes(id)) add([0, 0.12, top + 0.03], [0.04, 0.14, 0.04], DARK, { shape: 'ellipsoid' });  // mira
-    add([0, front + 0.03, 0.07], [0.05, 0.06, 0.05], DARK);  // quebra-chama
+    add([0, front + 0.03, axis], [0.05, 0.06, 0.05], DARK);  // quebra-chama
   }
   if (level >= 2) {
     const front = Math.max(...p.map((q) => q.at[1] + q.size[1] / 2));
-    add([0, front * 0.45, 0.13], [0.07, front * 0.5, 0.012], GOLD, { flat: true });  // friso dourado
-    add([0.036, front * 0.45, 0.07], [0.008, front * 0.6, 0.02], accent, { flat: true });  // faixa brilhante
-    add([-0.036, front * 0.45, 0.07], [0.008, front * 0.6, 0.02], accent, { flat: true });
+    add([0, front * 0.45, axis + 0.06], [0.07, front * 0.5, 0.012], GOLD, { flat: true });  // friso dourado
+    add([0.036, front * 0.45, axis], [0.008, front * 0.6, 0.02], accent, { flat: true });  // faixa brilhante
+    add([-0.036, front * 0.45, axis], [0.008, front * 0.6, 0.02], accent, { flat: true });
   }
+  if (leftHanded) for (const q of p.slice(beforeUpgrades)) q.hand = 'L';
+  // Uzi dupla: a Uzi da esquerda ganha as mesmas melhorias (antes das da direita, que continua
+  // com a ponta do cano por último).
+  if (id === 'uzi_dual') p.splice(beforeUpgrades, 0, ...p.slice(beforeUpgrades).map((q) => ({ ...q, hand: 'L' })));
   return p;
 }

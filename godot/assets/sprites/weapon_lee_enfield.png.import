@@ -2,21 +2,23 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bx6et70rm1hpd"
-path="res://.godot/imported/weapon_lee_enfield.png-55e944d77e532b8b4312f98a3638867b.ctex"
+uid="uid://drl4r3dl63el0"
+path.bptc="res://.godot/imported/weapon_lee_enfield.png-55e944d77e532b8b4312f98a3638867b.bptc.ctex"
+path.astc="res://.godot/imported/weapon_lee_enfield.png-55e944d77e532b8b4312f98a3638867b.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/weapon_lee_enfield.png"
-dest_files=["res://.godot/imported/weapon_lee_enfield.png-55e944d77e532b8b4312f98a3638867b.ctex"]
+dest_files=["res://.godot/imported/weapon_lee_enfield.png-55e944d77e532b8b4312f98a3638867b.bptc.ctex", "res://.godot/imported/weapon_lee_enfield.png-55e944d77e532b8b4312f98a3638867b.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

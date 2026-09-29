@@ -2,9 +2,16 @@
 // sprites em 8 direções (a mesma vista 3/4 da câmera do jogo).
 import { Pixels, drawBoxes, projector, ident, mul, translate, scale, rotX, rotY, rotZ, apply } from './raster.mjs';
 import { renderSdf } from './sdf.mjs';
+import { packShelf } from './pack.mjs';
 
 /** Ângulo de cada direção: 0 = olhando para a câmera (sul, +Z do Godot), 90° = leste (+X). */
 export const DIRECTIONS = 8;
+
+// A compressão de GPU (VRAM Compressed: BC7/S3TC) codifica blocos de 4×4 texels. Cada quadro
+// ocupa um espaço de múltiplos de 4 na folha, então nenhum bloco mistura dois quadros — senão a
+// borda de um quadro vizinho vaza pra dentro deste (lasquinhas finas ao lado do personagem).
+const BLOCK = 4;
+const toBlock = (v) => Math.ceil(v / BLOCK) * BLOCK;
 
 /**
  * Rotação local de um osso a partir da pose semântica:
@@ -99,11 +106,16 @@ export function posedBoxes(model, pose, dirIndex, only = null) {
 }
 
 /**
- * Monta a folha: linhas = 8 direções, colunas = quadros de todas as animações.
+ * Monta a folha: 8 blocos verticais (um por direção), cada um com os quadros de todas as
+ * animações empacotados lado a lado (shelf packing), cada quadro recortado no seu próprio
+ * bounding-box — não num tamanho de célula único pra folha inteira (isso desperdiçava 80%+
+ * de cada célula em pixel transparente). `meta.cells[i]` guarda, por quadro, onde ele foi
+ * parar na folha empacotada (`region`) e o deslocamento dele dentro do quadro lógico global
+ * (`margin`, usado pelo `AtlasTexture` no Godot pra manter pivot/alinhamento sem recalcular).
  * animations: [{ name, frames, fps, loop, keys }]. layers: {nome: filtro de peças}.
  * Devolve { sheets: {camada: Pixels}, meta }.
  */
-export function buildSheet(model, animations, { pitch, layers = { body: null }, workSize = 200, fixedFrame = null, ppm = 48, renderer = 'sdf', occlude = false }) {
+export function buildSheet(model, animations, { pitch, layers = { body: null }, workSize = 200, fixedFrame = null, ppm = 48, renderer = 'sdf', occlude = false, maxSheetWidth = 4096 }) {
   // Tamanhos pensados em 32 px/m; com outra densidade, a área de trabalho acompanha.
   workSize = Math.round((workSize * ppm) / 32);
   if (fixedFrame) fixedFrame = { size: fixedFrame.size.map((v) => Math.round((v * ppm) / 32)), pivot: fixedFrame.pivot.map((v) => Math.round((v * ppm) / 32)) };
@@ -124,7 +136,7 @@ export function buildSheet(model, animations, { pitch, layers = { body: null }, 
       for (let i = 0; i < anim.frames; i++) {
         const t = anim.loop ? i / anim.frames : (anim.frames > 1 ? i / (anim.frames - 1) : 0);
         const pose = sample(anim.keys, t);
-        const out = {};
+        const out = { bounds: {} };
         for (const [layer, filter] of Object.entries(layers)) {
           const canvas = new Pixels(workSize, workSize);
           // occlude: a camada é desenhada com o modelo todo e guarda só o que fica na frente.
@@ -134,6 +146,7 @@ export function buildSheet(model, animations, { pitch, layers = { body: null }, 
           canvas.outline();
           out[layer] = canvas;
           const b = canvas.bounds();
+          out.bounds[layer] = b;
           if (b) union = union ? {
             minX: Math.min(union.minX, b.minX), minY: Math.min(union.minY, b.minY),
             maxX: Math.max(union.maxX, b.maxX), maxY: Math.max(union.maxY, b.maxY),
@@ -165,30 +178,80 @@ export function buildSheet(model, animations, { pitch, layers = { body: null }, 
     h = union.maxY + pad - minY + 1;
   }
   const sheets = {};
+  let cells = null;
+  let sheetDims = null;
   for (const layer of Object.keys(layers)) {
-    const sheet = new Pixels(w * column, h * DIRECTIONS);
+    // Recorte individual de cada quadro (seu próprio bounding-box, não o `w×h` global).
+    const trims = frames.map((dirFrames) => dirFrames.map((out) => {
+      const b = out.bounds[layer];
+      if (!b) return [minX, minY, 1, 1]; // quadro totalmente vazio (ex.: arma 100% atrás do corpo)
+      const fMinX = Math.max(0, b.minX - pad);
+      const fMinY = Math.max(0, b.minY - pad);
+      const fMaxX = Math.min(workSize - 1, b.maxX + pad);
+      const fMaxY = Math.min(workSize - 1, b.maxY + pad);
+      const fw = fMaxX - fMinX + 1, fh = fMaxY - fMinY + 1;
+      // occlude: fragmento minúsculo (só a ponta da arma visível, o resto atrás do braço) fica
+      // "flutuando" solto do resto do corpo — melhor sumir (como já faz quando 100% oculta)
+      // do que mostrar um pedaço desconexo.
+      if (occlude && fw * fh < 100) return [minX, minY, 1, 1];
+      return [fMinX, fMinY, fw, fh];
+    }));
+    // Um bloco de shelf-packing por direção, empilhados verticalmente. Largura-alvo pela raiz
+    // da área total (pacote ~quadrado, quebrando linha de verdade) em vez de uma única fileira
+    // larguíssima — senão cada linha só ganha na largura e continua desperdiçando altura. Se a
+    // altura total ainda estourar o teto (personagem com poses muito assimétricas entre
+    // direções), tenta de novo mais largo até caber ou até o teto de largura também.
+    const totalArea = trims.reduce((s, dirTrims) => s + dirTrims.reduce((s2, [, , fw, fh]) => s2 + toBlock(fw) * toBlock(fh), 0), 0);
+    // O palpite inicial precisa caber pelo menos o quadro individual mais largo — senão
+    // packShelf recusa de cara (poucas peças grandes têm área total pequena mas um quadro
+    // sozinho pode passar do "quadrado" estimado por área).
+    const widestItem = Math.max(...trims.flat().map(([, , fw]) => toBlock(fw)));
+    let targetWidth = Math.min(maxSheetWidth, Math.max(64, widestItem, Math.ceil(Math.sqrt(totalArea / DIRECTIONS))));
+    let blocks, sheetWidth, blockY, sheetHeight;
+    for (;;) {
+      blocks = trims.map((dirTrims) => packShelf(dirTrims.map(([, , fw, fh]) => [toBlock(fw), toBlock(fh)]), targetWidth));
+      sheetWidth = Math.max(...blocks.map((b) => b.width));
+      let cursorY = 0;
+      blockY = blocks.map((b) => { const y = cursorY; cursorY += b.height; return y; });
+      sheetHeight = cursorY;
+      if (sheetHeight <= maxSheetWidth || targetWidth >= maxSheetWidth) break;
+      targetWidth = Math.min(maxSheetWidth, Math.ceil(targetWidth * 1.5));
+    }
+    if (sheetHeight > maxSheetWidth) {
+      throw new Error(`buildSheet: altura total ${sheetHeight}px (camada "${layer}") passa do teto ${maxSheetWidth}px mesmo na largura máxima.`);
+    }
+    const sheet = new Pixels(sheetWidth, sheetHeight);
+    const layerCells = [];
     for (let dir = 0; dir < DIRECTIONS; dir++) {
       frames[dir].forEach((out, i) => {
         const src = out[layer];
-        const crop = new Pixels(w, h);
-        for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
-          const a = src.alpha(minX + x, minY + y);
-          if (a > 0) crop.set(x, y, src.rgb(minX + x, minY + y), a);
+        const [fMinX, fMinY, fw, fh] = trims[dir][i];
+        const crop = new Pixels(fw, fh);
+        for (let y = 0; y < fh; y++) for (let x = 0; x < fw; x++) {
+          const a = src.alpha(fMinX + x, fMinY + y);
+          if (a > 0) crop.set(x, y, src.rgb(fMinX + x, fMinY + y), a);
         }
-        sheet.blit(crop, i * w, dir * h);
+        const [rx, ry] = blocks[dir].rects[i];
+        sheet.blit(crop, rx, blockY[dir] + ry);
+        layerCells.push([rx, blockY[dir] + ry, fw, fh, fMinX - minX, fMinY - minY]);
       });
     }
     sheets[layer] = sheet;
+    cells = layerCells; // uma camada por chamada na prática (corpo e arma são chamadas separadas)
+    sheetDims = [sheetWidth, sheetHeight];
   }
   const meta = {
+    format_version: 2,
     frame: [w, h],
     pivot: [originX - minX, originY - minY],
-    columns: column,
+    frames_per_direction: column,
     directions: DIRECTIONS,
     direction_angle: 'dir = round(atan2(facing.x, facing.z) / 45°) mod 8; 0 = olhando para a câmera (+Z), 2 = leste (+X)',
     pitch,
     pixels_per_meter: ppm,
+    sheet: sheetDims,
     animations: animMeta,
+    cells,
   };
   if (behind.length) meta.weapon_behind = behind;
   return { sheets, meta, union: union && { minX: union.minX - originX, minY: union.minY - originY, maxX: union.maxX - originX, maxY: union.maxY - originY } };

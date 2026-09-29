@@ -2,21 +2,23 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ccaip2ah67bqr"
-path="res://.godot/imported/weapon_sawed_off_mk3.png-b8c4583c5f95886e6df0d6dcf195c1ea.ctex"
+uid="uid://cvbeautryli3a"
+path.bptc="res://.godot/imported/weapon_sawed_off_mk3.png-b8c4583c5f95886e6df0d6dcf195c1ea.bptc.ctex"
+path.astc="res://.godot/imported/weapon_sawed_off_mk3.png-b8c4583c5f95886e6df0d6dcf195c1ea.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/weapon_sawed_off_mk3.png"
-dest_files=["res://.godot/imported/weapon_sawed_off_mk3.png-b8c4583c5f95886e6df0d6dcf195c1ea.ctex"]
+dest_files=["res://.godot/imported/weapon_sawed_off_mk3.png-b8c4583c5f95886e6df0d6dcf195c1ea.bptc.ctex", "res://.godot/imported/weapon_sawed_off_mk3.png-b8c4583c5f95886e6df0d6dcf195c1ea.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

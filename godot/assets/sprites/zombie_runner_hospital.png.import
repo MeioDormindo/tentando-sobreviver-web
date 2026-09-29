@@ -3,20 +3,22 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dtxvwrbgndcie"
-path="res://.godot/imported/zombie_runner_hospital.png-f33b751c3273e18d417710a9e5d0a6cc.ctex"
+path.bptc="res://.godot/imported/zombie_runner_hospital.png-f33b751c3273e18d417710a9e5d0a6cc.bptc.ctex"
+path.astc="res://.godot/imported/zombie_runner_hospital.png-f33b751c3273e18d417710a9e5d0a6cc.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/zombie_runner_hospital.png"
-dest_files=["res://.godot/imported/zombie_runner_hospital.png-f33b751c3273e18d417710a9e5d0a6cc.ctex"]
+dest_files=["res://.godot/imported/zombie_runner_hospital.png-f33b751c3273e18d417710a9e5d0a6cc.bptc.ctex", "res://.godot/imported/zombie_runner_hospital.png-f33b751c3273e18d417710a9e5d0a6cc.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

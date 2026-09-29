@@ -3,20 +3,22 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://oiuhdfddsksm"
-path="res://.godot/imported/zombie_exploder_hospital.png-ace8650497c5a9336ca4f10066604e26.ctex"
+path.bptc="res://.godot/imported/zombie_exploder_hospital.png-ace8650497c5a9336ca4f10066604e26.bptc.ctex"
+path.astc="res://.godot/imported/zombie_exploder_hospital.png-ace8650497c5a9336ca4f10066604e26.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/zombie_exploder_hospital.png"
-dest_files=["res://.godot/imported/zombie_exploder_hospital.png-ace8650497c5a9336ca4f10066604e26.ctex"]
+dest_files=["res://.godot/imported/zombie_exploder_hospital.png-ace8650497c5a9336ca4f10066604e26.bptc.ctex", "res://.godot/imported/zombie_exploder_hospital.png-ace8650497c5a9336ca4f10066604e26.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

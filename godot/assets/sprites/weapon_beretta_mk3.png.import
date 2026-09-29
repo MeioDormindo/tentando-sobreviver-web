@@ -2,21 +2,23 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://gq7oxrdo854v"
-path="res://.godot/imported/weapon_beretta_mk3.png-009a947adf85989a7768c596096aa250.ctex"
+uid="uid://cow8fghgjnjbn"
+path.bptc="res://.godot/imported/weapon_beretta_mk3.png-009a947adf85989a7768c596096aa250.bptc.ctex"
+path.astc="res://.godot/imported/weapon_beretta_mk3.png-009a947adf85989a7768c596096aa250.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/weapon_beretta_mk3.png"
-dest_files=["res://.godot/imported/weapon_beretta_mk3.png-009a947adf85989a7768c596096aa250.ctex"]
+dest_files=["res://.godot/imported/weapon_beretta_mk3.png-009a947adf85989a7768c596096aa250.bptc.ctex", "res://.godot/imported/weapon_beretta_mk3.png-009a947adf85989a7768c596096aa250.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0

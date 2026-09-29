@@ -2,21 +2,23 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dx7nqp75gchsj"
-path="res://.godot/imported/weapon_barrett_mk2.png-9eceb0905c03fec7bf4f8798e10403fb.ctex"
+uid="uid://f14yuv6yh1xw"
+path.bptc="res://.godot/imported/weapon_barrett_mk2.png-9eceb0905c03fec7bf4f8798e10403fb.bptc.ctex"
+path.astc="res://.godot/imported/weapon_barrett_mk2.png-9eceb0905c03fec7bf4f8798e10403fb.astc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/weapon_barrett_mk2.png"
-dest_files=["res://.godot/imported/weapon_barrett_mk2.png-9eceb0905c03fec7bf4f8798e10403fb.ctex"]
+dest_files=["res://.godot/imported/weapon_barrett_mk2.png-9eceb0905c03fec7bf4f8798e10403fb.bptc.ctex", "res://.godot/imported/weapon_barrett_mk2.png-9eceb0905c03fec7bf4f8798e10403fb.astc.ctex"]
 
 [params]
 
-compress/mode=0
-compress/high_quality=false
+compress/mode=2
+compress/high_quality=true
 compress/lossy_quality=0.7
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
