@@ -1,0 +1,180 @@
+{
+  "categories": [
+    {
+      "id": "enemies",
+      "name": "INIMIGOS",
+      "groups": [
+        {
+          "name": "ZUMBIS",
+          "entries": [
+            { "key": "zombie:walker", "sheet": "zombie_walker", "maps": "Todos os mapas", "text": "O zumbi mais comum: lento, mas nunca vem sozinho. Entra arrancando as tábuas das janelas e cerca quem fica parado. No Hospital é o paciente de camisola; no Templo, o arqueólogo da escavação." },
+            { "key": "zombie:runner", "sheet": "zombie_runner", "maps": "Todos os mapas", "text": "Rápido e com pouca vida: chega antes dos outros e pune quem fica encurralado. No Hospital é o enfermeiro; no Templo, o cultista de capuz." },
+            { "key": "zombie:tank", "sheet": "zombie_tank", "maps": "Todos os mapas", "text": "Grande e muito resistente: não recua com os tiros nem é empurrado. Guarde as armas pesadas para ele. No Hospital é o maqueiro; no Templo, o gladiador." },
+            { "key": "zombie:exploder", "sheet": "zombie_exploder", "maps": "Todos os mapas", "text": "Corre até você, começa a piscar e explode — e explode também ao morrer. Mate de longe: a explosão fere você e os zumbis em volta. No Hospital usa roupa de quarentena; no Templo carrega uma ânfora de fogo grego." },
+            { "key": "zombie:crawler", "sheet": "zombie_crawler", "maps": "Todos os mapas", "text": "Rasteja pelo chão, baixo e difícil de acertar na cabeça. Ao morrer solta uma nuvem de gás que fere quem ficar dentro. No Templo é a múmia." },
+            { "key": "zombie:spitter", "sheet": "zombie_spitter", "maps": "Todos os mapas", "text": "Para a uma certa distância e cospe ácido em arco; onde cai vira uma poça que queima. Não fique parado em cima dela. No Templo é o sacerdote do veneno." },
+            { "key": "zombie:armored", "sheet": "zombie_armored", "maps": "Todos os mapas", "text": "A armadura absorve 75% do dano no corpo até quebrar; um tiro na cabeça derruba o capacete. Nas missões, um deles carrega um item que você precisa. No Templo é o hoplita de bronze." },
+            { "key": "zombie:hound", "sheet": "hound", "maps": "Hospital (rodada dos cães) e Templo (com o Cérbero)", "text": "Rápido e em matilha. No Hospital chega nas rodadas dos cães; no Templo, o Cérbero chama os cães de Hades. Pega fogo ao morrer e não deixa corpo." },
+            { "key": "zombie:hoplite", "sheet": "zombie_hoplite", "maps": "Templo dos Mortos", "text": "Guerreiro grego morto-vivo: aguenta bastante e bate forte, mas é lento." },
+            { "key": "zombie:hoplite_shield", "sheet": "zombie_hoplite_shield", "maps": "Templo dos Mortos", "text": "O escudo segura quase todo o dano que vem de frente (só 20% passa). Acerte a cabeça, os lados ou as costas. Não é empurrado." },
+            { "key": "zombie:skeleton", "sheet": "zombie_skeleton", "maps": "Templo dos Mortos", "text": "Rápido e frágil. Às vezes os ossos se juntam e ele se levanta de novo com metade da vida — só uma vez." },
+            { "key": "zombie:skeleton_archer", "sheet": "zombie_skeleton_archer", "maps": "Templo dos Mortos", "text": "Mantém distância e atira flechas retas. Saia da linha de tiro ou corra para cima dele." },
+            { "key": "zombie:satyr", "sheet": "zombie_satyr", "maps": "Templo dos Mortos (Floresta de Artemis)", "text": "Rápido, corre em zigue-zague e anda em bando: difícil de mirar. Aparece em peso na Caçada de Artemis." },
+            { "key": "zombie:hellwolf", "sheet": "zombie_hellwolf", "maps": "Templo dos Mortos (Floresta de Artemis)", "text": "Chega perto, dá um bote rápido, recua e repete. Atire enquanto ele recua." },
+            { "key": "zombie:harpy", "sheet": "zombie_harpy", "maps": "Templo dos Mortos", "text": "Voa fora do alcance da faca e mergulha em você. Atire quando ela descer." },
+            { "key": "zombie:gorgon", "sheet": "zombie_gorgon", "maps": "Templo dos Mortos (Templo da Górgona)", "text": "Se você estiver olhando para ela quando ela olhar, fica lento, cinza e vira pedra por 1,5 s, sem andar nem atirar. Parede, objeto ou ficar de costas protegem. Depois do olhar, ela leva dano dobrado." }
+          ]
+        },
+        {
+          "name": "CHEFES",
+          "entries": [
+            { "key": "boss:conductor", "sheet": "boss_conductor", "maps": "Terminal Central · rounds 10, 20, 30…", "text": "O maquinista do último trem. Golpeia, investe (e fica tonto se bater na parede), cega a mira de perto com um clarão, solta ondas de choque e círculos que explodem e, na fase 3, chama zumbis. Tem 4 fases, com um rugido invulnerável a cada uma." },
+            { "key": "boss:patient_zero", "sheet": "boss_patient_zero", "maps": "Hospital Santa Luzia · rounds 10, 20, 30…", "text": "O primeiro infectado. A mordida envenena — e piora se ele morder de novo antes de passar —, vomita ácido que deixa poças, grita para deixar você lento e faz chover ácido. Enfurecido, é o chefe da missão do Hospital." },
+            { "key": "boss:minotaur", "sheet": "boss_minotaur", "maps": "Templo dos Mortos · round 10", "text": "Investe derrubando as colunas no caminho, e cada coluna quebrada o deixa em Fúria, com mais dano e velocidade. Solta ondas de choque; no Colapso, caem pedras que viram escombro. Carrega a chave do Submundo." },
+            { "key": "boss:cerberus", "sheet": "boss_cerberus", "maps": "Templo dos Mortos · round 20", "text": "Três cabeças: morde (e morde de novo logo depois de investir), sopra um leque de fogo que deixa chamas no chão e investe. Na fase 3 chama os cães de Hades." },
+            { "key": "boss:entity", "sheet": "boss_entity", "maps": "Templo dos Mortos · round 30", "text": "Solta esferas de alma em leque, levanta esqueletos e faz chover fogo que vira lava. Na fase 3 assume a forma monstruosa: investida, onda de choque e a Ruptura — some e reaparece perto de você." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "items",
+      "name": "ITENS",
+      "groups": [
+        {
+          "name": "PERKS",
+          "entries": [
+            { "key": "perk:quick_revive" },
+            { "key": "perk:fortify" },
+            { "key": "perk:adrenaline" },
+            { "key": "perk:quick_hands" },
+            { "key": "perk:sprint" },
+            { "key": "perk:deadeye" },
+            { "key": "perk:overload" }
+          ]
+        },
+        {
+          "name": "POWER-UPS",
+          "entries": [
+            { "key": "powerup:max_ammo", "text": "Enche o pente e a reserva de todas as suas armas." },
+            { "key": "powerup:double_cash", "text": "Todo ponto ganho vale em dobro enquanto durar." },
+            { "key": "powerup:insta_kill", "text": "Qualquer acerto de tiro ou de faca mata o zumbi na hora (não vale para chefes)." },
+            { "key": "powerup:nuke", "text": "Mata na hora todos os zumbis vivos — o chefe não — e paga um bônus de pontos." },
+            { "key": "powerup:full_heal", "text": "Recupera toda a vida." },
+            { "key": "powerup:armor", "text": "Enche a barra azul de armadura, que absorve o dano antes da vida." },
+            { "key": "powerup:speed_boost", "text": "Você corre bem mais rápido enquanto durar." },
+            { "key": "powerup:carpenter", "text": "Conserta na hora todas as barricadas do mapa e paga um bônus." },
+            { "key": "powerup:fire_sale", "text": "A Mystery Box custa 10 e aparece em todos os locais das áreas abertas enquanto durar." },
+            { "key": "powerup:golden", "text": "Raro. Sorteia um prêmio: uma arma especial, uma bolada de pontos, um perk grátis ou a Fúria (dano em dobro por um tempo). Cai do Zumbi Dourado, dos chefes e de quem acha todos os ursinhos." }
+          ]
+        },
+        {
+          "name": "ELEMENTOS",
+          "entries": [
+            { "key": "element:light" },
+            { "key": "element:shadow" },
+            { "key": "element:ice" },
+            { "key": "element:lightning" },
+            { "key": "element:fire" },
+            { "key": "element:explosive" }
+          ]
+        },
+        {
+          "name": "BÊNÇÃOS DO TEMPLO",
+          "entries": [
+            { "key": "blessing:zeus", "text": "12% dos tiros soltam um raio que salta entre até 3 zumbis próximos." },
+            { "key": "blessing:ares", "text": "Cada abate em sequência soma +8% de dano, até +40%. A sequência zera depois de 3 s sem abater." },
+            { "key": "blessing:athena", "text": "40% menos dispersão nos tiros e 15% de chance de crítico, com dano em dobro." },
+            { "key": "blessing:hermes", "text": "Anda, recarrega e interage 20% mais rápido." },
+            { "key": "blessing:poseidon", "text": "Os tiros empurram os zumbis para trás." },
+            { "key": "blessing:hades", "text": "20% dos zumbis abatidos voltam como espírito aliado por 10 s e lutam do seu lado." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "events",
+      "name": "EVENTOS",
+      "groups": [
+        {
+          "name": "TODOS OS MAPAS",
+          "entries": [
+            { "key": "event:blackout", "text": "As luzes caem e só ficam as de emergência, fracas. Use a lanterna (F); ligar a energia de novo no disjuntor encerra o apagão. Só acontece com a energia ligada." },
+            { "key": "event:emergency_alarm", "icon": "res://assets/web/props/panel_alarm.png", "text": "A sirene atrai zumbis: eles chegam mais rápido e mais deles ficam vivos ao mesmo tempo. O painel do alarme desliga a sirene pagando." },
+            { "key": "event:horde", "text": "Muito mais zumbis neste round, chegando mais rápido. Vem garantida no round 15 e depois a cada 10." },
+            { "key": "event:supply_drop", "icon": "res://assets/web/events/supply_crate.png", "text": "Uma caixa cai de paraquedas. Segure E por alguns segundos para abrir: munição, armadura ou dinheiro. Se levar um golpe, a abertura é interrompida." },
+            { "key": "event:gas_leak", "icon": "res://assets/web/events/gas_pipe.png", "text": "Um cano estoura e solta uma nuvem verde que fere quem estiver dentro — zumbis também. Fique longe ou segure E na válvula para fechar." },
+            { "key": "event:golden_zombie", "sheet": "zombie_golden", "text": "Um zumbi todo em ouro, com coroa, que foge de você (estrela dourada no minimapa). Mate-o antes que escape para ganhar dinheiro e um Golden Drop." },
+            { "key": "event:blood_moon", "text": "A lua fica vermelha: os zumbis correm mais, mas dinheiro e pontos valem em dobro." },
+            { "key": "event:collapse", "text": "O teto começa a cair: círculos vermelhos marcam onde as pedras vão bater. Saia deles — as pedras também esmagam os zumbis." },
+            { "key": "event:fog", "text": "Uma neblina fecha a visão e até a lanterna ilumina menos. Fique atento aos gemidos." }
+          ]
+        },
+        {
+          "name": "TERMINAL CENTRAL",
+          "entries": [
+            { "key": "event:train", "icon": "res://assets/web/events/train_head.png", "text": "Um trem atravessa a plataforma a toda velocidade e atropela quem estiver nos trilhos — zumbis inclusive. O painel do trem chama o trem na hora." }
+          ]
+        },
+        {
+          "name": "HOSPITAL SANTA LUZIA",
+          "entries": [
+            { "key": "event:containment_breach", "text": "Os pontos de isolamento se rompem e os zumbis entram por eles, com a sirene tocando." }
+          ]
+        },
+        {
+          "name": "TEMPLO DOS MORTOS",
+          "entries": [
+            { "key": "event:zeus_wrath", "text": "Raios caem do céu, e círculos azuis avisam onde. Saia deles — os raios também destroem os zumbis." },
+            { "key": "event:rise_of_dead", "text": "Os sarcófagos se abrem e soltam esqueletos, às vezes arqueiros." },
+            { "key": "event:artemis_hunt", "text": "Sátiros e lobos infernais surgem em volta de você numa caçada." },
+            { "key": "event:underworld_portal", "text": "Um portal se abre e solta criaturas até ser destruído a tiros. Destruído, deixa o Tridente de Poseidon." },
+            { "key": "event:blood_of_gods", "text": "Neste round, as bênçãos dos altares são de graça." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mechanics",
+      "name": "MECÂNICAS",
+      "groups": [
+        {
+          "name": "BÁSICO",
+          "entries": [
+            { "key": "mechanic:rounds", "name": "Rounds", "text": "A partida é uma sequência de rounds cada vez mais difíceis: mais zumbis e mais fortes. O round acaba quando o último zumbi morre, e o fim de cada um paga um bônus." },
+            { "key": "mechanic:points", "name": "Pontos", "text": "Acertar e matar zumbis dá pontos — mais no tiro na cabeça e na faca —, e consertar barricadas também. Com eles você compra armas, portas, perks e a Mystery Box. O score do ranking é separado dos pontos." },
+            { "key": "mechanic:barricades", "name": "Barricadas", "icon": "res://assets/web/map/plank.png", "text": "Os zumbis entram pelas janelas arrancando as tábuas. Segure E perto da janela para pregar as tábuas de volta — cada tábua dá 10 pontos." },
+            { "key": "mechanic:wall_buy", "name": "Armas na parede", "icon": "res://assets/sprites/chalk/chalk_ak.png", "text": "Os desenhos de giz nas paredes vendem armas e munição (E). A munição sai mais barata que a arma." },
+            { "key": "mechanic:knife", "name": "Faca", "icon": "res://assets/sprites/icons/weapon_knife.png", "text": "V dá um golpe com avanço que acerta um zumbi por vez: o alvo do avanço ou o mais perto à frente. Salva quando a munição acaba, e matar na faca dá mais pontos." },
+            { "key": "mechanic:flashlight", "name": "Lanterna", "text": "F liga e desliga a lanterna. Faz falta no Apagão, na Neblina e nas áreas escuras." },
+            { "key": "mechanic:inventory", "name": "Duas armas", "icon": "res://assets/sprites/icons/weapon_m1911.png", "text": "Você carrega duas armas (Q troca). Ao pegar uma terceira, a que está em mãos cai no chão e pode ser pega de volta por 60 s, com a munição e as melhorias." }
+          ]
+        },
+        {
+          "name": "AVANÇADO",
+          "entries": [
+            { "key": "mechanic:doors", "name": "Portas e áreas", "icon": "res://assets/web/map/door_shutter.png", "text": "Portas compráveis (E) abrem novas áreas — e também os pontos de onde os zumbis nascem nelas. A placa no chão mostra o nome da área do outro lado." },
+            { "key": "mechanic:power", "name": "Energia", "icon": "res://assets/web/props/panel_power.png", "text": "Segure E no disjuntor para ligar a energia: as máquinas de perk e o Weapon Lab passam a funcionar e as luzes voltam." },
+            { "key": "mechanic:perks", "name": "Máquinas de perk", "icon": "res://assets/web/machines/perk_quick_revive.png", "text": "Cada máquina vende um perk que vale pela partida inteira. Quase todas precisam da energia ligada — o Quick Revive não." },
+            { "key": "mechanic:mystery_box", "name": "Mystery Box", "icon": "res://assets/web/machines/mystery_box.png", "text": "Paga e sorteia uma arma, às vezes já com um elemento. Depois de alguns usos, a caixa troca de lugar; o feixe de luz dourada mostra onde ela está." },
+            { "key": "mechanic:weapon_lab", "name": "Weapon Lab", "icon": "res://assets/web/machines/weapon_lab.png", "text": "Melhora a arma em mãos para Mk II e depois Mk III: mais dano, mais munição e visual novo — algumas viram outra arma, como o Canhão de Vento, que vira Tornado. Precisa de energia." },
+            { "key": "mechanic:elements", "name": "Elementos", "icon": "res://assets/sprites/chalk/chalk_ammo.png", "text": "Com uma arma na mão, segure E na parede dela para comprar o elemento dela: Luz, Sombra, Gelo, Raio, Fogo ou Explosivo mudam o efeito dos tiros. A Mystery Box também pode entregar arma com elemento." },
+            { "key": "mechanic:power_ups", "name": "Power-ups", "icon": "res://assets/web/powerups/max_ammo.png", "text": "Zumbis abatidos às vezes deixam um power-up no chão. Passe por cima para pegar antes que ele suma; os que duram mostram o tempo na tela." },
+            { "key": "mechanic:hound_round", "name": "Rodada dos cães", "sheet": "hound", "text": "No Hospital, os rounds 5, 11, 17… são só de cães, com névoa e raios. O último cão deixa munição cheia." },
+            { "key": "mechanic:boss_round", "name": "Round de chefe", "text": "Nos rounds 10, 20 e 30 vem um chefe, com uma escolta menor e a barra de vida no alto da tela. Derrotado, deixa um Golden Drop e um Max Ammo." },
+            { "key": "mechanic:quests", "name": "Missões", "icon": "res://assets/web/props/serum_vial.png", "text": "Cada mapa tem uma missão em etapas, com o objetivo na tela e no minimapa: O Último Trem (Terminal), O Soro do Dr. Almeida (Hospital) e O Portão do Submundo (Templo). O prêmio é todos os perks e uma arma exclusiva." },
+            { "key": "mechanic:blessings", "name": "Bênçãos dos Deuses", "icon": "res://assets/sprites/blessings/blessing_zeus.png", "text": "No Templo, 3 altares oferecem a bênção de um deus, sorteado a cada round, por 1500 pontos. Só uma bênção por vez, e cair faz perder a que você tem." }
+          ]
+        },
+        {
+          "name": "SEGREDOS",
+          "entries": [
+            { "key": "mechanic:teddies", "name": "Ursinhos escondidos", "icon": "res://assets/web/props/teddy.png", "text": "Cada mapa esconde ursinhos de pelúcia. Achar todos na mesma partida solta um Golden Drop e libera uma conquista." },
+            { "key": "mechanic:radios", "name": "Rádios e gravadores", "icon": "res://assets/web/props/radio.png", "text": "Rádios e gravadores espalhados contam a história de cada mapa. Segure E para sintonizar; cada uso traz a próxima mensagem." },
+            { "key": "mechanic:statues", "name": "Estátuas dos deuses", "text": "No Templo, acender as 12 estátuas dos deuses abre a passagem para o Santuário do Olimpo, onde está o Arco de Artemis." }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -412,6 +412,13 @@ func _test_save() -> void:
 	check(Save.records("terminal").bestScore == 42000 and Save.is_unlocked("map2") and Save.lifetime.gamesPlayed == 7, "mescla da nuvem fica com o melhor de cada lado")
 	check(Save.ranking("terminal")[0].name == "MARIA", "mescla junta os rankings")
 	check(Save.catalog.unlocked_by("terminal", 10) == PackedStringArray(["map2"]) and Save.catalog.unlocked_by("terminal", 9).is_empty(), "boss do round 10 no Terminal libera o Hospital")
+	# Glossário: marca o que foi encontrado; o save valida e a nuvem soma as descobertas.
+	check(Save.see("zombie:walker") and not Save.see("zombie:walker") and Save.has_seen("zombie:walker") and not Save.has_seen("zombie:tank"),
+		"glossário: marca uma entrada encontrada (só a primeira vez é novidade)")
+	var odd := Save.sanitize({"glossary": {"event:fog": "2026-09-01T00:00:00Z", "lixo": 3, "x".repeat(80): "2026-09-01T00:00:00Z"}})
+	check(odd.glossary.keys() == ["event:fog"], "glossário no save: ignora entrada inválida")
+	Save.merge_from({"glossary": {"zombie:tank": "2026-09-01T00:00:00Z"}})
+	check(Save.has_seen("zombie:tank") and Save.has_seen("zombie:walker"), "mescla da nuvem soma as descobertas do glossário")
 	Save.reset()
 
 

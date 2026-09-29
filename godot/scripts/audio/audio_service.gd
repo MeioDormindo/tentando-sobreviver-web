@@ -183,15 +183,20 @@ func loop(key: String, category := "ambience", volume := 1.0) -> AudioStreamPlay
 	return player
 
 
-## Para tudo o que está tocando e zera a contagem de vozes.
-func stop_all() -> void:
+## Para tudo o que está tocando e zera a contagem de vozes. `keep_ui`: deixa terminar os sons
+## de interface (o clique do botão que acabou de trocar de tela).
+func stop_all(keep_ui := false) -> void:
 	_loops.clear()
-	_voices.clear()
 	for child in get_children():
-		if child != _ear:
-			if child.has_method(&"stop"):
-				child.call(&"stop")
-			child.queue_free()
+		if child == _ear or (keep_ui and child.get(&"bus") == BUSES["ui"]):
+			continue
+		if child.has_method(&"stop"):
+			child.call(&"stop")
+		child.queue_free()
+	# Os que sobraram (interface) liberam a própria voz quando terminam.
+	for category: String in _voices.keys():
+		if not keep_ui or category != "ui":
+			_voices.erase(category)
 
 
 ## Para todos os loops posicionais (fim da partida).

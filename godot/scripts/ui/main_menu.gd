@@ -8,6 +8,7 @@ const ARMORY := "res://scenes/ui/armory.tscn"
 const SETTINGS := "res://scenes/ui/settings.tscn"
 const ACCOUNT := "res://scenes/ui/account.tscn"
 const ACHIEVEMENTS := "res://scenes/ui/achievements.tscn"
+const GLOSSARY := "res://scenes/ui/glossary.tscn"
 ## Código Konami (↑↑↓↓←→←→BA): libera o "modo cabeção", como no jogo web.
 const KONAMI := [KEY_UP, KEY_UP, KEY_DOWN, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_LEFT, KEY_RIGHT, KEY_B, KEY_A]
 
@@ -31,6 +32,7 @@ func _ready() -> void:
 	MenuKit.button(column, "RANKING", func() -> void: MenuKit.go(self, RANKING))
 	MenuKit.button(column, "ARMAS", func() -> void: MenuKit.go(self, ARMORY))
 	MenuKit.button(column, "CONQUISTAS", func() -> void: MenuKit.go(self, ACHIEVEMENTS))
+	MenuKit.button(column, "GLOSSÁRIO", func() -> void: MenuKit.go(self, GLOSSARY))
 	var user := Account.current_user()
 	MenuKit.button(column, ("CONTA: " + user.to_upper()) if user != "" else "CONTA / SALVAR NA NUVEM", func() -> void: MenuKit.go(self, ACCOUNT))
 	MenuKit.button(column, "CONFIGURAÇÕES", func() -> void: MenuKit.go(self, SETTINGS))

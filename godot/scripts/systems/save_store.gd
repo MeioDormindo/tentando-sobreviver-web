@@ -1,7 +1,7 @@
 class_name SaveStore
 extends Node
 ## Save do jogador (autoload "Save"): configurações, recordes, mapas liberados, ranking local,
-## totais, segredos e conquistas. Usa **o mesmo formato JSON do jogo web** (mesmas chaves),
+## totais, segredos, conquistas e o que já foi encontrado para o glossário. Usa **o mesmo formato JSON do jogo web** (mesmas chaves),
 ## então o save na nuvem vale para as duas versões. Arquivo em user:// (seção 32: nada de
 ## caminho fixo do Windows); cada alteração grava na hora, trocando o arquivo de uma vez.
 
@@ -192,6 +192,23 @@ var lifetime: Dictionary:
 		return data.lifetime
 
 
+# ───────────────────────── Glossário ─────────────────────────
+
+## Entrada do glossário já encontrada numa partida (chave "tipo:id", ex.: "zombie:walker")? As
+## outras aparecem como "???" na tela GLOSSÁRIO.
+func has_seen(key: String) -> bool:
+	return data.glossary.has(key)
+
+
+## Marca uma entrada do glossário como encontrada; devolve true se era novidade.
+func see(key: String) -> bool:
+	if has_seen(key):
+		return false
+	data.glossary[key] = Time.get_datetime_string_from_system(true) + "Z"
+	_persist()
+	return true
+
+
 # ───────────────────────── Nuvem ─────────────────────────
 
 ## Cópia do save para enviar à nuvem (mesmo formato do jogo web).
@@ -230,6 +247,10 @@ func merge_from(raw: Variant, take_settings: bool = false) -> void:
 		var date: String = other.achievements[id]
 		if not data.achievements.has(id) or date < String(data.achievements[id]):
 			data.achievements[id] = date
+	for key: String in other.glossary:
+		var date: String = other.glossary[key]
+		if not data.glossary.has(key) or date < String(data.glossary[key]):
+			data.glossary[key] = date
 	_persist()
 
 
@@ -277,6 +298,10 @@ func sanitize(raw: Variant) -> Dictionary:
 	for id: String in ach:
 		if ach[id] is String:
 			d.achievements[id] = String(ach[id]).substr(0, 40)
+	var seen: Dictionary = r.get("glossary", {}) if r.get("glossary") is Dictionary else {}
+	for key: Variant in seen:
+		if key is String and String(key).length() <= 64 and seen[key] is String:
+			d.glossary[key] = String(seen[key]).substr(0, 40)
 	# Mapas liberados por conquista (saves de antes do Templo já com a missão feita).
 	for id: String in d.achievements:
 		for map_id in catalog.unlocked_by_achievement(id):
@@ -306,6 +331,8 @@ func _defaults() -> Dictionary:
 		"lifetime": {"gamesPlayed": 0, "totalKills": 0, "bossesDefeated": 0, "playTimeMs": 0, "knifeKills": 0, "headshots": 0},
 		"secrets": {"teddies": false, "konami": false},
 		"achievements": {},
+		# Só no Godot: entradas do glossário já encontradas (chave → data).
+		"glossary": {},
 	}
 
 

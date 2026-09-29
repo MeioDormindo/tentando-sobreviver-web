@@ -217,6 +217,7 @@ func _golden_zombie() -> void:
 	var golden := _tree.root.find_children("PowerUp_golden*", "", true, false)
 	check(_points.points >= before + 1000 and not golden.is_empty(), "abatido: +1000 e Golden Drop")
 	check(_system.active_id() == &"", "o evento acaba")
+	check(Save.has_seen("event:golden_zombie") and Save.has_seen("zombie:runner"), "glossário: o evento e o zumbi abatido contam como encontrados")
 	_rounds.stop()
 	for drop in golden:
 		drop.queue_free()

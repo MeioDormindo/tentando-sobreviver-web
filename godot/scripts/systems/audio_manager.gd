@@ -51,9 +51,11 @@ func _ready() -> void:
 	if player:
 		Audio.set_listener(player)
 		_last_position = player.global_position
+	# Fim da partida (menu, ranking, jogar de novo): para a música, o ambiente e os loops dela. O
+	# autoload Audio continua vivo, e o que ficasse tocando se somaria à música da próxima partida.
 	tree_exiting.connect(func() -> void:
 		Audio.set_listener(null)
-		Audio.stop_all_loops())
+		Audio.stop_all(true))
 	for layer in LAYERS:
 		var sound := Audio.loop("mus_" + layer, "music", 0.0)
 		if sound:
@@ -277,14 +279,20 @@ func _on_world_event(id: StringName, _n: String, _h: String, _c: Color) -> void:
 		&"collapse":
 			Audio.play("amb_creak", "world", 1.0, 0.04, 0.7)
 		&"emergency_alarm":
-			# A sirene soa pelo mapa inteiro: acompanha o jogador.
+			# A sirene soa pelo mapa inteiro: acompanha o jogador. Um alarme novo substitui a
+			# sirene do anterior (senão ela ficaria tocando sem ninguém para parar).
+			Audio.stop_loop(_event_loops.get(id, {}), 0.3)
 			_event_loops[id] = Audio.loop_at("evt_siren", player, "ambience", 0.8, 3000.0)
 
 
-## Loops dos eventos que acabaram (a sirene some com o fim do alarme).
+## Loops dos eventos que acabaram (a sirene some com o fim do alarme). Pergunta ao sistema de
+## eventos, não ao evento mostrado na HUD: com dois ao mesmo tempo, o mostrado pode ser o outro.
 func _stop_event_loops() -> void:
+	if _event_loops.is_empty():
+		return
+	var system := get_tree().get_first_node_in_group(&"world_events") as WorldEventSystem
 	for id: StringName in _event_loops.keys():
-		if id != _event_id:
+		if system == null or not system.is_running(id):
 			Audio.stop_loop(_event_loops[id], 1.2)
 			_event_loops.erase(id)
 

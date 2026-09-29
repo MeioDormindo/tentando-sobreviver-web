@@ -64,7 +64,9 @@ de conceitos: ver `docs/analise-typescript.md`.
   batimento com pouca vida e a música adaptativa em camadas (exploração, round, alta
   intensidade, boss) com vinhetas de vitória e de fim de jogo. Som posicional como no jogo
   web (volume pela distância, pan pela tela) e limite de vozes por categoria, cada uma no
-  seu barramento;
+  seu barramento. Ao sair da partida (menu, ranking ou jogar de novo), a música, o ambiente e
+  os loops dela param (`Audio.stop_all(true)`, deixando só os cliques de interface); a sirene
+  do alarme para quando o alarme acaba de fato, mesmo com outro evento na HUD;
 - **visual 2.5D em pixel art** (especificação 2.5D pixel): câmera reta como no jogo web
   (inclinada 60°, ~20 m de largura); paredes que abrem um círculo
   pontilhado quando o jogador passa atrás delas; tudo desenhado por código:
@@ -120,6 +122,13 @@ de conceitos: ver `docs/analise-typescript.md`.
   Laboratório);
 - **tela ARMAS** (como no jogo web): todas as armas por raridade, com barras de dano, cadência,
   pente, reserva, recarga e alcance, onde achar, elemento, efeito especial e o Mk II/III;
+- **tela GLOSSÁRIO** (só do Godot): inimigos e chefes, itens (perks, power-ups, elementos e
+  bênçãos), eventos e mecânicas em abas, com imagem, descrição e os números lidos dos dados do
+  jogo; cada entrada fica "???" em silhueta até ser encontrada numa partida (`GlossaryTracker`:
+  inimigo por perto ou acertado, evento que aconteceu, power-up pego, máquina vista...),
+  gravada no save (`glossary`, somada na mescla da nuvem). Textos em
+  `data/configs/glossary.json`; a suíte `menus` falha se um inimigo, perk, power-up, elemento,
+  bênção ou evento novo ficar sem entrada;
 - **código Konami** no menu (↑↑↓↓←→←→BA): libera o modo cabeção;
 - **anti-trapaça**: ganho impossível para o round ou pontos/score alterados por fora invalidam a
   partida, com zoeira na tela, e ela não vale save nem ranking;

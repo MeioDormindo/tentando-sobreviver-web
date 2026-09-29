@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scripts/systems/points_manager.gd" id="7_points"]
 [ext_resource type="Script" path="res://scripts/systems/game_manager.gd" id="8_game"]
 [ext_resource type="Script" path="res://scripts/systems/audio_manager.gd" id="9_audio"]
+[ext_resource type="Script" path="res://scripts/systems/glossary_tracker.gd" id="37_glossary"]
 [ext_resource type="Resource" path="res://data/zombies/walker.tres" id="10_walker"]
 [ext_resource type="Resource" path="res://data/configs/rounds.tres" id="11_rounds"]
 [ext_resource type="Resource" path="res://data/configs/points.tres" id="12_points"]
@@ -153,5 +154,9 @@ score_manager = NodePath("../ScoreManager")
 script = ExtResource("9_audio")
 player = NodePath("../Player")
 world = NodePath("../World")
+
+[node name="GlossaryTracker" type="Node" parent="." node_paths=PackedStringArray("player")]
+script = ExtResource("37_glossary")
+player = NodePath("../Player")
 
 [node name="HUD" parent="." instance=ExtResource("3_hud")]

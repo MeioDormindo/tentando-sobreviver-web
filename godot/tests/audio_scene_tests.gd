@@ -34,10 +34,14 @@ func run(tree: SceneTree) -> int:
 	_weapon_shots()
 	await _game_sounds()
 	await _area_themes()
+	await _alarm_siren()
 	await _music()
 
 	_main.queue_free()
 	await tree.physics_frame
+	var left := _match_sounds()
+	check(left.is_empty(), "fim da partida: música, ambiente e loops param (%d sobrando)" % left.size())
+	await _restart_does_not_stack()
 	print("\n%d ok, %d falharam (áudio)" % [_passed, _failed])
 	return _failed
 
@@ -58,6 +62,49 @@ func check(condition: bool, description: String) -> void:
 	else:
 		_failed += 1
 		printerr("  FALHOU  ", description)
+
+
+## Sons da partida ainda tocando no Audio (tudo menos a interface, que pode terminar sozinha).
+func _match_sounds() -> Array[Node]:
+	var found: Array[Node] = []
+	for child in _audio.get_children():
+		if child.get(&"stream") != null and child.get(&"bus") != &"UI" and not child.is_queued_for_deletion():
+			found.append(child)
+	return found
+
+
+## Jogar de novo (a cena da partida recriada): a música da partida anterior não fica tocando por
+## baixo da nova — antes, cada reinício somava mais um jogo de camadas.
+func _restart_does_not_stack() -> void:
+	var counts: Array[int] = []
+	for i in 2:
+		var main := (load("res://scenes/main.tscn") as PackedScene).instantiate()
+		_tree.root.add_child(main)
+		await _tree.create_timer(0.8).timeout
+		counts.append(_match_sounds().filter(func(n: Node) -> bool: return n.get(&"bus") == &"Music").size())
+		main.queue_free()
+		await _tree.physics_frame
+	check(counts[0] > 0 and counts[1] == counts[0], "jogar de novo não acumula música (%d → %d players)" % [counts[0], counts[1]])
+
+
+## Sirene do alarme: toca enquanto o alarme durar — mesmo se a HUD mostrar outro evento como o
+## principal — e para quando ele acaba.
+func _alarm_siren() -> void:
+	var manager := _main.get_node("AudioManager") as AudioManager
+	var system := _tree.get_first_node_in_group(&"world_events") as WorldEventSystem
+	check(system.trigger(&"emergency_alarm"), "alarme começa")
+	await _tree.process_frame
+	await _tree.process_frame
+	var siren: Dictionary = manager._event_loops.get(&"emergency_alarm", {})
+	check(not siren.is_empty() and is_instance_valid(siren.player), "sirene toca com o alarme")
+	Events.world_event_state.emit({"id": &"horde", "name": "HORDA", "color": Color.RED, "remaining": -1.0, "total": -1.0})
+	await _tree.process_frame
+	await _tree.process_frame
+	check(not siren.is_empty() and float(siren.fade) < 0.0, "sirene continua com outro evento na HUD")
+	system.end_event(&"emergency_alarm")
+	await _tree.process_frame
+	await _tree.process_frame
+	check(not manager._event_loops.has(&"emergency_alarm") and not siren.is_empty() and float(siren.fade) > 0.0, "alarme acabou: sirene para")
 
 
 ## Sons tocando agora cujo arquivo começa com `key`.
