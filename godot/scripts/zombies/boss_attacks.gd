@@ -12,26 +12,41 @@ const FIRE_COLOR := Color(1.0, 0.45, 0.12)
 const SOUL_COLOR := Color(0.7, 0.45, 1.0)
 
 
-## Onda de choque: um anel que cresce a partir do boss e fere o jogador quando passa por ele.
+## Ids de quem os ataques de área atingem (no cooperativo, todos os jogadores; no solo, o alvo).
+## Ids em vez dos nós: os efeitos com atraso não podem capturar um nó que pode sumir antes.
+static func _victim_ids(player: CharacterBase) -> Array[int]:
+	var ids: Array[int] = []
+	for victim in Players.victims(player):
+		ids.append(victim.get_instance_id())
+	return ids
+
+
+static func _live(id: int) -> CharacterBase:
+	return instance_from_id(id) as CharacterBase if is_instance_id_valid(id) else null
+
+
+## Onda de choque: um anel que cresce a partir do boss e fere quem estiver onde ele passa.
 static func shockwave(tree: SceneTree, at: Vector3, cfg: Dictionary, player: CharacterBase) -> void:
 	# Anel pontilhado em pixel art (raio 1 m, escala = raio atual).
 	var ring := PixelShapes.flat("ring", Color(1.0, 0.6, 0.29, 0.9), 1.0)
 	SpecialFire.world_root(tree).add_child(ring)
 	ring.global_position = Vector3(at.x, 0.15, at.z)
 	var radius := float(cfg.get("radius", 7.0))
-	var hit := [false]
+	var pending := _victim_ids(player)
 	var tween := ring.create_tween()
 	tween.tween_method(func(t: float) -> void:
 		var current := radius * t
 		ring.scale = Vector3(maxf(current, 0.05), 1.0, maxf(current, 0.05))
 		ring.modulate.a = 0.9 * (1.0 - t)
-		if hit[0] or player == null or not player.is_alive():
-			return
-		var offset := player.global_position - at
-		offset.y = 0.0
-		if absf(offset.length() - current) <= 1.25:
-			hit[0] = true
-			player.take_damage(DamageInfo.new(float(cfg.get("damage", 30)), DamageInfo.Kind.ZOMBIE, null, false, at)),
+		for id in pending.duplicate():
+			var victim := _live(id)
+			if victim == null or not victim.is_alive():
+				continue
+			var offset := victim.global_position - at
+			offset.y = 0.0
+			if absf(offset.length() - current) <= 1.25:
+				pending.erase(id)
+				victim.take_damage(DamageInfo.new(float(cfg.get("damage", 30)), DamageInfo.Kind.ZOMBIE, null, false, at)),
 		0.0, 1.0, float(cfg.get("expand_time", 0.65)))
 	tween.tween_callback(ring.queue_free)
 
@@ -47,7 +62,7 @@ static func area(tree: SceneTree, target_at: Vector3, cfg: Dictionary, acid: boo
 	# ID em vez do jogador direto: se a partida já tiver acabado quando o aviso terminar, capturar
 	# o Node ainda vivo no closure quebra o lambda ao chamar (erro do motor, "Lambda capture was
 	# freed") mesmo com o "player and player.is_alive()" dentro dele.
-	var player_id := player.get_instance_id() if player else 0
+	var victim_ids := _victim_ids(player)
 	for point in points:
 		var mark := PixelShapes.flat("disc", Color(FIRE_COLOR if fire else (ACID_COLOR if acid else BLAST_COLOR), 0.3), radius)
 		root.add_child(mark)
@@ -55,20 +70,26 @@ static func area(tree: SceneTree, target_at: Vector3, cfg: Dictionary, acid: boo
 		var tween := mark.create_tween()
 		tween.tween_property(mark, "modulate:a", 1.0, float(cfg.get("telegraph_time", 1.0)))
 		tween.tween_callback(func() -> void:
-			var live_player: CharacterBase = instance_from_id(player_id) if is_instance_id_valid(player_id) else null
+			var victims: Array[CharacterBase] = []
+			for id in victim_ids:
+				var victim := _live(id)
+				if victim:
+					victims.append(victim)
 			if acid and cfg.has("pool"):
 				ZombieAbilities._spawn_pool_at(root, cfg.pool, FIRE_COLOR if fire else ACID_COLOR, point)
 			else:
 				SpecialFire.flash(tree, point, radius, BLAST_COLOR)
-			# Escombro nunca cai em cima do jogador nem de outro objeto (senão prende).
-			if float(cfg.get("rubble_time", 0.0)) > 0.0 and (live_player == null or Vector2(live_player.global_position.x - point.x, live_player.global_position.z - point.z).length() >= RUBBLE_CLEAR) \
-					and SpawnManager.is_free(tree.root.get_world_3d(), point, 0.7):
+			# Escombro nunca cai em cima de um jogador nem de outro objeto (senão prende).
+			var clear := victims.all(func(v: CharacterBase) -> bool: return Vector2(v.global_position.x - point.x, v.global_position.z - point.z).length() >= RUBBLE_CLEAR)
+			if float(cfg.get("rubble_time", 0.0)) > 0.0 and clear and SpawnManager.is_free(tree.root.get_world_3d(), point, 0.7):
 				_rubble(root, point, float(cfg.rubble_time))
-			if live_player and live_player.is_alive():
-				var offset := live_player.global_position - point
+			for victim in victims:
+				if not victim.is_alive():
+					continue
+				var offset := victim.global_position - point
 				offset.y = 0.0
 				if offset.length() <= radius + 0.3:
-					live_player.take_damage(DamageInfo.new(float(cfg.get("damage", 30)), DamageInfo.Kind.ZOMBIE, null, false, point))
+					victim.take_damage(DamageInfo.new(float(cfg.get("damage", 30)), DamageInfo.Kind.ZOMBIE, null, false, point))
 			mark.queue_free())
 
 
@@ -128,16 +149,20 @@ static func volley(tree: SceneTree, from: Vector3, toward: Vector3, cfg: Diction
 		root.add_child(orb)
 		orb.global_position = from
 		var state := {"hit": false}
+		var victim_ids := _victim_ids(player)
 		var tween := orb.create_tween()
 		tween.tween_method(func(d: float) -> void:
 			if not is_instance_valid(orb) or state.hit:
 				return
 			orb.global_position = from + dir * d
-			if player and player.is_alive():
-				var offset := player.global_position + Vector3.UP * 1.0 - orb.global_position
+			for id in victim_ids:
+				var victim := _live(id)
+				if state.hit or victim == null or not victim.is_alive():
+					continue
+				var offset := victim.global_position + Vector3.UP * 1.0 - orb.global_position
 				if Vector2(offset.x, offset.z).length() <= 0.75:
 					state.hit = true
-					player.take_damage(DamageInfo.new(damage, DamageInfo.Kind.ZOMBIE, source if is_instance_valid(source) else null, false, orb.global_position))
+					victim.take_damage(DamageInfo.new(damage, DamageInfo.Kind.ZOMBIE, source if is_instance_valid(source) else null, false, orb.global_position))
 					SpecialFire.flash(tree, orb.global_position, 1.2, SOUL_COLOR)
 					orb.queue_free(), 0.0, reach, reach / speed)
 		tween.tween_callback(func() -> void:
@@ -161,20 +186,18 @@ static func vomit(tree: SceneTree, at: Vector3, facing: Vector3, cfg: Dictionary
 
 ## Grito: deixa o jogador lento (se estiver no raio).
 static func scream(at: Vector3, cfg: Dictionary, player: CharacterBase) -> void:
-	if player == null or not player.has_method(&"slow"):
-		return
-	if player.global_position.distance_to(at) <= float(cfg.get("radius", 16.0)):
-		player.call(&"slow", float(cfg.get("slow_factor", 0.55)), float(cfg.get("slow_time", 2.5)))
+	for victim in Players.victims(player):
+		if victim.has_method(&"slow") and victim.global_position.distance_to(at) <= float(cfg.get("radius", 16.0)):
+			victim.call(&"slow", float(cfg.get("slow_factor", 0.55)), float(cfg.get("slow_time", 2.5)))
 
 
 ## Ofuscar (The Conductor): clarão da lanterna que atrapalha a mira por um tempo (a arma
 ## espalha mais os tiros), se o jogador estiver no raio.
 static func blind(tree: SceneTree, at: Vector3, cfg: Dictionary, player: CharacterBase) -> void:
 	SpecialFire.flash(tree, at + Vector3.UP * 1.6, float(cfg.get("range", 7.0)) * 0.35, Color(1.0, 0.86, 0.55))
-	if player == null or not player.has_method(&"blind"):
-		return
-	if player.global_position.distance_to(at) <= float(cfg.get("range", 7.0)):
-		player.call(&"blind", float(cfg.get("spread_factor", 2.2)), float(cfg.get("blind_time", 2.5)))
+	for victim in Players.victims(player):
+		if victim.has_method(&"blind") and victim.global_position.distance_to(at) <= float(cfg.get("range", 7.0)):
+			victim.call(&"blind", float(cfg.get("spread_factor", 2.2)), float(cfg.get("blind_time", 2.5)))
 
 
 ## Sopro triplo (Cérbero): cone largo de fogo das 3 cabeças ao mesmo tempo — fere na hora quem
@@ -190,13 +213,15 @@ static func triple_breath(tree: SceneTree, at: Vector3, facing: Vector3, cfg: Di
 			var puff := PixelFx.spawn(tree, "flame", at + dir * (1.0 + float(j) * 1.6), 1.0 + float(j) * 0.25)
 			if puff:
 				puff.create_tween().tween_property(puff, "global_position", at + dir * reach, 0.22)
-	if player == null or not player.is_alive():
-		return
-	var offset := player.global_position - at
-	offset.y = 0.0
-	if offset.length() > reach:
-		return
 	var cos_half := cos(arc * 0.5)
-	if offset.length() > 0.4 and forward.dot(offset.normalized()) < cos_half:
-		return
-	player.take_damage(DamageInfo.new(float(cfg.get("damage", 45)), DamageInfo.Kind.ZOMBIE, null, false, at))
+	for victim in Players.victims(player):
+		var character := victim as CharacterBase
+		if character == null or not character.is_alive():
+			continue
+		var offset := character.global_position - at
+		offset.y = 0.0
+		if offset.length() > reach:
+			continue
+		if offset.length() > 0.4 and forward.dot(offset.normalized()) < cos_half:
+			continue
+		character.take_damage(DamageInfo.new(float(cfg.get("damage", 45)), DamageInfo.Kind.ZOMBIE, null, false, at))

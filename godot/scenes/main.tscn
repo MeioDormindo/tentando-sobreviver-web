@@ -41,27 +41,23 @@ script = ExtResource("14_main")
 
 [node name="World" parent="." instance=ExtResource("1_arena")]
 
-[node name="Player" parent="." node_paths=PackedStringArray("camera") instance=ExtResource("2_player")]
-camera = NodePath("../Camera")
+[node name="Player" parent="." instance=ExtResource("2_player")]
 
-[node name="Camera" type="Camera3D" parent="." node_paths=PackedStringArray("target")]
+[node name="Camera" type="Camera3D" parent="."]
 current = true
 fov = 35.0
 script = ExtResource("4_camera")
-target = NodePath("../Player")
 
-[node name="Occlusion" type="Node" parent="Camera" node_paths=PackedStringArray("target")]
+[node name="Occlusion" type="Node" parent="Camera"]
 script = ExtResource("30_occlusion")
-target = NodePath("../../Player")
 
 [node name="Zombies" type="Node3D" parent="."]
 
-[node name="SpawnManager" type="Node" parent="." node_paths=PackedStringArray("world", "container", "target")]
+[node name="SpawnManager" type="Node" parent="." node_paths=PackedStringArray("world", "container")]
 script = ExtResource("5_spawn")
 zombie_data = ExtResource("10_walker")
 world = NodePath("../World")
 container = NodePath("../Zombies")
-target = NodePath("../Player")
 
 [node name="BossManager" type="Node" parent="." node_paths=PackedStringArray("spawn_manager")]
 script = ExtResource("13_boss")
@@ -77,86 +73,76 @@ boss_manager = NodePath("../BossManager")
 script = ExtResource("7_points")
 data = ExtResource("12_points")
 
-[node name="ScoreManager" type="Node" parent="." node_paths=PackedStringArray("player")]
+[node name="ScoreManager" type="Node" parent="."]
 script = ExtResource("15_score")
 data = ExtResource("16_score_data")
-player = NodePath("../Player")
 
 [node name="AntiCheat" type="Node" parent="." node_paths=PackedStringArray("points_manager", "score_manager")]
 script = ExtResource("17_cheat")
 data = ExtResource("18_cheat_data")
 points_manager = NodePath("../PointsManager")
 score_manager = NodePath("../ScoreManager")
-anti_cheat = NodePath("../AntiCheat")
 
-[node name="PowerUpSystem" type="Node" parent="." node_paths=PackedStringArray("player", "points_manager")]
+[node name="PowerUpSystem" type="Node" parent="." node_paths=PackedStringArray("points_manager")]
 script = ExtResource("21_powerups")
 data = ExtResource("22_powerup_data")
-player = NodePath("../Player")
 points_manager = NodePath("../PointsManager")
 weapon_catalog = ExtResource("23_catalog")
 
-[node name="WorldEventSystem" type="Node" parent="." node_paths=PackedStringArray("player", "world", "round_manager", "spawn_manager", "points_manager")]
+[node name="WorldEventSystem" type="Node" parent="." node_paths=PackedStringArray("world", "round_manager", "spawn_manager", "points_manager")]
 script = ExtResource("25_events")
 data = ExtResource("26_event_data")
-player = NodePath("../Player")
 world = NodePath("../World")
 round_manager = NodePath("../RoundManager")
 spawn_manager = NodePath("../SpawnManager")
 points_manager = NodePath("../PointsManager")
 
-[node name="SerumQuest" type="Node" parent="." node_paths=PackedStringArray("player", "world", "round_manager", "spawn_manager")]
+[node name="SerumQuest" type="Node" parent="." node_paths=PackedStringArray("world", "round_manager", "spawn_manager")]
 script = ExtResource("27_serum")
 data = ExtResource("28_quests")
-player = NodePath("../Player")
 world = NodePath("../World")
 round_manager = NodePath("../RoundManager")
 spawn_manager = NodePath("../SpawnManager")
 reward_weapon = ExtResource("29_tornado")
 
-[node name="TrainQuest" type="Node" parent="." node_paths=PackedStringArray("player", "world", "round_manager", "spawn_manager")]
+[node name="TrainQuest" type="Node" parent="." node_paths=PackedStringArray("world", "round_manager", "spawn_manager")]
 script = ExtResource("29_train_quest")
 data = ExtResource("28_quests")
-player = NodePath("../Player")
 world = NodePath("../World")
 round_manager = NodePath("../RoundManager")
 spawn_manager = NodePath("../SpawnManager")
 reward_weapon = ExtResource("29_lantern")
 
-[node name="TempleQuest" type="Node" parent="." node_paths=PackedStringArray("player", "world", "round_manager", "spawn_manager")]
+[node name="TempleQuest" type="Node" parent="." node_paths=PackedStringArray("world", "round_manager", "spawn_manager")]
 script = ExtResource("31_temple_quest")
 data = ExtResource("28_quests")
-player = NodePath("../Player")
 world = NodePath("../World")
 round_manager = NodePath("../RoundManager")
 spawn_manager = NodePath("../SpawnManager")
 reward_weapon = ExtResource("31_zeus")
 
-[node name="MinimapFeed" type="Node" parent="." node_paths=PackedStringArray("world", "player")]
+[node name="MinimapFeed" type="Node" parent="." node_paths=PackedStringArray("world")]
 script = ExtResource("24_minimap")
 world = NodePath("../World")
-player = NodePath("../Player")
 
 [node name="AchievementSystem" type="Node" parent="." node_paths=PackedStringArray("anti_cheat")]
 script = ExtResource("19_achievements")
 catalog = ExtResource("20_achievement_data")
 anti_cheat = NodePath("../AntiCheat")
 
-[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("player", "arena", "round_manager", "points_manager", "score_manager", "anti_cheat")]
+[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("arena", "round_manager", "points_manager", "score_manager", "anti_cheat")]
 script = ExtResource("8_game")
-player = NodePath("../Player")
 arena = NodePath("../World")
 round_manager = NodePath("../RoundManager")
 points_manager = NodePath("../PointsManager")
 score_manager = NodePath("../ScoreManager")
+anti_cheat = NodePath("../AntiCheat")
 
-[node name="AudioManager" type="Node" parent="." node_paths=PackedStringArray("player", "world")]
+[node name="AudioManager" type="Node" parent="." node_paths=PackedStringArray("world")]
 script = ExtResource("9_audio")
-player = NodePath("../Player")
 world = NodePath("../World")
 
-[node name="GlossaryTracker" type="Node" parent="." node_paths=PackedStringArray("player")]
+[node name="GlossaryTracker" type="Node" parent="."]
 script = ExtResource("37_glossary")
-player = NodePath("../Player")
 
 [node name="HUD" parent="." instance=ExtResource("3_hud")]

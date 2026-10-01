@@ -239,9 +239,10 @@ func _gorgon(delta: float, to_target: Vector3) -> bool:
 		return true
 	if _gaze_left >= 0.0:
 		_gaze_left -= delta
-		var player := zombie.target
-		if player and player.is_alive() and player.has_method(&"petrify") and gazes_at(player):
-			player.call(&"petrify", float(p.get("rate", 0.75)) * delta)
+		# No cooperativo, o olhar pega todo jogador virado para ela (não só o alvo).
+		for player in Players.victims(zombie.target):
+			if player is CharacterBase and (player as CharacterBase).is_alive() and player.has_method(&"petrify") and gazes_at(player):
+				player.call(&"petrify", float(p.get("rate", 0.75)) * delta)
 		if _gaze_left < 0.0:
 			_set_gaze_light(false)
 			_vulnerable_left = float(p.get("vulnerable_time", 2.2))
@@ -258,7 +259,7 @@ func _gorgon(delta: float, to_target: Vector3) -> bool:
 ## O olhar pega o jogador? Precisa de linha de visão (parede e objeto protegem) e de o jogador
 ## estar virado para a Górgona (dentro de `facing_deg` da mira); de costas, não pega.
 func gazes_at(player: Node3D) -> bool:
-	if not zombie.has_line_of_sight():
+	if not zombie.has_line_of_sight_to(player):
 		return false
 	var to_gorgon := zombie.global_position - player.global_position
 	to_gorgon.y = 0.0

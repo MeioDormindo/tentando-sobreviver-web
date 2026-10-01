@@ -330,11 +330,13 @@ passam a ser editados direto no Godot.
 # perks, composição por round, rodada dos cães) e, na mesma execução, os testes de cena: as
 # 5 armas especiais, cada tipo de zumbi, a rodada dos cães, os dois bosses nos mapas migrados
 # as telas de menu, os power-ups, a arma caída, o minimapa, a pausa e os eventos, painéis,
-# armadilhas e segredos, a missão do Soro de ponta a ponta, o áudio e os sprites; e o online contra o servidor real, só com operações que não gravam
+# armadilhas e segredos, a missão do Soro de ponta a ponta, o áudio, os sprites, o cooperativo
+# (2 jogadores no mesmo processo); e o online contra o servidor real, só com operações que não gravam
 # (ler o ranking, envio recusado, login errado). Os testes usam um save de teste (o do
 # jogador não muda) e o bot joga offline (não envia nada ao ranking global):
 Godot --headless --path godot -s res://tests/run_tests.gd
-# Uma suíte só (unit, weapons, zombies, bosses, menus, powerups, match, events, quest, audio, models, online):
+# Uma suíte só (unit, weapons, zombies, bosses, menus, powerups, match, events, quest, audio,
+# sprites, online, elements, temple, stuck, touch, coop):
 Godot --headless --path godot -s res://tests/run_tests.gd -- --only=events
 
 # Jogado (abre uma janela), no Terminal migrado: um bot joga até o round 3 e confere
@@ -356,8 +358,10 @@ scenes/main.tscn                 Main: World, Player, Camera, Zombies, SpawnMana
                                  RoundManager, PointsManager, GameManager, AudioManager, HUD
 scripts/systems/events.gd        autoload Events: barramento de sinais (sistemas não se conhecem)
 scripts/systems/save_store.gd    autoload Save: save no formato do jogo web (+ mesclagem da nuvem)
-scripts/systems/session.gd       autoload Session: mapa escolhido para a partida
-scripts/main.gd                  troca o mapa da partida pelo escolhido
+scripts/systems/session.gd       autoload Session: mapa escolhido e a roster (quem joga a partida)
+scripts/systems/players.gd       Players: registro dos jogadores (todos, de pé, o local, o mais perto)
+scripts/main.gd                  troca o mapa pelo escolhido, cria um jogador por pessoa da roster
+                                 e liga câmera/HUD/áudio/minimapa ao jogador local
 scripts/online/                  autoloads Online (cliente REST) e Account (conta e nuvem),
                                  Leaderboard (ranking global), AntiCheat
 scripts/ui/                      HUD (fim de jogo com ranking), Minimap, PauseMenu, SettingsRows
@@ -420,6 +424,35 @@ Decisões:
 - **Munição:** como no jogo web, vem das compras na parede. O reabastecimento automático no fim do
   round (`RoundData.refill_ammo_on_round_end`) ficou desligado.
 - **Nenhum addon externo.**
+- **Base do cooperativo (Etapa 0, sem rede ainda).** A partida aceita até 4 jogadores na
+  `Session.roster` (vazia = solo, que segue idêntico):
+  - o nó `Player` da cena é o do host (peer 1); cada colega vira `Player<peer>`. Só o jogador
+    local (`is_local`) fala com a HUD, a câmera e o áudio;
+  - quem precisa "do jogador" pergunta ao registro `Players` (`all`, `standing`, `local_player`,
+    `nearest`, `victims`). No cooperativo, zumbis e chefes perseguem o de pé mais perto (a cada
+    0,5 s), ataques de área, eventos, trem, neblina e Górgona pegam todos, e os eventos miram um
+    jogador de pé ao acaso (`WorldEventSystem.focus()`);
+  - uma carteira por jogador (`PointsManager.points_of/add/spend/add_all`): acerto e abate pagam
+    quem causou (`DamageInfo.source`), bônus de round, chefe, Nuke e Carpenter vão para todos, e
+    cada compra sai de quem comprou. O score é por jogador e o do time é a soma; o anti-trapaça
+    vale por carteira;
+  - cair no cooperativo é sangrar 30 s (perde os perks), e um colega revive segurando E por 3 s
+    (1,5 s com Quick Revive) no `ReviveSpot`. Quem sangra até o fim assiste um colega e volta no
+    próximo round com a pistola inicial. `Events.player_died` (fim da partida) só sai com o time
+    inteiro caído;
+  - a horda cresce com o time (`RoundData.coop_*`, gerado em `export-data.ts`): cada jogador a mais
+    soma metade dos zumbis do solo (dupla ×1,5, trio ×2, quarteto ×2,5; cães e Horda também) e
+    25% do limite de vivos, que pode passar do teto do solo até 40;
+  - "segurar E" é por jogador (`HoldProgress`), e a Mystery Box só entrega a arma a quem pagou;
+  - para testar sem rede: `Godot --path godot -- --coop=2` (2 a 4) começa as partidas com colegas
+    controlados pelo computador (`CompanionBot`: segue você, atira no zumbi mais perto e revive
+    quem cair; munição de reserva infinita). Colegas têm visual diferente e o nome em cima da cabeça;
+  - os nós do mapa montados do JSON têm nome estável e único (`tipo`, `tipo_2`...): a busca acha
+    todos (o Levante dos Mortos agora usa os 6 sarcófagos, não só o primeiro) e, em rede, o mesmo
+    nó tem o mesmo caminho em todas as máquinas.
+- **Anti-trapaça ligado de verdade.** A ligação `anti_cheat` estava no nó errado do `main.tscn`, então
+  o fim de jogo nunca invalidava uma partida marcada. Agora está no `GameManager` (a suíte `match`
+  confere).
 - **Ranking global aceita os 3 mapas.** O Templo dos Mortos (`temple`) foi liberado na
   restrição `scores_map_check` do Supabase (antes só aceitava `terminal`/`map2`, e toda
   pontuação do Templo era recusada). A lista fica espelhada em `Leaderboard.MAPS`

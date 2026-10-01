@@ -21,7 +21,11 @@ static var _corpses: Array[ZombieBase] = []
 ## Lua de Sangue: todos os zumbis mais rápidos.
 static var event_speed: float = 1.0
 
+## Quem persegue: o jogador de pé mais perto, reavaliado a cada RETARGET_TIME (e logo que o
+## alvo cai ou morre). Sem ninguém de pé, fica com o último.
 var target: CharacterBase
+const RETARGET_TIME := 0.5
+var _retarget_left := 0.0
 ## Destino de fuga (Zumbi Dourado): anda até lá em vez de perseguir e não ataca.
 var flee_goal: Variant = null
 var state: State = State.CHASE
@@ -144,6 +148,7 @@ func _physics_process(delta: float) -> void:
 		_knockback = _knockback.move_toward(Vector3.ZERO, 30.0 * delta)
 		move_and_slide()
 		return
+	_update_target(delta)
 	if target == null or not target.is_alive():
 		velocity.x = 0.0
 		velocity.z = 0.0
@@ -185,6 +190,25 @@ func _physics_process(delta: float) -> void:
 	velocity.z += _knockback.z
 	_knockback = _knockback.move_toward(Vector3.ZERO, 30.0 * delta)
 	move_and_slide()
+
+
+## Persegue o jogador de pé mais perto (cooperativo). No solo é sempre o mesmo jogador.
+func _update_target(delta: float) -> void:
+	if target != null and not is_instance_valid(target):
+		target = null
+	if not Players.coop():
+		return
+	_retarget_left -= delta
+	var lost := target == null or (target is Player and not (target as Player).is_standing())
+	if lost:
+		_retarget_left = minf(_retarget_left, 0.1)
+	if _retarget_left > 0.0:
+		return
+	_retarget_left = RETARGET_TIME
+	var nearest := Players.nearest(global_position)
+	if nearest and nearest != target:
+		target = nearest
+		_best_distance = INF
 
 
 func _chase(to_target: Vector3, delta: float) -> void:
@@ -343,9 +367,14 @@ func reset_stuck() -> void:
 
 ## Linha de visão até o alvo (paredes bloqueiam).
 func has_line_of_sight() -> bool:
-	if target == null:
+	return has_line_of_sight_to(target)
+
+
+## Nada de parede entre o zumbi e `other` (a Górgona olha para cada jogador).
+func has_line_of_sight_to(other: Node3D) -> bool:
+	if other == null:
 		return false
-	var query := PhysicsRayQueryParameters3D.create(global_position + Vector3.UP * 1.4, target.global_position + Vector3.UP * 1.2, PhysicsLayers.WORLD)
+	var query := PhysicsRayQueryParameters3D.create(global_position + Vector3.UP * 1.4, other.global_position + Vector3.UP * 1.2, PhysicsLayers.WORLD)
 	return get_world_3d().direct_space_state.intersect_ray(query).is_empty()
 
 

@@ -27,6 +27,29 @@ var controlled: bool = true
 var move_input: Vector2 = Vector2.ZERO
 var aim_point: Vector3 = Vector3.ZERO
 
+## Quem é na partida (Session.roster): peer (1 = host; no solo, sempre 1), se é o jogador desta
+## máquina (só ele fala com a HUD, a câmera e o áudio) e o nome que os colegas veem.
+var peer_id: int = 1
+var is_local: bool = true
+var player_name: String = ""
+## Visual escolhido por este jogador (id da skin); vazio = o escolhido no save (solo).
+var skin_id: String = ""
+
+## Cooperativo: caído sangrando até um colega reviver (segurando E perto) ou o tempo acabar;
+## sangrou até o fim = fora até o próximo round. No solo vale o Quick Revive de sempre.
+const BLEED_TIME := 30.0
+const REVIVE_TIME := 3.0
+const REVIVE_TIME_QUICK := 1.5
+const REVIVE_RADIUS := 1.8
+var bleeding: bool = false
+var bleed_left: float = 0.0
+## Progresso do reviver (s) e quando foi a última vez que alguém segurou E.
+var _revive_progress := 0.0
+var _revive_held_at := -INF
+## O caído como interagível (os colegas acham ele como acham uma porta) e quem está ajudando.
+var _revive_spot: ReviveSpot
+var _last_reviver: Player
+
 ## Relógio de jogo (s): para com a pausa e acompanha a velocidade do jogo.
 var _clock := 0.0
 var _invulnerable_until := 0.0
@@ -107,6 +130,7 @@ func _ready() -> void:
 	super()
 	add_to_group(&"player")
 	_apply_skin()
+	_add_name_tag()
 	health.reset(data.max_health)
 	inventory.slots = data.inventory_slots
 	inventory.switch_time = data.switch_time
@@ -114,7 +138,8 @@ func _ready() -> void:
 	inventory.weapon_changed.connect(_on_weapon_changed)
 	melee.swung.connect(func() -> void:
 		_play_action(&"Knife", 0.36)
-		Events.knife_swung.emit())
+		if is_local:
+			Events.knife_swung.emit())
 	perks.perks_changed.connect(_on_perks_changed)
 	var blessings := BlessingSystem.new()
 	blessings.player = self
@@ -123,8 +148,11 @@ func _ready() -> void:
 		for w in inventory.weapons:
 			w.reset_ammo())
 	Events.hound_round_changed.connect(_on_hound_round)
+	Events.round_started.connect(_on_round_started)
 	inventory.give(data.starting_weapon)
-	health.health_changed.connect(func(current: float, maximum: float) -> void: Events.player_health_changed.emit(current, maximum))
+	health.health_changed.connect(func(current: float, maximum: float) -> void:
+		if is_local:
+			Events.player_health_changed.emit(current, maximum))
 	aim_point = global_position - global_basis.z * 3.0
 	# Depois que a cena inteira estiver pronta (a HUD fica pronta por último).
 	call_deferred(&"_emit_initial_state")
@@ -151,6 +179,15 @@ func _apply_skin() -> void:
 	# O personagem do mapa da partida (sobrevivente no Terminal, paciente no Hospital).
 	var catalog := load("res://data/configs/skins.tres") as SkinCatalog
 	var skin := catalog.chosen(Session.map_id)
+	# Cooperativo: cada um com o visual que escolheu na sala.
+	var options := catalog.for_map(Session.map_id)
+	for own: Dictionary in options:
+		if skin_id != "" and String(own.id) == skin_id:
+			skin = own
+	# Colega sem visual escolhido (bot de teste): um diferente do seu, pelo número do peer.
+	if skin_id == "" and not is_local and options.size() > 1:
+		var others := options.filter(func(s: Dictionary) -> bool: return s.id != skin.id)
+		skin = others[posmod(peer_id - 2, others.size())]
 	if skin.is_empty():
 		return
 	model = CharacterSprite.create("player_%s" % skin.id)
@@ -188,13 +225,37 @@ func _apply_skin() -> void:
 	pivot.add_child(hair)
 
 
+## Nome em cima da cabeça dos colegas (o seu não aparece).
+func _add_name_tag() -> void:
+	if is_local or player_name == "":
+		return
+	var tag := Label3D.new()
+	tag.name = "NameTag"
+	tag.text = player_name.to_upper()
+	tag.outline_size = 0  # a fonte pixel já tem o contorno embutido
+	tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	tag.font_size = 32
+	tag.pixel_size = 0.011
+	tag.modulate = Color(0.55, 0.85, 1.0)
+	tag.position.y = 2.5
+	add_child(tag)
+
+
 func _emit_initial_state() -> void:
-	Events.player_health_changed.emit(health.current, health.max_health)
+	if is_local:
+		Events.player_health_changed.emit(health.current, health.max_health)
 	_on_weapon_changed(inventory.current, inventory.other())
+
+
+## De pé: vivo e não caído (quem os zumbis perseguem e quem pode pegar coisas).
+func is_standing() -> bool:
+	return is_alive() and not is_down
 
 
 func _physics_process(delta: float) -> void:
 	_clock += delta
+	if bleeding:
+		_tick_bleed(delta)
 	if not is_alive() or is_down:
 		velocity = Vector3.ZERO
 		return
@@ -224,8 +285,9 @@ func petrify(amount: float) -> void:
 	if petrification >= 1.0:
 		petrification = 0.0
 		_stone_until = _clock + STONE_TIME
-		Events.toast.emit("PETRIFICADO! Não olhe para a Górgona")
-		Events.screen_shake.emit(0.3, 0.1)
+		if is_local:
+			Events.toast.emit("PETRIFICADO! Não olhe para a Górgona")
+			Events.screen_shake.emit(0.3, 0.1)
 		if model:
 			model.tint(STONE_COLOR * 0.85)
 			_stone_tint = true
@@ -285,7 +347,7 @@ func fire() -> Array[DamageInfo]:
 	_firing = true
 	_face_aim()
 	var hits := weapon.shoot(get_world_3d().direct_space_state, muzzle.global_position, aim_point, [get_rid()], self)
-	if not hits.is_empty():
+	if not hits.is_empty() and is_local:
 		Events.shot_connected.emit()
 	return hits
 
@@ -307,7 +369,8 @@ func hold_interact(delta: float) -> bool:
 ## Armadura cheia (power-up Armor).
 func refill_armor() -> void:
 	armor = data.max_armor
-	Events.player_armor_changed.emit(armor, data.max_armor)
+	if is_local:
+		Events.player_armor_changed.emit(armor, data.max_armor)
 
 
 ## Deixa o jogador mais lento por `seconds` (fator de velocidade).
@@ -388,7 +451,8 @@ func take_damage(info: DamageInfo) -> float:
 		var absorbed := minf(armor, info.amount)
 		armor -= absorbed
 		info.amount -= absorbed
-		Events.player_armor_changed.emit(armor, data.max_armor)
+		if is_local:
+			Events.player_armor_changed.emit(armor, data.max_armor)
 		if info.amount <= 0.0:
 			if is_blow:
 				_invulnerable_until = _clock + data.invulnerability_time
@@ -430,7 +494,7 @@ func _show_gun(_kind: StringName = &"") -> void:
 
 ## Avisa a HUD da arma em mãos e da reserva (também quando a HUD fica pronta depois do jogador).
 func announce_weapon() -> void:
-	if weapon == null:
+	if weapon == null or not is_local:
 		return
 	var other := inventory.other()
 	Events.weapon_visual_changed.emit(weapon.data.id, weapon.level, other.data.id if other else &"", other.level if other else 0)
@@ -500,8 +564,9 @@ func toggle_flashlight(on: Variant = null) -> void:
 	var flashlight := pivot.get_node_or_null("Flashlight") as SpotLight3D
 	if flashlight:
 		flashlight.visible = flashlight_on
-	Audio.play("weapon_switch", "player", 0.45, 0.0, 1.6 if flashlight_on else 1.3)
-	Events.flashlight_toggled.emit(flashlight_on)
+	if is_local:
+		Audio.play("weapon_switch", "player", 0.45, 0.0, 1.6 if flashlight_on else 1.3)
+		Events.flashlight_toggled.emit(flashlight_on)
 
 
 func set_flashlight_factor(factor: float) -> void:
@@ -518,8 +583,9 @@ func set_flashlight_factor(factor: float) -> void:
 func _go_down(revive: PerkData) -> void:
 	is_down = true
 	health.invulnerable = true
-	Events.interaction_prompt.emit("", "", -1.0)
-	Events.toast.emit("QUICK REVIVE!")
+	if is_local:
+		Events.interaction_prompt.emit("", "", -1.0)
+		Events.toast.emit("QUICK REVIVE!")
 	var tween := create_tween()
 	tween.tween_property(pivot, "rotation:z", deg_to_rad(70.0), 0.3)
 	tween.tween_interval(revive.down_time)
@@ -609,7 +675,7 @@ func _update_interaction() -> void:
 	var best := INF
 	for node in get_tree().get_nodes_in_group(&"interactable"):
 		var target := node as Node3D
-		if target == null:
+		if target == null or target == _revive_spot:
 			continue
 		var offset := target.global_position - global_position
 		offset.y = 0.0
@@ -627,7 +693,7 @@ func _update_interaction() -> void:
 			progress = _interactable.call(&"get_interaction_progress", self)
 	# A barra muda a cada quadro enquanto segura E, mesmo com o texto igual (por isso não fica
 	# só atrás do "if prompt != _last_prompt", que existe pra não gastar toa quando nada muda).
-	if prompt != _last_prompt or progress >= 0.0:
+	if (prompt != _last_prompt or progress >= 0.0) and is_local:
 		_last_prompt = prompt
 		Events.interaction_prompt.emit(prompt, icon, progress)
 
@@ -724,7 +790,8 @@ func _on_perks_changed() -> void:
 	var ids: Array[StringName] = []
 	for perk in perks.owned:
 		ids.append(perk.id)
-	Events.perks_changed.emit(ids)
+	if is_local:
+		Events.perks_changed.emit(ids)
 
 
 func _apply_weapon_modifiers() -> void:
@@ -752,32 +819,165 @@ func _on_weapon_changed(current: Weapon, other: Weapon) -> void:
 		if w.ammo_changed.is_connected(_on_ammo_changed):
 			w.ammo_changed.disconnect(_on_ammo_changed)
 	current.ammo_changed.connect(_on_ammo_changed)
-	Events.weapon_changed.emit(current.data.display_name, other.data.display_name if other else "")
+	if is_local:
+		Events.weapon_changed.emit(current.data.display_name, other.data.display_name if other else "")
 	_on_ammo_changed(current.magazine, current.reserve, current.reloading)
 
 
 func _on_fired() -> void:
 	_play_action(&"Shoot", 0.15)
 	_muzzle_flash()
-	Events.shot_fired.emit()
-	Events.weapon_fired.emit(weapon.data.id, weapon.level)
+	if is_local:
+		Events.shot_fired.emit()
+		Events.weapon_fired.emit(weapon.data.id, weapon.level)
 
 
 func _on_ammo_changed(magazine: int, reserve: int, reloading: bool) -> void:
-	if reloading and not _was_reloading:
+	if reloading and not _was_reloading and is_local:
 		Events.weapon_reload_started.emit(weapon.data.kind)
 	_was_reloading = reloading
-	Events.ammo_changed.emit(weapon.data.display_name, magazine, reserve, reloading)
+	if is_local:
+		Events.ammo_changed.emit(weapon.data.display_name, magazine, reserve, reloading)
+
+
+## A partida tem colegas (cair vira sangrar esperando ajuda, não o fim)?
+func _in_coop() -> bool:
+	return Players.coop()
 
 
 func _on_health_died(info: DamageInfo) -> void:
+	if _in_coop():
+		_bleed(info)
+		return
 	# Quick Revive: cai, fica alguns segundos no chão e levanta sozinho (gasta o perk).
 	var revive := perks.consume_self_revive()
 	if revive:
 		_go_down(revive)
 		return
 	super(info)
-	Events.interaction_prompt.emit("", "", -1.0)
+	if is_local:
+		Events.interaction_prompt.emit("", "", -1.0)
 	# Cai de lado.
 	create_tween().tween_property(pivot, "rotation:z", deg_to_rad(80.0), 0.4)
 	Events.player_died.emit()
+
+
+# ───────────────────────── Cooperativo: cair, reviver, voltar ─────────────────────────
+
+## Caiu com colegas na partida: sangra no chão (perde os perks, como no CoD) até alguém
+## reviver ou o tempo acabar. Os zumbis ignoram quem está caído.
+func _bleed(_info: DamageInfo) -> void:
+	is_down = true
+	bleeding = true
+	bleed_left = BLEED_TIME
+	_revive_progress = 0.0
+	health.invulnerable = true
+	armor = 0.0
+	perks.lose_all()
+	_revive_spot_on(true)
+	create_tween().tween_property(pivot, "rotation:z", deg_to_rad(70.0), 0.3)
+	if is_local:
+		Events.toast.emit("CAÍDO! Um colega pode te reviver")
+	Events.player_downed.emit(self)
+
+
+func _tick_bleed(delta: float) -> void:
+	# Ninguém segurando E: o progresso do reviver volta a zero.
+	if _clock - _revive_held_at > 0.25:
+		_revive_progress = 0.0
+		bleed_left -= delta
+	if is_local:
+		Events.interaction_prompt.emit("CAÍDO · %ds para um colega te reviver" % ceili(maxf(0.0, bleed_left)), "", -1.0 if _revive_progress <= 0.0 else _revive_progress / _revive_time_for(_last_reviver))
+	if bleed_left <= 0.0:
+		_bleed_out()
+
+
+## Sangrou até o fim: fora da partida até o começo do próximo round.
+func _bleed_out() -> void:
+	bleeding = false
+	is_down = false
+	_revive_spot_on(false)
+	visible = false
+	if is_local:
+		Events.interaction_prompt.emit("", "", -1.0)
+		Events.toast.emit("VOCÊ MORREU · volta no próximo round")
+	Events.player_bled_out.emit(self)
+
+
+## Um colega levantou este jogador: vida cheia, de pé, sem os perks.
+func revive() -> void:
+	if not bleeding:
+		return
+	bleeding = false
+	is_down = false
+	_revive_progress = 0.0
+	_revive_spot_on(false)
+	health.invulnerable = false
+	health.reset(data.max_health + perks.max_health_bonus)
+	_last_hurt_at = _clock
+	_invulnerable_until = _clock + 1.5
+	create_tween().tween_property(pivot, "rotation:z", 0.0, 0.3)
+	if is_local:
+		Events.interaction_prompt.emit("", "", -1.0)
+	Events.player_revived.emit(self)
+
+
+## Volta para a partida no começo do round (quem morreu no cooperativo), perto de um colega,
+## com a pistola inicial e sem perks.
+func _on_round_started(_round_number: int, _total: int) -> void:
+	if is_alive() or bleeding or not _in_coop():
+		return
+	var mate := Players.nearest(global_position)
+	if mate == null:
+		return
+	visible = true
+	health.invulnerable = false
+	health.reset(data.max_health)
+	armor = 0.0
+	pivot.rotation.z = 0.0
+	inventory.reset_to(_start_weapon if _start_weapon else data.starting_weapon)
+	global_position = SpawnManager.safe_point(get_world_3d(), mate.global_position + Vector3(1.2, 0.0, 0.0), 0.4) + Vector3.UP * 0.05
+	_last_hurt_at = _clock
+	_invulnerable_until = _clock + 2.0
+	Events.player_revived.emit(self)
+
+
+## Caído como interagível (ReviveSpot): liga ou desliga o ponto de reviver.
+func _revive_spot_on(on: bool) -> void:
+	if _revive_spot == null:
+		_revive_spot = ReviveSpot.new()
+		_revive_spot.name = "ReviveSpot"
+		_revive_spot.player = self
+		add_child(_revive_spot)
+	if on:
+		_revive_spot.add_to_group(&"interactable")
+	else:
+		_revive_spot.remove_from_group(&"interactable")
+
+
+## Texto para o colega perto do caído.
+func revive_prompt(by: Node3D) -> String:
+	if not bleeding or by == self:
+		return ""
+	return "[SEGURE E] REVIVER %s" % (player_name.to_upper() if player_name != "" else "O COLEGA")
+
+
+func revive_progress(_by: Node3D) -> float:
+	return _revive_progress / _revive_time_for(_last_reviver) if _revive_progress > 0.0 else -1.0
+
+
+func _revive_time_for(by: Player) -> float:
+	return REVIVE_TIME_QUICK if by and by.perks.has_perk(&"quick_revive") else REVIVE_TIME
+
+
+## Segurando E perto do caído (Quick Revive de quem ajuda deixa mais rápido).
+func help_revive(by: Node3D, delta: float) -> bool:
+	var helper := by as Player
+	if not bleeding or helper == null or helper == self or not helper.is_standing():
+		return false
+	_last_reviver = helper
+	_revive_held_at = _clock
+	_revive_progress += delta
+	if _revive_progress >= _revive_time_for(helper):
+		revive()
+	return true

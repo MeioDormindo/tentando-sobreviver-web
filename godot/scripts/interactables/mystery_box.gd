@@ -22,6 +22,8 @@ var result: WeaponData
 ## Elemento que veio junto com a arma sorteada ("" = nenhum): qualquer um dos seis, em qualquer
 ## arma, até nas que não têm elemento na parede e nas especiais.
 var result_element: StringName = &""
+## Quem pagou o sorteio em andamento (só essa pessoa pega a arma).
+var buyer: Player
 ## Chance de a arma da caixa já vir com um elemento.
 const ELEMENT_CHANCE := 0.3
 var uses: int = 0
@@ -140,6 +142,8 @@ func get_interaction_prompt(player: Node3D) -> String:
 			return "[E] MYSTERY BOX  ·  %d pontos" % price
 		State.READY:
 			var p := player as Player
+			if not _is_buyer(p):
+				return "MYSTERY BOX  ·  arma de %s" % _buyer_name()
 			var owned := p != null and p.inventory.owns(result.id)
 			var element := ("  " + ElementCatalog.shared().label(result_element)) if result_element != &"" else ""
 			return "[E] PEGAR %s%s%s" % [result.display_name.to_upper(), element, " (MUNIÇÃO)" if owned else ""]
@@ -159,12 +163,15 @@ func interact(player: Node3D) -> bool:
 	match state:
 		State.IDLE:
 			var points := get_tree().get_first_node_in_group(&"points_manager") as PointsManager
-			if points == null or not points.spend(price):
-				Events.purchase_denied.emit()
+			if points == null or not points.spend(price, p):
+				PointsManager.deny(p)
 				return false
+			buyer = p
 			_roll()
 			return true
 		State.READY:
+			if not _is_buyer(p):
+				return false
 			var dropped := p.give_weapon(result)
 			if dropped:
 				Events.weapon_dropped.emit(dropped, p.global_position)
@@ -172,10 +179,20 @@ func interact(player: Node3D) -> bool:
 			var taken := p.inventory.find(result.id)
 			if taken and result_element != &"":
 				taken.element = result_element
-				Events.weapon_element_changed.emit(result.id, result_element)
+				if p.is_local:
+					Events.weapon_element_changed.emit(result.id, result_element)
 			_reset()
 			return true
 	return false
+
+
+## Cooperativo: só quem pagou o sorteio pega a arma (no solo, sempre você).
+func _is_buyer(p: Player) -> bool:
+	return buyer == null or not is_instance_valid(buyer) or buyer == p
+
+
+func _buyer_name() -> String:
+	return buyer.player_name if is_instance_valid(buyer) and buyer.player_name != "" else "um colega"
 
 
 ## Elemento que acompanha a arma (função pura): com chance ELEMENT_CHANCE, um dos seis.
@@ -271,6 +288,7 @@ func _reset() -> void:
 	_set_lid(false)
 	state = State.IDLE
 	result = null
+	buyer = null
 	_label.text = ""
 	_label.modulate = Color.WHITE
 	if _dismiss_pending:

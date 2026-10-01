@@ -96,11 +96,12 @@ func interact(player: Node3D) -> bool:
 	if p == null or not _powered() or not p.perks.can_buy(perk):
 		return false
 	var points := get_tree().get_first_node_in_group(&"points_manager") as PointsManager
-	if points == null or not points.spend(perk.price):
-		Events.purchase_denied.emit()
+	if points == null or not points.spend(perk.price, p):
+		PointsManager.deny(p)
 		return false
 	p.perks.grant(perk)
-	Events.toast.emit(perk.display_name.to_upper())
+	if p.is_local:
+		Events.toast.emit(perk.display_name.to_upper())
 	return true
 
 

@@ -11,6 +11,26 @@ func get_player_spawn() -> Vector3:
 	return Vector3.ZERO
 
 
+## Inícios de `count` jogadores: o primeiro no início do mapa e os colegas em volta, em chão
+## aberto (pelos dados do mapa, não pelo navmesh: no começo da partida ele ainda não está pronto
+## e o ponto "mais perto" dele pode cair fora do mapa, sem chão).
+func get_player_spawns(count: int) -> Array[Vector3]:
+	var start := get_player_spawn()
+	var spots: Array[Vector3] = [start]
+	for ring: float in [1.4, 2.2, 3.0]:
+		for k in 8:
+			if spots.size() >= count:
+				return spots
+			var angle := k * TAU / 8.0
+			var spot := start + Vector3(cos(angle), 0.0, sin(angle)) * ring
+			if is_open_floor(spot) and SpawnManager.is_free(get_world_3d(), spot, 0.4):
+				spots.append(spot)
+	# Sem espaço em volta (não acontece nos mapas atuais): todos no início.
+	while spots.size() < count:
+		spots.append(start)
+	return spots
+
+
 ## Onde o boss pode surgir (o BossManager usa o mais longe do jogador).
 func boss_spawn_points() -> Array[Vector3]:
 	return [get_player_spawn() + Vector3(0, 0, -12)]

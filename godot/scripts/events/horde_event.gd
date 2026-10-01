@@ -11,7 +11,7 @@ func _init() -> void:
 
 func start() -> void:
 	var rounds := system.round_manager
-	var base := rounds.data.total_zombies(rounds.round_number)
+	var base := rounds.data.total_zombies(rounds.round_number, Session.player_count())
 	rounds.add_enemies(roundi(base * float(config.get("extra_enemies_ratio", 0.6))))
 	rounds.set_spawn_modifier(id, config)
 	Events.screen_shake.emit(0.5, 0.12)

@@ -361,7 +361,7 @@ func _update_area_light(delta: float) -> void:
 	_light_check -= delta
 	if _light_check <= 0.0:
 		_light_check = 0.25
-		var player := get_tree().get_first_node_in_group(&"player") as Node3D
+		var player := Players.local_player()
 		if player:
 			var area := area_of(player.global_position)
 			var now := area_lighting(area) if area != &"" else "dark"
@@ -388,7 +388,7 @@ func _update_lamps(delta: float) -> void:
 	if _spark_in > 0.0 or _broken.is_empty():
 		return
 	_spark_in = randf_range(2.0, 6.0)
-	var player := get_tree().get_first_node_in_group(&"player") as Node3D
+	var player := Players.local_player()
 	var at := _broken[randi() % _broken.size()]
 	if player == null or Vector2(at.x - player.global_position.x, at.z - player.global_position.z).length() > 16.0:
 		return
@@ -472,6 +472,7 @@ func _build_solids(ch: String, box_height: float, color: Color, layer: int, labe
 	var material: Material = _wall_material(color) if ch == "#" else (train_material(false, color) if ch == "T" else _material(color))
 	for rect in _merge(func(c: String) -> bool: return c == ch):
 		var body := StaticBody3D.new()
+		body.name = _unique_name(label)
 		body.collision_layer = layer
 		body.collision_mask = 0
 		var shape := BoxShape3D.new()
@@ -546,6 +547,7 @@ func _build_wall_buys() -> void:
 		taken.append(spot.tile)
 		var buy := wall_buy_scene.instantiate() as WallBuy
 		buy.setup(weapon, spot.normal)
+		buy.name = _unique_name("buy_%s" % buy.name)
 		add_child(buy)
 		buy.position = Vector3(spot.tile.x + 0.5, 0.0, spot.tile.y + 0.5)
 
@@ -650,6 +652,7 @@ func _build_interactions() -> void:
 				trap.setup(Rect2(float(zone.x), float(zone.y), float(zone.w), float(zone.h)))
 				node = trap
 		if node:
+			node.name = _unique_name(String(node.name) if String(node.name) != "" else String(item.type))
 			nav_region.add_child(node)
 			node.position = Vector3(float(item.tx) + 0.5, 0.0, float(item.ty) + 0.5)
 			# Painéis e disjuntor: de costas para a parede mais perto e encostados nela.
@@ -702,6 +705,18 @@ func _build_station() -> void:
 	add_child(board)
 
 
+## Nomes estáveis e únicos (tipo, tipo_2, tipo_3...) para o que o mapa monta a partir do JSON:
+## a busca por nome acha todos (sem virar "@StaticBody3D@12"), e em rede o mesmo nó tem o
+## mesmo caminho em todas as máquinas.
+var _name_count: Dictionary = {}
+
+
+func _unique_name(base: String) -> String:
+	var n := int(_name_count.get(base, 0)) + 1
+	_name_count[base] = n
+	return base if n == 1 else "%s_%d" % [base, n]
+
+
 func _build_props() -> void:
 	var group := Node3D.new()
 	group.name = "Props"
@@ -712,7 +727,7 @@ func _build_props() -> void:
 		var body_data: Variant = prop.body
 		if body_data is Dictionary:
 			var body := StaticBody3D.new()
-			body.name = prop.type
+			body.name = _unique_name(String(prop.type))
 			# Móveis que param bala contam como parede; os outros só bloqueiam a passagem.
 			body.collision_layer = PhysicsLayers.WORLD if prop.blocks_bullets else PhysicsLayers.PROPS
 			body.collision_mask = 0
@@ -737,6 +752,7 @@ func _build_props() -> void:
 			var mesh: Node3D = PropFactory.create(String(prop.type))
 			if mesh == null:
 				mesh = _box_mesh(Rect2(-0.3, -0.2, 0.6, 0.4), 0.0, 0.3, material)
+			mesh.name = _unique_name("decor_%s" % prop.type)
 			group.add_child(mesh)
 			mesh.position = center
 			mesh.rotation.y = deg_to_rad(-float(prop.angle))

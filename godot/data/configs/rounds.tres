@@ -33,3 +33,6 @@ hound_rounds = {
 "map2": { "first_round": 5, "every": 6, "per_round": 1.4, "cap": 24, "max_alive": 5, "spawn_interval": 1.4, "spawn_distance_min": 6.875, "spawn_distance_max": 13.125, "fog_darkness": 0.1, "flashlight_factor": 0.85 }
 }
 late_max_alive_per_type = { &"tank": 3 }
+coop_zombies_per_extra_player = 0.5
+coop_alive_per_extra_player = 0.25
+coop_alive_cap = 40

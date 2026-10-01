@@ -86,8 +86,8 @@ func interact(player: Node3D) -> bool:
 		return false
 	if not is_free():
 		var points := get_tree().get_first_node_in_group(&"points_manager") as PointsManager
-		if points == null or not points.spend(PRICE):
-			Events.purchase_denied.emit()
+		if points == null or not points.spend(PRICE, player):
+			PointsManager.deny(player)
 			return false
 	blessings.grant(god)
 	var info: Dictionary = BlessingSystem.GODS[god]

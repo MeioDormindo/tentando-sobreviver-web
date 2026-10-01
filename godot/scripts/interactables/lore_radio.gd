@@ -12,7 +12,7 @@ var messages: PackedStringArray = []
 
 var _next := 0
 var _busy := 0.0
-var _progress := 0.0
+var _progress := HoldProgress.new()
 
 
 func setup(p_label: String, p_hold_time: float, p_messages: PackedStringArray) -> void:
@@ -56,21 +56,20 @@ func get_interaction_prompt(_player: Node3D) -> String:
 	return "[SEGURE E] %s" % label
 
 
-func get_interaction_progress(_player: Node3D) -> float:
-	return -1.0 if _busy > 0.0 else _progress / hold_time
+func get_interaction_progress(player: Node3D) -> float:
+	return -1.0 if _busy > 0.0 else _progress.of(player) / hold_time
 
 
 func interact(_player: Node3D) -> bool:
 	return false
 
 
-func hold_interact(_player: Node3D, delta: float) -> bool:
+func hold_interact(player: Node3D, delta: float) -> bool:
 	if _busy > 0.0 or messages.is_empty():
 		return false
-	_progress += delta
-	if _progress < hold_time:
+	if _progress.add(player, delta) < hold_time:
 		return false
-	_progress = 0.0
+	_progress.reset()
 	_busy = BUSY_TIME
 	Audio.play_at("radio_static", global_position, "world", 0.9, -1.0, 0.0)
 	Events.toast.emit(messages[_next % messages.size()])

@@ -4,6 +4,7 @@ extends Node
 ## 1. ganho único ou soma em 10s de pontos/score muito acima do possível para o round;
 ## 2. pontos/score alterados por fora (depurador, editor de memória): a cópia mascarada não bate.
 ## Na primeira detecção a partida fica invalidada (não vale save nem ranking) e a HUD zoa.
+## No cooperativo, os limites valem para cada jogador (carteira e score de cada um).
 
 @export var data: AntiCheatData
 @export var points_manager: PointsManager
@@ -14,17 +15,26 @@ var taunt: String = ""
 
 var _round := 1
 var _clock := 0.0
-var _points_gains: Array = []
-var _score_gains: Array = []
+## peer → ganhos recentes [[quando, quanto], ...].
+var _points_gains: Dictionary = {}
+var _score_gains: Dictionary = {}
 var _next_check := 0.0
 
 
 func _ready() -> void:
 	Events.round_started.connect(func(n: int, _t: int) -> void: _round = maxi(1, n))
-	Events.points_changed.connect(func(_total: int, delta: int) -> void:
-		_check_gain(delta, _points_gains, data.points_event_base, data.points_event_per_round, data.points_window_base, data.points_window_per_round))
-	Events.score_changed.connect(func(_total: int, delta: int) -> void:
-		_check_gain(delta, _score_gains, data.score_event_base, data.score_event_per_round, data.score_window_base, data.score_window_per_round))
+	if points_manager:
+		points_manager.gained.connect(func(peer: int, delta: int) -> void:
+			_check_gain(delta, _gains(_points_gains, peer), data.points_event_base, data.points_event_per_round, data.points_window_base, data.points_window_per_round))
+	if score_manager:
+		score_manager.gained.connect(func(peer: int, delta: int) -> void:
+			_check_gain(delta, _gains(_score_gains, peer), data.score_event_base, data.score_event_per_round, data.score_window_base, data.score_window_per_round))
+
+
+static func _gains(table: Dictionary, peer: int) -> Array:
+	if not table.has(peer):
+		table[peer] = []
+	return table[peer]
 
 
 func _process(delta: float) -> void:

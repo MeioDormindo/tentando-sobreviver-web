@@ -21,6 +21,8 @@ func run(tree: SceneTree) -> int:
 	_player = _main.get_node("Player") as Player
 	_player.controlled = false
 	await _tree.create_timer(0.4).timeout
+	var game := _main.get_node("GameManager") as GameManager
+	check(game.anti_cheat != null and game.anti_cheat == _main.get_node("AntiCheat"), "o fim de jogo da cena consulta o anti-trapaça")
 
 	await _weapon_drop()
 	await _minimap()

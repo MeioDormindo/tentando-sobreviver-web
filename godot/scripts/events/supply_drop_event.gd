@@ -30,7 +30,7 @@ func start() -> void:
 	crate.interrupt_time = float(config.get("interrupt_time", 0.5))
 	crate.opened.connect(_open)
 	system.world_root().add_child(crate)
-	var at: Vector3 = point if point is Vector3 else system.player.global_position
+	var at: Vector3 = point if point is Vector3 else system.focus().global_position
 	crate.global_position = Vector3(at.x, 0.0, at.z)
 	crate.fall(FALL_HEIGHT, fall)
 
@@ -53,8 +53,9 @@ func end() -> void:
 func _open() -> void:
 	var money := int(config.get("money", 750))
 	Events.max_ammo.emit(crate.global_position)
-	system.player.refill_armor()
-	system.points_manager.add(money, false)
+	var opener := crate.opened_by as Player if crate.opened_by is Player else system.player
+	opener.refill_armor()
+	system.points_manager.add(money, false, opener)
 	var info := system.data.info(id)
 	Events.power_up_collected.emit(id, String(info.get("name", "SUPRIMENTOS")), info.get("color", Color.GREEN),
 		"Munição cheia · Armadura · +%d" % money)

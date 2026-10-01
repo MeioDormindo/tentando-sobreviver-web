@@ -26,9 +26,9 @@ func get_interaction_prompt(_player: Node3D) -> String:
 	return "[E] CHAMAR O TREM  ·  %d pontos" % price
 
 
-func interact(_player: Node3D) -> bool:
+func interact(player: Node3D) -> bool:
 	var events := world_events()
-	if _ready_in > 0.0 or events == null or not pay(price):
+	if _ready_in > 0.0 or events == null or not pay(price, player):
 		return false
 	if not events.call_train():
 		# Trem já passando (ou Plataforma fechada): devolve o dinheiro.

@@ -541,8 +541,12 @@ func _temple_events() -> void:
 	# Levante dos Mortos: esqueletos saem dos sarcófagos.
 	_world.open_area(&"necropolis")
 	var skeletons := func() -> int: return _tree.get_nodes_in_group(&"zombies").filter(func(z: Node) -> bool: return z is ZombieBase and String((z as ZombieBase).data.id).begins_with("skeleton")).size()
+	var tombs := _world.find_children("sarcophagus*", "StaticBody3D", true, false)
+	check(tombs.size() == 6, "os 6 sarcófagos têm nome próprio e são achados (%d)" % tombs.size())
 	var count: int = skeletons.call()
 	check(events.trigger(&"rise_of_dead"), "Levante dos Mortos começa (sarcófagos na Necrópole)")
+	var rise: Object = events.events[&"rise_of_dead"]
+	check((rise.get(&"_tombs") as Array).size() > 1, "o Levante usa vários sarcófagos, não só o primeiro (%d)" % (rise.get(&"_tombs") as Array).size())
 	await _tree.create_timer(3.5).timeout
 	check(skeletons.call() > count, "esqueletos saem dos sarcófagos (%d)" % (skeletons.call() - count))
 	events.stop()

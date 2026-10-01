@@ -16,7 +16,7 @@ var planks: int = 0
 var inside_direction: Vector3 = Vector3.FORWARD
 var interaction_radius: float = 1.9
 
-var _repair_progress := 0.0
+var _repair := HoldProgress.new()
 var _plank_meshes: Array[MeshInstance3D] = []
 
 
@@ -87,10 +87,10 @@ func get_interaction_prompt(_player: Node3D) -> String:
 	return "[SEGURE E] CONSERTAR BARRICADA  ·  +%d por tábua" % data.repair_reward
 
 
-func get_interaction_progress(_player: Node3D) -> float:
+func get_interaction_progress(player: Node3D) -> float:
 	if planks >= data.max_planks:
 		return -1.0
-	return _repair_progress / data.repair_time
+	return _repair.of(player) / data.repair_time
 
 
 func interact(_player: Node3D) -> bool:
@@ -102,18 +102,17 @@ func hold_interact(player: Node3D, delta: float) -> bool:
 	if planks >= data.max_planks:
 		return false
 	if player.has_method(&"hurt_within") and player.call(&"hurt_within", data.repair_interrupt):
-		_repair_progress = 0.0
+		_repair.reset(player)
 		return false
-	_repair_progress += delta
-	if _repair_progress < data.repair_time:
+	if _repair.add(player, delta) < data.repair_time:
 		return false
-	_repair_progress = 0.0
+	_repair.reset(player)
 	planks += 1
 	Audio.play_at("hammer", global_position, "world", 0.9)
 	_update()
 	var points := get_tree().get_first_node_in_group(&"points_manager") as PointsManager
 	if points:
-		points.add(data.repair_reward)
+		points.add(data.repair_reward, true, player)
 	return true
 
 

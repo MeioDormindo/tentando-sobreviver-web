@@ -190,12 +190,12 @@ func get_interaction_prompt(_player: Node3D) -> String:
 	return "[E] ABRIR PORTA%s  ·  %d pontos" % [where, cost]
 
 
-func interact(_player: Node3D) -> bool:
+func interact(player: Node3D) -> bool:
 	if is_open or kind != &"buy":
 		return false
 	var points := get_tree().get_first_node_in_group(&"points_manager") as PointsManager
-	if points == null or not points.spend(cost):
-		Events.purchase_denied.emit()
+	if points == null or not points.spend(cost, player):
+		PointsManager.deny(player)
 		return false
 	open()
 	return true

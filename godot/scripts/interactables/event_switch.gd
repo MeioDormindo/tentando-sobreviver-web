@@ -9,7 +9,7 @@ var idle_text: String
 var price: int
 var hold_time: float
 
-var _progress := 0.0
+var _progress := HoldProgress.new()
 
 
 ## `kind`: "power" (Apagão) ou "alarm" (Alarme de emergência).
@@ -38,23 +38,22 @@ func _active() -> bool:
 
 func get_interaction_prompt(_player: Node3D) -> String:
 	if not _active():
-		_progress = 0.0
+		_progress.reset()
 		return idle_text
 	return "[SEGURE E] %s  ·  %d pontos" % [action_text, price]
 
 
-func get_interaction_progress(_player: Node3D) -> float:
-	return _progress / hold_time if _active() else -1.0
+func get_interaction_progress(player: Node3D) -> float:
+	return _progress.of(player) / hold_time if _active() else -1.0
 
 
-func hold_interact(_player: Node3D, delta: float) -> bool:
+func hold_interact(player: Node3D, delta: float) -> bool:
 	if not _active():
 		return false
-	_progress += delta
-	if _progress < hold_time:
+	if _progress.add(player, delta) < hold_time:
 		return false
-	_progress = 0.0
-	if not pay(price):
+	_progress.reset()
+	if not pay(price, player):
 		return false
 	world_events().end_event(event_id)
 	SpecialFire.flash(get_tree(), global_position + Vector3.UP, 2.0, Color(0.91, 0.76, 0.29))

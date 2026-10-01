@@ -58,7 +58,7 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if player == null or not player.is_alive():
+	if not _anyone_standing():
 		return
 	if _pending_id != &"":
 		_pending_in -= delta
@@ -171,13 +171,31 @@ func train_status() -> Dictionary:
 
 # ───────────────────────── Ajuda para os eventos ─────────────────────────
 
+## Há alguém de pé (no solo, o jogador vivo)? Sem ninguém, os eventos param.
+func _anyone_standing() -> bool:
+	if Players.coop():
+		return not Players.standing().is_empty()
+	return player != null and player.is_alive()
+
+
+## Em quem um evento mira (desabamento, raio, gás, suprimentos): no cooperativo, um jogador de
+## pé ao acaso; no solo, o jogador.
+func focus() -> Player:
+	if Players.coop():
+		var someone := Players.random_standing()
+		if someone:
+			return someone
+	return player
+
+
 ## Ponto de chão livre numa área aberta, a uma distância do jogador no intervalo (ou null).
 func pick_floor_point(min_distance: float, max_distance: float, tries: int = 80) -> Variant:
-	var nav_map := player.get_world_3d().navigation_map
+	var center := focus()
+	var nav_map := center.get_world_3d().navigation_map
 	for i in tries:
 		var angle := randf() * TAU
 		var distance := randf_range(min_distance, max_distance)
-		var point := player.global_position + Vector3(cos(angle), 0.0, sin(angle)) * distance
+		var point := center.global_position + Vector3(cos(angle), 0.0, sin(angle)) * distance
 		point.y = 0.0
 		if not world.is_open_floor(point):
 			continue
@@ -197,11 +215,13 @@ func live_zombies() -> Array[ZombieBase]:
 	return list
 
 
-## Fere o jogador e os zumbis dentro do raio (gás, desabamento).
+## Fere os jogadores e os zumbis dentro do raio (gás, desabamento).
 func damage_area(center: Vector3, radius: float, player_damage: float, zombie_damage: float) -> void:
 	var flat := Vector2(center.x, center.z)
-	if player.is_alive() and Vector2(player.global_position.x, player.global_position.z).distance_to(flat) <= radius:
-		player.take_damage(DamageInfo.new(player_damage, DamageInfo.Kind.ENVIRONMENT, null, false, center))
+	for victim in Players.victims(player):
+		var someone := victim as Player
+		if someone and someone.is_alive() and Vector2(someone.global_position.x, someone.global_position.z).distance_to(flat) <= radius:
+			someone.take_damage(DamageInfo.new(player_damage, DamageInfo.Kind.ENVIRONMENT, null, false, center))
 	for zombie in live_zombies():
 		if Vector2(zombie.global_position.x, zombie.global_position.z).distance_to(flat) <= radius:
 			zombie.take_damage(DamageInfo.new(zombie_damage, DamageInfo.Kind.ENVIRONMENT, null, false, zombie.global_position))

@@ -47,7 +47,7 @@ func update(delta: float) -> bool:
 ## Sarcófagos (objetos do mapa) nas áreas abertas.
 func _open_tombs() -> Array[Node3D]:
 	var tombs: Array[Node3D] = []
-	for node in system.world.find_children("sarcophagus", "StaticBody3D", true, false):
+	for node in system.world.find_children("sarcophagus*", "StaticBody3D", true, false):
 		var body := node as Node3D
 		if system.world.is_area_open(system.world.area_of(body.global_position)):
 			tombs.append(body)

@@ -6,7 +6,7 @@ var interaction_radius: float = 1.9
 var hold_time: float = 1.5
 var closed := false
 
-var _progress := 0.0
+var _progress := HoldProgress.new()
 
 
 func _ready() -> void:
@@ -26,19 +26,18 @@ func get_interaction_prompt(_player: Node3D) -> String:
 	return "" if closed else "[SEGURE E] FECHAR A VÁLVULA"
 
 
-func get_interaction_progress(_player: Node3D) -> float:
-	return -1.0 if closed else _progress / hold_time
+func get_interaction_progress(player: Node3D) -> float:
+	return -1.0 if closed else _progress.of(player) / hold_time
 
 
 func interact(_player: Node3D) -> bool:
 	return false
 
 
-func hold_interact(_player: Node3D, delta: float) -> bool:
+func hold_interact(player: Node3D, delta: float) -> bool:
 	if closed:
 		return false
-	_progress += delta
-	if _progress < hold_time:
+	if _progress.add(player, delta) < hold_time:
 		return false
 	closed = true
 	remove_from_group(&"interactable")

@@ -15,7 +15,7 @@ var god: StringName = &"zeus"
 var total := 12
 var lit := false
 var interaction_radius := 1.8
-var _hold := 0.0
+var _hold := HoldProgress.new()
 var _since_hold := 1.0
 
 
@@ -37,7 +37,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	_since_hold += delta
 	if _since_hold > 0.2:
-		_hold = 0.0
+		_hold.reset()
 
 
 func get_interaction_prompt(_player: Node3D) -> String:
@@ -46,20 +46,19 @@ func get_interaction_prompt(_player: Node3D) -> String:
 	return "[SEGURE E] ACENDER A ESTÁTUA DE %s" % NAMES.get(god, String(god).to_upper())
 
 
-func get_interaction_progress(_player: Node3D) -> float:
-	return -1.0 if lit else _hold / HOLD_TIME
+func get_interaction_progress(player: Node3D) -> float:
+	return -1.0 if lit else _hold.of(player) / HOLD_TIME
 
 
 func interact(_player: Node3D) -> bool:
 	return false
 
 
-func hold_interact(_player: Node3D, delta: float) -> bool:
+func hold_interact(player: Node3D, delta: float) -> bool:
 	if lit:
 		return false
 	_since_hold = 0.0
-	_hold += delta
-	if _hold < HOLD_TIME:
+	if _hold.add(player, delta) < HOLD_TIME:
 		return false
 	light_up()
 	return true

@@ -73,12 +73,12 @@ func points() -> PointsManager:
 	return get_tree().get_first_node_in_group(&"points_manager") as PointsManager
 
 
-## Cobra do jogador; avisa a HUD se não der.
-func pay(amount: int) -> bool:
+## Cobra de quem usou (null = o jogador local); avisa a HUD se não der.
+func pay(amount: int, who: Node = null) -> bool:
 	var manager := points()
-	if manager and manager.spend(amount):
+	if manager and manager.spend(amount, who):
 		return true
-	Events.purchase_denied.emit()
+	PointsManager.deny(who)
 	return false
 
 

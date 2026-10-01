@@ -25,6 +25,11 @@ extends Resource
 @export var max_alive_base: float = 8.0
 @export var max_alive_per_round: float = 1.75
 @export var max_alive_cap: int = 30
+## Cooperativo: cada jogador a mais soma esta fração da horda do solo (0,5 = dupla ×1,5, trio ×2,
+## quarteto ×2,5) e do limite de vivos, que pode passar do teto do solo até `coop_alive_cap`.
+@export var coop_zombies_per_extra_player: float = 0.5
+@export var coop_alive_per_extra_player: float = 0.25
+@export var coop_alive_cap: int = 40
 
 @export_group("Tempo")
 ## Espera antes do primeiro round (s).
@@ -59,8 +64,15 @@ extends Resource
 @export var hound_rounds: Dictionary = {}
 
 
-func total_zombies(round_number: int) -> int:
-	return base_zombies + _r(round_number) * zombies_per_round
+## Zumbis do round para `players` jogadores (1 = solo).
+func total_zombies(round_number: int, players: int = 1) -> int:
+	return roundi((base_zombies + _r(round_number) * zombies_per_round) * coop_factor(players))
+
+
+## Quanto a horda cresce com `players` jogadores (1 no solo; +`coop_zombies_per_extra_player`
+## por jogador a mais).
+func coop_factor(players: int) -> float:
+	return 1.0 + coop_zombies_per_extra_player * maxi(0, players - 1)
 
 
 func health_multiplier(round_number: int) -> float:
@@ -80,8 +92,11 @@ func spawn_interval(round_number: int) -> float:
 	return maxf(spawn_interval_min, spawn_interval_base + (_r(round_number) - 1) * spawn_interval_per_round)
 
 
-func max_alive(round_number: int) -> int:
-	return mini(max_alive_cap, int(max_alive_base + (_r(round_number) - 1) * max_alive_per_round))
+func max_alive(round_number: int, players: int = 1) -> int:
+	var solo := mini(max_alive_cap, int(max_alive_base + (_r(round_number) - 1) * max_alive_per_round))
+	if players <= 1:
+		return solo
+	return mini(maxi(solo, coop_alive_cap), roundi(solo * (1.0 + coop_alive_per_extra_player * (players - 1))))
 
 
 func _r(round_number: int) -> int:
@@ -169,6 +184,6 @@ func is_hound_round(round_number: int, map_id: String) -> bool:
 
 
 ## Quantos cães na rodada.
-func hound_total(round_number: int, map_id: String) -> int:
+func hound_total(round_number: int, map_id: String, players: int = 1) -> int:
 	var cfg: Dictionary = hound_rounds.get(map_id, {})
-	return mini(int(cfg.get("cap", 0)), roundi(float(cfg.get("per_round", 0)) * round_number))
+	return roundi(mini(int(cfg.get("cap", 0)), roundi(float(cfg.get("per_round", 0)) * round_number)) * coop_factor(players))

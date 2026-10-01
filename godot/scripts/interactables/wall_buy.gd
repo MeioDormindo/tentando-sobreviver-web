@@ -130,13 +130,14 @@ func hold_interact(player: Node3D, delta: float) -> bool:
 	var catalog := ElementCatalog.shared()
 	var info := catalog.info(weapon.data.element)
 	var points := get_tree().get_first_node_in_group(&"points_manager") as PointsManager
-	if points == null or not _pay(points, int(info.get("price", 0))):
+	if points == null or not _pay(points, int(info.get("price", 0)), p):
 		return false
 	weapon.element = weapon.data.element
 	_bought_this_press = true
-	Audio.play("lab_upgrade", "ui", 0.8, 0.0, 1.3)
-	Events.toast.emit("%s — %s" % [catalog.label(weapon.element), info.get("description", "")])
-	Events.weapon_element_changed.emit(weapon.data.id, weapon.element)
+	if p.is_local:
+		Audio.play("lab_upgrade", "ui", 0.8, 0.0, 1.3)
+		Events.toast.emit("%s — %s" % [catalog.label(weapon.element), info.get("description", "")])
+		Events.weapon_element_changed.emit(weapon.data.id, weapon.element)
 	return true
 
 
@@ -198,11 +199,11 @@ func _buy(p: Player) -> bool:
 	if target:
 		if target.is_ammo_full():
 			return false
-		if not _pay(points, target.data.ammo_price):
+		if not _pay(points, target.data.ammo_price, p):
 			return false
 		target.reset_ammo()
 		return true
-	if not _pay(points, weapon_data.price):
+	if not _pay(points, weapon_data.price, p):
 		return false
 	var dropped := p.give_weapon(weapon_data)
 	if dropped:
@@ -210,8 +211,8 @@ func _buy(p: Player) -> bool:
 	return true
 
 
-func _pay(points: PointsManager, amount: int) -> bool:
-	if points.spend(amount):
+func _pay(points: PointsManager, amount: int, p: Player) -> bool:
+	if points.spend(amount, p):
 		return true
-	Events.purchase_denied.emit()
+	PointsManager.deny(p)
 	return false

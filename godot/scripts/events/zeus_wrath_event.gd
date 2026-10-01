@@ -47,7 +47,7 @@ func end() -> void:
 
 
 func _strike_warning() -> void:
-	var at := system.player.global_position
+	var at := system.focus().global_position
 	if randf() >= float(config.get("aim_at_player_chance", 0.4)):
 		var angle := randf() * TAU
 		at += Vector3(cos(angle), 0.0, sin(angle)) * sqrt(randf()) * float(config.get("spread", 8.0))

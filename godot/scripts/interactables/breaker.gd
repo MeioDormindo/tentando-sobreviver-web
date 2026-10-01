@@ -7,7 +7,7 @@ const SIZE := Vector3(1.0, 1.8, 0.5)
 var power: PowerSystem
 var interaction_radius: float = 1.8
 
-var _progress := 0.0
+var _progress := HoldProgress.new()
 var _label: Label3D
 var _led: Node3D
 var _blink := 0.0
@@ -64,19 +64,18 @@ func get_interaction_prompt(_player: Node3D) -> String:
 	return "[SEGURE E] LIGAR A ENERGIA"
 
 
-func get_interaction_progress(_player: Node3D) -> float:
-	return -1.0 if power.is_on else _progress / power.data.breaker_hold_time
+func get_interaction_progress(player: Node3D) -> float:
+	return -1.0 if power.is_on else _progress.of(player) / power.data.breaker_hold_time
 
 
 func interact(_player: Node3D) -> bool:
 	return false
 
 
-func hold_interact(_player: Node3D, delta: float) -> bool:
+func hold_interact(player: Node3D, delta: float) -> bool:
 	if power.is_on:
 		return false
-	_progress += delta
-	if _progress < power.data.breaker_hold_time:
+	if _progress.add(player, delta) < power.data.breaker_hold_time:
 		return false
 	power.turn_on()
 	_label.text = "ENERGIA LIGADA"

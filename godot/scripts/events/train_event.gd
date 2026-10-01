@@ -20,7 +20,8 @@ var _from := 0.0
 var _to := 0.0
 var _map_width := 128.0
 var _length := 50.0
-var _player_hit := false
+## Jogadores já atropelados nesta passagem (cada um leva o golpe uma vez).
+var _player_hit: Array[Node3D] = []
 var _node: Node3D
 var _stripe: MeshInstance3D
 var _train: Node3D
@@ -52,7 +53,7 @@ func start() -> void:
 	_map_width = float(system.world.minimap_size().x)
 	_length = float(config.get("cars", 5)) * float(config.get("car_length", 10.0))
 	_elapsed = 0.0
-	_player_hit = false
+	_player_hit.clear()
 	run_over = 0
 	direction = 1 if randf() < 0.5 else -1
 	_node = Node3D.new()
@@ -78,12 +79,12 @@ func update(delta: float) -> bool:
 	_train.global_position.x = head_x
 	var min_x := minf(head_x, head_x - direction * _length)
 	var max_x := maxf(head_x, head_x - direction * _length)
+	var listener := Players.local_player() if Players.local_player() else system.player
 	if _rumble_point:
-		_rumble_point.global_position = Vector3(clampf(system.player.global_position.x, min_x, max_x), 1.0, (_top + _bottom) * 0.5)
+		_rumble_point.global_position = Vector3(clampf(listener.global_position.x, min_x, max_x), 1.0, (_top + _bottom) * 0.5)
 	_run_over(min_x, max_x)
 	_air_blast(min_x, max_x, delta)
-	var player := system.player
-	if absf(player.global_position.z - (_top + _bottom) * 0.5) < 8.0 and player.global_position.x > min_x - 12.0 and player.global_position.x < max_x + 12.0:
+	if absf(listener.global_position.z - (_top + _bottom) * 0.5) < 8.0 and listener.global_position.x > min_x - 12.0 and listener.global_position.x < max_x + 12.0:
 		Events.screen_shake.emit(0.08, 0.06)
 	# Terminou quando o último vagão saiu do mapa.
 	var running := min_x < _map_width + 2.0 if direction > 0 else max_x > -2.0
@@ -136,23 +137,26 @@ func _run_over(min_x: float, max_x: float) -> void:
 		zombie.take_damage(DamageInfo.new(zombie.health.current + 1.0, DamageInfo.Kind.ENVIRONMENT, null, false, at))
 		if not zombie.is_alive():
 			run_over += 1
-	var player := system.player
-	var p := player.global_position
-	if not _player_hit and player.is_alive() and p.x >= min_x and p.x <= max_x and p.z > _top - 0.25 and p.z < _bottom + 0.25:
-		_player_hit = true
-		player.take_damage(DamageInfo.new(float(config.get("player_damage", 70)), DamageInfo.Kind.ENVIRONMENT, null, false, p))
-		Events.screen_shake.emit(0.4, 0.3)
+	for victim in Players.victims(system.player):
+		var player := victim as Player
+		var p := player.global_position
+		if not _player_hit.has(player) and player.is_alive() and p.x >= min_x and p.x <= max_x and p.z > _top - 0.25 and p.z < _bottom + 0.25:
+			_player_hit.append(player)
+			player.take_damage(DamageInfo.new(float(config.get("player_damage", 70)), DamageInfo.Kind.ENVIRONMENT, null, false, p))
+			if player.is_local:
+				Events.screen_shake.emit(0.4, 0.3)
 
 
 ## Deslocamento de ar: quem está na beira da faixa, ao lado do trem, é empurrado para longe.
 func _air_blast(min_x: float, max_x: float, delta: float) -> void:
 	var blast: Dictionary = system.data.config(&"station").get("air_blast", {})
 	var reach := float(blast.get("range", 1.1))
-	var player := system.player
-	var p := player.global_position
-	if not player.is_alive() or p.x < min_x or p.x > max_x:
-		return
-	var above := p.z < _top and p.z > _top - reach
-	var below := p.z > _bottom and p.z < _bottom + reach
-	if above or below:
-		player.global_position.z += (-1.0 if above else 1.0) * float(blast.get("speed", 2.2)) * delta
+	for victim in Players.victims(system.player):
+		var player := victim as Player
+		var p := player.global_position
+		if not player.is_alive() or p.x < min_x or p.x > max_x:
+			continue
+		var above := p.z < _top and p.z > _top - reach
+		var below := p.z > _bottom and p.z < _bottom + reach
+		if above or below:
+			player.global_position.z += (-1.0 if above else 1.0) * float(blast.get("speed", 2.2)) * delta

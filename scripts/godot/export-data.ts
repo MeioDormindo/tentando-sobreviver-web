@@ -271,6 +271,11 @@ function exportRoundsAndPoints(): void {
     boss_rounds: raw(`PackedInt32Array(${w.bossWaves.join(', ')})`),
     hound_rounds: raw(`{\n${Object.entries(houndRounds).map(([id, h]) => `"${id}": { "first_round": ${h!.firstWave}, "every": ${h!.every}, "per_round": ${h!.perWave}, "cap": ${h!.cap}, "max_alive": ${h!.maxAlive}, "spawn_interval": ${s(h!.spawnIntervalMs)}, "spawn_distance_min": ${m(h!.spawnDistance[0])}, "spawn_distance_max": ${m(h!.spawnDistance[1])}, "fog_darkness": ${h!.fog.extraDarkness}, "flashlight_factor": ${h!.fog.flashlightFactor} }`).join(',\n')}\n}`),
     late_max_alive_per_type: raw(`{ ${Object.entries(w.lateMaxAlivePerType.caps).map(([k, v]) => `&"${k}": ${v}`).join(', ')} }`),
+    // Só do Godot (cooperativo): cada jogador a mais soma metade da horda do solo (dupla ×1,5,
+    // trio ×2, quarteto ×2,5) e 25% do limite de vivos, que pode passar do teto do solo até 40.
+    coop_zombies_per_extra_player: 0.5,
+    coop_alive_per_extra_player: 0.25,
+    coop_alive_cap: 40,
   }));
   const e = economyConfig;
   write('configs/points.tres', tres('PointsData', 'res://scripts/systems/points_data.gd', {

@@ -19,7 +19,7 @@ var vanish_on_done := false
 var interaction_radius: float = 1.6
 var used := false
 
-var _progress := 0.0
+var _progress := HoldProgress.new()
 var _ring: Sprite3D
 var _clock := 0.0
 
@@ -72,8 +72,8 @@ func get_interaction_prompt(_player: Node3D) -> String:
 	return "[E] " + label
 
 
-func get_interaction_progress(_player: Node3D) -> float:
-	return _progress / hold_time if (hold_time > 0.0 and not used and available()) else -1.0
+func get_interaction_progress(player: Node3D) -> float:
+	return _progress.of(player) / hold_time if (hold_time > 0.0 and not used and available()) else -1.0
 
 
 func interact(_player: Node3D) -> bool:
@@ -83,11 +83,10 @@ func interact(_player: Node3D) -> bool:
 	return true
 
 
-func hold_interact(_player: Node3D, delta: float) -> bool:
+func hold_interact(player: Node3D, delta: float) -> bool:
 	if hold_time <= 0.0 or not available():
 		return false
-	_progress += delta
-	if _progress < hold_time:
+	if _progress.add(player, delta) < hold_time:
 		return false
 	finish()
 	return true

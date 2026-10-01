@@ -8,8 +8,14 @@ signal zombie_hit(zombie: Node3D, info: DamageInfo)
 signal zombie_killed(zombie: Node3D, info: DamageInfo)
 ## A vida do jogador mudou.
 signal player_health_changed(current: float, maximum: float)
-## O jogador morreu.
+## Fim da linha: o jogador morreu (no cooperativo, o time inteiro caiu). Encerra a partida.
 signal player_died()
+## Cooperativo: um jogador caiu (sangrando), foi revivido (ou voltou no round) ou sangrou até o fim.
+signal player_downed(player: Node3D)
+signal player_revived(player: Node3D)
+signal player_bled_out(player: Node3D)
+## O jogador desta máquina ficou pronto (câmera, HUD, áudio e minimapa se ligam a ele).
+signal local_player_ready(player: Node3D)
 ## Munição da arma em mãos (nome, pente, reserva, recarregando).
 signal ammo_changed(weapon_name: String, magazine: int, reserve: int, reloading: bool)
 ## Arma em mãos trocada (nome da atual e da outra; vazio = só uma arma).

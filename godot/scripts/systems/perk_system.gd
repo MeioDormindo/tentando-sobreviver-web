@@ -52,6 +52,13 @@ func clear() -> void:
 	_recalculate()
 
 
+## Cooperativo: caiu e perdeu os perks, que podem ser comprados de novo (como no CoD).
+func lose_all() -> void:
+	owned.clear()
+	purchases.clear()
+	_recalculate()
+
+
 func _recalculate() -> void:
 	max_health_bonus = 0.0
 	speed_multiplier = 1.0

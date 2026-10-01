@@ -71,12 +71,13 @@ func interact(player: Node3D) -> bool:
 	if upgraded == null:
 		return false
 	var points := get_tree().get_first_node_in_group(&"points_manager") as PointsManager
-	if points == null or not points.spend(price_for(weapon.level)):
-		Events.purchase_denied.emit()
+	if points == null or not points.spend(price_for(weapon.level), p):
+		PointsManager.deny(p)
 		return false
 	weapon.upgrade_to(upgraded)
-	Audio.play("lab_upgrade", "ui", 0.9, 0.0)
-	Events.toast.emit("%s!" % upgraded.display_name.to_upper())
+	if p.is_local:
+		Audio.play("lab_upgrade", "ui", 0.9, 0.0)
+		Events.toast.emit("%s!" % upgraded.display_name.to_upper())
 	return true
 
 

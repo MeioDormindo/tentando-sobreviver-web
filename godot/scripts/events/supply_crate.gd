@@ -4,6 +4,8 @@ extends Node3D
 ## zera a abertura). Fica no grupo do minimapa enquanto espera.
 
 signal opened
+## Quem abriu (recebe a armadura e o dinheiro).
+var opened_by: Node3D
 
 var interaction_radius: float = 1.6
 var hold_time: float = 3.0
@@ -11,7 +13,7 @@ var interrupt_time: float = 0.5
 var landed := false
 var is_open := false
 
-var _progress := 0.0
+var _progress := HoldProgress.new()
 var _clock := 0.0
 var _crate: Node3D
 var _chute: Node3D
@@ -84,8 +86,8 @@ func get_interaction_prompt(_player: Node3D) -> String:
 	return "[SEGURE E] ABRIR SUPRIMENTOS"
 
 
-func get_interaction_progress(_player: Node3D) -> float:
-	return -1.0 if (not landed or is_open) else _progress / hold_time
+func get_interaction_progress(player: Node3D) -> float:
+	return -1.0 if (not landed or is_open) else _progress.of(player) / hold_time
 
 
 func interact(_player: Node3D) -> bool:
@@ -97,12 +99,12 @@ func hold_interact(player: Node3D, delta: float) -> bool:
 		return false
 	var p := player as Player
 	if p and p.hurt_within(interrupt_time):
-		_progress = 0.0
+		_progress.reset(player)
 		return false
-	_progress += delta
-	if _progress < hold_time:
+	if _progress.add(player, delta) < hold_time:
 		return false
 	is_open = true
+	opened_by = player
 	remove_from_group(&"interactable")
 	remove_from_group(&"minimap_supply")
 	opened.emit()

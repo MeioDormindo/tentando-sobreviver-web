@@ -50,17 +50,29 @@ func offset() -> Vector3:
 
 
 func _desired_position() -> Vector3:
-	return target.global_position + _look + offset()
+	return _followed().global_position + _look + offset()
+
+
+## Quem a câmera enquadra: o alvo; no cooperativo, morto (esperando o próximo round), assiste
+## o colega de pé mais perto.
+func _followed() -> Node3D:
+	var player := target as Player
+	if player and Players.coop() and not player.is_alive() and not player.bleeding:
+		var mate := Players.nearest(player.global_position)
+		if mate:
+			return mate
+	return target
 
 
 func _physics_process(delta: float) -> void:
 	if target == null:
 		return
+	var followed := _followed()
 	# Antecipação: para onde o jogador mira (mouse ou analógico), um pouco à frente.
 	var wanted := Vector3.ZERO
-	var aim: Variant = target.get(&"aim_point")
+	var aim: Variant = followed.get(&"aim_point")
 	if aim is Vector3:
-		wanted = (aim as Vector3) - target.global_position
+		wanted = (aim as Vector3) - followed.global_position
 		wanted.y = 0.0
 		wanted = (wanted * look_ahead).limit_length(max_look_ahead)
 	_look = _look.lerp(wanted, clampf(look_ahead_smoothing * delta, 0.0, 1.0))

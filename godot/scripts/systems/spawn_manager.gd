@@ -27,6 +27,25 @@ var round_multipliers: Array = [1.0, 1.0, 1.0, 1]
 var _stuck_check := 0.0
 
 
+## Jogador de referência para nascer: no cooperativo, um de pé ao acaso (a horda se divide entre
+## o time); no solo, o alvo de sempre.
+func anchor_player() -> CharacterBase:
+	if Players.coop():
+		var someone := Players.random_standing()
+		if someone:
+			return someone
+	return target
+
+
+## Quem o zumbi nascido em `spot` persegue primeiro: no cooperativo, o de pé mais perto.
+func target_for(spot: Vector3) -> CharacterBase:
+	if Players.coop():
+		var someone := Players.nearest(spot)
+		if someone:
+			return someone
+	return target
+
+
 func _physics_process(delta: float) -> void:
 	_stuck_check -= delta
 	if _stuck_check <= 0.0:
@@ -66,10 +85,11 @@ func alive_count() -> int:
 ## Cria um zumbi com os multiplicadores do round; devolve null se não houver onde nascer.
 func spawn_zombie(health_mult: float, damage_mult: float, speed_mult: float, round_number: int = 1, type: StringName = &"") -> ZombieBase:
 	var points := world.active_spawn_points(round_number)
-	var index := pick_spawn_index(points, target.global_position, min_player_distance)
+	var anchor := anchor_player()
+	var index := pick_spawn_index(points, anchor.global_position, min_player_distance)
 	if index < 0:
 		return null
-	var zombie := ZombieFactory.create(type_data(type), target, health_mult, damage_mult, speed_mult)
+	var zombie := ZombieFactory.create(type_data(type), target_for(points[index]), health_mult, damage_mult, speed_mult)
 	if zombie == null:
 		return null
 	# Posição definida antes de entrar na cena: se o zumbi nascesse na origem por um passo de
@@ -91,7 +111,7 @@ func spawn_at(type: StringName, at: Vector3) -> ZombieBase:
 		spot = safe_point(target.get_world_3d(), at, 0.4)
 		if Vector2(spot.x - at.x, spot.z - at.z).length() > 3.5:
 			return null
-	var zombie := ZombieFactory.create(type_data(type), target, round_multipliers[0], round_multipliers[1], round_multipliers[2])
+	var zombie := ZombieFactory.create(type_data(type), target_for(spot), round_multipliers[0], round_multipliers[1], round_multipliers[2])
 	if zombie == null:
 		return null
 	zombie.position = container.to_local(spot + Vector3.UP * 0.1)
@@ -102,15 +122,16 @@ func spawn_at(type: StringName, at: Vector3) -> ZombieBase:
 ## Cria um zumbi a uma distância aleatória do jogador, num ponto alcançável da navegação,
 ## com um raio caindo (rodada dos cães). Devolve null se não achar lugar.
 func spawn_near_player(type: StringName, min_distance: float, max_distance: float, health_mult: float, damage_mult: float, speed_mult: float) -> ZombieBase:
-	var nav_map := target.get_world_3d().navigation_map
+	var anchor := anchor_player()
+	var nav_map := anchor.get_world_3d().navigation_map
 	for attempt in 12:
 		var angle := randf() * TAU
-		var candidate := target.global_position + Vector3(cos(angle), 0.0, sin(angle)) * randf_range(min_distance, max_distance)
+		var candidate := anchor.global_position + Vector3(cos(angle), 0.0, sin(angle)) * randf_range(min_distance, max_distance)
 		var spot := NavigationServer3D.map_get_closest_point(nav_map, candidate)
-		var distance := spot.distance_to(target.global_position)
+		var distance := spot.distance_to(anchor.global_position)
 		if spot.y > FLOOR_MAX_Y or spot.distance_to(candidate) > 1.5 or distance < min_distance * 0.8:
 			continue
-		var zombie := ZombieFactory.create(type_data(type), target, health_mult, damage_mult, speed_mult)
+		var zombie := ZombieFactory.create(type_data(type), target_for(spot), health_mult, damage_mult, speed_mult)
 		if zombie == null:
 			return null
 		zombie.position = container.to_local(spot + Vector3.UP * 0.1)
@@ -147,10 +168,11 @@ func _relocate_stuck() -> void:
 			continue
 		if zombie.stuck_time < stuck_timeout:
 			continue
-		if zombie.global_position.distance_to(target.global_position) < stuck_min_distance:
+		var chased: Node3D = zombie.target if is_instance_valid(zombie.target) else target
+		if zombie.global_position.distance_to(chased.global_position) < stuck_min_distance:
 			continue
 		var points := world.active_spawn_points(99)
-		var index := pick_spawn_index(points, target.global_position, min_player_distance)
+		var index := pick_spawn_index(points, chased.global_position, min_player_distance)
 		if index >= 0:
 			zombie.global_position = safe_point(world3d, points[index], zombie.data.body_radius) + Vector3.UP * 0.05
 			zombie.reset_stuck()

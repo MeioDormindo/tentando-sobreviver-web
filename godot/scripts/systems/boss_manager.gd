@@ -46,7 +46,7 @@ func start(boss_id: StringName, extra_health_mult: float = 1.0) -> void:
 func _spawn(data: BossData, extra_health_mult: float) -> void:
 	var appearance := int(appearances.get(data.id, 0))
 	appearances[data.id] = appearance + 1
-	var player := spawn_manager.target
+	var player := spawn_manager.anchor_player()
 	var points := spawn_manager.world.boss_spawn_points()
 	var at := points[0] if not points.is_empty() else player.global_position + Vector3(0, 0, -12)
 	for point in points:
@@ -55,7 +55,7 @@ func _spawn(data: BossData, extra_health_mult: float) -> void:
 	# Nasce num ponto livre (o boss é largo: nada de nascer dentro de banco ou coluna).
 	at = SpawnManager.safe_point(player.get_world_3d(), at, data.body_radius)
 	boss = data.scene.instantiate() as Boss
-	boss.setup(data, player, (1.0 + data.health_per_appearance * appearance) * extra_health_mult, _summon)
+	boss.setup(data, spawn_manager.target_for(at), (1.0 + data.health_per_appearance * appearance) * extra_health_mult, _summon)
 	boss.position = spawn_manager.container.to_local(at + Vector3.UP * 0.1)
 	spawn_manager.container.add_child(boss)
 	_pending = false

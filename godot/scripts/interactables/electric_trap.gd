@@ -68,8 +68,8 @@ func get_interaction_prompt(_player: Node3D) -> String:
 	return "[E] LIGAR ARMADILHA ELÉTRICA  ·  %d pontos" % price
 
 
-func interact(_player: Node3D) -> bool:
-	if is_active() or _ready_in > 0.0 or not pay(price):
+func interact(player: Node3D) -> bool:
+	if is_active() or _ready_in > 0.0 or not pay(price, player):
 		return false
 	activate()
 	return true

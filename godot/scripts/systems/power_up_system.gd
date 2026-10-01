@@ -17,6 +17,8 @@ var active: Dictionary = {}
 var _drops_this_round := 0
 var _pickups: Array[Node3D] = []
 var _fire_sale_boxes: Array[MysteryBox] = []
+## Quem está com a Fúria (Golden Drop) agora.
+var _fury_player: Player
 
 
 func _ready() -> void:
@@ -36,12 +38,11 @@ func _physics_process(delta: float) -> void:
 			continue
 		if age >= data.blink_at:
 			pickup.visible = int(age * (8.0 if age > data.lifetime - 3.0 else 4.0)) % 2 == 0
-		var offset := player.global_position - pickup.global_position
-		offset.y = 0.0
-		if player.is_alive() and offset.length() <= data.pickup_radius + 0.4:
+		var picker := _picker(pickup)
+		if picker:
 			var id: StringName = pickup.get_meta(&"id")
 			_remove(pickup)
-			apply(id)
+			apply(id, picker)
 	var changed := false
 	for id: StringName in active.keys():
 		active[id] = float(active[id]) - delta
@@ -51,6 +52,26 @@ func _physics_process(delta: float) -> void:
 			changed = true
 	if changed or not active.is_empty():
 		Events.power_up_timers.emit(active.duplicate(), data.power_ups)
+
+
+## Quem passou por cima do drop (no cooperativo, qualquer um de pé; no solo, o jogador).
+func _picker(pickup: Node3D) -> Player:
+	for someone in (Players.standing() if Players.coop() else _team()):
+		if someone == null or not someone.is_alive():
+			continue
+		var offset := someone.global_position - pickup.global_position
+		offset.y = 0.0
+		if offset.length() <= data.pickup_radius + 0.4:
+			return someone
+	return null
+
+
+## Quem recebe os efeitos de time (vida, armadura, velocidade): todos no cooperativo.
+func _team() -> Array[Player]:
+	if Players.coop():
+		return Players.all()
+	var solo: Array[Player] = [player]
+	return solo
 
 
 ## Caminho do ícone (jogo web, 40px; no Templo alguns têm visual grego — Ares, Hermes, Hefesto,
@@ -152,13 +173,16 @@ static func _halo_texture(_color: Color) -> ImageTexture:
 	return _halo
 
 
-## Aplica o efeito (ao pegar). Devolve o detalhe mostrado na HUD.
-func apply(id: StringName) -> String:
+## Aplica o efeito (ao pegar). `by` = quem pegou (prêmios do Golden Drop; null = o jogador).
+## Devolve o detalhe mostrado na HUD.
+func apply(id: StringName, by: Player = null) -> String:
+	if by == null:
+		by = player
 	var info: Dictionary = data.power_ups.get(id, {})
 	var detail := ""
 	match id:
 		&"max_ammo":
-			Events.max_ammo.emit(player.global_position)
+			Events.max_ammo.emit(by.global_position)
 		&"double_cash":
 			points_manager.multiplier = data.cash_multiplier
 		&"insta_kill":
@@ -166,11 +190,15 @@ func apply(id: StringName) -> String:
 		&"nuke":
 			detail = "+%d" % _nuke()
 		&"full_heal":
-			player.health.heal(player.health.max_health)
+			for someone in _team():
+				someone.health.heal(someone.health.max_health)
 		&"armor":
-			player.refill_armor()
+			for someone in _team():
+				if someone.is_alive():
+					someone.refill_armor()
 		&"speed_boost":
-			player.speed_buff = data.speed_multiplier
+			for someone in _team():
+				someone.speed_buff = data.speed_multiplier
 		&"carpenter":
 			var planks := 0
 			for node in get_tree().get_nodes_in_group(&"barricades"):
@@ -178,9 +206,9 @@ func apply(id: StringName) -> String:
 				planks += barricade.data.max_planks - barricade.planks
 				barricade.planks = barricade.data.max_planks
 				barricade.take_hit(0)
-			detail = "Barricadas consertadas (%d tábuas) · +%d" % [planks, points_manager.add(data.carpenter_reward)]
+			detail = "Barricadas consertadas (%d tábuas) · +%d" % [planks, points_manager.add_all(data.carpenter_reward)]
 		&"golden":
-			detail = _golden()
+			detail = _golden(by)
 		&"fire_sale":
 			_start_fire_sale()
 	var duration := float(info.get("duration", 0))
@@ -197,9 +225,11 @@ func _end(id: StringName) -> void:
 		&"insta_kill":
 			Hurtbox.insta_kill = false
 		&"speed_boost":
-			player.speed_buff = 1.0
+			for someone in _team():
+				someone.speed_buff = 1.0
 		&"fury":
-			player.fury_multiplier = 1.0
+			if is_instance_valid(_fury_player):
+				_fury_player.fury_multiplier = 1.0
 		&"fire_sale":
 			_end_fire_sale()
 
@@ -240,11 +270,11 @@ func _nuke() -> int:
 		if zombie and zombie.is_alive():
 			zombie.take_damage(DamageInfo.new(zombie.health.current + 1.0, DamageInfo.Kind.ENVIRONMENT, player, false, zombie.global_position))
 	SpecialFire.flash(get_tree(), player.global_position, 12.0, Color(1.0, 0.6, 0.3))
-	return points_manager.add(data.nuke_reward)
+	return points_manager.add_all(data.nuke_reward)
 
 
 ## Golden Drop: arma especial, dinheiro alto, perk grátis ou Fúria (dano em dobro).
-func _golden() -> String:
+func _golden(who: Player) -> String:
 	var total := 0.0
 	for key: StringName in data.golden_outcomes:
 		total += float(data.golden_outcomes[key])
@@ -258,31 +288,32 @@ func _golden() -> String:
 	if outcome == &"weapon":
 		var weapon := weapon_catalog.find(StringName(Array(data.golden_weapons).pick_random()))
 		if weapon:
-			if player.inventory.owns(weapon.id):
-				for w in player.inventory.weapons:
+			if who.inventory.owns(weapon.id):
+				for w in who.inventory.weapons:
 					w.reset_ammo()
 			else:
-				var dropped := player.give_weapon(weapon)
+				var dropped := who.give_weapon(weapon)
 				if dropped:
-					Events.weapon_dropped.emit(dropped, player.global_position)
+					Events.weapon_dropped.emit(dropped, who.global_position)
 			return weapon.display_name
 	if outcome == &"perk":
 		var options: Array[PerkData] = []
 		for file in DirAccess.get_files_at(perks_dir):
 			if file.ends_with(".tres") or file.ends_with(".tres.remap"):
 				var perk := load("%s/%s" % [perks_dir, file.trim_suffix(".remap")]) as PerkData
-				if perk and player.perks.can_buy(perk):
+				if perk and who.perks.can_buy(perk):
 					options.append(perk)
 		if not options.is_empty():
 			var perk: PerkData = options.pick_random()
-			player.perks.grant(perk)
+			who.perks.grant(perk)
 			return "Perk grátis: " + perk.display_name
 	if outcome == &"fury":
-		player.fury_multiplier = data.fury_damage_multiplier
+		who.fury_multiplier = data.fury_damage_multiplier
+		_fury_player = who
 		active[&"fury"] = data.fury_duration
 		return "Fúria: dano x%d" % roundi(data.fury_damage_multiplier)
 	# Dinheiro (também o prêmio quando não há perk para dar); não passa pelo Double Cash.
-	points_manager.add(data.golden_money, false)
+	points_manager.add(data.golden_money, false, who)
 	return "+%d" % data.golden_money
 
 

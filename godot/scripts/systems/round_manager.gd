@@ -66,7 +66,8 @@ func start_round(number: int) -> void:
 		boss_id = StringName(forced_boss.boss)
 	is_boss_round = boss_manager != null and boss_id != &"" and (data.is_boss_round_number(map_id, number) or forced)
 	is_hound_round = not is_boss_round and data.is_hound_round(number, map_id)
-	total = data.hound_total(number, map_id) if is_hound_round else data.total_zombies(number)
+	var players := Session.player_count()
+	total = data.hound_total(number, map_id, players) if is_hound_round else data.total_zombies(number, players)
 	Events.hound_round_changed.emit(is_hound_round, data.hound_rounds.get(map_id, {}))
 	if is_boss_round:
 		# O boss vem com uma horda reduzida de escolta.
@@ -109,7 +110,7 @@ func _max_alive() -> int:
 	var bonus := 0
 	for modifier: Dictionary in spawn_modifiers.values():
 		bonus += int(modifier.get("max_alive_bonus", 0))
-	return data.max_alive(round_number) + bonus
+	return data.max_alive(round_number, Session.player_count()) + bonus
 
 
 func _spawn_interval() -> float:

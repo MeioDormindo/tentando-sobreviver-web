@@ -13,6 +13,7 @@ const REPATH_INTERVAL := 0.3
 @export var data: BossData
 
 var target: CharacterBase
+var _retarget_left := 0.0
 var phase: int = 1
 var mode: Mode = Mode.ROAR
 ## Invoca zumbis em volta: (tipos, quantidade, ponto) → quantos surgiram.
@@ -170,6 +171,9 @@ func _physics_process(delta: float) -> void:
 		_stop()
 		move_and_slide()
 		return
+	# Cooperativo: entre um ataque e outro, persegue o jogador de pé mais perto.
+	if mode in [Mode.CHASE, Mode.ROAR, Mode.STUNNED]:
+		_update_target(delta)
 	var to_target := target.global_position - global_position if target else Vector3.ZERO
 	to_target.y = 0.0
 	var distance := to_target.length()
@@ -213,6 +217,23 @@ func _physics_process(delta: float) -> void:
 			elif not _try_attack(distance, to_target):
 				_chase(delta, to_target)
 	move_and_slide()
+
+
+## Mesma regra dos zumbis (ZombieBase._update_target): o mais perto de pé, a cada 0,5 s.
+func _update_target(delta: float) -> void:
+	if target != null and not is_instance_valid(target):
+		target = null
+	if not Players.coop():
+		return
+	_retarget_left -= delta
+	if target is Player and not (target as Player).is_standing():
+		_retarget_left = minf(_retarget_left, 0.1)
+	if _retarget_left > 0.0:
+		return
+	_retarget_left = ZombieBase.RETARGET_TIME
+	var nearest := Players.nearest(global_position)
+	if nearest:
+		target = nearest
 
 
 func _charging(distance: float) -> void:

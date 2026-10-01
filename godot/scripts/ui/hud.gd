@@ -185,12 +185,12 @@ func _ready() -> void:
 	Events.lighting_changed.connect(_on_lighting_changed)
 	# Comprou elemento: o nome da arma na HUD ganha o ícone na hora.
 	Events.weapon_element_changed.connect(func(_id: StringName, _e: StringName) -> void:
-		var player := get_tree().get_first_node_in_group(&"player") as Player
+		var player := Players.local_player()
 		if player and player.weapon:
 			_on_ammo_changed(player.weapon.data.display_name, player.weapon.magazine, player.weapon.reserve, player.weapon.reloading))
 	# O jogador pode ter anunciado a arma antes de a HUD existir: pede de novo.
 	(func() -> void:
-		var player := get_tree().get_first_node_in_group(&"player")
+		var player := Players.local_player()
 		if player and player.has_method(&"announce_weapon"):
 			player.announce_weapon()).call_deferred()
 
@@ -229,7 +229,7 @@ func _update_touch() -> void:
 	if wanted != InputBindings.touch_active:
 		InputBindings.set_touch_active(wanted)
 		_update_flashlight_label()  # sem o atalho [F] no toque
-	var player := get_tree().get_first_node_in_group(&"player") as Player
+	var player := Players.local_player()
 	touch.visible = wanted and not get_tree().paused and player != null and player.is_alive() and not _game_over_panel.visible
 
 
@@ -672,7 +672,7 @@ func _on_perks_changed(ids: Array[StringName]) -> void:
 func _on_ammo_changed(weapon_name: String, magazine: int, reserve: int, reloading: bool) -> void:
 	# Elemento comprado na parede: ícone e nome ao lado da arma (ex.: "M4 ✹ FOGO").
 	var element := ""
-	var player := get_tree().get_first_node_in_group(&"player") as Player
+	var player := Players.local_player()
 	if player and player.weapon and player.weapon.element != &"":
 		element = "  " + ElementCatalog.shared().label(player.weapon.element)
 	_weapon_label.text = weapon_name.to_upper() + element + ("  ·  RECARREGANDO" if reloading else "")

@@ -109,6 +109,10 @@ func _test_round_formulas() -> void:
 	check(is_equal_approx(data.spawn_interval(20), 0.4), "round 20: spawn no mínimo (0.4s)")
 	check(data.max_alive(1) == 8 and data.max_alive(20) == 30, "máximo de vivos: 8 no round 1, teto 30")
 	check(data.total_zombies(0) == 9, "round inválido vira round 1")
+	# Cooperativo: cada jogador a mais soma metade da horda do solo.
+	var hordes := [1, 2, 3, 4].map(func(n: int) -> int: return data.total_zombies(10, n))
+	check(hordes == [36, 54, 72, 90], "round 10: 36 zumbis no solo, ×1,5 em dupla, ×2 em trio, ×2,5 em quarteto (%s)" % [hordes])
+	check(data.max_alive(1, 2) == 10 and data.max_alive(20, 2) == 38 and data.max_alive(20, 4) == 40, "vivos no cooperativo: +25% por jogador a mais, teto 40")
 
 
 func _test_spawn_pick() -> void:
@@ -369,6 +373,7 @@ func _test_composition() -> void:
 	check(hound_rounds == [5, 11, 17, 23, 29], "cães no Hospital: rounds 5, 11, 17... (%s)" % [hound_rounds])
 	check(range(1, 30).all(func(r: int) -> bool: return not data.is_hound_round(r, "terminal")), "sem rodada dos cães no Terminal")
 	check(data.hound_total(5, "map2") == 7, "round 5: 7 cães")
+	check(data.hound_total(5, "map2", 2) == 11, "round 5 em dupla: 11 cães (×1,5)")
 
 
 func _test_save() -> void:

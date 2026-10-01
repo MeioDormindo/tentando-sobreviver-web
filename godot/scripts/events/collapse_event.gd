@@ -51,7 +51,7 @@ func end() -> void:
 
 
 func _drop() -> void:
-	var at := system.player.global_position
+	var at := system.focus().global_position
 	if randf() >= float(config.get("aim_at_player_chance", 0.35)):
 		var angle := randf() * TAU
 		var distance := sqrt(randf()) * float(config.get("spread", 6.9))

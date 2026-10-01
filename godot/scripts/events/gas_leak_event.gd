@@ -29,7 +29,7 @@ func start() -> void:
 	duration = float(config.get("duration_time", 22.0))
 	var range_m: Array = config.get("distance", [5.3, 11.9])
 	var point: Variant = system.pick_floor_point(float(range_m[0]), float(range_m[1]))
-	center = point if point is Vector3 else system.player.global_position + Vector3(float(range_m[0]), 0, 0)
+	center = point if point is Vector3 else system.focus().global_position + Vector3(float(range_m[0]), 0, 0)
 	_elapsed = 0.0
 	_tick = float(config.get("warning_time", 2.5))
 	_node = Node3D.new()

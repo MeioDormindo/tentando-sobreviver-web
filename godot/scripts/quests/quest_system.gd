@@ -179,19 +179,26 @@ func _spawn_carrier(item_art: String, toast: String, type: StringName = &"armore
 	return carrier
 
 
-## Prêmio: todos os perks que ainda dá para ter e a arma (level 1 = já no Mk II).
+## Prêmio: todos os perks que ainda dá para ter e a arma (level 1 = já no Mk II). No
+## cooperativo, cada jogador do time ganha o seu.
 func _grant_rewards(weapon_data: WeaponData, level := 0) -> void:
+	for someone in Players.victims(player):
+		if not Players.coop() or (someone as Player).is_alive():
+			_reward(someone as Player, weapon_data, level)
+
+
+func _reward(who: Player, weapon_data: WeaponData, level: int) -> void:
 	for file in DirAccess.get_files_at(perks_dir):
 		if file.ends_with(".tres") or file.ends_with(".tres.remap"):
 			var perk := load("%s/%s" % [perks_dir, file.trim_suffix(".remap")]) as PerkData
-			if perk and player.perks.can_buy(perk):
-				player.perks.grant(perk)
+			if perk and who.perks.can_buy(perk):
+				who.perks.grant(perk)
 	if weapon_data == null:
 		return
-	var dropped := player.give_weapon(weapon_data)
+	var dropped := who.give_weapon(weapon_data)
 	if dropped:
-		Events.weapon_dropped.emit(dropped, player.global_position)
-	var weapon := player.inventory.find(weapon_data.id)
+		Events.weapon_dropped.emit(dropped, who.global_position)
+	var weapon := who.inventory.find(weapon_data.id)
 	if weapon and level > 0:
 		var lab := load("res://data/configs/weapon_lab.tres") as WeaponLabData
 		while weapon.level < level:
