@@ -19,6 +19,9 @@ var _pulse := 0.0
 
 
 static func summon(tree: SceneTree, at: Vector3, player: Node3D) -> AllySpirit:
+	# Em rede: surge também nos colegas (lá ele corre e morde os fantoches, que não levam dano).
+	if Net.world and Net.is_host():
+		Net.world.on_spirit(at)
 	var spirit := AllySpirit.new()
 	spirit.owner_player = player
 	SpecialFire.world_root(tree).add_child(spirit)

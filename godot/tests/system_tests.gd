@@ -114,6 +114,7 @@ func _test_round_formulas() -> void:
 	var hordes := [1, 2, 3, 4].map(func(n: int) -> int: return data.total_zombies(10, n))
 	check(hordes == [36, 54, 72, 90], "round 10: 36 zumbis no solo, ×1,5 em dupla, ×2 em trio, ×2,5 em quarteto (%s)" % [hordes])
 	check(data.max_alive(1, 2) == 10 and data.max_alive(20, 2) == 38 and data.max_alive(20, 4) == 40, "vivos no cooperativo: +25% por jogador a mais, teto 40")
+	check(is_equal_approx(data.coop_boss_factor(1), 1.0) and is_equal_approx(data.coop_boss_factor(2), 1.5) and is_equal_approx(data.coop_boss_factor(4), 2.5), "chefe no cooperativo: vida ×1,5 em dupla, ×2,5 em quarteto")
 
 
 func _test_spawn_pick() -> void:

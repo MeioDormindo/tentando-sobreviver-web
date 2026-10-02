@@ -72,7 +72,9 @@ func start_round(number: int) -> void:
 	if is_boss_round:
 		# O boss vem com uma horda reduzida de escolta.
 		total = maxi(2, roundi(total * boss_manager.escort_ratio(boss_id)))
-		boss_manager.start(boss_id, float(forced_boss.get("health_multiplier", 1.0)) if forced else 1.0)
+		# Em grupo, o chefe tem mais vida (um por jogador a mais).
+		var health_mult := float(forced_boss.get("health_multiplier", 1.0)) if forced else 1.0
+		boss_manager.start(boss_id, health_mult * data.coop_boss_factor(Session.player_count()))
 	spawn_manager.round_multipliers = [data.health_multiplier(number), data.damage_multiplier(number), data.speed_multiplier(number), number]
 	spawned = 0
 	killed = 0

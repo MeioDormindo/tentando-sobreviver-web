@@ -68,6 +68,8 @@ func hold_interact(player: Node3D, delta: float) -> bool:
 func light_up() -> void:
 	if lit:
 		return
+	if Net.world and Net.is_host():
+		Net.world.on_node_call(self, &"net_light")
 	lit = true
 	remove_from_group(&"interactable")
 	var light := EventFx.light(GLOW, 1.2, 4.0)
@@ -96,3 +98,20 @@ func _find_world() -> LayoutMap:
 	while node and not node is LayoutMap:
 		node = node.get_parent()
 	return node as LayoutMap
+
+
+## Rede (colega): o host acendeu esta estátua — o mesmo visual (os avisos e o portão vêm do host).
+func net_light() -> void:
+	if lit:
+		return
+	lit = true
+	remove_from_group(&"interactable")
+	var light := EventFx.light(GLOW, 1.2, 4.0)
+	light.position.y = 2.2
+	add_child(light)
+	SpecialFire.flash(get_tree(), global_position + Vector3.UP * 1.5, 1.6, GLOW)
+	Audio.play_at("powerup", global_position, "world", 1.1)
+	var statues := get_tree().get_nodes_in_group(&"god_statues")
+	if statues.all(func(s: Node) -> bool: return (s as GodStatue).lit):
+		Events.screen_shake.emit(1.2, 0.2)
+		Audio.play("secret_song", "music")

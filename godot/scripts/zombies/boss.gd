@@ -438,6 +438,9 @@ func _rupture() -> void:
 			landing = candidate
 			break
 	SpecialFire.flash(get_tree(), global_position, 2.2, Color(0.7, 0.35, 1.0))
+	if Net.world and Net.is_host():
+		Net.world.on_flash(global_position, 2.2, Color(0.7, 0.35, 1.0))
+		Net.world.on_flash(landing, 2.2, Color(0.7, 0.35, 1.0))
 	global_position = landing
 	SpecialFire.flash(get_tree(), global_position, 2.2, Color(0.7, 0.35, 1.0))
 	_face(target.global_position - global_position)
@@ -583,13 +586,23 @@ func make_puppet() -> void:
 
 
 ## Estado mandado pelo host: posição, velocidade, direção, modo e a ação em andamento.
-func net_state(at: Vector3, moving: Vector3, yaw: float, new_mode: int, action: int) -> void:
+func net_state(at: Vector3, moving: Vector3, yaw: float, new_mode: int, action: int, new_phase := 1, fury := false) -> void:
 	if not _net_has_target:
 		global_position = at
 	_net_target = at
 	_net_velocity = moving
 	_net_yaw = yaw
 	_net_has_target = true
+	# Troca de fase (forma nova da Entidade) e a Fúria do Minotauro, como no host.
+	if new_phase > phase:
+		phase = new_phase
+		var sheet := String(data.extras.get("phase_sheets", {}).get(str(phase), ""))
+		if sheet != "" and model and CharacterSprite.exists(sheet):
+			model.set_sheet(sheet)
+			SpecialFire.flash(get_tree(), global_position + Vector3.UP * 1.5, 5.0, Color(0.7, 0.35, 1.0))
+	if fury != _fury_tinted and model:
+		_fury_tinted = fury
+		model.tint(Color(1.0, 0.55, 0.35) if fury else Color.WHITE)
 	var action_id: StringName = NET_ACTIONS[action] if action >= 0 and action < NET_ACTIONS.size() else &""
 	if new_mode == mode and action_id == _action_id:
 		return

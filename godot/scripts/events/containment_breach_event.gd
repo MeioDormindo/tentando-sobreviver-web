@@ -47,3 +47,15 @@ func _isolation_points() -> Array[Vector3]:
 		if system.world.area_of(point) in [&"icu", &"ward"]:
 			points.append(point)
 	return points
+
+
+func client_start(_params: Dictionary) -> void:
+	system.world.set_event_mood(id, true, config)
+	Audio.play("evt_power_down", "world", 0.9, 0.0)
+	var listener := Players.local_player()
+	if listener:
+		_siren = Audio.loop_at("evt_siren", listener, "ambience", 0.8, 3000.0)
+
+
+func client_end() -> void:
+	end()

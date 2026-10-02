@@ -209,9 +209,10 @@ func _on_zombie_added(node: Node) -> void:
 		_z_spawn.rpc(id, String((body as ZombieBase).data.id), at)
 
 
-## Posições compactadas: 11 bytes por zumbi (id; x, y, z em 1/64 m; velocidade em 1/8 m/s;
-## direção em 256 passos), cerca de um terço do tamanho em números de 4 bytes.
-const ZOMBIE_BYTES := 11
+## Posições compactadas: 13 bytes por zumbi (id; x, y, z em 1/64 m; velocidade em 1/8 m/s;
+## direção em 256 passos; altura do corpo — voo da Harpia — em 1/32 m; estados visuais: olhar
+## da Górgona, armadura caída, gelo), cerca de um terço do tamanho em números de 4 bytes.
+const ZOMBIE_BYTES := 13
 
 
 func _send_snapshot() -> void:
@@ -224,7 +225,7 @@ func _send_snapshot() -> void:
 			continue
 		if node is Boss:
 			var boss := node as Boss
-			_b_state.rpc(id, boss.global_position, Vector3(boss.velocity.x, 0.0, boss.velocity.z), boss.pivot.rotation.y, int(boss.mode), boss.net_action())
+			_b_state.rpc(id, boss.global_position, Vector3(boss.velocity.x, 0.0, boss.velocity.z), boss.pivot.rotation.y, int(boss.mode), boss.net_action(), boss.phase, boss._fury_active())
 			continue
 		var zombie := node as ZombieBase
 		var at := zombie.global_position
@@ -235,6 +236,8 @@ func _send_snapshot() -> void:
 		pack.encode_s8(at_byte + 8, clampi(roundi(zombie.velocity.x * 8.0), -128, 127))
 		pack.encode_s8(at_byte + 9, clampi(roundi(zombie.velocity.z * 8.0), -128, 127))
 		pack.encode_u8(at_byte + 10, posmod(roundi(zombie.pivot.rotation.y / TAU * 256.0), 256))
+		pack.encode_u8(at_byte + 11, clampi(roundi(zombie.pivot.position.y * 32.0), 0, 255))
+		pack.encode_u8(at_byte + 12, zombie.net_flags())
 		at_byte += ZOMBIE_BYTES
 	if at_byte > 0:
 		pack.resize(at_byte)
@@ -282,7 +285,7 @@ func _z_snapshot(pack: PackedByteArray) -> void:
 			continue
 		var at := Vector3(pack.decode_s16(i + 2), pack.decode_s16(i + 4), pack.decode_s16(i + 6)) / 64.0
 		var moving := Vector3(pack.decode_s8(i + 8), 0.0, pack.decode_s8(i + 9)) / 8.0
-		zombie.net_state(at, moving, pack.decode_u8(i + 10) / 256.0 * TAU)
+		zombie.net_state(at, moving, pack.decode_u8(i + 10) / 256.0 * TAU, pack.decode_u8(i + 11) / 32.0, pack.decode_u8(i + 12))
 
 
 ## Fantoche pelo id cortado em 16 bits (o snapshot só leva os 16 bits de baixo).
@@ -298,6 +301,41 @@ func _z_hit(id: int, at: Vector3, headshot: bool, kind: int) -> void:
 	var zombie := _puppet(id)
 	if zombie and zombie.has_method(&"net_hit"):
 		zombie.call(&"net_hit", at, headshot, kind)
+
+
+## Host: um clarão (o raio que traz um cão, a chegada do chefe) aparece também nos colegas.
+func on_flash(at: Vector3, radius: float, color: Color) -> void:
+	if Net.live:
+		_flash.rpc(at, radius, color)
+
+
+@rpc("authority", "unreliable")
+func _flash(at: Vector3, radius: float, color: Color) -> void:
+	SpecialFire.flash(get_tree(), at, radius, color)
+
+
+## Host: um espírito aliado (Hades) surgiu.
+func on_spirit(at: Vector3) -> void:
+	if Net.live:
+		_spirit.rpc(at)
+
+
+@rpc("authority", "reliable")
+func _spirit(at: Vector3) -> void:
+	AllySpirit.summon(get_tree(), at, null)
+
+
+## Host: um zumbi atirou (flecha, cuspe) — o colega vê o mesmo disparo (o dano é do host).
+func on_zombie_shot(zombie: ZombieBase, kind: StringName, to_target: Vector3) -> void:
+	if Net.live and zombie.has_meta(&"net_id"):
+		_z_shot.rpc(int(zombie.get_meta(&"net_id")), kind, to_target)
+
+
+@rpc("authority", "unreliable")
+func _z_shot(id: int, kind: StringName, to_target: Vector3) -> void:
+	var zombie := _puppet(id) as ZombieBase
+	if zombie:
+		zombie.net_shot(kind, to_target)
 
 
 @rpc("authority", "unreliable")
@@ -334,10 +372,10 @@ func _b_spawn(id: int, boss_id: String, at: Vector3) -> void:
 
 
 @rpc("authority", "unreliable_ordered")
-func _b_state(id: int, at: Vector3, moving: Vector3, yaw: float, mode: int, action: int) -> void:
+func _b_state(id: int, at: Vector3, moving: Vector3, yaw: float, mode: int, action: int, phase: int, fury: bool) -> void:
 	var boss := _puppet(id) as Boss
 	if boss:
-		boss.net_state(at, moving, yaw, mode, action)
+		boss.net_state(at, moving, yaw, mode, action, phase, fury)
 
 
 ## Host: o chefe atacou (os parâmetros exatos vão para os colegas verem igual).
@@ -487,7 +525,7 @@ func _fire_sale(main_path: String, list: Array) -> void:
 
 
 ## Métodos que o host pode mandar os colegas chamarem num nó do mapa (só o visual).
-const NODE_CALLS: Array[StringName] = [&"activate", &"net_taken"]
+const NODE_CALLS: Array[StringName] = [&"activate", &"net_taken", &"collapse", &"net_light"]
 
 
 ## Host: chama o mesmo método no mesmo nó das outras máquinas (armadilha ligada...).

@@ -113,7 +113,7 @@ func _fragments_enter() -> void:
 
 func _collect(key: String) -> void:
 	got[key] = true
-	Events.toast.emit("FRAGMENTO DE ALMA (%d/3)" % _count())
+	_toast("FRAGMENTO DE ALMA (%d/3)" % _count())
 	Audio.play("powerup", "ui", 0.7)
 
 
@@ -124,18 +124,24 @@ func _fragments_update(delta: float) -> bool:
 			_carrier_last = carrier.global_position
 		elif carrier != null and _carrier_last is Vector3:
 			carrier = null
-			_carrier_spot = _spot("PEGAR O FRAGMENTO DE ALMA", _carrier_last, _collect.bind("carrier"), FRAGMENT_HOLD)
-			_carrier_spot.name = "Fragment_carrier"
-			_carrier_spot.vanish_on_done = true
-			_carrier_spot.add_prop(Vector3(0.3, 0.45, 0.3), SOUL, 1.2, PropFactory.create("soul_fragment"))
+			_net(&"fragment", {"at": _carrier_last})
+			_make_carrier_spot(_carrier_last)
 		else:
 			_next_carrier -= delta
 			if _next_carrier <= 0.0:
 				_next_carrier = RETRY
-				carrier = _spawn_carrier("", "UM ESQUELETO CARREGA UM FRAGMENTO DE ALMA", &"skeleton", PropFactory.create("soul_fragment"))
+				carrier = _spawn_carrier("", "UM ESQUELETO CARREGA UM FRAGMENTO DE ALMA", &"skeleton", PropFactory.create("soul_fragment"), "soul_fragment")
 				if carrier:
 					_carrier_last = carrier.global_position
 	return _count() == 3
+
+
+## O fragmento no chão onde o esqueleto caiu (no host e, em rede, nos colegas).
+func _make_carrier_spot(at: Vector3) -> void:
+	_carrier_spot = _spot("PEGAR O FRAGMENTO DE ALMA", at, _collect.bind("carrier"), FRAGMENT_HOLD)
+	_carrier_spot.name = "Fragment_carrier"
+	_carrier_spot.vanish_on_done = true
+	_carrier_spot.add_prop(Vector3(0.3, 0.45, 0.3), SOUL, 1.2, PropFactory.create("soul_fragment"))
 
 
 # ── 3. Altares do Portão do Templo ──
@@ -156,7 +162,8 @@ func _altars_enter() -> void:
 		var spot := _spot("DEPOSITAR UM FRAGMENTO NO ALTAR", altar.global_position + Vector3(0, 0, 1.1), func() -> void:
 			altar.activate()
 			altars_lit += 1
-			Events.toast.emit("ALTAR ACESO (%d/3)" % altars_lit), ALTAR_HOLD)
+			_toast("ALTAR ACESO (%d/3)" % altars_lit), ALTAR_HOLD)
+		spot.name = "AltarSpot_%s" % altar.name
 		spot.interaction_radius = 1.7
 
 
@@ -166,7 +173,7 @@ func _altars_exit() -> void:
 	if gate:
 		gate.open()
 	Events.screen_shake.emit(0.8, 0.16)
-	Events.toast.emit("O PORTÃO DO TEMPLO SE ABRIU... ALGO ACORDOU NO LABIRINTO")
+	_toast("O PORTÃO DO TEMPLO SE ABRIU... ALGO ACORDOU NO LABIRINTO")
 
 
 # ── 5. Chave do Submundo ──
@@ -175,7 +182,7 @@ func _key_enter() -> void:
 	var at: Vector3 = boss_down if boss_down is Vector3 else player.global_position
 	var spot := _spot("PEGAR A CHAVE DO SUBMUNDO", Vector3(at.x, 0.0, at.z), func() -> void:
 		has_key = true
-		Events.toast.emit("CHAVE DO SUBMUNDO — abra o portão ao sul das Ruínas"), 1.0)
+		_toast("CHAVE DO SUBMUNDO — abra o portão ao sul das Ruínas"), 1.0)
 	spot.name = "UnderworldKey"
 	spot.vanish_on_done = true
 	spot.interaction_radius = 2.2
@@ -199,6 +206,7 @@ func _gate_enter() -> void:
 		if gate:
 			gate.open()
 		gate_open = true, GATE_HOLD)
+	spot.name = "UnderworldGateSpot"
 	spot.interaction_radius = 2.4
 
 
@@ -219,3 +227,20 @@ func _complete() -> void:
 	SpecialFire.flash(get_tree(), player.global_position + Vector3.UP, 8.0, Color(0.6, 0.85, 1.0))
 	Events.screen_shake.emit(1.0, 0.18)
 	Events.quest_completed.emit(&"temple", "O PORTÃO DO SUBMUNDO FOI SELADO", "Todos os perks + Raio de Zeus. Mas algo lá embaixo ainda respira...")
+
+
+# ───────────────────────── Rede ─────────────────────────
+
+func net_state() -> Dictionary:
+	return {"boss_down": boss_down, "boss_round": boss_round}
+
+
+func _apply_state(state: Dictionary) -> void:
+	if state.get("boss_down") is Vector3:
+		boss_down = state.boss_down
+	boss_round = int(state.get("boss_round", boss_round))
+
+
+func _net_custom(kind: StringName, payload: Dictionary) -> void:
+	if kind == &"fragment" and _carrier_spot == null:
+		_make_carrier_spot(payload.get("at", Vector3.ZERO))

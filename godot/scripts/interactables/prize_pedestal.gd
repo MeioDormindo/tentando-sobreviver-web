@@ -61,9 +61,21 @@ func hold_interact(player: Node3D, delta: float) -> bool:
 	var dropped := (player as Player).give_weapon(_weapon)
 	if dropped:
 		Events.weapon_dropped.emit(dropped, player.global_position)
+	if Net.world and Net.is_host():
+		Net.world.on_node_call(self, &"net_taken")
 	var art := find_child("Part1", true, false) as Node3D
 	if art:
 		art.visible = false
 	SpecialFire.flash(get_tree(), global_position + Vector3.UP * 1.5, 3.0, Color(0.85, 0.94, 1.0))
 	Events.toast.emit("%s — presente de Artemis" % _weapon.display_name.to_upper())
 	return true
+
+
+## Rede (colega): o host pegou a arma do pedestal — some daqui também.
+func net_taken() -> void:
+	taken = true
+	remove_from_group(&"interactable")
+	var art := find_child("Part1", true, false) as Node3D
+	if art:
+		art.visible = false
+	SpecialFire.flash(get_tree(), global_position + Vector3.UP * 1.5, 3.0, Color(0.85, 0.94, 1.0))

@@ -477,7 +477,13 @@ Decisões:
     eventos do mapa (cada um com a parte "só o visual" para os colegas: `client_start`,
     `client_update`, `client_fx`, `client_end` no WorldEvent), a missão do Último Trem (no colega
     ela fica em modo espelho: o host avisa o avanço e o uso de cada ponto; o objetivo vai para o
-    minimapa), armadilha, ursinhos, rádio e Fire Sale. Hospital e Templo ficam para a Etapa 3.
+    minimapa), armadilha, ursinhos, rádio e Fire Sale.
+  - **Hospital e Templo na rede (Etapa 3):** o host escolhe o mapa na sala (entre os liberados no
+    save dele). Os estados visuais dos zumbis vão no snapshot (altura do voo da Harpia, olhar da
+    Górgona, armadura caída, gelo); flechas e cuspes são repetidos nos colegas; o raio que traz
+    cada cão, a fase e a Fúria dos chefes, as colunas que o Minotauro derruba, as estátuas, o
+    pedestal do Arco, o espírito do Hades, as bênçãos (na HUD de quem recebeu), os eventos e as
+    missões do Soro e do Templo também. A vida do chefe cresce com o time (`coop_boss_*`).
   - **Regras:** o menu de pausa não para o mundo; no fim, o host leva todos de volta à sala
     (VOLTAR À SALA); quem sai some do mapa; o host sair leva todos ao menu.
   - **Banda medida** (4 jogadores, 35 zumbis vivos): o host manda ~10 KB/s (~80 kbit/s) para

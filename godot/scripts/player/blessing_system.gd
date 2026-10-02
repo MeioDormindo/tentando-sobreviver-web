@@ -62,7 +62,9 @@ func grant(god: StringName) -> void:
 	streak = 0
 	_apply()
 	var info: Dictionary = GODS[god]
-	if player == null or player.is_local:
+	if player:
+		player.hud(&"blessing_changed", [god, "%s · %s" % [info.name, String(info.title).to_upper()], info.color])
+	else:
 		Events.blessing_changed.emit(god, "%s · %s" % [info.name, String(info.title).to_upper()], info.color)
 
 
@@ -72,7 +74,9 @@ func clear() -> void:
 	active = &""
 	streak = 0
 	_apply()
-	if player == null or player.is_local:
+	if player:
+		player.hud(&"blessing_changed", [&"", "", Color.WHITE])
+	else:
 		Events.blessing_changed.emit(&"", "", Color.WHITE)
 
 
@@ -113,6 +117,5 @@ func _on_killed(zombie: Node3D, info: DamageInfo) -> void:
 		&"hades":
 			if randf() < HADES_CHANCE and is_instance_valid(zombie):
 				AllySpirit.summon(get_tree(), zombie.global_position, player)
-				if player.is_local:
-					Events.toast.emit("HADES: um espírito aliado se levanta para lutar")
+				player.hud(&"toast", ["HADES: um espírito aliado se levanta para lutar"])
 				Audio.play_at("powerup", zombie.global_position, "world", 0.9)

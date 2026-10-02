@@ -29,6 +29,12 @@ func update(delta: float) -> bool:
 	if _next <= 0.0:
 		_next = float(config.get("every_time", 1.0))
 		_strike_warning()
+	_tick_falling(delta)
+	return true
+
+
+## Os círculos encolhem e o raio cai no fim do aviso (dano só no host).
+func _tick_falling(delta: float) -> void:
 	var warning := float(config.get("warning_time", 0.9))
 	for piece in _falling.duplicate():
 		piece.left -= delta
@@ -37,7 +43,6 @@ func update(delta: float) -> bool:
 		ring.scale = Vector3.ONE * (1.5 - 0.5 * t)
 		if piece.left <= 0.0:
 			_impact(piece)
-	return true
 
 
 func end() -> void:
@@ -54,6 +59,12 @@ func _strike_warning() -> void:
 	at.y = 0.0
 	if not system.world.is_open_floor(at):
 		return
+	system.net_fx(id, [at])
+	_place(at)
+
+
+## Círculo de aviso do raio (no host e, em rede, nos colegas no mesmo lugar).
+func _place(at: Vector3) -> void:
 	var ring := EventFx.disc(WARN_COLOR, float(config.get("radius", 1.6)), 0.25)
 	system.world_root().add_child(ring)
 	ring.global_position = at + Vector3.UP * 0.03
@@ -76,3 +87,21 @@ func _impact(piece: Dictionary) -> void:
 	SpecialFire.flash(system.get_tree(), at + Vector3.UP * 0.6, radius * 1.6, WARN_COLOR)
 	Audio.play_at("explosion", at, "world", 0.8)
 	Events.screen_shake.emit(0.15, 0.12)
+
+
+func client_start(_params: Dictionary) -> void:
+	_falling.clear()
+	Events.screen_shake.emit(0.4, 0.1)
+
+
+func client_update(delta: float) -> void:
+	_tick_falling(delta)
+
+
+func client_fx(args: Array) -> void:
+	if not args.is_empty():
+		_place(args[0])
+
+
+func client_end() -> void:
+	end()

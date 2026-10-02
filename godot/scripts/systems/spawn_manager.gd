@@ -137,6 +137,8 @@ func spawn_near_player(type: StringName, min_distance: float, max_distance: floa
 		zombie.position = container.to_local(spot + Vector3.UP * 0.1)
 		container.add_child(zombie)
 		SpecialFire.flash(get_tree(), spot, 2.0, Color(0.55, 0.75, 1.0))
+		if Net.world and Net.is_host():
+			Net.world.on_flash(spot, 2.0, Color(0.55, 0.75, 1.0))
 		return zombie
 	return null
 

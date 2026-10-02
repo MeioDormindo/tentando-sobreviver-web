@@ -179,7 +179,7 @@ func _make_lock(parent: Node3D, on_open: Callable) -> Node3D:
 ## Um Blindado extra que carrega um item (sprite em cima dele); entra na conta do round.
 ## `type`: quem carrega (Blindado por padrão; no Templo, um Esqueleto); `item`: arte pronta
 ## em cima dele (senão a imagem de `item_art`).
-func _spawn_carrier(item_art: String, toast: String, type: StringName = &"armored", item_node: Node3D = null) -> ZombieBase:
+func _spawn_carrier(item_art: String, toast: String, type: StringName = &"armored", item_node: Node3D = null, item_prop := "") -> ZombieBase:
 	var number := maxi(1, round_manager.round_number)
 	var rounds := round_manager.data
 	var carrier := spawn_manager.spawn_zombie(rounds.health_multiplier(number), rounds.damage_multiplier(number), rounds.speed_multiplier(number), number, type)
@@ -191,7 +191,7 @@ func _spawn_carrier(item_art: String, toast: String, type: StringName = &"armore
 		item = EventFx.box(Vector3(0.25, 0.04, 0.16), EventFx.glow(Color(0.3, 0.6, 1.0), 1.0, 1.2))
 	item.position = Vector3(0.0, 2.0, 0.0)
 	carrier.add_child(item)
-	_net(&"carrier", {"zombie": int(carrier.get_meta(&"net_id", 0)), "art": item_art})
+	_net(&"carrier", {"zombie": int(carrier.get_meta(&"net_id", 0)), "art": item_art, "prop": item_prop})
 	Events.toast.emit(toast)
 	return carrier
 
@@ -272,7 +272,8 @@ func net_apply(kind: StringName, payload: Dictionary) -> void:
 		&"carrier":
 			var carrier := Net.world.call(&"_puppet", int(payload.get("zombie", 0))) as Node3D if Net.world else null
 			if carrier:
-				var item: Node3D = PixelShapes.standing(String(payload.get("art", "")), 56.0) if String(payload.get("art", "")) != "" else null
+				var prop := String(payload.get("prop", ""))
+				var item: Node3D = PropFactory.create(prop) if prop != "" else (PixelShapes.standing(String(payload.get("art", "")), 56.0) if String(payload.get("art", "")) != "" else null)
 				if item == null:
 					item = EventFx.box(Vector3(0.25, 0.04, 0.16), EventFx.glow(Color(0.3, 0.6, 1.0), 1.0, 1.2))
 				item.position = Vector3(0.0, 2.0, 0.0)

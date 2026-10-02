@@ -593,7 +593,9 @@ func _on_health_died(info: DamageInfo) -> void:
 	tween.tween_interval(CORPSE_STAY)
 	tween.tween_callback(_sink)
 	_corpses.append(self)
-	_corpses.assign(_corpses.filter(func(c: ZombieBase) -> bool: return is_instance_valid(c)))
+	# Sem tipo no parâmetro: a lista é estática e pode ter corpos de uma partida que já acabou
+	# (liberados), que não convertem para ZombieBase.
+	_corpses.assign(_corpses.filter(func(c: Variant) -> bool: return is_instance_valid(c)))
 	while _corpses.size() > MAX_CORPSES:
 		var oldest: ZombieBase = _corpses.pop_front()
 		if is_instance_valid(oldest):
@@ -648,14 +650,58 @@ func make_puppet() -> void:
 	collision_mask = 0
 
 
-## Estado mandado pelo host (posição no chão, velocidade e direção do corpo).
-func net_state(at: Vector3, moving: Vector3, yaw: float) -> void:
+## Estado mandado pelo host: posição, velocidade, direção, altura do corpo (voo) e estados visuais.
+func net_state(at: Vector3, moving: Vector3, yaw: float, height := 0.0, flags := 0) -> void:
 	if not _net_has_target:
 		global_position = at
 	_net_target = at
 	_net_velocity = moving
 	_net_yaw = yaw
+	_net_height = height
 	_net_has_target = true
+	if flags != _net_flags:
+		_apply_net_flags(flags)
+
+
+## Estados visuais no snapshot (bits): olhar da Górgona, armadura caída, gelo.
+const FLAG_GAZE := 1
+const FLAG_BARE := 2
+const FLAG_CHILL := 4
+var _net_flags := 0
+var _net_height := 0.0
+
+
+## Host: os estados visuais que os colegas precisam ver.
+func net_flags() -> int:
+	var flags := 0
+	if _abilities and _abilities.gazing():
+		flags |= FLAG_GAZE
+	if _abilities and not data.armor.is_empty() and _abilities.armor_hp <= 0.0:
+		flags |= FLAG_BARE
+	if is_chilled():
+		flags |= FLAG_CHILL
+	return flags
+
+
+func _apply_net_flags(flags: int) -> void:
+	var changed := flags ^ _net_flags
+	_net_flags = flags
+	if changed & FLAG_GAZE and _abilities:
+		_abilities._set_gaze_light(bool(flags & FLAG_GAZE))
+	if changed & FLAG_BARE and flags & FLAG_BARE:
+		break_armor()
+	if changed & FLAG_CHILL and model:
+		model.tint(Color(0.62, 0.85, 1.25) if flags & FLAG_CHILL else Color.WHITE)
+
+
+## Disparo visto no host (flecha, cuspe): o mesmo aqui (o dano é do host).
+func net_shot(kind: StringName, to_target: Vector3) -> void:
+	if _abilities == null or state == State.DEAD:
+		return
+	if kind == &"arrow":
+		_abilities._shoot_arrow(to_target)
+	else:
+		_abilities._spit(to_target)
 
 
 ## Desliza até a última posição recebida (com a velocidade, para não andar aos trancos).
@@ -666,6 +712,7 @@ func _follow_net(delta: float) -> void:
 	global_position = global_position.lerp(_net_target, clampf(12.0 * delta, 0.0, 1.0))
 	velocity = _net_velocity
 	pivot.rotation.y = lerp_angle(pivot.rotation.y, _net_yaw, clampf(14.0 * delta, 0.0, 1.0))
+	pivot.position.y = move_toward(pivot.position.y, _net_height, delta * 5.0)
 
 
 ## Golpe (som e animação) avisado pelo host.

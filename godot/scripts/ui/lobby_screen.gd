@@ -4,7 +4,7 @@ extends Control
 ## estiverem prontos. Até 4 jogadores; por enquanto só no Terminal.
 
 const MENU := "res://scenes/ui/main_menu.tscn"
-## Mapa das partidas em grupo nesta etapa.
+## Mapa da sala ao criar (o host troca na sala).
 const COOP_MAP := "terminal"
 
 var _column: VBoxContainer
@@ -25,6 +25,13 @@ func _ready() -> void:
 	Net.status_changed.connect(_on_status)
 	Net.disconnected.connect(_on_disconnected)
 	_rebuild()
+
+
+## Foco no próximo quadro, se o botão ainda estiver na tela (ela se refaz a cada mudança da sala).
+func _focus(button: Button) -> void:
+	(func() -> void:
+		if is_instance_valid(button) and button.is_inside_tree():
+			button.grab_focus()).call_deferred()
 
 
 func _on_status(text: String) -> void:
@@ -111,7 +118,7 @@ func _build_entry() -> void:
 	_status.name = "Status"
 	MenuKit.spacer(_column, 10)
 	MenuKit.button(_column, "VOLTAR", func() -> void: MenuKit.go(self, MENU)).name = "Back"
-	create.grab_focus.call_deferred()
+	_focus(create)
 
 
 func _my_name() -> String:
@@ -130,9 +137,10 @@ static func _lan_ips() -> String:
 	return "  /  ".join(ips) if not ips.is_empty() else "127.0.0.1"
 
 
+## Seu visual no personagem do mapa da sala (cada mapa tem o seu personagem).
 func _my_skin() -> String:
 	var catalog := load("res://data/configs/skins.tres") as SkinCatalog
-	return String(catalog.chosen(COOP_MAP).get("id", ""))
+	return String(catalog.chosen(Net.map_id if Net.is_online() else COOP_MAP).get("id", ""))
 
 
 func _create() -> void:
@@ -154,13 +162,27 @@ func _join() -> void:
 
 # ───────────────────────── Na sala ─────────────────────────
 
+## Host: o próximo mapa liberado (no seu save).
+func _next_map() -> void:
+	var maps: Array = Array(Save.catalog.order).filter(func(id: String) -> bool: return Save.is_unlocked(id))
+	if maps.is_empty():
+		return
+	Net.set_map(String(maps[(maps.find(Net.map_id) + 1) % maps.size()]))
+
 func _build_room() -> void:
 	MenuKit.spacer(_column, 20)
 	MenuKit.label(_column, "CÓDIGO DA SALA", 16, MenuKit.DIM, HORIZONTAL_ALIGNMENT_CENTER)
 	MenuKit.title(_column, Net.code if Net.code != "" else "...", 64, MenuKit.GOLD).name = "RoomCode"
 	if Net.code == "LOCAL" and Net.is_host():
 		MenuKit.label(_column, "Na rede local: os amigos entram com o IP  %s" % _lan_ips(), 14, MenuKit.DIM, HORIZONTAL_ALIGNMENT_CENTER)
-	MenuKit.label(_column, "MAPA: TERMINAL", 16, MenuKit.TEXT, HORIZONTAL_ALIGNMENT_CENTER)
+	var map_name := Save.catalog.display_name(Net.map_id).to_upper()
+	if Net.is_host():
+		MenuKit.button(_column, "MAPA: %s  ›" % map_name, _next_map, 18).name = "Map"
+	else:
+		MenuKit.label(_column, "MAPA: %s" % map_name, 16, MenuKit.TEXT, HORIZONTAL_ALIGNMENT_CENTER)
+	# O mapa mudou: o seu visual passa a ser o do personagem dele.
+	if Net.state == Net.State.ROOM and Net.players.has(Net.my_id()) and String(Net.players[Net.my_id()].skin) != _my_skin():
+		Net.set_skin.call_deferred(_my_skin())
 	MenuKit.spacer(_column, 6)
 	_list = VBoxContainer.new()
 	_list.name = "Players"
@@ -196,6 +218,6 @@ func _build_room() -> void:
 		Net.leave()
 		_rebuild()).name = "Leave"
 	if _start_button:
-		_start_button.grab_focus.call_deferred()
+		_focus(_start_button)
 	elif _ready_button:
-		_ready_button.grab_focus.call_deferred()
+		_focus(_ready_button)

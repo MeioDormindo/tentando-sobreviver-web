@@ -22,6 +22,11 @@ func start() -> void:
 	_tombs = _tombs.slice(0, int(config.get("tombs", 4)))
 	_left = _tombs.size() * int(config.get("per_tomb", 2))
 	_next = 0.8
+	_open_lids()
+
+
+## As tampas dos sarcófagos sorteados abrem (no host e, em rede, nos colegas).
+func _open_lids() -> void:
 	for tomb in _tombs:
 		var lid := tomb.find_child("lid", true, false) as Node3D
 		if lid:
@@ -52,3 +57,19 @@ func _open_tombs() -> Array[Node3D]:
 		if system.world.is_area_open(system.world.area_of(body.global_position)):
 			tombs.append(body)
 	return tombs
+
+
+func net_params() -> Dictionary:
+	var names: Array = []
+	for tomb in _tombs:
+		names.append(String(tomb.name))
+	return {"tombs": names}
+
+
+func client_start(params: Dictionary) -> void:
+	_tombs.clear()
+	for tomb_name: Variant in params.get("tombs", []):
+		var tomb := system.world.find_child(String(tomb_name), true, false) as Node3D
+		if tomb:
+			_tombs.append(tomb)
+	_open_lids()

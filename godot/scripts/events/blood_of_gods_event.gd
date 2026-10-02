@@ -23,3 +23,8 @@ func start() -> void:
 
 func end() -> void:
 	BlessingAltar.free_round = -1
+
+
+func client_start(_params: Dictionary) -> void:
+	for altar in system.get_tree().get_nodes_in_group(&"blessing_altars"):
+		SpecialFire.flash(system.get_tree(), (altar as Node3D).global_position + Vector3.UP * 1.5, 2.0, Color(1.0, 0.3, 0.25))

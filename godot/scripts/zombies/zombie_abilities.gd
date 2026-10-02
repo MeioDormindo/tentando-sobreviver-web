@@ -69,8 +69,8 @@ func setup(p_zombie: ZombieBase) -> void:
 
 
 func _process(delta: float) -> void:
-	# Harpia: o corpo (visual e hurtboxes) sobe e desce com o voo.
-	if zombie == null or data_flying().is_empty() or not zombie.is_alive():
+	# Harpia: o corpo (visual e hurtboxes) sobe e desce com o voo (no fantoche, a altura vem do host).
+	if zombie == null or zombie.puppet or data_flying().is_empty() or not zombie.is_alive():
 		return
 	var goal := 0.35 if _mode == "dive" else _hover
 	zombie.pivot.position.y = move_toward(zombie.pivot.position.y, goal, delta * 5.0)
@@ -348,6 +348,8 @@ func _schedule_revive() -> void:
 
 ## Flecha: reta e rápida até onde o alvo está agora; fere quem estiver perto da chegada.
 func _shoot_arrow(to_target: Vector3) -> void:
+	if not zombie.puppet and Net.world and Net.is_host():
+		Net.world.on_zombie_shot(zombie, &"arrow", to_target)
 	Audio.play_at("knife_swing", zombie.global_position, "zombie", 0.8)
 	var params := zombie.data.ranged
 	var from := zombie.global_position + Vector3.UP * 1.3
@@ -426,6 +428,8 @@ func _explode() -> void:
 
 ## Cuspe: um projétil em arco até onde o alvo está agora; ao cair, vira poça de ácido.
 func _spit(to_target: Vector3) -> void:
+	if not zombie.puppet and Net.world and Net.is_host():
+		Net.world.on_zombie_shot(zombie, &"spit", to_target)
 	Audio.play_at("spitter_spit", zombie.global_position, "zombie", 0.9)
 	var params := zombie.data.ranged
 	var from := zombie.global_position + Vector3.UP * 1.5

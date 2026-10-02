@@ -826,21 +826,25 @@ func _build_temple() -> void:
 	nav_region.add_child(group)
 	for spot: Dictionary in data.get("pillars", []):
 		var pillar := BreakablePillar.new()
+		pillar.name = _unique_name("Pillar")
 		pillar.world = self
 		pillar.position = Vector3(float(spot.tx) + 0.5, 0.0, float(spot.ty) + 0.5)
 		group.add_child(pillar)
 	for spot: Dictionary in data.get("blessings", []):
 		var blessing := BlessingAltar.new()
+		blessing.name = _unique_name("BlessingAltar")
 		blessing.position = Vector3(float(spot.tx) + 0.5, 0.0, float(spot.ty) + 0.5)
 		group.add_child(blessing)
 	for spot: Dictionary in data.get("altars", []):
 		var altar := SoulAltar.new()
+		altar.name = _unique_name("SoulAltar")
 		altar.god = StringName(spot.id)
 		altar.position = Vector3(float(spot.tx) + 0.5, 0.0, float(spot.ty) + 0.5)
 		group.add_child(altar)
 	var sanctuary: Variant = data.get("sanctuary")
 	if sanctuary is Dictionary and sanctuary.get("bow") is Dictionary:
 		var pedestal := PrizePedestal.new()
+		pedestal.name = _unique_name("PrizePedestal")
 		pedestal.position = Vector3(float(sanctuary.bow.tx) + 0.5, 0.0, float(sanctuary.bow.ty) + 0.5)
 		group.add_child(pedestal)
 	var secrets: Variant = data.get("secrets")
@@ -848,6 +852,7 @@ func _build_temple() -> void:
 		var statues: Array = secrets.get("statues", [])
 		for spot: Dictionary in statues:
 			var statue := GodStatue.new()
+			statue.name = _unique_name("GodStatue")
 			statue.god = StringName(spot.god)
 			statue.total = statues.size()
 			statue.position = Vector3(float(spot.tx) + 0.5, 0.0, float(spot.ty) + 0.5)

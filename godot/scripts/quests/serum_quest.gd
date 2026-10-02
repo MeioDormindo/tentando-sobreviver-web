@@ -70,7 +70,7 @@ func _count() -> int:
 
 
 func _collected(what: String) -> void:
-	Events.toast.emit("%s (%d/3)" % [what, _count()])
+	_toast("%s (%d/3)" % [what, _count()])
 
 
 # ── 2. Componentes (1. Energia usa as peças do QuestSystem) ──
@@ -123,17 +123,23 @@ func _components_update(delta: float) -> bool:
 			_armored_last = armored.global_position
 		elif armored != null and _armored_last is Vector3:
 			armored = null
-			_card_spot = _spot("PEGAR O CARTÃO DE ACESSO", _armored_last, func() -> void:
-				has_card = true
-				Events.toast.emit("CARTÃO DE ACESSO — abra a gaveta do Necrotério"))
-			_card_spot.name = "Keycard"
-			_card_spot.add_prop(Vector3(0.3, 0.04, 0.2), Color(0.3, 0.6, 1.0), 0.8, PixelShapes.standing("res://assets/web/props/keycard.png", 56.0))
+			_net(&"card", {"at": _armored_last})
+			_make_card_spot(_armored_last)
 		else:
 			_next_armored -= delta
 			if _next_armored <= 0.0:
 				_next_armored = RETRY
 				_spawn_armored()
 	return _count() == 3
+
+
+## O cartão no chão onde o Blindado caiu (no host e, em rede, nos colegas).
+func _make_card_spot(at: Vector3) -> void:
+	_card_spot = _spot("PEGAR O CARTÃO DE ACESSO", at, func() -> void:
+		has_card = true
+		_toast("CARTÃO DE ACESSO — abra a gaveta do Necrotério"))
+	_card_spot.name = "Keycard"
+	_card_spot.add_prop(Vector3(0.3, 0.04, 0.2), Color(0.3, 0.6, 1.0), 0.8, PixelShapes.standing("res://assets/web/props/keycard.png", 56.0))
 
 
 func _spawn_armored() -> void:
@@ -184,7 +190,7 @@ func _defense_enter() -> void:
 		_centrifuge_light = EventFx.light(SERUM_GREEN, 1.5, 5.0)
 		_centrifuge_light.position.y = 1.4
 		_centrifuge.add_child(_centrifuge_light)
-		Events.toast.emit("A CENTRÍFUGA ESTÁ GIRANDO — DEFENDA!"))
+		_toast("A CENTRÍFUGA ESTÁ GIRANDO — DEFENDA!"))
 	spot.interaction_radius = 1.9
 
 
@@ -213,7 +219,7 @@ func _defense_exit() -> void:
 	if _centrifuge_light:
 		_centrifuge_light.light_energy = 0.6
 	_clear_spots()
-	Events.toast.emit("SORO PRONTO! O Paciente Zero sentiu o cheiro...")
+	_toast("SORO PRONTO! O Paciente Zero sentiu o cheiro...")
 
 
 # ── 5. Aplicar o soro ──
@@ -231,3 +237,37 @@ func _complete() -> void:
 	_grant_rewards(reward_weapon, 1)
 	SpecialFire.flash(get_tree(), player.global_position + Vector3.UP, 8.0, SERUM_GREEN)
 	Events.quest_completed.emit(&"serum", "VOCÊ CUROU O PACIENTE ZERO", "Todos os perks + Tornado. A luta continua...")
+
+
+# ───────────────────────── Rede ─────────────────────────
+
+func net_state() -> Dictionary:
+	return {"boss_down": boss_down, "boss_round": boss_round}
+
+
+func _apply_state(state: Dictionary) -> void:
+	if state.get("boss_down") is Vector3:
+		boss_down = state.boss_down
+	boss_round = int(state.get("boss_round", boss_round))
+
+
+func _net_custom(kind: StringName, payload: Dictionary) -> void:
+	if kind == &"card" and _card_spot == null:
+		_make_card_spot(payload.get("at", Vector3.ZERO))
+
+
+## Colega: a centrífuga gira (devagar com zumbis perto), como no host.
+func _remote_update(delta: float) -> void:
+	if not centrifuge_running or _centrifuge == null:
+		return
+	var at := _at(cfg.centrifuge)
+	var threat := float(cfg.centrifuge.get("threat_radius", 2.2))
+	var attacked := false
+	for node in get_tree().get_nodes_in_group(&"zombies"):
+		var zombie := node as CharacterBase
+		if zombie and zombie.is_alive() and Vector2(zombie.global_position.x - at.x, zombie.global_position.z - at.z).length() <= threat:
+			attacked = true
+			break
+	var drum := _centrifuge.get_node_or_null("Drum") as Node3D
+	if drum:
+		drum.rotation.y += (0.6 if attacked else 7.0) * delta

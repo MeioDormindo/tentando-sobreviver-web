@@ -42,6 +42,9 @@ func collapse() -> void:
 	if broken:
 		return
 	broken = true
+	# Em rede: desaba também nos colegas.
+	if Net.world and Net.is_host():
+		Net.world.on_node_call(self, &"collapse")
 	collision_layer = 0
 	remove_from_group(&"breakable_pillars")
 	_set_visual("pillar_rubble")

@@ -41,3 +41,7 @@ func update(delta: float) -> bool:
 			else:
 				_satyrs -= 1
 	return true
+
+
+func client_start(_params: Dictionary) -> void:
+	Audio.play("hound_howl", "world", 0.8)

@@ -94,6 +94,13 @@ func _lobby(tree: SceneTree) -> void:
 	var start := lobby.find_child("Start", true, false) as Button
 	check(Net.is_host() and code_label != null and code_label.text == "LOCAL", "sala aberta: o código aparece grande")
 	check(start != null and start.disabled and (lobby.find_child("Players", true, false) as Node).get_child_count() == Net.MAX_PLAYERS, "sozinho: COMEÇAR espera os amigos (host + 3 vagas)")
+	Save.unlock("map2")
+	var map_button := lobby.find_child("Map", true, false) as Button
+	var had_button := map_button != null
+	if had_button:
+		map_button.pressed.emit()
+	await tree.process_frame
+	check(had_button and Net.map_id == "map2" and (lobby.find_child("Map", true, false) as Button).text.contains("HOSPITAL"), "o host troca o mapa da sala (só os liberados)")
 	(lobby.find_child("Leave", true, false) as Button).pressed.emit()
 	await tree.process_frame
 	check(not Net.is_online() and lobby.find_child("Create", true, false) != null, "SAIR DA SALA volta para criar ou entrar")

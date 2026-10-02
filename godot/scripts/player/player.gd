@@ -166,6 +166,8 @@ func _ready() -> void:
 	Events.hound_round_changed.connect(_on_hound_round)
 	Events.round_started.connect(_on_round_started)
 	inventory.give(data.starting_weapon)
+	if _start_weapon:
+		inventory.reset_to(_start_weapon)
 	health.health_changed.connect(func(current: float, maximum: float) -> void: hud(&"player_health_changed", [current, maximum]))
 	aim_point = global_position - global_basis.z * 3.0
 	# Depois que a cena inteira estiver pronta (a HUD fica pronta por último).
@@ -180,12 +182,14 @@ func start_weapon_id() -> StringName:
 	return (_start_weapon if _start_weapon else data.starting_weapon).id
 
 
-## Troca a arma inicial pela do mapa (no começo da partida).
+## Troca a arma inicial pela do mapa (no começo da partida). Os colegas criados pela roster
+## podem ainda não estar prontos: aí a troca fica para o _ready.
 func set_start_weapon(weapon_data: WeaponData) -> void:
 	if weapon_data == null or weapon_data.id == start_weapon_id():
 		return
 	_start_weapon = weapon_data
-	inventory.reset_to(weapon_data)
+	if inventory:
+		inventory.reset_to(weapon_data)
 
 
 ## Visual escolhido (cores da jaqueta, mochila e cabelo); trancado volta ao padrão.

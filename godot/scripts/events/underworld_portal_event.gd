@@ -26,6 +26,11 @@ func start() -> void:
 	destroyed = false
 	var point: Variant = system.pick_floor_point(float(config.get("min_distance", 10.0)), float(config.get("max_distance", 18.0)))
 	var at: Vector3 = point if point is Vector3 else system.focus().global_position + Vector3(10, 0, 0)
+	_build(at)
+
+
+## O portal no ponto (no host e, em rede, nos colegas; só no host ele leva dano).
+func _build(at: Vector3) -> void:
 	portal = Node3D.new()
 	portal.name = "UnderworldPortal"
 	portal.add_to_group(&"underworld_portal")
@@ -56,6 +61,7 @@ func start() -> void:
 	shape.position.y = 1.4
 	hurtbox.add_child(shape)
 	portal.add_child(hurtbox)
+	health.invulnerable = Net.is_client()
 	health.died.connect(func(_info: DamageInfo) -> void: _destroy())
 	_next = 1.5
 	SpecialFire.flash(system.get_tree(), portal.global_position + Vector3.UP, 3.0, COLOR)
@@ -101,3 +107,21 @@ func _destroy() -> void:
 		Events.toast.emit("O PORTAL CAIU — O TRIDENTE DE POSEIDON FICOU NO LUGAR")
 	else:
 		Events.toast.emit("O PORTÃO DO SUBMUNDO SE FECHOU")
+
+
+func net_params() -> Dictionary:
+	return {"at": portal.global_position if is_instance_valid(portal) else Vector3.ZERO}
+
+
+func client_start(params: Dictionary) -> void:
+	destroyed = false
+	_build(params.get("at", Vector3.ZERO))
+
+
+func client_update(delta: float) -> void:
+	if is_instance_valid(portal):
+		portal.rotation.y += delta * 0.8
+
+
+func client_end() -> void:
+	end()

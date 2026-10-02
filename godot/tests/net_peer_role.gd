@@ -54,8 +54,12 @@ func run(p_tree: SceneTree) -> void:
 	events.connect(&"interaction_prompt", func(text: String, _i: String, _p: float) -> void:
 		if text.contains("CAÍDO"):
 			_seen.down_prompt = true)
+	var smoke := OS.get_cmdline_user_args().has("--smoke")
 	var net := root.get_node("Net")
 	net.call(&"join_local", "BETO", "", "127.0.0.1", port)
+	if smoke:
+		await _smoke(net)
+		return
 	var started := Time.get_ticks_msec()
 	while Time.get_ticks_msec() - started < 90000 and not _seen.has("game_over"):
 		await tree.process_frame
@@ -140,3 +144,38 @@ func _finish(net: Node) -> void:
 	net.call(&"leave")
 	root.get_node("Save").call(&"reset")
 	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://test_save_peer.json"))
+
+
+## Roteiro curto (um mapa): só entra, fica pronto e anota o que chega do host — tipos de
+## fantoche, estados visuais (voo, olhar), eventos, chefe e disparos — até o host sair.
+func _smoke(net: Node) -> void:
+	var events := root.get_node("Events")
+	var started_events: Array = []
+	events.connect(&"world_event_started", func(id: StringName, _n: String, _h: String, _c: Color) -> void: started_events.append(String(id)))
+	var types := {}
+	var t0 := Time.get_ticks_msec()
+	var was_live := false
+	while Time.get_ticks_msec() - t0 < 90000:
+		await tree.process_frame
+		var state: int = net.get(&"state")
+		if state == 2 and not _seen.has("joined"):
+			_seen.joined = true
+			net.call(&"set_ready", true)
+		if bool(net.get(&"live")):
+			was_live = true
+			_seen.map = String(root.get_node("Session").get(&"map_id"))
+		elif was_live:
+			break
+		for node in tree.get_nodes_in_group(&"zombies"):
+			if node is ZombieBase and (node as ZombieBase).puppet:
+				var zombie := node as ZombieBase
+				types[String(zombie.data.id)] = true
+				if zombie.pivot.position.y > 0.6:
+					_seen.flying = true
+				if zombie.get(&"_net_flags") & ZombieBase.FLAG_GAZE:
+					_seen.gaze = true
+			elif node is Boss and (node as Boss).puppet:
+				_seen.boss = String((node as Boss).data.id)
+	_seen.types = types.keys()
+	_seen.events = started_events
+	_finish(net)

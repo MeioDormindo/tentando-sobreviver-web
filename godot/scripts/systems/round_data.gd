@@ -30,6 +30,8 @@ extends Resource
 @export var coop_zombies_per_extra_player: float = 0.5
 @export var coop_alive_per_extra_player: float = 0.25
 @export var coop_alive_cap: int = 40
+## Cooperativo: a vida do chefe também cresce por jogador a mais (0,5 = dupla ×1,5, quarteto ×2,5).
+@export var coop_boss_health_per_extra_player: float = 0.5
 
 @export_group("Tempo")
 ## Espera antes do primeiro round (s).
@@ -67,6 +69,11 @@ extends Resource
 ## Zumbis do round para `players` jogadores (1 = solo).
 func total_zombies(round_number: int, players: int = 1) -> int:
 	return roundi((base_zombies + _r(round_number) * zombies_per_round) * coop_factor(players))
+
+
+## Quanto a vida do chefe cresce com `players` jogadores (1 no solo).
+func coop_boss_factor(players: int) -> float:
+	return 1.0 + coop_boss_health_per_extra_player * maxi(0, players - 1)
 
 
 ## Quanto a horda cresce com `players` jogadores (1 no solo; +`coop_zombies_per_extra_player`

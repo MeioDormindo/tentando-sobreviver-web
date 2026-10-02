@@ -14,6 +14,9 @@ func run(tree: SceneTree) -> int:
 	await _webrtc_join()
 	print("Rede: partida em dois processos (ENet local, o colega é outro Godot)")
 	await _match()
+	print("Rede: Hospital e Templo em dois processos (inimigos, eventos e chefe de cada mapa)")
+	await _map_smoke("map2", [&"crawler", &"spitter", &"armored", &"hound"], [&"containment_breach", &"blackout", &"fog"], &"patient_zero")
+	await _map_smoke("temple", [&"harpy", &"gorgon", &"skeleton_archer", &"hoplite_shield", &"satyr", &"hellwolf"], [&"zeus_wrath", &"artemis_hunt", &"underworld_portal", &"blood_of_gods"], &"minotaur")
 	print("\n%d ok, %d falharam (rede)" % [_passed, _failed])
 	return _failed
 
@@ -240,4 +243,64 @@ func _match() -> void:
 	_tree.paused = false
 	if is_instance_valid(main):
 		main.queue_free()
+	await _tree.process_frame
+
+
+## Um mapa em dois processos: o host escolhe o mapa na sala, faz nascer os inimigos com
+## habilidades dele, começa eventos e chama o chefe; o colega anota o que viu chegar.
+func _map_smoke(map_id: String, types: Array, event_ids: Array, boss_id: StringName) -> void:
+	const PORT := 24712
+	var out := "user://net_peer_smoke.json"
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(out))
+	Net.host_local("ANA", "", PORT)
+	Net.set_map(map_id)
+	var pid := OS.create_process(OS.get_executable_path(), ["--headless", "--path", ProjectSettings.globalize_path("res://"),
+		"-s", "res://tests/net_peer.gd", "--", "--port=%d" % PORT, "--out=" + out, "--smoke"])
+	var joined := await _wait(func() -> bool: return Net.players.size() == 2 and Net.everyone_ready(), 25.0)
+	if not joined or not Net.start_match():
+		check(false, "%s: o colega entra e a partida começa" % map_id)
+		OS.kill(pid)
+		Net.leave()
+		return
+	var live := await _wait(func() -> bool: return Net.live and _tree.current_scene != null and _tree.current_scene.name == "Main", 25.0)
+	check(live and Session.map_id == map_id, "%s: os dois carregaram a partida no mapa escolhido" % map_id)
+	if not live:
+		OS.kill(pid)
+		Net.leave()
+		return
+	var main := _tree.current_scene
+	var host := main.get_node("Player") as Player
+	for someone in Players.all():
+		someone.health.invulnerable = true
+	var mates := Players.all().filter(func(p: Player) -> bool: return p != host)
+	check(not mates.is_empty() and (mates[0] as Player).weapon.data.id == host.weapon.data.id and host.weapon.data.id == host.start_weapon_id(),
+		"%s: o colega começa com a arma inicial do mapa (%s)" % [map_id, host.weapon.data.id])
+	var spawn := main.get_node("SpawnManager") as SpawnManager
+	for i in types.size():
+		var angle := TAU * i / types.size()
+		spawn.spawn_at(types[i], host.global_position + Vector3(cos(angle), 0.0, sin(angle)) * 6.0)
+	var events := main.get_node("WorldEventSystem") as WorldEventSystem
+	var started: Array = []
+	for id: StringName in event_ids:
+		if events.trigger(id):
+			started.append(String(id))
+	(main.get_node("BossManager") as BossManager).start(boss_id)
+	await _tree.create_timer(9.0).timeout
+	Net.leave()
+	_tree.paused = false
+	main.queue_free()
+	await _wait(func() -> bool: return not OS.is_process_running(pid), 20.0)
+	if OS.is_process_running(pid):
+		OS.kill(pid)
+	var seen: Variant = JSON.parse_string(FileAccess.get_file_as_string(out)) if FileAccess.file_exists(out) else null
+	var peer: Dictionary = seen if seen is Dictionary else {}
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(out))
+	var seen_types: Array = peer.get("types", [])
+	var missing := types.filter(func(t: StringName) -> bool: return not seen_types.has(String(t)))
+	check(String(peer.get("map", "")) == map_id and missing.is_empty(), "%s: no colega aparecem os fantoches de cada tipo (faltou %s)" % [map_id, missing])
+	var seen_events: Array = peer.get("events", [])
+	check(not started.is_empty() and started.all(func(id: String) -> bool: return seen_events.has(id)), "%s: os eventos começados no host chegam ao colega (%s)" % [map_id, started])
+	check(String(peer.get("boss", "")) == String(boss_id), "%s: o chefe aparece no colega (%s)" % [map_id, peer.get("boss", "")])
+	if types.has(&"harpy"):
+		check(bool(peer.get("flying", false)), "%s: a Harpia voa no colega (altura vinda do host)" % map_id)
 	await _tree.process_frame

@@ -60,6 +60,8 @@ func _spawn(data: BossData, extra_health_mult: float) -> void:
 	spawn_manager.container.add_child(boss)
 	_pending = false
 	SpecialFire.flash(get_tree(), at, 4.0, Color(1.0, 0.5, 0.3))
+	if Net.world and Net.is_host():
+		Net.world.on_flash(at, 4.0, Color(1.0, 0.5, 0.3))
 	Events.boss_state.emit(data.display_name, boss.health.current, boss.health.max_health, 1)
 
 
