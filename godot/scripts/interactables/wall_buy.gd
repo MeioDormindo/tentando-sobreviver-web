@@ -19,13 +19,29 @@ var weapon_data: WeaponData
 var interaction_radius: float = 1.7
 
 var _label: Label3D
-var _hold := 0.0
-var _since_hold := 1.0
-## Toque esperando soltar (jogador) e há quanto tempo foi apertado.
-var _pending_tap: Player
-## Quanto tempo o E ficou seguro neste aperto e se ele já comprou o elemento.
-var _held := 0.0
-var _bought_this_press := false
+## A pressionada de cada jogador (no cooperativo, dois na mesma parede não se atrapalham).
+var _presses: Dictionary = {}
+
+
+class Press:
+	var player: Player
+	## Toque esperando soltar (compra) ou virar "segurar" (elemento).
+	var pending := false
+	## Tempo com o E seguro neste aperto, a barra do elemento e há quanto tempo soltou.
+	var held := 0.0
+	var hold := 0.0
+	var since := 1.0
+	## Já comprou o elemento neste aperto (soltar não compra mais nada).
+	var bought := false
+
+
+func _press(p: Player) -> Press:
+	var key := p.get_instance_id()
+	if not _presses.has(key):
+		var press := Press.new()
+		press.player = p
+		_presses[key] = press
+	return _presses[key]
 
 
 ## `wall_normal`: direção da parede para o chão onde o jogador fica. Tudo fica chapado na face
@@ -74,15 +90,19 @@ func _flat_quad(path: String, at: Vector3, turn: float, pixel_size: float) -> vo
 
 
 func _process(delta: float) -> void:
-	_since_hold += delta
-	# Soltou: toque curto compra; segurou (ou já comprou o elemento), não compra mais nada.
-	if _pending_tap and _since_hold > RELEASE:
-		var player := _pending_tap
-		_pending_tap = null
-		if not _bought_this_press and _held < TAP_MAX and is_instance_valid(player):
-			_buy(player)
-	if _since_hold > RELEASE:
-		_hold = 0.0
+	for key: int in _presses.keys():
+		var press: Press = _presses[key]
+		if not is_instance_valid(press.player):
+			_presses.erase(key)
+			continue
+		press.since += delta
+		# Soltou: toque curto compra; segurou (ou já comprou o elemento), não compra mais nada.
+		if press.pending and press.since > RELEASE:
+			press.pending = false
+			if not press.bought and press.held < TAP_MAX:
+				_buy(press.player)
+		if press.since > RELEASE:
+			press.hold = 0.0
 
 
 ## Arma que recebe o elemento aqui (ou null): a desta parede, se você a tem; na munição, a
@@ -106,8 +126,9 @@ func _element_text(p: Player) -> String:
 		return "  ·  %s ✓" % catalog.label(weapon.element)
 	var info := catalog.info(weapon.data.element)
 	var text := "  ·  SEGURE E: %s %d" % [catalog.label(weapon.data.element), int(info.get("price", 0))]
-	if _hold > 0.0:
-		var filled := int(clampf(_hold / HOLD_TIME, 0.0, 1.0) * 6.0)
+	var hold := _press(p).hold
+	if hold > 0.0:
+		var filled := int(clampf(hold / HOLD_TIME, 0.0, 1.0) * 6.0)
 		text += " [%s%s]" % ["▰".repeat(filled), "▱".repeat(6 - filled)]
 	return text
 
@@ -118,22 +139,23 @@ func hold_interact(player: Node3D, delta: float) -> bool:
 	if p == null:
 		return false
 	# Conta o tempo segurando (mesmo depois de comprar), para o toque não comprar junto.
-	_since_hold = 0.0
-	_held += delta
+	var press := _press(p)
+	press.since = 0.0
+	press.held += delta
 	var weapon := element_target(p)
 	if weapon == null or weapon.element != &"":
 		return false
-	_hold += delta
-	if _hold < HOLD_TIME:
+	press.hold += delta
+	if press.hold < HOLD_TIME:
 		return false
-	_hold = 0.0
+	press.hold = 0.0
 	var catalog := ElementCatalog.shared()
 	var info := catalog.info(weapon.data.element)
 	var points := get_tree().get_first_node_in_group(&"points_manager") as PointsManager
 	if points == null or not _pay(points, int(info.get("price", 0)), p):
 		return false
 	weapon.element = weapon.data.element
-	_bought_this_press = true
+	press.bought = true
 	p.hud_sound("lab_upgrade", 0.8, 1.3)
 	p.hud(&"toast", ["%s — %s" % [catalog.label(weapon.element), info.get("description", "")]])
 	p.hud(&"weapon_element_changed", [weapon.data.id, weapon.element])
@@ -178,13 +200,14 @@ func interact(player: Node3D) -> bool:
 	var element_weapon := element_target(p)
 	if element_weapon and element_weapon.element == &"":
 		# Só reinicia a espera numa pressionada nova — um segundo interact() com o toque ainda
-		# pendente (ex.: chamado todo frame por um bot de teste) não pode empurrar `_since_hold`
-		# pra sempre, senão o toque nunca resolve e a compra trava.
-		if _pending_tap != p:
-			_pending_tap = p
-			_held = 0.0
-			_bought_this_press = false
-			_since_hold = 0.0
+		# pendente (ex.: chamado todo frame por um bot de teste) não pode empurrar o tempo desde
+		# que soltou pra sempre, senão o toque nunca resolve e a compra trava.
+		var press := _press(p)
+		if not press.pending:
+			press.pending = true
+			press.held = 0.0
+			press.bought = false
+			press.since = 0.0
 		return true
 	return _buy(p)
 

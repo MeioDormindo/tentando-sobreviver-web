@@ -263,10 +263,14 @@ Já mapeado para as próximas fases: pular (Espaço / B).
 
 | Plataforma | Preset | Saída | Comando (na pasta `godot/`) |
 |---|---|---|---|
-| Windows | `Windows` | `build/windows/TentandoSobreviver.exe` (pck embutido) | `godot --headless --path . --export-release "Windows" build/windows/TentandoSobreviver.exe` |
+| Windows | `Windows` | `build/windows/TentandoSobreviver.exe` (pck embutido) + `libwebrtc_native…dll` ao lado (multiplayer; mandar os dois) | `godot --headless --path . --export-release "Windows" build/windows/TentandoSobreviver.exe` |
 | Web | `Web` | `build/web/index.html` (+ `.wasm`, `.pck`) | `godot --headless --path . --export-release "Web" build/web/index.html` |
 | Android | `Android` | `build/android/TentandoSobreviver.apk` (arm64, assinado) | `godot --headless --path . --export-release "Android" build/android/TentandoSobreviver.apk` |
 
+- **Windows:** o multiplayer pela internet precisa da DLL do `webrtc-native` na mesma pasta do
+  `.exe` (o export já copia); para jogar com um amigo, mande a pasta inteira.
+- **Web:** a extensão `webrtc-native` fica de fora (`exclude_filter` do preset): o navegador já
+  tem WebRTC.
 - **Web:** template **sem threads** (o GitHub Pages não envia os cabeçalhos COOP/COEP). Testar
   localmente com `npx http-server build/web`. Na primeira vez no navegador o jogo importa o save e
   a sessão do jogo web antigo (`localStorage` `ts-save-v1` / `ts-session-v1`, mesmo site), então

@@ -43,6 +43,7 @@ func run(tree: SceneTree) -> int:
 		await _chase_nearest()
 		_points_per_player()
 		await _purchases()
+		await _wall_buy_together()
 		await _down_and_revive()
 		await _bleed_out_and_return()
 		await _team_wipe()
@@ -162,6 +163,34 @@ func _purchases() -> void:
 	await _tree.process_frame
 	check(box.state == MysteryBox.State.READY and not box.interact(_host) and box.get_interaction_prompt(_host).contains("BETO"), "a arma sorteada não é de quem não pagou")
 	check(box.interact(_mate) and _mate.inventory.owns(box.result.id if box.result else &"") or box.state == MysteryBox.State.IDLE, "quem pagou pega a arma")
+
+
+## Na mesma parede ao mesmo tempo: o host dá um toque (munição) e o colega segura E (elemento);
+## cada um tem a própria pressionada e ninguém atrapalha o outro.
+func _wall_buy_together() -> void:
+	var buy: WallBuy = null
+	for node in _tree.get_nodes_in_group(&"interactable"):
+		if node is WallBuy and (node as WallBuy).weapon_data and (node as WallBuy).weapon_data.id == &"glock":
+			buy = node
+	if buy == null:
+		check(false, "há compra da Glock na parede")
+		return
+	_points.add(20000, false, _host)
+	_points.add(20000, false, _mate)
+	for someone: Player in [_host, _mate]:
+		buy.interact(someone)
+	await _tree.create_timer(0.3).timeout
+	check(_host.inventory.owns(&"glock") and _mate.inventory.owns(&"glock"), "os dois compram a Glock na mesma parede")
+	var host_glock := _host.inventory.find(&"glock")
+	host_glock.magazine = 1
+	buy.interact(_host)
+	buy.interact(_mate)
+	for i in 36:
+		buy.hold_interact(_mate, 1.0 / 30.0)
+		await _tree.process_frame
+	await _tree.create_timer(0.3).timeout
+	check(host_glock.magazine == host_glock.data.magazine_size and host_glock.element == &"", "o toque do host compra munição (sem elemento)")
+	check(_mate.inventory.find(&"glock").element != &"", "ao mesmo tempo, o colega segurando E compra o elemento")
 
 
 func _down_and_revive() -> void:
