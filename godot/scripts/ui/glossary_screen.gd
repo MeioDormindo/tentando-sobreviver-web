@@ -97,7 +97,7 @@ func _open_tab(index: int) -> void:
 			var i := _entries.size()
 			_entries.append({"entry": entry, "group": group})
 			var seen := Save.has_seen(entry.key)
-			var button := MenuKit.button(_list, entry_name(entry).to_upper() if seen else "???", _select.bind(i), 16)
+			var button := MenuKit.button(_list, Loc.t(entry_name(entry)).to_upper() if seen else "???", _select.bind(i), 16)
 			button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 			button.add_theme_color_override(&"font_color", entry_color(entry) if seen else MenuKit.DIM)
 			button.focus_entered.connect(_select.bind(i))
@@ -130,7 +130,7 @@ func _refresh_counts() -> void:
 		total_all += total
 		_tabs[i].text = "%s %d/%d" % [categories[i].name, seen, total]
 		_tabs[i].add_theme_color_override(&"font_color", MenuKit.GOLD if i == tab else MenuKit.TEXT)
-	_count.text = "DESCOBERTOS %d DE %d" % [seen_all, total_all]
+	_count.text = Loc.t("DESCOBERTOS %d DE %d") % [seen_all, total_all]
 
 
 # ───────────────────────── Detalhe ─────────────────────────
@@ -154,19 +154,19 @@ func _show() -> void:
 	names.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	names.alignment = BoxContainer.ALIGNMENT_CENTER
 	head.add_child(names)
-	MenuKit.label(names, entry_name(entry).to_upper() if seen else "???", 30, entry_color(entry) if seen else MenuKit.DIM)
+	MenuKit.label(names, Loc.t(entry_name(entry)).to_upper() if seen else "???", 30, entry_color(entry) if seen else MenuKit.DIM)
 	var subtitle := entry_subtitle(entry)
-	MenuKit.label(names, String(group.name) + (" · " + subtitle if seen and subtitle != "" else ""), 14, MenuKit.DIM)
+	MenuKit.label(names, Loc.t(String(group.name)) + (" · " + Loc.t(subtitle) if seen and subtitle != "" else ""), 14, MenuKit.DIM)
 	if not seen:
-		MenuKit.label(_detail, "Ainda não encontrado. " + String(REVEAL.get(kind_of(entry), REVEAL.mechanic)), 16, MenuKit.TEXT)
+		MenuKit.label(_detail, Loc.t("Ainda não encontrado.") + " " + Loc.t(String(REVEAL.get(kind_of(entry), REVEAL.mechanic))), 16, MenuKit.TEXT)
 		if entry.has("maps"):
-			MenuKit.label(_detail, "Onde: " + String(entry.maps), 14, MenuKit.DIM)
+			MenuKit.label(_detail, Loc.t("Onde: %s") % Loc.t(String(entry.maps)), 14, MenuKit.DIM)
 		return
 	MenuKit.label(_detail, entry_text(entry), 16, MenuKit.TEXT)
 	for line: String in entry_stats(entry):
 		MenuKit.label(_detail, line, 14, MenuKit.GOLD)
 	if entry.has("maps"):
-		MenuKit.label(_detail, "Onde: " + String(entry.maps), 14, MenuKit.DIM)
+		MenuKit.label(_detail, Loc.t("Onde: %s") % Loc.t(String(entry.maps)), 14, MenuKit.DIM)
 
 
 ## "zombie", "boss", "perk", "powerup", "element", "blessing", "event" ou "mechanic".
@@ -245,36 +245,36 @@ func entry_stats(entry: Dictionary) -> Array[String]:
 		"zombie":
 			var zombie := _zombie(id)
 			if zombie:
-				lines.append("VIDA %d · VELOCIDADE %.1f m/s · DANO %d · %d PONTOS" % [zombie.max_health, zombie.move_speed, zombie.damage, zombie.points_kill])
+				lines.append(Loc.t("VIDA %d · VELOCIDADE %.1f m/s · DANO %d · %d PONTOS") % [zombie.max_health, zombie.move_speed, zombie.damage, zombie.points_kill])
 		"boss":
 			var boss := _boss(id)
 			if boss:
-				lines.append("VIDA %d · VELOCIDADE %.1f m/s · GOLPE %d" % [boss.max_health, boss.move_speed, int(boss.melee.get("damage", 0))])
+				lines.append(Loc.t("VIDA %d · VELOCIDADE %.1f m/s · GOLPE %d") % [boss.max_health, boss.move_speed, int(boss.melee.get("damage", 0))])
 		"perk":
 			var perk := _perk(id)
 			if perk:
-				var extra := (" · ATÉ %d POR PARTIDA" % perk.max_purchases) if perk.max_purchases > 1 else ""
-				lines.append("%d PONTOS · %s%s" % [perk.price, "FUNCIONA SEM ENERGIA" if perk.works_without_power else "PRECISA DE ENERGIA", extra])
+				var extra := (Loc.t(" · ATÉ %d POR PARTIDA") % perk.max_purchases) if perk.max_purchases > 1 else ""
+				lines.append(Loc.t("%d PONTOS · %s%s") % [perk.price, Loc.t("FUNCIONA SEM ENERGIA" if perk.works_without_power else "PRECISA DE ENERGIA"), extra])
 		"powerup":
 			var duration := int(_power_ups.power_ups.get(id, {}).get("duration", 0))
-			lines.append(("DURA %d s" % duration) if duration > 0 else "EFEITO NA HORA")
+			lines.append((Loc.t("DURA %d s") % duration) if duration > 0 else Loc.t("EFEITO NA HORA"))
 		"element":
-			lines.append("%d PONTOS NA PAREDE DA ARMA" % int(ElementCatalog.shared().info(id).get("price", 0)))
+			lines.append(Loc.t("%d PONTOS NA PAREDE DA ARMA") % int(ElementCatalog.shared().info(id).get("price", 0)))
 		"blessing":
-			lines.append("%d PONTOS NO ALTAR" % BlessingAltar.PRICE)
+			lines.append(Loc.t("%d PONTOS NO ALTAR") % BlessingAltar.PRICE)
 		"event":
 			var data := WorldEventData.shared()
 			var info := data.info(id)
 			var parts: Array[String] = []
 			var duration := float(data.config(id).get("duration_time", 0.0))
 			if duration > 0.0:
-				parts.append("DURA %d s" % roundi(duration))
+				parts.append(Loc.t("DURA %d s") % roundi(duration))
 			if int(info.get("min_round", 0)) > 1:
-				parts.append("A PARTIR DO ROUND %d" % int(info.min_round))
+				parts.append(Loc.t("A PARTIR DO ROUND %d") % int(info.min_round))
 			if not parts.is_empty():
 				lines.append(" · ".join(parts))
 			if String(info.get("hint", "")) != "":
-				lines.append("DICA: " + String(info.hint).to_upper())
+				lines.append(Loc.t("DICA: %s") % Loc.t(String(info.hint)).to_upper())
 	return lines
 
 

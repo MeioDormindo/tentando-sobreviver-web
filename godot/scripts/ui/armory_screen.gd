@@ -69,7 +69,7 @@ func _build() -> void:
 	_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(_list)
 	for i in weapons.size():
-		var button := MenuKit.button(_list, weapons[i].display_name.to_upper(), _select.bind(i), 16)
+		var button := MenuKit.button(_list, Loc.t(weapons[i].display_name).to_upper(), _select.bind(i), 16)
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.add_theme_color_override(&"font_color", MysteryBox.RARITY_COLORS.get(weapons[i].rarity, MenuKit.TEXT))
 		button.focus_entered.connect(_select.bind(i))
@@ -127,19 +127,19 @@ func _show() -> void:
 	var names := VBoxContainer.new()
 	names.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	head.add_child(names)
-	MenuKit.label(names, weapon.display_name.to_upper(), 30, MysteryBox.RARITY_COLORS.get(base.rarity, MenuKit.TEXT))
-	MenuKit.label(names, "%s · %s" % [RARITY_NAMES.get(base.rarity, ""), "AUTOMÁTICA" if weapon.automatic else "SEMIAUTOMÁTICA"], 14, MenuKit.DIM)
+	MenuKit.label(names, Loc.t(weapon.display_name).to_upper(), 30, MysteryBox.RARITY_COLORS.get(base.rarity, MenuKit.TEXT))
+	MenuKit.label(names, "%s · %s" % [Loc.t(RARITY_NAMES.get(base.rarity, "")), Loc.t("AUTOMÁTICA" if weapon.automatic else "SEMIAUTOMÁTICA")], 14, MenuKit.DIM)
 	for i in STATS.size():
 		_stat_row(STATS[i], weapon)
 	MenuKit.label(_detail, source_text(base), 14, MenuKit.TEXT)
 	if base.element != &"":
 		var catalog := ElementCatalog.shared()
 		var info := catalog.info(base.element)
-		MenuKit.label(_detail, "Elemento %s (%d, segure E na parede): %s" % [catalog.label(base.element), int(info.get("price", 0)), info.get("description", "")], 14, info.get("color", MenuKit.TEXT))
+		MenuKit.label(_detail, Loc.t("Elemento %s (%d, segure E na parede): %s") % [catalog.label(base.element), int(info.get("price", 0)), Loc.t(String(info.get("description", "")))], 14, info.get("color", MenuKit.TEXT))
 	var special := special_text(weapon)
 	if special != "":
 		MenuKit.label(_detail, special, 14, MenuKit.GOLD)
-	MenuKit.label(_detail, "Weapon Lab: Mk II %d · Mk III %d%s" % [_lab.price_mk2, _lab.price_mk3, ("  (vira %s)" % base.upgrade_name) if base.upgrade_name != "" else ""], 14, MenuKit.DIM)
+	MenuKit.label(_detail, Loc.t("Weapon Lab: Mk II %d · Mk III %d%s") % [_lab.price_mk2, _lab.price_mk3, (Loc.t("  (vira %s)") % Loc.t(base.upgrade_name)) if base.upgrade_name != "" else ""], 14, MenuKit.DIM)
 	var toggle := MenuKit.button(_detail, ["VER MK II", "VER MK III", "VER NORMAL"][level], func() -> void:
 		level = (level + 1) % 3
 		_show(), 16)
@@ -176,11 +176,11 @@ func _stat_row(stat: String, weapon: WeaponData) -> void:
 		"RECARGA":
 			value = 4.0 - weapon.reload_time
 			maximum = 3.0
-			text = "%.1f s" % weapon.reload_time
+			text = Loc.t("%.1f s") % weapon.reload_time
 		"ALCANCE":
 			value = weapon.max_range
 			maximum = 44.0
-			text = "%.0f m" % weapon.max_range
+			text = Loc.t("%.0f m") % weapon.max_range
 	var bar: Array = PixelSkin.bar(MenuKit.GOLD, 300.0, 8.0)
 	(bar[1] as ProgressBar).max_value = maximum
 	(bar[1] as ProgressBar).value = clampf(value, 0.0, maximum)
@@ -199,12 +199,12 @@ func source_text(weapon: WeaponData) -> String:
 		if start == "":
 			start = "m1911"
 		if start == String(weapon.id):
-			parts.append("Arma inicial do %s" % Save.catalog.display_name(map_id))
+			parts.append(Loc.t("Arma inicial do %s") % Loc.t(Save.catalog.display_name(map_id)))
 		for station: Dictionary in data.get("stations", []):
 			if station.get("weaponId", "") == String(weapon.id):
-				parts.append("Parede: %d · %s · %s" % [weapon.price, Save.catalog.display_name(map_id), _area_name(data, float(station.tx), float(station.ty))])
+				parts.append(Loc.t("Parede: %d · %s · %s") % [weapon.price, Loc.t(Save.catalog.display_name(map_id)), Loc.t(_area_name(data, float(station.tx), float(station.ty)))])
 	if weapon.box_only and not weapon.maps.is_empty():
-		parts.append("Mystery Box só no %s" % ", ".join(Array(weapon.maps).map(func(m: String) -> String: return Save.catalog.display_name(m))))
+		parts.append(Loc.t("Mystery Box só no %s") % ", ".join(Array(weapon.maps).map(func(m: String) -> String: return Loc.t(Save.catalog.display_name(m)))))
 	else:
 		parts.append("Mystery Box (em todos os mapas)" if parts.is_empty() else "também na Mystery Box")
 	return " · ".join(parts)
@@ -223,16 +223,16 @@ func special_text(weapon: WeaponData) -> String:
 	var p := weapon.special_params
 	match weapon.special_type:
 		&"grenade":
-			return "Granada explode no impacto: %d de dano em área (raio %.1f m). Não fere você." % [p.get("blast_damage", 0), p.get("blast_radius", 0)]
+			return Loc.t("Granada explode no impacto: %d de dano em área (raio %.1f m). Não fere você.") % [p.get("blast_damage", 0), p.get("blast_radius", 0)]
 		&"flame":
-			return "Jato contínuo que incendeia: %d de dano por segundo durante %.1f s." % [p.get("burn_dps", 0), p.get("burn_time", 0)]
+			return Loc.t("Jato contínuo que incendeia: %d de dano por segundo durante %.1f s.") % [p.get("burn_dps", 0), p.get("burn_time", 0)]
 		&"arc":
-			return "Raio instantâneo que salta entre até %d zumbis e os atordoa." % p.get("chains", 0)
+			return Loc.t("Raio instantâneo que salta entre até %d zumbis e os atordoa.") % p.get("chains", 0)
 		&"plasma":
-			return "Esfera que atravessa a horda e explode numa descarga elétrica (%d em área)." % p.get("blast_damage", 0)
+			return Loc.t("Esfera que atravessa a horda e explode numa descarga elétrica (%d em área).") % p.get("blast_damage", 0)
 		&"gust":
-			return "Rajada de vento em cone (%d°, alcance %.0f m) que arremessa e destrói a horda à frente." % [p.get("arc_deg", 0), p.get("range", 0)]
-	return ("Atravessa até %d zumbis por tiro." % weapon.pierce) if weapon.pierce > 0 else ""
+			return Loc.t("Rajada de vento em cone (%d°, alcance %.0f m) que arremessa e destrói a horda à frente.") % [p.get("arc_deg", 0), p.get("range", 0)]
+	return (Loc.t("Atravessa até %d zumbis por tiro.") % weapon.pierce) if weapon.pierce > 0 else ""
 
 
 func _unhandled_input(event: InputEvent) -> void:

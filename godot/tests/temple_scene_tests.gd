@@ -119,7 +119,7 @@ func _map() -> void:
 	check(doors.size() == 7, "7 portas e portões (%d)" % doors.size())
 	var gate := _world.door_by_id(&"gate_temple")
 	check(gate != null and gate.kind == &"altar" and not gate.interact(_player) and not gate.is_open, "Portão do Templo não se compra (pede os altares)")
-	check(gate.get_interaction_prompt(_player).contains("altares"), "Portão do Templo explica o que falta")
+	check(Loc.text(gate.get_interaction_prompt(_player)).contains("altares"), "Portão do Templo explica o que falta")
 	check(_world.door_by_id(&"gate_underworld").kind == &"quest" and _world.door_by_id(&"gate_sanctuary").kind == &"secret", "Portão do Submundo (missão) e passagem do Santuário (segredo)")
 	var styles := {}
 	for door: Door in doors:

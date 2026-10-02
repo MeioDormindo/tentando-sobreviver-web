@@ -141,14 +141,16 @@ func _process(delta: float) -> void:
 func get_interaction_prompt(player: Node3D) -> String:
 	match state:
 		State.IDLE:
-			return "[E] MYSTERY BOX  ·  %d pontos" % price
+			return Loc.fmt("[%s] MYSTERY BOX  ·  %s pontos", [Loc.key(&"interact"), price])
 		State.READY:
 			var p := player as Player
 			if not _is_buyer(p):
-				return "MYSTERY BOX  ·  arma de %s" % _buyer_name()
+				return Loc.fmt("MYSTERY BOX  ·  arma de %s", [_buyer_name()])
 			var owned := p != null and p.inventory.owns(result.id)
-			var element := ("  " + ElementCatalog.shared().label(result_element)) if result_element != &"" else ""
-			return "[E] PEGAR %s%s%s" % [result.display_name.to_upper(), element, " (MUNIÇÃO)" if owned else ""]
+			var take := Loc.fmt("[%s] PEGAR %s (MUNIÇÃO)" if owned else "[%s] PEGAR %s", [Loc.key(&"interact"), Loc.up(result.display_name)])
+			if result_element == &"":
+				return take
+			return Loc.cat([take, "  ", ElementCatalog.shared().label_msg(result_element)])
 	return ""
 
 
@@ -337,7 +339,7 @@ func _move_to(spot: Vector3) -> void:
 	var area := world.area_of(spot) if world else &""
 	# Cada máquina mostra o aviso ao ver a caixa sair (não vai pela rede).
 	Net.relay_mute += 1
-	Events.toast.emit("A MYSTERY BOX MUDOU DE LUGAR — %s" % world.area_display_name(area).to_upper() if area != &"" else "A MYSTERY BOX MUDOU DE LUGAR")
+	Events.toast.emit(Loc.fmt("A MYSTERY BOX MUDOU DE LUGAR — %s", [Loc.up(world.area_display_name(area))]) if area != &"" else "A MYSTERY BOX MUDOU DE LUGAR")
 	Net.relay_mute -= 1
 
 

@@ -2,3 +2,4 @@ node_modules
 dist
 .vscode/mcp.json
 scripts/godot/pixellab/.cache
+scripts/godot/i18n/.cache

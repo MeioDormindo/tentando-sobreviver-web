@@ -94,7 +94,7 @@ func _on_message(from: int, kind: String, payload: Dictionary) -> void:
 			if not accepting:
 				signaling.send(from, "reject", {"reason": "A partida já começou"})
 			elif _connections.size() + 1 >= max_players and not _connections.has(from):
-				signaling.send(from, "reject", {"reason": "Sala cheia (%d jogadores)" % max_players})
+				signaling.send(from, "reject", {"reason": Loc.fmt("Sala cheia (%s jogadores)", [max_players])})
 			elif not _connections.has(from):
 				signaling.send(from, "accept", {})
 				_connect(from, true)

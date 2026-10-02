@@ -23,4 +23,10 @@ func param(id: StringName) -> Dictionary:
 ## "✹ FOGO" (ícone e nome).
 func label(id: StringName) -> String:
 	var e := info(id)
-	return "%s %s" % [e.get("icon", ""), e.get("name", "")] if not e.is_empty() else ""
+	return "%s %s" % [e.get("icon", ""), Loc.t(String(e.get("name", "")))] if not e.is_empty() else ""
+
+
+## O mesmo nome para mandar pela rede ou para a HUD de outro jogador (traduzido em quem lê).
+func label_msg(id: StringName) -> String:
+	var e := info(id)
+	return Loc.cat([String(e.get("icon", "")) + " ", String(e.get("name", ""))]) if not e.is_empty() else ""

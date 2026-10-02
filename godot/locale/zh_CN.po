@@ -1,0 +1,2734 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tentando Sobreviver\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
+
+msgid "[SEGURE %s] FECHAR A VÁLVULA"
+msgstr "[按住 %s] 关闭阀门"
+
+msgid "ZUMBI DOURADO ABATIDO!  +%s"
+msgstr "黄金僵尸已击杀！ +%s"
+
+msgid "O ZUMBI DOURADO ESCAPOU"
+msgstr "黄金僵尸逃走了"
+
+msgid "[SEGURE %s] ABRIR SUPRIMENTOS"
+msgstr "[按住 %s] 打开补给"
+
+msgid "SUPRIMENTOS"
+msgstr "补给"
+
+msgid "Munição cheia · Armadura · +%s"
+msgstr "弹药全满 · 护甲 · +%s"
+
+msgid "ATROPELADOS ×%s"
+msgstr "碾压 ×%s"
+
+msgid "O PORTAL CAIU — O TRIDENTE DE POSEIDON FICOU NO LUGAR"
+msgstr "传送门倒下了——波塞冬三叉戟留在了原地"
+
+msgid "O PORTÃO DO SUBMUNDO SE FECHOU"
+msgstr "冥界之门已关闭"
+
+msgid "TREM"
+msgstr "列车"
+
+msgid "[SEGURE %s] CONSERTAR BARRICADA  ·  +%s por tábua"
+msgstr "[按住 %s] 修复路障 · 每块木板 +%s"
+
+msgid "BÊNÇÃO DE %s"
+msgstr "%s的祝福"
+
+msgid "BÊNÇÃO DE %s ATIVA"
+msgstr "%s的祝福已生效"
+
+msgid "[%s] BÊNÇÃO DE %s — %s: %s  ·  DE GRAÇA"
+msgstr "[%s] %s的祝福——%s：%s · 免费"
+
+msgid "[%s] BÊNÇÃO DE %s — %s: %s  ·  %s pontos"
+msgstr "[%s] %s的祝福——%s：%s · %s 点数"
+
+msgid "%s — %s"
+msgstr "%s——%s"
+
+msgid "DISJUNTOR"
+msgstr "电闸"
+
+msgid "[SEGURE %s] LIGAR A ENERGIA"
+msgstr "[按住 %s] 打开电源"
+
+msgid "ENERGIA LIGADA"
+msgstr "电源已开启"
+
+msgid "%s ligou a energia"
+msgstr "%s 打开了电源"
+
+msgid "[%s] LER A PLACA"
+msgstr "[%s] 阅读告示牌"
+
+msgid "PORTÃO DO TEMPLO — leve Fragmentos de Alma aos 3 altares"
+msgstr "神殿之门——把灵魂碎片带到 3 座祭坛"
+
+msgid "PORTÃO DO SUBMUNDO — precisa da chave do Minotauro"
+msgstr "冥界之门——需要弥诺陶洛斯的钥匙"
+
+msgid "PASSAGEM SELADA — ative as 12 estátuas dos deuses"
+msgstr "封印的通道——点亮 12 座神像"
+
+msgid "PORTÃO FECHADO"
+msgstr "大门已关闭"
+
+msgid "[%s] ABRIR PORTA  ·  %s pontos"
+msgstr "[%s] 打开门 · %s 点数"
+
+msgid "[%s] ABRIR PORTA — %s  ·  %s pontos"
+msgstr "[%s] 打开门——%s · %s 点数"
+
+msgid "[%s] ABRIR PORTA — %s, %s  ·  %s pontos"
+msgstr "[%s] 打开门——%s、%s · %s 点数"
+
+msgid "%s abriu %s"
+msgstr "%s 打开了 %s"
+
+msgid "ARMADILHA"
+msgstr "陷阱"
+
+msgid "ARMADILHA ELÉTRICA LIGADA — %ss"
+msgstr "电击陷阱已开启——%s秒"
+
+msgid "ARMADILHA RECARREGANDO — %ss"
+msgstr "陷阱充能中——%s秒"
+
+msgid "[%s] LIGAR ARMADILHA ELÉTRICA  ·  %s pontos"
+msgstr "[%s] 开启电击陷阱 · %s 点数"
+
+msgid "RELIGAR A ENERGIA"
+msgstr "恢复电源"
+
+msgid "PAINEL DE ENERGIA — FUNCIONANDO"
+msgstr "电源面板——运行中"
+
+msgid "ENERGIA"
+msgstr "电源"
+
+msgid "DESLIGAR O ALARME"
+msgstr "关闭警报"
+
+msgid "ALARME DE EMERGÊNCIA — DESLIGADO"
+msgstr "紧急警报——已关闭"
+
+msgid "ALARME"
+msgstr "警报"
+
+msgid "[SEGURE %s] %s  ·  %s pontos"
+msgstr "[按住 %s] %s · %s 点数"
+
+msgid "ZEUS"
+msgstr "宙斯"
+
+msgid "HERA"
+msgstr "赫拉"
+
+msgid "POSEIDON"
+msgstr "波塞冬"
+
+msgid "DEMÉTER"
+msgstr "德墨忒尔"
+
+msgid "ATENA"
+msgstr "雅典娜"
+
+msgid "APOLO"
+msgstr "阿波罗"
+
+msgid "ÁRTEMIS"
+msgstr "阿尔忒弥斯"
+
+msgid "ARES"
+msgstr "阿瑞斯"
+
+msgid "AFRODITE"
+msgstr "阿佛洛狄忒"
+
+msgid "HEFESTO"
+msgstr "赫菲斯托斯"
+
+msgid "HERMES"
+msgstr "赫尔墨斯"
+
+msgid "DIONÍSIO"
+msgstr "狄俄尼索斯"
+
+msgid "[SEGURE %s] ACENDER A ESTÁTUA DE %s"
+msgstr "[按住 %s] 点亮%s神像"
+
+msgid "ESTÁTUA DE %s ACESA (%s/%s)"
+msgstr "%s神像已点亮（%s/%s）"
+
+msgid "OS DOZE DO OLIMPO"
+msgstr "奥林匹斯十二神"
+
+msgid "O templo reage... uma passagem se abriu na Floresta."
+msgstr "神殿起了反应……森林里打开了一条通道。"
+
+msgid "SINTONIZAR O RÁDIO"
+msgstr "调谐收音机"
+
+msgid "RÁDIO — CHIADO..."
+msgstr "收音机——沙沙声……"
+
+msgid "[SEGURE %s] %s"
+msgstr "[按住 %s] %s"
+
+msgid "[%s] MYSTERY BOX  ·  %s pontos"
+msgstr "[%s] MYSTERY BOX · %s 点数"
+
+msgid "MYSTERY BOX  ·  arma de %s"
+msgstr "MYSTERY BOX · %s 的武器"
+
+msgid "[%s] PEGAR %s (MUNIÇÃO)"
+msgstr "[%s] 拾取 %s（弹药）"
+
+msgid "[%s] PEGAR %s"
+msgstr "[%s] 拾取 %s"
+
+msgid "um colega"
+msgstr "一名队友"
+
+msgid "A MYSTERY BOX MUDOU DE LUGAR — %s"
+msgstr "MYSTERY BOX 换了位置——%s"
+
+msgid "A MYSTERY BOX MUDOU DE LUGAR"
+msgstr "MYSTERY BOX 换了位置"
+
+msgid "SEM ENERGIA — ligue o disjuntor"
+msgstr "没有电——打开电闸"
+
+msgid "%s  ·  JÁ ATIVO"
+msgstr "%s · 已生效"
+
+msgid "%s  ·  ESGOTADO NESTA PARTIDA"
+msgstr "%s · 本局已用完"
+
+msgid "[%s] %s — %s  ·  %s pontos"
+msgstr "[%s] %s——%s · %s 点数"
+
+msgid "[SEGURE %s] PEGAR %s  (%s%%)"
+msgstr "[按住 %s] 拾取 %s （%s%%）"
+
+msgid "%s — presente de Artemis"
+msgstr "%s——阿尔忒弥斯的礼物"
+
+msgid "[%s] PEGAR O URSINHO"
+msgstr "[%s] 拾取小熊"
+
+msgid "URSINHO %s/%s"
+msgstr "小熊 %s/%s"
+
+msgid "SEGREDO DOS URSINHOS"
+msgstr "小熊的秘密"
+
+msgid "Você achou todos! Segredo salvo."
+msgstr "你找到了全部！秘密已保存。"
+
+msgid "Todos os ursinhos de novo!"
+msgstr "又找齐了所有小熊！"
+
+msgid "PAINEL DO TREM — DISPONÍVEL EM %ss"
+msgstr "列车面板——%s秒后可用"
+
+msgid "[%s] CHAMAR O TREM  ·  %s pontos"
+msgstr "[%s] 呼叫列车 · %s 点数"
+
+msgid "O TREM NÃO PODE VIR AGORA"
+msgstr "列车现在无法前来"
+
+msgid "MUNIÇÃO"
+msgstr "弹药"
+
+msgid "  ·  SEGURE %s: "
+msgstr " · 按住 %s："
+
+msgid "MUNIÇÃO CHEIA"
+msgstr "弹药已满"
+
+msgid "[%s] MUNIÇÃO %s  ·  %s pontos"
+msgstr "[%s] %s 弹药 · %s 点数"
+
+msgid "%s  ·  MUNIÇÃO CHEIA"
+msgstr "%s · 弹药已满"
+
+msgid "[%s] COMPRAR %s  ·  %s pontos"
+msgstr "[%s] 购买 %s · %s 点数"
+
+msgid "[%s] PEGAR %s  ·  %ss"
+msgstr "[%s] 拾取 %s · %s秒"
+
+msgid "[%s] PEGAR %s (troca por %s)  ·  %ss"
+msgstr "[%s] 拾取 %s（替换 %s） · %s秒"
+
+msgid "%s  ·  NÍVEL MÁXIMO"
+msgstr "%s · 已满级"
+
+msgid "Mk II"
+msgstr "Mk II"
+
+msgid "Mk III"
+msgstr "Mk III"
+
+msgid "[%s] WEAPON LAB: %s → %s  ·  %s pontos"
+msgstr "[%s] WEAPON LAB：%s → %s · %s 点数"
+
+msgid "TREM PASSANDO"
+msgstr "列车通过中"
+
+msgid "⚠ TREM CHEGANDO"
+msgstr "⚠ 列车即将到站"
+
+msgid "PRÓXIMO TREM %ds"
+msgstr "下一班列车 %d秒"
+
+msgid "PRÓXIMO TREM EM BREVE"
+msgstr "下一班列车即将到来"
+
+msgid "SEM PREVISÃO"
+msgstr "暂无预计"
+
+msgid "Não foi possível conectar à sala"
+msgstr "无法连接到房间"
+
+msgid "O host saiu"
+msgstr "房主已离开"
+
+msgid "Tempo esgotado ao entrar na sala"
+msgstr "进入房间超时"
+
+msgid "Criando sala..."
+msgstr "正在创建房间……"
+
+msgid "Não foi possível criar a sala (%s)"
+msgstr "无法创建房间（%s）"
+
+msgid "Procurando a sala %s..."
+msgstr "正在寻找房间 %s……"
+
+msgid "Sem conexão com o servidor (%s)"
+msgstr "无法连接服务器（%s）"
+
+msgid "Sala %s não encontrada"
+msgstr "未找到房间 %s"
+
+msgid "Não foi possível abrir a sala (%s)"
+msgstr "无法打开房间（%s）"
+
+msgid "Sala %s aberta"
+msgstr "房间 %s 已开放"
+
+msgid "Não foi possível entrar (%s)"
+msgstr "无法加入（%s）"
+
+msgid "Conectando à sala %s..."
+msgstr "正在连接房间 %s……"
+
+msgid "Na sala %s"
+msgstr "在房间 %s 中"
+
+msgid "JOGADOR"
+msgstr "玩家"
+
+msgid "sem conexão"
+msgstr "无连接"
+
+msgid "A partida já começou"
+msgstr "比赛已经开始"
+
+msgid "Sala cheia (%s jogadores)"
+msgstr "房间已满（%s 名玩家）"
+
+msgid "Entrada recusada"
+msgstr "加入被拒绝"
+
+msgid "sem sessão"
+msgstr "无会话"
+
+msgid "Usuário: 3 a 16 letras minúsculas, números ou _"
+msgstr "用户名：3 到 16 个小写字母、数字或 _"
+
+msgid "Senha: mínimo de %d caracteres"
+msgstr "密码：至少 %d 个字符"
+
+msgid "Senha: máximo de %d caracteres"
+msgstr "密码：最多 %d 个字符"
+
+msgid "Não foi possível entrar — tente de novo"
+msgstr "无法登录——请重试"
+
+msgid "Sem conexão"
+msgstr "无连接"
+
+msgid "Sessão expirada — entre de novo"
+msgstr "会话已过期——请重新登录"
+
+msgid "Falha ao ler da nuvem"
+msgstr "读取云端失败"
+
+msgid "Contas online indisponíveis"
+msgstr "在线账号不可用"
+
+msgid "Falha ao salvar na nuvem"
+msgstr "保存到云端失败"
+
+msgid "Sem conexão com o servidor"
+msgstr "无法连接服务器"
+
+msgid "Muitas tentativas — aguarde um pouco"
+msgstr "尝试次数过多——请稍候"
+
+msgid "Esse usuário já existe"
+msgstr "该用户名已存在"
+
+msgid "Usuário ou senha incorretos"
+msgstr "用户名或密码错误"
+
+msgid "Senha fraca demais"
+msgstr "密码太弱"
+
+msgid "Usuário inválido"
+msgstr "用户名无效"
+
+msgid "Não foi possível concluir — tente de novo"
+msgstr "无法完成——请重试"
+
+msgid "HACKER DETECTADO"
+msgstr "检测到作弊"
+
+msgid "SOLO"
+msgstr "单人"
+
+msgid "DUPLA"
+msgstr "双人"
+
+msgid "TRIO"
+msgstr "三人"
+
+msgid "QUARTETO"
+msgstr "四人"
+
+msgid "ranking global indisponível"
+msgstr "全球排行榜不可用"
+
+msgid "mapa ainda não aceito no ranking global"
+msgstr "该地图尚未加入全球排行榜"
+
+msgid "pontuação recusada"
+msgstr "分数被拒绝"
+
+msgid "resposta incompleta"
+msgstr "响应不完整"
+
+msgid "não conectou ao servidor"
+msgstr "未能连接服务器"
+
+msgid "endereço não encontrado"
+msgstr "找不到地址"
+
+msgid "conexão caiu"
+msgstr "连接中断"
+
+msgid "falha de TLS"
+msgstr "TLS 错误"
+
+msgid "sem resposta"
+msgstr "无响应"
+
+msgid "resposta grande demais"
+msgstr "响应过大"
+
+msgid "falha ao descompactar a resposta"
+msgstr "解压响应失败"
+
+msgid "requisição falhou"
+msgstr "请求失败"
+
+msgid "redirecionamentos demais"
+msgstr "重定向过多"
+
+msgid "tempo esgotado"
+msgstr "超时"
+
+msgid "requisição recusada (%s)"
+msgstr "请求被拒绝（%s）"
+
+msgid "erro de rede %d"
+msgstr "网络错误 %d"
+
+msgid "ALIADO"
+msgstr "盟友"
+
+msgid "Fúria do Trovão"
+msgstr "雷霆之怒"
+
+msgid "12% dos tiros soltam um raio"
+msgstr "12% 的射击会释放闪电"
+
+msgid "Sede de Sangue"
+msgstr "嗜血"
+
+msgid "abates seguidos aumentam o dano"
+msgstr "连续击杀提高伤害"
+
+msgid "mira precisa e golpes críticos"
+msgstr "精准瞄准与暴击"
+
+msgid "anda, recarrega e interage mais rápido"
+msgstr "移动、换弹和互动更快"
+
+msgid "Maré"
+msgstr "潮汐"
+
+msgid "os tiros empurram os zumbis"
+msgstr "射击会击退僵尸"
+
+msgid "HADES"
+msgstr "哈迪斯"
+
+msgid "Pacto dos Mortos"
+msgstr "亡者契约"
+
+msgid "abatidos voltam como aliados"
+msgstr "被击杀者会化为盟友归来"
+
+msgid "HADES: um espírito aliado se levanta para lutar"
+msgstr "哈迪斯：一个盟友之魂站起来参战"
+
+msgid "PETRIFICADO! Não olhe para a Górgona"
+msgstr "石化了！别看戈耳工"
+
+msgid "QUICK REVIVE!"
+msgstr "QUICK REVIVE！"
+
+msgid "CAÍDO! Um colega pode te reviver"
+msgstr "倒地了！队友可以救起你"
+
+msgid "%s caiu!"
+msgstr "%s 倒地了！"
+
+msgid "CAÍDO · %ss para um colega te reviver"
+msgstr "倒地 · 队友有 %s秒 可以救起你"
+
+msgid "VOCÊ MORREU · volta no próximo round"
+msgstr "你死了 · 下回合复活"
+
+msgid "%s levantou %s"
+msgstr "%s 救起了 %s"
+
+msgid "[SEGURE %s] REVIVER %s"
+msgstr "[按住 %s] 救起 %s"
+
+msgid "O COLEGA"
+msgstr "队友"
+
+msgid "[%s] %s"
+msgstr "[%s] %s"
+
+msgid "CADEADO ABERTO"
+msgstr "挂锁已打开"
+
+msgid "%s concluiu a missão: todos os perks + %s"
+msgstr "%s 完成了任务：所有 Perk + %s"
+
+msgid "%s concluiu a missão: todos os perks"
+msgstr "%s 完成了任务：所有 Perk"
+
+msgid "Ligue a energia (disjuntor no Necrotério)"
+msgstr "打开电源（电闸在停尸房）"
+
+msgid "Derrote o Paciente Zero enfurecido (round %s)"
+msgstr "击败暴怒的零号病人（第 %s 回合）"
+
+msgid "Aplique o soro no Paciente Zero"
+msgstr "给零号病人注射血清"
+
+msgid "O SORO"
+msgstr "血清"
+
+msgid "Componentes do soro %s/3 — UTI · Farmácia · cartão do Blindado"
+msgstr "血清成分 %s/3——重症监护室 · 药房 · 装甲兵的门卡"
+
+msgid "PEGAR AS AMOSTRAS"
+msgstr "拿取样本"
+
+msgid "AMOSTRAS COLETADAS"
+msgstr "样本已收集"
+
+msgid "PEGAR O REAGENTE"
+msgstr "拿取试剂"
+
+msgid "REAGENTE COLETADO"
+msgstr "试剂已收集"
+
+msgid "ARMÁRIO TRANCADO — ATIRE NO CADEADO"
+msgstr "柜子上锁了——射击挂锁"
+
+msgid "ABRIR A GAVETA COM O CARTÃO"
+msgstr "用门卡打开抽屉"
+
+msgid "CATALISADOR COLETADO"
+msgstr "催化剂已收集"
+
+msgid "GAVETA TRANCADA — PRECISA DO CARTÃO DE ACESSO"
+msgstr "抽屉上锁了——需要门卡"
+
+msgid "PEGAR O CARTÃO DE ACESSO"
+msgstr "拿取门卡"
+
+msgid "CARTÃO DE ACESSO — abra a gaveta do Necrotério"
+msgstr "门卡——打开停尸房的抽屉"
+
+msgid "UM SEGURANÇA BLINDADO ESTÁ COM O CARTÃO DE ACESSO"
+msgstr "一名装甲保安拿着门卡"
+
+msgid "Leve os componentes à centrífuga do Laboratório"
+msgstr "把成分带到实验室的离心机"
+
+msgid "CENTRÍFUGA SOB ATAQUE! Afaste os zumbis (%ss)"
+msgstr "离心机遭到攻击！赶走僵尸（%s秒）"
+
+msgid "Defenda a centrífuga: %ss"
+msgstr "守住离心机：%s秒"
+
+msgid "COLOCAR OS COMPONENTES NA CENTRÍFUGA"
+msgstr "把成分放入离心机"
+
+msgid "A CENTRÍFUGA ESTÁ GIRANDO — DEFENDA!"
+msgstr "离心机正在运转——守住它！"
+
+msgid "SORO PRONTO! O Paciente Zero sentiu o cheiro..."
+msgstr "血清完成！零号病人闻到了气味……"
+
+msgid "APLICAR O SORO"
+msgstr "注射血清"
+
+msgid "VOCÊ CUROU O PACIENTE ZERO"
+msgstr "你治愈了零号病人"
+
+msgid "Todos os perks + Tornado. A luta continua..."
+msgstr "所有 Perk + 龙卷风。战斗仍在继续……"
+
+msgid "Ligue o gerador dos arqueólogos (Necrópole)"
+msgstr "启动考古学家的发电机（墓城）"
+
+msgid "Leve os Fragmentos aos altares do Portão do Templo (%s/3)"
+msgstr "把碎片带到神殿之门的祭坛（%s/3）"
+
+msgid "O guardião despertou: derrote o Minotauro (round %s)"
+msgstr "守护者苏醒了：击败弥诺陶洛斯（第 %s 回合）"
+
+msgid "Pegue a chave do Submundo onde o Minotauro caiu"
+msgstr "在弥诺陶洛斯倒下的地方拿取冥界钥匙"
+
+msgid "Abra o Portão do Submundo (sul das Ruínas)"
+msgstr "打开冥界之门（废墟南侧）"
+
+msgid "O Cérbero guarda o Submundo: derrote-o (round %s)"
+msgstr "刻耳柏洛斯守护着冥界：击败它（第 %s 回合）"
+
+msgid "Sele o portão no altar da Arena Final"
+msgstr "在最终竞技场的祭坛封印大门"
+
+msgid "O PORTÃO DO SUBMUNDO"
+msgstr "冥界之门"
+
+msgid "Fragmentos de Alma %s/3 — Necrópole · Floresta · um Esqueleto os carrega"
+msgstr "灵魂碎片 %s/3——墓城 · 森林 · 一具骷髅带着它"
+
+msgid "PEGAR O FRAGMENTO DE ALMA"
+msgstr "拿取灵魂碎片"
+
+msgid "FRAGMENTO DE ALMA (%s/3)"
+msgstr "灵魂碎片（%s/3）"
+
+msgid "UM ESQUELETO CARREGA UM FRAGMENTO DE ALMA"
+msgstr "一具骷髅带着灵魂碎片"
+
+msgid "DEPOSITAR UM FRAGMENTO NO ALTAR"
+msgstr "把碎片放上祭坛"
+
+msgid "ALTAR ACESO (%s/3)"
+msgstr "祭坛已点亮（%s/3）"
+
+msgid "O PORTÃO DO TEMPLO SE ABRIU... ALGO ACORDOU NO LABIRINTO"
+msgstr "神殿之门打开了……迷宫里有东西醒了"
+
+msgid "PEGAR A CHAVE DO SUBMUNDO"
+msgstr "拿取冥界钥匙"
+
+msgid "CHAVE DO SUBMUNDO — abra o portão ao sul das Ruínas"
+msgstr "冥界钥匙——打开废墟南侧的大门"
+
+msgid "ABRIR O PORTÃO DO SUBMUNDO"
+msgstr "打开冥界之门"
+
+msgid "SELAR O PORTÃO DO SUBMUNDO"
+msgstr "封印冥界之门"
+
+msgid "O PORTÃO DO SUBMUNDO FOI SELADO"
+msgstr "冥界之门已被封印"
+
+msgid "Todos os perks + Raio de Zeus. Mas algo lá embaixo ainda respira..."
+msgstr "所有 Perk + 宙斯之雷。但下面还有东西在呼吸……"
+
+msgid "O ÚLTIMO TREM"
+msgstr "最后一班列车"
+
+msgid "Ligue a energia (disjuntor na Área Técnica)"
+msgstr "打开电源（电闸在技术区）"
+
+msgid "Derrote o Condutor enfurecido (round %s)"
+msgstr "击败暴怒的列车长（第 %s 回合）"
+
+msgid "Pegue a Lanterna do Condutor"
+msgstr "拿取列车长的提灯"
+
+msgid "Peças do sinal %s/3 — fusível (Manutenção) · chave (Bilheteria) · manivela (Blindado)"
+msgstr "信号零件 %s/3——保险丝（维修区） · 钥匙（售票处） · 摇柄（装甲兵）"
+
+msgid "PEGAR O FUSÍVEL DO SINAL"
+msgstr "拿取信号保险丝"
+
+msgid "FUSÍVEL COLETADO"
+msgstr "保险丝已收集"
+
+msgid "PEGAR A CHAVE DO PAINEL"
+msgstr "拿取面板钥匙"
+
+msgid "CHAVE DO PAINEL COLETADA"
+msgstr "面板钥匙已收集"
+
+msgid "COFRE TRANCADO — ATIRE NO CADEADO"
+msgstr "保险箱上锁了——射击挂锁"
+
+msgid "UM BLINDADO ESTÁ COM A MANIVELA DO SINAL"
+msgstr "一名装甲兵拿着信号摇柄"
+
+msgid "PEGAR A MANIVELA DO SINAL"
+msgstr "拿取信号摇柄"
+
+msgid "MANIVELA COLETADA"
+msgstr "摇柄已收集"
+
+msgid "Leve as peças ao sinal da Plataforma e conserte"
+msgstr "把零件带到站台的信号机并修好它"
+
+msgid "SINAL SOB ATAQUE! Afaste os zumbis (%ss)"
+msgstr "信号机遭到攻击！赶走僵尸（%s秒）"
+
+msgid "Segure o sinal até o trem passar: %ss"
+msgstr "守住信号机直到列车通过：%s秒"
+
+msgid "CONSERTAR O SINAL"
+msgstr "修复信号机"
+
+msgid "O SINAL ESTÁ LIGADO — SEGURE ATÉ O TREM PASSAR!"
+msgstr "信号机已开启——坚持到列车通过！"
+
+msgid "O TREM PASSOU! O Condutor saiu dos túneis..."
+msgstr "列车通过了！列车长从隧道里出来了……"
+
+msgid "PEGAR A LANTERNA DO CONDUTOR"
+msgstr "拿取列车长的提灯"
+
+msgid "O ÚLTIMO TREM PASSOU"
+msgstr "最后一班列车已通过"
+
+msgid "Todos os perks + Lanterna do Condutor. A estação é sua..."
+msgstr "所有 Perk + 列车长的提灯。车站归你了……"
+
+msgid "ANDAR PARA CIMA"
+msgstr "向上移动"
+
+msgid "ANDAR PARA BAIXO"
+msgstr "向下移动"
+
+msgid "ANDAR PARA A ESQUERDA"
+msgstr "向左移动"
+
+msgid "ANDAR PARA A DIREITA"
+msgstr "向右移动"
+
+msgid "ATIRAR"
+msgstr "射击"
+
+msgid "RECARREGAR"
+msgstr "换弹"
+
+msgid "USAR / COMPRAR"
+msgstr "使用 / 购买"
+
+msgid "TROCAR DE ARMA"
+msgstr "切换武器"
+
+msgid "ARMA 1"
+msgstr "武器 1"
+
+msgid "ARMA 2"
+msgstr "武器 2"
+
+msgid "FACA"
+msgstr "小刀"
+
+msgid "PULAR"
+msgstr "跳跃"
+
+msgid "MAPA GRANDE"
+msgstr "大地图"
+
+msgid "LANTERNA"
+msgstr "手电筒"
+
+msgid "PAUSA"
+msgstr "暂停"
+
+msgid "MOUSE %d"
+msgstr "鼠标 %d"
+
+msgid "BOTÃO %d"
+msgstr "按键 %d"
+
+msgid "EIXO %d"
+msgstr "轴 %d"
+
+msgid "ESPAÇO"
+msgstr "空格"
+
+msgid "MOUSE ESQ."
+msgstr "鼠标左键"
+
+msgid "MOUSE DIR."
+msgstr "鼠标右键"
+
+msgid "MOUSE MEIO"
+msgstr "鼠标中键"
+
+msgid "RODA ↑"
+msgstr "滚轮 ↑"
+
+msgid "RODA ↓"
+msgstr "滚轮 ↓"
+
+msgid "AUTOMÁTICO (%s)"
+msgstr "自动（%s）"
+
+msgid " Mk III"
+msgstr " Mk III"
+
+msgid " Mk II"
+msgstr " Mk II"
+
+msgid "ALGUÉM"
+msgstr "某人"
+
+msgid "Barricadas consertadas (%s tábuas) · +%s"
+msgstr "路障已修复（%s 块木板） · +%s"
+
+msgid "%s pegou %s"
+msgstr "%s 拾取了 %s"
+
+msgid "Perk grátis: %s"
+msgstr "免费 Perk：%s"
+
+msgid "Fúria: dano x%s"
+msgstr "狂怒：伤害 x%s"
+
+msgid "FIRE SALE! MYSTERY BOX A %s · +%s CAIXAS NO MAPA"
+msgstr "FIRE SALE！MYSTERY BOX 仅需 %s · 地图上 +%s 个箱子"
+
+msgid "SOBREVIVENTE"
+msgstr "幸存者"
+
+msgid "MULTI x%s"
+msgstr "MULTI x%s"
+
+msgid "VOCÊ"
+msgstr "你"
+
+msgid "BOT %d"
+msgstr "BOT %d"
+
+msgid "CONTA"
+msgstr "账号"
+
+msgid "Contas online indisponíveis nesta versão."
+msgstr "此版本不提供在线账号。"
+
+msgid "VOLTAR"
+msgstr "返回"
+
+msgid "LOGADO COMO %s"
+msgstr "已登录为 %s"
+
+msgid "SINCRONIZAR AGORA"
+msgstr "立即同步"
+
+msgid "SAIR DA CONTA"
+msgstr "退出账号"
+
+msgid "USUÁRIO"
+msgstr "用户名"
+
+msgid "SENHA"
+msgstr "密码"
+
+msgid "Sincronizando o progresso..."
+msgstr "正在同步进度……"
+
+msgid "ENTRAR"
+msgstr "登录"
+
+msgid "CRIAR CONTA"
+msgstr "创建账号"
+
+msgid "Entre para salvar o progresso na nuvem e jogar em qualquer aparelho (inclusive no navegador).\nNão há recuperação por e-mail: guarde bem a sua senha."
+msgstr "登录后可将进度保存到云端，并在任何设备上游玩（包括浏览器）。\n无法通过邮箱找回：请妥善保管密码。"
+
+msgid "Progresso salvo na nuvem · %s"
+msgstr "进度已保存到云端 · %s"
+
+msgid "O progresso é salvo na nuvem automaticamente"
+msgstr "进度会自动保存到云端"
+
+msgid "CONQUISTAS"
+msgstr "成就"
+
+msgid "%d / %d LIBERADAS"
+msgstr "已解锁 %d / %d"
+
+msgid "Segredo — continue explorando"
+msgstr "秘密——继续探索"
+
+msgid "ESTATÍSTICAS"
+msgstr "统计"
+
+msgid "%s — melhor round %d · recorde %d pts · %d abates"
+msgstr "%s——最佳回合 %d · 纪录 %d 分 · %d 击杀"
+
+msgid "Partidas %d · Abates %d · Faca %d · Headshots %d · Bosses %d · Tempo %dh%02d"
+msgstr "场次 %d · 击杀 %d · 刀杀 %d · 爆头 %d · 首领 %d · 时间 %dh%02d"
+
+msgid "COMUM"
+msgstr "普通"
+
+msgid "INCOMUM"
+msgstr "精良"
+
+msgid "RARA"
+msgstr "稀有"
+
+msgid "ÉPICA"
+msgstr "史诗"
+
+msgid "LENDÁRIA"
+msgstr "传说"
+
+msgid "Prêmio da missão O Último Trem (Terminal) — nunca sai na Mystery Box"
+msgstr "任务“最后一班列车”（中央总站）的奖励——绝不会从 Mystery Box 中出现"
+
+msgid "Prêmio da missão O Portão do Submundo (Templo) — nunca sai na Mystery Box"
+msgstr "任务“冥界之门”（神殿）的奖励——绝不会从 Mystery Box 中出现"
+
+msgid "Santuário do Olimpo: ative as 12 estátuas dos deuses no Templo"
+msgstr "奥林匹斯圣所：点亮神殿里的 12 座神像"
+
+msgid "Evento Portão do Submundo (Templo): destrua o portal"
+msgstr "冥界之门事件（神殿）：摧毁传送门"
+
+msgid "DANO"
+msgstr "伤害"
+
+msgid "CADÊNCIA"
+msgstr "射速"
+
+msgid "PENTE"
+msgstr "弹匣"
+
+msgid "RESERVA"
+msgstr "备弹"
+
+msgid "RECARGA"
+msgstr "换弹"
+
+msgid "ALCANCE"
+msgstr "射程"
+
+msgid "ARMAS"
+msgstr "武器"
+
+msgid "AUTOMÁTICA"
+msgstr "全自动"
+
+msgid "SEMIAUTOMÁTICA"
+msgstr "半自动"
+
+msgid "Elemento %s (%d, segure E na parede): %s"
+msgstr "%s元素（%d，在墙边按住 E）：%s"
+
+msgid "Weapon Lab: Mk II %d · Mk III %d%s"
+msgstr "Weapon Lab：Mk II %d · Mk III %d%s"
+
+msgid "  (vira %s)"
+msgstr " （变为 %s）"
+
+msgid "VER MK II"
+msgstr "查看 MK II"
+
+msgid "VER MK III"
+msgstr "查看 MK III"
+
+msgid "VER NORMAL"
+msgstr "查看普通版"
+
+msgid "%.1f s"
+msgstr "%.1f 秒"
+
+msgid "%.0f m"
+msgstr "%.0f 米"
+
+msgid "Arma inicial do %s"
+msgstr "%s 的初始武器"
+
+msgid "Parede: %d · %s · %s"
+msgstr "墙上：%d · %s · %s"
+
+msgid "Mystery Box só no %s"
+msgstr "Mystery Box 仅限 %s"
+
+msgid "Mystery Box (em todos os mapas)"
+msgstr "Mystery Box（所有地图）"
+
+msgid "também na Mystery Box"
+msgstr "Mystery Box 中也有"
+
+msgid "Granada explode no impacto: %d de dano em área (raio %.1f m). Não fere você."
+msgstr "榴弹碰撞即爆：范围伤害 %d（半径 %.1f 米）。不会伤到你。"
+
+msgid "Jato contínuo que incendeia: %d de dano por segundo durante %.1f s."
+msgstr "持续喷射并点燃：每秒 %d 伤害，持续 %.1f 秒。"
+
+msgid "Raio instantâneo que salta entre até %d zumbis e os atordoa."
+msgstr "瞬间闪电，在最多 %d 只僵尸之间跳跃并使其眩晕。"
+
+msgid "Esfera que atravessa a horda e explode numa descarga elétrica (%d em área)."
+msgstr "穿过尸群并以电击爆炸的光球（范围 %d）。"
+
+msgid "Rajada de vento em cone (%d°, alcance %.0f m) que arremessa e destrói a horda à frente."
+msgstr "锥形狂风（%d°，射程 %.0f 米），掀飞并摧毁前方尸群。"
+
+msgid "Atravessa até %d zumbis por tiro."
+msgstr "每发最多穿透 %d 只僵尸。"
+
+msgid "PERSONAGEM"
+msgstr "角色"
+
+msgid "Libere os visuais com as conquistas."
+msgstr "通过成就解锁外观。"
+
+msgid "EM USO"
+msgstr "使用中"
+
+msgid "USAR"
+msgstr "使用"
+
+msgid "TRANCADO"
+msgstr "未解锁"
+
+msgid "JOGAR"
+msgstr "开始游戏"
+
+msgid "Trancado — libere com a conquista \"%s\": %s"
+msgstr "未解锁——通过成就“%s”解锁：%s"
+
+msgid "Aparece quando você enfrentar esse inimigo."
+msgstr "遭遇该敌人后显示。"
+
+msgid "Aparece quando você enfrentar esse chefe."
+msgstr "遭遇该首领后显示。"
+
+msgid "Chegue perto da máquina desse perk."
+msgstr "靠近该 Perk 的贩卖机。"
+
+msgid "Pegue esse power-up numa partida."
+msgstr "在比赛中拾取该强化道具。"
+
+msgid "Compre esse elemento numa parede de arma."
+msgstr "在武器墙购买该元素。"
+
+msgid "Receba essa bênção num altar do Templo."
+msgstr "在神殿的祭坛获得该祝福。"
+
+msgid "Aparece quando esse evento acontecer numa partida."
+msgstr "比赛中发生该事件后显示。"
+
+msgid "Descubra jogando."
+msgstr "在游戏中发现。"
+
+msgid "GLOSSÁRIO"
+msgstr "图鉴"
+
+msgid "DESCOBERTOS %d DE %d"
+msgstr "已发现 %d / %d"
+
+msgid "Ainda não encontrado."
+msgstr "尚未发现。"
+
+msgid "Onde: %s"
+msgstr "位置：%s"
+
+msgid "VIDA %d · VELOCIDADE %.1f m/s · DANO %d · %d PONTOS"
+msgstr "生命 %d · 速度 %.1f m/s · 伤害 %d · %d 点数"
+
+msgid "VIDA %d · VELOCIDADE %.1f m/s · GOLPE %d"
+msgstr "生命 %d · 速度 %.1f m/s · 攻击 %d"
+
+msgid " · ATÉ %d POR PARTIDA"
+msgstr " · 每局最多 %d 次"
+
+msgid "%d PONTOS · %s%s"
+msgstr "%d 点数 · %s%s"
+
+msgid "FUNCIONA SEM ENERGIA"
+msgstr "无需电源"
+
+msgid "PRECISA DE ENERGIA"
+msgstr "需要电源"
+
+msgid "DURA %d s"
+msgstr "持续 %d 秒"
+
+msgid "EFEITO NA HORA"
+msgstr "立即生效"
+
+msgid "%d PONTOS NA PAREDE DA ARMA"
+msgstr "武器墙 %d 点数"
+
+msgid "%d PONTOS NO ALTAR"
+msgstr "祭坛 %d 点数"
+
+msgid "A PARTIR DO ROUND %d"
+msgstr "第 %d 回合起"
+
+msgid "DICA: %s"
+msgstr "提示：%s"
+
+msgid "ZUMBIS RESTANTES  %d"
+msgstr "剩余僵尸  %d"
+
+msgid "ROUND %d COMPLETO"
+msgstr "第 %d 回合完成"
+
+msgid "ÁREA LIBERADA: %s"
+msgstr "区域已开放：%s"
+
+msgid "CONQUISTA DESBLOQUEADA: %s"
+msgstr "成就解锁：%s"
+
+msgid "SCORE %d"
+msgstr "得分 %d"
+
+msgid "%s DESBLOQUEADO!"
+msgstr "%s 已解锁！"
+
+msgid "%s SE APROXIMA"
+msgstr "%s 正在逼近"
+
+msgid "FASE %d"
+msgstr "第 %d 阶段"
+
+msgid "%s DERROTADO  +%d"
+msgstr "%s 已被击败  +%d"
+
+msgid "MAX AMMO"
+msgstr "MAX AMMO"
+
+msgid "◆ %s  %d/%d"
+msgstr "◆ %s  %d/%d"
+
+msgid "%d FPS"
+msgstr "%d FPS"
+
+msgid "ROUND"
+msgstr "回合"
+
+msgid "SCORE 0"
+msgstr "得分 0"
+
+msgid "VIDA"
+msgstr "生命"
+
+msgid "GAME OVER"
+msgstr "游戏结束"
+
+msgid "ROUND %d"
+msgstr "第 %d 回合"
+
+msgid "%s  ·  FASE %d"
+msgstr "%s · 第 %d 阶段"
+
+msgid "RODADA DOS CÃES"
+msgstr "猎犬回合"
+
+msgid "VIDA  %d / %d"
+msgstr "生命  %d / %d"
+
+msgid "Fúria"
+msgstr "狂怒"
+
+msgid "RECARREGANDO"
+msgstr "换弹中"
+
+msgid "ZUMBIS ABATIDOS"
+msgstr "击杀僵尸"
+
+msgid "HEADSHOTS"
+msgstr "爆头"
+
+msgid "PONTOS GANHOS"
+msgstr "获得点数"
+
+msgid "TEMPO"
+msgstr "时间"
+
+msgid "BOSSES"
+msgstr "首领"
+
+msgid "DANO CAUSADO"
+msgstr "造成伤害"
+
+msgid "DISPAROS / ACERTOS"
+msgstr "射击 / 命中"
+
+msgid "PRECISÃO"
+msgstr "命中率"
+
+msgid "ABATES NA FACA"
+msgstr "刀杀"
+
+msgid "NOVO RECORDE!"
+msgstr "新纪录！"
+
+msgid "RECORDE: %d PONTOS · ROUND %d"
+msgstr "纪录：%d 分 · 第 %d 回合"
+
+msgid "TIME: %s"
+msgstr "队伍：%s"
+
+msgid "PARTIDA INVALIDADA — NÃO VALE SAVE NEM RANKING"
+msgstr "比赛无效——不保存也不计入排行榜"
+
+msgid "JOGAR NOVAMENTE"
+msgstr "再玩一次"
+
+msgid "VOLTAR À SALA"
+msgstr "返回房间"
+
+msgid "RANKING"
+msgstr "排行榜"
+
+msgid "MENU"
+msgstr "菜单"
+
+msgid "PARTIDA INVALIDADA"
+msgstr "比赛无效"
+
+msgid "%dº LUGAR NO RANKING %s DE %s!"
+msgstr "第 %d 名 · %s 排行榜 · %s！"
+
+msgid "ENVIANDO O TIME AO RANKING GLOBAL..."
+msgstr "正在将队伍提交到全球排行榜……"
+
+msgid "RANKING GLOBAL: %s"
+msgstr "全球排行榜：%s"
+
+msgid "TIME ENVIADO AO RANKING GLOBAL (%s)!"
+msgstr "队伍已提交到全球排行榜（%s）！"
+
+msgid "ENTROU NO TOP! SEU NOME:"
+msgstr "进入前列！你的名字："
+
+msgid "SEU NOME PARA O RANKING GLOBAL:"
+msgstr "你在全球排行榜上的名字："
+
+msgid "%dº LUGAR NO RANKING DE %s!"
+msgstr "第 %d 名 · %s 排行榜！"
+
+msgid "ENVIANDO AO RANKING GLOBAL..."
+msgstr "正在提交到全球排行榜……"
+
+msgid "ENVIADO AO RANKING GLOBAL DA TEMPORADA!"
+msgstr "已提交到本赛季全球排行榜！"
+
+msgid "SALVAR"
+msgstr "保存"
+
+msgid "LANTERNA %s%s"
+msgstr "手电筒 %s%s"
+
+msgid "LIGADA"
+msgstr "开"
+
+msgid "DESLIGADA"
+msgstr "关"
+
+msgid "ESTÁ ESCURO — [%s] LIGA A LANTERNA"
+msgstr "太黑了——[%s] 打开手电筒"
+
+msgid "CAÍDO %ds"
+msgstr "倒地 %d秒"
+
+msgid "FORA"
+msgstr "出局"
+
+msgid "%d ms"
+msgstr "%d ms"
+
+msgid "COLEGA"
+msgstr "队友"
+
+msgid "%s %ds"
+msgstr "%s %d秒"
+
+msgid "JOGAR EM GRUPO"
+msgstr "多人游戏"
+
+msgid "Até 4 jogadores pela internet. Crie uma sala e passe o código, ou entre com o código de um amigo."
+msgstr "最多 4 名玩家联网游戏。创建房间并分享代码，或用好友的代码加入。"
+
+msgid "SEU NOME"
+msgstr "你的名字"
+
+msgid "NOME"
+msgstr "名字"
+
+msgid "CRIAR SALA"
+msgstr "创建房间"
+
+msgid "CÓDIGO DA SALA"
+msgstr "房间代码"
+
+msgid "ENTRAR NA SALA"
+msgstr "加入房间"
+
+msgid "REDE LOCAL (MESMO WI-FI) — IP DO HOST"
+msgstr "局域网（同一 Wi-Fi）——房主 IP"
+
+msgid "CRIAR SALA NA REDE LOCAL"
+msgstr "在局域网创建房间"
+
+msgid "Convite para a sala %s: digite seu nome e toque ENTRAR NA SALA"
+msgstr "房间 %s 的邀请：输入你的名字并点击加入房间"
+
+msgid "O código tem 5 letras"
+msgstr "代码为 5 个字母"
+
+msgid "Procurando a sala..."
+msgstr "正在寻找房间……"
+
+msgid "Na rede local: os amigos entram com o IP  %s"
+msgstr "局域网：好友使用此 IP 加入  %s"
+
+msgid "COPIAR CÓDIGO"
+msgstr "复制代码"
+
+msgid "Código %s copiado!"
+msgstr "代码 %s 已复制！"
+
+msgid "COPIAR CONVITE"
+msgstr "复制邀请"
+
+msgid "Convite copiado! Quem abrir o link entra direto na sala."
+msgstr "邀请已复制！打开链接即可直接进入房间。"
+
+msgid "MAPA: %s  →"
+msgstr "地图：%s  →"
+
+msgid "MAPA: %s"
+msgstr "地图：%s"
+
+msgid "  (VOCÊ)"
+msgstr " （你）"
+
+msgid "HOST"
+msgstr "房主"
+
+msgid "PRONTO"
+msgstr "已准备"
+
+msgid "ESPERANDO"
+msgstr "等待中"
+
+msgid "· vaga livre"
+msgstr "· 空位"
+
+msgid "COMEÇAR"
+msgstr "开始"
+
+msgid "Começa quando todos estiverem prontos."
+msgstr "所有人准备就绪后开始。"
+
+msgid "Esperando os amigos entrarem com o código."
+msgstr "等待好友用代码加入。"
+
+msgid "CANCELAR PRONTO"
+msgstr "取消准备"
+
+msgid "SAIR DA SALA"
+msgstr "离开房间"
+
+msgid "SEU VISUAL\n%s"
+msgstr "你的外观\n%s"
+
+msgid "Bora jogar Tentando Sobreviver comigo! Sala %s: %s"
+msgstr "来和我一起玩 Tentando Sobreviver！房间 %s：%s"
+
+msgid "— ms"
+msgstr "— ms"
+
+msgid "%s mover · mouse mirar · clique atirar · %s recarregar · %s trocar arma · %s faca · %s usar · %s pausa"
+msgstr "%s 移动 · 鼠标 瞄准 · 点击 射击 · %s 换弹 · %s 切换武器 · %s 小刀 · %s 使用 · %s 暂停"
+
+msgid "Analógico: mover · ATIRAR: mira sozinho no zumbi mais perto e atira · FACA: golpe corpo a corpo"
+msgstr "摇杆：移动 · 射击：自动瞄准最近的僵尸并开火 · 小刀：近战攻击"
+
+msgid "TENTANDO\nSOBREVIVER"
+msgstr "TENTANDO\nSOBREVIVER"
+
+msgid "CONTA: %s"
+msgstr "账号：%s"
+
+msgid "CONTA / SALVAR NA NUVEM"
+msgstr "账号 / 云端存档"
+
+msgid "CONFIGURAÇÕES"
+msgstr "设置"
+
+msgid "APOIE O PROJETO (PIX)"
+msgstr "支持本项目（PIX）"
+
+msgid "SAIR"
+msgstr "退出"
+
+msgid "MODO CABEÇÃO LIBERADO! (liga/desliga em Configurações)"
+msgstr "大头模式已解锁！（在设置中开关）"
+
+msgid "MODO CABEÇÃO LIGADO!"
+msgstr "大头模式已开启！"
+
+msgid "O Último Trem"
+msgstr "最后一班列车"
+
+msgid "O Soro do Dr. Almeida"
+msgstr "阿尔梅达医生的血清"
+
+msgid "O Portão do Submundo"
+msgstr "冥界之门"
+
+msgid "ESCOLHA O MAPA"
+msgstr "选择地图"
+
+msgid "Recorde: %d pontos · round %d"
+msgstr "纪录：%d 分 · 第 %d 回合"
+
+msgid "Sem recorde ainda"
+msgstr "暂无纪录"
+
+msgid "1º no ranking: %s · %d pts"
+msgstr "排行榜第 1：%s · %d 分"
+
+msgid "✓ MISSÃO CONCLUÍDA: %s"
+msgstr "✓ 任务完成：%s"
+
+msgid "◆ MISSÃO: %s"
+msgstr "◆ 任务：%s"
+
+msgid "BLOQUEADO — conclua a missão do %s"
+msgstr "未解锁——完成 %s 的任务"
+
+msgid " ou do "
+msgstr " 或"
+
+msgid "BLOQUEADO — derrote o boss do round %d no %s"
+msgstr "未解锁——击败第 %d 回合的首领（%s）"
+
+msgid "MAPA"
+msgstr "地图"
+
+msgid "PAUSADO"
+msgstr "已暂停"
+
+msgid "A partida continua para o time."
+msgstr "比赛对队伍仍在继续。"
+
+msgid "CONTINUAR"
+msgstr "继续"
+
+msgid "REINICIAR"
+msgstr "重新开始"
+
+msgid "SAIR DA PARTIDA"
+msgstr "退出比赛"
+
+msgid "%s para continuar  ·  %s: mapa grande"
+msgstr "%s 继续 · %s：大地图"
+
+msgid "TIME"
+msgstr "队伍"
+
+msgid "PONTOS"
+msgstr "点数"
+
+msgid "Nenhuma partida ainda — jogue para entrar no ranking!"
+msgstr "还没有比赛——快去游戏登上排行榜！"
+
+msgid "Nenhuma partida em %s ainda — chame os amigos em JOGAR EM GRUPO!"
+msgstr "%s 还没有比赛——在多人游戏中叫上好友！"
+
+msgid "Mapa bloqueado"
+msgstr "地图未解锁"
+
+msgid "Ranking global indisponível"
+msgstr "全球排行榜不可用"
+
+msgid "Ranking global indisponível (sem conexão)"
+msgstr "全球排行榜不可用（无连接）"
+
+msgid "Ninguém pontuou nesta temporada ainda — seja o primeiro!"
+msgstr "本赛季还没有人得分——成为第一个吧！"
+
+msgid "TEMPORADA TERMINA EM %d %s%s"
+msgstr "赛季剩余 %d %s%s"
+
+msgid "DIA"
+msgstr "天"
+
+msgid "DIAS"
+msgstr "天"
+
+msgid " · VOCÊ: %dº"
+msgstr " · 你：第 %d 名"
+
+msgid "JOGO"
+msgstr "游戏"
+
+msgid "VÍDEO"
+msgstr "画面"
+
+msgid "ÁUDIO"
+msgstr "音频"
+
+msgid "CONTROLES"
+msgstr "操作"
+
+msgid "PEQUENO"
+msgstr "小"
+
+msgid "MÉDIO"
+msgstr "中"
+
+msgid "GRANDE"
+msgstr "大"
+
+msgid "AUTO"
+msgstr "自动"
+
+msgid "LIGADO"
+msgstr "开"
+
+msgid "DESLIGADO"
+msgstr "关"
+
+msgid "JANELA"
+msgstr "窗口"
+
+msgid "TELA CHEIA"
+msgstr "全屏"
+
+msgid "TELA CHEIA EXCLUSIVA"
+msgstr "独占全屏"
+
+msgid "ADAPTATIVO"
+msgstr "自适应"
+
+msgid "Q / E: trocar de aba"
+msgstr "Q / E：切换标签页"
+
+msgid "IDIOMA"
+msgstr "语言"
+
+msgid "NOME NO RANKING"
+msgstr "排行榜名字"
+
+msgid "TREMOR DE TELA"
+msgstr "屏幕震动"
+
+msgid "SANGUE"
+msgstr "血液"
+
+msgid "MIRA NO MOUSE"
+msgstr "鼠标瞄准"
+
+msgid "MINIMAPA"
+msgstr "小地图"
+
+msgid "TAMANHO DO MINIMAPA"
+msgstr "小地图大小"
+
+msgid "MODO CABEÇÃO"
+msgstr "大头模式"
+
+msgid "MODO DE TELA"
+msgstr "显示模式"
+
+msgid "RESOLUÇÃO"
+msgstr "分辨率"
+
+msgid "VSYNC"
+msgstr "垂直同步"
+
+msgid "LIMITE DE FPS"
+msgstr "帧率上限"
+
+msgid "SEM LIMITE"
+msgstr "无上限"
+
+msgid "ESCALA DA INTERFACE"
+msgstr "界面缩放"
+
+msgid "BRILHO"
+msgstr "亮度"
+
+msgid "SOMBRAS"
+msgstr "阴影"
+
+msgid "MOSTRAR FPS"
+msgstr "显示 FPS"
+
+msgid "VOLUME GERAL"
+msgstr "总音量"
+
+msgid "MÚSICA"
+msgstr "音乐"
+
+msgid "EFEITOS"
+msgstr "音效"
+
+msgid "INTERFACE"
+msgstr "界面"
+
+msgid "VOZES"
+msgstr "语音"
+
+msgid "SOM"
+msgstr "声音"
+
+msgid "CONTROLES DE TOQUE"
+msgstr "触屏操作"
+
+msgid "AÇÃO"
+msgstr "动作"
+
+msgid "TECLADO / MOUSE"
+msgstr "键盘 / 鼠标"
+
+msgid "CONTROLE"
+msgstr "手柄"
+
+msgid "Clique numa tecla para trocar. ESC cancela."
+msgstr "点击按键即可更改。ESC 取消。"
+
+msgid "RESTAURAR PADRÕES"
+msgstr "恢复默认"
+
+msgid "Aperte uma tecla para %s… (ESC cancela)"
+msgstr "请按下用于“%s”的按键……（ESC 取消）"
+
+msgid "Aperte um botão do controle para %s… (ESC cancela)"
+msgstr "请按下用于“%s”的手柄按键……（ESC 取消）"
+
+msgid "CONFIRMAR: APAGAR TUDO?"
+msgstr "确认：删除全部？"
+
+msgid "APAGAR PROGRESSO"
+msgstr "删除进度"
+
+msgid "Desenvolvido por %s\n%s"
+msgstr "开发者：%s\n%s"
+
+msgid "APOIE O PROJETO"
+msgstr "支持本项目"
+
+msgid "O Tentando Sobreviver é gratuito e sem anúncios. Se você curtiu, um PIX de qualquer valor ajuda a manter o projeto vivo — totalmente opcional."
+msgstr "Tentando Sobreviver 免费且无广告。如果你喜欢，任意金额的 PIX 都能帮助项目继续下去——完全自愿。"
+
+msgid "PIX para %s"
+msgstr "PIX 收款人：%s"
+
+msgid "Chave aleatória: %s"
+msgstr "随机密钥：%s"
+
+msgid "COPIAR PIX COPIA E COLA"
+msgstr "复制 PIX 付款码"
+
+msgid "PIX copia e cola copiado! Cole no app do seu banco."
+msgstr "PIX 付款码已复制！请粘贴到银行 App 中。"
+
+msgid "COPIAR CHAVE"
+msgstr "复制密钥"
+
+msgid "Chave PIX copiada!"
+msgstr "PIX 密钥已复制！"
+
+msgid "Ideias, bugs ou parcerias: %s"
+msgstr "想法、Bug 或合作：%s"
+
+msgid "Desenvolvido por %s"
+msgstr "开发者：%s"
+
+msgid "RECARR."
+msgstr "换弹"
+
+msgid "TROCAR"
+msgstr "切换"
+
+msgid "Cérbero"
+msgstr "刻耳柏洛斯"
+
+msgid "The Conductor"
+msgstr "The Conductor"
+
+msgid "A Entidade do Submundo"
+msgstr "冥界实体"
+
+msgid "O templo não era uma prisão. Era uma porta... e ela está se abrindo."
+msgstr "神殿不是监狱。它是一扇门……而它正在打开。"
+
+msgid "O Minotauro"
+msgstr "弥诺陶洛斯"
+
+msgid "Paciente Zero"
+msgstr "零号病人"
+
+msgid "Primeiro Sangue"
+msgstr "第一滴血"
+
+msgid "Abata o primeiro zumbi"
+msgstr "击杀第一只僵尸"
+
+msgid "Sobrevivente"
+msgstr "幸存者"
+
+msgid "Chegue à wave 10"
+msgstr "到达第 10 波"
+
+msgid "Veterano"
+msgstr "老兵"
+
+msgid "Chegue à wave 20"
+msgstr "到达第 20 波"
+
+msgid "Energia!"
+msgstr "来电了！"
+
+msgid "Ligue o disjuntor principal"
+msgstr "打开主电闸"
+
+msgid "Maquinista"
+msgstr "司机"
+
+msgid "Derrote o boss The Conductor"
+msgstr "击败首领 The Conductor"
+
+msgid "Paciente Curado"
+msgstr "病人痊愈"
+
+msgid "Derrote o Paciente Zero"
+msgstr "击败零号病人"
+
+msgid "O Soro"
+msgstr "血清"
+
+msgid "Complete a missão do Dr. Almeida"
+msgstr "完成阿尔梅达医生的任务"
+
+msgid "Adestrador"
+msgstr "驯兽师"
+
+msgid "Vença uma rodada de cães sem levar dano"
+msgstr "在猎犬回合中无伤获胜"
+
+msgid "Atropelador"
+msgstr "压路机"
+
+msgid "Atropele 10 zumbis com uma passagem do trem"
+msgstr "列车一次通过碾压 10 只僵尸"
+
+msgid "Colecionador"
+msgstr "收藏家"
+
+msgid "Tenha todos os perks na mesma partida"
+msgstr "在同一局中拥有所有 Perk"
+
+msgid "Olho do Furacão"
+msgstr "风暴之眼"
+
+msgid "Transforme o Canhão de Vento no Tornado"
+msgstr "把风之炮变成龙卷风"
+
+msgid "Liquidação"
+msgstr "清仓甩卖"
+
+msgid "Use a Mystery Box durante um Fire Sale"
+msgstr "在 Fire Sale 期间使用 Mystery Box"
+
+msgid "Açougueiro"
+msgstr "屠夫"
+
+msgid "Abata 1.000 zumbis"
+msgstr "击杀 1000 只僵尸"
+
+msgid "Faca na Caveira"
+msgstr "刀刺骷髅"
+
+msgid "Abata 50 zumbis na faca"
+msgstr "用小刀击杀 50 只僵尸"
+
+msgid "Mira de Ouro"
+msgstr "黄金准星"
+
+msgid "Acerte 100 headshots fatais"
+msgstr "完成 100 次致命爆头"
+
+msgid "Ursinhos"
+msgstr "小熊"
+
+msgid "Encontre todos os ursinhos escondidos"
+msgstr "找到所有隐藏的小熊"
+
+msgid "Cabeção"
+msgstr "大头"
+
+msgid "Descubra o código secreto do menu"
+msgstr "发现菜单的秘密代码"
+
+msgid "Complete a missão do Terminal e pegue a Lanterna do Condutor"
+msgstr "完成中央总站的任务并拿取列车长的提灯"
+
+msgid "Fio de Ariadne"
+msgstr "阿里阿德涅之线"
+
+msgid "Derrote o Minotauro"
+msgstr "击败弥诺陶洛斯"
+
+msgid "Os Doze do Olimpo"
+msgstr "奥林匹斯十二神"
+
+msgid "Ative as 12 estátuas dos deuses no Templo"
+msgstr "点亮神殿里的 12 座神像"
+
+msgid "Complete a missão do Templo e pegue o Raio de Zeus"
+msgstr "完成神殿的任务并拿取宙斯之雷"
+
+msgid "Guardião dos Três"
+msgstr "三首守卫"
+
+msgid "Derrote o Cérbero"
+msgstr "击败刻耳柏洛斯"
+
+msgid "A Porta"
+msgstr "那扇门"
+
+msgid "Derrote a Entidade do Submundo"
+msgstr "击败冥界实体"
+
+msgid "PARTIDA INVALIDADA — não vale save nem ranking"
+msgstr "比赛无效——不保存也不计入排行榜"
+
+msgid "LUZ"
+msgstr "光"
+
+msgid "Clarão que cega: atordoa os zumbis e causa +50% de dano no boss."
+msgstr "致盲闪光：使僵尸眩晕，并对首领造成 +50% 伤害。"
+
+msgid "SOMBRA"
+msgstr "暗影"
+
+msgid "Rouba vida: cada acerto recupera parte do dano causado."
+msgstr "吸血：每次命中回复部分造成的伤害。"
+
+msgid "GELO"
+msgstr "冰"
+
+msgid "Deixa os zumbis lentos e às vezes os congela."
+msgstr "使僵尸减速，有时会将其冻结。"
+
+msgid "RAIO"
+msgstr "雷"
+
+msgid "A eletricidade salta para 2 zumbis próximos."
+msgstr "电流跳向附近 2 只僵尸。"
+
+msgid "FOGO"
+msgstr "火"
+
+msgid "Incendeia: dano contínuo por alguns segundos."
+msgstr "点燃：在几秒内持续造成伤害。"
+
+msgid "EXPLOSIVO"
+msgstr "爆炸"
+
+msgid "Cada tiro que acerta estoura numa pequena explosão."
+msgstr "每发命中都会引发一次小爆炸。"
+
+msgid "Terminal Central"
+msgstr "中央总站"
+
+msgid "Estação de trem abandonada: hall, plataforma, lojas, túneis e manutenção."
+msgstr "废弃的火车站：大厅、站台、商店、隧道和维修区。"
+
+msgid "Hospital Santa Luzia"
+msgstr "圣卢西亚医院"
+
+msgid "Onde o vírus nasceu: recepção, UTI, centro cirúrgico, necrotério e o laboratório no subsolo."
+msgstr "病毒诞生之地：接待处、重症监护室、手术区、停尸房和地下实验室。"
+
+msgid "Templo dos Mortos"
+msgstr "亡者神殿"
+
+msgid "Ruínas gregas, uma necrópole, a floresta de Artemis e o portão para o Submundo."
+msgstr "希腊遗迹、一座墓城、阿尔忒弥斯之森和通往冥界的大门。"
+
+msgid "Max Ammo"
+msgstr "Max Ammo"
+
+msgid "Double Cash"
+msgstr "Double Cash"
+
+msgid "Instant Kill"
+msgstr "Instant Kill"
+
+msgid "Nuke"
+msgstr "Nuke"
+
+msgid "Full Heal"
+msgstr "Full Heal"
+
+msgid "Armor"
+msgstr "Armor"
+
+msgid "Speed Boost"
+msgstr "Speed Boost"
+
+msgid "Carpenter"
+msgstr "Carpenter"
+
+msgid "Golden Drop"
+msgstr "Golden Drop"
+
+msgid "Fire Sale"
+msgstr "Fire Sale"
+
+msgid "O SORO DO DR. ALMEIDA"
+msgstr "阿尔梅达医生的血清"
+
+msgid "Enfermeiro"
+msgstr "护士"
+
+msgid "Agente"
+msgstr "特工"
+
+msgid "Guarda da Estação"
+msgstr "车站警卫"
+
+msgid "Paciente"
+msgstr "病人"
+
+msgid "Paciente da UTI"
+msgstr "重症病人"
+
+msgid "Cobaia do Laboratório"
+msgstr "实验室白鼠"
+
+msgid "Arqueóloga"
+msgstr "考古学家"
+
+msgid "Caçadora do Labirinto"
+msgstr "迷宫猎手"
+
+msgid "Sacerdotisa do Olimpo"
+msgstr "奥林匹斯女祭司"
+
+msgid "Andarilha do Submundo"
+msgstr "冥界行者"
+
+msgid "TENTANDO SOBREVIVER — feito com Godot + GDScript. Arte e sons 100% gerados por código."
+msgstr "TENTANDO SOBREVIVER——使用 Godot + GDScript 制作。美术和音效 100% 由代码生成。"
+
+msgid "APAGÃO"
+msgstr "停电"
+
+msgid "As luzes caíram — use a lanterna"
+msgstr "灯灭了——使用手电筒"
+
+msgid "ALARME DE EMERGÊNCIA"
+msgstr "紧急警报"
+
+msgid "O barulho atrai mais zumbis"
+msgstr "噪音会吸引更多僵尸"
+
+msgid "Saia dos trilhos da plataforma!"
+msgstr "离开站台轨道！"
+
+msgid "HORDA"
+msgstr "尸潮"
+
+msgid "Muito mais zumbis nesta wave"
+msgstr "本波僵尸数量大增"
+
+msgid "Uma caixa caiu do céu — segure E para abrir"
+msgstr "天上掉下一个箱子——按住 E 打开"
+
+msgid "VAZAMENTO DE GÁS"
+msgstr "毒气泄漏"
+
+msgid "Fique longe da nuvem verde"
+msgstr "远离绿色毒云"
+
+msgid "ZUMBI DOURADO"
+msgstr "黄金僵尸"
+
+msgid "Mate-o antes que fuja: dinheiro e Golden Drop!"
+msgstr "在它逃走前击杀：金钱和 Golden Drop！"
+
+msgid "LUA DE SANGUE"
+msgstr "血月"
+
+msgid "Zumbis mais rápidos — dinheiro e pontos em dobro"
+msgstr "僵尸更快——金钱和点数翻倍"
+
+msgid "DESABAMENTO"
+msgstr "坍塌"
+
+msgid "O teto está caindo: saia dos círculos vermelhos!"
+msgstr "天花板正在坍塌：离开红色圆圈！"
+
+msgid "NEBLINA"
+msgstr "浓雾"
+
+msgid "Você mal enxerga — atenção aos gemidos"
+msgstr "几乎什么都看不见——注意听呻吟声"
+
+msgid "IRA DE ZEUS"
+msgstr "宙斯之怒"
+
+msgid "Raios caem do céu: saia dos círculos azuis!"
+msgstr "闪电从天而降：离开蓝色圆圈！"
+
+msgid "LEVANTE DOS MORTOS"
+msgstr "亡者崛起"
+
+msgid "Os sarcófagos se abrem — esqueletos saindo!"
+msgstr "石棺打开了——骷髅正在涌出！"
+
+msgid "CAÇADA DE ARTEMIS"
+msgstr "阿尔忒弥斯的狩猎"
+
+msgid "Sátiros e lobos infernais estão caçando você"
+msgstr "萨堤尔和地狱狼正在猎杀你"
+
+msgid "PORTÃO DO SUBMUNDO"
+msgstr "冥界之门"
+
+msgid "Um portal solta criaturas — destrua-o a tiros"
+msgstr "传送门释放出怪物——开火摧毁它"
+
+msgid "SANGUE DOS DEUSES"
+msgstr "众神之血"
+
+msgid "Neste round as bênçãos dos altares são de graça"
+msgstr "本回合祭坛的祝福免费"
+
+msgid "CONTENÇÃO ROMPIDA"
+msgstr "隔离被突破"
+
+msgid "Zumbis entrando pelos pontos de isolamento!"
+msgstr "僵尸从隔离点涌入！"
+
+msgid "Adrenaline"
+msgstr "Adrenaline"
+
+msgid "Regenera vida 2,5x mais rápido e mais cedo"
+msgstr "生命恢复速度提升 2.5 倍且更早开始"
+
+msgid "Deadeye"
+msgstr "Deadeye"
+
+msgid "Headshots causam +100% de dano"
+msgstr "爆头伤害 +100%"
+
+msgid "Fortify"
+msgstr "Fortify"
+
+msgid "+50 de vida máxima"
+msgstr "最大生命 +50"
+
+msgid "Overload"
+msgstr "Overload"
+
+msgid "+25% de dano das armas"
+msgstr "武器伤害 +25%"
+
+msgid "Quick Hands"
+msgstr "Quick Hands"
+
+msgid "Recarga 40% mais rápida"
+msgstr "换弹速度提升 40%"
+
+msgid "Quick Revive"
+msgstr "Quick Revive"
+
+msgid "Ao cair, levanta sozinho (gasta o perk; até 3 por partida)"
+msgstr "倒地后自行站起（消耗该 Perk；每局最多 3 次）"
+
+msgid "Sprint+"
+msgstr "Sprint+"
+
+msgid "+20% de velocidade"
+msgstr "移动速度 +20%"
+
+msgid "AK"
+msgstr "AK"
+
+msgid "Arc Gun"
+msgstr "Arc Gun"
+
+msgid "Arco de Artemis"
+msgstr "阿尔忒弥斯之弓"
+
+msgid "Caçada Lunar"
+msgstr "月之狩猎"
+
+msgid "Barrett .50"
+msgstr "Barrett .50"
+
+msgid "Beretta 92"
+msgstr "Beretta 92"
+
+msgid "Bren"
+msgstr "Bren"
+
+msgid "Combat Shotgun"
+msgstr "战斗霰弹枪"
+
+msgid "Lanterna do Condutor"
+msgstr "列车长的提灯"
+
+msgid "Farol do Condutor"
+msgstr "列车长的灯塔"
+
+msgid "Energy Cannon"
+msgstr "能量炮"
+
+msgid "Flamethrower"
+msgstr "火焰喷射器"
+
+msgid "Glock 17"
+msgstr "Glock 17"
+
+msgid "Grenade Launcher"
+msgstr "榴弹发射器"
+
+msgid "Lança de Hefesto"
+msgstr "赫菲斯托斯之矛"
+
+msgid "Forja de Hefesto"
+msgstr "赫菲斯托斯熔炉"
+
+msgid "Lee-Enfield"
+msgstr "Lee-Enfield"
+
+msgid "Lupara"
+msgstr "Lupara"
+
+msgid "M1911"
+msgstr "M1911"
+
+msgid "M4"
+msgstr "M4"
+
+msgid "Magnum .44"
+msgstr "Magnum .44"
+
+msgid "Makarov PM"
+msgstr "Makarov PM"
+
+msgid "Mauser C96"
+msgstr "Mauser C96"
+
+msgid "Minigun"
+msgstr "Minigun"
+
+msgid "MP5"
+msgstr "MP5"
+
+msgid "Pistola de Pregos"
+msgstr "射钉枪"
+
+msgid "P90"
+msgstr "P90"
+
+msgid "Tridente de Poseidon"
+msgstr "波塞冬三叉戟"
+
+msgid "Maremoto"
+msgstr "海啸"
+
+msgid "Pump Shotgun"
+msgstr "泵动霰弹枪"
+
+msgid "Rail Weapon"
+msgstr "Rail Weapon"
+
+msgid "RPK"
+msgstr "RPK"
+
+msgid "Cano Serrado"
+msgstr "短管霰弹枪"
+
+msgid "StG 44"
+msgstr "StG 44"
+
+msgid "Thompson M1928"
+msgstr "Thompson M1928"
+
+msgid "Uzi Dupla"
+msgstr "双持 Uzi"
+
+msgid "Vector"
+msgstr "Vector"
+
+msgid "Winchester 1887"
+msgstr "Winchester 1887"
+
+msgid "Canhão de Vento"
+msgstr "风之炮"
+
+msgid "Tornado"
+msgstr "龙卷风"
+
+msgid "Raio de Zeus"
+msgstr "宙斯之雷"
+
+msgid "Ira do Olimpo"
+msgstr "奥林匹斯之怒"
+
+msgid "Blindado"
+msgstr "装甲兵"
+
+msgid "Rastejante"
+msgstr "爬行者"
+
+msgid "Exploder"
+msgstr "自爆者"
+
+msgid "Górgona"
+msgstr "戈耳工"
+
+msgid "Harpia"
+msgstr "鹰身女妖"
+
+msgid "Lobo Infernal"
+msgstr "地狱狼"
+
+msgid "Hoplita Morto"
+msgstr "亡灵重装步兵"
+
+msgid "Hoplita com Escudo"
+msgstr "持盾重装步兵"
+
+msgid "Cão Infernal"
+msgstr "地狱犬"
+
+msgid "Runner"
+msgstr "奔跑者"
+
+msgid "Sátiro"
+msgstr "萨堤尔"
+
+msgid "Esqueleto Guerreiro"
+msgstr "骷髅战士"
+
+msgid "Esqueleto Arqueiro"
+msgstr "骷髅弓手"
+
+msgid "Cuspidor"
+msgstr "喷吐者"
+
+msgid "Tank"
+msgstr "坦克"
+
+msgid "Walker"
+msgstr "行尸"
+
+msgid "INIMIGOS"
+msgstr "敌人"
+
+msgid "ZUMBIS"
+msgstr "僵尸"
+
+msgid "O zumbi mais comum: lento, mas nunca vem sozinho. Entra arrancando as tábuas das janelas e cerca quem fica parado. No Hospital é o paciente de camisola; no Templo, o arqueólogo da escavação."
+msgstr "最常见的僵尸：行动缓慢，但从不单独出现。会扯下窗户上的木板闯进来，包围原地不动的人。在医院里是穿病号服的病人；在神殿里是发掘现场的考古学家。"
+
+msgid "Rápido e com pouca vida: chega antes dos outros e pune quem fica encurralado. No Hospital é o enfermeiro; no Templo, o cultista de capuz."
+msgstr "速度快、生命少：比其他僵尸先到，专门惩罚被逼进角落的人。在医院里是护士；在神殿里是戴兜帽的邪教徒。"
+
+msgid "Grande e muito resistente: não recua com os tiros nem é empurrado. Guarde as armas pesadas para ele. No Hospital é o maqueiro; no Templo, o gladiador."
+msgstr "体型巨大、非常耐打：中弹不会后退，也推不动。把重武器留给它。在医院里是担架员；在神殿里是角斗士。"
+
+msgid "Corre até você, começa a piscar e explode — e explode também ao morrer. Mate de longe: a explosão fere você e os zumbis em volta. No Hospital usa roupa de quarentena; no Templo carrega uma ânfora de fogo grego."
+msgstr "冲向你，开始闪烁，然后爆炸——死亡时也会爆炸。要远距离击杀：爆炸会伤到你和周围的僵尸。在医院里穿着隔离服；在神殿里抱着装满希腊火的双耳瓶。"
+
+msgid "Rasteja pelo chão, baixo e difícil de acertar na cabeça. Ao morrer solta uma nuvem de gás que fere quem ficar dentro. No Templo é a múmia."
+msgstr "贴地爬行，很难打中头部。死亡时释放毒气云，伤害其中所有人。在神殿里是木乃伊。"
+
+msgid "Para a uma certa distância e cospe ácido em arco; onde cai vira uma poça que queima. Não fique parado em cima dela. No Templo é o sacerdote do veneno."
+msgstr "在一定距离外停下，以弧线喷吐酸液；落地处会变成灼烧的水坑。别站在上面。在神殿里是毒之祭司。"
+
+msgid "A armadura absorve 75% do dano no corpo até quebrar; um tiro na cabeça derruba o capacete. Nas missões, um deles carrega um item que você precisa. No Templo é o hoplita de bronze."
+msgstr "护甲在破碎前吸收身体所受 75% 的伤害；爆头可打掉头盔。在任务中，其中一个携带你需要的物品。在神殿里是青铜重装步兵。"
+
+msgid "Rápido e em matilha. No Hospital chega nas rodadas dos cães; no Templo, o Cérbero chama os cães de Hades. Pega fogo ao morrer e não deixa corpo."
+msgstr "速度快且成群行动。在医院里会在猎犬回合出现；在神殿里，刻耳柏洛斯会召唤哈迪斯的猎犬。死亡时燃烧，不留尸体。"
+
+msgid "Guerreiro grego morto-vivo: aguenta bastante e bate forte, mas é lento."
+msgstr "不死的希腊战士：很耐打、攻击力强，但行动缓慢。"
+
+msgid "O escudo segura quase todo o dano que vem de frente (só 20% passa). Acerte a cabeça, os lados ou as costas. Não é empurrado."
+msgstr "盾牌能挡住几乎所有正面伤害（只有 20% 能穿透）。攻击头部、侧面或背后。推不动。"
+
+msgid "Rápido e frágil. Às vezes os ossos se juntam e ele se levanta de novo com metade da vida — só uma vez."
+msgstr "速度快但脆弱。有时骨头会重新拼起，以一半生命再次站起——仅限一次。"
+
+msgid "Mantém distância e atira flechas retas. Saia da linha de tiro ou corra para cima dele."
+msgstr "保持距离并射出直线箭矢。离开射击线，或者冲向它。"
+
+msgid "Rápido, corre em zigue-zague e anda em bando: difícil de mirar. Aparece em peso na Caçada de Artemis."
+msgstr "速度快，走之字形，成群结队：很难瞄准。在阿尔忒弥斯的狩猎中大量出现。"
+
+msgid "Chega perto, dá um bote rápido, recua e repete. Atire enquanto ele recua."
+msgstr "靠近后快速扑击，后撤，然后重复。趁它后撤时射击。"
+
+msgid "Voa fora do alcance da faca e mergulha em você. Atire quando ela descer."
+msgstr "在小刀够不到的高度飞行，并向你俯冲。在它下降时射击。"
+
+msgid "Se você estiver olhando para ela quando ela olhar, fica lento, cinza e vira pedra por 1,5 s, sem andar nem atirar. Parede, objeto ou ficar de costas protegem. Depois do olhar, ela leva dano dobrado."
+msgstr "如果在她注视你时你也看着她，你会减速、变灰并石化 1.5 秒，无法移动或射击。墙壁、物体或背对她可以保护你。注视过后，她受到的伤害翻倍。"
+
+msgid "CHEFES"
+msgstr "首领"
+
+msgid "O maquinista do último trem. Golpeia, investe (e fica tonto se bater na parede), cega a mira de perto com um clarão, solta ondas de choque e círculos que explodem e, na fase 3, chama zumbis. Tem 4 fases, com um rugido invulnerável a cada uma."
+msgstr "最后一班列车的司机。会挥击、冲锋（撞墙会眩晕）、近距离用闪光致盲准星、释放冲击波和会爆炸的圆圈，并在第 3 阶段召唤僵尸。共 4 个阶段，每个阶段都有一次无敌咆哮。"
+
+msgid "O primeiro infectado. A mordida envenena — e piora se ele morder de novo antes de passar —, vomita ácido que deixa poças, grita para deixar você lento e faz chover ácido. Enfurecido, é o chefe da missão do Hospital."
+msgstr "第一个感染者。咬伤会让人中毒——如果在毒效结束前再次被咬会更严重——它会吐出留下水坑的酸液，尖叫让你减速，还会降下酸雨。暴怒时，它是医院任务的首领。"
+
+msgid "Investe derrubando as colunas no caminho, e cada coluna quebrada o deixa em Fúria, com mais dano e velocidade. Solta ondas de choque; no Colapso, caem pedras que viram escombro. Carrega a chave do Submundo."
+msgstr "冲锋时撞倒沿途的石柱，每撞断一根就会进入狂怒：伤害和速度提升。会释放冲击波；坍塌时，落石会变成瓦砾。携带冥界钥匙。"
+
+msgid "Três cabeças: morde (e morde de novo logo depois de investir), sopra um leque de fogo que deixa chamas no chão e investe. Na fase 3 chama os cães de Hades."
+msgstr "三个头：撕咬（冲锋后立刻再咬一次），喷出扇形火焰并在地面留下火焰，还会冲锋。在第 3 阶段召唤哈迪斯的猎犬。"
+
+msgid "Solta esferas de alma em leque, levanta esqueletos e faz chover fogo que vira lava. Na fase 3 assume a forma monstruosa: investida, onda de choque e a Ruptura — some e reaparece perto de você."
+msgstr "扇形发射灵魂球，唤起骷髅，并降下会化为熔岩的火雨。在第 3 阶段变为怪物形态：冲锋、冲击波和裂隙——消失后在你身旁出现。"
+
+msgid "ITENS"
+msgstr "物品"
+
+msgid "PERKS"
+msgstr "PERK"
+
+msgid "POWER-UPS"
+msgstr "强化道具"
+
+msgid "Enche o pente e a reserva de todas as suas armas."
+msgstr "补满你所有武器的弹匣和备弹。"
+
+msgid "Todo ponto ganho vale em dobro enquanto durar."
+msgstr "持续期间获得的每一点数都翻倍。"
+
+msgid "Qualquer acerto de tiro ou de faca mata o zumbi na hora (não vale para chefes)."
+msgstr "任何子弹或小刀命中都会立即杀死僵尸（对首领无效）。"
+
+msgid "Mata na hora todos os zumbis vivos — o chefe não — e paga um bônus de pontos."
+msgstr "立即杀死所有存活的僵尸（首领除外），并奖励点数。"
+
+msgid "Recupera toda a vida."
+msgstr "恢复全部生命。"
+
+msgid "Enche a barra azul de armadura, que absorve o dano antes da vida."
+msgstr "填满蓝色护甲条，护甲会先于生命承受伤害。"
+
+msgid "Você corre bem mais rápido enquanto durar."
+msgstr "持续期间你的移动速度大幅提升。"
+
+msgid "Conserta na hora todas as barricadas do mapa e paga um bônus."
+msgstr "立即修复地图上所有路障并给予奖励。"
+
+msgid "A Mystery Box custa 10 e aparece em todos os locais das áreas abertas enquanto durar."
+msgstr "持续期间 Mystery Box 只需 10，并出现在已开放区域的所有位置。"
+
+msgid "Raro. Sorteia um prêmio: uma arma especial, uma bolada de pontos, um perk grátis ou a Fúria (dano em dobro por um tempo). Cai do Zumbi Dourado, dos chefes e de quem acha todos os ursinhos."
+msgstr "稀有。随机抽取一项奖励：特殊武器、大量点数、免费 Perk 或狂怒（一段时间内伤害翻倍）。由黄金僵尸、首领掉落，找到所有小熊时也会掉落。"
+
+msgid "ELEMENTOS"
+msgstr "元素"
+
+msgid "BÊNÇÃOS DO TEMPLO"
+msgstr "神殿祝福"
+
+msgid "12% dos tiros soltam um raio que salta entre até 3 zumbis próximos."
+msgstr "12% 的射击会释放闪电，在附近最多 3 只僵尸之间跳跃。"
+
+msgid "Cada abate em sequência soma +8% de dano, até +40%. A sequência zera depois de 3 s sem abater."
+msgstr "每次连续击杀增加 +8% 伤害，最多 +40%。3 秒内没有击杀则连杀归零。"
+
+msgid "40% menos dispersão nos tiros e 15% de chance de crítico, com dano em dobro."
+msgstr "射击散布减少 40%，并有 15% 几率造成双倍伤害的暴击。"
+
+msgid "Anda, recarrega e interage 20% mais rápido."
+msgstr "移动、换弹和互动速度提升 20%。"
+
+msgid "Os tiros empurram os zumbis para trás."
+msgstr "射击会把僵尸击退。"
+
+msgid "20% dos zumbis abatidos voltam como espírito aliado por 10 s e lutam do seu lado."
+msgstr "20% 被击杀的僵尸会化为盟友之魂归来 10 秒，为你而战。"
+
+msgid "EVENTOS"
+msgstr "事件"
+
+msgid "TODOS OS MAPAS"
+msgstr "所有地图"
+
+msgid "As luzes caem e só ficam as de emergência, fracas. Use a lanterna (F); ligar a energia de novo no disjuntor encerra o apagão. Só acontece com a energia ligada."
+msgstr "灯光熄灭，只剩微弱的应急灯。使用手电筒（F）；在电闸重新打开电源即可结束停电。只会在电源开启时发生。"
+
+msgid "A sirene atrai zumbis: eles chegam mais rápido e mais deles ficam vivos ao mesmo tempo. O painel do alarme desliga a sirene pagando."
+msgstr "警笛会吸引僵尸：它们来得更快，同时存活的数量也更多。在警报面板付费即可关闭警笛。"
+
+msgid "Muito mais zumbis neste round, chegando mais rápido. Vem garantida no round 15 e depois a cada 10."
+msgstr "本回合僵尸数量大增，来得也更快。第 15 回合必定出现，之后每 10 回合一次。"
+
+msgid "Uma caixa cai de paraquedas. Segure E por alguns segundos para abrir: munição, armadura ou dinheiro. Se levar um golpe, a abertura é interrompida."
+msgstr "一个箱子乘降落伞落下。按住 E 几秒即可打开：弹药、护甲或金钱。如果受到攻击，开启会被打断。"
+
+msgid "Um cano estoura e solta uma nuvem verde que fere quem estiver dentro — zumbis também. Fique longe ou segure E na válvula para fechar."
+msgstr "一根管道爆裂，释放出伤害其中所有人的绿色毒云——僵尸也一样。远离它，或在阀门处按住 E 将其关闭。"
+
+msgid "Um zumbi todo em ouro, com coroa, que foge de você (estrela dourada no minimapa). Mate-o antes que escape para ganhar dinheiro e um Golden Drop."
+msgstr "一只头戴王冠、全身金色的僵尸，会躲着你逃跑（小地图上的金色星星）。在它逃走前击杀，可获得金钱和 Golden Drop。"
+
+msgid "A lua fica vermelha: os zumbis correm mais, mas dinheiro e pontos valem em dobro."
+msgstr "月亮变红：僵尸跑得更快，但金钱和点数翻倍。"
+
+msgid "O teto começa a cair: círculos vermelhos marcam onde as pedras vão bater. Saia deles — as pedras também esmagam os zumbis."
+msgstr "天花板开始坍塌：红色圆圈标出落石的位置。离开圆圈——落石也会砸死僵尸。"
+
+msgid "Uma neblina fecha a visão e até a lanterna ilumina menos. Fique atento aos gemidos."
+msgstr "浓雾遮蔽视野，连手电筒也照得更近。注意听呻吟声。"
+
+msgid "TERMINAL CENTRAL"
+msgstr "中央总站"
+
+msgid "Um trem atravessa a plataforma a toda velocidade e atropela quem estiver nos trilhos — zumbis inclusive. O painel do trem chama o trem na hora."
+msgstr "一列火车全速驶过站台，碾压轨道上的所有人——包括僵尸。列车面板可立即呼叫列车。"
+
+msgid "HOSPITAL SANTA LUZIA"
+msgstr "圣卢西亚医院"
+
+msgid "Os pontos de isolamento se rompem e os zumbis entram por eles, com a sirene tocando."
+msgstr "隔离点被突破，僵尸在警笛声中从那里涌入。"
+
+msgid "TEMPLO DOS MORTOS"
+msgstr "亡者神殿"
+
+msgid "Raios caem do céu, e círculos azuis avisam onde. Saia deles — os raios também destroem os zumbis."
+msgstr "闪电从天而降，蓝色圆圈会提示落点。离开圆圈——闪电也会摧毁僵尸。"
+
+msgid "Os sarcófagos se abrem e soltam esqueletos, às vezes arqueiros."
+msgstr "石棺打开，放出骷髅，有时还有弓手。"
+
+msgid "Sátiros e lobos infernais surgem em volta de você numa caçada."
+msgstr "萨堤尔和地狱狼会在狩猎中出现在你周围。"
+
+msgid "Um portal se abre e solta criaturas até ser destruído a tiros. Destruído, deixa o Tridente de Poseidon."
+msgstr "一道传送门打开并不断放出怪物，直到被火力摧毁。摧毁后会留下波塞冬三叉戟。"
+
+msgid "Neste round, as bênçãos dos altares são de graça."
+msgstr "本回合祭坛的祝福免费。"
+
+msgid "MECÂNICAS"
+msgstr "机制"
+
+msgid "BÁSICO"
+msgstr "基础"
+
+msgid "Rounds"
+msgstr "回合"
+
+msgid "A partida é uma sequência de rounds cada vez mais difíceis: mais zumbis e mais fortes. O round acaba quando o último zumbi morre, e o fim de cada um paga um bônus."
+msgstr "一局比赛由越来越难的回合组成：僵尸更多、更强。最后一只僵尸死亡时回合结束，每回合结束都会给予奖励。"
+
+msgid "Pontos"
+msgstr "点数"
+
+msgid "Acertar e matar zumbis dá pontos — mais no tiro na cabeça e na faca —, e consertar barricadas também. Com eles você compra armas, portas, perks e a Mystery Box. O score do ranking é separado dos pontos."
+msgstr "命中和击杀僵尸可获得点数——爆头和小刀更多——修复路障也可以。用点数购买武器、门、Perk 和 Mystery Box。排行榜得分与点数分开计算。"
+
+msgid "Barricadas"
+msgstr "路障"
+
+msgid "Os zumbis entram pelas janelas arrancando as tábuas. Segure E perto da janela para pregar as tábuas de volta — cada tábua dá 10 pontos."
+msgstr "僵尸会扯下木板从窗户闯入。在窗边按住 E 把木板钉回去——每块木板 10 点数。"
+
+msgid "Armas na parede"
+msgstr "墙上武器"
+
+msgid "Os desenhos de giz nas paredes vendem armas e munição (E). A munição sai mais barata que a arma."
+msgstr "墙上的粉笔画出售武器和弹药（E）。弹药比武器便宜。"
+
+msgid "Faca"
+msgstr "小刀"
+
+msgid "V dá um golpe com avanço que acerta um zumbi por vez: o alvo do avanço ou o mais perto à frente. Salva quando a munição acaba, e matar na faca dá mais pontos."
+msgstr "V 发动带突进的攻击，每次命中一只僵尸：突进的目标或前方最近的僵尸。弹药耗尽时能救命，用小刀击杀还能获得更多点数。"
+
+msgid "Lanterna"
+msgstr "手电筒"
+
+msgid "F liga e desliga a lanterna. Faz falta no Apagão, na Neblina e nas áreas escuras."
+msgstr "F 开关手电筒。停电、浓雾和黑暗区域中必不可少。"
+
+msgid "Duas armas"
+msgstr "两把武器"
+
+msgid "Você carrega duas armas (Q troca). Ao pegar uma terceira, a que está em mãos cai no chão e pode ser pega de volta por 60 s, com a munição e as melhorias."
+msgstr "你可以携带两把武器（Q 切换）。拾取第三把时，手中的武器会掉在地上，60 秒内可以捡回，弹药和升级都保留。"
+
+msgid "AVANÇADO"
+msgstr "进阶"
+
+msgid "Portas e áreas"
+msgstr "门与区域"
+
+msgid "Portas compráveis (E) abrem novas áreas — e também os pontos de onde os zumbis nascem nelas. A placa no chão mostra o nome da área do outro lado."
+msgstr "可购买的门（E）会开放新区域——以及那里的僵尸出生点。地上的标牌显示另一侧区域的名称。"
+
+msgid "Energia"
+msgstr "电源"
+
+msgid "Segure E no disjuntor para ligar a energia: as máquinas de perk e o Weapon Lab passam a funcionar e as luzes voltam."
+msgstr "在电闸处按住 E 打开电源：Perk 贩卖机和 Weapon Lab 开始运作，灯光恢复。"
+
+msgid "Máquinas de perk"
+msgstr "Perk 贩卖机"
+
+msgid "Cada máquina vende um perk que vale pela partida inteira. Quase todas precisam da energia ligada — o Quick Revive não."
+msgstr "每台贩卖机出售一种整局有效的 Perk。几乎都需要电源——Quick Revive 不需要。"
+
+msgid "Mystery Box"
+msgstr "Mystery Box"
+
+msgid "Paga e sorteia uma arma, às vezes já com um elemento. Depois de alguns usos, a caixa troca de lugar; o feixe de luz dourada mostra onde ela está."
+msgstr "付费后随机抽取一把武器，有时还带有元素。使用几次后箱子会换位置；金色光柱会指示它的位置。"
+
+msgid "Weapon Lab"
+msgstr "Weapon Lab"
+
+msgid "Melhora a arma em mãos para Mk II e depois Mk III: mais dano, mais munição e visual novo — algumas viram outra arma, como o Canhão de Vento, que vira Tornado. Precisa de energia."
+msgstr "把手中的武器升级为 Mk II，再升级为 Mk III：更高伤害、更多弹药和全新外观——有些会变成另一把武器，比如风之炮会变成龙卷风。需要电源。"
+
+msgid "Elementos"
+msgstr "元素"
+
+msgid "Com uma arma na mão, segure E na parede dela para comprar o elemento dela: Luz, Sombra, Gelo, Raio, Fogo ou Explosivo mudam o efeito dos tiros. A Mystery Box também pode entregar arma com elemento."
+msgstr "手持武器时，在该武器的墙边按住 E 购买其元素：光、暗影、冰、雷、火或爆炸会改变射击效果。Mystery Box 也可能给出带元素的武器。"
+
+msgid "Power-ups"
+msgstr "强化道具"
+
+msgid "Zumbis abatidos às vezes deixam um power-up no chão. Passe por cima para pegar antes que ele suma; os que duram mostram o tempo na tela."
+msgstr "被击杀的僵尸有时会掉落强化道具。在它消失前走过去拾取；有持续时间的会在屏幕上显示剩余时间。"
+
+msgid "Rodada dos cães"
+msgstr "猎犬回合"
+
+msgid "No Hospital, os rounds 5, 11, 17… são só de cães, com névoa e raios. O último cão deixa munição cheia."
+msgstr "在医院里，第 5、11、17……回合只有猎犬，伴随雾气和闪电。最后一只猎犬会掉落满弹药。"
+
+msgid "Round de chefe"
+msgstr "首领回合"
+
+msgid "Nos rounds 10, 20 e 30 vem um chefe, com uma escolta menor e a barra de vida no alto da tela. Derrotado, deixa um Golden Drop e um Max Ammo."
+msgstr "第 10、20 和 30 回合会出现首领，护卫较少，屏幕顶部显示生命条。击败后掉落 Golden Drop 和 Max Ammo。"
+
+msgid "Missões"
+msgstr "任务"
+
+msgid "Cada mapa tem uma missão em etapas, com o objetivo na tela e no minimapa: O Último Trem (Terminal), O Soro do Dr. Almeida (Hospital) e O Portão do Submundo (Templo). O prêmio é todos os perks e uma arma exclusiva."
+msgstr "每张地图都有一个分阶段的任务，目标显示在屏幕和小地图上：最后一班列车（中央总站）、阿尔梅达医生的血清（医院）和冥界之门（神殿）。奖励是所有 Perk 和一把专属武器。"
+
+msgid "Bênçãos dos Deuses"
+msgstr "众神的祝福"
+
+msgid "No Templo, 3 altares oferecem a bênção de um deus, sorteado a cada round, por 1500 pontos. Só uma bênção por vez, e cair faz perder a que você tem."
+msgstr "在神殿里，3 座祭坛以 1500 点数提供一位神明的祝福，每回合随机抽取。同一时间只能有一个祝福，倒地会失去当前的祝福。"
+
+msgid "SEGREDOS"
+msgstr "秘密"
+
+msgid "Ursinhos escondidos"
+msgstr "隐藏的小熊"
+
+msgid "Cada mapa esconde ursinhos de pelúcia. Achar todos na mesma partida solta um Golden Drop e libera uma conquista."
+msgstr "每张地图都藏着毛绒小熊。在同一局中找齐全部会掉落 Golden Drop 并解锁成就。"
+
+msgid "Rádios e gravadores"
+msgstr "收音机和录音机"
+
+msgid "Rádios e gravadores espalhados contam a história de cada mapa. Segure E para sintonizar; cada uso traz a próxima mensagem."
+msgstr "散落各处的收音机和录音机讲述着每张地图的故事。按住 E 调谐；每次使用都会播放下一条消息。"
+
+msgid "Estátuas dos deuses"
+msgstr "众神神像"
+
+msgid "No Templo, acender as 12 estátuas dos deuses abre a passagem para o Santuário do Olimpo, onde está o Arco de Artemis."
+msgstr "在神殿里，点亮 12 座神像会打开通往奥林匹斯圣所的通道，阿尔忒弥斯之弓就在那里。"
+
+msgid "Recepção"
+msgstr "接待处"
+
+msgid "Centro Cirúrgico"
+msgstr "手术区"
+
+msgid "UTI"
+msgstr "重症监护室"
+
+msgid "Enfermaria"
+msgstr "病房"
+
+msgid "Radiologia"
+msgstr "放射科"
+
+msgid "Farmácia"
+msgstr "药房"
+
+msgid "Pediatria"
+msgstr "儿科"
+
+msgid "Necrotério"
+msgstr "停尸房"
+
+msgid "Refeitório"
+msgstr "食堂"
+
+msgid "Laboratório"
+msgstr "实验室"
+
+msgid "OUVIR O GRAVADOR"
+msgstr "收听录音机"
+
+msgid "📼 \"Diário do Dr. Almeida, dia 3: a amostra do Paciente Zero reagiu ao soro. As células não param de se dividir.\""
+msgstr "📼 “阿尔梅达医生日志，第 3 天：零号病人的样本对血清起了反应。细胞不停地分裂。”"
+
+msgid "📼 \"Dia 9: a febre some e volta. O Paciente Zero arrancou as amarras. Três enfermeiros foram mordidos.\""
+msgstr "📼 “第 9 天：高烧退了又来。零号病人挣断了束缚带。三名护士被咬了。”"
+
+msgid "📼 \"Dia 12: lacramos o laboratório e mandamos as amostras de trem para a Estação Central. Que Deus nos perdoe.\""
+msgstr "📼 “第 12 天：我们封锁了实验室，把样本用火车送往中央车站。愿上帝宽恕我们。”"
+
+msgid "📼 \"...se estiver ouvindo isto: não deixe o Paciente Zero chegar à superfície. O soro está na câmara.\""
+msgstr "📼 “……如果你听到这段话：别让零号病人到达地面。血清在密室里。”"
+
+msgid "Ruínas Gregas"
+msgstr "希腊遗迹"
+
+msgid "Necrópole"
+msgstr "墓城"
+
+msgid "Labirinto"
+msgstr "迷宫"
+
+msgid "Floresta de Artemis"
+msgstr "阿尔忒弥斯之森"
+
+msgid "Templo da Górgona"
+msgstr "戈耳工神殿"
+
+msgid "Submundo"
+msgstr "冥界"
+
+msgid "Arena Final"
+msgstr "最终竞技场"
+
+msgid "Santuário do Olimpo"
+msgstr "奥林匹斯圣所"
+
+msgid "LER A INSCRIÇÃO"
+msgstr "阅读铭文"
+
+msgid "📜 \"Diário da Dra. Helena, escavação 7: as inscrições falam de mortos que voltam quando o portão é tocado.\""
+msgstr "📜 “海伦娜博士日志，第 7 号发掘点：铭文提到，触碰大门时死者就会归来。”"
+
+msgid "📜 \"Chegou a caixa do Hospital Santa Luzia: amostras do Dr. Almeida. Ele disse que o soro veio DAQUI.\""
+msgstr "📜 “圣卢西亚医院的箱子到了：阿尔梅达医生的样本。他说血清就来自这里。”"
+
+msgid "📜 \"Os trens da Estação Central traziam os caixotes à noite. Nenhum carregador voltou para a segunda viagem.\""
+msgstr "📜 “中央车站的列车在夜里运来木箱。没有一个搬运工回来跑第二趟。”"
+
+msgid "📜 \"O templo não era uma prisão. Era uma porta. E alguém, do outro lado, está batendo.\""
+msgstr "📜 “神殿不是监狱。它是一扇门。而门的另一边，有人在敲门。”"
+
+msgid "Hall Central"
+msgstr "中央大厅"
+
+msgid "Plataforma Norte"
+msgstr "北站台"
+
+msgid "Bilheteria"
+msgstr "售票处"
+
+msgid "Lojas"
+msgstr "商店"
+
+msgid "Área Técnica"
+msgstr "技术区"
+
+msgid "Túneis"
+msgstr "隧道"
+
+msgid "Manutenção"
+msgstr "维修区"
+
+msgid "📻 \"...controle da Estação Central. O trem das 23h40 NÃO deve parar. Repito: não parem o trem...\""
+msgstr "📻 “……中央车站调度室。23:40 的列车绝不能停。重复：不要让列车停下……”"
+
+msgid "📻 \"...o maquinista não responde. Alguém viu o Condutor? Ele desceu nos túneis e voltou... diferente.\""
+msgstr "📻 “……司机没有回应。有人看到列车长了吗？他下到隧道里，回来时……变了。”"
+
+msgid "📻 \"...quarentena decretada. Portas lacradas. Quem ficou lá dentro está por conta própria.\""
+msgstr "📻 “……已宣布隔离。大门已封锁。留在里面的人只能靠自己了。”"
+
+msgid "📻 \"...se alguém ouvir isto: tentem sobreviver. O resgate chega ao amanhecer. Talvez.\""
+msgstr "📻 “……如果有人听到这段话：努力活下去。救援将在黎明到来。也许吧。”"

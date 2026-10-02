@@ -64,6 +64,10 @@ extends Resource
 ## Rodada dos cães por mapa: first_round, every, per_round, cap, max_alive, spawn_interval,
 ## spawn_distance_min/max, fog_darkness, flashlight_factor.
 @export var hound_rounds: Dictionary = {}
+## Cães misturados na horda dos rounds normais (todos os mapas), surgindo com um raio perto do
+## time: from_round, chance (no from_round), chance_per_round, max_chance, max_alive,
+## late_max_alive (a partir de late_caps_from_round), spawn_distance_min/max. Vazio = sem cães.
+@export var hound_mix: Dictionary = {}
 
 
 ## Zumbis do round para `players` jogadores (1 = solo).
@@ -194,3 +198,23 @@ func is_hound_round(round_number: int, map_id: String) -> bool:
 func hound_total(round_number: int, map_id: String, players: int = 1) -> int:
 	var cfg: Dictionary = hound_rounds.get(map_id, {})
 	return roundi(mini(int(cfg.get("cap", 0)), roundi(float(cfg.get("per_round", 0)) * round_number)) * coop_factor(players))
+
+
+## Chance de o próximo inimigo de um round normal ser um cão (0 antes de `hound_mix.from_round`).
+func hound_mix_chance(round_number: int) -> float:
+	if hound_mix.is_empty() or _r(round_number) < int(hound_mix.get("from_round", 5)):
+		return 0.0
+	var extra := (_r(round_number) - int(hound_mix.from_round)) * float(hound_mix.get("chance_per_round", 0.0))
+	return minf(float(hound_mix.get("max_chance", 1.0)), float(hound_mix.get("chance", 0.0)) + extra)
+
+
+## Cães misturados vivos ao mesmo tempo (um a mais por jogador a mais no cooperativo).
+func hound_mix_cap(round_number: int, players: int = 1) -> int:
+	var key := "late_max_alive" if _r(round_number) >= late_caps_from_round and hound_mix.has("late_max_alive") else "max_alive"
+	return int(hound_mix.get(key, 0)) + maxi(0, players - 1)
+
+
+## Função pura: o próximo inimigo do round é um cão? (sorteio com `rng`, dentro do limite de vivos).
+func hound_mix_roll(round_number: int, alive_hounds: int, rng: RandomNumberGenerator, players: int = 1) -> bool:
+	var chance := hound_mix_chance(round_number)
+	return chance > 0.0 and alive_hounds < hound_mix_cap(round_number, players) and rng.randf() < chance

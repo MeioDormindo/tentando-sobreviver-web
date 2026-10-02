@@ -110,9 +110,9 @@ func _on_kill(zombie: Node3D, info: DamageInfo) -> void:
 			points += mini(int(streak[0]), data.multi_kill_max_steps) * data.multi_kill_bonus_per_step
 			if int(streak[0]) >= 2:
 				if killer:
-					killer.hud(&"toast", ["MULTI x%d" % (int(streak[0]) + 1)])
+					killer.hud(&"toast", [Loc.fmt("MULTI x%s", [int(streak[0]) + 1])])
 				else:
-					Events.toast.emit("MULTI x%d" % (int(streak[0]) + 1))
+					Events.toast.emit(Loc.fmt("MULTI x%s", [int(streak[0]) + 1]))
 	else:
 		points *= data.indirect_factor
 	add(points, killer)

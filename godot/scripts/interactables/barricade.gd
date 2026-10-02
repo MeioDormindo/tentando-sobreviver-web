@@ -84,7 +84,7 @@ func take_hit(amount: int) -> void:
 func get_interaction_prompt(_player: Node3D) -> String:
 	if planks >= data.max_planks:
 		return ""
-	return "[SEGURE E] CONSERTAR BARRICADA  ·  +%d por tábua" % data.repair_reward
+	return Loc.fmt("[SEGURE %s] CONSERTAR BARRICADA  ·  +%s por tábua", [Loc.key(&"interact"), data.repair_reward])
 
 
 func get_interaction_progress(player: Node3D) -> float:

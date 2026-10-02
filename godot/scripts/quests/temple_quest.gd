@@ -54,10 +54,10 @@ func _start() -> void:
 		func(_d: float) -> bool: return _power_on())
 	var fragments := QuestStep.make(_fragments_text, _fragments_target, _fragments_update, _fragments_enter, _clear_spots)
 	var altars := QuestStep.make(
-		func() -> String: return "Leve os Fragmentos aos altares do Portão do Templo (%d/3)" % altars_lit,
+		func() -> String: return Loc.fmt("Leve os Fragmentos aos altares do Portão do Templo (%s/3)", [altars_lit]),
 		_altar_target, func(_d: float) -> bool: return altars_lit >= 3, _altars_enter, _altars_exit)
 	var boss := QuestStep.make(
-		func() -> String: return "O guardião despertou: derrote o Minotauro (round %d)" % boss_round,
+		func() -> String: return Loc.fmt("O guardião despertou: derrote o Minotauro (round %s)", [boss_round]),
 		func() -> Variant: return null,
 		func(_d: float) -> bool: return boss_down != null,
 		func() -> void: boss_round = round_manager.force_boss_next_round(BOSS_HEALTH, &"minotaur"))
@@ -70,7 +70,7 @@ func _start() -> void:
 		func() -> Variant: return _gate_position(&"gate_underworld"),
 		func(_d: float) -> bool: return gate_open, _gate_enter, _clear_spots)
 	var cerberus := QuestStep.make(
-		func() -> String: return "O Cérbero guarda o Submundo: derrote-o (round %d)" % cerberus_round,
+		func() -> String: return Loc.fmt("O Cérbero guarda o Submundo: derrote-o (round %s)", [cerberus_round]),
 		func() -> Variant: return null,
 		func(_d: float) -> bool: return cerberus_down,
 		func() -> void: cerberus_round = round_manager.force_boss_next_round(BOSS_HEALTH, &"cerberus"))
@@ -88,7 +88,7 @@ func _count() -> int:
 
 
 func _fragments_text() -> String:
-	return "Fragmentos de Alma %d/3 — Necrópole · Floresta · um Esqueleto os carrega" % _count()
+	return Loc.fmt("Fragmentos de Alma %s/3 — Necrópole · Floresta · um Esqueleto os carrega", [_count()])
 
 
 func _fragments_target() -> Variant:
@@ -113,7 +113,7 @@ func _fragments_enter() -> void:
 
 func _collect(key: String) -> void:
 	got[key] = true
-	_toast("FRAGMENTO DE ALMA (%d/3)" % _count())
+	_toast(Loc.fmt("FRAGMENTO DE ALMA (%s/3)", [_count()]))
 	Audio.play("powerup", "ui", 0.7)
 
 
@@ -162,7 +162,7 @@ func _altars_enter() -> void:
 		var spot := _spot("DEPOSITAR UM FRAGMENTO NO ALTAR", altar.global_position + Vector3(0, 0, 1.1), func() -> void:
 			altar.activate()
 			altars_lit += 1
-			_toast("ALTAR ACESO (%d/3)" % altars_lit), ALTAR_HOLD)
+			_toast(Loc.fmt("ALTAR ACESO (%s/3)", [altars_lit])), ALTAR_HOLD)
 		spot.name = "AltarSpot_%s" % altar.name
 		spot.interaction_radius = 1.7
 

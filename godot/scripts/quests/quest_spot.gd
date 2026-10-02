@@ -18,6 +18,8 @@ var on_done: Callable
 var vanish_on_done := false
 var interaction_radius: float = 1.6
 var used := false
+## Quem concluiu (o jogador que tocou ou segurou E; vazio no colega, que só espelha o host).
+var finished_by: Node3D
 
 var _progress := HoldProgress.new()
 var _ring: Sprite3D
@@ -68,17 +70,18 @@ func get_interaction_prompt(_player: Node3D) -> String:
 	if not available():
 		return locked_label
 	if hold_time > 0.0:
-		return "[SEGURE E] %s" % label
-	return "[E] " + label
+		return Loc.fmt("[SEGURE %s] %s", [Loc.key(&"interact"), label])
+	return Loc.fmt("[%s] %s", [Loc.key(&"interact"), label])
 
 
 func get_interaction_progress(player: Node3D) -> float:
 	return _progress.of(player) / hold_time if (hold_time > 0.0 and not used and available()) else -1.0
 
 
-func interact(_player: Node3D) -> bool:
+func interact(player: Node3D) -> bool:
 	if hold_time > 0.0 or not available():
 		return false
+	finished_by = player
 	finish()
 	return true
 
@@ -88,6 +91,7 @@ func hold_interact(player: Node3D, delta: float) -> bool:
 		return false
 	if _progress.add(player, delta) < hold_time:
 		return false
+	finished_by = player
 	finish()
 	return true
 

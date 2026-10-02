@@ -116,7 +116,7 @@ func spawn_drop(id: StringName, at: Vector3) -> Node3D:
 		halo.shaded = false
 		halo.pixel_size = 1.4 / 24.0
 		halo.modulate = Color(color, 0.7)
-		halo.position.y = 0.03
+		halo.position.y = PixelShapes.GROUND_Y
 		pickup.add_child(halo)
 	else:
 		var sphere := MeshInstance3D.new()
@@ -211,7 +211,7 @@ func apply(id: StringName, by: Player = null) -> String:
 				planks += barricade.data.max_planks - barricade.planks
 				barricade.planks = barricade.data.max_planks
 				barricade.take_hit(0)
-			detail = "Barricadas consertadas (%d tábuas) · +%d" % [planks, points_manager.add_all(data.carpenter_reward)]
+			detail = Loc.fmt("Barricadas consertadas (%s tábuas) · +%s", [planks, points_manager.add_all(data.carpenter_reward)])
 		&"golden":
 			detail = _golden(by)
 		&"fire_sale":
@@ -220,6 +220,7 @@ func apply(id: StringName, by: Player = null) -> String:
 	if duration > 0.0:
 		active[id] = duration  # pegar de novo renova
 	Events.power_up_collected.emit(id, String(info.get("name", id)), info.get("color", Color.WHITE), detail)
+	Players.feed(Loc.fmt("%s pegou %s", [Players.name_of(by), String(info.get("name", id))]))
 	return detail
 
 
@@ -316,20 +317,18 @@ func _golden(who: Player) -> String:
 			return weapon.display_name
 	if outcome == &"perk":
 		var options: Array[PerkData] = []
-		for file in DirAccess.get_files_at(perks_dir):
-			if file.ends_with(".tres") or file.ends_with(".tres.remap"):
-				var perk := load("%s/%s" % [perks_dir, file.trim_suffix(".remap")]) as PerkData
-				if perk and who.perks.can_buy(perk):
-					options.append(perk)
+		for perk in PerkCatalog.all(perks_dir):
+			if who.perks.can_buy(perk):
+				options.append(perk)
 		if not options.is_empty():
 			var perk: PerkData = options.pick_random()
 			who.perks.grant(perk)
-			return "Perk grátis: " + perk.display_name
+			return Loc.fmt("Perk grátis: %s", [perk.display_name])
 	if outcome == &"fury":
 		who.fury_multiplier = data.fury_damage_multiplier
 		_fury_player = who
 		active[&"fury"] = data.fury_duration
-		return "Fúria: dano x%d" % roundi(data.fury_damage_multiplier)
+		return Loc.fmt("Fúria: dano x%s", [roundi(data.fury_damage_multiplier)])
 	# Dinheiro (também o prêmio quando não há perk para dar); não passa pelo Double Cash.
 	points_manager.add(data.golden_money, false, who)
 	return "+%d" % data.golden_money
@@ -350,7 +349,7 @@ func _start_fire_sale() -> void:
 		_fire_sale_boxes.append(add_fire_sale_box(main, spot, "FireSaleBox%d" % (_fire_sale_boxes.size() + 1)))
 	if Net.world and Net.is_host():
 		Net.world.on_fire_sale(main, _fire_sale_boxes)
-	Events.toast.emit("FIRE SALE! MYSTERY BOX A %d · +%d CAIXAS NO MAPA" % [main.data.fire_sale_price, _fire_sale_boxes.size()])
+	Events.toast.emit(Loc.fmt("FIRE SALE! MYSTERY BOX A %s · +%s CAIXAS NO MAPA", [main.data.fire_sale_price, _fire_sale_boxes.size()]))
 
 
 ## Caixa extra do Fire Sale num ponto (nome fixo: em rede, o mesmo caminho em todas as máquinas).

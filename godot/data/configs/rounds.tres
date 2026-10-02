@@ -37,3 +37,4 @@ coop_zombies_per_extra_player = 0.5
 coop_alive_per_extra_player = 0.25
 coop_alive_cap = 40
 coop_boss_health_per_extra_player = 0.5
+hound_mix = { "from_round": 5, "chance": 0.05, "chance_per_round": 0.006, "max_chance": 0.14, "max_alive": 3, "late_max_alive": 4, "spawn_distance_min": 6.875, "spawn_distance_max": 13.125 }

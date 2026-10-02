@@ -44,6 +44,8 @@ func run(tree: SceneTree) -> int:
 		_points_per_player()
 		await _purchases()
 		await _wall_buy_together()
+		await _quest_reward_to_finisher()
+		await _hud_team_and_crosshair()
 		await _down_and_revive()
 		await _bleed_out_and_return()
 		await _team_wipe()
@@ -161,7 +163,7 @@ func _purchases() -> void:
 	box.set(&"_timer", 0.0)
 	await _tree.process_frame
 	await _tree.process_frame
-	check(box.state == MysteryBox.State.READY and not box.interact(_host) and box.get_interaction_prompt(_host).contains("BETO"), "a arma sorteada não é de quem não pagou")
+	check(box.state == MysteryBox.State.READY and not box.interact(_host) and Loc.text(box.get_interaction_prompt(_host)).contains("BETO"), "a arma sorteada não é de quem não pagou")
 	check(box.interact(_mate) and _mate.inventory.owns(box.result.id if box.result else &"") or box.state == MysteryBox.State.IDLE, "quem pagou pega a arma")
 
 
@@ -206,7 +208,7 @@ func _down_and_revive() -> void:
 	check(downed[0] and _mate.bleeding and _mate.is_down and not _mate.is_standing() and not _game.over, "caiu: sangra no chão e a partida segue")
 	check(_mate.perks.owned.is_empty() and _mate.perks.can_buy(load("res://data/perks/deadeye.tres") as PerkData), "quem cai perde os perks (e pode comprar de novo)")
 	var spot := _mate.get_node_or_null("ReviveSpot") as ReviveSpot
-	check(spot != null and spot.is_in_group(&"interactable") and spot.get_interaction_prompt(_host).contains("REVIVER BETO"), "o colega vê \"segure E para reviver\"")
+	check(spot != null and spot.is_in_group(&"interactable") and Loc.text(spot.get_interaction_prompt(_host)).contains("REVIVER BETO"), "o colega vê \"segure E para reviver\"")
 	check(not _mate.help_revive(_mate, 1.0), "não dá para reviver a si mesmo")
 	_mate.help_revive(_host, 1.5)
 	check(_mate.bleeding, "reviver leva %.0fs segurando E" % Player.REVIVE_TIME)
@@ -247,3 +249,59 @@ func _team_wipe() -> void:
 	await _tree.process_frame
 	Events.game_over.disconnect(capture)
 	check(_game.over and int(summary.get("players", 0)) == 2, "todos caídos: fim de jogo do time (%d jogadores)" % int(summary.get("players", 0)))
+
+
+## O prêmio da missão é de quem concluiu a última etapa (todos os perks + a arma), não do time; o
+## feed avisa quem levou.
+func _quest_reward_to_finisher() -> void:
+	var quest := _main.get_node("TrainQuest") as QuestSystem
+	var feed := [""]
+	var on_feed := func(text: String) -> void: feed[0] = text
+	Events.team_feed.connect(on_feed)
+	var spot: QuestSpot = quest._spot("PEGAR O TESTE", _mate.global_position, func() -> void: pass, 0.0)
+	await _tree.process_frame
+	spot.interact(_mate)
+	var host_perks := _host.perks.owned.size()
+	quest._grant_rewards(load("res://data/weapons/conductor_lantern.tres") as WeaponData)
+	Events.team_feed.disconnect(on_feed)
+	check(spot.finished_by == _mate and _mate.perks.owned.size() >= 7 and _mate.inventory.owns(&"conductor_lantern"), "prêmio da missão para quem concluiu: todos os perks e a arma")
+	check(_host.perks.owned.size() == host_perks and not _host.inventory.owns(&"conductor_lantern"), "quem não concluiu fica sem o prêmio")
+	check(feed[0].contains("BETO") and feed[0].contains("concluiu"), "o time vê quem concluiu a missão (%s)" % feed[0])
+	_mate.perks.lose_all()
+	spot.queue_free()
+
+
+## HUD estilo CoD: o seu dinheiro com cifrão em verde; o colega num cartão à direita com nome,
+## dinheiro e vida; o feed de quem fez o quê; a mini mira no PC (e não no toque).
+func _hud_team_and_crosshair() -> void:
+	var hud := _main.get_node("HUD") as Hud
+	var points_label: Label = hud.get(&"_points_label")
+	await _tree.process_frame
+	check(points_label.text.begins_with("$") and points_label.get_theme_color(&"font_color") == Hud.MONEY, "o seu dinheiro com cifrão, em verde (%s)" % points_label.text)
+	_points.add(250, false, _mate)
+	await _tree.create_timer(0.5).timeout
+	var team := hud.find_child("Team", true, false) as Control
+	var labels: Array = team.find_children("*", "Label", true, false) if team else []
+	var texts: Array = labels.map(func(l: Label) -> String: return l.text)
+	check(team != null and texts.has("BETO") and texts.has(Hud.money_text(_points.points_of(_mate))), "colega no canto direito com nome e dinheiro (%s)" % [texts])
+	var screen := hud.get_viewport().get_visible_rect().size
+	check(team != null and team.position.x + team.size.x > screen.x * 0.7, "painel do time encostado na direita")
+	Events.team_feed.emit("BETO abriu a porta")
+	await _tree.process_frame
+	var feed := hud.find_child("Feed", true, false) as Control
+	check(feed != null and feed.find_children("*", "Label", true, false).any(func(l: Label) -> bool: return l.text == "BETO abriu a porta"), "feed: quem fez o quê")
+	var crosshair := hud.find_child("Crosshair", true, false) as Control
+	_host.mouse_aim = true
+	await _tree.process_frame
+	var on_pc := crosshair != null and crosshair.visible
+	var touch_mode: Variant = Save.get_setting("touchMode")
+	Save.set_setting("touchMode", "on")
+	await _tree.process_frame
+	await _tree.process_frame
+	var on_touch := crosshair != null and crosshair.visible
+	Save.set_setting("touchMode", touch_mode)
+	await _tree.process_frame
+	_host.mouse_aim = false
+	await _tree.process_frame
+	check(on_pc and not on_touch, "mini mira na posição do mouse no PC, escondida no toque")
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE

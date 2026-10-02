@@ -90,5 +90,5 @@ func board_text(state: String, time: float, blink_on: bool) -> String:
 		"warning":
 			return "⚠ TREM CHEGANDO" if blink_on else ""
 		"scheduled":
-			return "PRÓXIMO TREM %ds" % ceili(time) if time <= countdown_from else "PRÓXIMO TREM EM BREVE"
+			return Loc.t("PRÓXIMO TREM %ds") % ceili(time) if time <= countdown_from else Loc.t("PRÓXIMO TREM EM BREVE")
 	return "SEM PREVISÃO"

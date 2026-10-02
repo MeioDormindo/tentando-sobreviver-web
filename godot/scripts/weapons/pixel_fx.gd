@@ -76,7 +76,7 @@ static func decal(tree: SceneTree, fx_name: String, at: Vector3, size := 1.0, li
 	sprite.shaded = true
 	sprite.frame = randi() % sprite.hframes
 	SpecialFire.world_root(tree).add_child(sprite)
-	sprite.global_position = Vector3(at.x, 0.015, at.z)
+	sprite.global_position = Vector3(at.x, PixelShapes.GROUND_Y - 0.015, at.z)
 	sprite.rotation.y = randf() * TAU
 	var tween := sprite.create_tween()
 	tween.tween_interval(lifetime)

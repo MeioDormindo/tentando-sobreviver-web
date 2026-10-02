@@ -213,6 +213,18 @@ func pick_floor_point(min_distance: float, max_distance: float, tries: int = 80)
 	return null
 
 
+## Como `pick_floor_point`, mas sempre devolve um ponto: sem nenhum na distância pedida, procura
+## mais perto e, em último caso, o chão aberto junto do jogador em foco (nunca fora do mapa nem
+## numa área fechada, como o antigo "+10 m para o lado").
+func floor_point_near(min_distance: float, max_distance: float) -> Vector3:
+	var point: Variant = pick_floor_point(min_distance, max_distance)
+	if point == null:
+		point = pick_floor_point(2.0, max_distance * 1.5, 120)
+	if point == null and spawn_manager:
+		point = spawn_manager.spot_near(focus().global_position, 0.6)
+	return point if point is Vector3 else focus().global_position
+
+
 ## Zumbis vivos (sem o boss).
 func live_zombies() -> Array[ZombieBase]:
 	var list: Array[ZombieBase] = []
@@ -368,9 +380,10 @@ func _emit_state() -> void:
 		return
 	_state_key = key
 	var info := data.info(primary.id)
-	var event_name := String(info.get("name", primary.id))
+	var names := [String(info.get("name", primary.id))]
 	for extra in others:
-		event_name += " + " + extra
+		names.append_array([" + ", extra])
+	var event_name := Loc.cat(names)
 	Events.world_event_state.emit({"id": primary.id, "name": event_name, "color": info.get("color", Color.WHITE),
 		"remaining": remaining, "total": primary.duration if not showing_train else -1.0})
 

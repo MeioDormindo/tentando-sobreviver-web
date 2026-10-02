@@ -67,7 +67,7 @@ func _strike_warning() -> void:
 func _place(at: Vector3) -> void:
 	var ring := EventFx.disc(WARN_COLOR, float(config.get("radius", 1.6)), 0.25)
 	system.world_root().add_child(ring)
-	ring.global_position = at + Vector3.UP * 0.03
+	ring.global_position = Vector3(at.x, PixelShapes.GROUND_Y, at.z)
 	_falling.append({"node": ring, "at": at, "left": float(config.get("warning_time", 0.9))})
 
 

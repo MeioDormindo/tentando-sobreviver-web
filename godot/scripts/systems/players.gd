@@ -3,6 +3,9 @@ class_name Players
 ## pessoa. Quem precisa "do jogador" pergunta aqui em vez de guardar um nó fixo: o mais perto
 ## de pé (zumbis, chefes), todos (dano em área, bônus) ou o local (câmera, HUD, áudio).
 
+## Cor de cada vaga da sala (como no CoD): nome no painel do time, sobre a cabeça e no minimapa.
+const COLORS: Array[Color] = [Color(0.95, 0.95, 0.9), Color(0.42, 0.72, 1.0), Color(1.0, 0.8, 0.28), Color(0.95, 0.5, 0.82)]
+
 
 static func _tree() -> SceneTree:
 	return Engine.get_main_loop() as SceneTree
@@ -95,3 +98,27 @@ static func victims(fallback: Node3D) -> Array[Node3D]:
 ## cada um contam só o que ele mesmo fez.
 static func is_remote(source: Object) -> bool:
 	return is_instance_valid(source) and source is Player and not (source as Player).is_local
+
+
+## Cor da vaga do jogador (a ordem da sala; fora dela, a ordem de peer).
+static func color_of(player: Player) -> Color:
+	var slot := -1
+	for i in Session.roster.size():
+		if int(Session.roster[i].get("peer", 0)) == player.peer_id:
+			slot = i
+	if slot < 0:
+		slot = maxi(0, all().find(player))
+	return COLORS[slot % COLORS.size()]
+
+
+## Cooperativo: conta ao time quem fez o quê ("ANA abriu a porta"). Só no host (os colegas
+## recebem pela rede); no solo, nada.
+static func feed(text: String) -> void:
+	if coop() and not Net.is_client():
+		Events.team_feed.emit(text)
+
+
+## Nome para os avisos do time (o do jogador, ou "ALGUÉM").
+static func name_of(who: Node) -> String:
+	var player := who as Player
+	return player.player_name if player and player.player_name != "" else "ALGUÉM"

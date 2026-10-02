@@ -1,0 +1,2734 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tentando Sobreviver\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt_BR\n"
+
+msgid "[SEGURE %s] FECHAR A VÁLVULA"
+msgstr "[SEGURE %s] FECHAR A VÁLVULA"
+
+msgid "ZUMBI DOURADO ABATIDO!  +%s"
+msgstr "ZUMBI DOURADO ABATIDO!  +%s"
+
+msgid "O ZUMBI DOURADO ESCAPOU"
+msgstr "O ZUMBI DOURADO ESCAPOU"
+
+msgid "[SEGURE %s] ABRIR SUPRIMENTOS"
+msgstr "[SEGURE %s] ABRIR SUPRIMENTOS"
+
+msgid "SUPRIMENTOS"
+msgstr "SUPRIMENTOS"
+
+msgid "Munição cheia · Armadura · +%s"
+msgstr "Munição cheia · Armadura · +%s"
+
+msgid "ATROPELADOS ×%s"
+msgstr "ATROPELADOS ×%s"
+
+msgid "O PORTAL CAIU — O TRIDENTE DE POSEIDON FICOU NO LUGAR"
+msgstr "O PORTAL CAIU — O TRIDENTE DE POSEIDON FICOU NO LUGAR"
+
+msgid "O PORTÃO DO SUBMUNDO SE FECHOU"
+msgstr "O PORTÃO DO SUBMUNDO SE FECHOU"
+
+msgid "TREM"
+msgstr "TREM"
+
+msgid "[SEGURE %s] CONSERTAR BARRICADA  ·  +%s por tábua"
+msgstr "[SEGURE %s] CONSERTAR BARRICADA  ·  +%s por tábua"
+
+msgid "BÊNÇÃO DE %s"
+msgstr "BÊNÇÃO DE %s"
+
+msgid "BÊNÇÃO DE %s ATIVA"
+msgstr "BÊNÇÃO DE %s ATIVA"
+
+msgid "[%s] BÊNÇÃO DE %s — %s: %s  ·  DE GRAÇA"
+msgstr "[%s] BÊNÇÃO DE %s — %s: %s  ·  DE GRAÇA"
+
+msgid "[%s] BÊNÇÃO DE %s — %s: %s  ·  %s pontos"
+msgstr "[%s] BÊNÇÃO DE %s — %s: %s  ·  %s pontos"
+
+msgid "%s — %s"
+msgstr "%s — %s"
+
+msgid "DISJUNTOR"
+msgstr "DISJUNTOR"
+
+msgid "[SEGURE %s] LIGAR A ENERGIA"
+msgstr "[SEGURE %s] LIGAR A ENERGIA"
+
+msgid "ENERGIA LIGADA"
+msgstr "ENERGIA LIGADA"
+
+msgid "%s ligou a energia"
+msgstr "%s ligou a energia"
+
+msgid "[%s] LER A PLACA"
+msgstr "[%s] LER A PLACA"
+
+msgid "PORTÃO DO TEMPLO — leve Fragmentos de Alma aos 3 altares"
+msgstr "PORTÃO DO TEMPLO — leve Fragmentos de Alma aos 3 altares"
+
+msgid "PORTÃO DO SUBMUNDO — precisa da chave do Minotauro"
+msgstr "PORTÃO DO SUBMUNDO — precisa da chave do Minotauro"
+
+msgid "PASSAGEM SELADA — ative as 12 estátuas dos deuses"
+msgstr "PASSAGEM SELADA — ative as 12 estátuas dos deuses"
+
+msgid "PORTÃO FECHADO"
+msgstr "PORTÃO FECHADO"
+
+msgid "[%s] ABRIR PORTA  ·  %s pontos"
+msgstr "[%s] ABRIR PORTA  ·  %s pontos"
+
+msgid "[%s] ABRIR PORTA — %s  ·  %s pontos"
+msgstr "[%s] ABRIR PORTA — %s  ·  %s pontos"
+
+msgid "[%s] ABRIR PORTA — %s, %s  ·  %s pontos"
+msgstr "[%s] ABRIR PORTA — %s, %s  ·  %s pontos"
+
+msgid "%s abriu %s"
+msgstr "%s abriu %s"
+
+msgid "ARMADILHA"
+msgstr "ARMADILHA"
+
+msgid "ARMADILHA ELÉTRICA LIGADA — %ss"
+msgstr "ARMADILHA ELÉTRICA LIGADA — %ss"
+
+msgid "ARMADILHA RECARREGANDO — %ss"
+msgstr "ARMADILHA RECARREGANDO — %ss"
+
+msgid "[%s] LIGAR ARMADILHA ELÉTRICA  ·  %s pontos"
+msgstr "[%s] LIGAR ARMADILHA ELÉTRICA  ·  %s pontos"
+
+msgid "RELIGAR A ENERGIA"
+msgstr "RELIGAR A ENERGIA"
+
+msgid "PAINEL DE ENERGIA — FUNCIONANDO"
+msgstr "PAINEL DE ENERGIA — FUNCIONANDO"
+
+msgid "ENERGIA"
+msgstr "ENERGIA"
+
+msgid "DESLIGAR O ALARME"
+msgstr "DESLIGAR O ALARME"
+
+msgid "ALARME DE EMERGÊNCIA — DESLIGADO"
+msgstr "ALARME DE EMERGÊNCIA — DESLIGADO"
+
+msgid "ALARME"
+msgstr "ALARME"
+
+msgid "[SEGURE %s] %s  ·  %s pontos"
+msgstr "[SEGURE %s] %s  ·  %s pontos"
+
+msgid "ZEUS"
+msgstr "ZEUS"
+
+msgid "HERA"
+msgstr "HERA"
+
+msgid "POSEIDON"
+msgstr "POSEIDON"
+
+msgid "DEMÉTER"
+msgstr "DEMÉTER"
+
+msgid "ATENA"
+msgstr "ATENA"
+
+msgid "APOLO"
+msgstr "APOLO"
+
+msgid "ÁRTEMIS"
+msgstr "ÁRTEMIS"
+
+msgid "ARES"
+msgstr "ARES"
+
+msgid "AFRODITE"
+msgstr "AFRODITE"
+
+msgid "HEFESTO"
+msgstr "HEFESTO"
+
+msgid "HERMES"
+msgstr "HERMES"
+
+msgid "DIONÍSIO"
+msgstr "DIONÍSIO"
+
+msgid "[SEGURE %s] ACENDER A ESTÁTUA DE %s"
+msgstr "[SEGURE %s] ACENDER A ESTÁTUA DE %s"
+
+msgid "ESTÁTUA DE %s ACESA (%s/%s)"
+msgstr "ESTÁTUA DE %s ACESA (%s/%s)"
+
+msgid "OS DOZE DO OLIMPO"
+msgstr "OS DOZE DO OLIMPO"
+
+msgid "O templo reage... uma passagem se abriu na Floresta."
+msgstr "O templo reage... uma passagem se abriu na Floresta."
+
+msgid "SINTONIZAR O RÁDIO"
+msgstr "SINTONIZAR O RÁDIO"
+
+msgid "RÁDIO — CHIADO..."
+msgstr "RÁDIO — CHIADO..."
+
+msgid "[SEGURE %s] %s"
+msgstr "[SEGURE %s] %s"
+
+msgid "[%s] MYSTERY BOX  ·  %s pontos"
+msgstr "[%s] MYSTERY BOX  ·  %s pontos"
+
+msgid "MYSTERY BOX  ·  arma de %s"
+msgstr "MYSTERY BOX  ·  arma de %s"
+
+msgid "[%s] PEGAR %s (MUNIÇÃO)"
+msgstr "[%s] PEGAR %s (MUNIÇÃO)"
+
+msgid "[%s] PEGAR %s"
+msgstr "[%s] PEGAR %s"
+
+msgid "um colega"
+msgstr "um colega"
+
+msgid "A MYSTERY BOX MUDOU DE LUGAR — %s"
+msgstr "A MYSTERY BOX MUDOU DE LUGAR — %s"
+
+msgid "A MYSTERY BOX MUDOU DE LUGAR"
+msgstr "A MYSTERY BOX MUDOU DE LUGAR"
+
+msgid "SEM ENERGIA — ligue o disjuntor"
+msgstr "SEM ENERGIA — ligue o disjuntor"
+
+msgid "%s  ·  JÁ ATIVO"
+msgstr "%s  ·  JÁ ATIVO"
+
+msgid "%s  ·  ESGOTADO NESTA PARTIDA"
+msgstr "%s  ·  ESGOTADO NESTA PARTIDA"
+
+msgid "[%s] %s — %s  ·  %s pontos"
+msgstr "[%s] %s — %s  ·  %s pontos"
+
+msgid "[SEGURE %s] PEGAR %s  (%s%%)"
+msgstr "[SEGURE %s] PEGAR %s  (%s%%)"
+
+msgid "%s — presente de Artemis"
+msgstr "%s — presente de Artemis"
+
+msgid "[%s] PEGAR O URSINHO"
+msgstr "[%s] PEGAR O URSINHO"
+
+msgid "URSINHO %s/%s"
+msgstr "URSINHO %s/%s"
+
+msgid "SEGREDO DOS URSINHOS"
+msgstr "SEGREDO DOS URSINHOS"
+
+msgid "Você achou todos! Segredo salvo."
+msgstr "Você achou todos! Segredo salvo."
+
+msgid "Todos os ursinhos de novo!"
+msgstr "Todos os ursinhos de novo!"
+
+msgid "PAINEL DO TREM — DISPONÍVEL EM %ss"
+msgstr "PAINEL DO TREM — DISPONÍVEL EM %ss"
+
+msgid "[%s] CHAMAR O TREM  ·  %s pontos"
+msgstr "[%s] CHAMAR O TREM  ·  %s pontos"
+
+msgid "O TREM NÃO PODE VIR AGORA"
+msgstr "O TREM NÃO PODE VIR AGORA"
+
+msgid "MUNIÇÃO"
+msgstr "MUNIÇÃO"
+
+msgid "  ·  SEGURE %s: "
+msgstr "  ·  SEGURE %s: "
+
+msgid "MUNIÇÃO CHEIA"
+msgstr "MUNIÇÃO CHEIA"
+
+msgid "[%s] MUNIÇÃO %s  ·  %s pontos"
+msgstr "[%s] MUNIÇÃO %s  ·  %s pontos"
+
+msgid "%s  ·  MUNIÇÃO CHEIA"
+msgstr "%s  ·  MUNIÇÃO CHEIA"
+
+msgid "[%s] COMPRAR %s  ·  %s pontos"
+msgstr "[%s] COMPRAR %s  ·  %s pontos"
+
+msgid "[%s] PEGAR %s  ·  %ss"
+msgstr "[%s] PEGAR %s  ·  %ss"
+
+msgid "[%s] PEGAR %s (troca por %s)  ·  %ss"
+msgstr "[%s] PEGAR %s (troca por %s)  ·  %ss"
+
+msgid "%s  ·  NÍVEL MÁXIMO"
+msgstr "%s  ·  NÍVEL MÁXIMO"
+
+msgid "Mk II"
+msgstr "Mk II"
+
+msgid "Mk III"
+msgstr "Mk III"
+
+msgid "[%s] WEAPON LAB: %s → %s  ·  %s pontos"
+msgstr "[%s] WEAPON LAB: %s → %s  ·  %s pontos"
+
+msgid "TREM PASSANDO"
+msgstr "TREM PASSANDO"
+
+msgid "⚠ TREM CHEGANDO"
+msgstr "⚠ TREM CHEGANDO"
+
+msgid "PRÓXIMO TREM %ds"
+msgstr "PRÓXIMO TREM %ds"
+
+msgid "PRÓXIMO TREM EM BREVE"
+msgstr "PRÓXIMO TREM EM BREVE"
+
+msgid "SEM PREVISÃO"
+msgstr "SEM PREVISÃO"
+
+msgid "Não foi possível conectar à sala"
+msgstr "Não foi possível conectar à sala"
+
+msgid "O host saiu"
+msgstr "O host saiu"
+
+msgid "Tempo esgotado ao entrar na sala"
+msgstr "Tempo esgotado ao entrar na sala"
+
+msgid "Criando sala..."
+msgstr "Criando sala..."
+
+msgid "Não foi possível criar a sala (%s)"
+msgstr "Não foi possível criar a sala (%s)"
+
+msgid "Procurando a sala %s..."
+msgstr "Procurando a sala %s..."
+
+msgid "Sem conexão com o servidor (%s)"
+msgstr "Sem conexão com o servidor (%s)"
+
+msgid "Sala %s não encontrada"
+msgstr "Sala %s não encontrada"
+
+msgid "Não foi possível abrir a sala (%s)"
+msgstr "Não foi possível abrir a sala (%s)"
+
+msgid "Sala %s aberta"
+msgstr "Sala %s aberta"
+
+msgid "Não foi possível entrar (%s)"
+msgstr "Não foi possível entrar (%s)"
+
+msgid "Conectando à sala %s..."
+msgstr "Conectando à sala %s..."
+
+msgid "Na sala %s"
+msgstr "Na sala %s"
+
+msgid "JOGADOR"
+msgstr "JOGADOR"
+
+msgid "sem conexão"
+msgstr "sem conexão"
+
+msgid "A partida já começou"
+msgstr "A partida já começou"
+
+msgid "Sala cheia (%s jogadores)"
+msgstr "Sala cheia (%s jogadores)"
+
+msgid "Entrada recusada"
+msgstr "Entrada recusada"
+
+msgid "sem sessão"
+msgstr "sem sessão"
+
+msgid "Usuário: 3 a 16 letras minúsculas, números ou _"
+msgstr "Usuário: 3 a 16 letras minúsculas, números ou _"
+
+msgid "Senha: mínimo de %d caracteres"
+msgstr "Senha: mínimo de %d caracteres"
+
+msgid "Senha: máximo de %d caracteres"
+msgstr "Senha: máximo de %d caracteres"
+
+msgid "Não foi possível entrar — tente de novo"
+msgstr "Não foi possível entrar — tente de novo"
+
+msgid "Sem conexão"
+msgstr "Sem conexão"
+
+msgid "Sessão expirada — entre de novo"
+msgstr "Sessão expirada — entre de novo"
+
+msgid "Falha ao ler da nuvem"
+msgstr "Falha ao ler da nuvem"
+
+msgid "Contas online indisponíveis"
+msgstr "Contas online indisponíveis"
+
+msgid "Falha ao salvar na nuvem"
+msgstr "Falha ao salvar na nuvem"
+
+msgid "Sem conexão com o servidor"
+msgstr "Sem conexão com o servidor"
+
+msgid "Muitas tentativas — aguarde um pouco"
+msgstr "Muitas tentativas — aguarde um pouco"
+
+msgid "Esse usuário já existe"
+msgstr "Esse usuário já existe"
+
+msgid "Usuário ou senha incorretos"
+msgstr "Usuário ou senha incorretos"
+
+msgid "Senha fraca demais"
+msgstr "Senha fraca demais"
+
+msgid "Usuário inválido"
+msgstr "Usuário inválido"
+
+msgid "Não foi possível concluir — tente de novo"
+msgstr "Não foi possível concluir — tente de novo"
+
+msgid "HACKER DETECTADO"
+msgstr "HACKER DETECTADO"
+
+msgid "SOLO"
+msgstr "SOLO"
+
+msgid "DUPLA"
+msgstr "DUPLA"
+
+msgid "TRIO"
+msgstr "TRIO"
+
+msgid "QUARTETO"
+msgstr "QUARTETO"
+
+msgid "ranking global indisponível"
+msgstr "ranking global indisponível"
+
+msgid "mapa ainda não aceito no ranking global"
+msgstr "mapa ainda não aceito no ranking global"
+
+msgid "pontuação recusada"
+msgstr "pontuação recusada"
+
+msgid "resposta incompleta"
+msgstr "resposta incompleta"
+
+msgid "não conectou ao servidor"
+msgstr "não conectou ao servidor"
+
+msgid "endereço não encontrado"
+msgstr "endereço não encontrado"
+
+msgid "conexão caiu"
+msgstr "conexão caiu"
+
+msgid "falha de TLS"
+msgstr "falha de TLS"
+
+msgid "sem resposta"
+msgstr "sem resposta"
+
+msgid "resposta grande demais"
+msgstr "resposta grande demais"
+
+msgid "falha ao descompactar a resposta"
+msgstr "falha ao descompactar a resposta"
+
+msgid "requisição falhou"
+msgstr "requisição falhou"
+
+msgid "redirecionamentos demais"
+msgstr "redirecionamentos demais"
+
+msgid "tempo esgotado"
+msgstr "tempo esgotado"
+
+msgid "requisição recusada (%s)"
+msgstr "requisição recusada (%s)"
+
+msgid "erro de rede %d"
+msgstr "erro de rede %d"
+
+msgid "ALIADO"
+msgstr "ALIADO"
+
+msgid "Fúria do Trovão"
+msgstr "Fúria do Trovão"
+
+msgid "12% dos tiros soltam um raio"
+msgstr "12% dos tiros soltam um raio"
+
+msgid "Sede de Sangue"
+msgstr "Sede de Sangue"
+
+msgid "abates seguidos aumentam o dano"
+msgstr "abates seguidos aumentam o dano"
+
+msgid "mira precisa e golpes críticos"
+msgstr "mira precisa e golpes críticos"
+
+msgid "anda, recarrega e interage mais rápido"
+msgstr "anda, recarrega e interage mais rápido"
+
+msgid "Maré"
+msgstr "Maré"
+
+msgid "os tiros empurram os zumbis"
+msgstr "os tiros empurram os zumbis"
+
+msgid "HADES"
+msgstr "HADES"
+
+msgid "Pacto dos Mortos"
+msgstr "Pacto dos Mortos"
+
+msgid "abatidos voltam como aliados"
+msgstr "abatidos voltam como aliados"
+
+msgid "HADES: um espírito aliado se levanta para lutar"
+msgstr "HADES: um espírito aliado se levanta para lutar"
+
+msgid "PETRIFICADO! Não olhe para a Górgona"
+msgstr "PETRIFICADO! Não olhe para a Górgona"
+
+msgid "QUICK REVIVE!"
+msgstr "QUICK REVIVE!"
+
+msgid "CAÍDO! Um colega pode te reviver"
+msgstr "CAÍDO! Um colega pode te reviver"
+
+msgid "%s caiu!"
+msgstr "%s caiu!"
+
+msgid "CAÍDO · %ss para um colega te reviver"
+msgstr "CAÍDO · %ss para um colega te reviver"
+
+msgid "VOCÊ MORREU · volta no próximo round"
+msgstr "VOCÊ MORREU · volta no próximo round"
+
+msgid "%s levantou %s"
+msgstr "%s levantou %s"
+
+msgid "[SEGURE %s] REVIVER %s"
+msgstr "[SEGURE %s] REVIVER %s"
+
+msgid "O COLEGA"
+msgstr "O COLEGA"
+
+msgid "[%s] %s"
+msgstr "[%s] %s"
+
+msgid "CADEADO ABERTO"
+msgstr "CADEADO ABERTO"
+
+msgid "%s concluiu a missão: todos os perks + %s"
+msgstr "%s concluiu a missão: todos os perks + %s"
+
+msgid "%s concluiu a missão: todos os perks"
+msgstr "%s concluiu a missão: todos os perks"
+
+msgid "Ligue a energia (disjuntor no Necrotério)"
+msgstr "Ligue a energia (disjuntor no Necrotério)"
+
+msgid "Derrote o Paciente Zero enfurecido (round %s)"
+msgstr "Derrote o Paciente Zero enfurecido (round %s)"
+
+msgid "Aplique o soro no Paciente Zero"
+msgstr "Aplique o soro no Paciente Zero"
+
+msgid "O SORO"
+msgstr "O SORO"
+
+msgid "Componentes do soro %s/3 — UTI · Farmácia · cartão do Blindado"
+msgstr "Componentes do soro %s/3 — UTI · Farmácia · cartão do Blindado"
+
+msgid "PEGAR AS AMOSTRAS"
+msgstr "PEGAR AS AMOSTRAS"
+
+msgid "AMOSTRAS COLETADAS"
+msgstr "AMOSTRAS COLETADAS"
+
+msgid "PEGAR O REAGENTE"
+msgstr "PEGAR O REAGENTE"
+
+msgid "REAGENTE COLETADO"
+msgstr "REAGENTE COLETADO"
+
+msgid "ARMÁRIO TRANCADO — ATIRE NO CADEADO"
+msgstr "ARMÁRIO TRANCADO — ATIRE NO CADEADO"
+
+msgid "ABRIR A GAVETA COM O CARTÃO"
+msgstr "ABRIR A GAVETA COM O CARTÃO"
+
+msgid "CATALISADOR COLETADO"
+msgstr "CATALISADOR COLETADO"
+
+msgid "GAVETA TRANCADA — PRECISA DO CARTÃO DE ACESSO"
+msgstr "GAVETA TRANCADA — PRECISA DO CARTÃO DE ACESSO"
+
+msgid "PEGAR O CARTÃO DE ACESSO"
+msgstr "PEGAR O CARTÃO DE ACESSO"
+
+msgid "CARTÃO DE ACESSO — abra a gaveta do Necrotério"
+msgstr "CARTÃO DE ACESSO — abra a gaveta do Necrotério"
+
+msgid "UM SEGURANÇA BLINDADO ESTÁ COM O CARTÃO DE ACESSO"
+msgstr "UM SEGURANÇA BLINDADO ESTÁ COM O CARTÃO DE ACESSO"
+
+msgid "Leve os componentes à centrífuga do Laboratório"
+msgstr "Leve os componentes à centrífuga do Laboratório"
+
+msgid "CENTRÍFUGA SOB ATAQUE! Afaste os zumbis (%ss)"
+msgstr "CENTRÍFUGA SOB ATAQUE! Afaste os zumbis (%ss)"
+
+msgid "Defenda a centrífuga: %ss"
+msgstr "Defenda a centrífuga: %ss"
+
+msgid "COLOCAR OS COMPONENTES NA CENTRÍFUGA"
+msgstr "COLOCAR OS COMPONENTES NA CENTRÍFUGA"
+
+msgid "A CENTRÍFUGA ESTÁ GIRANDO — DEFENDA!"
+msgstr "A CENTRÍFUGA ESTÁ GIRANDO — DEFENDA!"
+
+msgid "SORO PRONTO! O Paciente Zero sentiu o cheiro..."
+msgstr "SORO PRONTO! O Paciente Zero sentiu o cheiro..."
+
+msgid "APLICAR O SORO"
+msgstr "APLICAR O SORO"
+
+msgid "VOCÊ CUROU O PACIENTE ZERO"
+msgstr "VOCÊ CUROU O PACIENTE ZERO"
+
+msgid "Todos os perks + Tornado. A luta continua..."
+msgstr "Todos os perks + Tornado. A luta continua..."
+
+msgid "Ligue o gerador dos arqueólogos (Necrópole)"
+msgstr "Ligue o gerador dos arqueólogos (Necrópole)"
+
+msgid "Leve os Fragmentos aos altares do Portão do Templo (%s/3)"
+msgstr "Leve os Fragmentos aos altares do Portão do Templo (%s/3)"
+
+msgid "O guardião despertou: derrote o Minotauro (round %s)"
+msgstr "O guardião despertou: derrote o Minotauro (round %s)"
+
+msgid "Pegue a chave do Submundo onde o Minotauro caiu"
+msgstr "Pegue a chave do Submundo onde o Minotauro caiu"
+
+msgid "Abra o Portão do Submundo (sul das Ruínas)"
+msgstr "Abra o Portão do Submundo (sul das Ruínas)"
+
+msgid "O Cérbero guarda o Submundo: derrote-o (round %s)"
+msgstr "O Cérbero guarda o Submundo: derrote-o (round %s)"
+
+msgid "Sele o portão no altar da Arena Final"
+msgstr "Sele o portão no altar da Arena Final"
+
+msgid "O PORTÃO DO SUBMUNDO"
+msgstr "O PORTÃO DO SUBMUNDO"
+
+msgid "Fragmentos de Alma %s/3 — Necrópole · Floresta · um Esqueleto os carrega"
+msgstr "Fragmentos de Alma %s/3 — Necrópole · Floresta · um Esqueleto os carrega"
+
+msgid "PEGAR O FRAGMENTO DE ALMA"
+msgstr "PEGAR O FRAGMENTO DE ALMA"
+
+msgid "FRAGMENTO DE ALMA (%s/3)"
+msgstr "FRAGMENTO DE ALMA (%s/3)"
+
+msgid "UM ESQUELETO CARREGA UM FRAGMENTO DE ALMA"
+msgstr "UM ESQUELETO CARREGA UM FRAGMENTO DE ALMA"
+
+msgid "DEPOSITAR UM FRAGMENTO NO ALTAR"
+msgstr "DEPOSITAR UM FRAGMENTO NO ALTAR"
+
+msgid "ALTAR ACESO (%s/3)"
+msgstr "ALTAR ACESO (%s/3)"
+
+msgid "O PORTÃO DO TEMPLO SE ABRIU... ALGO ACORDOU NO LABIRINTO"
+msgstr "O PORTÃO DO TEMPLO SE ABRIU... ALGO ACORDOU NO LABIRINTO"
+
+msgid "PEGAR A CHAVE DO SUBMUNDO"
+msgstr "PEGAR A CHAVE DO SUBMUNDO"
+
+msgid "CHAVE DO SUBMUNDO — abra o portão ao sul das Ruínas"
+msgstr "CHAVE DO SUBMUNDO — abra o portão ao sul das Ruínas"
+
+msgid "ABRIR O PORTÃO DO SUBMUNDO"
+msgstr "ABRIR O PORTÃO DO SUBMUNDO"
+
+msgid "SELAR O PORTÃO DO SUBMUNDO"
+msgstr "SELAR O PORTÃO DO SUBMUNDO"
+
+msgid "O PORTÃO DO SUBMUNDO FOI SELADO"
+msgstr "O PORTÃO DO SUBMUNDO FOI SELADO"
+
+msgid "Todos os perks + Raio de Zeus. Mas algo lá embaixo ainda respira..."
+msgstr "Todos os perks + Raio de Zeus. Mas algo lá embaixo ainda respira..."
+
+msgid "O ÚLTIMO TREM"
+msgstr "O ÚLTIMO TREM"
+
+msgid "Ligue a energia (disjuntor na Área Técnica)"
+msgstr "Ligue a energia (disjuntor na Área Técnica)"
+
+msgid "Derrote o Condutor enfurecido (round %s)"
+msgstr "Derrote o Condutor enfurecido (round %s)"
+
+msgid "Pegue a Lanterna do Condutor"
+msgstr "Pegue a Lanterna do Condutor"
+
+msgid "Peças do sinal %s/3 — fusível (Manutenção) · chave (Bilheteria) · manivela (Blindado)"
+msgstr "Peças do sinal %s/3 — fusível (Manutenção) · chave (Bilheteria) · manivela (Blindado)"
+
+msgid "PEGAR O FUSÍVEL DO SINAL"
+msgstr "PEGAR O FUSÍVEL DO SINAL"
+
+msgid "FUSÍVEL COLETADO"
+msgstr "FUSÍVEL COLETADO"
+
+msgid "PEGAR A CHAVE DO PAINEL"
+msgstr "PEGAR A CHAVE DO PAINEL"
+
+msgid "CHAVE DO PAINEL COLETADA"
+msgstr "CHAVE DO PAINEL COLETADA"
+
+msgid "COFRE TRANCADO — ATIRE NO CADEADO"
+msgstr "COFRE TRANCADO — ATIRE NO CADEADO"
+
+msgid "UM BLINDADO ESTÁ COM A MANIVELA DO SINAL"
+msgstr "UM BLINDADO ESTÁ COM A MANIVELA DO SINAL"
+
+msgid "PEGAR A MANIVELA DO SINAL"
+msgstr "PEGAR A MANIVELA DO SINAL"
+
+msgid "MANIVELA COLETADA"
+msgstr "MANIVELA COLETADA"
+
+msgid "Leve as peças ao sinal da Plataforma e conserte"
+msgstr "Leve as peças ao sinal da Plataforma e conserte"
+
+msgid "SINAL SOB ATAQUE! Afaste os zumbis (%ss)"
+msgstr "SINAL SOB ATAQUE! Afaste os zumbis (%ss)"
+
+msgid "Segure o sinal até o trem passar: %ss"
+msgstr "Segure o sinal até o trem passar: %ss"
+
+msgid "CONSERTAR O SINAL"
+msgstr "CONSERTAR O SINAL"
+
+msgid "O SINAL ESTÁ LIGADO — SEGURE ATÉ O TREM PASSAR!"
+msgstr "O SINAL ESTÁ LIGADO — SEGURE ATÉ O TREM PASSAR!"
+
+msgid "O TREM PASSOU! O Condutor saiu dos túneis..."
+msgstr "O TREM PASSOU! O Condutor saiu dos túneis..."
+
+msgid "PEGAR A LANTERNA DO CONDUTOR"
+msgstr "PEGAR A LANTERNA DO CONDUTOR"
+
+msgid "O ÚLTIMO TREM PASSOU"
+msgstr "O ÚLTIMO TREM PASSOU"
+
+msgid "Todos os perks + Lanterna do Condutor. A estação é sua..."
+msgstr "Todos os perks + Lanterna do Condutor. A estação é sua..."
+
+msgid "ANDAR PARA CIMA"
+msgstr "ANDAR PARA CIMA"
+
+msgid "ANDAR PARA BAIXO"
+msgstr "ANDAR PARA BAIXO"
+
+msgid "ANDAR PARA A ESQUERDA"
+msgstr "ANDAR PARA A ESQUERDA"
+
+msgid "ANDAR PARA A DIREITA"
+msgstr "ANDAR PARA A DIREITA"
+
+msgid "ATIRAR"
+msgstr "ATIRAR"
+
+msgid "RECARREGAR"
+msgstr "RECARREGAR"
+
+msgid "USAR / COMPRAR"
+msgstr "USAR / COMPRAR"
+
+msgid "TROCAR DE ARMA"
+msgstr "TROCAR DE ARMA"
+
+msgid "ARMA 1"
+msgstr "ARMA 1"
+
+msgid "ARMA 2"
+msgstr "ARMA 2"
+
+msgid "FACA"
+msgstr "FACA"
+
+msgid "PULAR"
+msgstr "PULAR"
+
+msgid "MAPA GRANDE"
+msgstr "MAPA GRANDE"
+
+msgid "LANTERNA"
+msgstr "LANTERNA"
+
+msgid "PAUSA"
+msgstr "PAUSA"
+
+msgid "MOUSE %d"
+msgstr "MOUSE %d"
+
+msgid "BOTÃO %d"
+msgstr "BOTÃO %d"
+
+msgid "EIXO %d"
+msgstr "EIXO %d"
+
+msgid "ESPAÇO"
+msgstr "ESPAÇO"
+
+msgid "MOUSE ESQ."
+msgstr "MOUSE ESQ."
+
+msgid "MOUSE DIR."
+msgstr "MOUSE DIR."
+
+msgid "MOUSE MEIO"
+msgstr "MOUSE MEIO"
+
+msgid "RODA ↑"
+msgstr "RODA ↑"
+
+msgid "RODA ↓"
+msgstr "RODA ↓"
+
+msgid "AUTOMÁTICO (%s)"
+msgstr "AUTOMÁTICO (%s)"
+
+msgid " Mk III"
+msgstr " Mk III"
+
+msgid " Mk II"
+msgstr " Mk II"
+
+msgid "ALGUÉM"
+msgstr "ALGUÉM"
+
+msgid "Barricadas consertadas (%s tábuas) · +%s"
+msgstr "Barricadas consertadas (%s tábuas) · +%s"
+
+msgid "%s pegou %s"
+msgstr "%s pegou %s"
+
+msgid "Perk grátis: %s"
+msgstr "Perk grátis: %s"
+
+msgid "Fúria: dano x%s"
+msgstr "Fúria: dano x%s"
+
+msgid "FIRE SALE! MYSTERY BOX A %s · +%s CAIXAS NO MAPA"
+msgstr "FIRE SALE! MYSTERY BOX A %s · +%s CAIXAS NO MAPA"
+
+msgid "SOBREVIVENTE"
+msgstr "SOBREVIVENTE"
+
+msgid "MULTI x%s"
+msgstr "MULTI x%s"
+
+msgid "VOCÊ"
+msgstr "VOCÊ"
+
+msgid "BOT %d"
+msgstr "BOT %d"
+
+msgid "CONTA"
+msgstr "CONTA"
+
+msgid "Contas online indisponíveis nesta versão."
+msgstr "Contas online indisponíveis nesta versão."
+
+msgid "VOLTAR"
+msgstr "VOLTAR"
+
+msgid "LOGADO COMO %s"
+msgstr "LOGADO COMO %s"
+
+msgid "SINCRONIZAR AGORA"
+msgstr "SINCRONIZAR AGORA"
+
+msgid "SAIR DA CONTA"
+msgstr "SAIR DA CONTA"
+
+msgid "USUÁRIO"
+msgstr "USUÁRIO"
+
+msgid "SENHA"
+msgstr "SENHA"
+
+msgid "Sincronizando o progresso..."
+msgstr "Sincronizando o progresso..."
+
+msgid "ENTRAR"
+msgstr "ENTRAR"
+
+msgid "CRIAR CONTA"
+msgstr "CRIAR CONTA"
+
+msgid "Entre para salvar o progresso na nuvem e jogar em qualquer aparelho (inclusive no navegador).\nNão há recuperação por e-mail: guarde bem a sua senha."
+msgstr "Entre para salvar o progresso na nuvem e jogar em qualquer aparelho (inclusive no navegador).\nNão há recuperação por e-mail: guarde bem a sua senha."
+
+msgid "Progresso salvo na nuvem · %s"
+msgstr "Progresso salvo na nuvem · %s"
+
+msgid "O progresso é salvo na nuvem automaticamente"
+msgstr "O progresso é salvo na nuvem automaticamente"
+
+msgid "CONQUISTAS"
+msgstr "CONQUISTAS"
+
+msgid "%d / %d LIBERADAS"
+msgstr "%d / %d LIBERADAS"
+
+msgid "Segredo — continue explorando"
+msgstr "Segredo — continue explorando"
+
+msgid "ESTATÍSTICAS"
+msgstr "ESTATÍSTICAS"
+
+msgid "%s — melhor round %d · recorde %d pts · %d abates"
+msgstr "%s — melhor round %d · recorde %d pts · %d abates"
+
+msgid "Partidas %d · Abates %d · Faca %d · Headshots %d · Bosses %d · Tempo %dh%02d"
+msgstr "Partidas %d · Abates %d · Faca %d · Headshots %d · Bosses %d · Tempo %dh%02d"
+
+msgid "COMUM"
+msgstr "COMUM"
+
+msgid "INCOMUM"
+msgstr "INCOMUM"
+
+msgid "RARA"
+msgstr "RARA"
+
+msgid "ÉPICA"
+msgstr "ÉPICA"
+
+msgid "LENDÁRIA"
+msgstr "LENDÁRIA"
+
+msgid "Prêmio da missão O Último Trem (Terminal) — nunca sai na Mystery Box"
+msgstr "Prêmio da missão O Último Trem (Terminal) — nunca sai na Mystery Box"
+
+msgid "Prêmio da missão O Portão do Submundo (Templo) — nunca sai na Mystery Box"
+msgstr "Prêmio da missão O Portão do Submundo (Templo) — nunca sai na Mystery Box"
+
+msgid "Santuário do Olimpo: ative as 12 estátuas dos deuses no Templo"
+msgstr "Santuário do Olimpo: ative as 12 estátuas dos deuses no Templo"
+
+msgid "Evento Portão do Submundo (Templo): destrua o portal"
+msgstr "Evento Portão do Submundo (Templo): destrua o portal"
+
+msgid "DANO"
+msgstr "DANO"
+
+msgid "CADÊNCIA"
+msgstr "CADÊNCIA"
+
+msgid "PENTE"
+msgstr "PENTE"
+
+msgid "RESERVA"
+msgstr "RESERVA"
+
+msgid "RECARGA"
+msgstr "RECARGA"
+
+msgid "ALCANCE"
+msgstr "ALCANCE"
+
+msgid "ARMAS"
+msgstr "ARMAS"
+
+msgid "AUTOMÁTICA"
+msgstr "AUTOMÁTICA"
+
+msgid "SEMIAUTOMÁTICA"
+msgstr "SEMIAUTOMÁTICA"
+
+msgid "Elemento %s (%d, segure E na parede): %s"
+msgstr "Elemento %s (%d, segure E na parede): %s"
+
+msgid "Weapon Lab: Mk II %d · Mk III %d%s"
+msgstr "Weapon Lab: Mk II %d · Mk III %d%s"
+
+msgid "  (vira %s)"
+msgstr "  (vira %s)"
+
+msgid "VER MK II"
+msgstr "VER MK II"
+
+msgid "VER MK III"
+msgstr "VER MK III"
+
+msgid "VER NORMAL"
+msgstr "VER NORMAL"
+
+msgid "%.1f s"
+msgstr "%.1f s"
+
+msgid "%.0f m"
+msgstr "%.0f m"
+
+msgid "Arma inicial do %s"
+msgstr "Arma inicial do %s"
+
+msgid "Parede: %d · %s · %s"
+msgstr "Parede: %d · %s · %s"
+
+msgid "Mystery Box só no %s"
+msgstr "Mystery Box só no %s"
+
+msgid "Mystery Box (em todos os mapas)"
+msgstr "Mystery Box (em todos os mapas)"
+
+msgid "também na Mystery Box"
+msgstr "também na Mystery Box"
+
+msgid "Granada explode no impacto: %d de dano em área (raio %.1f m). Não fere você."
+msgstr "Granada explode no impacto: %d de dano em área (raio %.1f m). Não fere você."
+
+msgid "Jato contínuo que incendeia: %d de dano por segundo durante %.1f s."
+msgstr "Jato contínuo que incendeia: %d de dano por segundo durante %.1f s."
+
+msgid "Raio instantâneo que salta entre até %d zumbis e os atordoa."
+msgstr "Raio instantâneo que salta entre até %d zumbis e os atordoa."
+
+msgid "Esfera que atravessa a horda e explode numa descarga elétrica (%d em área)."
+msgstr "Esfera que atravessa a horda e explode numa descarga elétrica (%d em área)."
+
+msgid "Rajada de vento em cone (%d°, alcance %.0f m) que arremessa e destrói a horda à frente."
+msgstr "Rajada de vento em cone (%d°, alcance %.0f m) que arremessa e destrói a horda à frente."
+
+msgid "Atravessa até %d zumbis por tiro."
+msgstr "Atravessa até %d zumbis por tiro."
+
+msgid "PERSONAGEM"
+msgstr "PERSONAGEM"
+
+msgid "Libere os visuais com as conquistas."
+msgstr "Libere os visuais com as conquistas."
+
+msgid "EM USO"
+msgstr "EM USO"
+
+msgid "USAR"
+msgstr "USAR"
+
+msgid "TRANCADO"
+msgstr "TRANCADO"
+
+msgid "JOGAR"
+msgstr "JOGAR"
+
+msgid "Trancado — libere com a conquista \"%s\": %s"
+msgstr "Trancado — libere com a conquista \"%s\": %s"
+
+msgid "Aparece quando você enfrentar esse inimigo."
+msgstr "Aparece quando você enfrentar esse inimigo."
+
+msgid "Aparece quando você enfrentar esse chefe."
+msgstr "Aparece quando você enfrentar esse chefe."
+
+msgid "Chegue perto da máquina desse perk."
+msgstr "Chegue perto da máquina desse perk."
+
+msgid "Pegue esse power-up numa partida."
+msgstr "Pegue esse power-up numa partida."
+
+msgid "Compre esse elemento numa parede de arma."
+msgstr "Compre esse elemento numa parede de arma."
+
+msgid "Receba essa bênção num altar do Templo."
+msgstr "Receba essa bênção num altar do Templo."
+
+msgid "Aparece quando esse evento acontecer numa partida."
+msgstr "Aparece quando esse evento acontecer numa partida."
+
+msgid "Descubra jogando."
+msgstr "Descubra jogando."
+
+msgid "GLOSSÁRIO"
+msgstr "GLOSSÁRIO"
+
+msgid "DESCOBERTOS %d DE %d"
+msgstr "DESCOBERTOS %d DE %d"
+
+msgid "Ainda não encontrado."
+msgstr "Ainda não encontrado."
+
+msgid "Onde: %s"
+msgstr "Onde: %s"
+
+msgid "VIDA %d · VELOCIDADE %.1f m/s · DANO %d · %d PONTOS"
+msgstr "VIDA %d · VELOCIDADE %.1f m/s · DANO %d · %d PONTOS"
+
+msgid "VIDA %d · VELOCIDADE %.1f m/s · GOLPE %d"
+msgstr "VIDA %d · VELOCIDADE %.1f m/s · GOLPE %d"
+
+msgid " · ATÉ %d POR PARTIDA"
+msgstr " · ATÉ %d POR PARTIDA"
+
+msgid "%d PONTOS · %s%s"
+msgstr "%d PONTOS · %s%s"
+
+msgid "FUNCIONA SEM ENERGIA"
+msgstr "FUNCIONA SEM ENERGIA"
+
+msgid "PRECISA DE ENERGIA"
+msgstr "PRECISA DE ENERGIA"
+
+msgid "DURA %d s"
+msgstr "DURA %d s"
+
+msgid "EFEITO NA HORA"
+msgstr "EFEITO NA HORA"
+
+msgid "%d PONTOS NA PAREDE DA ARMA"
+msgstr "%d PONTOS NA PAREDE DA ARMA"
+
+msgid "%d PONTOS NO ALTAR"
+msgstr "%d PONTOS NO ALTAR"
+
+msgid "A PARTIR DO ROUND %d"
+msgstr "A PARTIR DO ROUND %d"
+
+msgid "DICA: %s"
+msgstr "DICA: %s"
+
+msgid "ZUMBIS RESTANTES  %d"
+msgstr "ZUMBIS RESTANTES  %d"
+
+msgid "ROUND %d COMPLETO"
+msgstr "ROUND %d COMPLETO"
+
+msgid "ÁREA LIBERADA: %s"
+msgstr "ÁREA LIBERADA: %s"
+
+msgid "CONQUISTA DESBLOQUEADA: %s"
+msgstr "CONQUISTA DESBLOQUEADA: %s"
+
+msgid "SCORE %d"
+msgstr "SCORE %d"
+
+msgid "%s DESBLOQUEADO!"
+msgstr "%s DESBLOQUEADO!"
+
+msgid "%s SE APROXIMA"
+msgstr "%s SE APROXIMA"
+
+msgid "FASE %d"
+msgstr "FASE %d"
+
+msgid "%s DERROTADO  +%d"
+msgstr "%s DERROTADO  +%d"
+
+msgid "MAX AMMO"
+msgstr "MAX AMMO"
+
+msgid "◆ %s  %d/%d"
+msgstr "◆ %s  %d/%d"
+
+msgid "%d FPS"
+msgstr "%d FPS"
+
+msgid "ROUND"
+msgstr "ROUND"
+
+msgid "SCORE 0"
+msgstr "SCORE 0"
+
+msgid "VIDA"
+msgstr "VIDA"
+
+msgid "GAME OVER"
+msgstr "GAME OVER"
+
+msgid "ROUND %d"
+msgstr "ROUND %d"
+
+msgid "%s  ·  FASE %d"
+msgstr "%s  ·  FASE %d"
+
+msgid "RODADA DOS CÃES"
+msgstr "RODADA DOS CÃES"
+
+msgid "VIDA  %d / %d"
+msgstr "VIDA  %d / %d"
+
+msgid "Fúria"
+msgstr "Fúria"
+
+msgid "RECARREGANDO"
+msgstr "RECARREGANDO"
+
+msgid "ZUMBIS ABATIDOS"
+msgstr "ZUMBIS ABATIDOS"
+
+msgid "HEADSHOTS"
+msgstr "HEADSHOTS"
+
+msgid "PONTOS GANHOS"
+msgstr "PONTOS GANHOS"
+
+msgid "TEMPO"
+msgstr "TEMPO"
+
+msgid "BOSSES"
+msgstr "BOSSES"
+
+msgid "DANO CAUSADO"
+msgstr "DANO CAUSADO"
+
+msgid "DISPAROS / ACERTOS"
+msgstr "DISPAROS / ACERTOS"
+
+msgid "PRECISÃO"
+msgstr "PRECISÃO"
+
+msgid "ABATES NA FACA"
+msgstr "ABATES NA FACA"
+
+msgid "NOVO RECORDE!"
+msgstr "NOVO RECORDE!"
+
+msgid "RECORDE: %d PONTOS · ROUND %d"
+msgstr "RECORDE: %d PONTOS · ROUND %d"
+
+msgid "TIME: %s"
+msgstr "TIME: %s"
+
+msgid "PARTIDA INVALIDADA — NÃO VALE SAVE NEM RANKING"
+msgstr "PARTIDA INVALIDADA — NÃO VALE SAVE NEM RANKING"
+
+msgid "JOGAR NOVAMENTE"
+msgstr "JOGAR NOVAMENTE"
+
+msgid "VOLTAR À SALA"
+msgstr "VOLTAR À SALA"
+
+msgid "RANKING"
+msgstr "RANKING"
+
+msgid "MENU"
+msgstr "MENU"
+
+msgid "PARTIDA INVALIDADA"
+msgstr "PARTIDA INVALIDADA"
+
+msgid "%dº LUGAR NO RANKING %s DE %s!"
+msgstr "%dº LUGAR NO RANKING %s DE %s!"
+
+msgid "ENVIANDO O TIME AO RANKING GLOBAL..."
+msgstr "ENVIANDO O TIME AO RANKING GLOBAL..."
+
+msgid "RANKING GLOBAL: %s"
+msgstr "RANKING GLOBAL: %s"
+
+msgid "TIME ENVIADO AO RANKING GLOBAL (%s)!"
+msgstr "TIME ENVIADO AO RANKING GLOBAL (%s)!"
+
+msgid "ENTROU NO TOP! SEU NOME:"
+msgstr "ENTROU NO TOP! SEU NOME:"
+
+msgid "SEU NOME PARA O RANKING GLOBAL:"
+msgstr "SEU NOME PARA O RANKING GLOBAL:"
+
+msgid "%dº LUGAR NO RANKING DE %s!"
+msgstr "%dº LUGAR NO RANKING DE %s!"
+
+msgid "ENVIANDO AO RANKING GLOBAL..."
+msgstr "ENVIANDO AO RANKING GLOBAL..."
+
+msgid "ENVIADO AO RANKING GLOBAL DA TEMPORADA!"
+msgstr "ENVIADO AO RANKING GLOBAL DA TEMPORADA!"
+
+msgid "SALVAR"
+msgstr "SALVAR"
+
+msgid "LANTERNA %s%s"
+msgstr "LANTERNA %s%s"
+
+msgid "LIGADA"
+msgstr "LIGADA"
+
+msgid "DESLIGADA"
+msgstr "DESLIGADA"
+
+msgid "ESTÁ ESCURO — [%s] LIGA A LANTERNA"
+msgstr "ESTÁ ESCURO — [%s] LIGA A LANTERNA"
+
+msgid "CAÍDO %ds"
+msgstr "CAÍDO %ds"
+
+msgid "FORA"
+msgstr "FORA"
+
+msgid "%d ms"
+msgstr "%d ms"
+
+msgid "COLEGA"
+msgstr "COLEGA"
+
+msgid "%s %ds"
+msgstr "%s %ds"
+
+msgid "JOGAR EM GRUPO"
+msgstr "JOGAR EM GRUPO"
+
+msgid "Até 4 jogadores pela internet. Crie uma sala e passe o código, ou entre com o código de um amigo."
+msgstr "Até 4 jogadores pela internet. Crie uma sala e passe o código, ou entre com o código de um amigo."
+
+msgid "SEU NOME"
+msgstr "SEU NOME"
+
+msgid "NOME"
+msgstr "NOME"
+
+msgid "CRIAR SALA"
+msgstr "CRIAR SALA"
+
+msgid "CÓDIGO DA SALA"
+msgstr "CÓDIGO DA SALA"
+
+msgid "ENTRAR NA SALA"
+msgstr "ENTRAR NA SALA"
+
+msgid "REDE LOCAL (MESMO WI-FI) — IP DO HOST"
+msgstr "REDE LOCAL (MESMO WI-FI) — IP DO HOST"
+
+msgid "CRIAR SALA NA REDE LOCAL"
+msgstr "CRIAR SALA NA REDE LOCAL"
+
+msgid "Convite para a sala %s: digite seu nome e toque ENTRAR NA SALA"
+msgstr "Convite para a sala %s: digite seu nome e toque ENTRAR NA SALA"
+
+msgid "O código tem 5 letras"
+msgstr "O código tem 5 letras"
+
+msgid "Procurando a sala..."
+msgstr "Procurando a sala..."
+
+msgid "Na rede local: os amigos entram com o IP  %s"
+msgstr "Na rede local: os amigos entram com o IP  %s"
+
+msgid "COPIAR CÓDIGO"
+msgstr "COPIAR CÓDIGO"
+
+msgid "Código %s copiado!"
+msgstr "Código %s copiado!"
+
+msgid "COPIAR CONVITE"
+msgstr "COPIAR CONVITE"
+
+msgid "Convite copiado! Quem abrir o link entra direto na sala."
+msgstr "Convite copiado! Quem abrir o link entra direto na sala."
+
+msgid "MAPA: %s  →"
+msgstr "MAPA: %s  →"
+
+msgid "MAPA: %s"
+msgstr "MAPA: %s"
+
+msgid "  (VOCÊ)"
+msgstr "  (VOCÊ)"
+
+msgid "HOST"
+msgstr "HOST"
+
+msgid "PRONTO"
+msgstr "PRONTO"
+
+msgid "ESPERANDO"
+msgstr "ESPERANDO"
+
+msgid "· vaga livre"
+msgstr "· vaga livre"
+
+msgid "COMEÇAR"
+msgstr "COMEÇAR"
+
+msgid "Começa quando todos estiverem prontos."
+msgstr "Começa quando todos estiverem prontos."
+
+msgid "Esperando os amigos entrarem com o código."
+msgstr "Esperando os amigos entrarem com o código."
+
+msgid "CANCELAR PRONTO"
+msgstr "CANCELAR PRONTO"
+
+msgid "SAIR DA SALA"
+msgstr "SAIR DA SALA"
+
+msgid "SEU VISUAL\n%s"
+msgstr "SEU VISUAL\n%s"
+
+msgid "Bora jogar Tentando Sobreviver comigo! Sala %s: %s"
+msgstr "Bora jogar Tentando Sobreviver comigo! Sala %s: %s"
+
+msgid "— ms"
+msgstr "— ms"
+
+msgid "%s mover · mouse mirar · clique atirar · %s recarregar · %s trocar arma · %s faca · %s usar · %s pausa"
+msgstr "%s mover · mouse mirar · clique atirar · %s recarregar · %s trocar arma · %s faca · %s usar · %s pausa"
+
+msgid "Analógico: mover · ATIRAR: mira sozinho no zumbi mais perto e atira · FACA: golpe corpo a corpo"
+msgstr "Analógico: mover · ATIRAR: mira sozinho no zumbi mais perto e atira · FACA: golpe corpo a corpo"
+
+msgid "TENTANDO\nSOBREVIVER"
+msgstr "TENTANDO\nSOBREVIVER"
+
+msgid "CONTA: %s"
+msgstr "CONTA: %s"
+
+msgid "CONTA / SALVAR NA NUVEM"
+msgstr "CONTA / SALVAR NA NUVEM"
+
+msgid "CONFIGURAÇÕES"
+msgstr "CONFIGURAÇÕES"
+
+msgid "APOIE O PROJETO (PIX)"
+msgstr "APOIE O PROJETO (PIX)"
+
+msgid "SAIR"
+msgstr "SAIR"
+
+msgid "MODO CABEÇÃO LIBERADO! (liga/desliga em Configurações)"
+msgstr "MODO CABEÇÃO LIBERADO! (liga/desliga em Configurações)"
+
+msgid "MODO CABEÇÃO LIGADO!"
+msgstr "MODO CABEÇÃO LIGADO!"
+
+msgid "O Último Trem"
+msgstr "O Último Trem"
+
+msgid "O Soro do Dr. Almeida"
+msgstr "O Soro do Dr. Almeida"
+
+msgid "O Portão do Submundo"
+msgstr "O Portão do Submundo"
+
+msgid "ESCOLHA O MAPA"
+msgstr "ESCOLHA O MAPA"
+
+msgid "Recorde: %d pontos · round %d"
+msgstr "Recorde: %d pontos · round %d"
+
+msgid "Sem recorde ainda"
+msgstr "Sem recorde ainda"
+
+msgid "1º no ranking: %s · %d pts"
+msgstr "1º no ranking: %s · %d pts"
+
+msgid "✓ MISSÃO CONCLUÍDA: %s"
+msgstr "✓ MISSÃO CONCLUÍDA: %s"
+
+msgid "◆ MISSÃO: %s"
+msgstr "◆ MISSÃO: %s"
+
+msgid "BLOQUEADO — conclua a missão do %s"
+msgstr "BLOQUEADO — conclua a missão do %s"
+
+msgid " ou do "
+msgstr " ou do "
+
+msgid "BLOQUEADO — derrote o boss do round %d no %s"
+msgstr "BLOQUEADO — derrote o boss do round %d no %s"
+
+msgid "MAPA"
+msgstr "MAPA"
+
+msgid "PAUSADO"
+msgstr "PAUSADO"
+
+msgid "A partida continua para o time."
+msgstr "A partida continua para o time."
+
+msgid "CONTINUAR"
+msgstr "CONTINUAR"
+
+msgid "REINICIAR"
+msgstr "REINICIAR"
+
+msgid "SAIR DA PARTIDA"
+msgstr "SAIR DA PARTIDA"
+
+msgid "%s para continuar  ·  %s: mapa grande"
+msgstr "%s para continuar  ·  %s: mapa grande"
+
+msgid "TIME"
+msgstr "TIME"
+
+msgid "PONTOS"
+msgstr "PONTOS"
+
+msgid "Nenhuma partida ainda — jogue para entrar no ranking!"
+msgstr "Nenhuma partida ainda — jogue para entrar no ranking!"
+
+msgid "Nenhuma partida em %s ainda — chame os amigos em JOGAR EM GRUPO!"
+msgstr "Nenhuma partida em %s ainda — chame os amigos em JOGAR EM GRUPO!"
+
+msgid "Mapa bloqueado"
+msgstr "Mapa bloqueado"
+
+msgid "Ranking global indisponível"
+msgstr "Ranking global indisponível"
+
+msgid "Ranking global indisponível (sem conexão)"
+msgstr "Ranking global indisponível (sem conexão)"
+
+msgid "Ninguém pontuou nesta temporada ainda — seja o primeiro!"
+msgstr "Ninguém pontuou nesta temporada ainda — seja o primeiro!"
+
+msgid "TEMPORADA TERMINA EM %d %s%s"
+msgstr "TEMPORADA TERMINA EM %d %s%s"
+
+msgid "DIA"
+msgstr "DIA"
+
+msgid "DIAS"
+msgstr "DIAS"
+
+msgid " · VOCÊ: %dº"
+msgstr " · VOCÊ: %dº"
+
+msgid "JOGO"
+msgstr "JOGO"
+
+msgid "VÍDEO"
+msgstr "VÍDEO"
+
+msgid "ÁUDIO"
+msgstr "ÁUDIO"
+
+msgid "CONTROLES"
+msgstr "CONTROLES"
+
+msgid "PEQUENO"
+msgstr "PEQUENO"
+
+msgid "MÉDIO"
+msgstr "MÉDIO"
+
+msgid "GRANDE"
+msgstr "GRANDE"
+
+msgid "AUTO"
+msgstr "AUTO"
+
+msgid "LIGADO"
+msgstr "LIGADO"
+
+msgid "DESLIGADO"
+msgstr "DESLIGADO"
+
+msgid "JANELA"
+msgstr "JANELA"
+
+msgid "TELA CHEIA"
+msgstr "TELA CHEIA"
+
+msgid "TELA CHEIA EXCLUSIVA"
+msgstr "TELA CHEIA EXCLUSIVA"
+
+msgid "ADAPTATIVO"
+msgstr "ADAPTATIVO"
+
+msgid "Q / E: trocar de aba"
+msgstr "Q / E: trocar de aba"
+
+msgid "IDIOMA"
+msgstr "IDIOMA"
+
+msgid "NOME NO RANKING"
+msgstr "NOME NO RANKING"
+
+msgid "TREMOR DE TELA"
+msgstr "TREMOR DE TELA"
+
+msgid "SANGUE"
+msgstr "SANGUE"
+
+msgid "MIRA NO MOUSE"
+msgstr "MIRA NO MOUSE"
+
+msgid "MINIMAPA"
+msgstr "MINIMAPA"
+
+msgid "TAMANHO DO MINIMAPA"
+msgstr "TAMANHO DO MINIMAPA"
+
+msgid "MODO CABEÇÃO"
+msgstr "MODO CABEÇÃO"
+
+msgid "MODO DE TELA"
+msgstr "MODO DE TELA"
+
+msgid "RESOLUÇÃO"
+msgstr "RESOLUÇÃO"
+
+msgid "VSYNC"
+msgstr "VSYNC"
+
+msgid "LIMITE DE FPS"
+msgstr "LIMITE DE FPS"
+
+msgid "SEM LIMITE"
+msgstr "SEM LIMITE"
+
+msgid "ESCALA DA INTERFACE"
+msgstr "ESCALA DA INTERFACE"
+
+msgid "BRILHO"
+msgstr "BRILHO"
+
+msgid "SOMBRAS"
+msgstr "SOMBRAS"
+
+msgid "MOSTRAR FPS"
+msgstr "MOSTRAR FPS"
+
+msgid "VOLUME GERAL"
+msgstr "VOLUME GERAL"
+
+msgid "MÚSICA"
+msgstr "MÚSICA"
+
+msgid "EFEITOS"
+msgstr "EFEITOS"
+
+msgid "INTERFACE"
+msgstr "INTERFACE"
+
+msgid "VOZES"
+msgstr "VOZES"
+
+msgid "SOM"
+msgstr "SOM"
+
+msgid "CONTROLES DE TOQUE"
+msgstr "CONTROLES DE TOQUE"
+
+msgid "AÇÃO"
+msgstr "AÇÃO"
+
+msgid "TECLADO / MOUSE"
+msgstr "TECLADO / MOUSE"
+
+msgid "CONTROLE"
+msgstr "CONTROLE"
+
+msgid "Clique numa tecla para trocar. ESC cancela."
+msgstr "Clique numa tecla para trocar. ESC cancela."
+
+msgid "RESTAURAR PADRÕES"
+msgstr "RESTAURAR PADRÕES"
+
+msgid "Aperte uma tecla para %s… (ESC cancela)"
+msgstr "Aperte uma tecla para %s… (ESC cancela)"
+
+msgid "Aperte um botão do controle para %s… (ESC cancela)"
+msgstr "Aperte um botão do controle para %s… (ESC cancela)"
+
+msgid "CONFIRMAR: APAGAR TUDO?"
+msgstr "CONFIRMAR: APAGAR TUDO?"
+
+msgid "APAGAR PROGRESSO"
+msgstr "APAGAR PROGRESSO"
+
+msgid "Desenvolvido por %s\n%s"
+msgstr "Desenvolvido por %s\n%s"
+
+msgid "APOIE O PROJETO"
+msgstr "APOIE O PROJETO"
+
+msgid "O Tentando Sobreviver é gratuito e sem anúncios. Se você curtiu, um PIX de qualquer valor ajuda a manter o projeto vivo — totalmente opcional."
+msgstr "O Tentando Sobreviver é gratuito e sem anúncios. Se você curtiu, um PIX de qualquer valor ajuda a manter o projeto vivo — totalmente opcional."
+
+msgid "PIX para %s"
+msgstr "PIX para %s"
+
+msgid "Chave aleatória: %s"
+msgstr "Chave aleatória: %s"
+
+msgid "COPIAR PIX COPIA E COLA"
+msgstr "COPIAR PIX COPIA E COLA"
+
+msgid "PIX copia e cola copiado! Cole no app do seu banco."
+msgstr "PIX copia e cola copiado! Cole no app do seu banco."
+
+msgid "COPIAR CHAVE"
+msgstr "COPIAR CHAVE"
+
+msgid "Chave PIX copiada!"
+msgstr "Chave PIX copiada!"
+
+msgid "Ideias, bugs ou parcerias: %s"
+msgstr "Ideias, bugs ou parcerias: %s"
+
+msgid "Desenvolvido por %s"
+msgstr "Desenvolvido por %s"
+
+msgid "RECARR."
+msgstr "RECARR."
+
+msgid "TROCAR"
+msgstr "TROCAR"
+
+msgid "Cérbero"
+msgstr "Cérbero"
+
+msgid "The Conductor"
+msgstr "The Conductor"
+
+msgid "A Entidade do Submundo"
+msgstr "A Entidade do Submundo"
+
+msgid "O templo não era uma prisão. Era uma porta... e ela está se abrindo."
+msgstr "O templo não era uma prisão. Era uma porta... e ela está se abrindo."
+
+msgid "O Minotauro"
+msgstr "O Minotauro"
+
+msgid "Paciente Zero"
+msgstr "Paciente Zero"
+
+msgid "Primeiro Sangue"
+msgstr "Primeiro Sangue"
+
+msgid "Abata o primeiro zumbi"
+msgstr "Abata o primeiro zumbi"
+
+msgid "Sobrevivente"
+msgstr "Sobrevivente"
+
+msgid "Chegue à wave 10"
+msgstr "Chegue à wave 10"
+
+msgid "Veterano"
+msgstr "Veterano"
+
+msgid "Chegue à wave 20"
+msgstr "Chegue à wave 20"
+
+msgid "Energia!"
+msgstr "Energia!"
+
+msgid "Ligue o disjuntor principal"
+msgstr "Ligue o disjuntor principal"
+
+msgid "Maquinista"
+msgstr "Maquinista"
+
+msgid "Derrote o boss The Conductor"
+msgstr "Derrote o boss The Conductor"
+
+msgid "Paciente Curado"
+msgstr "Paciente Curado"
+
+msgid "Derrote o Paciente Zero"
+msgstr "Derrote o Paciente Zero"
+
+msgid "O Soro"
+msgstr "O Soro"
+
+msgid "Complete a missão do Dr. Almeida"
+msgstr "Complete a missão do Dr. Almeida"
+
+msgid "Adestrador"
+msgstr "Adestrador"
+
+msgid "Vença uma rodada de cães sem levar dano"
+msgstr "Vença uma rodada de cães sem levar dano"
+
+msgid "Atropelador"
+msgstr "Atropelador"
+
+msgid "Atropele 10 zumbis com uma passagem do trem"
+msgstr "Atropele 10 zumbis com uma passagem do trem"
+
+msgid "Colecionador"
+msgstr "Colecionador"
+
+msgid "Tenha todos os perks na mesma partida"
+msgstr "Tenha todos os perks na mesma partida"
+
+msgid "Olho do Furacão"
+msgstr "Olho do Furacão"
+
+msgid "Transforme o Canhão de Vento no Tornado"
+msgstr "Transforme o Canhão de Vento no Tornado"
+
+msgid "Liquidação"
+msgstr "Liquidação"
+
+msgid "Use a Mystery Box durante um Fire Sale"
+msgstr "Use a Mystery Box durante um Fire Sale"
+
+msgid "Açougueiro"
+msgstr "Açougueiro"
+
+msgid "Abata 1.000 zumbis"
+msgstr "Abata 1.000 zumbis"
+
+msgid "Faca na Caveira"
+msgstr "Faca na Caveira"
+
+msgid "Abata 50 zumbis na faca"
+msgstr "Abata 50 zumbis na faca"
+
+msgid "Mira de Ouro"
+msgstr "Mira de Ouro"
+
+msgid "Acerte 100 headshots fatais"
+msgstr "Acerte 100 headshots fatais"
+
+msgid "Ursinhos"
+msgstr "Ursinhos"
+
+msgid "Encontre todos os ursinhos escondidos"
+msgstr "Encontre todos os ursinhos escondidos"
+
+msgid "Cabeção"
+msgstr "Cabeção"
+
+msgid "Descubra o código secreto do menu"
+msgstr "Descubra o código secreto do menu"
+
+msgid "Complete a missão do Terminal e pegue a Lanterna do Condutor"
+msgstr "Complete a missão do Terminal e pegue a Lanterna do Condutor"
+
+msgid "Fio de Ariadne"
+msgstr "Fio de Ariadne"
+
+msgid "Derrote o Minotauro"
+msgstr "Derrote o Minotauro"
+
+msgid "Os Doze do Olimpo"
+msgstr "Os Doze do Olimpo"
+
+msgid "Ative as 12 estátuas dos deuses no Templo"
+msgstr "Ative as 12 estátuas dos deuses no Templo"
+
+msgid "Complete a missão do Templo e pegue o Raio de Zeus"
+msgstr "Complete a missão do Templo e pegue o Raio de Zeus"
+
+msgid "Guardião dos Três"
+msgstr "Guardião dos Três"
+
+msgid "Derrote o Cérbero"
+msgstr "Derrote o Cérbero"
+
+msgid "A Porta"
+msgstr "A Porta"
+
+msgid "Derrote a Entidade do Submundo"
+msgstr "Derrote a Entidade do Submundo"
+
+msgid "PARTIDA INVALIDADA — não vale save nem ranking"
+msgstr "PARTIDA INVALIDADA — não vale save nem ranking"
+
+msgid "LUZ"
+msgstr "LUZ"
+
+msgid "Clarão que cega: atordoa os zumbis e causa +50% de dano no boss."
+msgstr "Clarão que cega: atordoa os zumbis e causa +50% de dano no boss."
+
+msgid "SOMBRA"
+msgstr "SOMBRA"
+
+msgid "Rouba vida: cada acerto recupera parte do dano causado."
+msgstr "Rouba vida: cada acerto recupera parte do dano causado."
+
+msgid "GELO"
+msgstr "GELO"
+
+msgid "Deixa os zumbis lentos e às vezes os congela."
+msgstr "Deixa os zumbis lentos e às vezes os congela."
+
+msgid "RAIO"
+msgstr "RAIO"
+
+msgid "A eletricidade salta para 2 zumbis próximos."
+msgstr "A eletricidade salta para 2 zumbis próximos."
+
+msgid "FOGO"
+msgstr "FOGO"
+
+msgid "Incendeia: dano contínuo por alguns segundos."
+msgstr "Incendeia: dano contínuo por alguns segundos."
+
+msgid "EXPLOSIVO"
+msgstr "EXPLOSIVO"
+
+msgid "Cada tiro que acerta estoura numa pequena explosão."
+msgstr "Cada tiro que acerta estoura numa pequena explosão."
+
+msgid "Terminal Central"
+msgstr "Terminal Central"
+
+msgid "Estação de trem abandonada: hall, plataforma, lojas, túneis e manutenção."
+msgstr "Estação de trem abandonada: hall, plataforma, lojas, túneis e manutenção."
+
+msgid "Hospital Santa Luzia"
+msgstr "Hospital Santa Luzia"
+
+msgid "Onde o vírus nasceu: recepção, UTI, centro cirúrgico, necrotério e o laboratório no subsolo."
+msgstr "Onde o vírus nasceu: recepção, UTI, centro cirúrgico, necrotério e o laboratório no subsolo."
+
+msgid "Templo dos Mortos"
+msgstr "Templo dos Mortos"
+
+msgid "Ruínas gregas, uma necrópole, a floresta de Artemis e o portão para o Submundo."
+msgstr "Ruínas gregas, uma necrópole, a floresta de Artemis e o portão para o Submundo."
+
+msgid "Max Ammo"
+msgstr "Max Ammo"
+
+msgid "Double Cash"
+msgstr "Double Cash"
+
+msgid "Instant Kill"
+msgstr "Instant Kill"
+
+msgid "Nuke"
+msgstr "Nuke"
+
+msgid "Full Heal"
+msgstr "Full Heal"
+
+msgid "Armor"
+msgstr "Armor"
+
+msgid "Speed Boost"
+msgstr "Speed Boost"
+
+msgid "Carpenter"
+msgstr "Carpenter"
+
+msgid "Golden Drop"
+msgstr "Golden Drop"
+
+msgid "Fire Sale"
+msgstr "Fire Sale"
+
+msgid "O SORO DO DR. ALMEIDA"
+msgstr "O SORO DO DR. ALMEIDA"
+
+msgid "Enfermeiro"
+msgstr "Enfermeiro"
+
+msgid "Agente"
+msgstr "Agente"
+
+msgid "Guarda da Estação"
+msgstr "Guarda da Estação"
+
+msgid "Paciente"
+msgstr "Paciente"
+
+msgid "Paciente da UTI"
+msgstr "Paciente da UTI"
+
+msgid "Cobaia do Laboratório"
+msgstr "Cobaia do Laboratório"
+
+msgid "Arqueóloga"
+msgstr "Arqueóloga"
+
+msgid "Caçadora do Labirinto"
+msgstr "Caçadora do Labirinto"
+
+msgid "Sacerdotisa do Olimpo"
+msgstr "Sacerdotisa do Olimpo"
+
+msgid "Andarilha do Submundo"
+msgstr "Andarilha do Submundo"
+
+msgid "TENTANDO SOBREVIVER — feito com Godot + GDScript. Arte e sons 100% gerados por código."
+msgstr "TENTANDO SOBREVIVER — feito com Godot + GDScript. Arte e sons 100% gerados por código."
+
+msgid "APAGÃO"
+msgstr "APAGÃO"
+
+msgid "As luzes caíram — use a lanterna"
+msgstr "As luzes caíram — use a lanterna"
+
+msgid "ALARME DE EMERGÊNCIA"
+msgstr "ALARME DE EMERGÊNCIA"
+
+msgid "O barulho atrai mais zumbis"
+msgstr "O barulho atrai mais zumbis"
+
+msgid "Saia dos trilhos da plataforma!"
+msgstr "Saia dos trilhos da plataforma!"
+
+msgid "HORDA"
+msgstr "HORDA"
+
+msgid "Muito mais zumbis nesta wave"
+msgstr "Muito mais zumbis nesta wave"
+
+msgid "Uma caixa caiu do céu — segure E para abrir"
+msgstr "Uma caixa caiu do céu — segure E para abrir"
+
+msgid "VAZAMENTO DE GÁS"
+msgstr "VAZAMENTO DE GÁS"
+
+msgid "Fique longe da nuvem verde"
+msgstr "Fique longe da nuvem verde"
+
+msgid "ZUMBI DOURADO"
+msgstr "ZUMBI DOURADO"
+
+msgid "Mate-o antes que fuja: dinheiro e Golden Drop!"
+msgstr "Mate-o antes que fuja: dinheiro e Golden Drop!"
+
+msgid "LUA DE SANGUE"
+msgstr "LUA DE SANGUE"
+
+msgid "Zumbis mais rápidos — dinheiro e pontos em dobro"
+msgstr "Zumbis mais rápidos — dinheiro e pontos em dobro"
+
+msgid "DESABAMENTO"
+msgstr "DESABAMENTO"
+
+msgid "O teto está caindo: saia dos círculos vermelhos!"
+msgstr "O teto está caindo: saia dos círculos vermelhos!"
+
+msgid "NEBLINA"
+msgstr "NEBLINA"
+
+msgid "Você mal enxerga — atenção aos gemidos"
+msgstr "Você mal enxerga — atenção aos gemidos"
+
+msgid "IRA DE ZEUS"
+msgstr "IRA DE ZEUS"
+
+msgid "Raios caem do céu: saia dos círculos azuis!"
+msgstr "Raios caem do céu: saia dos círculos azuis!"
+
+msgid "LEVANTE DOS MORTOS"
+msgstr "LEVANTE DOS MORTOS"
+
+msgid "Os sarcófagos se abrem — esqueletos saindo!"
+msgstr "Os sarcófagos se abrem — esqueletos saindo!"
+
+msgid "CAÇADA DE ARTEMIS"
+msgstr "CAÇADA DE ARTEMIS"
+
+msgid "Sátiros e lobos infernais estão caçando você"
+msgstr "Sátiros e lobos infernais estão caçando você"
+
+msgid "PORTÃO DO SUBMUNDO"
+msgstr "PORTÃO DO SUBMUNDO"
+
+msgid "Um portal solta criaturas — destrua-o a tiros"
+msgstr "Um portal solta criaturas — destrua-o a tiros"
+
+msgid "SANGUE DOS DEUSES"
+msgstr "SANGUE DOS DEUSES"
+
+msgid "Neste round as bênçãos dos altares são de graça"
+msgstr "Neste round as bênçãos dos altares são de graça"
+
+msgid "CONTENÇÃO ROMPIDA"
+msgstr "CONTENÇÃO ROMPIDA"
+
+msgid "Zumbis entrando pelos pontos de isolamento!"
+msgstr "Zumbis entrando pelos pontos de isolamento!"
+
+msgid "Adrenaline"
+msgstr "Adrenaline"
+
+msgid "Regenera vida 2,5x mais rápido e mais cedo"
+msgstr "Regenera vida 2,5x mais rápido e mais cedo"
+
+msgid "Deadeye"
+msgstr "Deadeye"
+
+msgid "Headshots causam +100% de dano"
+msgstr "Headshots causam +100% de dano"
+
+msgid "Fortify"
+msgstr "Fortify"
+
+msgid "+50 de vida máxima"
+msgstr "+50 de vida máxima"
+
+msgid "Overload"
+msgstr "Overload"
+
+msgid "+25% de dano das armas"
+msgstr "+25% de dano das armas"
+
+msgid "Quick Hands"
+msgstr "Quick Hands"
+
+msgid "Recarga 40% mais rápida"
+msgstr "Recarga 40% mais rápida"
+
+msgid "Quick Revive"
+msgstr "Quick Revive"
+
+msgid "Ao cair, levanta sozinho (gasta o perk; até 3 por partida)"
+msgstr "Ao cair, levanta sozinho (gasta o perk; até 3 por partida)"
+
+msgid "Sprint+"
+msgstr "Sprint+"
+
+msgid "+20% de velocidade"
+msgstr "+20% de velocidade"
+
+msgid "AK"
+msgstr "AK"
+
+msgid "Arc Gun"
+msgstr "Arc Gun"
+
+msgid "Arco de Artemis"
+msgstr "Arco de Artemis"
+
+msgid "Caçada Lunar"
+msgstr "Caçada Lunar"
+
+msgid "Barrett .50"
+msgstr "Barrett .50"
+
+msgid "Beretta 92"
+msgstr "Beretta 92"
+
+msgid "Bren"
+msgstr "Bren"
+
+msgid "Combat Shotgun"
+msgstr "Combat Shotgun"
+
+msgid "Lanterna do Condutor"
+msgstr "Lanterna do Condutor"
+
+msgid "Farol do Condutor"
+msgstr "Farol do Condutor"
+
+msgid "Energy Cannon"
+msgstr "Energy Cannon"
+
+msgid "Flamethrower"
+msgstr "Flamethrower"
+
+msgid "Glock 17"
+msgstr "Glock 17"
+
+msgid "Grenade Launcher"
+msgstr "Grenade Launcher"
+
+msgid "Lança de Hefesto"
+msgstr "Lança de Hefesto"
+
+msgid "Forja de Hefesto"
+msgstr "Forja de Hefesto"
+
+msgid "Lee-Enfield"
+msgstr "Lee-Enfield"
+
+msgid "Lupara"
+msgstr "Lupara"
+
+msgid "M1911"
+msgstr "M1911"
+
+msgid "M4"
+msgstr "M4"
+
+msgid "Magnum .44"
+msgstr "Magnum .44"
+
+msgid "Makarov PM"
+msgstr "Makarov PM"
+
+msgid "Mauser C96"
+msgstr "Mauser C96"
+
+msgid "Minigun"
+msgstr "Minigun"
+
+msgid "MP5"
+msgstr "MP5"
+
+msgid "Pistola de Pregos"
+msgstr "Pistola de Pregos"
+
+msgid "P90"
+msgstr "P90"
+
+msgid "Tridente de Poseidon"
+msgstr "Tridente de Poseidon"
+
+msgid "Maremoto"
+msgstr "Maremoto"
+
+msgid "Pump Shotgun"
+msgstr "Pump Shotgun"
+
+msgid "Rail Weapon"
+msgstr "Rail Weapon"
+
+msgid "RPK"
+msgstr "RPK"
+
+msgid "Cano Serrado"
+msgstr "Cano Serrado"
+
+msgid "StG 44"
+msgstr "StG 44"
+
+msgid "Thompson M1928"
+msgstr "Thompson M1928"
+
+msgid "Uzi Dupla"
+msgstr "Uzi Dupla"
+
+msgid "Vector"
+msgstr "Vector"
+
+msgid "Winchester 1887"
+msgstr "Winchester 1887"
+
+msgid "Canhão de Vento"
+msgstr "Canhão de Vento"
+
+msgid "Tornado"
+msgstr "Tornado"
+
+msgid "Raio de Zeus"
+msgstr "Raio de Zeus"
+
+msgid "Ira do Olimpo"
+msgstr "Ira do Olimpo"
+
+msgid "Blindado"
+msgstr "Blindado"
+
+msgid "Rastejante"
+msgstr "Rastejante"
+
+msgid "Exploder"
+msgstr "Exploder"
+
+msgid "Górgona"
+msgstr "Górgona"
+
+msgid "Harpia"
+msgstr "Harpia"
+
+msgid "Lobo Infernal"
+msgstr "Lobo Infernal"
+
+msgid "Hoplita Morto"
+msgstr "Hoplita Morto"
+
+msgid "Hoplita com Escudo"
+msgstr "Hoplita com Escudo"
+
+msgid "Cão Infernal"
+msgstr "Cão Infernal"
+
+msgid "Runner"
+msgstr "Runner"
+
+msgid "Sátiro"
+msgstr "Sátiro"
+
+msgid "Esqueleto Guerreiro"
+msgstr "Esqueleto Guerreiro"
+
+msgid "Esqueleto Arqueiro"
+msgstr "Esqueleto Arqueiro"
+
+msgid "Cuspidor"
+msgstr "Cuspidor"
+
+msgid "Tank"
+msgstr "Tank"
+
+msgid "Walker"
+msgstr "Walker"
+
+msgid "INIMIGOS"
+msgstr "INIMIGOS"
+
+msgid "ZUMBIS"
+msgstr "ZUMBIS"
+
+msgid "O zumbi mais comum: lento, mas nunca vem sozinho. Entra arrancando as tábuas das janelas e cerca quem fica parado. No Hospital é o paciente de camisola; no Templo, o arqueólogo da escavação."
+msgstr "O zumbi mais comum: lento, mas nunca vem sozinho. Entra arrancando as tábuas das janelas e cerca quem fica parado. No Hospital é o paciente de camisola; no Templo, o arqueólogo da escavação."
+
+msgid "Rápido e com pouca vida: chega antes dos outros e pune quem fica encurralado. No Hospital é o enfermeiro; no Templo, o cultista de capuz."
+msgstr "Rápido e com pouca vida: chega antes dos outros e pune quem fica encurralado. No Hospital é o enfermeiro; no Templo, o cultista de capuz."
+
+msgid "Grande e muito resistente: não recua com os tiros nem é empurrado. Guarde as armas pesadas para ele. No Hospital é o maqueiro; no Templo, o gladiador."
+msgstr "Grande e muito resistente: não recua com os tiros nem é empurrado. Guarde as armas pesadas para ele. No Hospital é o maqueiro; no Templo, o gladiador."
+
+msgid "Corre até você, começa a piscar e explode — e explode também ao morrer. Mate de longe: a explosão fere você e os zumbis em volta. No Hospital usa roupa de quarentena; no Templo carrega uma ânfora de fogo grego."
+msgstr "Corre até você, começa a piscar e explode — e explode também ao morrer. Mate de longe: a explosão fere você e os zumbis em volta. No Hospital usa roupa de quarentena; no Templo carrega uma ânfora de fogo grego."
+
+msgid "Rasteja pelo chão, baixo e difícil de acertar na cabeça. Ao morrer solta uma nuvem de gás que fere quem ficar dentro. No Templo é a múmia."
+msgstr "Rasteja pelo chão, baixo e difícil de acertar na cabeça. Ao morrer solta uma nuvem de gás que fere quem ficar dentro. No Templo é a múmia."
+
+msgid "Para a uma certa distância e cospe ácido em arco; onde cai vira uma poça que queima. Não fique parado em cima dela. No Templo é o sacerdote do veneno."
+msgstr "Para a uma certa distância e cospe ácido em arco; onde cai vira uma poça que queima. Não fique parado em cima dela. No Templo é o sacerdote do veneno."
+
+msgid "A armadura absorve 75% do dano no corpo até quebrar; um tiro na cabeça derruba o capacete. Nas missões, um deles carrega um item que você precisa. No Templo é o hoplita de bronze."
+msgstr "A armadura absorve 75% do dano no corpo até quebrar; um tiro na cabeça derruba o capacete. Nas missões, um deles carrega um item que você precisa. No Templo é o hoplita de bronze."
+
+msgid "Rápido e em matilha. No Hospital chega nas rodadas dos cães; no Templo, o Cérbero chama os cães de Hades. Pega fogo ao morrer e não deixa corpo."
+msgstr "Rápido e em matilha. No Hospital chega nas rodadas dos cães; no Templo, o Cérbero chama os cães de Hades. Pega fogo ao morrer e não deixa corpo."
+
+msgid "Guerreiro grego morto-vivo: aguenta bastante e bate forte, mas é lento."
+msgstr "Guerreiro grego morto-vivo: aguenta bastante e bate forte, mas é lento."
+
+msgid "O escudo segura quase todo o dano que vem de frente (só 20% passa). Acerte a cabeça, os lados ou as costas. Não é empurrado."
+msgstr "O escudo segura quase todo o dano que vem de frente (só 20% passa). Acerte a cabeça, os lados ou as costas. Não é empurrado."
+
+msgid "Rápido e frágil. Às vezes os ossos se juntam e ele se levanta de novo com metade da vida — só uma vez."
+msgstr "Rápido e frágil. Às vezes os ossos se juntam e ele se levanta de novo com metade da vida — só uma vez."
+
+msgid "Mantém distância e atira flechas retas. Saia da linha de tiro ou corra para cima dele."
+msgstr "Mantém distância e atira flechas retas. Saia da linha de tiro ou corra para cima dele."
+
+msgid "Rápido, corre em zigue-zague e anda em bando: difícil de mirar. Aparece em peso na Caçada de Artemis."
+msgstr "Rápido, corre em zigue-zague e anda em bando: difícil de mirar. Aparece em peso na Caçada de Artemis."
+
+msgid "Chega perto, dá um bote rápido, recua e repete. Atire enquanto ele recua."
+msgstr "Chega perto, dá um bote rápido, recua e repete. Atire enquanto ele recua."
+
+msgid "Voa fora do alcance da faca e mergulha em você. Atire quando ela descer."
+msgstr "Voa fora do alcance da faca e mergulha em você. Atire quando ela descer."
+
+msgid "Se você estiver olhando para ela quando ela olhar, fica lento, cinza e vira pedra por 1,5 s, sem andar nem atirar. Parede, objeto ou ficar de costas protegem. Depois do olhar, ela leva dano dobrado."
+msgstr "Se você estiver olhando para ela quando ela olhar, fica lento, cinza e vira pedra por 1,5 s, sem andar nem atirar. Parede, objeto ou ficar de costas protegem. Depois do olhar, ela leva dano dobrado."
+
+msgid "CHEFES"
+msgstr "CHEFES"
+
+msgid "O maquinista do último trem. Golpeia, investe (e fica tonto se bater na parede), cega a mira de perto com um clarão, solta ondas de choque e círculos que explodem e, na fase 3, chama zumbis. Tem 4 fases, com um rugido invulnerável a cada uma."
+msgstr "O maquinista do último trem. Golpeia, investe (e fica tonto se bater na parede), cega a mira de perto com um clarão, solta ondas de choque e círculos que explodem e, na fase 3, chama zumbis. Tem 4 fases, com um rugido invulnerável a cada uma."
+
+msgid "O primeiro infectado. A mordida envenena — e piora se ele morder de novo antes de passar —, vomita ácido que deixa poças, grita para deixar você lento e faz chover ácido. Enfurecido, é o chefe da missão do Hospital."
+msgstr "O primeiro infectado. A mordida envenena — e piora se ele morder de novo antes de passar —, vomita ácido que deixa poças, grita para deixar você lento e faz chover ácido. Enfurecido, é o chefe da missão do Hospital."
+
+msgid "Investe derrubando as colunas no caminho, e cada coluna quebrada o deixa em Fúria, com mais dano e velocidade. Solta ondas de choque; no Colapso, caem pedras que viram escombro. Carrega a chave do Submundo."
+msgstr "Investe derrubando as colunas no caminho, e cada coluna quebrada o deixa em Fúria, com mais dano e velocidade. Solta ondas de choque; no Colapso, caem pedras que viram escombro. Carrega a chave do Submundo."
+
+msgid "Três cabeças: morde (e morde de novo logo depois de investir), sopra um leque de fogo que deixa chamas no chão e investe. Na fase 3 chama os cães de Hades."
+msgstr "Três cabeças: morde (e morde de novo logo depois de investir), sopra um leque de fogo que deixa chamas no chão e investe. Na fase 3 chama os cães de Hades."
+
+msgid "Solta esferas de alma em leque, levanta esqueletos e faz chover fogo que vira lava. Na fase 3 assume a forma monstruosa: investida, onda de choque e a Ruptura — some e reaparece perto de você."
+msgstr "Solta esferas de alma em leque, levanta esqueletos e faz chover fogo que vira lava. Na fase 3 assume a forma monstruosa: investida, onda de choque e a Ruptura — some e reaparece perto de você."
+
+msgid "ITENS"
+msgstr "ITENS"
+
+msgid "PERKS"
+msgstr "PERKS"
+
+msgid "POWER-UPS"
+msgstr "POWER-UPS"
+
+msgid "Enche o pente e a reserva de todas as suas armas."
+msgstr "Enche o pente e a reserva de todas as suas armas."
+
+msgid "Todo ponto ganho vale em dobro enquanto durar."
+msgstr "Todo ponto ganho vale em dobro enquanto durar."
+
+msgid "Qualquer acerto de tiro ou de faca mata o zumbi na hora (não vale para chefes)."
+msgstr "Qualquer acerto de tiro ou de faca mata o zumbi na hora (não vale para chefes)."
+
+msgid "Mata na hora todos os zumbis vivos — o chefe não — e paga um bônus de pontos."
+msgstr "Mata na hora todos os zumbis vivos — o chefe não — e paga um bônus de pontos."
+
+msgid "Recupera toda a vida."
+msgstr "Recupera toda a vida."
+
+msgid "Enche a barra azul de armadura, que absorve o dano antes da vida."
+msgstr "Enche a barra azul de armadura, que absorve o dano antes da vida."
+
+msgid "Você corre bem mais rápido enquanto durar."
+msgstr "Você corre bem mais rápido enquanto durar."
+
+msgid "Conserta na hora todas as barricadas do mapa e paga um bônus."
+msgstr "Conserta na hora todas as barricadas do mapa e paga um bônus."
+
+msgid "A Mystery Box custa 10 e aparece em todos os locais das áreas abertas enquanto durar."
+msgstr "A Mystery Box custa 10 e aparece em todos os locais das áreas abertas enquanto durar."
+
+msgid "Raro. Sorteia um prêmio: uma arma especial, uma bolada de pontos, um perk grátis ou a Fúria (dano em dobro por um tempo). Cai do Zumbi Dourado, dos chefes e de quem acha todos os ursinhos."
+msgstr "Raro. Sorteia um prêmio: uma arma especial, uma bolada de pontos, um perk grátis ou a Fúria (dano em dobro por um tempo). Cai do Zumbi Dourado, dos chefes e de quem acha todos os ursinhos."
+
+msgid "ELEMENTOS"
+msgstr "ELEMENTOS"
+
+msgid "BÊNÇÃOS DO TEMPLO"
+msgstr "BÊNÇÃOS DO TEMPLO"
+
+msgid "12% dos tiros soltam um raio que salta entre até 3 zumbis próximos."
+msgstr "12% dos tiros soltam um raio que salta entre até 3 zumbis próximos."
+
+msgid "Cada abate em sequência soma +8% de dano, até +40%. A sequência zera depois de 3 s sem abater."
+msgstr "Cada abate em sequência soma +8% de dano, até +40%. A sequência zera depois de 3 s sem abater."
+
+msgid "40% menos dispersão nos tiros e 15% de chance de crítico, com dano em dobro."
+msgstr "40% menos dispersão nos tiros e 15% de chance de crítico, com dano em dobro."
+
+msgid "Anda, recarrega e interage 20% mais rápido."
+msgstr "Anda, recarrega e interage 20% mais rápido."
+
+msgid "Os tiros empurram os zumbis para trás."
+msgstr "Os tiros empurram os zumbis para trás."
+
+msgid "20% dos zumbis abatidos voltam como espírito aliado por 10 s e lutam do seu lado."
+msgstr "20% dos zumbis abatidos voltam como espírito aliado por 10 s e lutam do seu lado."
+
+msgid "EVENTOS"
+msgstr "EVENTOS"
+
+msgid "TODOS OS MAPAS"
+msgstr "TODOS OS MAPAS"
+
+msgid "As luzes caem e só ficam as de emergência, fracas. Use a lanterna (F); ligar a energia de novo no disjuntor encerra o apagão. Só acontece com a energia ligada."
+msgstr "As luzes caem e só ficam as de emergência, fracas. Use a lanterna (F); ligar a energia de novo no disjuntor encerra o apagão. Só acontece com a energia ligada."
+
+msgid "A sirene atrai zumbis: eles chegam mais rápido e mais deles ficam vivos ao mesmo tempo. O painel do alarme desliga a sirene pagando."
+msgstr "A sirene atrai zumbis: eles chegam mais rápido e mais deles ficam vivos ao mesmo tempo. O painel do alarme desliga a sirene pagando."
+
+msgid "Muito mais zumbis neste round, chegando mais rápido. Vem garantida no round 15 e depois a cada 10."
+msgstr "Muito mais zumbis neste round, chegando mais rápido. Vem garantida no round 15 e depois a cada 10."
+
+msgid "Uma caixa cai de paraquedas. Segure E por alguns segundos para abrir: munição, armadura ou dinheiro. Se levar um golpe, a abertura é interrompida."
+msgstr "Uma caixa cai de paraquedas. Segure E por alguns segundos para abrir: munição, armadura ou dinheiro. Se levar um golpe, a abertura é interrompida."
+
+msgid "Um cano estoura e solta uma nuvem verde que fere quem estiver dentro — zumbis também. Fique longe ou segure E na válvula para fechar."
+msgstr "Um cano estoura e solta uma nuvem verde que fere quem estiver dentro — zumbis também. Fique longe ou segure E na válvula para fechar."
+
+msgid "Um zumbi todo em ouro, com coroa, que foge de você (estrela dourada no minimapa). Mate-o antes que escape para ganhar dinheiro e um Golden Drop."
+msgstr "Um zumbi todo em ouro, com coroa, que foge de você (estrela dourada no minimapa). Mate-o antes que escape para ganhar dinheiro e um Golden Drop."
+
+msgid "A lua fica vermelha: os zumbis correm mais, mas dinheiro e pontos valem em dobro."
+msgstr "A lua fica vermelha: os zumbis correm mais, mas dinheiro e pontos valem em dobro."
+
+msgid "O teto começa a cair: círculos vermelhos marcam onde as pedras vão bater. Saia deles — as pedras também esmagam os zumbis."
+msgstr "O teto começa a cair: círculos vermelhos marcam onde as pedras vão bater. Saia deles — as pedras também esmagam os zumbis."
+
+msgid "Uma neblina fecha a visão e até a lanterna ilumina menos. Fique atento aos gemidos."
+msgstr "Uma neblina fecha a visão e até a lanterna ilumina menos. Fique atento aos gemidos."
+
+msgid "TERMINAL CENTRAL"
+msgstr "TERMINAL CENTRAL"
+
+msgid "Um trem atravessa a plataforma a toda velocidade e atropela quem estiver nos trilhos — zumbis inclusive. O painel do trem chama o trem na hora."
+msgstr "Um trem atravessa a plataforma a toda velocidade e atropela quem estiver nos trilhos — zumbis inclusive. O painel do trem chama o trem na hora."
+
+msgid "HOSPITAL SANTA LUZIA"
+msgstr "HOSPITAL SANTA LUZIA"
+
+msgid "Os pontos de isolamento se rompem e os zumbis entram por eles, com a sirene tocando."
+msgstr "Os pontos de isolamento se rompem e os zumbis entram por eles, com a sirene tocando."
+
+msgid "TEMPLO DOS MORTOS"
+msgstr "TEMPLO DOS MORTOS"
+
+msgid "Raios caem do céu, e círculos azuis avisam onde. Saia deles — os raios também destroem os zumbis."
+msgstr "Raios caem do céu, e círculos azuis avisam onde. Saia deles — os raios também destroem os zumbis."
+
+msgid "Os sarcófagos se abrem e soltam esqueletos, às vezes arqueiros."
+msgstr "Os sarcófagos se abrem e soltam esqueletos, às vezes arqueiros."
+
+msgid "Sátiros e lobos infernais surgem em volta de você numa caçada."
+msgstr "Sátiros e lobos infernais surgem em volta de você numa caçada."
+
+msgid "Um portal se abre e solta criaturas até ser destruído a tiros. Destruído, deixa o Tridente de Poseidon."
+msgstr "Um portal se abre e solta criaturas até ser destruído a tiros. Destruído, deixa o Tridente de Poseidon."
+
+msgid "Neste round, as bênçãos dos altares são de graça."
+msgstr "Neste round, as bênçãos dos altares são de graça."
+
+msgid "MECÂNICAS"
+msgstr "MECÂNICAS"
+
+msgid "BÁSICO"
+msgstr "BÁSICO"
+
+msgid "Rounds"
+msgstr "Rounds"
+
+msgid "A partida é uma sequência de rounds cada vez mais difíceis: mais zumbis e mais fortes. O round acaba quando o último zumbi morre, e o fim de cada um paga um bônus."
+msgstr "A partida é uma sequência de rounds cada vez mais difíceis: mais zumbis e mais fortes. O round acaba quando o último zumbi morre, e o fim de cada um paga um bônus."
+
+msgid "Pontos"
+msgstr "Pontos"
+
+msgid "Acertar e matar zumbis dá pontos — mais no tiro na cabeça e na faca —, e consertar barricadas também. Com eles você compra armas, portas, perks e a Mystery Box. O score do ranking é separado dos pontos."
+msgstr "Acertar e matar zumbis dá pontos — mais no tiro na cabeça e na faca —, e consertar barricadas também. Com eles você compra armas, portas, perks e a Mystery Box. O score do ranking é separado dos pontos."
+
+msgid "Barricadas"
+msgstr "Barricadas"
+
+msgid "Os zumbis entram pelas janelas arrancando as tábuas. Segure E perto da janela para pregar as tábuas de volta — cada tábua dá 10 pontos."
+msgstr "Os zumbis entram pelas janelas arrancando as tábuas. Segure E perto da janela para pregar as tábuas de volta — cada tábua dá 10 pontos."
+
+msgid "Armas na parede"
+msgstr "Armas na parede"
+
+msgid "Os desenhos de giz nas paredes vendem armas e munição (E). A munição sai mais barata que a arma."
+msgstr "Os desenhos de giz nas paredes vendem armas e munição (E). A munição sai mais barata que a arma."
+
+msgid "Faca"
+msgstr "Faca"
+
+msgid "V dá um golpe com avanço que acerta um zumbi por vez: o alvo do avanço ou o mais perto à frente. Salva quando a munição acaba, e matar na faca dá mais pontos."
+msgstr "V dá um golpe com avanço que acerta um zumbi por vez: o alvo do avanço ou o mais perto à frente. Salva quando a munição acaba, e matar na faca dá mais pontos."
+
+msgid "Lanterna"
+msgstr "Lanterna"
+
+msgid "F liga e desliga a lanterna. Faz falta no Apagão, na Neblina e nas áreas escuras."
+msgstr "F liga e desliga a lanterna. Faz falta no Apagão, na Neblina e nas áreas escuras."
+
+msgid "Duas armas"
+msgstr "Duas armas"
+
+msgid "Você carrega duas armas (Q troca). Ao pegar uma terceira, a que está em mãos cai no chão e pode ser pega de volta por 60 s, com a munição e as melhorias."
+msgstr "Você carrega duas armas (Q troca). Ao pegar uma terceira, a que está em mãos cai no chão e pode ser pega de volta por 60 s, com a munição e as melhorias."
+
+msgid "AVANÇADO"
+msgstr "AVANÇADO"
+
+msgid "Portas e áreas"
+msgstr "Portas e áreas"
+
+msgid "Portas compráveis (E) abrem novas áreas — e também os pontos de onde os zumbis nascem nelas. A placa no chão mostra o nome da área do outro lado."
+msgstr "Portas compráveis (E) abrem novas áreas — e também os pontos de onde os zumbis nascem nelas. A placa no chão mostra o nome da área do outro lado."
+
+msgid "Energia"
+msgstr "Energia"
+
+msgid "Segure E no disjuntor para ligar a energia: as máquinas de perk e o Weapon Lab passam a funcionar e as luzes voltam."
+msgstr "Segure E no disjuntor para ligar a energia: as máquinas de perk e o Weapon Lab passam a funcionar e as luzes voltam."
+
+msgid "Máquinas de perk"
+msgstr "Máquinas de perk"
+
+msgid "Cada máquina vende um perk que vale pela partida inteira. Quase todas precisam da energia ligada — o Quick Revive não."
+msgstr "Cada máquina vende um perk que vale pela partida inteira. Quase todas precisam da energia ligada — o Quick Revive não."
+
+msgid "Mystery Box"
+msgstr "Mystery Box"
+
+msgid "Paga e sorteia uma arma, às vezes já com um elemento. Depois de alguns usos, a caixa troca de lugar; o feixe de luz dourada mostra onde ela está."
+msgstr "Paga e sorteia uma arma, às vezes já com um elemento. Depois de alguns usos, a caixa troca de lugar; o feixe de luz dourada mostra onde ela está."
+
+msgid "Weapon Lab"
+msgstr "Weapon Lab"
+
+msgid "Melhora a arma em mãos para Mk II e depois Mk III: mais dano, mais munição e visual novo — algumas viram outra arma, como o Canhão de Vento, que vira Tornado. Precisa de energia."
+msgstr "Melhora a arma em mãos para Mk II e depois Mk III: mais dano, mais munição e visual novo — algumas viram outra arma, como o Canhão de Vento, que vira Tornado. Precisa de energia."
+
+msgid "Elementos"
+msgstr "Elementos"
+
+msgid "Com uma arma na mão, segure E na parede dela para comprar o elemento dela: Luz, Sombra, Gelo, Raio, Fogo ou Explosivo mudam o efeito dos tiros. A Mystery Box também pode entregar arma com elemento."
+msgstr "Com uma arma na mão, segure E na parede dela para comprar o elemento dela: Luz, Sombra, Gelo, Raio, Fogo ou Explosivo mudam o efeito dos tiros. A Mystery Box também pode entregar arma com elemento."
+
+msgid "Power-ups"
+msgstr "Power-ups"
+
+msgid "Zumbis abatidos às vezes deixam um power-up no chão. Passe por cima para pegar antes que ele suma; os que duram mostram o tempo na tela."
+msgstr "Zumbis abatidos às vezes deixam um power-up no chão. Passe por cima para pegar antes que ele suma; os que duram mostram o tempo na tela."
+
+msgid "Rodada dos cães"
+msgstr "Rodada dos cães"
+
+msgid "No Hospital, os rounds 5, 11, 17… são só de cães, com névoa e raios. O último cão deixa munição cheia."
+msgstr "No Hospital, os rounds 5, 11, 17… são só de cães, com névoa e raios. O último cão deixa munição cheia."
+
+msgid "Round de chefe"
+msgstr "Round de chefe"
+
+msgid "Nos rounds 10, 20 e 30 vem um chefe, com uma escolta menor e a barra de vida no alto da tela. Derrotado, deixa um Golden Drop e um Max Ammo."
+msgstr "Nos rounds 10, 20 e 30 vem um chefe, com uma escolta menor e a barra de vida no alto da tela. Derrotado, deixa um Golden Drop e um Max Ammo."
+
+msgid "Missões"
+msgstr "Missões"
+
+msgid "Cada mapa tem uma missão em etapas, com o objetivo na tela e no minimapa: O Último Trem (Terminal), O Soro do Dr. Almeida (Hospital) e O Portão do Submundo (Templo). O prêmio é todos os perks e uma arma exclusiva."
+msgstr "Cada mapa tem uma missão em etapas, com o objetivo na tela e no minimapa: O Último Trem (Terminal), O Soro do Dr. Almeida (Hospital) e O Portão do Submundo (Templo). O prêmio é todos os perks e uma arma exclusiva."
+
+msgid "Bênçãos dos Deuses"
+msgstr "Bênçãos dos Deuses"
+
+msgid "No Templo, 3 altares oferecem a bênção de um deus, sorteado a cada round, por 1500 pontos. Só uma bênção por vez, e cair faz perder a que você tem."
+msgstr "No Templo, 3 altares oferecem a bênção de um deus, sorteado a cada round, por 1500 pontos. Só uma bênção por vez, e cair faz perder a que você tem."
+
+msgid "SEGREDOS"
+msgstr "SEGREDOS"
+
+msgid "Ursinhos escondidos"
+msgstr "Ursinhos escondidos"
+
+msgid "Cada mapa esconde ursinhos de pelúcia. Achar todos na mesma partida solta um Golden Drop e libera uma conquista."
+msgstr "Cada mapa esconde ursinhos de pelúcia. Achar todos na mesma partida solta um Golden Drop e libera uma conquista."
+
+msgid "Rádios e gravadores"
+msgstr "Rádios e gravadores"
+
+msgid "Rádios e gravadores espalhados contam a história de cada mapa. Segure E para sintonizar; cada uso traz a próxima mensagem."
+msgstr "Rádios e gravadores espalhados contam a história de cada mapa. Segure E para sintonizar; cada uso traz a próxima mensagem."
+
+msgid "Estátuas dos deuses"
+msgstr "Estátuas dos deuses"
+
+msgid "No Templo, acender as 12 estátuas dos deuses abre a passagem para o Santuário do Olimpo, onde está o Arco de Artemis."
+msgstr "No Templo, acender as 12 estátuas dos deuses abre a passagem para o Santuário do Olimpo, onde está o Arco de Artemis."
+
+msgid "Recepção"
+msgstr "Recepção"
+
+msgid "Centro Cirúrgico"
+msgstr "Centro Cirúrgico"
+
+msgid "UTI"
+msgstr "UTI"
+
+msgid "Enfermaria"
+msgstr "Enfermaria"
+
+msgid "Radiologia"
+msgstr "Radiologia"
+
+msgid "Farmácia"
+msgstr "Farmácia"
+
+msgid "Pediatria"
+msgstr "Pediatria"
+
+msgid "Necrotério"
+msgstr "Necrotério"
+
+msgid "Refeitório"
+msgstr "Refeitório"
+
+msgid "Laboratório"
+msgstr "Laboratório"
+
+msgid "OUVIR O GRAVADOR"
+msgstr "OUVIR O GRAVADOR"
+
+msgid "📼 \"Diário do Dr. Almeida, dia 3: a amostra do Paciente Zero reagiu ao soro. As células não param de se dividir.\""
+msgstr "📼 \"Diário do Dr. Almeida, dia 3: a amostra do Paciente Zero reagiu ao soro. As células não param de se dividir.\""
+
+msgid "📼 \"Dia 9: a febre some e volta. O Paciente Zero arrancou as amarras. Três enfermeiros foram mordidos.\""
+msgstr "📼 \"Dia 9: a febre some e volta. O Paciente Zero arrancou as amarras. Três enfermeiros foram mordidos.\""
+
+msgid "📼 \"Dia 12: lacramos o laboratório e mandamos as amostras de trem para a Estação Central. Que Deus nos perdoe.\""
+msgstr "📼 \"Dia 12: lacramos o laboratório e mandamos as amostras de trem para a Estação Central. Que Deus nos perdoe.\""
+
+msgid "📼 \"...se estiver ouvindo isto: não deixe o Paciente Zero chegar à superfície. O soro está na câmara.\""
+msgstr "📼 \"...se estiver ouvindo isto: não deixe o Paciente Zero chegar à superfície. O soro está na câmara.\""
+
+msgid "Ruínas Gregas"
+msgstr "Ruínas Gregas"
+
+msgid "Necrópole"
+msgstr "Necrópole"
+
+msgid "Labirinto"
+msgstr "Labirinto"
+
+msgid "Floresta de Artemis"
+msgstr "Floresta de Artemis"
+
+msgid "Templo da Górgona"
+msgstr "Templo da Górgona"
+
+msgid "Submundo"
+msgstr "Submundo"
+
+msgid "Arena Final"
+msgstr "Arena Final"
+
+msgid "Santuário do Olimpo"
+msgstr "Santuário do Olimpo"
+
+msgid "LER A INSCRIÇÃO"
+msgstr "LER A INSCRIÇÃO"
+
+msgid "📜 \"Diário da Dra. Helena, escavação 7: as inscrições falam de mortos que voltam quando o portão é tocado.\""
+msgstr "📜 \"Diário da Dra. Helena, escavação 7: as inscrições falam de mortos que voltam quando o portão é tocado.\""
+
+msgid "📜 \"Chegou a caixa do Hospital Santa Luzia: amostras do Dr. Almeida. Ele disse que o soro veio DAQUI.\""
+msgstr "📜 \"Chegou a caixa do Hospital Santa Luzia: amostras do Dr. Almeida. Ele disse que o soro veio DAQUI.\""
+
+msgid "📜 \"Os trens da Estação Central traziam os caixotes à noite. Nenhum carregador voltou para a segunda viagem.\""
+msgstr "📜 \"Os trens da Estação Central traziam os caixotes à noite. Nenhum carregador voltou para a segunda viagem.\""
+
+msgid "📜 \"O templo não era uma prisão. Era uma porta. E alguém, do outro lado, está batendo.\""
+msgstr "📜 \"O templo não era uma prisão. Era uma porta. E alguém, do outro lado, está batendo.\""
+
+msgid "Hall Central"
+msgstr "Hall Central"
+
+msgid "Plataforma Norte"
+msgstr "Plataforma Norte"
+
+msgid "Bilheteria"
+msgstr "Bilheteria"
+
+msgid "Lojas"
+msgstr "Lojas"
+
+msgid "Área Técnica"
+msgstr "Área Técnica"
+
+msgid "Túneis"
+msgstr "Túneis"
+
+msgid "Manutenção"
+msgstr "Manutenção"
+
+msgid "📻 \"...controle da Estação Central. O trem das 23h40 NÃO deve parar. Repito: não parem o trem...\""
+msgstr "📻 \"...controle da Estação Central. O trem das 23h40 NÃO deve parar. Repito: não parem o trem...\""
+
+msgid "📻 \"...o maquinista não responde. Alguém viu o Condutor? Ele desceu nos túneis e voltou... diferente.\""
+msgstr "📻 \"...o maquinista não responde. Alguém viu o Condutor? Ele desceu nos túneis e voltou... diferente.\""
+
+msgid "📻 \"...quarentena decretada. Portas lacradas. Quem ficou lá dentro está por conta própria.\""
+msgstr "📻 \"...quarentena decretada. Portas lacradas. Quem ficou lá dentro está por conta própria.\""
+
+msgid "📻 \"...se alguém ouvir isto: tentem sobreviver. O resgate chega ao amanhecer. Talvez.\""
+msgstr "📻 \"...se alguém ouvir isto: tentem sobreviver. O resgate chega ao amanhecer. Talvez.\""

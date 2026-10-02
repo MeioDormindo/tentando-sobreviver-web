@@ -9,8 +9,25 @@ de conceitos: ver `docs/analise-typescript.md`.
   chão; os **corpos ficam no chão** por 45 s (até 40 de uma vez, o mais antigo afunda);
 - eventos com mais frequência (quase todo round) e o trem passando quase todo round, muitas vezes duas;
 - **menu principal**, escolha de mapa (o Hospital libera ao vencer o boss do round 10 no
-  Terminal; o Templo dos Mortos, ao concluir a missão do Terminal ou a do Hospital), ranking local por mapa, configurações (volume, som, música, tremor, tela cheia,
-  nome, apagar progresso);
+  Terminal; o Templo dos Mortos, ao concluir a missão do Terminal ou a do Hospital), ranking local por mapa, configurações
+  (abaixo) e apagar progresso;
+- **15 idiomas** (inglês, português, espanhol, francês, alemão, italiano, russo, ucraniano,
+  polonês, turco, indonésio, chinês simplificado e tradicional, japonês e coreano): abre no
+  idioma do aparelho (PC, navegador ou celular), ou em inglês se ele não estiver na lista; troca
+  em Configurações → JOGO → IDIOMA, na hora. O texto em português é a chave do catálogo gettext
+  (`locale/*.po`, autoload `Loc`): `npm run godot:i18n` extrai os textos novos para os `.po`,
+  `godot:i18n:fonts` recorta a fonte pixel de reserva do chinês, japonês e coreano (Fusion Pixel
+  12px, licença OFL, só os caracteres usados) e `godot:i18n:check` confere que tudo está
+  traduzido, com os mesmos marcadores, e que todo caractere existe na fonte. O que vai pela rede
+  (feed, avisos, dicas, objetivos) vai como modelo + argumentos e é traduzido em quem lê
+  (`Loc.fmt`/`Loc.text`): cada colega vê no seu idioma. As traduções foram feitas por IA (vale
+  revisão de falantes nativos); termos fixos em `scripts/godot/i18n/glossary.md`;
+- **configurações em 4 abas**, também no menu de pausa (Q/E ou LB/RB trocam de aba): JOGO
+  (idioma, nome no ranking, tremor, sangue, mira no mouse, minimapa e tamanho, modo cabeção),
+  VÍDEO (modo de tela, resolução, VSync, limite de FPS, escala da interface, brilho, sombras,
+  contador de FPS; no navegador e no celular só o que vale lá), ÁUDIO (geral, música, efeitos,
+  interface, vozes, mudo) e CONTROLES (controles de toque e troca das teclas e dos botões do
+  controle: se a tecla já é de outra ação, as duas trocam; RESTAURAR PADRÕES);
 - **save** em `user://save.json` com **o mesmo formato JSON do jogo web** (prepara o save na
   nuvem entre as duas versões): configurações, recordes, mapas liberados, ranking, totais,
   segredos e conquistas; validado campo a campo e gravado de forma segura;
@@ -86,8 +103,9 @@ de conceitos: ver `docs/analise-typescript.md`.
     no mobile via `textures/vram_compression/import_etc2_astc` do projeto, S3TC/BPTC no
     desktop) por cima disso — sprite novo nasce sem essa compressão até rodar o script de novo;
     ~5× menos VRAM no total só com o recorte+empacotamento (mais uns 4× da compressão de GPU);
-  - interface (`npm run godot:font`): fonte pixel 5×7 desenhada em código (acentos do
-    português, símbolos e contorno embutido, em BMFont), padrão do projeto em escala inteira
+  - interface (`npm run godot:font`): fonte pixel 5×7 desenhada em código (latim com os acentos
+    dos idiomas do jogo, cirílico, símbolos e contorno embutido, em BMFont; chinês, japonês e
+    coreano vêm da fonte de reserva do idioma), padrão do projeto em escala inteira
     (2×, 3×, 4×...), e molduras 9-slice; HUD em painéis nos cantos (ROUND, pontos, vida com
     barra segmentada, munição com o ícone da arma), botões e campos com moldura dourada no
     foco, retratos dos visuais na tela PERSONAGEM;
@@ -501,6 +519,39 @@ Decisões:
     dois processos (este é o host; `tests/net_peer.gd` é o colega, por ENet local): entrar, tiro
     do colega com pontos para ele, porta comprada com a carteira dele, cair e levantar, fim de
     jogo com o resumo dele.
+- **Correções e qualidade de vida do cooperativo.**
+  - **Ninguém nasce fora do mapa nem em área fechada.** O chão (e o navmesh) cobre a grade
+    inteira, inclusive fora do prédio e atrás das portas. Agora `GameWorld.is_spawnable` (chão de
+    área aberta) vale para os cães com raio, a Caçada de Ártemis, as invocações do chefe e os
+    sarcófagos (`SpawnManager.spot_near`, anéis até 6 m), e para o destravamento. No Hospital, 8
+    de 30 cães da rodada caíam na Radiologia fechada ou do lado de fora. Os eventos que pareciam
+    não soltar monstros soltavam: eles nasciam onde ninguém via. A Horda e o Alarme também soltam
+    uma leva na hora (`RoundManager.burst`). No cooperativo, o ponto de spawn fica longe de todos
+    os jogadores.
+  - **Marcas no chão visíveis.** O piso visual vai até 0,05 m e poças, avisos (Zeus,
+    desabamento) e sangue ficavam embaixo dele. Tudo sobe para `PixelShapes.GROUND_Y` (0,08 m), e
+    os círculos do chefe ficaram mais fortes.
+  - **Prêmio da missão para quem concluiu:** todos os perks e a arma vão para quem fez a última
+    etapa (`QuestSpot.finished_by`). Os perks vêm de `PerkCatalog`
+    (`ResourceLoader.list_directory`, que também funciona no jogo exportado).
+  - **Cães misturados com os zumbis em todos os mapas** a partir do round 5, com o raio, perto do
+    time. A chance cresce por round até 14%, com no máximo 3 vivos (4 no fim de jogo), +1 por
+    jogador a mais (`RoundData.hound_mix`). As rodadas só de cães do Hospital continuam.
+  - **Sala:**
+    - COPIAR CÓDIGO e COPIAR CONVITE (link `…?sala=CÓDIGO`: na Web, quem abre entra direto);
+    - o campo aceita colar o link;
+    - escolha do visual (← →, só os liberados), com o retrato de cada um;
+    - latência de cada colega, medida pelo host a cada 2 s (`Net.pings`).
+  - **HUD estilo CoD:**
+    - o dinheiro com cifrão, em verde ("$1.250");
+    - os colegas no canto direito, logo abaixo, com nome na cor da vaga, dinheiro (vai nos
+      vitals), vida, "CAÍDO 23s" e ping;
+    - seta na borda da tela (ou cruz em cima dele) para o colega caído, com alerta;
+    - feed de quem fez o quê (porta, energia, power-up, cair, levantar, missão);
+    - mini mira no mouse, que abre com o espalhamento e fica vermelha sobre um inimigo (opção
+      MIRA NO MOUSE).
+  - **Apoie o projeto:** crédito no topo do menu e a tela APOIE O PROJETO (PIX: QR Code, chave
+    aleatória e "copia e cola", em `SupportInfo`).
 - **Anti-trapaça ligado de verdade.** A ligação `anti_cheat` estava no nó errado do `main.tscn`, então
   o fim de jogo nunca invalidava uma partida marcada. Agora está no `GameManager` (a suíte `match`
   confere).

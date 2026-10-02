@@ -27,7 +27,7 @@ func _build() -> void:
 	MenuKit.spacer(column, 10)
 	var map := Session.map_id if Save.catalog.maps.has(Session.map_id) else Save.catalog.default_map
 	MenuKit.title(column, "PERSONAGEM", 48)
-	MenuKit.label(column, Save.catalog.display_name(map).to_upper(), 20, MenuKit.GOLD, HORIZONTAL_ALIGNMENT_CENTER)
+	MenuKit.label(column, Loc.t(Save.catalog.display_name(map)).to_upper(), 20, MenuKit.GOLD, HORIZONTAL_ALIGNMENT_CENTER)
 	MenuKit.label(column, "Libere os visuais com as conquistas.", 14, MenuKit.DIM, HORIZONTAL_ALIGNMENT_CENTER)
 	for map_id: String in [map]:
 		var skins := _skins.for_map(map_id)
@@ -42,9 +42,9 @@ func _build() -> void:
 			var card := VBoxContainer.new()
 			card.custom_minimum_size = Vector2(190, 0)
 			row.add_child(card)
-			card.add_child(_portrait(skin))
+			card.add_child(portrait(skin))
 			var status := "EM USO" if skin.id == selected else ("USAR" if is_unlocked(skin) else "TRANCADO")
-			var button := MenuKit.button(card, "%s\n%s" % [String(skin.name).to_upper(), status], _choose.bind(skin), 16)
+			var button := MenuKit.button(card, "%s\n%s" % [Loc.t(String(skin.name)).to_upper(), Loc.t(status)], _choose.bind(skin), 16)
 			if skin.id == selected:
 				button.add_theme_color_override(&"font_color", MenuKit.GOLD)
 	_message = MenuKit.label(column, "", 15, MenuKit.DIM, HORIZONTAL_ALIGNMENT_CENTER)
@@ -55,10 +55,12 @@ func _build() -> void:
 
 
 ## Retrato: o sprite do visual (parado, de frente, com a pistola) num painel pixel; os
-## trancados aparecem em silhueta. Sem a folha, a cor da jaqueta.
-func _portrait(skin: Dictionary) -> Control:
+## trancados aparecem em silhueta. Sem a folha, a cor da jaqueta. `zoom` é a escala do sprite
+## (2 aqui; menor na sala do multiplayer).
+static func portrait(skin: Dictionary, zoom := 2.0, frame_size := Vector2(190, 170)) -> Control:
 	var frame := PanelContainer.new()
-	frame.custom_minimum_size = Vector2(190, 170)
+	frame.custom_minimum_size = frame_size
+	frame.clip_contents = true
 	frame.add_theme_stylebox_override(&"panel", PixelSkin.panel(false, 6.0))
 	var sheet := "player_%s" % skin.id
 	var meta_path := "res://assets/sprites/%s.json" % sheet
@@ -68,10 +70,9 @@ func _portrait(skin: Dictionary) -> Control:
 		frame.add_child(swatch)
 		return frame
 	var meta: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(meta_path))
-	const PORTRAIT_SCALE := 2.0
 	var size := Vector2(meta.frame[0], meta.frame[1])
 	var stack := Control.new()
-	stack.custom_minimum_size = size * PORTRAIT_SCALE
+	stack.custom_minimum_size = size * zoom
 	frame.add_child(stack)
 	# Com a pistola inicial do mapa do visual (M1911 no Terminal, Beretta no Hospital,
 	# Makarov no Templo), lida do mapa.
@@ -92,8 +93,8 @@ func _portrait(skin: Dictionary) -> Control:
 		# O AtlasTexture é só o recorte; `cell[4..5]` é onde ele fica dentro do quadro (o mesmo
 		# pras duas camadas), igual o offset por quadro do CharacterSprite no 3D.
 		picture.stretch_mode = TextureRect.STRETCH_SCALE
-		picture.position = Vector2(cell[4], cell[5]) * PORTRAIT_SCALE
-		picture.size = Vector2(cell[2], cell[3]) * PORTRAIT_SCALE
+		picture.position = Vector2(cell[4], cell[5]) * zoom
+		picture.size = Vector2(cell[2], cell[3]) * zoom
 		if not is_unlocked(skin):
 			picture.modulate = Color(0.05, 0.05, 0.06)
 		stack.add_child(picture)
@@ -113,7 +114,7 @@ static func start_weapon(map_id: String) -> String:
 func _choose(skin: Dictionary) -> void:
 	if not is_unlocked(skin):
 		var need := _achievements.find(skin.unlock)
-		_message.text = "Trancado — libere com a conquista \"%s\": %s" % [need.get("name", ""), need.get("description", "")]
+		_message.text = Loc.t("Trancado — libere com a conquista \"%s\": %s") % [Loc.t(String(need.get("name", ""))), Loc.t(String(need.get("description", "")))]
 		_message.add_theme_color_override(&"font_color", MenuKit.RED)
 		return
 	Save.set_setting(SkinCatalog.setting_key(String(skin.get("map", "terminal"))), skin.id)

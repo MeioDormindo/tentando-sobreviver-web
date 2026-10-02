@@ -1,0 +1,3642 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tentando Sobreviver\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: scripts/events/gas_valve.gd:26
+msgid "[SEGURE %s] FECHAR A VÁLVULA"
+msgstr ""
+
+#: scripts/events/golden_zombie_event.gd:97
+msgid "ZUMBI DOURADO ABATIDO!  +%s"
+msgstr ""
+
+#: scripts/events/golden_zombie_event.gd:119
+msgid "O ZUMBI DOURADO ESCAPOU"
+msgstr ""
+
+#: scripts/events/supply_crate.gd:86
+msgid "[SEGURE %s] ABRIR SUPRIMENTOS"
+msgstr ""
+
+#: scripts/events/supply_drop_event.gd:86 data/configs/world_events.tres
+msgid "SUPRIMENTOS"
+msgstr ""
+
+#: scripts/events/supply_drop_event.gd:87
+msgid "Munição cheia · Armadura · +%s"
+msgstr ""
+
+#: scripts/events/train_event.gd:102
+msgid "ATROPELADOS ×%s"
+msgstr ""
+
+#: scripts/events/underworld_portal_event.gd:106
+msgid "O PORTAL CAIU — O TRIDENTE DE POSEIDON FICOU NO LUGAR"
+msgstr ""
+
+#: scripts/events/underworld_portal_event.gd:108
+msgid "O PORTÃO DO SUBMUNDO SE FECHOU"
+msgstr ""
+
+#: scripts/events/world_event_system.gd:376 scripts/interactables/train_panel.gd:16
+msgid "TREM"
+msgstr ""
+
+#: scripts/interactables/barricade.gd:87
+msgid "[SEGURE %s] CONSERTAR BARRICADA  ·  +%s por tábua"
+msgstr ""
+
+#: scripts/interactables/blessing_altar.gd:62 scripts/interactables/blessing_altar.gd:98 scripts/ui/hud.gd:151
+msgid "BÊNÇÃO DE %s"
+msgstr ""
+
+#: scripts/interactables/blessing_altar.gd:75
+msgid "BÊNÇÃO DE %s ATIVA"
+msgstr ""
+
+#: scripts/interactables/blessing_altar.gd:77
+msgid "[%s] BÊNÇÃO DE %s — %s: %s  ·  DE GRAÇA"
+msgstr ""
+
+#: scripts/interactables/blessing_altar.gd:78
+msgid "[%s] BÊNÇÃO DE %s — %s: %s  ·  %s pontos"
+msgstr ""
+
+#: scripts/interactables/blessing_altar.gd:98
+msgid "%s — %s"
+msgstr ""
+
+#: scripts/interactables/breaker.gd:48
+msgid "DISJUNTOR"
+msgstr ""
+
+#: scripts/interactables/breaker.gd:64
+msgid "[SEGURE %s] LIGAR A ENERGIA"
+msgstr ""
+
+#: scripts/interactables/breaker.gd:81 scripts/ui/hud.gd:147
+msgid "ENERGIA LIGADA"
+msgstr ""
+
+#: scripts/interactables/breaker.gd:82
+msgid "%s ligou a energia"
+msgstr ""
+
+#: scripts/interactables/credits_sign.gd:14
+msgid "[%s] LER A PLACA"
+msgstr ""
+
+#: scripts/interactables/door.gd:38
+msgid "PORTÃO DO TEMPLO — leve Fragmentos de Alma aos 3 altares"
+msgstr ""
+
+#: scripts/interactables/door.gd:39
+msgid "PORTÃO DO SUBMUNDO — precisa da chave do Minotauro"
+msgstr ""
+
+#: scripts/interactables/door.gd:40
+msgid "PASSAGEM SELADA — ative as 12 estátuas dos deuses"
+msgstr ""
+
+#: scripts/interactables/door.gd:184
+msgid "PORTÃO FECHADO"
+msgstr ""
+
+#: scripts/interactables/door.gd:191
+msgid "[%s] ABRIR PORTA  ·  %s pontos"
+msgstr ""
+
+#: scripts/interactables/door.gd:193
+msgid "[%s] ABRIR PORTA — %s  ·  %s pontos"
+msgstr ""
+
+#: scripts/interactables/door.gd:194
+msgid "[%s] ABRIR PORTA — %s, %s  ·  %s pontos"
+msgstr ""
+
+#: scripts/interactables/door.gd:206
+msgid "%s abriu %s"
+msgstr ""
+
+#: scripts/interactables/electric_trap.gd:28
+msgid "ARMADILHA"
+msgstr ""
+
+#: scripts/interactables/electric_trap.gd:65
+msgid "ARMADILHA ELÉTRICA LIGADA — %ss"
+msgstr ""
+
+#: scripts/interactables/electric_trap.gd:67
+msgid "ARMADILHA RECARREGANDO — %ss"
+msgstr ""
+
+#: scripts/interactables/electric_trap.gd:68
+msgid "[%s] LIGAR ARMADILHA ELÉTRICA  ·  %s pontos"
+msgstr ""
+
+#: scripts/interactables/event_switch.gd:23
+msgid "RELIGAR A ENERGIA"
+msgstr ""
+
+#: scripts/interactables/event_switch.gd:24
+msgid "PAINEL DE ENERGIA — FUNCIONANDO"
+msgstr ""
+
+#: scripts/interactables/event_switch.gd:25
+msgid "ENERGIA"
+msgstr ""
+
+#: scripts/interactables/event_switch.gd:29
+msgid "DESLIGAR O ALARME"
+msgstr ""
+
+#: scripts/interactables/event_switch.gd:30
+msgid "ALARME DE EMERGÊNCIA — DESLIGADO"
+msgstr ""
+
+#: scripts/interactables/event_switch.gd:31
+msgid "ALARME"
+msgstr ""
+
+#: scripts/interactables/event_switch.gd:43
+msgid "[SEGURE %s] %s  ·  %s pontos"
+msgstr ""
+
+#: scripts/interactables/god_statue.gd:10 scripts/player/blessing_system.gd:13
+msgid "ZEUS"
+msgstr ""
+
+#: scripts/interactables/god_statue.gd:10
+msgid "HERA"
+msgstr ""
+
+#: scripts/interactables/god_statue.gd:10 scripts/player/blessing_system.gd:17
+msgid "POSEIDON"
+msgstr ""
+
+#: scripts/interactables/god_statue.gd:10
+msgid "DEMÉTER"
+msgstr ""
+
+#: scripts/interactables/god_statue.gd:10 scripts/player/blessing_system.gd:15
+msgid "ATENA"
+msgstr ""
+
+#: scripts/interactables/god_statue.gd:10
+msgid "APOLO"
+msgstr ""
+
+#: scripts/interactables/god_statue.gd:11
+msgid "ÁRTEMIS"
+msgstr ""
+
+#: scripts/interactables/god_statue.gd:11 scripts/player/blessing_system.gd:14
+msgid "ARES"
+msgstr ""
+
+#: scripts/interactables/god_statue.gd:11
+msgid "AFRODITE"
+msgstr ""
+
+#: scripts/interactables/god_statue.gd:11
+msgid "HEFESTO"
+msgstr ""
+
+#: scripts/interactables/god_statue.gd:11 scripts/player/blessing_system.gd:16
+msgid "HERMES"
+msgstr ""
+
+#: scripts/interactables/god_statue.gd:11
+msgid "DIONÍSIO"
+msgstr ""
+
+#: scripts/interactables/god_statue.gd:46
+msgid "[SEGURE %s] ACENDER A ESTÁTUA DE %s"
+msgstr ""
+
+#: scripts/interactables/god_statue.gd:84
+msgid "ESTÁTUA DE %s ACESA (%s/%s)"
+msgstr ""
+
+#: scripts/interactables/god_statue.gd:87
+msgid "OS DOZE DO OLIMPO"
+msgstr ""
+
+#: scripts/interactables/god_statue.gd:87
+msgid "O templo reage... uma passagem se abriu na Floresta."
+msgstr ""
+
+#: scripts/interactables/lore_radio.gd:9 data/maps/terminal.json
+msgid "SINTONIZAR O RÁDIO"
+msgstr ""
+
+#: scripts/interactables/lore_radio.gd:55
+msgid "RÁDIO — CHIADO..."
+msgstr ""
+
+#: scripts/interactables/lore_radio.gd:56 scripts/quests/quest_spot.gd:73
+msgid "[SEGURE %s] %s"
+msgstr ""
+
+#: scripts/interactables/mystery_box.gd:144
+msgid "[%s] MYSTERY BOX  ·  %s pontos"
+msgstr ""
+
+#: scripts/interactables/mystery_box.gd:148
+msgid "MYSTERY BOX  ·  arma de %s"
+msgstr ""
+
+#: scripts/interactables/mystery_box.gd:150
+msgid "[%s] PEGAR %s (MUNIÇÃO)"
+msgstr ""
+
+#: scripts/interactables/mystery_box.gd:150
+msgid "[%s] PEGAR %s"
+msgstr ""
+
+#: scripts/interactables/mystery_box.gd:198
+msgid "um colega"
+msgstr ""
+
+#: scripts/interactables/mystery_box.gd:342
+msgid "A MYSTERY BOX MUDOU DE LUGAR — %s"
+msgstr ""
+
+#: scripts/interactables/mystery_box.gd:342
+msgid "A MYSTERY BOX MUDOU DE LUGAR"
+msgstr ""
+
+#: scripts/interactables/perk_machine.gd:82 scripts/interactables/weapon_lab.gd:57
+msgid "SEM ENERGIA — ligue o disjuntor"
+msgstr ""
+
+#: scripts/interactables/perk_machine.gd:84
+msgid "%s  ·  JÁ ATIVO"
+msgstr ""
+
+#: scripts/interactables/perk_machine.gd:86
+msgid "%s  ·  ESGOTADO NESTA PARTIDA"
+msgstr ""
+
+#: scripts/interactables/perk_machine.gd:87
+msgid "[%s] %s — %s  ·  %s pontos"
+msgstr ""
+
+#: scripts/interactables/prize_pedestal.gd:45
+msgid "[SEGURE %s] PEGAR %s  (%s%%)"
+msgstr ""
+
+#: scripts/interactables/prize_pedestal.gd:70
+msgid "%s — presente de Artemis"
+msgstr ""
+
+#: scripts/interactables/teddy.gd:35
+msgid "[%s] PEGAR O URSINHO"
+msgstr ""
+
+#: scripts/interactables/teddy.gd:48
+msgid "URSINHO %s/%s"
+msgstr ""
+
+#: scripts/interactables/teddy.gd:55
+msgid "SEGREDO DOS URSINHOS"
+msgstr ""
+
+#: scripts/interactables/teddy.gd:56
+msgid "Você achou todos! Segredo salvo."
+msgstr ""
+
+#: scripts/interactables/teddy.gd:56
+msgid "Todos os ursinhos de novo!"
+msgstr ""
+
+#: scripts/interactables/train_panel.gd:25
+msgid "PAINEL DO TREM — DISPONÍVEL EM %ss"
+msgstr ""
+
+#: scripts/interactables/train_panel.gd:26
+msgid "[%s] CHAMAR O TREM  ·  %s pontos"
+msgstr ""
+
+#: scripts/interactables/train_panel.gd:36
+msgid "O TREM NÃO PODE VIR AGORA"
+msgstr ""
+
+#: scripts/interactables/wall_buy.gd:66
+msgid "MUNIÇÃO"
+msgstr ""
+
+#: scripts/interactables/wall_buy.gd:128
+msgid "  ·  SEGURE %s: "
+msgstr ""
+
+#: scripts/interactables/wall_buy.gd:185
+msgid "MUNIÇÃO CHEIA"
+msgstr ""
+
+#: scripts/interactables/wall_buy.gd:186 scripts/interactables/wall_buy.gd:191
+msgid "[%s] MUNIÇÃO %s  ·  %s pontos"
+msgstr ""
+
+#: scripts/interactables/wall_buy.gd:190
+msgid "%s  ·  MUNIÇÃO CHEIA"
+msgstr ""
+
+#: scripts/interactables/wall_buy.gd:192
+msgid "[%s] COMPRAR %s  ·  %s pontos"
+msgstr ""
+
+#: scripts/interactables/weapon_drop.gd:85
+msgid "[%s] PEGAR %s  ·  %ss"
+msgstr ""
+
+#: scripts/interactables/weapon_drop.gd:86
+msgid "[%s] PEGAR %s (troca por %s)  ·  %ss"
+msgstr ""
+
+#: scripts/interactables/weapon_lab.gd:60
+msgid "%s  ·  NÍVEL MÁXIMO"
+msgstr ""
+
+#: scripts/interactables/weapon_lab.gd:61
+msgid "Mk II"
+msgstr ""
+
+#: scripts/interactables/weapon_lab.gd:61
+msgid "Mk III"
+msgstr ""
+
+#: scripts/interactables/weapon_lab.gd:62
+msgid "[%s] WEAPON LAB: %s → %s  ·  %s pontos"
+msgstr ""
+
+#: scripts/maps/station_board.gd:89 data/configs/world_events.tres
+msgid "TREM PASSANDO"
+msgstr ""
+
+#: scripts/maps/station_board.gd:91
+msgid "⚠ TREM CHEGANDO"
+msgstr ""
+
+#: scripts/maps/station_board.gd:93
+msgid "PRÓXIMO TREM %ds"
+msgstr ""
+
+#: scripts/maps/station_board.gd:93
+msgid "PRÓXIMO TREM EM BREVE"
+msgstr ""
+
+#: scripts/maps/station_board.gd:94
+msgid "SEM PREVISÃO"
+msgstr ""
+
+#: scripts/net/net.gd:65
+msgid "Não foi possível conectar à sala"
+msgstr ""
+
+#: scripts/net/net.gd:66
+msgid "O host saiu"
+msgstr ""
+
+#: scripts/net/net.gd:76
+msgid "Tempo esgotado ao entrar na sala"
+msgstr ""
+
+#: scripts/net/net.gd:186 scripts/ui/lobby_screen.gd:172
+msgid "Criando sala..."
+msgstr ""
+
+#: scripts/net/net.gd:191
+msgid "Não foi possível criar a sala (%s)"
+msgstr ""
+
+#: scripts/net/net.gd:201
+msgid "Procurando a sala %s..."
+msgstr ""
+
+#: scripts/net/net.gd:206 scripts/net/net.gd:216
+msgid "Sem conexão com o servidor (%s)"
+msgstr ""
+
+#: scripts/net/net.gd:209
+msgid "Sala %s não encontrada"
+msgstr ""
+
+#: scripts/net/net.gd:234
+msgid "Não foi possível abrir a sala (%s)"
+msgstr ""
+
+#: scripts/net/net.gd:240
+msgid "Sala %s aberta"
+msgstr ""
+
+#: scripts/net/net.gd:246
+msgid "Não foi possível entrar (%s)"
+msgstr ""
+
+#: scripts/net/net.gd:253
+msgid "Conectando à sala %s..."
+msgstr ""
+
+#: scripts/net/net.gd:379
+msgid "Na sala %s"
+msgstr ""
+
+#: scripts/net/net.gd:436
+msgid "JOGADOR"
+msgstr ""
+
+#: scripts/net/supabase_signaling.gd:56 scripts/net/supabase_signaling.gd:73 scripts/online/leaderboard.gd:40
+msgid "sem conexão"
+msgstr ""
+
+#: scripts/net/webrtc_transport.gd:95
+msgid "A partida já começou"
+msgstr ""
+
+#: scripts/net/webrtc_transport.gd:97
+msgid "Sala cheia (%s jogadores)"
+msgstr ""
+
+#: scripts/net/webrtc_transport.gd:102
+msgid "Entrada recusada"
+msgstr ""
+
+#: scripts/online/account.gd:10
+msgid "sem sessão"
+msgstr ""
+
+#: scripts/online/account.gd:57
+msgid "Usuário: 3 a 16 letras minúsculas, números ou _"
+msgstr ""
+
+#: scripts/online/account.gd:62
+msgid "Senha: mínimo de %d caracteres"
+msgstr ""
+
+#: scripts/online/account.gd:64
+msgid "Senha: máximo de %d caracteres"
+msgstr ""
+
+#: scripts/online/account.gd:78
+msgid "Não foi possível entrar — tente de novo"
+msgstr ""
+
+#: scripts/online/account.gd:110 scripts/online/account.gd:114 scripts/online/account.gd:159
+msgid "Sem conexão"
+msgstr ""
+
+#: scripts/online/account.gd:110
+msgid "Sessão expirada — entre de novo"
+msgstr ""
+
+#: scripts/online/account.gd:114
+msgid "Falha ao ler da nuvem"
+msgstr ""
+
+#: scripts/online/account.gd:129
+msgid "Contas online indisponíveis"
+msgstr ""
+
+#: scripts/online/account.gd:159
+msgid "Falha ao salvar na nuvem"
+msgstr ""
+
+#: scripts/online/account.gd:176
+msgid "Sem conexão com o servidor"
+msgstr ""
+
+#: scripts/online/account.gd:178
+msgid "Muitas tentativas — aguarde um pouco"
+msgstr ""
+
+#: scripts/online/account.gd:180
+msgid "Esse usuário já existe"
+msgstr ""
+
+#: scripts/online/account.gd:182
+msgid "Usuário ou senha incorretos"
+msgstr ""
+
+#: scripts/online/account.gd:184
+msgid "Senha fraca demais"
+msgstr ""
+
+#: scripts/online/account.gd:186
+msgid "Usuário inválido"
+msgstr ""
+
+#: scripts/online/account.gd:187
+msgid "Não foi possível concluir — tente de novo"
+msgstr ""
+
+#: scripts/online/anti_cheat.gd:70
+msgid "HACKER DETECTADO"
+msgstr ""
+
+#: scripts/online/leaderboard.gd:8
+msgid "SOLO"
+msgstr ""
+
+#: scripts/online/leaderboard.gd:8
+msgid "DUPLA"
+msgstr ""
+
+#: scripts/online/leaderboard.gd:8
+msgid "TRIO"
+msgstr ""
+
+#: scripts/online/leaderboard.gd:8
+msgid "QUARTETO"
+msgstr ""
+
+#: scripts/online/leaderboard.gd:30
+msgid "ranking global indisponível"
+msgstr ""
+
+#: scripts/online/leaderboard.gd:43
+msgid "mapa ainda não aceito no ranking global"
+msgstr ""
+
+#: scripts/online/leaderboard.gd:45
+msgid "pontuação recusada"
+msgstr ""
+
+#: scripts/online/online_client.gd:12
+msgid "resposta incompleta"
+msgstr ""
+
+#: scripts/online/online_client.gd:13
+msgid "não conectou ao servidor"
+msgstr ""
+
+#: scripts/online/online_client.gd:14
+msgid "endereço não encontrado"
+msgstr ""
+
+#: scripts/online/online_client.gd:15
+msgid "conexão caiu"
+msgstr ""
+
+#: scripts/online/online_client.gd:16
+msgid "falha de TLS"
+msgstr ""
+
+#: scripts/online/online_client.gd:17
+msgid "sem resposta"
+msgstr ""
+
+#: scripts/online/online_client.gd:18
+msgid "resposta grande demais"
+msgstr ""
+
+#: scripts/online/online_client.gd:19
+msgid "falha ao descompactar a resposta"
+msgstr ""
+
+#: scripts/online/online_client.gd:20
+msgid "requisição falhou"
+msgstr ""
+
+#: scripts/online/online_client.gd:21
+msgid "redirecionamentos demais"
+msgstr ""
+
+#: scripts/online/online_client.gd:22
+msgid "tempo esgotado"
+msgstr ""
+
+#: scripts/online/online_client.gd:47
+msgid "requisição recusada (%s)"
+msgstr ""
+
+#: scripts/online/online_client.gd:74
+msgid "erro de rede %d"
+msgstr ""
+
+#: scripts/player/ally_spirit.gd:47
+msgid "ALIADO"
+msgstr ""
+
+#: scripts/player/blessing_system.gd:13
+msgid "Fúria do Trovão"
+msgstr ""
+
+#: scripts/player/blessing_system.gd:13
+msgid "12% dos tiros soltam um raio"
+msgstr ""
+
+#: scripts/player/blessing_system.gd:14
+msgid "Sede de Sangue"
+msgstr ""
+
+#: scripts/player/blessing_system.gd:14
+msgid "abates seguidos aumentam o dano"
+msgstr ""
+
+#: scripts/player/blessing_system.gd:15
+msgid "mira precisa e golpes críticos"
+msgstr ""
+
+#: scripts/player/blessing_system.gd:16
+msgid "anda, recarrega e interage mais rápido"
+msgstr ""
+
+#: scripts/player/blessing_system.gd:17
+msgid "Maré"
+msgstr ""
+
+#: scripts/player/blessing_system.gd:17
+msgid "os tiros empurram os zumbis"
+msgstr ""
+
+#: scripts/player/blessing_system.gd:18
+msgid "HADES"
+msgstr ""
+
+#: scripts/player/blessing_system.gd:18
+msgid "Pacto dos Mortos"
+msgstr ""
+
+#: scripts/player/blessing_system.gd:18
+msgid "abatidos voltam como aliados"
+msgstr ""
+
+#: scripts/player/blessing_system.gd:120
+msgid "HADES: um espírito aliado se levanta para lutar"
+msgstr ""
+
+#: scripts/player/player.gd:549
+msgid "PETRIFICADO! Não olhe para a Górgona"
+msgstr ""
+
+#: scripts/player/player.gd:848
+msgid "QUICK REVIVE!"
+msgstr ""
+
+#: scripts/player/player.gd:1159
+msgid "CAÍDO! Um colega pode te reviver"
+msgstr ""
+
+#: scripts/player/player.gd:1161
+msgid "%s caiu!"
+msgstr ""
+
+#: scripts/player/player.gd:1169
+msgid "CAÍDO · %ss para um colega te reviver"
+msgstr ""
+
+#: scripts/player/player.gd:1181
+msgid "VOCÊ MORREU · volta no próximo round"
+msgstr ""
+
+#: scripts/player/player.gd:1201
+msgid "%s levantou %s"
+msgstr ""
+
+#: scripts/player/player.gd:1242
+msgid "[SEGURE %s] REVIVER %s"
+msgstr ""
+
+#: scripts/player/player.gd:1242
+msgid "O COLEGA"
+msgstr ""
+
+#: scripts/quests/quest_spot.gd:74
+msgid "[%s] %s"
+msgstr ""
+
+#: scripts/quests/quest_system.gd:185
+msgid "CADEADO ABERTO"
+msgstr ""
+
+#: scripts/quests/quest_system.gd:219
+msgid "%s concluiu a missão: todos os perks + %s"
+msgstr ""
+
+#: scripts/quests/quest_system.gd:221
+msgid "%s concluiu a missão: todos os perks"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:50
+msgid "Ligue a energia (disjuntor no Necrotério)"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:56
+msgid "Derrote o Paciente Zero enfurecido (round %s)"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:61
+msgid "Aplique o soro no Paciente Zero"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:65
+msgid "O SORO"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:79
+msgid "Componentes do soro %s/3 — UTI · Farmácia · cartão do Blindado"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:97
+msgid "PEGAR AS AMOSTRAS"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:99
+msgid "AMOSTRAS COLETADAS"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:103
+msgid "PEGAR O REAGENTE"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:105
+msgid "REAGENTE COLETADO"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:107
+msgid "ARMÁRIO TRANCADO — ATIRE NO CADEADO"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:111
+msgid "ABRIR A GAVETA COM O CARTÃO"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:113
+msgid "CATALISADOR COLETADO"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:115
+msgid "GAVETA TRANCADA — PRECISA DO CARTÃO DE ACESSO"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:138
+msgid "PEGAR O CARTÃO DE ACESSO"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:140
+msgid "CARTÃO DE ACESSO — abra a gaveta do Necrotério"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:146
+msgid "UM SEGURANÇA BLINDADO ESTÁ COM O CARTÃO DE ACESSO"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:155
+msgid "Leve os componentes à centrífuga do Laboratório"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:157
+msgid "CENTRÍFUGA SOB ATAQUE! Afaste os zumbis (%ss)"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:157
+msgid "Defenda a centrífuga: %ss"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:186
+msgid "COLOCAR OS COMPONENTES NA CENTRÍFUGA"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:193
+msgid "A CENTRÍFUGA ESTÁ GIRANDO — DEFENDA!"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:222
+msgid "SORO PRONTO! O Paciente Zero sentiu o cheiro..."
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:229
+msgid "APLICAR O SORO"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:239
+msgid "VOCÊ CUROU O PACIENTE ZERO"
+msgstr ""
+
+#: scripts/quests/serum_quest.gd:239
+msgid "Todos os perks + Tornado. A luta continua..."
+msgstr ""
+
+#: scripts/quests/temple_quest.gd:52
+msgid "Ligue o gerador dos arqueólogos (Necrópole)"
+msgstr ""
+
+#: scripts/quests/temple_quest.gd:57
+msgid "Leve os Fragmentos aos altares do Portão do Templo (%s/3)"
+msgstr ""
+
+#: scripts/quests/temple_quest.gd:60
+msgid "O guardião despertou: derrote o Minotauro (round %s)"
+msgstr ""
+
+#: scripts/quests/temple_quest.gd:65
+msgid "Pegue a chave do Submundo onde o Minotauro caiu"
+msgstr ""
+
+#: scripts/quests/temple_quest.gd:69
+msgid "Abra o Portão do Submundo (sul das Ruínas)"
+msgstr ""
+
+#: scripts/quests/temple_quest.gd:73
+msgid "O Cérbero guarda o Submundo: derrote-o (round %s)"
+msgstr ""
+
+#: scripts/quests/temple_quest.gd:78
+msgid "Sele o portão no altar da Arena Final"
+msgstr ""
+
+#: scripts/quests/temple_quest.gd:81
+msgid "O PORTÃO DO SUBMUNDO"
+msgstr ""
+
+#: scripts/quests/temple_quest.gd:91
+msgid "Fragmentos de Alma %s/3 — Necrópole · Floresta · um Esqueleto os carrega"
+msgstr ""
+
+#: scripts/quests/temple_quest.gd:108 scripts/quests/temple_quest.gd:141
+msgid "PEGAR O FRAGMENTO DE ALMA"
+msgstr ""
+
+#: scripts/quests/temple_quest.gd:116
+msgid "FRAGMENTO DE ALMA (%s/3)"
+msgstr ""
+
+#: scripts/quests/temple_quest.gd:133
+msgid "UM ESQUELETO CARREGA UM FRAGMENTO DE ALMA"
+msgstr ""
+
+#: scripts/quests/temple_quest.gd:162
+msgid "DEPOSITAR UM FRAGMENTO NO ALTAR"
+msgstr ""
+
+#: scripts/quests/temple_quest.gd:165
+msgid "ALTAR ACESO (%s/3)"
+msgstr ""
+
+#: scripts/quests/temple_quest.gd:176
+msgid "O PORTÃO DO TEMPLO SE ABRIU... ALGO ACORDOU NO LABIRINTO"
+msgstr ""
+
+#: scripts/quests/temple_quest.gd:183
+msgid "PEGAR A CHAVE DO SUBMUNDO"
+msgstr ""
+
+#: scripts/quests/temple_quest.gd:185
+msgid "CHAVE DO SUBMUNDO — abra o portão ao sul das Ruínas"
+msgstr ""
+
+#: scripts/quests/temple_quest.gd:204
+msgid "ABRIR O PORTÃO DO SUBMUNDO"
+msgstr ""
+
+#: scripts/quests/temple_quest.gd:218
+msgid "SELAR O PORTÃO DO SUBMUNDO"
+msgstr ""
+
+#: scripts/quests/temple_quest.gd:229
+msgid "O PORTÃO DO SUBMUNDO FOI SELADO"
+msgstr ""
+
+#: scripts/quests/temple_quest.gd:229
+msgid "Todos os perks + Raio de Zeus. Mas algo lá embaixo ainda respira..."
+msgstr ""
+
+#: scripts/quests/train_quest.gd:14 scripts/quests/train_quest.gd:73
+msgid "O ÚLTIMO TREM"
+msgstr ""
+
+#: scripts/quests/train_quest.gd:58
+msgid "Ligue a energia (disjuntor na Área Técnica)"
+msgstr ""
+
+#: scripts/quests/train_quest.gd:64
+msgid "Derrote o Condutor enfurecido (round %s)"
+msgstr ""
+
+#: scripts/quests/train_quest.gd:69
+msgid "Pegue a Lanterna do Condutor"
+msgstr ""
+
+#: scripts/quests/train_quest.gd:87
+msgid "Peças do sinal %s/3 — fusível (Manutenção) · chave (Bilheteria) · manivela (Blindado)"
+msgstr ""
+
+#: scripts/quests/train_quest.gd:103
+msgid "PEGAR O FUSÍVEL DO SINAL"
+msgstr ""
+
+#: scripts/quests/train_quest.gd:105
+msgid "FUSÍVEL COLETADO"
+msgstr ""
+
+#: scripts/quests/train_quest.gd:109
+msgid "PEGAR A CHAVE DO PAINEL"
+msgstr ""
+
+#: scripts/quests/train_quest.gd:111
+msgid "CHAVE DO PAINEL COLETADA"
+msgstr ""
+
+#: scripts/quests/train_quest.gd:113
+msgid "COFRE TRANCADO — ATIRE NO CADEADO"
+msgstr ""
+
+#: scripts/quests/train_quest.gd:132
+msgid "UM BLINDADO ESTÁ COM A MANIVELA DO SINAL"
+msgstr ""
+
+#: scripts/quests/train_quest.gd:140
+msgid "PEGAR A MANIVELA DO SINAL"
+msgstr ""
+
+#: scripts/quests/train_quest.gd:142
+msgid "MANIVELA COLETADA"
+msgstr ""
+
+#: scripts/quests/train_quest.gd:151
+msgid "Leve as peças ao sinal da Plataforma e conserte"
+msgstr ""
+
+#: scripts/quests/train_quest.gd:153
+msgid "SINAL SOB ATAQUE! Afaste os zumbis (%ss)"
+msgstr ""
+
+#: scripts/quests/train_quest.gd:153
+msgid "Segure o sinal até o trem passar: %ss"
+msgstr ""
+
+#: scripts/quests/train_quest.gd:167
+msgid "CONSERTAR O SINAL"
+msgstr ""
+
+#: scripts/quests/train_quest.gd:174
+msgid "O SINAL ESTÁ LIGADO — SEGURE ATÉ O TREM PASSAR!"
+msgstr ""
+
+#: scripts/quests/train_quest.gd:209
+msgid "O TREM PASSOU! O Condutor saiu dos túneis..."
+msgstr ""
+
+#: scripts/quests/train_quest.gd:216
+msgid "PEGAR A LANTERNA DO CONDUTOR"
+msgstr ""
+
+#: scripts/quests/train_quest.gd:226
+msgid "O ÚLTIMO TREM PASSOU"
+msgstr ""
+
+#: scripts/quests/train_quest.gd:226
+msgid "Todos os perks + Lanterna do Condutor. A estação é sua..."
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:122
+msgid "ANDAR PARA CIMA"
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:122
+msgid "ANDAR PARA BAIXO"
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:122
+msgid "ANDAR PARA A ESQUERDA"
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:123
+msgid "ANDAR PARA A DIREITA"
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:123 scripts/ui/touch_controls.gd:25
+msgid "ATIRAR"
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:123
+msgid "RECARREGAR"
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:123
+msgid "USAR / COMPRAR"
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:124
+msgid "TROCAR DE ARMA"
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:124
+msgid "ARMA 1"
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:124
+msgid "ARMA 2"
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:124 scripts/ui/touch_controls.gd:29
+msgid "FACA"
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:125
+msgid "PULAR"
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:125
+msgid "MAPA GRANDE"
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:125
+msgid "LANTERNA"
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:125
+msgid "PAUSA"
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:245
+msgid "MOUSE %d"
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:247
+msgid "BOTÃO %d"
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:249
+msgid "EIXO %d"
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:254
+msgid "ESPAÇO"
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:256
+msgid "MOUSE ESQ."
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:256
+msgid "MOUSE DIR."
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:256
+msgid "MOUSE MEIO"
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:257
+msgid "RODA ↑"
+msgstr ""
+
+#: scripts/systems/input_bindings.gd:257
+msgid "RODA ↓"
+msgstr ""
+
+#: scripts/systems/loc.gd:98
+msgid "AUTOMÁTICO (%s)"
+msgstr ""
+
+#: scripts/systems/loc.gd:106 scripts/weapons/weapon_upgrade.gd:35 scripts/weapons/weapon_upgrade.gd:35
+msgid " Mk III"
+msgstr ""
+
+#: scripts/systems/loc.gd:106 scripts/weapons/weapon_upgrade.gd:21
+msgid " Mk II"
+msgstr ""
+
+#: scripts/systems/players.gd:124
+msgid "ALGUÉM"
+msgstr ""
+
+#: scripts/systems/power_up_system.gd:214
+msgid "Barricadas consertadas (%s tábuas) · +%s"
+msgstr ""
+
+#: scripts/systems/power_up_system.gd:223
+msgid "%s pegou %s"
+msgstr ""
+
+#: scripts/systems/power_up_system.gd:326
+msgid "Perk grátis: %s"
+msgstr ""
+
+#: scripts/systems/power_up_system.gd:331
+msgid "Fúria: dano x%s"
+msgstr ""
+
+#: scripts/systems/power_up_system.gd:352
+msgid "FIRE SALE! MYSTERY BOX A %s · +%s CAIXAS NO MAPA"
+msgstr ""
+
+#: scripts/systems/save_store.gd:207 scripts/systems/save_store.gd:444 scripts/ui/hud.gd:827
+msgid "SOBREVIVENTE"
+msgstr ""
+
+#: scripts/systems/score_manager.gd:113 scripts/systems/score_manager.gd:115
+msgid "MULTI x%s"
+msgstr ""
+
+#: scripts/systems/session.gd:23
+msgid "VOCÊ"
+msgstr ""
+
+#: scripts/systems/session.gd:25
+msgid "BOT %d"
+msgstr ""
+
+#: scripts/ui/account_screen.gd:23
+msgid "CONTA"
+msgstr ""
+
+#: scripts/ui/account_screen.gd:25
+msgid "Contas online indisponíveis nesta versão."
+msgstr ""
+
+#: scripts/ui/account_screen.gd:33 scripts/ui/achievements_screen.gd:32 scripts/ui/armory_screen.gd:86
+msgid "VOLTAR"
+msgstr ""
+
+#: scripts/ui/account_screen.gd:41
+msgid "LOGADO COMO %s"
+msgstr ""
+
+#: scripts/ui/account_screen.gd:42
+msgid "SINCRONIZAR AGORA"
+msgstr ""
+
+#: scripts/ui/account_screen.gd:43
+msgid "SAIR DA CONTA"
+msgstr ""
+
+#: scripts/ui/account_screen.gd:49
+msgid "USUÁRIO"
+msgstr ""
+
+#: scripts/ui/account_screen.gd:55
+msgid "SENHA"
+msgstr ""
+
+#: scripts/ui/account_screen.gd:78
+msgid "Sincronizando o progresso..."
+msgstr ""
+
+#: scripts/ui/account_screen.gd:86
+msgid "ENTRAR"
+msgstr ""
+
+#: scripts/ui/account_screen.gd:87
+msgid "CRIAR CONTA"
+msgstr ""
+
+#: scripts/ui/account_screen.gd:88
+msgid "Entre para salvar o progresso na nuvem e jogar em qualquer aparelho (inclusive no navegador).\nNão há recuperação por e-mail: guarde bem a sua senha."
+msgstr ""
+
+#: scripts/ui/account_screen.gd:102
+msgid "Progresso salvo na nuvem · %s"
+msgstr ""
+
+#: scripts/ui/account_screen.gd:104
+msgid "O progresso é salvo na nuvem automaticamente"
+msgstr ""
+
+#: scripts/ui/achievements_screen.gd:15 scripts/ui/main_menu.gd:42
+msgid "CONQUISTAS"
+msgstr ""
+
+#: scripts/ui/achievements_screen.gd:17
+msgid "%d / %d LIBERADAS"
+msgstr ""
+
+#: scripts/ui/achievements_screen.gd:68
+msgid "Segredo — continue explorando"
+msgstr ""
+
+#: scripts/ui/achievements_screen.gd:89
+msgid "ESTATÍSTICAS"
+msgstr ""
+
+#: scripts/ui/achievements_screen.gd:92
+msgid "%s — melhor round %d · recorde %d pts · %d abates"
+msgstr ""
+
+#: scripts/ui/achievements_screen.gd:96
+msgid "Partidas %d · Abates %d · Faca %d · Headshots %d · Bosses %d · Tempo %dh%02d"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:9
+msgid "COMUM"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:9
+msgid "INCOMUM"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:9
+msgid "RARA"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:9
+msgid "ÉPICA"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:9
+msgid "LENDÁRIA"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:15
+msgid "Prêmio da missão O Último Trem (Terminal) — nunca sai na Mystery Box"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:16
+msgid "Prêmio da missão O Portão do Submundo (Templo) — nunca sai na Mystery Box"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:17
+msgid "Santuário do Olimpo: ative as 12 estátuas dos deuses no Templo"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:18
+msgid "Evento Portão do Submundo (Templo): destrua o portal"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:21 scripts/ui/armory_screen.gd:160
+msgid "DANO"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:21 scripts/ui/armory_screen.gd:164
+msgid "CADÊNCIA"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:21 scripts/ui/armory_screen.gd:168
+msgid "PENTE"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:21 scripts/ui/armory_screen.gd:172
+msgid "RESERVA"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:21 scripts/ui/armory_screen.gd:176
+msgid "RECARGA"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:21 scripts/ui/armory_screen.gd:180
+msgid "ALCANCE"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:57 scripts/ui/main_menu.gd:41
+msgid "ARMAS"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:131
+msgid "AUTOMÁTICA"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:131
+msgid "SEMIAUTOMÁTICA"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:138
+msgid "Elemento %s (%d, segure E na parede): %s"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:142
+msgid "Weapon Lab: Mk II %d · Mk III %d%s"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:142
+msgid "  (vira %s)"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:143
+msgid "VER MK II"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:143
+msgid "VER MK III"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:143
+msgid "VER NORMAL"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:179
+msgid "%.1f s"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:183
+msgid "%.0f m"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:202
+msgid "Arma inicial do %s"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:205
+msgid "Parede: %d · %s · %s"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:207
+msgid "Mystery Box só no %s"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:209
+msgid "Mystery Box (em todos os mapas)"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:209
+msgid "também na Mystery Box"
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:226
+msgid "Granada explode no impacto: %d de dano em área (raio %.1f m). Não fere você."
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:228
+msgid "Jato contínuo que incendeia: %d de dano por segundo durante %.1f s."
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:230
+msgid "Raio instantâneo que salta entre até %d zumbis e os atordoa."
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:232
+msgid "Esfera que atravessa a horda e explode numa descarga elétrica (%d em área)."
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:234
+msgid "Rajada de vento em cone (%d°, alcance %.0f m) que arremessa e destrói a horda à frente."
+msgstr ""
+
+#: scripts/ui/armory_screen.gd:235
+msgid "Atravessa até %d zumbis por tiro."
+msgstr ""
+
+#: scripts/ui/character_screen.gd:29
+msgid "PERSONAGEM"
+msgstr ""
+
+#: scripts/ui/character_screen.gd:31
+msgid "Libere os visuais com as conquistas."
+msgstr ""
+
+#: scripts/ui/character_screen.gd:46
+msgid "EM USO"
+msgstr ""
+
+#: scripts/ui/character_screen.gd:46 scripts/ui/touch_controls.gd:26
+msgid "USAR"
+msgstr ""
+
+#: scripts/ui/character_screen.gd:46
+msgid "TRANCADO"
+msgstr ""
+
+#: scripts/ui/character_screen.gd:51 scripts/ui/main_menu.gd:38 scripts/ui/map_select.gd:73
+msgid "JOGAR"
+msgstr ""
+
+#: scripts/ui/character_screen.gd:117
+msgid "Trancado — libere com a conquista \"%s\": %s"
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:13
+msgid "Aparece quando você enfrentar esse inimigo."
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:14
+msgid "Aparece quando você enfrentar esse chefe."
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:15
+msgid "Chegue perto da máquina desse perk."
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:16
+msgid "Pegue esse power-up numa partida."
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:17
+msgid "Compre esse elemento numa parede de arma."
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:18
+msgid "Receba essa bênção num altar do Templo."
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:19
+msgid "Aparece quando esse evento acontecer numa partida."
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:20
+msgid "Descubra jogando."
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:48 scripts/ui/main_menu.gd:43
+msgid "GLOSSÁRIO"
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:133
+msgid "DESCOBERTOS %d DE %d"
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:161
+msgid "Ainda não encontrado."
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:163 scripts/ui/glossary_screen.gd:169
+msgid "Onde: %s"
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:248
+msgid "VIDA %d · VELOCIDADE %.1f m/s · DANO %d · %d PONTOS"
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:252
+msgid "VIDA %d · VELOCIDADE %.1f m/s · GOLPE %d"
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:256
+msgid " · ATÉ %d POR PARTIDA"
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:257
+msgid "%d PONTOS · %s%s"
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:257
+msgid "FUNCIONA SEM ENERGIA"
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:257
+msgid "PRECISA DE ENERGIA"
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:260 scripts/ui/glossary_screen.gd:271
+msgid "DURA %d s"
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:260
+msgid "EFEITO NA HORA"
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:262
+msgid "%d PONTOS NA PAREDE DA ARMA"
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:264
+msgid "%d PONTOS NO ALTAR"
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:273
+msgid "A PARTIR DO ROUND %d"
+msgstr ""
+
+#: scripts/ui/glossary_screen.gd:277
+msgid "DICA: %s"
+msgstr ""
+
+#: scripts/ui/hud.gd:97 scripts/ui/hud.gd:563
+msgid "ZUMBIS RESTANTES  %d"
+msgstr ""
+
+#: scripts/ui/hud.gd:98
+msgid "ROUND %d COMPLETO"
+msgstr ""
+
+#: scripts/ui/hud.gd:116
+msgid "ÁREA LIBERADA: %s"
+msgstr ""
+
+#: scripts/ui/hud.gd:134
+msgid "CONQUISTA DESBLOQUEADA: %s"
+msgstr ""
+
+#: scripts/ui/hud.gd:135 scripts/ui/hud.gd:705
+msgid "SCORE %d"
+msgstr ""
+
+#: scripts/ui/hud.gd:136
+msgid "%s DESBLOQUEADO!"
+msgstr ""
+
+#: scripts/ui/hud.gd:137
+msgid "%s SE APROXIMA"
+msgstr ""
+
+#: scripts/ui/hud.gd:139
+msgid "FASE %d"
+msgstr ""
+
+#: scripts/ui/hud.gd:144
+msgid "%s DERROTADO  +%d"
+msgstr ""
+
+#: scripts/ui/hud.gd:146
+msgid "MAX AMMO"
+msgstr ""
+
+#: scripts/ui/hud.gd:179
+msgid "◆ %s  %d/%d"
+msgstr ""
+
+#: scripts/ui/hud.gd:208
+msgid "%d FPS"
+msgstr ""
+
+#: scripts/ui/hud.gd:268 scripts/ui/hud.gd:709 scripts/ui/ranking_screen.gd:67
+msgid "ROUND"
+msgstr ""
+
+#: scripts/ui/hud.gd:273
+msgid "SCORE 0"
+msgstr ""
+
+#: scripts/ui/hud.gd:283
+msgid "VIDA"
+msgstr ""
+
+#: scripts/ui/hud.gd:414
+msgid "GAME OVER"
+msgstr ""
+
+#: scripts/ui/hud.gd:562 scripts/ui/hud.gd:564
+msgid "ROUND %d"
+msgstr ""
+
+#: scripts/ui/hud.gd:572
+msgid "%s  ·  FASE %d"
+msgstr ""
+
+#: scripts/ui/hud.gd:577
+msgid "RODADA DOS CÃES"
+msgstr ""
+
+#: scripts/ui/hud.gd:593
+msgid "VIDA  %d / %d"
+msgstr ""
+
+#: scripts/ui/hud.gd:659
+msgid "Fúria"
+msgstr ""
+
+#: scripts/ui/hud.gd:696
+msgid "RECARREGANDO"
+msgstr ""
+
+#: scripts/ui/hud.gd:709
+msgid "ZUMBIS ABATIDOS"
+msgstr ""
+
+#: scripts/ui/hud.gd:709
+msgid "HEADSHOTS"
+msgstr ""
+
+#: scripts/ui/hud.gd:710
+msgid "PONTOS GANHOS"
+msgstr ""
+
+#: scripts/ui/hud.gd:710
+msgid "TEMPO"
+msgstr ""
+
+#: scripts/ui/hud.gd:711
+msgid "BOSSES"
+msgstr ""
+
+#: scripts/ui/hud.gd:711
+msgid "DANO CAUSADO"
+msgstr ""
+
+#: scripts/ui/hud.gd:711
+msgid "DISPAROS / ACERTOS"
+msgstr ""
+
+#: scripts/ui/hud.gd:712
+msgid "PRECISÃO"
+msgstr ""
+
+#: scripts/ui/hud.gd:712
+msgid "ABATES NA FACA"
+msgstr ""
+
+#: scripts/ui/hud.gd:729
+msgid "NOVO RECORDE!"
+msgstr ""
+
+#: scripts/ui/hud.gd:729 scripts/ui/main_menu.gd:32
+msgid "RECORDE: %d PONTOS · ROUND %d"
+msgstr ""
+
+#: scripts/ui/hud.gd:731
+msgid "TIME: %s"
+msgstr ""
+
+#: scripts/ui/hud.gd:736
+msgid "PARTIDA INVALIDADA — NÃO VALE SAVE NEM RANKING"
+msgstr ""
+
+#: scripts/ui/hud.gd:752
+msgid "JOGAR NOVAMENTE"
+msgstr ""
+
+#: scripts/ui/hud.gd:752 scripts/ui/pause_menu.gd:38
+msgid "VOLTAR À SALA"
+msgstr ""
+
+#: scripts/ui/hud.gd:755 scripts/ui/main_menu.gd:40 scripts/ui/ranking_screen.gd:23
+msgid "RANKING"
+msgstr ""
+
+#: scripts/ui/hud.gd:759 scripts/ui/pause_menu.gd:28 scripts/ui/pause_menu.gd:39
+msgid "MENU"
+msgstr ""
+
+#: scripts/ui/hud.gd:771
+msgid "PARTIDA INVALIDADA"
+msgstr ""
+
+#: scripts/ui/hud.gd:790
+msgid "%dº LUGAR NO RANKING %s DE %s!"
+msgstr ""
+
+#: scripts/ui/hud.gd:798
+msgid "ENVIANDO O TIME AO RANKING GLOBAL..."
+msgstr ""
+
+#: scripts/ui/hud.gd:804 scripts/ui/hud.gd:849
+msgid "RANKING GLOBAL: %s"
+msgstr ""
+
+#: scripts/ui/hud.gd:804
+msgid "TIME ENVIADO AO RANKING GLOBAL (%s)!"
+msgstr ""
+
+#: scripts/ui/hud.gd:814
+msgid "ENTROU NO TOP! SEU NOME:"
+msgstr ""
+
+#: scripts/ui/hud.gd:814
+msgid "SEU NOME PARA O RANKING GLOBAL:"
+msgstr ""
+
+#: scripts/ui/hud.gd:835
+msgid "%dº LUGAR NO RANKING DE %s!"
+msgstr ""
+
+#: scripts/ui/hud.gd:843
+msgid "ENVIANDO AO RANKING GLOBAL..."
+msgstr ""
+
+#: scripts/ui/hud.gd:849
+msgid "ENVIADO AO RANKING GLOBAL DA TEMPORADA!"
+msgstr ""
+
+#: scripts/ui/hud.gd:852
+msgid "SALVAR"
+msgstr ""
+
+#: scripts/ui/hud.gd:875
+msgid "LANTERNA %s%s"
+msgstr ""
+
+#: scripts/ui/hud.gd:875
+msgid "LIGADA"
+msgstr ""
+
+#: scripts/ui/hud.gd:875
+msgid "DESLIGADA"
+msgstr ""
+
+#: scripts/ui/hud.gd:886
+msgid "ESTÁ ESCURO — [%s] LIGA A LANTERNA"
+msgstr ""
+
+#: scripts/ui/hud.gd:966
+msgid "CAÍDO %ds"
+msgstr ""
+
+#: scripts/ui/hud.gd:968 scripts/ui/hud.gd:970
+msgid "FORA"
+msgstr ""
+
+#: scripts/ui/hud.gd:972 scripts/ui/lobby_screen.gd:325
+msgid "%d ms"
+msgstr ""
+
+#: scripts/ui/hud.gd:1008
+msgid "COLEGA"
+msgstr ""
+
+#: scripts/ui/hud.gd:1092
+msgid "%s %ds"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:78 scripts/ui/main_menu.gd:39
+msgid "JOGAR EM GRUPO"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:79
+msgid "Até 4 jogadores pela internet. Crie uma sala e passe o código, ou entre com o código de um amigo."
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:81
+msgid "SEU NOME"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:85 scripts/ui/ranking_screen.gd:67
+msgid "NOME"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:89
+msgid "CRIAR SALA"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:92 scripts/ui/lobby_screen.gd:196
+msgid "CÓDIGO DA SALA"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:105 scripts/ui/lobby_screen.gd:119
+msgid "ENTRAR NA SALA"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:109
+msgid "REDE LOCAL (MESMO WI-FI) — IP DO HOST"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:123
+msgid "CRIAR SALA NA REDE LOCAL"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:141
+msgid "Convite para a sala %s: digite seu nome e toque ENTRAR NA SALA"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:178
+msgid "O código tem 5 letras"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:182
+msgid "Procurando a sala..."
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:199
+msgid "Na rede local: os amigos entram com o IP  %s"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:206
+msgid "COPIAR CÓDIGO"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:206
+msgid "Código %s copiado!"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:207
+msgid "COPIAR CONVITE"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:207
+msgid "Convite copiado! Quem abrir o link entra direto na sala."
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:210
+msgid "MAPA: %s  →"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:212
+msgid "MAPA: %s"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:234
+msgid "  (VOCÊ)"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:242
+msgid "HOST"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:242 scripts/ui/lobby_screen.gd:257
+msgid "PRONTO"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:242
+msgid "ESPERANDO"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:248
+msgid "· vaga livre"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:251
+msgid "COMEÇAR"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:254
+msgid "Começa quando todos estiverem prontos."
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:254
+msgid "Esperando os amigos entrarem com o código."
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:257
+msgid "CANCELAR PRONTO"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:263
+msgid "SAIR DA SALA"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:286
+msgid "SEU VISUAL\n%s"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:315
+msgid "Bora jogar Tentando Sobreviver comigo! Sala %s: %s"
+msgstr ""
+
+#: scripts/ui/lobby_screen.gd:325
+msgid "— ms"
+msgstr ""
+
+#: scripts/ui/main_menu.gd:20
+msgid "%s mover · mouse mirar · clique atirar · %s recarregar · %s trocar arma · %s faca · %s usar · %s pausa"
+msgstr ""
+
+#: scripts/ui/main_menu.gd:22
+msgid "Analógico: mover · ATIRAR: mira sozinho no zumbi mais perto e atira · FACA: golpe corpo a corpo"
+msgstr ""
+
+#: scripts/ui/main_menu.gd:28
+msgid "TENTANDO\nSOBREVIVER"
+msgstr ""
+
+#: scripts/ui/main_menu.gd:45
+msgid "CONTA: %s"
+msgstr ""
+
+#: scripts/ui/main_menu.gd:45
+msgid "CONTA / SALVAR NA NUVEM"
+msgstr ""
+
+#: scripts/ui/main_menu.gd:46 scripts/ui/settings_screen.gd:26
+msgid "CONFIGURAÇÕES"
+msgstr ""
+
+#: scripts/ui/main_menu.gd:47
+msgid "APOIE O PROJETO (PIX)"
+msgstr ""
+
+#: scripts/ui/main_menu.gd:49
+msgid "SAIR"
+msgstr ""
+
+#: scripts/ui/main_menu.gd:70
+msgid "MODO CABEÇÃO LIBERADO! (liga/desliga em Configurações)"
+msgstr ""
+
+#: scripts/ui/main_menu.gd:70
+msgid "MODO CABEÇÃO LIGADO!"
+msgstr ""
+
+#: scripts/ui/map_select.gd:12 data/configs/achievements.tres
+msgid "O Último Trem"
+msgstr ""
+
+#: scripts/ui/map_select.gd:12
+msgid "O Soro do Dr. Almeida"
+msgstr ""
+
+#: scripts/ui/map_select.gd:13 data/configs/achievements.tres
+msgid "O Portão do Submundo"
+msgstr ""
+
+#: scripts/ui/map_select.gd:20
+msgid "ESCOLHA O MAPA"
+msgstr ""
+
+#: scripts/ui/map_select.gd:65
+msgid "Recorde: %d pontos · round %d"
+msgstr ""
+
+#: scripts/ui/map_select.gd:65
+msgid "Sem recorde ainda"
+msgstr ""
+
+#: scripts/ui/map_select.gd:68
+msgid "1º no ranking: %s · %d pts"
+msgstr ""
+
+#: scripts/ui/map_select.gd:72
+msgid "✓ MISSÃO CONCLUÍDA: %s"
+msgstr ""
+
+#: scripts/ui/map_select.gd:72
+msgid "◆ MISSÃO: %s"
+msgstr ""
+
+#: scripts/ui/map_select.gd:85
+msgid "BLOQUEADO — conclua a missão do %s"
+msgstr ""
+
+#: scripts/ui/map_select.gd:85
+msgid " ou do "
+msgstr ""
+
+#: scripts/ui/map_select.gd:86
+msgid "BLOQUEADO — derrote o boss do round %d no %s"
+msgstr ""
+
+#: scripts/ui/minimap.gd:113 scripts/ui/touch_controls.gd:30
+msgid "MAPA"
+msgstr ""
+
+#: scripts/ui/pause_menu.gd:28
+msgid "PAUSADO"
+msgstr ""
+
+#: scripts/ui/pause_menu.gd:30
+msgid "A partida continua para o time."
+msgstr ""
+
+#: scripts/ui/pause_menu.gd:35
+msgid "CONTINUAR"
+msgstr ""
+
+#: scripts/ui/pause_menu.gd:38
+msgid "REINICIAR"
+msgstr ""
+
+#: scripts/ui/pause_menu.gd:39
+msgid "SAIR DA PARTIDA"
+msgstr ""
+
+#: scripts/ui/pause_menu.gd:46
+msgid "%s para continuar  ·  %s: mapa grande"
+msgstr ""
+
+#: scripts/ui/ranking_screen.gd:67
+msgid "TIME"
+msgstr ""
+
+#: scripts/ui/ranking_screen.gd:67
+msgid "PONTOS"
+msgstr ""
+
+#: scripts/ui/ranking_screen.gd:73
+msgid "Nenhuma partida ainda — jogue para entrar no ranking!"
+msgstr ""
+
+#: scripts/ui/ranking_screen.gd:73
+msgid "Nenhuma partida em %s ainda — chame os amigos em JOGAR EM GRUPO!"
+msgstr ""
+
+#: scripts/ui/ranking_screen.gd:74
+msgid "Mapa bloqueado"
+msgstr ""
+
+#: scripts/ui/ranking_screen.gd:81
+msgid "Ranking global indisponível"
+msgstr ""
+
+#: scripts/ui/ranking_screen.gd:90
+msgid "Ranking global indisponível (sem conexão)"
+msgstr ""
+
+#: scripts/ui/ranking_screen.gd:93
+msgid "Ninguém pontuou nesta temporada ainda — seja o primeiro!"
+msgstr ""
+
+#: scripts/ui/ranking_screen.gd:102
+msgid "TEMPORADA TERMINA EM %d %s%s"
+msgstr ""
+
+#: scripts/ui/ranking_screen.gd:102
+msgid "DIA"
+msgstr ""
+
+#: scripts/ui/ranking_screen.gd:102
+msgid "DIAS"
+msgstr ""
+
+#: scripts/ui/ranking_screen.gd:102
+msgid " · VOCÊ: %dº"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:9
+msgid "JOGO"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:9
+msgid "VÍDEO"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:9
+msgid "ÁUDIO"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:9
+msgid "CONTROLES"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:11
+msgid "PEQUENO"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:11 scripts/ui/settings_rows.gd:92
+msgid "MÉDIO"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:11
+msgid "GRANDE"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:14 scripts/ui/settings_rows.gd:155
+msgid "AUTO"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:14 scripts/ui/settings_rows.gd:19 scripts/ui/settings_rows.gd:124
+msgid "LIGADO"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:14 scripts/ui/settings_rows.gd:19 scripts/ui/settings_rows.gd:216
+msgid "DESLIGADO"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:16 scripts/ui/settings_rows.gd:118
+msgid "JANELA"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:16 scripts/ui/settings_rows.gd:126
+msgid "TELA CHEIA"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:16
+msgid "TELA CHEIA EXCLUSIVA"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:19
+msgid "ADAPTATIVO"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:63
+msgid "Q / E: trocar de aba"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:77
+msgid "IDIOMA"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:80
+msgid "NOME NO RANKING"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:88
+msgid "TREMOR DE TELA"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:89
+msgid "SANGUE"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:90
+msgid "MIRA NO MOUSE"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:91
+msgid "MINIMAPA"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:92
+msgid "TAMANHO DO MINIMAPA"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:94
+msgid "MODO CABEÇÃO"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:118
+msgid "MODO DE TELA"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:123
+msgid "RESOLUÇÃO"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:124
+msgid "VSYNC"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:127
+msgid "LIMITE DE FPS"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:127
+msgid "SEM LIMITE"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:129
+msgid "ESCALA DA INTERFACE"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:130
+msgid "BRILHO"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:131
+msgid "SOMBRAS"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:132
+msgid "MOSTRAR FPS"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:142
+msgid "VOLUME GERAL"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:144
+msgid "MÚSICA"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:145
+msgid "EFEITOS"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:146
+msgid "INTERFACE"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:147
+msgid "VOZES"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:148
+msgid "SOM"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:155
+msgid "CONTROLES DE TOQUE"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:159
+msgid "AÇÃO"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:160
+msgid "TECLADO / MOUSE"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:161
+msgid "CONTROLE"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:175
+msgid "Clique numa tecla para trocar. ESC cancela."
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:176
+msgid "RESTAURAR PADRÕES"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:193
+msgid "Aperte uma tecla para %s… (ESC cancela)"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:193
+msgid "Aperte um botão do controle para %s… (ESC cancela)"
+msgstr ""
+
+#: scripts/ui/settings_screen.gd:30
+msgid "CONFIRMAR: APAGAR TUDO?"
+msgstr ""
+
+#: scripts/ui/settings_screen.gd:30
+msgid "APAGAR PROGRESSO"
+msgstr ""
+
+#: scripts/ui/support_info.gd:17
+msgid "Desenvolvido por %s\n%s"
+msgstr ""
+
+#: scripts/ui/support_screen.gd:15
+msgid "APOIE O PROJETO"
+msgstr ""
+
+#: scripts/ui/support_screen.gd:16
+msgid "O Tentando Sobreviver é gratuito e sem anúncios. Se você curtiu, um PIX de qualquer valor ajuda a manter o projeto vivo — totalmente opcional."
+msgstr ""
+
+#: scripts/ui/support_screen.gd:35
+msgid "PIX para %s"
+msgstr ""
+
+#: scripts/ui/support_screen.gd:36
+msgid "Chave aleatória: %s"
+msgstr ""
+
+#: scripts/ui/support_screen.gd:37
+msgid "COPIAR PIX COPIA E COLA"
+msgstr ""
+
+#: scripts/ui/support_screen.gd:37
+msgid "PIX copia e cola copiado! Cole no app do seu banco."
+msgstr ""
+
+#: scripts/ui/support_screen.gd:39
+msgid "COPIAR CHAVE"
+msgstr ""
+
+#: scripts/ui/support_screen.gd:39
+msgid "Chave PIX copiada!"
+msgstr ""
+
+#: scripts/ui/support_screen.gd:43
+msgid "Ideias, bugs ou parcerias: %s"
+msgstr ""
+
+#: scripts/ui/support_screen.gd:44
+msgid "Desenvolvido por %s"
+msgstr ""
+
+#: scripts/ui/touch_controls.gd:27
+msgid "RECARR."
+msgstr ""
+
+#: scripts/ui/touch_controls.gd:28
+msgid "TROCAR"
+msgstr ""
+
+#: data/bosses/cerberus.tres
+msgid "Cérbero"
+msgstr ""
+
+#: data/bosses/conductor.tres
+msgid "The Conductor"
+msgstr ""
+
+#: data/bosses/entity.tres
+msgid "A Entidade do Submundo"
+msgstr ""
+
+#: data/bosses/entity.tres
+msgid "O templo não era uma prisão. Era uma porta... e ela está se abrindo."
+msgstr ""
+
+#: data/bosses/minotaur.tres
+msgid "O Minotauro"
+msgstr ""
+
+#: data/bosses/patient_zero.tres
+msgid "Paciente Zero"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Primeiro Sangue"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Abata o primeiro zumbi"
+msgstr ""
+
+#: data/configs/achievements.tres data/configs/skins.tres
+msgid "Sobrevivente"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Chegue à wave 10"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Veterano"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Chegue à wave 20"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Energia!"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Ligue o disjuntor principal"
+msgstr ""
+
+#: data/configs/achievements.tres data/configs/skins.tres
+msgid "Maquinista"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Derrote o boss The Conductor"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Paciente Curado"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Derrote o Paciente Zero"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "O Soro"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Complete a missão do Dr. Almeida"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Adestrador"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Vença uma rodada de cães sem levar dano"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Atropelador"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Atropele 10 zumbis com uma passagem do trem"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Colecionador"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Tenha todos os perks na mesma partida"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Olho do Furacão"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Transforme o Canhão de Vento no Tornado"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Liquidação"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Use a Mystery Box durante um Fire Sale"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Açougueiro"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Abata 1.000 zumbis"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Faca na Caveira"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Abata 50 zumbis na faca"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Mira de Ouro"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Acerte 100 headshots fatais"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Ursinhos"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Encontre todos os ursinhos escondidos"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Cabeção"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Descubra o código secreto do menu"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Complete a missão do Terminal e pegue a Lanterna do Condutor"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Fio de Ariadne"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Derrote o Minotauro"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Os Doze do Olimpo"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Ative as 12 estátuas dos deuses no Templo"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Complete a missão do Templo e pegue o Raio de Zeus"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Guardião dos Três"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Derrote o Cérbero"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "A Porta"
+msgstr ""
+
+#: data/configs/achievements.tres
+msgid "Derrote a Entidade do Submundo"
+msgstr ""
+
+#: data/configs/anticheat.tres
+msgid "PARTIDA INVALIDADA — não vale save nem ranking"
+msgstr ""
+
+#: data/configs/elements.tres
+msgid "LUZ"
+msgstr ""
+
+#: data/configs/elements.tres
+msgid "Clarão que cega: atordoa os zumbis e causa +50% de dano no boss."
+msgstr ""
+
+#: data/configs/elements.tres
+msgid "SOMBRA"
+msgstr ""
+
+#: data/configs/elements.tres
+msgid "Rouba vida: cada acerto recupera parte do dano causado."
+msgstr ""
+
+#: data/configs/elements.tres
+msgid "GELO"
+msgstr ""
+
+#: data/configs/elements.tres
+msgid "Deixa os zumbis lentos e às vezes os congela."
+msgstr ""
+
+#: data/configs/elements.tres
+msgid "RAIO"
+msgstr ""
+
+#: data/configs/elements.tres
+msgid "A eletricidade salta para 2 zumbis próximos."
+msgstr ""
+
+#: data/configs/elements.tres
+msgid "FOGO"
+msgstr ""
+
+#: data/configs/elements.tres
+msgid "Incendeia: dano contínuo por alguns segundos."
+msgstr ""
+
+#: data/configs/elements.tres
+msgid "EXPLOSIVO"
+msgstr ""
+
+#: data/configs/elements.tres
+msgid "Cada tiro que acerta estoura numa pequena explosão."
+msgstr ""
+
+#: data/configs/maps.tres
+msgid "Terminal Central"
+msgstr ""
+
+#: data/configs/maps.tres
+msgid "Estação de trem abandonada: hall, plataforma, lojas, túneis e manutenção."
+msgstr ""
+
+#: data/configs/maps.tres
+msgid "Hospital Santa Luzia"
+msgstr ""
+
+#: data/configs/maps.tres
+msgid "Onde o vírus nasceu: recepção, UTI, centro cirúrgico, necrotério e o laboratório no subsolo."
+msgstr ""
+
+#: data/configs/maps.tres
+msgid "Templo dos Mortos"
+msgstr ""
+
+#: data/configs/maps.tres
+msgid "Ruínas gregas, uma necrópole, a floresta de Artemis e o portão para o Submundo."
+msgstr ""
+
+#: data/configs/powerups.tres
+msgid "Max Ammo"
+msgstr ""
+
+#: data/configs/powerups.tres
+msgid "Double Cash"
+msgstr ""
+
+#: data/configs/powerups.tres
+msgid "Instant Kill"
+msgstr ""
+
+#: data/configs/powerups.tres
+msgid "Nuke"
+msgstr ""
+
+#: data/configs/powerups.tres
+msgid "Full Heal"
+msgstr ""
+
+#: data/configs/powerups.tres
+msgid "Armor"
+msgstr ""
+
+#: data/configs/powerups.tres
+msgid "Speed Boost"
+msgstr ""
+
+#: data/configs/powerups.tres
+msgid "Carpenter"
+msgstr ""
+
+#: data/configs/powerups.tres
+msgid "Golden Drop"
+msgstr ""
+
+#: data/configs/powerups.tres
+msgid "Fire Sale"
+msgstr ""
+
+#: data/configs/quests.tres
+msgid "O SORO DO DR. ALMEIDA"
+msgstr ""
+
+#: data/configs/skins.tres
+msgid "Enfermeiro"
+msgstr ""
+
+#: data/configs/skins.tres
+msgid "Agente"
+msgstr ""
+
+#: data/configs/skins.tres
+msgid "Guarda da Estação"
+msgstr ""
+
+#: data/configs/skins.tres
+msgid "Paciente"
+msgstr ""
+
+#: data/configs/skins.tres
+msgid "Paciente da UTI"
+msgstr ""
+
+#: data/configs/skins.tres
+msgid "Cobaia do Laboratório"
+msgstr ""
+
+#: data/configs/skins.tres
+msgid "Arqueóloga"
+msgstr ""
+
+#: data/configs/skins.tres
+msgid "Caçadora do Labirinto"
+msgstr ""
+
+#: data/configs/skins.tres
+msgid "Sacerdotisa do Olimpo"
+msgstr ""
+
+#: data/configs/skins.tres
+msgid "Andarilha do Submundo"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "TENTANDO SOBREVIVER — feito com Godot + GDScript. Arte e sons 100% gerados por código."
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "APAGÃO"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "As luzes caíram — use a lanterna"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "ALARME DE EMERGÊNCIA"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "O barulho atrai mais zumbis"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "Saia dos trilhos da plataforma!"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "HORDA"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "Muito mais zumbis nesta wave"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "Uma caixa caiu do céu — segure E para abrir"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "VAZAMENTO DE GÁS"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "Fique longe da nuvem verde"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "ZUMBI DOURADO"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "Mate-o antes que fuja: dinheiro e Golden Drop!"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "LUA DE SANGUE"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "Zumbis mais rápidos — dinheiro e pontos em dobro"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "DESABAMENTO"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "O teto está caindo: saia dos círculos vermelhos!"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "NEBLINA"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "Você mal enxerga — atenção aos gemidos"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "IRA DE ZEUS"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "Raios caem do céu: saia dos círculos azuis!"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "LEVANTE DOS MORTOS"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "Os sarcófagos se abrem — esqueletos saindo!"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "CAÇADA DE ARTEMIS"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "Sátiros e lobos infernais estão caçando você"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "PORTÃO DO SUBMUNDO"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "Um portal solta criaturas — destrua-o a tiros"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "SANGUE DOS DEUSES"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "Neste round as bênçãos dos altares são de graça"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "CONTENÇÃO ROMPIDA"
+msgstr ""
+
+#: data/configs/world_events.tres
+msgid "Zumbis entrando pelos pontos de isolamento!"
+msgstr ""
+
+#: data/perks/adrenaline.tres
+msgid "Adrenaline"
+msgstr ""
+
+#: data/perks/adrenaline.tres
+msgid "Regenera vida 2,5x mais rápido e mais cedo"
+msgstr ""
+
+#: data/perks/deadeye.tres
+msgid "Deadeye"
+msgstr ""
+
+#: data/perks/deadeye.tres
+msgid "Headshots causam +100% de dano"
+msgstr ""
+
+#: data/perks/fortify.tres
+msgid "Fortify"
+msgstr ""
+
+#: data/perks/fortify.tres
+msgid "+50 de vida máxima"
+msgstr ""
+
+#: data/perks/overload.tres
+msgid "Overload"
+msgstr ""
+
+#: data/perks/overload.tres
+msgid "+25% de dano das armas"
+msgstr ""
+
+#: data/perks/quick_hands.tres
+msgid "Quick Hands"
+msgstr ""
+
+#: data/perks/quick_hands.tres
+msgid "Recarga 40% mais rápida"
+msgstr ""
+
+#: data/perks/quick_revive.tres
+msgid "Quick Revive"
+msgstr ""
+
+#: data/perks/quick_revive.tres
+msgid "Ao cair, levanta sozinho (gasta o perk; até 3 por partida)"
+msgstr ""
+
+#: data/perks/sprint.tres
+msgid "Sprint+"
+msgstr ""
+
+#: data/perks/sprint.tres
+msgid "+20% de velocidade"
+msgstr ""
+
+#: data/weapons/ak.tres
+msgid "AK"
+msgstr ""
+
+#: data/weapons/arc_gun.tres
+msgid "Arc Gun"
+msgstr ""
+
+#: data/weapons/artemis_bow.tres
+msgid "Arco de Artemis"
+msgstr ""
+
+#: data/weapons/artemis_bow.tres
+msgid "Caçada Lunar"
+msgstr ""
+
+#: data/weapons/barrett.tres
+msgid "Barrett .50"
+msgstr ""
+
+#: data/weapons/beretta.tres
+msgid "Beretta 92"
+msgstr ""
+
+#: data/weapons/bren.tres
+msgid "Bren"
+msgstr ""
+
+#: data/weapons/combat_shotgun.tres
+msgid "Combat Shotgun"
+msgstr ""
+
+#: data/weapons/conductor_lantern.tres
+msgid "Lanterna do Condutor"
+msgstr ""
+
+#: data/weapons/conductor_lantern.tres
+msgid "Farol do Condutor"
+msgstr ""
+
+#: data/weapons/energy_cannon.tres
+msgid "Energy Cannon"
+msgstr ""
+
+#: data/weapons/flamethrower.tres
+msgid "Flamethrower"
+msgstr ""
+
+#: data/weapons/glock.tres
+msgid "Glock 17"
+msgstr ""
+
+#: data/weapons/grenade_launcher.tres
+msgid "Grenade Launcher"
+msgstr ""
+
+#: data/weapons/hephaestus_spear.tres
+msgid "Lança de Hefesto"
+msgstr ""
+
+#: data/weapons/hephaestus_spear.tres
+msgid "Forja de Hefesto"
+msgstr ""
+
+#: data/weapons/lee_enfield.tres
+msgid "Lee-Enfield"
+msgstr ""
+
+#: data/weapons/lupara.tres
+msgid "Lupara"
+msgstr ""
+
+#: data/weapons/m1911.tres
+msgid "M1911"
+msgstr ""
+
+#: data/weapons/m4.tres
+msgid "M4"
+msgstr ""
+
+#: data/weapons/magnum.tres
+msgid "Magnum .44"
+msgstr ""
+
+#: data/weapons/makarov.tres
+msgid "Makarov PM"
+msgstr ""
+
+#: data/weapons/mauser_c96.tres
+msgid "Mauser C96"
+msgstr ""
+
+#: data/weapons/minigun.tres
+msgid "Minigun"
+msgstr ""
+
+#: data/weapons/mp5.tres
+msgid "MP5"
+msgstr ""
+
+#: data/weapons/nailgun.tres
+msgid "Pistola de Pregos"
+msgstr ""
+
+#: data/weapons/p90.tres
+msgid "P90"
+msgstr ""
+
+#: data/weapons/poseidon_trident.tres
+msgid "Tridente de Poseidon"
+msgstr ""
+
+#: data/weapons/poseidon_trident.tres
+msgid "Maremoto"
+msgstr ""
+
+#: data/weapons/pump.tres
+msgid "Pump Shotgun"
+msgstr ""
+
+#: data/weapons/rail.tres
+msgid "Rail Weapon"
+msgstr ""
+
+#: data/weapons/rpk.tres
+msgid "RPK"
+msgstr ""
+
+#: data/weapons/sawed_off.tres
+msgid "Cano Serrado"
+msgstr ""
+
+#: data/weapons/stg44.tres
+msgid "StG 44"
+msgstr ""
+
+#: data/weapons/thompson.tres
+msgid "Thompson M1928"
+msgstr ""
+
+#: data/weapons/uzi_dual.tres
+msgid "Uzi Dupla"
+msgstr ""
+
+#: data/weapons/vector.tres
+msgid "Vector"
+msgstr ""
+
+#: data/weapons/winchester_1887.tres
+msgid "Winchester 1887"
+msgstr ""
+
+#: data/weapons/wind_cannon.tres
+msgid "Canhão de Vento"
+msgstr ""
+
+#: data/weapons/wind_cannon.tres
+msgid "Tornado"
+msgstr ""
+
+#: data/weapons/zeus_bolt.tres
+msgid "Raio de Zeus"
+msgstr ""
+
+#: data/weapons/zeus_bolt.tres
+msgid "Ira do Olimpo"
+msgstr ""
+
+#: data/zombies/armored.tres
+msgid "Blindado"
+msgstr ""
+
+#: data/zombies/crawler.tres
+msgid "Rastejante"
+msgstr ""
+
+#: data/zombies/exploder.tres
+msgid "Exploder"
+msgstr ""
+
+#: data/zombies/gorgon.tres
+msgid "Górgona"
+msgstr ""
+
+#: data/zombies/harpy.tres
+msgid "Harpia"
+msgstr ""
+
+#: data/zombies/hellwolf.tres
+msgid "Lobo Infernal"
+msgstr ""
+
+#: data/zombies/hoplite.tres
+msgid "Hoplita Morto"
+msgstr ""
+
+#: data/zombies/hoplite_shield.tres
+msgid "Hoplita com Escudo"
+msgstr ""
+
+#: data/zombies/hound.tres
+msgid "Cão Infernal"
+msgstr ""
+
+#: data/zombies/runner.tres
+msgid "Runner"
+msgstr ""
+
+#: data/zombies/satyr.tres
+msgid "Sátiro"
+msgstr ""
+
+#: data/zombies/skeleton.tres
+msgid "Esqueleto Guerreiro"
+msgstr ""
+
+#: data/zombies/skeleton_archer.tres
+msgid "Esqueleto Arqueiro"
+msgstr ""
+
+#: data/zombies/spitter.tres
+msgid "Cuspidor"
+msgstr ""
+
+#: data/zombies/tank.tres
+msgid "Tank"
+msgstr ""
+
+#: data/zombies/walker.tres
+msgid "Walker"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "INIMIGOS"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "ZUMBIS"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "O zumbi mais comum: lento, mas nunca vem sozinho. Entra arrancando as tábuas das janelas e cerca quem fica parado. No Hospital é o paciente de camisola; no Templo, o arqueólogo da escavação."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Rápido e com pouca vida: chega antes dos outros e pune quem fica encurralado. No Hospital é o enfermeiro; no Templo, o cultista de capuz."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Grande e muito resistente: não recua com os tiros nem é empurrado. Guarde as armas pesadas para ele. No Hospital é o maqueiro; no Templo, o gladiador."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Corre até você, começa a piscar e explode — e explode também ao morrer. Mate de longe: a explosão fere você e os zumbis em volta. No Hospital usa roupa de quarentena; no Templo carrega uma ânfora de fogo grego."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Rasteja pelo chão, baixo e difícil de acertar na cabeça. Ao morrer solta uma nuvem de gás que fere quem ficar dentro. No Templo é a múmia."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Para a uma certa distância e cospe ácido em arco; onde cai vira uma poça que queima. Não fique parado em cima dela. No Templo é o sacerdote do veneno."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "A armadura absorve 75% do dano no corpo até quebrar; um tiro na cabeça derruba o capacete. Nas missões, um deles carrega um item que você precisa. No Templo é o hoplita de bronze."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Rápido e em matilha. No Hospital chega nas rodadas dos cães; no Templo, o Cérbero chama os cães de Hades. Pega fogo ao morrer e não deixa corpo."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Guerreiro grego morto-vivo: aguenta bastante e bate forte, mas é lento."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "O escudo segura quase todo o dano que vem de frente (só 20% passa). Acerte a cabeça, os lados ou as costas. Não é empurrado."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Rápido e frágil. Às vezes os ossos se juntam e ele se levanta de novo com metade da vida — só uma vez."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Mantém distância e atira flechas retas. Saia da linha de tiro ou corra para cima dele."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Rápido, corre em zigue-zague e anda em bando: difícil de mirar. Aparece em peso na Caçada de Artemis."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Chega perto, dá um bote rápido, recua e repete. Atire enquanto ele recua."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Voa fora do alcance da faca e mergulha em você. Atire quando ela descer."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Se você estiver olhando para ela quando ela olhar, fica lento, cinza e vira pedra por 1,5 s, sem andar nem atirar. Parede, objeto ou ficar de costas protegem. Depois do olhar, ela leva dano dobrado."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "CHEFES"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "O maquinista do último trem. Golpeia, investe (e fica tonto se bater na parede), cega a mira de perto com um clarão, solta ondas de choque e círculos que explodem e, na fase 3, chama zumbis. Tem 4 fases, com um rugido invulnerável a cada uma."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "O primeiro infectado. A mordida envenena — e piora se ele morder de novo antes de passar —, vomita ácido que deixa poças, grita para deixar você lento e faz chover ácido. Enfurecido, é o chefe da missão do Hospital."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Investe derrubando as colunas no caminho, e cada coluna quebrada o deixa em Fúria, com mais dano e velocidade. Solta ondas de choque; no Colapso, caem pedras que viram escombro. Carrega a chave do Submundo."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Três cabeças: morde (e morde de novo logo depois de investir), sopra um leque de fogo que deixa chamas no chão e investe. Na fase 3 chama os cães de Hades."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Solta esferas de alma em leque, levanta esqueletos e faz chover fogo que vira lava. Na fase 3 assume a forma monstruosa: investida, onda de choque e a Ruptura — some e reaparece perto de você."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "ITENS"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "PERKS"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "POWER-UPS"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Enche o pente e a reserva de todas as suas armas."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Todo ponto ganho vale em dobro enquanto durar."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Qualquer acerto de tiro ou de faca mata o zumbi na hora (não vale para chefes)."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Mata na hora todos os zumbis vivos — o chefe não — e paga um bônus de pontos."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Recupera toda a vida."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Enche a barra azul de armadura, que absorve o dano antes da vida."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Você corre bem mais rápido enquanto durar."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Conserta na hora todas as barricadas do mapa e paga um bônus."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "A Mystery Box custa 10 e aparece em todos os locais das áreas abertas enquanto durar."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Raro. Sorteia um prêmio: uma arma especial, uma bolada de pontos, um perk grátis ou a Fúria (dano em dobro por um tempo). Cai do Zumbi Dourado, dos chefes e de quem acha todos os ursinhos."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "ELEMENTOS"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "BÊNÇÃOS DO TEMPLO"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "12% dos tiros soltam um raio que salta entre até 3 zumbis próximos."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Cada abate em sequência soma +8% de dano, até +40%. A sequência zera depois de 3 s sem abater."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "40% menos dispersão nos tiros e 15% de chance de crítico, com dano em dobro."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Anda, recarrega e interage 20% mais rápido."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Os tiros empurram os zumbis para trás."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "20% dos zumbis abatidos voltam como espírito aliado por 10 s e lutam do seu lado."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "EVENTOS"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "TODOS OS MAPAS"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "As luzes caem e só ficam as de emergência, fracas. Use a lanterna (F); ligar a energia de novo no disjuntor encerra o apagão. Só acontece com a energia ligada."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "A sirene atrai zumbis: eles chegam mais rápido e mais deles ficam vivos ao mesmo tempo. O painel do alarme desliga a sirene pagando."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Muito mais zumbis neste round, chegando mais rápido. Vem garantida no round 15 e depois a cada 10."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Uma caixa cai de paraquedas. Segure E por alguns segundos para abrir: munição, armadura ou dinheiro. Se levar um golpe, a abertura é interrompida."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Um cano estoura e solta uma nuvem verde que fere quem estiver dentro — zumbis também. Fique longe ou segure E na válvula para fechar."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Um zumbi todo em ouro, com coroa, que foge de você (estrela dourada no minimapa). Mate-o antes que escape para ganhar dinheiro e um Golden Drop."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "A lua fica vermelha: os zumbis correm mais, mas dinheiro e pontos valem em dobro."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "O teto começa a cair: círculos vermelhos marcam onde as pedras vão bater. Saia deles — as pedras também esmagam os zumbis."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Uma neblina fecha a visão e até a lanterna ilumina menos. Fique atento aos gemidos."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "TERMINAL CENTRAL"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Um trem atravessa a plataforma a toda velocidade e atropela quem estiver nos trilhos — zumbis inclusive. O painel do trem chama o trem na hora."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "HOSPITAL SANTA LUZIA"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Os pontos de isolamento se rompem e os zumbis entram por eles, com a sirene tocando."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "TEMPLO DOS MORTOS"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Raios caem do céu, e círculos azuis avisam onde. Saia deles — os raios também destroem os zumbis."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Os sarcófagos se abrem e soltam esqueletos, às vezes arqueiros."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Sátiros e lobos infernais surgem em volta de você numa caçada."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Um portal se abre e solta criaturas até ser destruído a tiros. Destruído, deixa o Tridente de Poseidon."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Neste round, as bênçãos dos altares são de graça."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "MECÂNICAS"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "BÁSICO"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Rounds"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "A partida é uma sequência de rounds cada vez mais difíceis: mais zumbis e mais fortes. O round acaba quando o último zumbi morre, e o fim de cada um paga um bônus."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Pontos"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Acertar e matar zumbis dá pontos — mais no tiro na cabeça e na faca —, e consertar barricadas também. Com eles você compra armas, portas, perks e a Mystery Box. O score do ranking é separado dos pontos."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Barricadas"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Os zumbis entram pelas janelas arrancando as tábuas. Segure E perto da janela para pregar as tábuas de volta — cada tábua dá 10 pontos."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Armas na parede"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Os desenhos de giz nas paredes vendem armas e munição (E). A munição sai mais barata que a arma."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Faca"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "V dá um golpe com avanço que acerta um zumbi por vez: o alvo do avanço ou o mais perto à frente. Salva quando a munição acaba, e matar na faca dá mais pontos."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Lanterna"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "F liga e desliga a lanterna. Faz falta no Apagão, na Neblina e nas áreas escuras."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Duas armas"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Você carrega duas armas (Q troca). Ao pegar uma terceira, a que está em mãos cai no chão e pode ser pega de volta por 60 s, com a munição e as melhorias."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "AVANÇADO"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Portas e áreas"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Portas compráveis (E) abrem novas áreas — e também os pontos de onde os zumbis nascem nelas. A placa no chão mostra o nome da área do outro lado."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Energia"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Segure E no disjuntor para ligar a energia: as máquinas de perk e o Weapon Lab passam a funcionar e as luzes voltam."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Máquinas de perk"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Cada máquina vende um perk que vale pela partida inteira. Quase todas precisam da energia ligada — o Quick Revive não."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Mystery Box"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Paga e sorteia uma arma, às vezes já com um elemento. Depois de alguns usos, a caixa troca de lugar; o feixe de luz dourada mostra onde ela está."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Weapon Lab"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Melhora a arma em mãos para Mk II e depois Mk III: mais dano, mais munição e visual novo — algumas viram outra arma, como o Canhão de Vento, que vira Tornado. Precisa de energia."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Elementos"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Com uma arma na mão, segure E na parede dela para comprar o elemento dela: Luz, Sombra, Gelo, Raio, Fogo ou Explosivo mudam o efeito dos tiros. A Mystery Box também pode entregar arma com elemento."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Power-ups"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Zumbis abatidos às vezes deixam um power-up no chão. Passe por cima para pegar antes que ele suma; os que duram mostram o tempo na tela."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Rodada dos cães"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "No Hospital, os rounds 5, 11, 17… são só de cães, com névoa e raios. O último cão deixa munição cheia."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Round de chefe"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Nos rounds 10, 20 e 30 vem um chefe, com uma escolta menor e a barra de vida no alto da tela. Derrotado, deixa um Golden Drop e um Max Ammo."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Missões"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Cada mapa tem uma missão em etapas, com o objetivo na tela e no minimapa: O Último Trem (Terminal), O Soro do Dr. Almeida (Hospital) e O Portão do Submundo (Templo). O prêmio é todos os perks e uma arma exclusiva."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Bênçãos dos Deuses"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "No Templo, 3 altares oferecem a bênção de um deus, sorteado a cada round, por 1500 pontos. Só uma bênção por vez, e cair faz perder a que você tem."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "SEGREDOS"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Ursinhos escondidos"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Cada mapa esconde ursinhos de pelúcia. Achar todos na mesma partida solta um Golden Drop e libera uma conquista."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Rádios e gravadores"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Rádios e gravadores espalhados contam a história de cada mapa. Segure E para sintonizar; cada uso traz a próxima mensagem."
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "Estátuas dos deuses"
+msgstr ""
+
+#: data/configs/glossary.json
+msgid "No Templo, acender as 12 estátuas dos deuses abre a passagem para o Santuário do Olimpo, onde está o Arco de Artemis."
+msgstr ""
+
+#: data/maps/map2.json
+msgid "Recepção"
+msgstr ""
+
+#: data/maps/map2.json
+msgid "Centro Cirúrgico"
+msgstr ""
+
+#: data/maps/map2.json
+msgid "UTI"
+msgstr ""
+
+#: data/maps/map2.json
+msgid "Enfermaria"
+msgstr ""
+
+#: data/maps/map2.json
+msgid "Radiologia"
+msgstr ""
+
+#: data/maps/map2.json
+msgid "Farmácia"
+msgstr ""
+
+#: data/maps/map2.json
+msgid "Pediatria"
+msgstr ""
+
+#: data/maps/map2.json
+msgid "Necrotério"
+msgstr ""
+
+#: data/maps/map2.json
+msgid "Refeitório"
+msgstr ""
+
+#: data/maps/map2.json
+msgid "Laboratório"
+msgstr ""
+
+#: data/maps/map2.json
+msgid "OUVIR O GRAVADOR"
+msgstr ""
+
+#: data/maps/map2.json
+msgid "📼 \"Diário do Dr. Almeida, dia 3: a amostra do Paciente Zero reagiu ao soro. As células não param de se dividir.\""
+msgstr ""
+
+#: data/maps/map2.json
+msgid "📼 \"Dia 9: a febre some e volta. O Paciente Zero arrancou as amarras. Três enfermeiros foram mordidos.\""
+msgstr ""
+
+#: data/maps/map2.json
+msgid "📼 \"Dia 12: lacramos o laboratório e mandamos as amostras de trem para a Estação Central. Que Deus nos perdoe.\""
+msgstr ""
+
+#: data/maps/map2.json
+msgid "📼 \"...se estiver ouvindo isto: não deixe o Paciente Zero chegar à superfície. O soro está na câmara.\""
+msgstr ""
+
+#: data/maps/temple.json
+msgid "Ruínas Gregas"
+msgstr ""
+
+#: data/maps/temple.json
+msgid "Necrópole"
+msgstr ""
+
+#: data/maps/temple.json
+msgid "Labirinto"
+msgstr ""
+
+#: data/maps/temple.json
+msgid "Floresta de Artemis"
+msgstr ""
+
+#: data/maps/temple.json
+msgid "Templo da Górgona"
+msgstr ""
+
+#: data/maps/temple.json
+msgid "Submundo"
+msgstr ""
+
+#: data/maps/temple.json
+msgid "Arena Final"
+msgstr ""
+
+#: data/maps/temple.json
+msgid "Santuário do Olimpo"
+msgstr ""
+
+#: data/maps/temple.json
+msgid "LER A INSCRIÇÃO"
+msgstr ""
+
+#: data/maps/temple.json
+msgid "📜 \"Diário da Dra. Helena, escavação 7: as inscrições falam de mortos que voltam quando o portão é tocado.\""
+msgstr ""
+
+#: data/maps/temple.json
+msgid "📜 \"Chegou a caixa do Hospital Santa Luzia: amostras do Dr. Almeida. Ele disse que o soro veio DAQUI.\""
+msgstr ""
+
+#: data/maps/temple.json
+msgid "📜 \"Os trens da Estação Central traziam os caixotes à noite. Nenhum carregador voltou para a segunda viagem.\""
+msgstr ""
+
+#: data/maps/temple.json
+msgid "📜 \"O templo não era uma prisão. Era uma porta. E alguém, do outro lado, está batendo.\""
+msgstr ""
+
+#: data/maps/terminal.json
+msgid "Hall Central"
+msgstr ""
+
+#: data/maps/terminal.json
+msgid "Plataforma Norte"
+msgstr ""
+
+#: data/maps/terminal.json
+msgid "Bilheteria"
+msgstr ""
+
+#: data/maps/terminal.json
+msgid "Lojas"
+msgstr ""
+
+#: data/maps/terminal.json
+msgid "Área Técnica"
+msgstr ""
+
+#: data/maps/terminal.json
+msgid "Túneis"
+msgstr ""
+
+#: data/maps/terminal.json
+msgid "Manutenção"
+msgstr ""
+
+#: data/maps/terminal.json
+msgid "📻 \"...controle da Estação Central. O trem das 23h40 NÃO deve parar. Repito: não parem o trem...\""
+msgstr ""
+
+#: data/maps/terminal.json
+msgid "📻 \"...o maquinista não responde. Alguém viu o Condutor? Ele desceu nos túneis e voltou... diferente.\""
+msgstr ""
+
+#: data/maps/terminal.json
+msgid "📻 \"...quarentena decretada. Portas lacradas. Quem ficou lá dentro está por conta própria.\""
+msgstr ""
+
+#: data/maps/terminal.json
+msgid "📻 \"...se alguém ouvir isto: tentem sobreviver. O resgate chega ao amanhecer. Talvez.\""
+msgstr ""

@@ -47,7 +47,7 @@ func _ready() -> void:
 	grate.mesh = mesh
 	add_child(grate)
 	grate.top_level = true
-	grate.global_position = Vector3(zone.get_center().x, 0.03, zone.get_center().y)
+	grate.global_position = Vector3(zone.get_center().x, PixelShapes.GROUND_Y - 0.02, zone.get_center().y)
 	_light = OmniLight3D.new()
 	_light.light_color = Color(0.5, 0.85, 1.0)
 	_light.light_energy = 0.0
@@ -62,10 +62,10 @@ func is_active() -> bool:
 
 func get_interaction_prompt(_player: Node3D) -> String:
 	if is_active():
-		return "ARMADILHA ELÉTRICA LIGADA — %ds" % ceili(active_left)
+		return Loc.fmt("ARMADILHA ELÉTRICA LIGADA — %ss", [ceili(active_left)])
 	if _ready_in > 0.0:
-		return "ARMADILHA RECARREGANDO — %ds" % ceili(_ready_in)
-	return "[E] LIGAR ARMADILHA ELÉTRICA  ·  %d pontos" % price
+		return Loc.fmt("ARMADILHA RECARREGANDO — %ss", [ceili(_ready_in)])
+	return Loc.fmt("[%s] LIGAR ARMADILHA ELÉTRICA  ·  %s pontos", [Loc.key(&"interact"), price])
 
 
 func interact(player: Node3D) -> bool:

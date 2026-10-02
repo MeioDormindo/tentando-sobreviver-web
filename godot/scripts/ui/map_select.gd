@@ -56,20 +56,20 @@ func _card(parent: Control, id: String) -> Button:
 		if not unlocked:
 			thumb.modulate = Color(0.25, 0.25, 0.28)
 		box.add_child(thumb)
-	MenuKit.label(box, String(info.name).to_upper(), 28, MenuKit.GOLD if unlocked else MenuKit.DIM)
+	MenuKit.label(box, Loc.t(String(info.name)).to_upper(), 28, MenuKit.GOLD if unlocked else MenuKit.DIM)
 	MenuKit.label(box, String(info.description), 15, MenuKit.TEXT if unlocked else MenuKit.DIM)
 	if not unlocked:
 		MenuKit.label(box, unlock_text(info), 15, MenuKit.RED)
 		return null
 	var best := Save.records(id)
-	MenuKit.label(box, ("Recorde: %d pontos · round %d" % [best.bestScore, best.bestWave]) if int(best.bestScore) > 0 else "Sem recorde ainda", 14, MenuKit.TEXT)
+	MenuKit.label(box, (Loc.t("Recorde: %d pontos · round %d") % [best.bestScore, best.bestWave]) if int(best.bestScore) > 0 else "Sem recorde ainda", 14, MenuKit.TEXT)
 	var ranking := Save.ranking(id)
 	if not ranking.is_empty():
-		MenuKit.label(box, "1º no ranking: %s · %d pts" % [String(ranking[0].get("name", "?")), int(ranking[0].get("score", 0))], 14, MenuKit.DIM)
+		MenuKit.label(box, Loc.t("1º no ranking: %s · %d pts") % [String(ranking[0].get("name", "?")), int(ranking[0].get("score", 0))], 14, MenuKit.DIM)
 	var quest: Array = QUESTS.get(id, [])
 	if not quest.is_empty():
 		var done := Save.has_achievement(quest[0])
-		MenuKit.label(box, ("✓ MISSÃO CONCLUÍDA: " if done else "◆ MISSÃO: ") + String(quest[1]).to_upper(), 14, MenuKit.GOLD if done else MenuKit.DIM)
+		MenuKit.label(box, (Loc.t("✓ MISSÃO CONCLUÍDA: %s") if done else Loc.t("◆ MISSÃO: %s")) % Loc.t(String(quest[1])).to_upper(), 14, MenuKit.GOLD if done else MenuKit.DIM)
 	return MenuKit.button(box, "JOGAR", _play.bind(id), 26)
 
 
@@ -82,8 +82,8 @@ static func unlock_text(info: Dictionary) -> String:
 		for id: String in catalog.order:
 			if QUESTS.has(id) and by_quest.has(QUESTS[id][0]):
 				names.append(catalog.display_name(id))
-		return "BLOQUEADO — conclua a missão do %s" % " ou do ".join(names)
-	return "BLOQUEADO — derrote o boss do round %d no %s" % [int(info.unlock_boss_round), catalog.display_name(String(info.unlock_on_map))]
+		return Loc.t("BLOQUEADO — conclua a missão do %s") % Loc.t(" ou do ").join(names.map(func(n: String) -> String: return Loc.t(n)))
+	return Loc.t("BLOQUEADO — derrote o boss do round %d no %s") % [int(info.unlock_boss_round), Loc.t(catalog.display_name(String(info.unlock_on_map)))]
 
 
 func _play(id: String) -> void:

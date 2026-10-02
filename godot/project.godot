@@ -22,6 +22,7 @@ buses/default_bus_layout="res://data/configs/default_bus_layout.tres"
 Events="*res://scripts/systems/events.gd"
 InputBindings="*res://scripts/systems/input_bindings.gd"
 Save="*res://scripts/systems/save_store.gd"
+Loc="*res://scripts/systems/loc.gd"
 Session="*res://scripts/systems/session.gd"
 Online="*res://scripts/online/online_client.gd"
 Account="*res://scripts/online/account.gd"
@@ -42,6 +43,12 @@ window/handheld/orientation=4
 ; Fonte pixel do jogo (npm run godot:font): padrão de toda a interface e dos textos no mundo.
 theme/custom_font="res://assets/fonts/pixel.fnt"
 theme/default_font_size=26
+
+[internationalization]
+
+; Catálogo (npm run godot:i18n): o texto em português é a chave; o Loc escolhe o idioma.
+locale/translations=PackedStringArray("res://locale/en.po", "res://locale/pt_BR.po", "res://locale/es.po", "res://locale/fr.po", "res://locale/de.po", "res://locale/it.po", "res://locale/ru.po", "res://locale/uk.po", "res://locale/pl.po", "res://locale/tr.po", "res://locale/id.po", "res://locale/zh_CN.po", "res://locale/zh_TW.po", "res://locale/ja.po", "res://locale/ko.po")
+locale/fallback="en"
 
 [layer_names]
 

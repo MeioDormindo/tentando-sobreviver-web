@@ -61,7 +61,7 @@ func _process(delta: float) -> void:
 func get_interaction_prompt(_player: Node3D) -> String:
 	if power.is_on:
 		return ""
-	return "[SEGURE E] LIGAR A ENERGIA"
+	return Loc.fmt("[SEGURE %s] LIGAR A ENERGIA", [Loc.key(&"interact")])
 
 
 func get_interaction_progress(player: Node3D) -> float:
@@ -79,5 +79,6 @@ func hold_interact(player: Node3D, delta: float) -> bool:
 		return false
 	power.turn_on()
 	_label.text = "ENERGIA LIGADA"
+	Players.feed(Loc.fmt("%s ligou a energia", [Players.name_of(player)]))
 	remove_from_group(&"interactable")
 	return true

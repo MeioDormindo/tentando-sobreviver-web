@@ -185,9 +185,13 @@ func get_interaction_prompt(_player: Node3D) -> String:
 	var names := []
 	for area in areas:
 		if _world and not _world.is_area_open(StringName(area)):
-			names.append(_world.area_display_name(StringName(area)).to_upper())
-	var where := (" — " + ", ".join(names)) if not names.is_empty() else ""
-	return "[E] ABRIR PORTA%s  ·  %d pontos" % [where, cost]
+			names.append(Loc.up(_world.area_display_name(StringName(area))))
+	match names.size():
+		0:
+			return Loc.fmt("[%s] ABRIR PORTA  ·  %s pontos", [Loc.key(&"interact"), cost])
+		1:
+			return Loc.fmt("[%s] ABRIR PORTA — %s  ·  %s pontos", [Loc.key(&"interact"), names[0], cost])
+	return Loc.fmt("[%s] ABRIR PORTA — %s, %s  ·  %s pontos", [Loc.key(&"interact"), names[0], names[1], cost])
 
 
 func interact(player: Node3D) -> bool:
@@ -198,6 +202,8 @@ func interact(player: Node3D) -> bool:
 		PointsManager.deny(player)
 		return false
 	open()
+	if not areas.is_empty():
+		Players.feed(Loc.fmt("%s abriu %s", [Players.name_of(player), _world.area_display_name(StringName(areas[0]))]))
 	return true
 
 

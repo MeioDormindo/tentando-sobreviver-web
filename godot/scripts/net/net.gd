@@ -21,6 +21,13 @@ const JOIN_TIMEOUT := 25.0
 const MAIN_SCENE := "res://scenes/main.tscn"
 const MENU_SCENE := "res://scenes/ui/main_menu.tscn"
 const LOBBY_SCENE := "res://scenes/ui/lobby.tscn"
+## Endereço do jogo publicado (o link do convite fora da Web).
+const SITE_URL := "https://meiodormindo.github.io/tentando-sobreviver-web/"
+## De quanto em quanto tempo o host mede a latência de cada colega (s).
+const PING_EVERY := 2.0
+
+## A latência mudou (a sala e a HUD mostram ao lado do nome).
+signal pings_changed()
 
 var state: State = State.OFFLINE
 var code := ""
@@ -40,6 +47,12 @@ var menu_open := false
 var relay_mute := 0
 ## O NetWorld da partida em grupo (null fora dela).
 var world: Node
+## Latência de cada colega até o host (ms; o host não entra). O host mede e manda para todos.
+var pings: Dictionary = {}
+## Código de um convite aberto pelo link (?sala=ABCDE no endereço, na Web): o menu leva direto
+## para a sala, que entra sozinha. Vazio depois de usado.
+var invite_code := ""
+var _ping_in := 0.0
 var _join_left := 0.0
 var _hello := {}
 
@@ -51,6 +64,7 @@ func _ready() -> void:
 	multiplayer.connected_to_server.connect(_on_connected_to_host)
 	multiplayer.connection_failed.connect(func() -> void: _fail("Não foi possível conectar à sala"))
 	multiplayer.server_disconnected.connect(func() -> void: _fail("O host saiu"))
+	invite_code = _read_invite()
 
 
 func _process(delta: float) -> void:
@@ -60,6 +74,93 @@ func _process(delta: float) -> void:
 		_join_left -= delta
 		if _join_left <= 0.0:
 			_fail("Tempo esgotado ao entrar na sala")
+	if is_host() and players.size() > 1:
+		_ping_in -= delta
+		if _ping_in <= 0.0:
+			_ping_in = PING_EVERY
+			_ping.rpc(Time.get_ticks_msec())
+			_pings.rpc(pings)
+
+
+# ───────────────────────── Latência ─────────────────────────
+
+## Host → colegas: a hora do host, que volta igual (a diferença é a ida e volta).
+@rpc("authority", "unreliable")
+func _ping(sent: int) -> void:
+	_pong.rpc_id(1, sent)
+
+
+@rpc("any_peer", "unreliable")
+func _pong(sent: int) -> void:
+	if is_host():
+		pings[multiplayer.get_remote_sender_id()] = clampi(Time.get_ticks_msec() - sent, 0, 9999)
+		pings_changed.emit()
+
+
+@rpc("authority", "unreliable")
+func _pings(table: Dictionary) -> void:
+	pings = table
+	pings_changed.emit()
+
+
+## Latência de um jogador (ms), ou -1 se ainda não medida (o host é 0).
+func ping_of(peer: int) -> int:
+	return 0 if peer == 1 else int(pings.get(peer, -1))
+
+
+## Cor da latência: verde até 80 ms, amarelo até 150, vermelho acima (cinza sem medida).
+static func ping_color(ms: int) -> Color:
+	if ms < 0:
+		return Color(0.6, 0.6, 0.56)
+	if ms < 80:
+		return Color(0.45, 0.85, 0.4)
+	return Color(0.95, 0.8, 0.3) if ms < 150 else Color(0.85, 0.25, 0.2)
+
+
+# ───────────────────────── Convite ─────────────────────────
+
+## Link do convite para a sala atual: o endereço deste site na Web; fora dela, o site publicado.
+func invite_link() -> String:
+	var base := SITE_URL
+	if OS.has_feature("web"):
+		var here: Variant = JavaScriptBridge.eval("window.location.origin + window.location.pathname", true)
+		if here is String and String(here).begins_with("http"):
+			base = here
+	return "%s?sala=%s" % [base, code]
+
+
+## Na Web, o código de um convite no endereço (?sala=ABCDE); some do endereço depois de lido
+## (recarregar a página não entra de novo).
+func _read_invite() -> String:
+	if not OS.has_feature("web"):
+		return ""
+	var search: Variant = JavaScriptBridge.eval("window.location.search", true)
+	if not search is String or String(search).findn("sala=") < 0:
+		return ""
+	JavaScriptBridge.eval("history.replaceState(null, '', window.location.pathname)", true)
+	return code_from_text(search)
+
+
+## Código de sala num texto colado (função pura): o código com espaços ou minúsculas, ou o link
+## do convite inteiro (…?sala=ABCDE). Vazio se não achar.
+static func code_from_text(text: String) -> String:
+	var source := text.strip_edges()
+	var at := source.findn("sala=")
+	if at >= 0:
+		source = source.substr(at + 5)
+	var compact := source.replace(" ", "").replace("-", "").to_upper()
+	if compact.length() == 5 and _is_code(compact):
+		return compact
+	# Dentro de uma frase: a palavra de 5 caracteres (a primeira depois de "sala=", senão a última).
+	var words := RegEx.create_from_string("(?<![A-Za-z0-9])[A-Za-z0-9]{5}(?![A-Za-z0-9])").search_all(source)
+	if words.is_empty():
+		return ""
+	var word := (words[0] if at >= 0 else words[-1]).get_string().to_upper()
+	return word if _is_code(word) else ""
+
+
+static func _is_code(text: String) -> bool:
+	return RegEx.create_from_string("^[A-Z0-9]{5}$").search(text) != null
 
 
 func is_online() -> bool:
@@ -87,7 +188,7 @@ func create_room(player_name: String, skin: String) -> void:
 	if state != State.CONNECTING:
 		return
 	if not result.ok:
-		_fail("Não foi possível criar a sala (%s)" % result.message)
+		_fail(Loc.fmt("Não foi possível criar a sala (%s)", [result.message]))
 		return
 	var webrtc := WebRTCTransport.new()
 	webrtc.max_players = MAX_PLAYERS
@@ -97,22 +198,22 @@ func create_room(player_name: String, skin: String) -> void:
 ## Entra na sala de um amigo pelo código.
 func join_room(room_code: String, player_name: String, skin: String) -> void:
 	room_code = room_code.strip_edges().to_upper()
-	_set_status(State.CONNECTING, "Procurando a sala %s..." % room_code)
+	_set_status(State.CONNECTING, Loc.fmt("Procurando a sala %s...", [room_code]))
 	var found: Dictionary = await SupabaseSignaling.room_exists(Online, room_code)
 	if state != State.CONNECTING:
 		return
 	if not found.ok:
-		_fail("Sem conexão com o servidor (%s)" % found.message)
+		_fail(Loc.fmt("Sem conexão com o servidor (%s)", [found.message]))
 		return
 	if not found.exists:
-		_fail("Sala %s não encontrada" % room_code)
+		_fail(Loc.fmt("Sala %s não encontrada", [room_code]))
 		return
 	var webrtc := WebRTCTransport.new()
 	webrtc.rejected.connect(_fail)
 	var signaling := SupabaseSignaling.new(Online, room_code, 0)
 	signaling.failed.connect(func(reason: String) -> void:
 		if state == State.CONNECTING:
-			_fail("Sem conexão com o servidor (%s)" % reason))
+			_fail(Loc.fmt("Sem conexão com o servidor (%s)", [reason])))
 	_open_client(webrtc, room_code, webrtc.join(signaling, {"name": _clean_name(player_name)}), player_name, skin)
 
 
@@ -130,26 +231,26 @@ func join_local(player_name: String, skin: String, address := "127.0.0.1", port 
 
 func _open_host(p_transport: RefCounted, p_code: String, error: Error, player_name: String, skin: String) -> void:
 	if error != OK:
-		_fail("Não foi possível abrir a sala (%s)" % error_string(error))
+		_fail(Loc.fmt("Não foi possível abrir a sala (%s)", [error_string(error)]))
 		return
 	transport = p_transport
 	code = p_code
 	multiplayer.multiplayer_peer = transport.get(&"peer")
 	players = {1: _clean({"name": player_name, "skin": skin, "ready": true})}
-	_set_status(State.ROOM, "Sala %s aberta" % code)
+	_set_status(State.ROOM, Loc.fmt("Sala %s aberta", [code]))
 	room_changed.emit()
 
 
 func _open_client(p_transport: RefCounted, p_code: String, error: Error, player_name: String, skin: String) -> void:
 	if error != OK:
-		_fail("Não foi possível entrar (%s)" % error_string(error))
+		_fail(Loc.fmt("Não foi possível entrar (%s)", [error_string(error)]))
 		return
 	transport = p_transport
 	code = p_code
 	_hello = _clean({"name": player_name, "skin": skin, "ready": false})
 	multiplayer.multiplayer_peer = transport.get(&"peer")
 	_join_left = JOIN_TIMEOUT
-	_set_status(State.CONNECTING, "Conectando à sala %s..." % code)
+	_set_status(State.CONNECTING, Loc.fmt("Conectando à sala %s...", [code]))
 
 
 ## Sai da sala (ou da partida em grupo) e volta ao solo.
@@ -165,6 +266,7 @@ func leave() -> void:
 	Session.local_peer = 1
 	live = false
 	menu_open = false
+	pings.clear()
 	if state != State.OFFLINE:
 		state = State.OFFLINE
 		room_changed.emit()
@@ -274,7 +376,7 @@ func _broadcast() -> void:
 
 func _on_connected_to_host() -> void:
 	_join_left = 0.0
-	_set_status(State.ROOM, "Na sala %s" % code)
+	_set_status(State.ROOM, Loc.fmt("Na sala %s", [code]))
 	_send_hello.rpc_id(1, _hello)
 
 
@@ -286,6 +388,7 @@ func _on_peer_disconnected(id: int) -> void:
 	if not is_host():
 		return
 	players.erase(id)
+	pings.erase(id)
 	if transport and transport.has_method(&"forget"):
 		transport.call(&"forget", id)
 	_broadcast()

@@ -43,7 +43,7 @@ func _process(delta: float) -> void:
 func get_interaction_prompt(_player: Node3D) -> String:
 	if lit:
 		return ""
-	return "[SEGURE E] ACENDER A ESTÁTUA DE %s" % NAMES.get(god, String(god).to_upper())
+	return Loc.fmt("[SEGURE %s] ACENDER A ESTÁTUA DE %s", [Loc.key(&"interact"), NAMES.get(god, String(god).to_upper())])
 
 
 func get_interaction_progress(player: Node3D) -> float:
@@ -81,7 +81,7 @@ func light_up() -> void:
 	var found := statues.filter(func(s: Node) -> bool: return (s as GodStatue).lit).size()
 	Events.statue_lit.emit(found, total)
 	if found < total:
-		Events.toast.emit("ESTÁTUA DE %s ACESA (%d/%d)" % [NAMES.get(god, ""), found, total])
+		Events.toast.emit(Loc.fmt("ESTÁTUA DE %s ACESA (%s/%s)", [NAMES.get(god, ""), found, total]))
 		return
 	Events.screen_shake.emit(1.2, 0.2)
 	Events.power_up_collected.emit(&"statues", "OS DOZE DO OLIMPO", GLOW, "O templo reage... uma passagem se abriu na Floresta.")

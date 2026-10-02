@@ -81,10 +81,10 @@ func get_interaction_prompt(player: Node3D) -> String:
 	if not _powered():
 		return "SEM ENERGIA — ligue o disjuntor"
 	if p.perks.has_perk(perk.id):
-		return "%s  ·  JÁ ATIVO" % perk.display_name.to_upper()
+		return Loc.fmt("%s  ·  JÁ ATIVO", [Loc.up(perk.display_name)])
 	if not p.perks.can_buy(perk):
-		return "%s  ·  ESGOTADO NESTA PARTIDA" % perk.display_name.to_upper()
-	return "[E] %s — %s  ·  %d pontos" % [perk.display_name.to_upper(), perk.description, perk.price]
+		return Loc.fmt("%s  ·  ESGOTADO NESTA PARTIDA", [Loc.up(perk.display_name)])
+	return Loc.fmt("[%s] %s — %s  ·  %s pontos", [Loc.key(&"interact"), Loc.up(perk.display_name), perk.description, perk.price])
 
 
 func get_interaction_icon(_player: Node3D) -> String:

@@ -34,8 +34,7 @@ func start() -> void:
 		var spot: Variant = system.pick_floor_point(4.7, 43.75, 10)
 		if spot is Vector3:
 			_hideouts.append(spot)
-	var point: Variant = system.pick_floor_point(9.4, 21.9)
-	var at: Vector3 = point if point is Vector3 else system.focus().global_position + Vector3(9.4, 0, 0)
+	var at := system.floor_point_near(9.4, 21.9)
 	var data := system.spawn_manager.type_data(&"runner").duplicate() as ZombieData
 	data.max_health = float(config.get("health", 450)) + float(config.get("health_per_wave", 60)) * system.round_manager.round_number
 	data.move_speed = float(config.get("speed", 4.7))
@@ -95,7 +94,7 @@ func update(delta: float) -> bool:
 			power_ups.spawn_drop(&"golden", _last_position)
 		system.points_manager.add(reward, false, _killer)
 		SpecialFire.flash(system.get_tree(), _last_position + Vector3.UP, 3.0, GOLD)
-		Events.toast.emit("ZUMBI DOURADO ABATIDO!  +%d" % reward)
+		Events.toast.emit(Loc.fmt("ZUMBI DOURADO ABATIDO!  +%s", [reward]))
 		return false
 	_last_position = zombie.global_position
 	_elapsed += delta

@@ -62,6 +62,7 @@ func run(tree: SceneTree) -> int:
 	ZombieBase.event_speed = 1.0
 	_main.queue_free()
 	await tree.physics_frame
+	await _spawn_only_in_open_areas()
 	print("\n%d ok, %d falharam (eventos)" % [_passed, _failed])
 	return _failed
 
@@ -92,6 +93,7 @@ func _horde() -> void:
 	var base := _rounds.total
 	check(_system.trigger(&"horde"), "Horda começa")
 	check(_rounds.total == base + roundi(base * 0.6), "Horda: +60%% de zumbis no round (%d → %d)" % [base, _rounds.total])
+	check(_rounds.spawned >= 6, "Horda: uma leva chega na hora (%d zumbis)" % _rounds.spawned)
 	check(_rounds._max_alive() > _rounds.data.max_alive(5) and _rounds._spawn_interval() < _rounds.data.spawn_interval(5), "Horda: mais vivos ao mesmo tempo e spawn mais rápido")
 	var state := [{}]
 	Events.world_event_state.connect(func(s: Dictionary) -> void: state[0] = s, CONNECT_ONE_SHOT)
@@ -276,7 +278,7 @@ func _trap() -> void:
 	electric.activate()
 	await _tree.create_timer(0.4).timeout
 	check(not is_instance_valid(zombie) or not zombie.is_alive(), "armadilha ligada mata o zumbi na grade")
-	check(electric.get_interaction_prompt(_player).begins_with("ARMADILHA ELÉTRICA LIGADA"), "aviso: %s" % electric.get_interaction_prompt(_player))
+	check(Loc.text(electric.get_interaction_prompt(_player)).begins_with("ARMADILHA ELÉTRICA LIGADA"), "aviso: %s" % Loc.text(electric.get_interaction_prompt(_player)))
 
 
 ## Luz por área (Fase 5): a luz ambiente segue a área do jogador; a lanterna liga/desliga.
@@ -397,3 +399,47 @@ func _concurrent_events() -> void:
 	await _tree.create_timer(0.2).timeout
 	check(_system.running.is_empty(), "round de boss continua bloqueando o sorteio normal")
 	_rounds.stop()
+
+
+## Ninguém nasce fora do prédio nem numa área fechada (o navmesh existe nos dois): no Hospital,
+## só com a Recepção aberta, os cães com raio e as invocações perto do jogador ficam no chão
+## de uma área aberta.
+func _spawn_only_in_open_areas() -> void:
+	var map := (load("res://scenes/maps/hospital.tscn") as PackedScene).instantiate() as LayoutMap
+	_tree.root.add_child(map)
+	var player := (load("res://scenes/player/player.tscn") as PackedScene).instantiate() as Player
+	player.position = map.get_player_spawn()
+	_tree.root.add_child(player)
+	player.controlled = false
+	player.health.invulnerable = true
+	var container := Node3D.new()
+	_tree.root.add_child(container)
+	var spawner := SpawnManager.new()
+	spawner.world = map
+	spawner.container = container
+	spawner.target = player
+	spawner.zombie_data = load("res://data/zombies/walker.tres")
+	_tree.root.add_child(spawner)
+	await _tree.create_timer(0.6).timeout
+	var bad := 0
+	var made := 0
+	for i in 40:
+		var hound := spawner.spawn_near_player(&"hound", 6.875, 13.125, 1.0, 1.0, 1.0)
+		if hound:
+			made += 1
+			if not map.is_spawnable(hound.global_position) and not map.active_spawn_points(99).any(func(p: Vector3) -> bool: return Vector2(p.x - hound.global_position.x, p.z - hound.global_position.z).length() < 4.0):
+				bad += 1
+	check(made == 40 and bad == 0, "cães com raio: todos em área aberta (ou num ponto de spawn) — %d de %d fora" % [bad, made])
+	bad = 0
+	made = 0
+	for i in 40:
+		var angle := TAU * i / 40.0
+		var zombie := spawner.spawn_at(&"walker", player.global_position + Vector3(cos(angle), 0.0, sin(angle)) * 9.0)
+		if zombie:
+			made += 1
+			if not map.is_spawnable(zombie.global_position) and not map.active_spawn_points(99).any(func(p: Vector3) -> bool: return Vector2(p.x - zombie.global_position.x, p.z - zombie.global_position.z).length() < 4.0):
+				bad += 1
+	check(made > 0 and bad == 0, "invocações em volta do jogador (atravessando parede): nenhuma numa área fechada (%d de %d)" % [bad, made])
+	for node in [spawner, container, player, map]:
+		node.queue_free()
+	await _tree.process_frame

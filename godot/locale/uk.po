@@ -1,0 +1,2734 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tentando Sobreviver\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: uk\n"
+
+msgid "[SEGURE %s] FECHAR A VÁLVULA"
+msgstr "[УТРИМ. %s] ЗАКРИТИ ВЕНТИЛЬ"
+
+msgid "ZUMBI DOURADO ABATIDO!  +%s"
+msgstr "ЗОЛОТОГО ЗОМБІ ВБИТО!  +%s"
+
+msgid "O ZUMBI DOURADO ESCAPOU"
+msgstr "ЗОЛОТИЙ ЗОМБІ ВТІК"
+
+msgid "[SEGURE %s] ABRIR SUPRIMENTOS"
+msgstr "[УТРИМ. %s] ВІДКРИТИ ПРИПАСИ"
+
+msgid "SUPRIMENTOS"
+msgstr "ПРИПАСИ"
+
+msgid "Munição cheia · Armadura · +%s"
+msgstr "Повний боєзапас · Броня · +%s"
+
+msgid "ATROPELADOS ×%s"
+msgstr "ЗБИТО ×%s"
+
+msgid "O PORTAL CAIU — O TRIDENTE DE POSEIDON FICOU NO LUGAR"
+msgstr "ПОРТАЛ ВПАВ — ТРИЗУБ ПОСЕЙДОНА ЛИШИВСЯ НА МІСЦІ"
+
+msgid "O PORTÃO DO SUBMUNDO SE FECHOU"
+msgstr "БРАМА ПІДЗЕМНОГО СВІТУ ЗАЧИНИЛАСЯ"
+
+msgid "TREM"
+msgstr "ПОТЯГ"
+
+msgid "[SEGURE %s] CONSERTAR BARRICADA  ·  +%s por tábua"
+msgstr "[УТРИМ. %s] ПОЛАГОДИТИ БАРИКАДУ  ·  +%s за дошку"
+
+msgid "BÊNÇÃO DE %s"
+msgstr "БЛАГОСЛОВЕННЯ: %s"
+
+msgid "BÊNÇÃO DE %s ATIVA"
+msgstr "БЛАГОСЛОВЕННЯ %s АКТИВНЕ"
+
+msgid "[%s] BÊNÇÃO DE %s — %s: %s  ·  DE GRAÇA"
+msgstr "[%s] БЛАГОСЛОВЕННЯ: %s — %s: %s  ·  БЕЗКОШТОВНО"
+
+msgid "[%s] BÊNÇÃO DE %s — %s: %s  ·  %s pontos"
+msgstr "[%s] БЛАГОСЛОВЕННЯ: %s — %s: %s  ·  %s очок"
+
+msgid "%s — %s"
+msgstr "%s — %s"
+
+msgid "DISJUNTOR"
+msgstr "РУБИЛЬНИК"
+
+msgid "[SEGURE %s] LIGAR A ENERGIA"
+msgstr "[УТРИМ. %s] УВІМКНУТИ ЖИВЛЕННЯ"
+
+msgid "ENERGIA LIGADA"
+msgstr "ЖИВЛЕННЯ УВІМКНЕНО"
+
+msgid "%s ligou a energia"
+msgstr "%s увімкнув(ла) живлення"
+
+msgid "[%s] LER A PLACA"
+msgstr "[%s] ПРОЧИТАТИ ТАБЛИЧКУ"
+
+msgid "PORTÃO DO TEMPLO — leve Fragmentos de Alma aos 3 altares"
+msgstr "БРАМА ХРАМУ — принеси Фрагменти Душі до 3 вівтарів"
+
+msgid "PORTÃO DO SUBMUNDO — precisa da chave do Minotauro"
+msgstr "БРАМА ПІДЗЕМНОГО СВІТУ — потрібен ключ Мінотавра"
+
+msgid "PASSAGEM SELADA — ative as 12 estátuas dos deuses"
+msgstr "ЗАПЕЧАТАНИЙ ПРОХІД — запали 12 статуй богів"
+
+msgid "PORTÃO FECHADO"
+msgstr "ВОРОТА ЗАЧИНЕНІ"
+
+msgid "[%s] ABRIR PORTA  ·  %s pontos"
+msgstr "[%s] ВІДЧИНИТИ ДВЕРІ  ·  %s очок"
+
+msgid "[%s] ABRIR PORTA — %s  ·  %s pontos"
+msgstr "[%s] ВІДЧИНИТИ ДВЕРІ — %s  ·  %s очок"
+
+msgid "[%s] ABRIR PORTA — %s, %s  ·  %s pontos"
+msgstr "[%s] ВІДЧИНИТИ ДВЕРІ — %s, %s  ·  %s очок"
+
+msgid "%s abriu %s"
+msgstr "%s відчинив(ла): %s"
+
+msgid "ARMADILHA"
+msgstr "ПАСТКА"
+
+msgid "ARMADILHA ELÉTRICA LIGADA — %ss"
+msgstr "ЕЛЕКТРОПАСТКА УВІМКНЕНА — %ss"
+
+msgid "ARMADILHA RECARREGANDO — %ss"
+msgstr "ПАСТКА ПЕРЕЗАРЯДЖАЄТЬСЯ — %ss"
+
+msgid "[%s] LIGAR ARMADILHA ELÉTRICA  ·  %s pontos"
+msgstr "[%s] УВІМКНУТИ ЕЛЕКТРОПАСТКУ  ·  %s очок"
+
+msgid "RELIGAR A ENERGIA"
+msgstr "ВІДНОВИТИ ЖИВЛЕННЯ"
+
+msgid "PAINEL DE ENERGIA — FUNCIONANDO"
+msgstr "ЩИТОК — ПРАЦЮЄ"
+
+msgid "ENERGIA"
+msgstr "ЖИВЛЕННЯ"
+
+msgid "DESLIGAR O ALARME"
+msgstr "ВИМКНУТИ ТРИВОГУ"
+
+msgid "ALARME DE EMERGÊNCIA — DESLIGADO"
+msgstr "АВАРІЙНА ТРИВОГА — ВИМКНЕНА"
+
+msgid "ALARME"
+msgstr "ТРИВОГА"
+
+msgid "[SEGURE %s] %s  ·  %s pontos"
+msgstr "[УТРИМ. %s] %s  ·  %s очок"
+
+msgid "ZEUS"
+msgstr "ЗЕВС"
+
+msgid "HERA"
+msgstr "ГЕРА"
+
+msgid "POSEIDON"
+msgstr "ПОСЕЙДОН"
+
+msgid "DEMÉTER"
+msgstr "ДЕМЕТРА"
+
+msgid "ATENA"
+msgstr "АФІНА"
+
+msgid "APOLO"
+msgstr "АПОЛЛОН"
+
+msgid "ÁRTEMIS"
+msgstr "АРТЕМІДА"
+
+msgid "ARES"
+msgstr "АРЕС"
+
+msgid "AFRODITE"
+msgstr "АФРОДІТА"
+
+msgid "HEFESTO"
+msgstr "ГЕФЕСТ"
+
+msgid "HERMES"
+msgstr "ГЕРМЕС"
+
+msgid "DIONÍSIO"
+msgstr "ДІОНІС"
+
+msgid "[SEGURE %s] ACENDER A ESTÁTUA DE %s"
+msgstr "[УТРИМ. %s] ЗАПАЛИТИ СТАТУЮ: %s"
+
+msgid "ESTÁTUA DE %s ACESA (%s/%s)"
+msgstr "СТАТУЮ ЗАПАЛЕНО: %s (%s/%s)"
+
+msgid "OS DOZE DO OLIMPO"
+msgstr "ДВАНАДЦЯТЬ ОЛІМПІЙЦІВ"
+
+msgid "O templo reage... uma passagem se abriu na Floresta."
+msgstr "Храм відгукується... у Лісі відкрився прохід."
+
+msgid "SINTONIZAR O RÁDIO"
+msgstr "НАЛАШТУВАТИ РАДІО"
+
+msgid "RÁDIO — CHIADO..."
+msgstr "РАДІО — ШИПІННЯ..."
+
+msgid "[SEGURE %s] %s"
+msgstr "[УТРИМ. %s] %s"
+
+msgid "[%s] MYSTERY BOX  ·  %s pontos"
+msgstr "[%s] MYSTERY BOX  ·  %s очок"
+
+msgid "MYSTERY BOX  ·  arma de %s"
+msgstr "MYSTERY BOX  ·  зброя гравця %s"
+
+msgid "[%s] PEGAR %s (MUNIÇÃO)"
+msgstr "[%s] ВЗЯТИ %s (НАБОЇ)"
+
+msgid "[%s] PEGAR %s"
+msgstr "[%s] ВЗЯТИ %s"
+
+msgid "um colega"
+msgstr "товариш"
+
+msgid "A MYSTERY BOX MUDOU DE LUGAR — %s"
+msgstr "MYSTERY BOX ПЕРЕМІСТИЛАСЯ — %s"
+
+msgid "A MYSTERY BOX MUDOU DE LUGAR"
+msgstr "MYSTERY BOX ПЕРЕМІСТИЛАСЯ"
+
+msgid "SEM ENERGIA — ligue o disjuntor"
+msgstr "НЕМАЄ ЖИВЛЕННЯ — увімкни рубильник"
+
+msgid "%s  ·  JÁ ATIVO"
+msgstr "%s  ·  ВЖЕ АКТИВНИЙ"
+
+msgid "%s  ·  ESGOTADO NESTA PARTIDA"
+msgstr "%s  ·  РОЗПРОДАНО В ЦЬОМУ МАТЧІ"
+
+msgid "[%s] %s — %s  ·  %s pontos"
+msgstr "[%s] %s — %s  ·  %s очок"
+
+msgid "[SEGURE %s] PEGAR %s  (%s%%)"
+msgstr "[УТРИМ. %s] ВЗЯТИ %s  (%s%%)"
+
+msgid "%s — presente de Artemis"
+msgstr "%s — дар Артеміди"
+
+msgid "[%s] PEGAR O URSINHO"
+msgstr "[%s] ВЗЯТИ ВЕДМЕДИКА"
+
+msgid "URSINHO %s/%s"
+msgstr "ВЕДМЕДИК %s/%s"
+
+msgid "SEGREDO DOS URSINHOS"
+msgstr "ТАЄМНИЦЯ ВЕДМЕДИКІВ"
+
+msgid "Você achou todos! Segredo salvo."
+msgstr "Ти знайшов усіх! Таємницю збережено."
+
+msgid "Todos os ursinhos de novo!"
+msgstr "Знову всі ведмедики!"
+
+msgid "PAINEL DO TREM — DISPONÍVEL EM %ss"
+msgstr "ПАНЕЛЬ ПОТЯГА — ДОСТУПНА ЧЕРЕЗ %ss"
+
+msgid "[%s] CHAMAR O TREM  ·  %s pontos"
+msgstr "[%s] ВИКЛИКАТИ ПОТЯГ  ·  %s очок"
+
+msgid "O TREM NÃO PODE VIR AGORA"
+msgstr "ПОТЯГ ЗАРАЗ НЕ МОЖЕ ПРИЇХАТИ"
+
+msgid "MUNIÇÃO"
+msgstr "НАБОЇ"
+
+msgid "  ·  SEGURE %s: "
+msgstr "  ·  УТРИМ. %s:"
+
+msgid "MUNIÇÃO CHEIA"
+msgstr "НАБОЇ ПОВНІ"
+
+msgid "[%s] MUNIÇÃO %s  ·  %s pontos"
+msgstr "[%s] НАБОЇ %s  ·  %s очок"
+
+msgid "%s  ·  MUNIÇÃO CHEIA"
+msgstr "%s  ·  НАБОЇ ПОВНІ"
+
+msgid "[%s] COMPRAR %s  ·  %s pontos"
+msgstr "[%s] КУПИТИ %s  ·  %s очок"
+
+msgid "[%s] PEGAR %s  ·  %ss"
+msgstr "[%s] ВЗЯТИ %s  ·  %ss"
+
+msgid "[%s] PEGAR %s (troca por %s)  ·  %ss"
+msgstr "[%s] ВЗЯТИ %s (замість %s)  ·  %ss"
+
+msgid "%s  ·  NÍVEL MÁXIMO"
+msgstr "%s  ·  МАКС. РІВЕНЬ"
+
+msgid "Mk II"
+msgstr "Mk II"
+
+msgid "Mk III"
+msgstr "Mk III"
+
+msgid "[%s] WEAPON LAB: %s → %s  ·  %s pontos"
+msgstr "[%s] WEAPON LAB: %s → %s  ·  %s очок"
+
+msgid "TREM PASSANDO"
+msgstr "ПРОЇЖДЖАЄ ПОТЯГ"
+
+msgid "⚠ TREM CHEGANDO"
+msgstr "⚠ НАБЛИЖАЄТЬСЯ ПОТЯГ"
+
+msgid "PRÓXIMO TREM %ds"
+msgstr "НАСТУПНИЙ ПОТЯГ %ds"
+
+msgid "PRÓXIMO TREM EM BREVE"
+msgstr "НАСТУПНИЙ ПОТЯГ НЕЗАБАРОМ"
+
+msgid "SEM PREVISÃO"
+msgstr "НЕМАЄ ПРОГНОЗУ"
+
+msgid "Não foi possível conectar à sala"
+msgstr "Не вдалося підключитися до кімнати"
+
+msgid "O host saiu"
+msgstr "Хост вийшов"
+
+msgid "Tempo esgotado ao entrar na sala"
+msgstr "Час очікування входу в кімнату минув"
+
+msgid "Criando sala..."
+msgstr "Створення кімнати..."
+
+msgid "Não foi possível criar a sala (%s)"
+msgstr "Не вдалося створити кімнату (%s)"
+
+msgid "Procurando a sala %s..."
+msgstr "Пошук кімнати %s..."
+
+msgid "Sem conexão com o servidor (%s)"
+msgstr "Немає зв'язку з сервером (%s)"
+
+msgid "Sala %s não encontrada"
+msgstr "Кімнату %s не знайдено"
+
+msgid "Não foi possível abrir a sala (%s)"
+msgstr "Не вдалося відкрити кімнату (%s)"
+
+msgid "Sala %s aberta"
+msgstr "Кімнату %s відкрито"
+
+msgid "Não foi possível entrar (%s)"
+msgstr "Не вдалося увійти (%s)"
+
+msgid "Conectando à sala %s..."
+msgstr "Підключення до кімнати %s..."
+
+msgid "Na sala %s"
+msgstr "У кімнаті %s"
+
+msgid "JOGADOR"
+msgstr "ГРАВЕЦЬ"
+
+msgid "sem conexão"
+msgstr "немає зв'язку"
+
+msgid "A partida já começou"
+msgstr "Матч уже почався"
+
+msgid "Sala cheia (%s jogadores)"
+msgstr "Кімната заповнена (%s гравців)"
+
+msgid "Entrada recusada"
+msgstr "Вхід відхилено"
+
+msgid "sem sessão"
+msgstr "немає сесії"
+
+msgid "Usuário: 3 a 16 letras minúsculas, números ou _"
+msgstr "Ім'я користувача: від 3 до 16 малих літер, цифр або _"
+
+msgid "Senha: mínimo de %d caracteres"
+msgstr "Пароль: щонайменше %d символів"
+
+msgid "Senha: máximo de %d caracteres"
+msgstr "Пароль: щонайбільше %d символів"
+
+msgid "Não foi possível entrar — tente de novo"
+msgstr "Не вдалося увійти — спробуй ще раз"
+
+msgid "Sem conexão"
+msgstr "Немає зв'язку"
+
+msgid "Sessão expirada — entre de novo"
+msgstr "Сесія завершилася — увійди знову"
+
+msgid "Falha ao ler da nuvem"
+msgstr "Помилка читання з хмари"
+
+msgid "Contas online indisponíveis"
+msgstr "Онлайн-акаунти недоступні"
+
+msgid "Falha ao salvar na nuvem"
+msgstr "Помилка збереження в хмару"
+
+msgid "Sem conexão com o servidor"
+msgstr "Немає зв'язку з сервером"
+
+msgid "Muitas tentativas — aguarde um pouco"
+msgstr "Забагато спроб — зачекай трохи"
+
+msgid "Esse usuário já existe"
+msgstr "Такий користувач уже існує"
+
+msgid "Usuário ou senha incorretos"
+msgstr "Неправильне ім'я користувача або пароль"
+
+msgid "Senha fraca demais"
+msgstr "Надто слабкий пароль"
+
+msgid "Usuário inválido"
+msgstr "Недійсне ім'я користувача"
+
+msgid "Não foi possível concluir — tente de novo"
+msgstr "Не вдалося завершити — спробуй ще раз"
+
+msgid "HACKER DETECTADO"
+msgstr "ВИЯВЛЕНО ЧИТЕРА"
+
+msgid "SOLO"
+msgstr "СОЛО"
+
+msgid "DUPLA"
+msgstr "ДУЕТ"
+
+msgid "TRIO"
+msgstr "ТРІО"
+
+msgid "QUARTETO"
+msgstr "КВАРТЕТ"
+
+msgid "ranking global indisponível"
+msgstr "глобальний рейтинг недоступний"
+
+msgid "mapa ainda não aceito no ranking global"
+msgstr "карту ще не прийнято до глобального рейтингу"
+
+msgid "pontuação recusada"
+msgstr "результат відхилено"
+
+msgid "resposta incompleta"
+msgstr "неповна відповідь"
+
+msgid "não conectou ao servidor"
+msgstr "не вдалося зв'язатися з сервером"
+
+msgid "endereço não encontrado"
+msgstr "адресу не знайдено"
+
+msgid "conexão caiu"
+msgstr "з'єднання обірвалося"
+
+msgid "falha de TLS"
+msgstr "помилка TLS"
+
+msgid "sem resposta"
+msgstr "немає відповіді"
+
+msgid "resposta grande demais"
+msgstr "завелика відповідь"
+
+msgid "falha ao descompactar a resposta"
+msgstr "не вдалося розпакувати відповідь"
+
+msgid "requisição falhou"
+msgstr "запит не вдався"
+
+msgid "redirecionamentos demais"
+msgstr "забагато перенаправлень"
+
+msgid "tempo esgotado"
+msgstr "час очікування минув"
+
+msgid "requisição recusada (%s)"
+msgstr "запит відхилено (%s)"
+
+msgid "erro de rede %d"
+msgstr "мережева помилка %d"
+
+msgid "ALIADO"
+msgstr "СОЮЗНИК"
+
+msgid "Fúria do Trovão"
+msgstr "Лють Грому"
+
+msgid "12% dos tiros soltam um raio"
+msgstr "12% пострілів випускають блискавку"
+
+msgid "Sede de Sangue"
+msgstr "Жага Крові"
+
+msgid "abates seguidos aumentam o dano"
+msgstr "вбивства поспіль підвищують шкоду"
+
+msgid "mira precisa e golpes críticos"
+msgstr "точний приціл і критичні удари"
+
+msgid "anda, recarrega e interage mais rápido"
+msgstr "ходить, перезаряджає і взаємодіє швидше"
+
+msgid "Maré"
+msgstr "Приплив"
+
+msgid "os tiros empurram os zumbis"
+msgstr "постріли відкидають зомбі"
+
+msgid "HADES"
+msgstr "АЇД"
+
+msgid "Pacto dos Mortos"
+msgstr "Пакт Мертвих"
+
+msgid "abatidos voltam como aliados"
+msgstr "убиті повертаються союзниками"
+
+msgid "HADES: um espírito aliado se levanta para lutar"
+msgstr "АЇД: союзний дух повстає, щоб битися"
+
+msgid "PETRIFICADO! Não olhe para a Górgona"
+msgstr "СКАМ'ЯНІННЯ! Не дивись на Горгону"
+
+msgid "QUICK REVIVE!"
+msgstr "QUICK REVIVE!"
+
+msgid "CAÍDO! Um colega pode te reviver"
+msgstr "ТЕБЕ ЗБИТО! Товариш може тебе підняти"
+
+msgid "%s caiu!"
+msgstr "%s збито!"
+
+msgid "CAÍDO · %ss para um colega te reviver"
+msgstr "ЗБИТО · %ss, щоб товариш тебе підняв"
+
+msgid "VOCÊ MORREU · volta no próximo round"
+msgstr "ТИ ЗАГИНУВ · повернешся в наступному раунді"
+
+msgid "%s levantou %s"
+msgstr "%s підняв(ла) гравця %s"
+
+msgid "[SEGURE %s] REVIVER %s"
+msgstr "[УТРИМ. %s] ПІДНЯТИ: %s"
+
+msgid "O COLEGA"
+msgstr "ТОВАРИША"
+
+msgid "[%s] %s"
+msgstr "[%s] %s"
+
+msgid "CADEADO ABERTO"
+msgstr "ЗАМОК ВІДКРИТО"
+
+msgid "%s concluiu a missão: todos os perks + %s"
+msgstr "%s виконав(ла) місію: усі перки + %s"
+
+msgid "%s concluiu a missão: todos os perks"
+msgstr "%s виконав(ла) місію: усі перки"
+
+msgid "Ligue a energia (disjuntor no Necrotério)"
+msgstr "Увімкни живлення (рубильник у Моргу)"
+
+msgid "Derrote o Paciente Zero enfurecido (round %s)"
+msgstr "Переможи розлюченого Нульового Пацієнта (раунд %s)"
+
+msgid "Aplique o soro no Paciente Zero"
+msgstr "Введи сироватку Нульовому Пацієнту"
+
+msgid "O SORO"
+msgstr "СИРОВАТКА"
+
+msgid "Componentes do soro %s/3 — UTI · Farmácia · cartão do Blindado"
+msgstr "Компоненти сироватки %s/3 — Реанімація · Аптека · перепустка Броньованого"
+
+msgid "PEGAR AS AMOSTRAS"
+msgstr "ВЗЯТИ ЗРАЗКИ"
+
+msgid "AMOSTRAS COLETADAS"
+msgstr "ЗРАЗКИ ЗІБРАНО"
+
+msgid "PEGAR O REAGENTE"
+msgstr "ВЗЯТИ РЕАГЕНТ"
+
+msgid "REAGENTE COLETADO"
+msgstr "РЕАГЕНТ ЗІБРАНО"
+
+msgid "ARMÁRIO TRANCADO — ATIRE NO CADEADO"
+msgstr "ШАФА ЗАМКНЕНА — СТРІЛЯЙ У ЗАМОК"
+
+msgid "ABRIR A GAVETA COM O CARTÃO"
+msgstr "ВІДКРИТИ ШУХЛЯДУ ПЕРЕПУСТКОЮ"
+
+msgid "CATALISADOR COLETADO"
+msgstr "КАТАЛІЗАТОР ЗІБРАНО"
+
+msgid "GAVETA TRANCADA — PRECISA DO CARTÃO DE ACESSO"
+msgstr "ШУХЛЯДА ЗАМКНЕНА — ПОТРІБНА ПЕРЕПУСТКА"
+
+msgid "PEGAR O CARTÃO DE ACESSO"
+msgstr "ВЗЯТИ ПЕРЕПУСТКУ"
+
+msgid "CARTÃO DE ACESSO — abra a gaveta do Necrotério"
+msgstr "ПЕРЕПУСТКА — відкрий шухляду в Моргу"
+
+msgid "UM SEGURANÇA BLINDADO ESTÁ COM O CARTÃO DE ACESSO"
+msgstr "У БРОНЬОВАНОГО ОХОРОНЦЯ Є ПЕРЕПУСТКА"
+
+msgid "Leve os componentes à centrífuga do Laboratório"
+msgstr "Віднеси компоненти до центрифуги в Лабораторії"
+
+msgid "CENTRÍFUGA SOB ATAQUE! Afaste os zumbis (%ss)"
+msgstr "ЦЕНТРИФУГУ АТАКУЮТЬ! Віджени зомбі (%ss)"
+
+msgid "Defenda a centrífuga: %ss"
+msgstr "Захищай центрифугу: %ss"
+
+msgid "COLOCAR OS COMPONENTES NA CENTRÍFUGA"
+msgstr "ЗАВАНТАЖИТИ КОМПОНЕНТИ В ЦЕНТРИФУГУ"
+
+msgid "A CENTRÍFUGA ESTÁ GIRANDO — DEFENDA!"
+msgstr "ЦЕНТРИФУГА ПРАЦЮЄ — ЗАХИЩАЙ ЇЇ!"
+
+msgid "SORO PRONTO! O Paciente Zero sentiu o cheiro..."
+msgstr "СИРОВАТКА ГОТОВА! Нульовий Пацієнт відчув запах..."
+
+msgid "APLICAR O SORO"
+msgstr "ВВЕСТИ СИРОВАТКУ"
+
+msgid "VOCÊ CUROU O PACIENTE ZERO"
+msgstr "ТИ ВИЛІКУВАВ НУЛЬОВОГО ПАЦІЄНТА"
+
+msgid "Todos os perks + Tornado. A luta continua..."
+msgstr "Усі перки + Торнадо. Боротьба триває..."
+
+msgid "Ligue o gerador dos arqueólogos (Necrópole)"
+msgstr "Увімкни генератор археологів (Некрополь)"
+
+msgid "Leve os Fragmentos aos altares do Portão do Templo (%s/3)"
+msgstr "Віднеси Фрагменти до вівтарів Брами Храму (%s/3)"
+
+msgid "O guardião despertou: derrote o Minotauro (round %s)"
+msgstr "Вартовий прокинувся: переможи Мінотавра (раунд %s)"
+
+msgid "Pegue a chave do Submundo onde o Minotauro caiu"
+msgstr "Візьми ключ Підземного світу там, де впав Мінотавр"
+
+msgid "Abra o Portão do Submundo (sul das Ruínas)"
+msgstr "Відчини Браму Підземного світу (на південь від Руїн)"
+
+msgid "O Cérbero guarda o Submundo: derrote-o (round %s)"
+msgstr "Цербер охороняє Підземний світ: переможи його (раунд %s)"
+
+msgid "Sele o portão no altar da Arena Final"
+msgstr "Запечатай браму на вівтарі Фінальної Арени"
+
+msgid "O PORTÃO DO SUBMUNDO"
+msgstr "БРАМА ПІДЗЕМНОГО СВІТУ"
+
+msgid "Fragmentos de Alma %s/3 — Necrópole · Floresta · um Esqueleto os carrega"
+msgstr "Фрагменти Душі %s/3 — Некрополь · Ліс · їх несе Скелет"
+
+msgid "PEGAR O FRAGMENTO DE ALMA"
+msgstr "ВЗЯТИ ФРАГМЕНТ ДУШІ"
+
+msgid "FRAGMENTO DE ALMA (%s/3)"
+msgstr "ФРАГМЕНТ ДУШІ (%s/3)"
+
+msgid "UM ESQUELETO CARREGA UM FRAGMENTO DE ALMA"
+msgstr "СКЕЛЕТ НЕСЕ ФРАГМЕНТ ДУШІ"
+
+msgid "DEPOSITAR UM FRAGMENTO NO ALTAR"
+msgstr "ПОКЛАСТИ ФРАГМЕНТ НА ВІВТАР"
+
+msgid "ALTAR ACESO (%s/3)"
+msgstr "ВІВТАР ЗАПАЛЕНО (%s/3)"
+
+msgid "O PORTÃO DO TEMPLO SE ABRIU... ALGO ACORDOU NO LABIRINTO"
+msgstr "БРАМА ХРАМУ ВІДЧИНИЛАСЯ... У ЛАБІРИНТІ ЩОСЬ ПРОКИНУЛОСЯ"
+
+msgid "PEGAR A CHAVE DO SUBMUNDO"
+msgstr "ВЗЯТИ КЛЮЧ ПІДЗЕМНОГО СВІТУ"
+
+msgid "CHAVE DO SUBMUNDO — abra o portão ao sul das Ruínas"
+msgstr "КЛЮЧ ПІДЗЕМНОГО СВІТУ — відчини браму на південь від Руїн"
+
+msgid "ABRIR O PORTÃO DO SUBMUNDO"
+msgstr "ВІДЧИНИТИ БРАМУ ПІДЗЕМНОГО СВІТУ"
+
+msgid "SELAR O PORTÃO DO SUBMUNDO"
+msgstr "ЗАПЕЧАТАТИ БРАМУ ПІДЗЕМНОГО СВІТУ"
+
+msgid "O PORTÃO DO SUBMUNDO FOI SELADO"
+msgstr "БРАМУ ПІДЗЕМНОГО СВІТУ ЗАПЕЧАТАНО"
+
+msgid "Todos os perks + Raio de Zeus. Mas algo lá embaixo ainda respira..."
+msgstr "Усі перки + Блискавка Зевса. Але там, унизу, щось іще дихає..."
+
+msgid "O ÚLTIMO TREM"
+msgstr "ОСТАННІЙ ПОТЯГ"
+
+msgid "Ligue a energia (disjuntor na Área Técnica)"
+msgstr "Увімкни живлення (рубильник у Технічній зоні)"
+
+msgid "Derrote o Condutor enfurecido (round %s)"
+msgstr "Переможи розлюченого Кондуктора (раунд %s)"
+
+msgid "Pegue a Lanterna do Condutor"
+msgstr "Візьми Ліхтар Кондуктора"
+
+msgid "Peças do sinal %s/3 — fusível (Manutenção) · chave (Bilheteria) · manivela (Blindado)"
+msgstr "Деталі сигналу %s/3 — запобіжник (Обслуговування) · ключ (Каса) · рукоятка (Броньований)"
+
+msgid "PEGAR O FUSÍVEL DO SINAL"
+msgstr "ВЗЯТИ ЗАПОБІЖНИК СИГНАЛУ"
+
+msgid "FUSÍVEL COLETADO"
+msgstr "ЗАПОБІЖНИК ЗІБРАНО"
+
+msgid "PEGAR A CHAVE DO PAINEL"
+msgstr "ВЗЯТИ КЛЮЧ ВІД ПАНЕЛІ"
+
+msgid "CHAVE DO PAINEL COLETADA"
+msgstr "КЛЮЧ ВІД ПАНЕЛІ ЗІБРАНО"
+
+msgid "COFRE TRANCADO — ATIRE NO CADEADO"
+msgstr "СЕЙФ ЗАМКНЕНО — СТРІЛЯЙ У ЗАМОК"
+
+msgid "UM BLINDADO ESTÁ COM A MANIVELA DO SINAL"
+msgstr "У БРОНЬОВАНОГО Є РУКОЯТКА СИГНАЛУ"
+
+msgid "PEGAR A MANIVELA DO SINAL"
+msgstr "ВЗЯТИ РУКОЯТКУ СИГНАЛУ"
+
+msgid "MANIVELA COLETADA"
+msgstr "РУКОЯТКУ ЗІБРАНО"
+
+msgid "Leve as peças ao sinal da Plataforma e conserte"
+msgstr "Віднеси деталі до сигналу на Платформі й полагодь його"
+
+msgid "SINAL SOB ATAQUE! Afaste os zumbis (%ss)"
+msgstr "СИГНАЛ АТАКУЮТЬ! Віджени зомбі (%ss)"
+
+msgid "Segure o sinal até o trem passar: %ss"
+msgstr "Тримай сигнал, доки не пройде потяг: %ss"
+
+msgid "CONSERTAR O SINAL"
+msgstr "ПОЛАГОДИТИ СИГНАЛ"
+
+msgid "O SINAL ESTÁ LIGADO — SEGURE ATÉ O TREM PASSAR!"
+msgstr "СИГНАЛ УВІМКНЕНО — ТРИМАЙСЯ, ДОКИ НЕ ПРОЙДЕ ПОТЯГ!"
+
+msgid "O TREM PASSOU! O Condutor saiu dos túneis..."
+msgstr "ПОТЯГ ПРОЙШОВ! Кондуктор вийшов із тунелів..."
+
+msgid "PEGAR A LANTERNA DO CONDUTOR"
+msgstr "ВЗЯТИ ЛІХТАР КОНДУКТОРА"
+
+msgid "O ÚLTIMO TREM PASSOU"
+msgstr "ОСТАННІЙ ПОТЯГ ПРОЙШОВ"
+
+msgid "Todos os perks + Lanterna do Condutor. A estação é sua..."
+msgstr "Усі перки + Ліхтар Кондуктора. Станція твоя..."
+
+msgid "ANDAR PARA CIMA"
+msgstr "ВГОРУ"
+
+msgid "ANDAR PARA BAIXO"
+msgstr "ВНИЗ"
+
+msgid "ANDAR PARA A ESQUERDA"
+msgstr "ЛІВОРУЧ"
+
+msgid "ANDAR PARA A DIREITA"
+msgstr "ПРАВОРУЧ"
+
+msgid "ATIRAR"
+msgstr "СТРІЛЯТИ"
+
+msgid "RECARREGAR"
+msgstr "ПЕРЕЗАРЯДКА"
+
+msgid "USAR / COMPRAR"
+msgstr "ВИКОРИСТАТИ / КУПИТИ"
+
+msgid "TROCAR DE ARMA"
+msgstr "ЗМІНИТИ ЗБРОЮ"
+
+msgid "ARMA 1"
+msgstr "ЗБРОЯ 1"
+
+msgid "ARMA 2"
+msgstr "ЗБРОЯ 2"
+
+msgid "FACA"
+msgstr "НІЖ"
+
+msgid "PULAR"
+msgstr "СТРИБОК"
+
+msgid "MAPA GRANDE"
+msgstr "ВЕЛИКА КАРТА"
+
+msgid "LANTERNA"
+msgstr "ЛІХТАРИК"
+
+msgid "PAUSA"
+msgstr "ПАУЗА"
+
+msgid "MOUSE %d"
+msgstr "МИША %d"
+
+msgid "BOTÃO %d"
+msgstr "КНОПКА %d"
+
+msgid "EIXO %d"
+msgstr "ВІСЬ %d"
+
+msgid "ESPAÇO"
+msgstr "ПРОБІЛ"
+
+msgid "MOUSE ESQ."
+msgstr "ЛІВА КН. МИШІ"
+
+msgid "MOUSE DIR."
+msgstr "ПРАВА КН. МИШІ"
+
+msgid "MOUSE MEIO"
+msgstr "СЕРЕДНЯ КН. МИШІ"
+
+msgid "RODA ↑"
+msgstr "КОЛЕСО ↑"
+
+msgid "RODA ↓"
+msgstr "КОЛЕСО ↓"
+
+msgid "AUTOMÁTICO (%s)"
+msgstr "АВТОМАТИЧНО (%s)"
+
+msgid " Mk III"
+msgstr " Mk III"
+
+msgid " Mk II"
+msgstr " Mk II"
+
+msgid "ALGUÉM"
+msgstr "ХТОСЬ"
+
+msgid "Barricadas consertadas (%s tábuas) · +%s"
+msgstr "Барикади полагоджено (%s дошок) · +%s"
+
+msgid "%s pegou %s"
+msgstr "%s підібрав(ла): %s"
+
+msgid "Perk grátis: %s"
+msgstr "Безкоштовний перк: %s"
+
+msgid "Fúria: dano x%s"
+msgstr "Лють: шкода x%s"
+
+msgid "FIRE SALE! MYSTERY BOX A %s · +%s CAIXAS NO MAPA"
+msgstr "FIRE SALE! MYSTERY BOX ЗА %s · +%s СКРИНЬ НА КАРТІ"
+
+msgid "SOBREVIVENTE"
+msgstr "ВИЖИЛИЙ"
+
+msgid "MULTI x%s"
+msgstr "MULTI x%s"
+
+msgid "VOCÊ"
+msgstr "ТИ"
+
+msgid "BOT %d"
+msgstr "БОТ %d"
+
+msgid "CONTA"
+msgstr "АКАУНТ"
+
+msgid "Contas online indisponíveis nesta versão."
+msgstr "Онлайн-акаунти недоступні в цій версії."
+
+msgid "VOLTAR"
+msgstr "НАЗАД"
+
+msgid "LOGADO COMO %s"
+msgstr "ВИ УВІЙШЛИ ЯК %s"
+
+msgid "SINCRONIZAR AGORA"
+msgstr "СИНХРОНІЗУВАТИ"
+
+msgid "SAIR DA CONTA"
+msgstr "ВИЙТИ З АКАУНТА"
+
+msgid "USUÁRIO"
+msgstr "ІМ'Я КОРИСТУВАЧА"
+
+msgid "SENHA"
+msgstr "ПАРОЛЬ"
+
+msgid "Sincronizando o progresso..."
+msgstr "Синхронізація прогресу..."
+
+msgid "ENTRAR"
+msgstr "УВІЙТИ"
+
+msgid "CRIAR CONTA"
+msgstr "СТВОРИТИ АКАУНТ"
+
+msgid "Entre para salvar o progresso na nuvem e jogar em qualquer aparelho (inclusive no navegador).\nNão há recuperação por e-mail: guarde bem a sua senha."
+msgstr "Увійди, щоб зберігати прогрес у хмарі й грати на будь-якому пристрої (навіть у браузері).\nВідновлення через пошту немає: зберігай пароль надійно."
+
+msgid "Progresso salvo na nuvem · %s"
+msgstr "Прогрес збережено в хмарі · %s"
+
+msgid "O progresso é salvo na nuvem automaticamente"
+msgstr "Прогрес зберігається в хмарі автоматично"
+
+msgid "CONQUISTAS"
+msgstr "ДОСЯГНЕННЯ"
+
+msgid "%d / %d LIBERADAS"
+msgstr "%d / %d ВІДКРИТО"
+
+msgid "Segredo — continue explorando"
+msgstr "Таємниця — досліджуй далі"
+
+msgid "ESTATÍSTICAS"
+msgstr "СТАТИСТИКА"
+
+msgid "%s — melhor round %d · recorde %d pts · %d abates"
+msgstr "%s — найкращий раунд %d · рекорд %d оч. · %d вбивств"
+
+msgid "Partidas %d · Abates %d · Faca %d · Headshots %d · Bosses %d · Tempo %dh%02d"
+msgstr "Матчі %d · Вбивства %d · Ніж %d · Хедшоти %d · Боси %d · Час %dh%02d"
+
+msgid "COMUM"
+msgstr "ЗВИЧАЙНА"
+
+msgid "INCOMUM"
+msgstr "НЕЗВИЧАЙНА"
+
+msgid "RARA"
+msgstr "РІДКІСНА"
+
+msgid "ÉPICA"
+msgstr "ЕПІЧНА"
+
+msgid "LENDÁRIA"
+msgstr "ЛЕГЕНДАРНА"
+
+msgid "Prêmio da missão O Último Trem (Terminal) — nunca sai na Mystery Box"
+msgstr "Нагорода місії «Останній потяг» (Термінал) — ніколи не випадає з Mystery Box"
+
+msgid "Prêmio da missão O Portão do Submundo (Templo) — nunca sai na Mystery Box"
+msgstr "Нагорода місії «Брама Підземного світу» (Храм) — ніколи не випадає з Mystery Box"
+
+msgid "Santuário do Olimpo: ative as 12 estátuas dos deuses no Templo"
+msgstr "Святилище Олімпу: запали 12 статуй богів у Храмі"
+
+msgid "Evento Portão do Submundo (Templo): destrua o portal"
+msgstr "Подія «Брама Підземного світу» (Храм): знищ портал"
+
+msgid "DANO"
+msgstr "ШКОДА"
+
+msgid "CADÊNCIA"
+msgstr "СКОРОСТРІЛЬНІСТЬ"
+
+msgid "PENTE"
+msgstr "МАГАЗИН"
+
+msgid "RESERVA"
+msgstr "ЗАПАС"
+
+msgid "RECARGA"
+msgstr "ПЕРЕЗАРЯДКА"
+
+msgid "ALCANCE"
+msgstr "ДАЛЬНІСТЬ"
+
+msgid "ARMAS"
+msgstr "ЗБРОЯ"
+
+msgid "AUTOMÁTICA"
+msgstr "АВТОМАТИЧНА"
+
+msgid "SEMIAUTOMÁTICA"
+msgstr "НАПІВАВТОМАТИЧНА"
+
+msgid "Elemento %s (%d, segure E na parede): %s"
+msgstr "Стихія %s (%d, утримуй E біля стіни): %s"
+
+msgid "Weapon Lab: Mk II %d · Mk III %d%s"
+msgstr "Weapon Lab: Mk II %d · Mk III %d%s"
+
+msgid "  (vira %s)"
+msgstr "  (стає: %s)"
+
+msgid "VER MK II"
+msgstr "ДИВИТИСЯ MK II"
+
+msgid "VER MK III"
+msgstr "ДИВИТИСЯ MK III"
+
+msgid "VER NORMAL"
+msgstr "ДИВИТИСЯ ЗВИЧАЙНУ"
+
+msgid "%.1f s"
+msgstr "%.1f с"
+
+msgid "%.0f m"
+msgstr "%.0f м"
+
+msgid "Arma inicial do %s"
+msgstr "Стартова зброя на карті %s"
+
+msgid "Parede: %d · %s · %s"
+msgstr "Стіна: %d · %s · %s"
+
+msgid "Mystery Box só no %s"
+msgstr "Mystery Box лише на карті %s"
+
+msgid "Mystery Box (em todos os mapas)"
+msgstr "Mystery Box (на всіх картах)"
+
+msgid "também na Mystery Box"
+msgstr "також у Mystery Box"
+
+msgid "Granada explode no impacto: %d de dano em área (raio %.1f m). Não fere você."
+msgstr "Граната вибухає при влучанні: %d шкоди по площі (радіус %.1f м). Тебе не ранить."
+
+msgid "Jato contínuo que incendeia: %d de dano por segundo durante %.1f s."
+msgstr "Безперервний струмінь, що підпалює: %d шкоди за секунду протягом %.1f с."
+
+msgid "Raio instantâneo que salta entre até %d zumbis e os atordoa."
+msgstr "Миттєва блискавка, що перескакує між %d зомбі й оглушує їх."
+
+msgid "Esfera que atravessa a horda e explode numa descarga elétrica (%d em área)."
+msgstr "Сфера пронизує орду й вибухає електричним розрядом (%d по площі)."
+
+msgid "Rajada de vento em cone (%d°, alcance %.0f m) que arremessa e destrói a horda à frente."
+msgstr "Конусний порив вітру (%d°, дальність %.0f м) відкидає й розриває орду попереду."
+
+msgid "Atravessa até %d zumbis por tiro."
+msgstr "Пробиває до %d зомбі за постріл."
+
+msgid "PERSONAGEM"
+msgstr "ПЕРСОНАЖ"
+
+msgid "Libere os visuais com as conquistas."
+msgstr "Відкривай образи за досягнення."
+
+msgid "EM USO"
+msgstr "ВИКОРИСТОВУЄТЬСЯ"
+
+msgid "USAR"
+msgstr "ВИБРАТИ"
+
+msgid "TRANCADO"
+msgstr "ЗАКРИТО"
+
+msgid "JOGAR"
+msgstr "ГРАТИ"
+
+msgid "Trancado — libere com a conquista \"%s\": %s"
+msgstr "Закрито — відкриється досягненням «%s»: %s"
+
+msgid "Aparece quando você enfrentar esse inimigo."
+msgstr "З'явиться, коли зустрінеш цього ворога."
+
+msgid "Aparece quando você enfrentar esse chefe."
+msgstr "З'явиться, коли зустрінеш цього боса."
+
+msgid "Chegue perto da máquina desse perk."
+msgstr "Підійди до автомата цього перка."
+
+msgid "Pegue esse power-up numa partida."
+msgstr "Підбери цей бонус у матчі."
+
+msgid "Compre esse elemento numa parede de arma."
+msgstr "Купи цю стихію на стіні зі зброєю."
+
+msgid "Receba essa bênção num altar do Templo."
+msgstr "Отримай це благословення на вівтарі в Храмі."
+
+msgid "Aparece quando esse evento acontecer numa partida."
+msgstr "З'явиться, коли ця подія станеться в матчі."
+
+msgid "Descubra jogando."
+msgstr "Дізнаєшся, граючи."
+
+msgid "GLOSSÁRIO"
+msgstr "ГЛОСАРІЙ"
+
+msgid "DESCOBERTOS %d DE %d"
+msgstr "ВІДКРИТО %d З %d"
+
+msgid "Ainda não encontrado."
+msgstr "Ще не знайдено."
+
+msgid "Onde: %s"
+msgstr "Де: %s"
+
+msgid "VIDA %d · VELOCIDADE %.1f m/s · DANO %d · %d PONTOS"
+msgstr "ЗДОРОВ'Я %d · ШВИДКІСТЬ %.1f м/с · ШКОДА %d · %d ОЧОК"
+
+msgid "VIDA %d · VELOCIDADE %.1f m/s · GOLPE %d"
+msgstr "ЗДОРОВ'Я %d · ШВИДКІСТЬ %.1f м/с · УДАР %d"
+
+msgid " · ATÉ %d POR PARTIDA"
+msgstr " · ДО %d ЗА МАТЧ"
+
+msgid "%d PONTOS · %s%s"
+msgstr "%d ОЧОК · %s%s"
+
+msgid "FUNCIONA SEM ENERGIA"
+msgstr "ПРАЦЮЄ БЕЗ ЖИВЛЕННЯ"
+
+msgid "PRECISA DE ENERGIA"
+msgstr "ПОТРІБНЕ ЖИВЛЕННЯ"
+
+msgid "DURA %d s"
+msgstr "ТРИВАЄ %d с"
+
+msgid "EFEITO NA HORA"
+msgstr "МИТТЄВИЙ ЕФЕКТ"
+
+msgid "%d PONTOS NA PAREDE DA ARMA"
+msgstr "%d ОЧОК БІЛЯ СТІНИ ЗІ ЗБРОЄЮ"
+
+msgid "%d PONTOS NO ALTAR"
+msgstr "%d ОЧОК БІЛЯ ВІВТАРЯ"
+
+msgid "A PARTIR DO ROUND %d"
+msgstr "З РАУНДУ %d"
+
+msgid "DICA: %s"
+msgstr "ПОРАДА: %s"
+
+msgid "ZUMBIS RESTANTES  %d"
+msgstr "ЗАЛИШИЛОСЯ ЗОМБІ  %d"
+
+msgid "ROUND %d COMPLETO"
+msgstr "РАУНД %d ПРОЙДЕНО"
+
+msgid "ÁREA LIBERADA: %s"
+msgstr "ЗОНУ ВІДКРИТО: %s"
+
+msgid "CONQUISTA DESBLOQUEADA: %s"
+msgstr "ДОСЯГНЕННЯ ОТРИМАНО: %s"
+
+msgid "SCORE %d"
+msgstr "РАХУНОК %d"
+
+msgid "%s DESBLOQUEADO!"
+msgstr "%s ВІДКРИТО!"
+
+msgid "%s SE APROXIMA"
+msgstr "НАБЛИЖАЄТЬСЯ: %s"
+
+msgid "FASE %d"
+msgstr "ФАЗА %d"
+
+msgid "%s DERROTADO  +%d"
+msgstr "%s ПЕРЕМОЖЕНО  +%d"
+
+msgid "MAX AMMO"
+msgstr "MAX AMMO"
+
+msgid "◆ %s  %d/%d"
+msgstr "◆ %s  %d/%d"
+
+msgid "%d FPS"
+msgstr "%d FPS"
+
+msgid "ROUND"
+msgstr "РАУНД"
+
+msgid "SCORE 0"
+msgstr "РАХУНОК 0"
+
+msgid "VIDA"
+msgstr "ЗДОРОВ'Я"
+
+msgid "GAME OVER"
+msgstr "ГРУ ЗАКІНЧЕНО"
+
+msgid "ROUND %d"
+msgstr "РАУНД %d"
+
+msgid "%s  ·  FASE %d"
+msgstr "%s  ·  ФАЗА %d"
+
+msgid "RODADA DOS CÃES"
+msgstr "РАУНД СОБАК"
+
+msgid "VIDA  %d / %d"
+msgstr "ЗДОРОВ'Я  %d / %d"
+
+msgid "Fúria"
+msgstr "Лють"
+
+msgid "RECARREGANDO"
+msgstr "ПЕРЕЗАРЯДЖАННЯ"
+
+msgid "ZUMBIS ABATIDOS"
+msgstr "ВБИТО ЗОМБІ"
+
+msgid "HEADSHOTS"
+msgstr "ХЕДШОТИ"
+
+msgid "PONTOS GANHOS"
+msgstr "ЗАРОБЛЕНО ОЧОК"
+
+msgid "TEMPO"
+msgstr "ЧАС"
+
+msgid "BOSSES"
+msgstr "БОСИ"
+
+msgid "DANO CAUSADO"
+msgstr "ЗАВДАНО ШКОДИ"
+
+msgid "DISPAROS / ACERTOS"
+msgstr "ПОСТРІЛИ / ВЛУЧАННЯ"
+
+msgid "PRECISÃO"
+msgstr "ТОЧНІСТЬ"
+
+msgid "ABATES NA FACA"
+msgstr "ВБИВСТВА НОЖЕМ"
+
+msgid "NOVO RECORDE!"
+msgstr "НОВИЙ РЕКОРД!"
+
+msgid "RECORDE: %d PONTOS · ROUND %d"
+msgstr "РЕКОРД: %d ОЧОК · РАУНД %d"
+
+msgid "TIME: %s"
+msgstr "КОМАНДА: %s"
+
+msgid "PARTIDA INVALIDADA — NÃO VALE SAVE NEM RANKING"
+msgstr "МАТЧ АНУЛЬОВАНО — БЕЗ ЗБЕРЕЖЕННЯ Й РЕЙТИНГУ"
+
+msgid "JOGAR NOVAMENTE"
+msgstr "ГРАТИ ЗНОВУ"
+
+msgid "VOLTAR À SALA"
+msgstr "НАЗАД ДО КІМНАТИ"
+
+msgid "RANKING"
+msgstr "РЕЙТИНГ"
+
+msgid "MENU"
+msgstr "МЕНЮ"
+
+msgid "PARTIDA INVALIDADA"
+msgstr "МАТЧ АНУЛЬОВАНО"
+
+msgid "%dº LUGAR NO RANKING %s DE %s!"
+msgstr "%dº МІСЦЕ В РЕЙТИНГУ %s НА КАРТІ %s!"
+
+msgid "ENVIANDO O TIME AO RANKING GLOBAL..."
+msgstr "НАДСИЛАННЯ КОМАНДИ ДО ГЛОБАЛЬНОГО РЕЙТИНГУ..."
+
+msgid "RANKING GLOBAL: %s"
+msgstr "ГЛОБАЛЬНИЙ РЕЙТИНГ: %s"
+
+msgid "TIME ENVIADO AO RANKING GLOBAL (%s)!"
+msgstr "КОМАНДУ НАДІСЛАНО ДО ГЛОБАЛЬНОГО РЕЙТИНГУ (%s)!"
+
+msgid "ENTROU NO TOP! SEU NOME:"
+msgstr "ТИ В ТОПІ! ТВОЄ ІМ'Я:"
+
+msgid "SEU NOME PARA O RANKING GLOBAL:"
+msgstr "ТВОЄ ІМ'Я ДЛЯ ГЛОБАЛЬНОГО РЕЙТИНГУ:"
+
+msgid "%dº LUGAR NO RANKING DE %s!"
+msgstr "%dº МІСЦЕ В РЕЙТИНГУ КАРТИ %s!"
+
+msgid "ENVIANDO AO RANKING GLOBAL..."
+msgstr "НАДСИЛАННЯ ДО ГЛОБАЛЬНОГО РЕЙТИНГУ..."
+
+msgid "ENVIADO AO RANKING GLOBAL DA TEMPORADA!"
+msgstr "НАДІСЛАНО ДО ГЛОБАЛЬНОГО РЕЙТИНГУ СЕЗОНУ!"
+
+msgid "SALVAR"
+msgstr "ЗБЕРЕГТИ"
+
+msgid "LANTERNA %s%s"
+msgstr "ЛІХТАРИК %s%s"
+
+msgid "LIGADA"
+msgstr "УВІМКНЕНО"
+
+msgid "DESLIGADA"
+msgstr "ВИМКНЕНО"
+
+msgid "ESTÁ ESCURO — [%s] LIGA A LANTERNA"
+msgstr "ТЕМНО — [%s] ВМИКАЄ ЛІХТАРИК"
+
+msgid "CAÍDO %ds"
+msgstr "ЗБИТО %ds"
+
+msgid "FORA"
+msgstr "ВИБУВ"
+
+msgid "%d ms"
+msgstr "%d ms"
+
+msgid "COLEGA"
+msgstr "ТОВАРИШ"
+
+msgid "%s %ds"
+msgstr "%s %ds"
+
+msgid "JOGAR EM GRUPO"
+msgstr "ГРАТИ З ДРУЗЯМИ"
+
+msgid "Até 4 jogadores pela internet. Crie uma sala e passe o código, ou entre com o código de um amigo."
+msgstr "До 4 гравців у мережі. Створи кімнату й поділися кодом або увійди за кодом друга."
+
+msgid "SEU NOME"
+msgstr "ТВОЄ ІМ'Я"
+
+msgid "NOME"
+msgstr "ІМ'Я"
+
+msgid "CRIAR SALA"
+msgstr "СТВОРИТИ КІМНАТУ"
+
+msgid "CÓDIGO DA SALA"
+msgstr "КОД КІМНАТИ"
+
+msgid "ENTRAR NA SALA"
+msgstr "УВІЙТИ В КІМНАТУ"
+
+msgid "REDE LOCAL (MESMO WI-FI) — IP DO HOST"
+msgstr "ЛОКАЛЬНА МЕРЕЖА (ТОЙ САМИЙ WI-FI) — IP ХОСТА"
+
+msgid "CRIAR SALA NA REDE LOCAL"
+msgstr "СТВОРИТИ КІМНАТУ В ЛОКАЛЬНІЙ МЕРЕЖІ"
+
+msgid "Convite para a sala %s: digite seu nome e toque ENTRAR NA SALA"
+msgstr "Запрошення до кімнати %s: введи ім'я й натисни УВІЙТИ В КІМНАТУ"
+
+msgid "O código tem 5 letras"
+msgstr "У коді 5 літер"
+
+msgid "Procurando a sala..."
+msgstr "Пошук кімнати..."
+
+msgid "Na rede local: os amigos entram com o IP  %s"
+msgstr "У локальній мережі: друзі входять за IP  %s"
+
+msgid "COPIAR CÓDIGO"
+msgstr "КОПІЮВАТИ КОД"
+
+msgid "Código %s copiado!"
+msgstr "Код %s скопійовано!"
+
+msgid "COPIAR CONVITE"
+msgstr "КОПІЮВАТИ ЗАПРОШЕННЯ"
+
+msgid "Convite copiado! Quem abrir o link entra direto na sala."
+msgstr "Запрошення скопійовано! Хто відкриє посилання, одразу потрапить до кімнати."
+
+msgid "MAPA: %s  →"
+msgstr "КАРТА: %s  →"
+
+msgid "MAPA: %s"
+msgstr "КАРТА: %s"
+
+msgid "  (VOCÊ)"
+msgstr "  (ТИ)"
+
+msgid "HOST"
+msgstr "ХОСТ"
+
+msgid "PRONTO"
+msgstr "ГОТОВИЙ"
+
+msgid "ESPERANDO"
+msgstr "ЧЕКАЄ"
+
+msgid "· vaga livre"
+msgstr "· вільне місце"
+
+msgid "COMEÇAR"
+msgstr "ПОЧАТИ"
+
+msgid "Começa quando todos estiverem prontos."
+msgstr "Почнеться, коли всі будуть готові."
+
+msgid "Esperando os amigos entrarem com o código."
+msgstr "Чекаємо, доки друзі увійдуть за кодом."
+
+msgid "CANCELAR PRONTO"
+msgstr "СКАСУВАТИ ГОТОВНІСТЬ"
+
+msgid "SAIR DA SALA"
+msgstr "ВИЙТИ З КІМНАТИ"
+
+msgid "SEU VISUAL\n%s"
+msgstr "ТВІЙ ОБРАЗ\n%s"
+
+msgid "Bora jogar Tentando Sobreviver comigo! Sala %s: %s"
+msgstr "Зіграй зі мною в Tentando Sobreviver! Кімната %s: %s"
+
+msgid "— ms"
+msgstr "— ms"
+
+msgid "%s mover · mouse mirar · clique atirar · %s recarregar · %s trocar arma · %s faca · %s usar · %s pausa"
+msgstr "%s рух · миша приціл · клік постріл · %s перезарядка · %s змінити зброю · %s ніж · %s використати · %s пауза"
+
+msgid "Analógico: mover · ATIRAR: mira sozinho no zumbi mais perto e atira · FACA: golpe corpo a corpo"
+msgstr "Стік: рух · СТРІЛЯТИ: сам цілиться в найближчого зомбі й стріляє · НІЖ: удар у ближньому бою"
+
+msgid "TENTANDO\nSOBREVIVER"
+msgstr "TENTANDO\nSOBREVIVER"
+
+msgid "CONTA: %s"
+msgstr "АКАУНТ: %s"
+
+msgid "CONTA / SALVAR NA NUVEM"
+msgstr "АКАУНТ / ХМАРНЕ ЗБЕРЕЖЕННЯ"
+
+msgid "CONFIGURAÇÕES"
+msgstr "НАЛАШТУВАННЯ"
+
+msgid "APOIE O PROJETO (PIX)"
+msgstr "ПІДТРИМАТИ ПРОЄКТ (PIX)"
+
+msgid "SAIR"
+msgstr "ВИЙТИ"
+
+msgid "MODO CABEÇÃO LIBERADO! (liga/desliga em Configurações)"
+msgstr "РЕЖИМ ВЕЛИКИХ ГОЛІВ ВІДКРИТО! (вмикається в Налаштуваннях)"
+
+msgid "MODO CABEÇÃO LIGADO!"
+msgstr "РЕЖИМ ВЕЛИКИХ ГОЛІВ УВІМКНЕНО!"
+
+msgid "O Último Trem"
+msgstr "Останній потяг"
+
+msgid "O Soro do Dr. Almeida"
+msgstr "Сироватка доктора Алмейди"
+
+msgid "O Portão do Submundo"
+msgstr "Брама Підземного світу"
+
+msgid "ESCOLHA O MAPA"
+msgstr "ОБЕРИ КАРТУ"
+
+msgid "Recorde: %d pontos · round %d"
+msgstr "Рекорд: %d очок · раунд %d"
+
+msgid "Sem recorde ainda"
+msgstr "Рекорду поки немає"
+
+msgid "1º no ranking: %s · %d pts"
+msgstr "1-ше місце в рейтингу: %s · %d оч."
+
+msgid "✓ MISSÃO CONCLUÍDA: %s"
+msgstr "✓ МІСІЮ ВИКОНАНО: %s"
+
+msgid "◆ MISSÃO: %s"
+msgstr "◆ МІСІЯ: %s"
+
+msgid "BLOQUEADO — conclua a missão do %s"
+msgstr "ЗАКРИТО — виконай місію на карті %s"
+
+msgid " ou do "
+msgstr " або на карті"
+
+msgid "BLOQUEADO — derrote o boss do round %d no %s"
+msgstr "ЗАКРИТО — переможи боса %d раунду на карті %s"
+
+msgid "MAPA"
+msgstr "КАРТА"
+
+msgid "PAUSADO"
+msgstr "ПАУЗА"
+
+msgid "A partida continua para o time."
+msgstr "Матч триває для команди."
+
+msgid "CONTINUAR"
+msgstr "ПРОДОВЖИТИ"
+
+msgid "REINICIAR"
+msgstr "СПОЧАТКУ"
+
+msgid "SAIR DA PARTIDA"
+msgstr "ПОКИНУТИ МАТЧ"
+
+msgid "%s para continuar  ·  %s: mapa grande"
+msgstr "%s — продовжити  ·  %s: велика карта"
+
+msgid "TIME"
+msgstr "КОМАНДА"
+
+msgid "PONTOS"
+msgstr "ОЧКИ"
+
+msgid "Nenhuma partida ainda — jogue para entrar no ranking!"
+msgstr "Матчів поки немає — грай, щоб потрапити до рейтингу!"
+
+msgid "Nenhuma partida em %s ainda — chame os amigos em JOGAR EM GRUPO!"
+msgstr "Матчів у режимі %s поки немає — клич друзів у ГРАТИ З ДРУЗЯМИ!"
+
+msgid "Mapa bloqueado"
+msgstr "Карта закрита"
+
+msgid "Ranking global indisponível"
+msgstr "Глобальний рейтинг недоступний"
+
+msgid "Ranking global indisponível (sem conexão)"
+msgstr "Глобальний рейтинг недоступний (немає зв'язку)"
+
+msgid "Ninguém pontuou nesta temporada ainda — seja o primeiro!"
+msgstr "У цьому сезоні ще ніхто не набрав очок — будь першим!"
+
+msgid "TEMPORADA TERMINA EM %d %s%s"
+msgstr "СЕЗОН ЗАКІНЧИТЬСЯ ЧЕРЕЗ %d %s%s"
+
+msgid "DIA"
+msgstr "ДЕНЬ"
+
+msgid "DIAS"
+msgstr "ДН."
+
+msgid " · VOCÊ: %dº"
+msgstr " · ТИ: %dº"
+
+msgid "JOGO"
+msgstr "ГРА"
+
+msgid "VÍDEO"
+msgstr "ВІДЕО"
+
+msgid "ÁUDIO"
+msgstr "ЗВУК"
+
+msgid "CONTROLES"
+msgstr "КЕРУВАННЯ"
+
+msgid "PEQUENO"
+msgstr "МАЛА"
+
+msgid "MÉDIO"
+msgstr "СЕРЕДНЯ"
+
+msgid "GRANDE"
+msgstr "ВЕЛИКА"
+
+msgid "AUTO"
+msgstr "АВТО"
+
+msgid "LIGADO"
+msgstr "УВІМК."
+
+msgid "DESLIGADO"
+msgstr "ВИМК."
+
+msgid "JANELA"
+msgstr "ВІКНО"
+
+msgid "TELA CHEIA"
+msgstr "ПОВНИЙ ЕКРАН"
+
+msgid "TELA CHEIA EXCLUSIVA"
+msgstr "ЕКСКЛЮЗИВНИЙ ПОВНИЙ ЕКРАН"
+
+msgid "ADAPTATIVO"
+msgstr "АДАПТИВНИЙ"
+
+msgid "Q / E: trocar de aba"
+msgstr "Q / E: змінити вкладку"
+
+msgid "IDIOMA"
+msgstr "МОВА"
+
+msgid "NOME NO RANKING"
+msgstr "ІМ'Я В РЕЙТИНГУ"
+
+msgid "TREMOR DE TELA"
+msgstr "ТРУСІННЯ ЕКРАНА"
+
+msgid "SANGUE"
+msgstr "КРОВ"
+
+msgid "MIRA NO MOUSE"
+msgstr "ПРИЦІЛ МИШІ"
+
+msgid "MINIMAPA"
+msgstr "МІНІКАРТА"
+
+msgid "TAMANHO DO MINIMAPA"
+msgstr "РОЗМІР МІНІКАРТИ"
+
+msgid "MODO CABEÇÃO"
+msgstr "РЕЖИМ ВЕЛИКИХ ГОЛІВ"
+
+msgid "MODO DE TELA"
+msgstr "РЕЖИМ ЕКРАНА"
+
+msgid "RESOLUÇÃO"
+msgstr "РОЗДІЛЬНІСТЬ"
+
+msgid "VSYNC"
+msgstr "VSYNC"
+
+msgid "LIMITE DE FPS"
+msgstr "ЛІМІТ FPS"
+
+msgid "SEM LIMITE"
+msgstr "БЕЗ ЛІМІТУ"
+
+msgid "ESCALA DA INTERFACE"
+msgstr "МАСШТАБ ІНТЕРФЕЙСУ"
+
+msgid "BRILHO"
+msgstr "ЯСКРАВІСТЬ"
+
+msgid "SOMBRAS"
+msgstr "ТІНІ"
+
+msgid "MOSTRAR FPS"
+msgstr "ПОКАЗУВАТИ FPS"
+
+msgid "VOLUME GERAL"
+msgstr "ЗАГАЛЬНА ГУЧНІСТЬ"
+
+msgid "MÚSICA"
+msgstr "МУЗИКА"
+
+msgid "EFEITOS"
+msgstr "ЕФЕКТИ"
+
+msgid "INTERFACE"
+msgstr "ІНТЕРФЕЙС"
+
+msgid "VOZES"
+msgstr "ГОЛОСИ"
+
+msgid "SOM"
+msgstr "ЗВУК"
+
+msgid "CONTROLES DE TOQUE"
+msgstr "СЕНСОРНЕ КЕРУВАННЯ"
+
+msgid "AÇÃO"
+msgstr "ДІЯ"
+
+msgid "TECLADO / MOUSE"
+msgstr "КЛАВІАТУРА / МИША"
+
+msgid "CONTROLE"
+msgstr "ГЕЙМПАД"
+
+msgid "Clique numa tecla para trocar. ESC cancela."
+msgstr "Натисни на клавішу, щоб змінити її. ESC — скасувати."
+
+msgid "RESTAURAR PADRÕES"
+msgstr "ВІДНОВИТИ ЗА ЗАМОВЧУВАННЯМ"
+
+msgid "Aperte uma tecla para %s… (ESC cancela)"
+msgstr "Натисни клавішу для дії «%s»… (ESC — скасувати)"
+
+msgid "Aperte um botão do controle para %s… (ESC cancela)"
+msgstr "Натисни кнопку геймпада для дії «%s»… (ESC — скасувати)"
+
+msgid "CONFIRMAR: APAGAR TUDO?"
+msgstr "ПІДТВЕРДИТИ: СТЕРТИ ВСЕ?"
+
+msgid "APAGAR PROGRESSO"
+msgstr "СТЕРТИ ПРОГРЕС"
+
+msgid "Desenvolvido por %s\n%s"
+msgstr "Розробник: %s\n%s"
+
+msgid "APOIE O PROJETO"
+msgstr "ПІДТРИМАТИ ПРОЄКТ"
+
+msgid "O Tentando Sobreviver é gratuito e sem anúncios. Se você curtiu, um PIX de qualquer valor ajuda a manter o projeto vivo — totalmente opcional."
+msgstr "Tentando Sobreviver безкоштовна й без реклами. Якщо гра сподобалася, PIX на будь-яку суму допоможе проєкту жити — цілком за бажанням."
+
+msgid "PIX para %s"
+msgstr "PIX для %s"
+
+msgid "Chave aleatória: %s"
+msgstr "Випадковий ключ: %s"
+
+msgid "COPIAR PIX COPIA E COLA"
+msgstr "КОПІЮВАТИ КОД PIX «КОПІЮВАТИ Й ВСТАВИТИ»"
+
+msgid "PIX copia e cola copiado! Cole no app do seu banco."
+msgstr "Код PIX скопійовано! Встав його в застосунку банку."
+
+msgid "COPIAR CHAVE"
+msgstr "КОПІЮВАТИ КЛЮЧ"
+
+msgid "Chave PIX copiada!"
+msgstr "Ключ PIX скопійовано!"
+
+msgid "Ideias, bugs ou parcerias: %s"
+msgstr "Ідеї, баги чи співпраця: %s"
+
+msgid "Desenvolvido por %s"
+msgstr "Розробник: %s"
+
+msgid "RECARR."
+msgstr "ПЕРЕЗАР."
+
+msgid "TROCAR"
+msgstr "ЗМІНИТИ"
+
+msgid "Cérbero"
+msgstr "Цербер"
+
+msgid "The Conductor"
+msgstr "The Conductor"
+
+msgid "A Entidade do Submundo"
+msgstr "Сутність Підземного світу"
+
+msgid "O templo não era uma prisão. Era uma porta... e ela está se abrindo."
+msgstr "Храм не був в'язницею. Він був дверима... і вони відчиняються."
+
+msgid "O Minotauro"
+msgstr "Мінотавр"
+
+msgid "Paciente Zero"
+msgstr "Нульовий Пацієнт"
+
+msgid "Primeiro Sangue"
+msgstr "Перша Кров"
+
+msgid "Abata o primeiro zumbi"
+msgstr "Убий першого зомбі"
+
+msgid "Sobrevivente"
+msgstr "Вижилий"
+
+msgid "Chegue à wave 10"
+msgstr "Дійди до 10-ї хвилі"
+
+msgid "Veterano"
+msgstr "Ветеран"
+
+msgid "Chegue à wave 20"
+msgstr "Дійди до 20-ї хвилі"
+
+msgid "Energia!"
+msgstr "Є живлення!"
+
+msgid "Ligue o disjuntor principal"
+msgstr "Увімкни головний рубильник"
+
+msgid "Maquinista"
+msgstr "Машиніст"
+
+msgid "Derrote o boss The Conductor"
+msgstr "Переможи боса The Conductor"
+
+msgid "Paciente Curado"
+msgstr "Пацієнта Вилікувано"
+
+msgid "Derrote o Paciente Zero"
+msgstr "Переможи Нульового Пацієнта"
+
+msgid "O Soro"
+msgstr "Сироватка"
+
+msgid "Complete a missão do Dr. Almeida"
+msgstr "Виконай місію доктора Алмейди"
+
+msgid "Adestrador"
+msgstr "Дресирувальник"
+
+msgid "Vença uma rodada de cães sem levar dano"
+msgstr "Виграй раунд собак, не отримавши шкоди"
+
+msgid "Atropelador"
+msgstr "Коток"
+
+msgid "Atropele 10 zumbis com uma passagem do trem"
+msgstr "Збий 10 зомбі одним проїздом потяга"
+
+msgid "Colecionador"
+msgstr "Колекціонер"
+
+msgid "Tenha todos os perks na mesma partida"
+msgstr "Май усі перки в одному матчі"
+
+msgid "Olho do Furacão"
+msgstr "Око Бурі"
+
+msgid "Transforme o Canhão de Vento no Tornado"
+msgstr "Перетвори Вітряну гармату на Торнадо"
+
+msgid "Liquidação"
+msgstr "Розпродаж"
+
+msgid "Use a Mystery Box durante um Fire Sale"
+msgstr "Використай Mystery Box під час Fire Sale"
+
+msgid "Açougueiro"
+msgstr "М'ясник"
+
+msgid "Abata 1.000 zumbis"
+msgstr "Убий 1000 зомбі"
+
+msgid "Faca na Caveira"
+msgstr "Ніж у Череп"
+
+msgid "Abata 50 zumbis na faca"
+msgstr "Убий 50 зомбі ножем"
+
+msgid "Mira de Ouro"
+msgstr "Золотий Приціл"
+
+msgid "Acerte 100 headshots fatais"
+msgstr "Зроби 100 смертельних хедшотів"
+
+msgid "Ursinhos"
+msgstr "Ведмедики"
+
+msgid "Encontre todos os ursinhos escondidos"
+msgstr "Знайди всіх схованих ведмедиків"
+
+msgid "Cabeção"
+msgstr "Велика Голова"
+
+msgid "Descubra o código secreto do menu"
+msgstr "Знайди секретний код меню"
+
+msgid "Complete a missão do Terminal e pegue a Lanterna do Condutor"
+msgstr "Виконай місію Терміналу й візьми Ліхтар Кондуктора"
+
+msgid "Fio de Ariadne"
+msgstr "Нитка Аріадни"
+
+msgid "Derrote o Minotauro"
+msgstr "Переможи Мінотавра"
+
+msgid "Os Doze do Olimpo"
+msgstr "Дванадцять Олімпійців"
+
+msgid "Ative as 12 estátuas dos deuses no Templo"
+msgstr "Запали 12 статуй богів у Храмі"
+
+msgid "Complete a missão do Templo e pegue o Raio de Zeus"
+msgstr "Виконай місію Храму й візьми Блискавку Зевса"
+
+msgid "Guardião dos Três"
+msgstr "Вартовий Трьох"
+
+msgid "Derrote o Cérbero"
+msgstr "Переможи Цербера"
+
+msgid "A Porta"
+msgstr "Двері"
+
+msgid "Derrote a Entidade do Submundo"
+msgstr "Переможи Сутність Підземного світу"
+
+msgid "PARTIDA INVALIDADA — não vale save nem ranking"
+msgstr "МАТЧ АНУЛЬОВАНО — без збереження й рейтингу"
+
+msgid "LUZ"
+msgstr "СВІТЛО"
+
+msgid "Clarão que cega: atordoa os zumbis e causa +50% de dano no boss."
+msgstr "Сліпучий спалах: оглушує зомбі й завдає босам +50% шкоди."
+
+msgid "SOMBRA"
+msgstr "ТІНЬ"
+
+msgid "Rouba vida: cada acerto recupera parte do dano causado."
+msgstr "Вампіризм: кожне влучання відновлює частину завданої шкоди."
+
+msgid "GELO"
+msgstr "ЛІД"
+
+msgid "Deixa os zumbis lentos e às vezes os congela."
+msgstr "Сповільнює зомбі й іноді заморожує їх."
+
+msgid "RAIO"
+msgstr "БЛИСКАВКА"
+
+msgid "A eletricidade salta para 2 zumbis próximos."
+msgstr "Електрика перескакує на 2 найближчих зомбі."
+
+msgid "FOGO"
+msgstr "ВОГОНЬ"
+
+msgid "Incendeia: dano contínuo por alguns segundos."
+msgstr "Підпалює: шкода протягом кількох секунд."
+
+msgid "EXPLOSIVO"
+msgstr "ВИБУХ"
+
+msgid "Cada tiro que acerta estoura numa pequena explosão."
+msgstr "Кожне влучання розривається невеликим вибухом."
+
+msgid "Terminal Central"
+msgstr "Центральний термінал"
+
+msgid "Estação de trem abandonada: hall, plataforma, lojas, túneis e manutenção."
+msgstr "Покинутий вокзал: зал, платформа, крамниці, тунелі й обслуговування."
+
+msgid "Hospital Santa Luzia"
+msgstr "Лікарня Санта-Лузія"
+
+msgid "Onde o vírus nasceu: recepção, UTI, centro cirúrgico, necrotério e o laboratório no subsolo."
+msgstr "Де народився вірус: приймальня, реанімація, операційні, морг і лабораторія в підвалі."
+
+msgid "Templo dos Mortos"
+msgstr "Храм Мертвих"
+
+msgid "Ruínas gregas, uma necrópole, a floresta de Artemis e o portão para o Submundo."
+msgstr "Грецькі руїни, некрополь, ліс Артеміди й брама до Підземного світу."
+
+msgid "Max Ammo"
+msgstr "Max Ammo"
+
+msgid "Double Cash"
+msgstr "Double Cash"
+
+msgid "Instant Kill"
+msgstr "Instant Kill"
+
+msgid "Nuke"
+msgstr "Nuke"
+
+msgid "Full Heal"
+msgstr "Full Heal"
+
+msgid "Armor"
+msgstr "Armor"
+
+msgid "Speed Boost"
+msgstr "Speed Boost"
+
+msgid "Carpenter"
+msgstr "Carpenter"
+
+msgid "Golden Drop"
+msgstr "Golden Drop"
+
+msgid "Fire Sale"
+msgstr "Fire Sale"
+
+msgid "O SORO DO DR. ALMEIDA"
+msgstr "СИРОВАТКА ДОКТОРА АЛМЕЙДИ"
+
+msgid "Enfermeiro"
+msgstr "Медбрат"
+
+msgid "Agente"
+msgstr "Агент"
+
+msgid "Guarda da Estação"
+msgstr "Охоронець станції"
+
+msgid "Paciente"
+msgstr "Пацієнт"
+
+msgid "Paciente da UTI"
+msgstr "Пацієнт реанімації"
+
+msgid "Cobaia do Laboratório"
+msgstr "Піддослідний лабораторії"
+
+msgid "Arqueóloga"
+msgstr "Археологиня"
+
+msgid "Caçadora do Labirinto"
+msgstr "Мисливиця Лабіринту"
+
+msgid "Sacerdotisa do Olimpo"
+msgstr "Жриця Олімпу"
+
+msgid "Andarilha do Submundo"
+msgstr "Мандрівниця Підземного світу"
+
+msgid "TENTANDO SOBREVIVER — feito com Godot + GDScript. Arte e sons 100% gerados por código."
+msgstr "TENTANDO SOBREVIVER — зроблено на Godot + GDScript. Графіку й звук на 100% створено кодом."
+
+msgid "APAGÃO"
+msgstr "БЛЕКАУТ"
+
+msgid "As luzes caíram — use a lanterna"
+msgstr "Світло згасло — скористайся ліхтариком"
+
+msgid "ALARME DE EMERGÊNCIA"
+msgstr "АВАРІЙНА ТРИВОГА"
+
+msgid "O barulho atrai mais zumbis"
+msgstr "Шум приваблює більше зомбі"
+
+msgid "Saia dos trilhos da plataforma!"
+msgstr "Зійди з колій платформи!"
+
+msgid "HORDA"
+msgstr "ОРДА"
+
+msgid "Muito mais zumbis nesta wave"
+msgstr "Набагато більше зомбі в цій хвилі"
+
+msgid "Uma caixa caiu do céu — segure E para abrir"
+msgstr "З неба впала скриня — утримуй E, щоб відкрити"
+
+msgid "VAZAMENTO DE GÁS"
+msgstr "ВИТІК ГАЗУ"
+
+msgid "Fique longe da nuvem verde"
+msgstr "Тримайся подалі від зеленої хмари"
+
+msgid "ZUMBI DOURADO"
+msgstr "ЗОЛОТИЙ ЗОМБІ"
+
+msgid "Mate-o antes que fuja: dinheiro e Golden Drop!"
+msgstr "Убий його, доки не втік: гроші й Golden Drop!"
+
+msgid "LUA DE SANGUE"
+msgstr "КРИВАВИЙ МІСЯЦЬ"
+
+msgid "Zumbis mais rápidos — dinheiro e pontos em dobro"
+msgstr "Зомбі швидші — гроші й очки вдвічі"
+
+msgid "DESABAMENTO"
+msgstr "ОБВАЛ"
+
+msgid "O teto está caindo: saia dos círculos vermelhos!"
+msgstr "Стеля падає: вийди з червоних кіл!"
+
+msgid "NEBLINA"
+msgstr "ТУМАН"
+
+msgid "Você mal enxerga — atenção aos gemidos"
+msgstr "Майже нічого не видно — слухай стогони"
+
+msgid "IRA DE ZEUS"
+msgstr "ГНІВ ЗЕВСА"
+
+msgid "Raios caem do céu: saia dos círculos azuis!"
+msgstr "З неба б'ють блискавки: вийди із синіх кіл!"
+
+msgid "LEVANTE DOS MORTOS"
+msgstr "ПОВСТАННЯ МЕРТВИХ"
+
+msgid "Os sarcófagos se abrem — esqueletos saindo!"
+msgstr "Саркофаги відчиняються — виходять скелети!"
+
+msgid "CAÇADA DE ARTEMIS"
+msgstr "ПОЛЮВАННЯ АРТЕМІДИ"
+
+msgid "Sátiros e lobos infernais estão caçando você"
+msgstr "Сатири й пекельні вовки полюють на тебе"
+
+msgid "PORTÃO DO SUBMUNDO"
+msgstr "БРАМА ПІДЗЕМНОГО СВІТУ"
+
+msgid "Um portal solta criaturas — destrua-o a tiros"
+msgstr "Портал випускає істот — розстріляй його"
+
+msgid "SANGUE DOS DEUSES"
+msgstr "КРОВ БОГІВ"
+
+msgid "Neste round as bênçãos dos altares são de graça"
+msgstr "У цьому раунді благословення вівтарів безкоштовні"
+
+msgid "CONTENÇÃO ROMPIDA"
+msgstr "ПОРУШЕННЯ ІЗОЛЯЦІЇ"
+
+msgid "Zumbis entrando pelos pontos de isolamento!"
+msgstr "Зомбі лізуть через точки ізоляції!"
+
+msgid "Adrenaline"
+msgstr "Adrenaline"
+
+msgid "Regenera vida 2,5x mais rápido e mais cedo"
+msgstr "Відновлює здоров'я в 2,5 раза швидше й раніше"
+
+msgid "Deadeye"
+msgstr "Deadeye"
+
+msgid "Headshots causam +100% de dano"
+msgstr "Хедшоти завдають +100% шкоди"
+
+msgid "Fortify"
+msgstr "Fortify"
+
+msgid "+50 de vida máxima"
+msgstr "+50 до максимального здоров'я"
+
+msgid "Overload"
+msgstr "Overload"
+
+msgid "+25% de dano das armas"
+msgstr "+25% до шкоди зброї"
+
+msgid "Quick Hands"
+msgstr "Quick Hands"
+
+msgid "Recarga 40% mais rápida"
+msgstr "Перезарядка на 40% швидша"
+
+msgid "Quick Revive"
+msgstr "Quick Revive"
+
+msgid "Ao cair, levanta sozinho (gasta o perk; até 3 por partida)"
+msgstr "Коли тебе зіб'ють, встаєш сам (витрачає перк; до 3 за матч)"
+
+msgid "Sprint+"
+msgstr "Sprint+"
+
+msgid "+20% de velocidade"
+msgstr "+20% до швидкості"
+
+msgid "AK"
+msgstr "AK"
+
+msgid "Arc Gun"
+msgstr "Arc Gun"
+
+msgid "Arco de Artemis"
+msgstr "Лук Артеміди"
+
+msgid "Caçada Lunar"
+msgstr "Місячне Полювання"
+
+msgid "Barrett .50"
+msgstr "Barrett .50"
+
+msgid "Beretta 92"
+msgstr "Beretta 92"
+
+msgid "Bren"
+msgstr "Bren"
+
+msgid "Combat Shotgun"
+msgstr "Бойовий дробовик"
+
+msgid "Lanterna do Condutor"
+msgstr "Ліхтар Кондуктора"
+
+msgid "Farol do Condutor"
+msgstr "Маяк Кондуктора"
+
+msgid "Energy Cannon"
+msgstr "Енергетична гармата"
+
+msgid "Flamethrower"
+msgstr "Вогнемет"
+
+msgid "Glock 17"
+msgstr "Glock 17"
+
+msgid "Grenade Launcher"
+msgstr "Гранатомет"
+
+msgid "Lança de Hefesto"
+msgstr "Спис Гефеста"
+
+msgid "Forja de Hefesto"
+msgstr "Кузня Гефеста"
+
+msgid "Lee-Enfield"
+msgstr "Lee-Enfield"
+
+msgid "Lupara"
+msgstr "Лупара"
+
+msgid "M1911"
+msgstr "M1911"
+
+msgid "M4"
+msgstr "M4"
+
+msgid "Magnum .44"
+msgstr "Magnum .44"
+
+msgid "Makarov PM"
+msgstr "Makarov PM"
+
+msgid "Mauser C96"
+msgstr "Mauser C96"
+
+msgid "Minigun"
+msgstr "Мініган"
+
+msgid "MP5"
+msgstr "MP5"
+
+msgid "Pistola de Pregos"
+msgstr "Цвяхомет"
+
+msgid "P90"
+msgstr "P90"
+
+msgid "Tridente de Poseidon"
+msgstr "Тризуб Посейдона"
+
+msgid "Maremoto"
+msgstr "Цунамі"
+
+msgid "Pump Shotgun"
+msgstr "Помповий дробовик"
+
+msgid "Rail Weapon"
+msgstr "Rail Weapon"
+
+msgid "RPK"
+msgstr "RPK"
+
+msgid "Cano Serrado"
+msgstr "Обріз"
+
+msgid "StG 44"
+msgstr "StG 44"
+
+msgid "Thompson M1928"
+msgstr "Thompson M1928"
+
+msgid "Uzi Dupla"
+msgstr "Подвійний Узі"
+
+msgid "Vector"
+msgstr "Vector"
+
+msgid "Winchester 1887"
+msgstr "Winchester 1887"
+
+msgid "Canhão de Vento"
+msgstr "Вітряна гармата"
+
+msgid "Tornado"
+msgstr "Торнадо"
+
+msgid "Raio de Zeus"
+msgstr "Блискавка Зевса"
+
+msgid "Ira do Olimpo"
+msgstr "Гнів Олімпу"
+
+msgid "Blindado"
+msgstr "Броньований"
+
+msgid "Rastejante"
+msgstr "Повзун"
+
+msgid "Exploder"
+msgstr "Вибухівець"
+
+msgid "Górgona"
+msgstr "Горгона"
+
+msgid "Harpia"
+msgstr "Гарпія"
+
+msgid "Lobo Infernal"
+msgstr "Пекельний вовк"
+
+msgid "Hoplita Morto"
+msgstr "Мертвий гоплит"
+
+msgid "Hoplita com Escudo"
+msgstr "Гоплит зі щитом"
+
+msgid "Cão Infernal"
+msgstr "Пекельний пес"
+
+msgid "Runner"
+msgstr "Бігун"
+
+msgid "Sátiro"
+msgstr "Сатир"
+
+msgid "Esqueleto Guerreiro"
+msgstr "Скелет-воїн"
+
+msgid "Esqueleto Arqueiro"
+msgstr "Скелет-лучник"
+
+msgid "Cuspidor"
+msgstr "Плювун"
+
+msgid "Tank"
+msgstr "Танк"
+
+msgid "Walker"
+msgstr "Ходок"
+
+msgid "INIMIGOS"
+msgstr "ВОРОГИ"
+
+msgid "ZUMBIS"
+msgstr "ЗОМБІ"
+
+msgid "O zumbi mais comum: lento, mas nunca vem sozinho. Entra arrancando as tábuas das janelas e cerca quem fica parado. No Hospital é o paciente de camisola; no Templo, o arqueólogo da escavação."
+msgstr "Найзвичайніший зомбі: повільний, але ніколи не приходить сам. Лізе всередину, відриваючи дошки з вікон, і оточує тих, хто стоїть на місці. У Лікарні це пацієнт у халаті; у Храмі — археолог із розкопок."
+
+msgid "Rápido e com pouca vida: chega antes dos outros e pune quem fica encurralado. No Hospital é o enfermeiro; no Templo, o cultista de capuz."
+msgstr "Швидкий і з малим запасом здоров'я: приходить раніше за інших і карає тих, кого затиснули в кут. У Лікарні це медбрат; у Храмі — сектант у каптурі."
+
+msgid "Grande e muito resistente: não recua com os tiros nem é empurrado. Guarde as armas pesadas para ele. No Hospital é o maqueiro; no Templo, o gladiador."
+msgstr "Великий і дуже живучий: не відступає від пострілів і не відштовхується. Прибережи важку зброю для нього. У Лікарні це санітар; у Храмі — гладіатор."
+
+msgid "Corre até você, começa a piscar e explode — e explode também ao morrer. Mate de longe: a explosão fere você e os zumbis em volta. No Hospital usa roupa de quarentena; no Templo carrega uma ânfora de fogo grego."
+msgstr "Біжить до тебе, починає блимати й вибухає — і вибухає також після смерті. Вбивай здалеку: вибух ранить тебе й зомбі навколо. У Лікарні він у карантинному костюмі; у Храмі несе амфору з грецьким вогнем."
+
+msgid "Rasteja pelo chão, baixo e difícil de acertar na cabeça. Ao morrer solta uma nuvem de gás que fere quem ficar dentro. No Templo é a múmia."
+msgstr "Повзе підлогою, низько, у голову влучити важко. Помираючи, випускає хмару газу, що ранить усіх усередині. У Храмі це мумія."
+
+msgid "Para a uma certa distância e cospe ácido em arco; onde cai vira uma poça que queima. Não fique parado em cima dela. No Templo é o sacerdote do veneno."
+msgstr "Зупиняється на відстані й плюється кислотою по дузі; де вона падає, лишається пекуча калюжа. Не стій у ній. У Храмі це жрець отрути."
+
+msgid "A armadura absorve 75% do dano no corpo até quebrar; um tiro na cabeça derruba o capacete. Nas missões, um deles carrega um item que você precisa. No Templo é o hoplita de bronze."
+msgstr "Броня поглинає 75% шкоди по тілу, доки не зламається; постріл у голову збиває шолом. У місіях один із них несе потрібний тобі предмет. У Храмі це бронзовий гоплит."
+
+msgid "Rápido e em matilha. No Hospital chega nas rodadas dos cães; no Templo, o Cérbero chama os cães de Hades. Pega fogo ao morrer e não deixa corpo."
+msgstr "Швидкі й зграєю. У Лікарні приходять у раунди собак; у Храмі Цербер кличе псів Аїда. Спалахує після смерті й не лишає тіла."
+
+msgid "Guerreiro grego morto-vivo: aguenta bastante e bate forte, mas é lento."
+msgstr "Немертвий грецький воїн: витримує багато й б'є сильно, але повільний."
+
+msgid "O escudo segura quase todo o dano que vem de frente (só 20% passa). Acerte a cabeça, os lados ou as costas. Não é empurrado."
+msgstr "Щит блокує майже всю шкоду спереду (проходить лише 20%). Бий у голову, боки чи спину. Його не можна відштовхнути."
+
+msgid "Rápido e frágil. Às vezes os ossos se juntam e ele se levanta de novo com metade da vida — só uma vez."
+msgstr "Швидкий і крихкий. Іноді кістки збираються, і він знову встає з половиною здоров'я — лише раз."
+
+msgid "Mantém distância e atira flechas retas. Saia da linha de tiro ou corra para cima dele."
+msgstr "Тримає дистанцію й стріляє прямими стрілами. Зійди з лінії вогню або біжи на нього."
+
+msgid "Rápido, corre em zigue-zague e anda em bando: difícil de mirar. Aparece em peso na Caçada de Artemis."
+msgstr "Швидкий, бігає зигзагом і ходить зграєю: важко прицілитися. Масово з'являється на Полюванні Артеміди."
+
+msgid "Chega perto, dá um bote rápido, recua e repete. Atire enquanto ele recua."
+msgstr "Підходить, робить швидкий випад, відступає й повторює. Стріляй, коли він відступає."
+
+msgid "Voa fora do alcance da faca e mergulha em você. Atire quando ela descer."
+msgstr "Літає поза досяжністю ножа й пікірує на тебе. Стріляй, коли вона знижується."
+
+msgid "Se você estiver olhando para ela quando ela olhar, fica lento, cinza e vira pedra por 1,5 s, sem andar nem atirar. Parede, objeto ou ficar de costas protegem. Depois do olhar, ela leva dano dobrado."
+msgstr "Якщо ти дивишся на неї, коли вона дивиться на тебе, ти сповільнюєшся, сірієш і перетворюєшся на камінь на 1,5 с — ні рухатися, ні стріляти. Захищають стіна, предмет або якщо відвернутися. Після погляду вона отримує подвійну шкоду."
+
+msgid "CHEFES"
+msgstr "БОСИ"
+
+msgid "O maquinista do último trem. Golpeia, investe (e fica tonto se bater na parede), cega a mira de perto com um clarão, solta ondas de choque e círculos que explodem e, na fase 3, chama zumbis. Tem 4 fases, com um rugido invulnerável a cada uma."
+msgstr "Машиніст останнього потяга. Б'є, кидається в атаку (і оглушений, якщо вріжеться в стіну), зблизька засліплює приціл спалахом, пускає ударні хвилі й кола, що вибухають, а в 3-й фазі кличе зомбі. Має 4 фази, на кожній — невразливий рик."
+
+msgid "O primeiro infectado. A mordida envenena — e piora se ele morder de novo antes de passar —, vomita ácido que deixa poças, grita para deixar você lento e faz chover ácido. Enfurecido, é o chefe da missão do Hospital."
+msgstr "Перший заражений. Його укус отруює — і гірше, якщо він укусить знову, доки не минуло, — він вивергає кислоту, що лишає калюжі, кричить, щоб сповільнити тебе, і викликає кислотний дощ. Розлючений, він бос місії Лікарні."
+
+msgid "Investe derrubando as colunas no caminho, e cada coluna quebrada o deixa em Fúria, com mais dano e velocidade. Solta ondas de choque; no Colapso, caem pedras que viram escombro. Carrega a chave do Submundo."
+msgstr "Кидається в атаку, збиваючи колони на шляху, і кожна зламана колона доводить його до Люті: більше шкоди й швидкості. Пускає ударні хвилі; під час Обвалу падає каміння, що стає завалами. Несе ключ Підземного світу."
+
+msgid "Três cabeças: morde (e morde de novo logo depois de investir), sopra um leque de fogo que deixa chamas no chão e investe. Na fase 3 chama os cães de Hades."
+msgstr "Три голови: кусає (і кусає знову одразу після ривка), видихає віяло вогню, що лишає полум'я на землі, і кидається в атаку. У 3-й фазі кличе псів Аїда."
+
+msgid "Solta esferas de alma em leque, levanta esqueletos e faz chover fogo que vira lava. Na fase 3 assume a forma monstruosa: investida, onda de choque e a Ruptura — some e reaparece perto de você."
+msgstr "Випускає віяло куль душ, піднімає скелетів і викликає вогняний дощ, що стає лавою. У 3-й фазі набуває жахливої подоби: ривок, ударна хвиля й Розрив — зникає й з'являється поруч із тобою."
+
+msgid "ITENS"
+msgstr "ПРЕДМЕТИ"
+
+msgid "PERKS"
+msgstr "ПЕРКИ"
+
+msgid "POWER-UPS"
+msgstr "БОНУСИ"
+
+msgid "Enche o pente e a reserva de todas as suas armas."
+msgstr "Поповнює магазин і запас усієї твоєї зброї."
+
+msgid "Todo ponto ganho vale em dobro enquanto durar."
+msgstr "Кожне зароблене очко рахується вдвічі, доки діє."
+
+msgid "Qualquer acerto de tiro ou de faca mata o zumbi na hora (não vale para chefes)."
+msgstr "Будь-яке влучання кулею чи ножем миттєво вбиває зомбі (не діє на босів)."
+
+msgid "Mata na hora todos os zumbis vivos — o chefe não — e paga um bônus de pontos."
+msgstr "Миттєво вбиває всіх живих зомбі — крім боса — і дає бонус очок."
+
+msgid "Recupera toda a vida."
+msgstr "Повністю відновлює здоров'я."
+
+msgid "Enche a barra azul de armadura, que absorve o dano antes da vida."
+msgstr "Заповнює синю шкалу броні, яка приймає шкоду раніше за здоров'я."
+
+msgid "Você corre bem mais rápido enquanto durar."
+msgstr "Ти бігаєш набагато швидше, доки діє."
+
+msgid "Conserta na hora todas as barricadas do mapa e paga um bônus."
+msgstr "Миттєво лагодить усі барикади на карті й дає бонус."
+
+msgid "A Mystery Box custa 10 e aparece em todos os locais das áreas abertas enquanto durar."
+msgstr "Mystery Box коштує 10 і з'являється в усіх точках відкритих зон, доки діє."
+
+msgid "Raro. Sorteia um prêmio: uma arma especial, uma bolada de pontos, um perk grátis ou a Fúria (dano em dobro por um tempo). Cai do Zumbi Dourado, dos chefes e de quem acha todos os ursinhos."
+msgstr "Рідкісний. Розігрує приз: особливу зброю, гору очок, безкоштовний перк або Лють (подвійна шкода на час). Випадає із Золотого зомбі, босів і коли знаходиш усіх ведмедиків."
+
+msgid "ELEMENTOS"
+msgstr "СТИХІЇ"
+
+msgid "BÊNÇÃOS DO TEMPLO"
+msgstr "БЛАГОСЛОВЕННЯ ХРАМУ"
+
+msgid "12% dos tiros soltam um raio que salta entre até 3 zumbis próximos."
+msgstr "12% пострілів випускають блискавку, що перескакує між 3 найближчими зомбі."
+
+msgid "Cada abate em sequência soma +8% de dano, até +40%. A sequência zera depois de 3 s sem abater."
+msgstr "Кожне вбивство поспіль додає +8% шкоди, до +40%. Серія скидається через 3 с без убивства."
+
+msgid "40% menos dispersão nos tiros e 15% de chance de crítico, com dano em dobro."
+msgstr "На 40% менший розкид і 15% шансу критичного удару з подвійною шкодою."
+
+msgid "Anda, recarrega e interage 20% mais rápido."
+msgstr "Ходиш, перезаряджаєш і взаємодієш на 20% швидше."
+
+msgid "Os tiros empurram os zumbis para trás."
+msgstr "Постріли відкидають зомбі назад."
+
+msgid "20% dos zumbis abatidos voltam como espírito aliado por 10 s e lutam do seu lado."
+msgstr "20% убитих зомбі повертаються союзним духом на 10 с і б'ються на твоєму боці."
+
+msgid "EVENTOS"
+msgstr "ПОДІЇ"
+
+msgid "TODOS OS MAPAS"
+msgstr "УСІ КАРТИ"
+
+msgid "As luzes caem e só ficam as de emergência, fracas. Use a lanterna (F); ligar a energia de novo no disjuntor encerra o apagão. Só acontece com a energia ligada."
+msgstr "Світло гасне, лишається тільки слабке аварійне освітлення. Скористайся ліхтариком (F); увімкнення живлення на рубильнику завершує блекаут. Буває лише з увімкненим живленням."
+
+msgid "A sirene atrai zumbis: eles chegam mais rápido e mais deles ficam vivos ao mesmo tempo. O painel do alarme desliga a sirene pagando."
+msgstr "Сирена приваблює зомбі: вони приходять швидше, і одночасно живих більше. Панель тривоги вимикає сирену за плату."
+
+msgid "Muito mais zumbis neste round, chegando mais rápido. Vem garantida no round 15 e depois a cada 10."
+msgstr "Набагато більше зомбі в цьому раунді, і приходять вони швидше. Гарантовано в 15-му раунді, а далі кожні 10."
+
+msgid "Uma caixa cai de paraquedas. Segure E por alguns segundos para abrir: munição, armadura ou dinheiro. Se levar um golpe, a abertura é interrompida."
+msgstr "Скриня спускається на парашуті. Утримуй E кілька секунд, щоб відкрити: набої, броня або гроші. Якщо по тобі влучать, відкривання перерветься."
+
+msgid "Um cano estoura e solta uma nuvem verde que fere quem estiver dentro — zumbis também. Fique longe ou segure E na válvula para fechar."
+msgstr "Лопається труба й випускає зелену хмару, що ранить усіх усередині — і зомбі теж. Тримайся подалі або утримуй E на вентилі, щоб закрити."
+
+msgid "Um zumbi todo em ouro, com coroa, que foge de você (estrela dourada no minimapa). Mate-o antes que escape para ganhar dinheiro e um Golden Drop."
+msgstr "Увесь золотий зомбі в короні, що тікає від тебе (золота зірка на мінікарті). Убий його, доки не втік, — отримаєш гроші й Golden Drop."
+
+msgid "A lua fica vermelha: os zumbis correm mais, mas dinheiro e pontos valem em dobro."
+msgstr "Місяць стає червоним: зомбі бігають швидше, але гроші й очки подвоюються."
+
+msgid "O teto começa a cair: círculos vermelhos marcam onde as pedras vão bater. Saia deles — as pedras também esmagam os zumbis."
+msgstr "Стеля починає падати: червоні кола показують, куди впаде каміння. Виходь із них — каміння розчавлює й зомбі."
+
+msgid "Uma neblina fecha a visão e até a lanterna ilumina menos. Fique atento aos gemidos."
+msgstr "Туман закриває огляд, і навіть ліхтарик світить слабше. Слухай стогони."
+
+msgid "TERMINAL CENTRAL"
+msgstr "ЦЕНТРАЛЬНИЙ ТЕРМІНАЛ"
+
+msgid "Um trem atravessa a plataforma a toda velocidade e atropela quem estiver nos trilhos — zumbis inclusive. O painel do trem chama o trem na hora."
+msgstr "Потяг мчить через платформу на повній швидкості й збиває всіх на коліях — зомбі теж. Панель потяга викликає його одразу."
+
+msgid "HOSPITAL SANTA LUZIA"
+msgstr "ЛІКАРНЯ САНТА-ЛУЗІЯ"
+
+msgid "Os pontos de isolamento se rompem e os zumbis entram por eles, com a sirene tocando."
+msgstr "Точки ізоляції проривуються, і зомбі лізуть через них під виття сирени."
+
+msgid "TEMPLO DOS MORTOS"
+msgstr "ХРАМ МЕРТВИХ"
+
+msgid "Raios caem do céu, e círculos azuis avisam onde. Saia deles — os raios também destroem os zumbis."
+msgstr "З неба б'ють блискавки, а сині кола попереджають куди. Виходь із них — блискавки знищують і зомбі."
+
+msgid "Os sarcófagos se abrem e soltam esqueletos, às vezes arqueiros."
+msgstr "Саркофаги відчиняються й випускають скелетів, іноді лучників."
+
+msgid "Sátiros e lobos infernais surgem em volta de você numa caçada."
+msgstr "Сатири й пекельні вовки з'являються навколо тебе на полюванні."
+
+msgid "Um portal se abre e solta criaturas até ser destruído a tiros. Destruído, deixa o Tridente de Poseidon."
+msgstr "Відчиняється портал і випускає істот, доки його не розстріляють. Знищений, він лишає Тризуб Посейдона."
+
+msgid "Neste round, as bênçãos dos altares são de graça."
+msgstr "У цьому раунді благословення вівтарів безкоштовні."
+
+msgid "MECÂNICAS"
+msgstr "МЕХАНІКИ"
+
+msgid "BÁSICO"
+msgstr "ОСНОВИ"
+
+msgid "Rounds"
+msgstr "Раунди"
+
+msgid "A partida é uma sequência de rounds cada vez mais difíceis: mais zumbis e mais fortes. O round acaba quando o último zumbi morre, e o fim de cada um paga um bônus."
+msgstr "Матч — це низка дедалі складніших раундів: зомбі більше, і вони сильніші. Раунд закінчується, коли гине останній зомбі, і наприкінці кожного дається бонус."
+
+msgid "Pontos"
+msgstr "Очки"
+
+msgid "Acertar e matar zumbis dá pontos — mais no tiro na cabeça e na faca —, e consertar barricadas também. Com eles você compra armas, portas, perks e a Mystery Box. O score do ranking é separado dos pontos."
+msgstr "Влучання й убивства зомбі дають очки — більше за постріли в голову й ніж, — як і лагодження барикад. За них купуєш зброю, двері, перки й Mystery Box. Рахунок рейтингу окремо від очок."
+
+msgid "Barricadas"
+msgstr "Барикади"
+
+msgid "Os zumbis entram pelas janelas arrancando as tábuas. Segure E perto da janela para pregar as tábuas de volta — cada tábua dá 10 pontos."
+msgstr "Зомбі лізуть у вікна, відриваючи дошки. Утримуй E біля вікна, щоб прибити дошки назад — кожна дошка дає 10 очок."
+
+msgid "Armas na parede"
+msgstr "Зброя на стінах"
+
+msgid "Os desenhos de giz nas paredes vendem armas e munição (E). A munição sai mais barata que a arma."
+msgstr "Малюнки крейдою на стінах продають зброю й набої (E). Набої дешевші за зброю."
+
+msgid "Faca"
+msgstr "Ніж"
+
+msgid "V dá um golpe com avanço que acerta um zumbi por vez: o alvo do avanço ou o mais perto à frente. Salva quando a munição acaba, e matar na faca dá mais pontos."
+msgstr "V — удар із випадом, що вражає одного зомбі за раз: ціль випаду або найближчого попереду. Рятує, коли скінчилися набої, а вбивства ножем дають більше очок."
+
+msgid "Lanterna"
+msgstr "Ліхтарик"
+
+msgid "F liga e desliga a lanterna. Faz falta no Apagão, na Neblina e nas áreas escuras."
+msgstr "F вмикає й вимикає ліхтарик. Потрібен під час Блекауту, у Тумані й у темних зонах."
+
+msgid "Duas armas"
+msgstr "Дві зброї"
+
+msgid "Você carrega duas armas (Q troca). Ao pegar uma terceira, a que está em mãos cai no chão e pode ser pega de volta por 60 s, com a munição e as melhorias."
+msgstr "Ти носиш дві зброї (Q змінює). Якщо підібрати третю, зброя в руках падає на землю, і її можна підібрати протягом 60 с, з набоями й покращеннями."
+
+msgid "AVANÇADO"
+msgstr "ПРОСУНУТЕ"
+
+msgid "Portas e áreas"
+msgstr "Двері й зони"
+
+msgid "Portas compráveis (E) abrem novas áreas — e também os pontos de onde os zumbis nascem nelas. A placa no chão mostra o nome da área do outro lado."
+msgstr "Двері, що купуються (E), відкривають нові зони — і точки появи зомбі в них. Табличка на підлозі показує назву зони з іншого боку."
+
+msgid "Energia"
+msgstr "Живлення"
+
+msgid "Segure E no disjuntor para ligar a energia: as máquinas de perk e o Weapon Lab passam a funcionar e as luzes voltam."
+msgstr "Утримуй E на рубильнику, щоб увімкнути живлення: автомати перків і Weapon Lab запрацюють, і повернеться світло."
+
+msgid "Máquinas de perk"
+msgstr "Автомати перків"
+
+msgid "Cada máquina vende um perk que vale pela partida inteira. Quase todas precisam da energia ligada — o Quick Revive não."
+msgstr "Кожен автомат продає перк, що діє весь матч. Майже всім потрібне живлення — Quick Revive ні."
+
+msgid "Mystery Box"
+msgstr "Mystery Box"
+
+msgid "Paga e sorteia uma arma, às vezes já com um elemento. Depois de alguns usos, a caixa troca de lugar; o feixe de luz dourada mostra onde ela está."
+msgstr "Платиш, і він розігрує зброю, іноді вже зі стихією. Після кількох використань скриня переміщується; стовп золотого світла показує, де вона."
+
+msgid "Weapon Lab"
+msgstr "Weapon Lab"
+
+msgid "Melhora a arma em mãos para Mk II e depois Mk III: mais dano, mais munição e visual novo — algumas viram outra arma, como o Canhão de Vento, que vira Tornado. Precisa de energia."
+msgstr "Покращує зброю в руках до Mk II, а потім до Mk III: більше шкоди, більше набоїв і новий вигляд — деякі стають іншою зброєю, як Вітряна гармата, що перетворюється на Торнадо. Потрібне живлення."
+
+msgid "Elementos"
+msgstr "Стихії"
+
+msgid "Com uma arma na mão, segure E na parede dela para comprar o elemento dela: Luz, Sombra, Gelo, Raio, Fogo ou Explosivo mudam o efeito dos tiros. A Mystery Box também pode entregar arma com elemento."
+msgstr "Зі зброєю в руках утримуй E біля її стіни, щоб купити її стихію: Світло, Тінь, Лід, Блискавка, Вогонь чи Вибух змінюють ефект пострілів. Mystery Box теж може дати зброю зі стихією."
+
+msgid "Power-ups"
+msgstr "Бонуси"
+
+msgid "Zumbis abatidos às vezes deixam um power-up no chão. Passe por cima para pegar antes que ele suma; os que duram mostram o tempo na tela."
+msgstr "Убиті зомбі іноді лишають бонус. Пройди по ньому, щоб підібрати, доки не зник; у тривалих на екрані видно час."
+
+msgid "Rodada dos cães"
+msgstr "Раунд собак"
+
+msgid "No Hospital, os rounds 5, 11, 17… são só de cães, com névoa e raios. O último cão deixa munição cheia."
+msgstr "У Лікарні раунди 5, 11, 17… — лише собаки, з туманом і блискавками. Остання собака лишає повний боєзапас."
+
+msgid "Round de chefe"
+msgstr "Раунд боса"
+
+msgid "Nos rounds 10, 20 e 30 vem um chefe, com uma escolta menor e a barra de vida no alto da tela. Derrotado, deixa um Golden Drop e um Max Ammo."
+msgstr "У 10, 20 і 30 раундах приходить бос із меншим ескортом і шкалою здоров'я вгорі екрана. Переможений, він лишає Golden Drop і Max Ammo."
+
+msgid "Missões"
+msgstr "Місії"
+
+msgid "Cada mapa tem uma missão em etapas, com o objetivo na tela e no minimapa: O Último Trem (Terminal), O Soro do Dr. Almeida (Hospital) e O Portão do Submundo (Templo). O prêmio é todos os perks e uma arma exclusiva."
+msgstr "На кожній карті є місія з етапів, із метою на екрані й на мінікарті: Останній потяг (Термінал), Сироватка доктора Алмейди (Лікарня) і Брама Підземного світу (Храм). Нагорода — усі перки й ексклюзивна зброя."
+
+msgid "Bênçãos dos Deuses"
+msgstr "Благословення богів"
+
+msgid "No Templo, 3 altares oferecem a bênção de um deus, sorteado a cada round, por 1500 pontos. Só uma bênção por vez, e cair faz perder a que você tem."
+msgstr "У Храмі 3 вівтарі дають благословення бога, що обирається щораунду, за 1500 очок. Лише одне благословення за раз, а якщо тебе зіб'ють, ти його втрачаєш."
+
+msgid "SEGREDOS"
+msgstr "ТАЄМНИЦІ"
+
+msgid "Ursinhos escondidos"
+msgstr "Сховані ведмедики"
+
+msgid "Cada mapa esconde ursinhos de pelúcia. Achar todos na mesma partida solta um Golden Drop e libera uma conquista."
+msgstr "На кожній карті сховано плюшевих ведмедиків. Знайди всіх в одному матчі — випаде Golden Drop і відкриється досягнення."
+
+msgid "Rádios e gravadores"
+msgstr "Радіо й диктофони"
+
+msgid "Rádios e gravadores espalhados contam a história de cada mapa. Segure E para sintonizar; cada uso traz a próxima mensagem."
+msgstr "Розкидані радіоприймачі й диктофони розповідають історію кожної карти. Утримуй E, щоб налаштуватися; кожне використання дає наступне повідомлення."
+
+msgid "Estátuas dos deuses"
+msgstr "Статуї богів"
+
+msgid "No Templo, acender as 12 estátuas dos deuses abre a passagem para o Santuário do Olimpo, onde está o Arco de Artemis."
+msgstr "У Храмі, якщо запалити 12 статуй богів, відкриється прохід до Святилища Олімпу, де лежить Лук Артеміди."
+
+msgid "Recepção"
+msgstr "Приймальня"
+
+msgid "Centro Cirúrgico"
+msgstr "Операційний блок"
+
+msgid "UTI"
+msgstr "Реанімація"
+
+msgid "Enfermaria"
+msgstr "Палата"
+
+msgid "Radiologia"
+msgstr "Рентгенологія"
+
+msgid "Farmácia"
+msgstr "Аптека"
+
+msgid "Pediatria"
+msgstr "Педіатрія"
+
+msgid "Necrotério"
+msgstr "Морг"
+
+msgid "Refeitório"
+msgstr "Їдальня"
+
+msgid "Laboratório"
+msgstr "Лабораторія"
+
+msgid "OUVIR O GRAVADOR"
+msgstr "ПОСЛУХАТИ ДИКТОФОН"
+
+msgid "📼 \"Diário do Dr. Almeida, dia 3: a amostra do Paciente Zero reagiu ao soro. As células não param de se dividir.\""
+msgstr "📼 «Щоденник доктора Алмейди, день 3: зразок Нульового Пацієнта відреагував на сироватку. Клітини не припиняють ділитися.»"
+
+msgid "📼 \"Dia 9: a febre some e volta. O Paciente Zero arrancou as amarras. Três enfermeiros foram mordidos.\""
+msgstr "📼 «День 9: жар то минає, то повертається. Нульовий Пацієнт зірвав ремені. Трьох медбратів укушено.»"
+
+msgid "📼 \"Dia 12: lacramos o laboratório e mandamos as amostras de trem para a Estação Central. Que Deus nos perdoe.\""
+msgstr "📼 «День 12: ми запечатали лабораторію й відправили зразки потягом на Центральний вокзал. Хай Бог нам простить.»"
+
+msgid "📼 \"...se estiver ouvindo isto: não deixe o Paciente Zero chegar à superfície. O soro está na câmara.\""
+msgstr "📼 «...якщо ти це чуєш: не дай Нульовому Пацієнту вибратися на поверхню. Сироватка в камері.»"
+
+msgid "Ruínas Gregas"
+msgstr "Грецькі руїни"
+
+msgid "Necrópole"
+msgstr "Некрополь"
+
+msgid "Labirinto"
+msgstr "Лабіринт"
+
+msgid "Floresta de Artemis"
+msgstr "Ліс Артеміди"
+
+msgid "Templo da Górgona"
+msgstr "Храм Горгони"
+
+msgid "Submundo"
+msgstr "Підземний світ"
+
+msgid "Arena Final"
+msgstr "Фінальна арена"
+
+msgid "Santuário do Olimpo"
+msgstr "Святилище Олімпу"
+
+msgid "LER A INSCRIÇÃO"
+msgstr "ПРОЧИТАТИ НАПИС"
+
+msgid "📜 \"Diário da Dra. Helena, escavação 7: as inscrições falam de mortos que voltam quando o portão é tocado.\""
+msgstr "📜 «Щоденник докторки Олени, розкоп 7: написи говорять про мертвих, що повертаються, коли торкаються брами.»"
+
+msgid "📜 \"Chegou a caixa do Hospital Santa Luzia: amostras do Dr. Almeida. Ele disse que o soro veio DAQUI.\""
+msgstr "📜 «Прийшла скриня з Лікарні Санта-Лузія: зразки доктора Алмейди. Він сказав, що сироватка походить ЗВІДСИ.»"
+
+msgid "📜 \"Os trens da Estação Central traziam os caixotes à noite. Nenhum carregador voltou para a segunda viagem.\""
+msgstr "📜 «Потяги з Центрального вокзалу привозили скрині вночі. Жоден вантажник не повернувся на другий рейс.»"
+
+msgid "📜 \"O templo não era uma prisão. Era uma porta. E alguém, do outro lado, está batendo.\""
+msgstr "📜 «Храм не був в'язницею. Він був дверима. І хтось з того боку стукає.»"
+
+msgid "Hall Central"
+msgstr "Центральна зала"
+
+msgid "Plataforma Norte"
+msgstr "Північна платформа"
+
+msgid "Bilheteria"
+msgstr "Каса"
+
+msgid "Lojas"
+msgstr "Крамниці"
+
+msgid "Área Técnica"
+msgstr "Технічна зона"
+
+msgid "Túneis"
+msgstr "Тунелі"
+
+msgid "Manutenção"
+msgstr "Обслуговування"
+
+msgid "📻 \"...controle da Estação Central. O trem das 23h40 NÃO deve parar. Repito: não parem o trem...\""
+msgstr "📻 «...диспетчерська Центрального вокзалу. Потяг о 23:40 НЕ повинен зупинятися. Повторюю: не зупиняйте потяг...»"
+
+msgid "📻 \"...o maquinista não responde. Alguém viu o Condutor? Ele desceu nos túneis e voltou... diferente.\""
+msgstr "📻 «...машиніст не відповідає. Хтось бачив Кондуктора? Він спустився в тунелі й повернувся... іншим.»"
+
+msgid "📻 \"...quarentena decretada. Portas lacradas. Quem ficou lá dentro está por conta própria.\""
+msgstr "📻 «...оголошено карантин. Двері запечатано. Хто лишився всередині, той сам по собі.»"
+
+msgid "📻 \"...se alguém ouvir isto: tentem sobreviver. O resgate chega ao amanhecer. Talvez.\""
+msgstr "📻 «...якщо хтось це чує: спробуйте вижити. Допомога прибуде на світанку. Можливо.»"

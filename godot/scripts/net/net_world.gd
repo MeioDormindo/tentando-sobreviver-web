@@ -19,7 +19,7 @@ const RELAYED: Array[StringName] = [
 	&"power_up_collected", &"power_up_timers", &"boss_incoming", &"boss_state", &"boss_phase",
 	&"boss_defeated", &"score_changed", &"mystery_box_rolled", &"hound_round_changed",
 	&"world_event_started", &"world_event_state", &"reward_multiplier_changed", &"quest_state",
-	&"quest_completed", &"max_ammo", &"map_unlocked", &"teddy_found", &"statue_lit", &"train_run_over",
+	&"quest_completed", &"max_ammo", &"map_unlocked", &"teddy_found", &"statue_lit", &"train_run_over", &"team_feed",
 ]
 
 var main: Node

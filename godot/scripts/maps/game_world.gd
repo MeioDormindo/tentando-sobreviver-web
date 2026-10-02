@@ -88,6 +88,12 @@ func is_open_floor(_point: Vector3) -> bool:
 	return true
 
 
+## Um inimigo pode surgir aqui? Chão de uma área aberta: nunca do lado de fora do prédio nem
+## atrás de uma porta fechada (o navmesh existe nos dois). Sem a folga em volta de `is_open_floor`.
+func is_spawnable(_point: Vector3) -> bool:
+	return true
+
+
 ## Tipo de piso no ponto (som dos passos): terminal, concrete, metal, tracks, tunnel, wagon...
 func surface_at(_point: Vector3) -> String:
 	return "concrete"

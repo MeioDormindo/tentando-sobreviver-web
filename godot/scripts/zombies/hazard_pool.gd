@@ -25,7 +25,7 @@ func setup(params: Dictionary, color: Color, gas := false) -> void:
 	if pool:
 		pool.billboard = BaseMaterial3D.BILLBOARD_DISABLED
 		pool.axis = Vector3.AXIS_Y
-		pool.position.y = 0.03
+		pool.position.y = PixelShapes.GROUND_Y
 		pool.alpha_cut = SpriteBase3D.ALPHA_CUT_DISABLED
 		pool.modulate = Color(color, 0.55 if gas else _alpha)
 		_visuals.append(pool)

@@ -43,6 +43,13 @@ const REVIVE_TIME_QUICK := 1.5
 const REVIVE_RADIUS := 1.8
 var bleeding: bool = false
 var bleed_left: float = 0.0
+## Dinheiro deste jogador (a carteira): o host atualiza pelo PointsManager; os colegas recebem
+## nos vitals (o painel do time mostra o de cada um).
+var money: int = 0
+## Mira pelo mouse neste quadro (a mini mira da HUD só aparece assim) e se ele está sobre um
+## inimigo (a mira fica vermelha).
+var mouse_aim := false
+var aiming_at_enemy := false
 ## Progresso do reviver (s) e quando foi a última vez que alguém segurou E.
 var _revive_progress := 0.0
 var _revive_held_at := -INF
@@ -157,6 +164,8 @@ func _ready() -> void:
 		if net:
 			net.on_knife())
 	perks.perks_changed.connect(_on_perks_changed)
+	Events.settings_changed.connect(_apply_shadow_setting)
+	_apply_shadow_setting()
 	var blessings := BlessingSystem.new()
 	blessings.player = self
 	add_child(blessings)
@@ -243,6 +252,13 @@ func _apply_skin() -> void:
 	pivot.add_child(hair)
 
 
+## Sombra da lanterna (Configurações → VÍDEO → SOMBRAS).
+func _apply_shadow_setting() -> void:
+	var flashlight := pivot.get_node_or_null(^"Flashlight") as Light3D
+	if flashlight:
+		flashlight.shadow_enabled = Save.get_setting("shadows") != false
+
+
 ## Nome em cima da cabeça dos colegas (o seu não aparece).
 func _add_name_tag() -> void:
 	if is_local or player_name == "":
@@ -254,7 +270,7 @@ func _add_name_tag() -> void:
 	tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	tag.font_size = 32
 	tag.pixel_size = 0.011
-	tag.modulate = Color(0.55, 0.85, 1.0)
+	tag.modulate = Players.color_of(self)
 	tag.position.y = 2.5
 	add_child(tag)
 
@@ -443,7 +459,7 @@ var _last_shot_at := -INF
 ## Estado decidido pelo host: vida, armadura, cair/levantar/morrer, lentidão, pedra, velocidade.
 ## Ordem dos valores do estado (vitals): vida, máxima, armadura, estado (0 de pé, 1 caído, 2 fora),
 ## sangramento, velocidade, lentidão e quanto falta, pedra, lanterna, recarregando.
-enum Vital { HP, MAX, ARMOR, STATE, BLEED, SPEED, SLOW, SLOW_LEFT, STONE_LEFT, LIGHT, RELOAD, COUNT }
+enum Vital { HP, MAX, ARMOR, STATE, BLEED, SPEED, SLOW, SLOW_LEFT, STONE_LEFT, LIGHT, RELOAD, POINTS, COUNT }
 
 
 func mirror_vitals(v: PackedFloat32Array) -> void:
@@ -456,6 +472,7 @@ func mirror_vitals(v: PackedFloat32Array) -> void:
 	net_speed = v[Vital.SPEED]
 	flashlight_on = v[Vital.LIGHT] > 0.5
 	net_reloading = v[Vital.RELOAD] > 0.5
+	money = int(v[Vital.POINTS])
 	var flashlight := pivot.get_node_or_null("Flashlight") as SpotLight3D
 	if flashlight:
 		flashlight.visible = flashlight_on
@@ -508,6 +525,7 @@ func vitals() -> PackedFloat32Array:
 	v[Vital.STONE_LEFT] = snappedf(maxf(0.0, _stone_until - _clock), 0.1)
 	v[Vital.LIGHT] = 1.0 if flashlight_on else 0.0
 	v[Vital.RELOAD] = 1.0 if weapon != null and weapon.reloading else 0.0
+	v[Vital.POINTS] = money
 	return v
 
 
@@ -975,6 +993,8 @@ func screen_to_world(input: Vector2) -> Vector2:
 
 func _update_aim_from_input() -> void:
 	var stick := screen_to_world(Input.get_vector(&"aim_left", &"aim_right", &"aim_up", &"aim_down"))
+	mouse_aim = false
+	aiming_at_enemy = false
 	if stick.length() > 0.3:
 		_aim_dir = Vector3(stick.x, 0.0, stick.y).normalized()
 		aim_point = global_position + _aim_dir * stick_aim_distance
@@ -1005,7 +1025,9 @@ func _update_aim_from_input() -> void:
 	var query := PhysicsRayQueryParameters3D.create(from, from + direction * 200.0, PhysicsLayers.HURTBOXES)
 	query.collide_with_areas = true
 	query.collide_with_bodies = false
+	mouse_aim = true
 	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+	aiming_at_enemy = not hit.is_empty()
 	if not hit.is_empty():
 		aim_point = hit.position
 		return
@@ -1136,6 +1158,7 @@ func _bleed(_info: DamageInfo) -> void:
 	create_tween().tween_property(pivot, "rotation:z", deg_to_rad(70.0), 0.3)
 	hud(&"toast", ["CAÍDO! Um colega pode te reviver"])
 	Events.player_downed.emit(self)
+	Players.feed(Loc.fmt("%s caiu!", [Players.name_of(self)]))
 
 
 func _tick_bleed(delta: float) -> void:
@@ -1143,7 +1166,7 @@ func _tick_bleed(delta: float) -> void:
 	if _clock - _revive_held_at > 0.25:
 		_revive_progress = 0.0
 		bleed_left -= delta
-	hud(&"interaction_prompt", ["CAÍDO · %ds para um colega te reviver" % ceili(maxf(0.0, bleed_left)), "", -1.0 if _revive_progress <= 0.0 else _revive_progress / _revive_time_for(_last_reviver)])
+	hud(&"interaction_prompt", [Loc.fmt("CAÍDO · %ss para um colega te reviver", [ceili(maxf(0.0, bleed_left))]), "", -1.0 if _revive_progress <= 0.0 else _revive_progress / _revive_time_for(_last_reviver)])
 	if bleed_left <= 0.0:
 		_bleed_out()
 
@@ -1174,6 +1197,9 @@ func revive() -> void:
 	create_tween().tween_property(pivot, "rotation:z", 0.0, 0.3)
 	hud(&"interaction_prompt", ["", "", -1.0])
 	Events.player_revived.emit(self)
+	if is_instance_valid(_last_reviver) and _last_reviver != self:
+		Players.feed(Loc.fmt("%s levantou %s", [Players.name_of(_last_reviver), Players.name_of(self)]))
+	_last_reviver = null
 
 
 ## Volta para a partida no começo do round (quem morreu no cooperativo), perto de um colega,
@@ -1213,7 +1239,7 @@ func _revive_spot_on(on: bool) -> void:
 func revive_prompt(by: Node3D) -> String:
 	if not bleeding or by == self:
 		return ""
-	return "[SEGURE E] REVIVER %s" % (player_name.to_upper() if player_name != "" else "O COLEGA")
+	return Loc.fmt("[SEGURE %s] REVIVER %s", [Loc.key(&"interact"), player_name.to_upper() if player_name != "" else "O COLEGA"])
 
 
 func revive_progress(_by: Node3D) -> float:

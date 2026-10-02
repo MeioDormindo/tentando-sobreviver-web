@@ -99,7 +99,7 @@ func update(delta: float) -> bool:
 	# Terminou quando o último vagão saiu do mapa.
 	var running := min_x < _map_width + 2.0 if direction > 0 else max_x > -2.0
 	if not running and run_over > 0:
-		Events.toast.emit("ATROPELADOS ×%d" % run_over)
+		Events.toast.emit(Loc.fmt("ATROPELADOS ×%s", [run_over]))
 		Events.train_run_over.emit(run_over)
 	return running
 

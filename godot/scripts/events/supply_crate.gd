@@ -83,7 +83,7 @@ func _process(delta: float) -> void:
 func get_interaction_prompt(_player: Node3D) -> String:
 	if not landed or is_open:
 		return ""
-	return "[SEGURE E] ABRIR SUPRIMENTOS"
+	return Loc.fmt("[SEGURE %s] ABRIR SUPRIMENTOS", [Loc.key(&"interact")])
 
 
 func get_interaction_progress(player: Node3D) -> float:

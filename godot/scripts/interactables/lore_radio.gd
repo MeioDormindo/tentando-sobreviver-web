@@ -53,7 +53,7 @@ func _process(delta: float) -> void:
 func get_interaction_prompt(_player: Node3D) -> String:
 	if _busy > 0.0:
 		return "RÁDIO — CHIADO..."
-	return "[SEGURE E] %s" % label
+	return Loc.fmt("[SEGURE %s] %s", [Loc.key(&"interact"), label])
 
 
 func get_interaction_progress(player: Node3D) -> float:

@@ -38,6 +38,11 @@ func _initialize() -> void:
 	var save := root.get_node("Save")
 	save.call(&"load_from", "user://test_save.json")
 	save.call(&"reset")
+	# Os testes conferem os textos em português, qualquer que seja o idioma da máquina.
+	var loc := root.get_node("Loc")
+	if loc.get(&"forced") == "":
+		loc.set(&"forced", "pt_BR")
+	loc.call(&"apply")
 	var only := ""
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--only="):

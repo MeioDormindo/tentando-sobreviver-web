@@ -23,7 +23,7 @@ func _ready() -> void:
 
 
 func get_interaction_prompt(_player: Node3D) -> String:
-	return "" if closed else "[SEGURE E] FECHAR A VÁLVULA"
+	return "" if closed else Loc.fmt("[SEGURE %s] FECHAR A VÁLVULA", [Loc.key(&"interact")])
 
 
 func get_interaction_progress(player: Node3D) -> float:

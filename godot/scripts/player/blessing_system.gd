@@ -63,9 +63,9 @@ func grant(god: StringName) -> void:
 	_apply()
 	var info: Dictionary = GODS[god]
 	if player:
-		player.hud(&"blessing_changed", [god, "%s · %s" % [info.name, String(info.title).to_upper()], info.color])
+		player.hud(&"blessing_changed", [god, Loc.fmt("%s · %s", [info.name, Loc.up(info.title)]), info.color])
 	else:
-		Events.blessing_changed.emit(god, "%s · %s" % [info.name, String(info.title).to_upper()], info.color)
+		Events.blessing_changed.emit(god, Loc.fmt("%s · %s", [info.name, Loc.up(info.title)]), info.color)
 
 
 func clear() -> void:

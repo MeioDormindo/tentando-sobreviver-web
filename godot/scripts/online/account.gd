@@ -59,9 +59,9 @@ func username_error(username: String) -> String:
 
 func password_error(password: String) -> String:
 	if password.length() < Online.data.password_min:
-		return "Senha: mínimo de %d caracteres" % Online.data.password_min
+		return Loc.t("Senha: mínimo de %d caracteres") % Online.data.password_min
 	if password.length() > Online.data.password_max:
-		return "Senha: máximo de %d caracteres" % Online.data.password_max
+		return Loc.t("Senha: máximo de %d caracteres") % Online.data.password_max
 	return ""
 
 

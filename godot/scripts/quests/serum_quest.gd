@@ -53,7 +53,7 @@ func _start() -> void:
 	var components := QuestStep.make(_components_text, _components_target, _components_update, _components_enter, _clear_spots)
 	var defense := QuestStep.make(_defense_text, func() -> Variant: return _at(cfg.centrifuge), _defense_update, _defense_enter, _defense_exit)
 	var boss := QuestStep.make(
-		func() -> String: return "Derrote o Paciente Zero enfurecido (round %d)" % boss_round,
+		func() -> String: return Loc.fmt("Derrote o Paciente Zero enfurecido (round %s)", [boss_round]),
 		func() -> Variant: return null,
 		func(_d: float) -> bool: return boss_down != null,
 		func() -> void: boss_round = round_manager.force_boss_next_round(float(cfg.get("boss_health_multiplier", 1.5))))
@@ -76,7 +76,7 @@ func _collected(what: String) -> void:
 # ── 2. Componentes (1. Energia usa as peças do QuestSystem) ──
 
 func _components_text() -> String:
-	return "Componentes do soro %d/3 — UTI · Farmácia · cartão do Blindado" % _count()
+	return Loc.fmt("Componentes do soro %s/3 — UTI · Farmácia · cartão do Blindado", [_count()])
 
 
 func _components_target() -> Variant:
@@ -154,7 +154,7 @@ func _defense_text() -> String:
 	if not centrifuge_running:
 		return "Leve os componentes à centrífuga do Laboratório"
 	var left := ceili(float(cfg.centrifuge.get("defend_time", 60.0)) - centrifuge_progress)
-	return "CENTRÍFUGA SOB ATAQUE! Afaste os zumbis (%ds)" % left if under_attack else "Defenda a centrífuga: %ds" % left
+	return Loc.fmt("CENTRÍFUGA SOB ATAQUE! Afaste os zumbis (%ss)", [left]) if under_attack else Loc.fmt("Defenda a centrífuga: %ss", [left])
 
 
 func _defense_enter() -> void:

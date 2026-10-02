@@ -43,6 +43,8 @@ func run(tree: SceneTree) -> int:
 	Session.map_id = "terminal"
 	await _glossary(tree)
 	await _lobby(tree)
+	await _support(tree)
+	await _settings_tabs(tree)
 	await _ranking_modes(tree)
 	Save.reset()
 	await tree.process_frame
@@ -94,6 +96,27 @@ func _lobby(tree: SceneTree) -> void:
 	var start := lobby.find_child("Start", true, false) as Button
 	check(Net.is_host() and code_label != null and code_label.text == "LOCAL", "sala aberta: o código aparece grande")
 	check(start != null and start.disabled and (lobby.find_child("Players", true, false) as Node).get_child_count() == Net.MAX_PLAYERS, "sozinho: COMEÇAR espera os amigos (host + 3 vagas)")
+	# Visual na sala e passar o código.
+	var skin_before := String(Net.players[1].skin)
+	var next := lobby.find_child("SkinNext", true, false) as Button
+	var had_next := next != null
+	if had_next:
+		next.pressed.emit()
+	await tree.process_frame
+	var catalog := load("res://data/configs/skins.tres") as SkinCatalog
+	var unlocked := catalog.for_map(Net.map_id).filter(func(s: Dictionary) -> bool: return String(s.unlock) == "" or Save.has_achievement(s.unlock))
+	check(had_next and lobby.find_child("SkinName", true, false) != null and (unlocked.size() < 2 or String(Net.players[1].skin) != skin_before),
+		"sala: escolhe o visual (← →) só entre os liberados (%s → %s)" % [skin_before, Net.players[1].skin])
+	check(lobby.find_child("CopyCode", true, false) == null, "sala local: sem copiar código (os amigos entram pelo IP)")
+	Net.code = "QWERT"
+	lobby.call(&"_rebuild")
+	await tree.process_frame
+	(lobby.find_child("CopyCode", true, false) as Button).pressed.emit()
+	var copied_code := String(lobby.get(&"last_copied"))
+	(lobby.find_child("CopyInvite", true, false) as Button).pressed.emit()
+	var copied_invite := String(lobby.get(&"last_copied"))
+	check(copied_code == "QWERT" and copied_invite.contains("?sala=QWERT") and Net.code_from_text(copied_invite) == "QWERT", "sala pela internet: copia o código e o convite com o link (%s)" % copied_invite)
+	Net.code = "LOCAL"
 	Save.unlock("map2")
 	var map_button := lobby.find_child("Map", true, false) as Button
 	var had_button := map_button != null
@@ -175,3 +198,84 @@ func check(condition: bool, description: String) -> void:
 	else:
 		_failed += 1
 		printerr("  FALHOU  ", description)
+
+
+## Crédito no topo do menu e a tela APOIE O PROJETO com o PIX.
+func _support(tree: SceneTree) -> void:
+	var menu := (load("res://scenes/ui/main_menu.tscn") as PackedScene).instantiate()
+	tree.root.add_child(menu)
+	await tree.process_frame
+	var credit := menu.find_child("Credit", true, false) as Label
+	check(credit != null and credit.text.contains("Siryus Canuto") and credit.text.contains("siryuscanuto@gmail.com"), "menu: desenvolvido por Siryus Canuto, com o e-mail")
+	check(menu.find_child("Support", true, false) is Button, "menu: botão APOIE O PROJETO (PIX)")
+	menu.queue_free()
+	var support := (load("res://scenes/ui/support.tscn") as PackedScene).instantiate()
+	tree.root.add_child(support)
+	await tree.process_frame
+	var qr := support.find_child("PixQr", true, false) as TextureRect
+	var key := support.find_child("PixKey", true, false) as Label
+	check(qr != null and qr.texture != null and key != null and key.text.contains(SupportInfo.PIX_KEY), "APOIE: QR Code e a chave PIX na tela")
+	(support.find_child("CopyPayload", true, false) as Button).pressed.emit()
+	var payload := String(support.get(&"last_copied"))
+	(support.find_child("CopyKey", true, false) as Button).pressed.emit()
+	check(payload == SupportInfo.PIX_PAYLOAD and String(support.get(&"last_copied")) == SupportInfo.PIX_KEY, "APOIE: copia o PIX copia e cola e a chave")
+	support.queue_free()
+	await tree.process_frame
+
+
+## Configurações em abas: JOGO (idioma), VÍDEO, ÁUDIO e CONTROLES (trocar uma tecla de verdade).
+func _settings_tabs(tree: SceneTree) -> void:
+	var screen := (load("res://scenes/ui/settings.tscn") as PackedScene).instantiate()
+	tree.root.add_child(screen)
+	await tree.process_frame
+	check(screen.find_child("Tabs", true, false) != null and screen.find_child("Language", true, false) != null and screen.find_child("PlayerName", true, false) != null,
+		"Configurações: abas e, na JOGO, idioma e nome no ranking")
+	# Trocar o idioma refaz a tela na hora (o idioma fixo dos testes sai e volta).
+	var forced := Loc.forced
+	var language_before: Variant = Save.get_setting("language")
+	Loc.forced = ""
+	Save.set_setting("language", "en")
+	Loc.apply()
+	await tree.process_frame
+	await tree.process_frame
+	var language := screen.find_child("Language", true, false) as Button
+	check(TranslationServer.get_locale() == "en" and language != null and language.text == "LANGUAGE: English",
+		"trocar para English refaz as Configurações em inglês (%s)" % [language.text if language else "?"])
+	Save.set_setting("language", language_before)
+	Loc.forced = forced
+	Loc.apply()
+	await tree.process_frame
+	await tree.process_frame
+	(screen.find_child("Tab_video", true, false) as Button).pressed.emit()
+	await tree.process_frame
+	await tree.process_frame
+	check(["MaxFps", "UiScale", "Brightness", "shadows", "showFps"].all(func(n: String) -> bool: return screen.find_child(n, true, false) != null), "aba VÍDEO: FPS, escala, brilho, sombras, contador")
+	(screen.find_child("Tab_audio", true, false) as Button).pressed.emit()
+	await tree.process_frame
+	await tree.process_frame
+	check(["Volume", "MusicVolume", "SfxVolume", "UiVolume", "VoiceVolume"].all(func(n: String) -> bool: return screen.find_child(n, true, false) != null), "aba ÁUDIO: geral, música, efeitos, interface, vozes")
+	(screen.find_child("Tab_controls", true, false) as Button).pressed.emit()
+	await tree.process_frame
+	await tree.process_frame
+	var row := screen.find_child("Bind_reload", true, false)
+	var kb := row.find_child("kb", true, false) as Button if row else null
+	check(kb != null and kb.text == "R", "aba CONTROLES: recarregar no R")
+	if kb:
+		kb.pressed.emit()
+		var key := InputEventKey.new()
+		key.physical_keycode = KEY_G
+		key.keycode = KEY_G
+		key.pressed = true
+		Input.parse_input_event(key)
+		await tree.process_frame
+		await tree.process_frame
+		var again := screen.find_child("Bind_reload", true, false)
+		var new_kb := again.find_child("kb", true, false) as Button if again else null
+		check(InputBindings.binding_of(&"reload", InputBindings.KEYBOARD) == ["key", KEY_G] and new_kb != null and new_kb.text == "G", "clicar e apertar G: recarregar passa para o G")
+	var reset := screen.find_child("ResetBindings", true, false) as Button
+	if reset:
+		reset.pressed.emit()
+	await tree.process_frame
+	check(InputBindings.binding_of(&"reload", InputBindings.KEYBOARD) == ["key", KEY_R], "restaurar padrões")
+	screen.queue_free()
+	await tree.process_frame

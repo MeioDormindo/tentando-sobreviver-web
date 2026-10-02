@@ -14,7 +14,7 @@ func _ready() -> void:
 	MenuKit.spacer(column, 20)
 	MenuKit.title(column, "CONQUISTAS", 48)
 	var unlocked := catalog.achievements.filter(func(a: Dictionary) -> bool: return Save.has_achievement(a.id)).size()
-	MenuKit.label(column, "%d / %d LIBERADAS" % [unlocked, catalog.achievements.size()], 16, MenuKit.GOLD, HORIZONTAL_ALIGNMENT_CENTER)
+	MenuKit.label(column, Loc.t("%d / %d LIBERADAS") % [unlocked, catalog.achievements.size()], 16, MenuKit.GOLD, HORIZONTAL_ALIGNMENT_CENTER)
 	var grid := GridContainer.new()
 	grid.columns = COLUMNS
 	grid.add_theme_constant_override(&"h_separation", 12)
@@ -64,7 +64,7 @@ func _card(a: Dictionary) -> Control:
 	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	text.add_theme_constant_override(&"separation", 2)
 	row.add_child(text)
-	MenuKit.label(text, "???" if hidden else String(a.name).to_upper(), 20, MenuKit.GOLD if done else MenuKit.TEXT)
+	MenuKit.label(text, "???" if hidden else Loc.t(String(a.name)).to_upper(), 20, MenuKit.GOLD if done else MenuKit.TEXT)
 	MenuKit.label(text, "Segredo — continue explorando" if hidden else String(a.description), 14, MenuKit.TEXT if done else MenuKit.DIM)
 	if done:
 		MenuKit.label(text, "✓ " + String(Save.data.achievements[a.id]).substr(0, 10), 14, MenuKit.GOLD)
@@ -89,11 +89,11 @@ func _stats(column: VBoxContainer) -> void:
 	MenuKit.label(box, "ESTATÍSTICAS", 24, MenuKit.TEXT, HORIZONTAL_ALIGNMENT_CENTER)
 	for id in Save.catalog.order:
 		var r := Save.records(id)
-		MenuKit.label(box, "%s — melhor round %d · recorde %d pts · %d abates" % [Save.catalog.display_name(id).to_upper(), r.bestWave, r.bestScore, r.bestKills],
+		MenuKit.label(box, Loc.t("%s — melhor round %d · recorde %d pts · %d abates") % [Loc.t(Save.catalog.display_name(id)).to_upper(), r.bestWave, r.bestScore, r.bestKills],
 			14, MenuKit.TEXT, HORIZONTAL_ALIGNMENT_CENTER)
 	var l := Save.lifetime
 	var minutes := int(l.playTimeMs) / 60000
-	MenuKit.label(box, "Partidas %d · Abates %d · Faca %d · Headshots %d · Bosses %d · Tempo %dh%02d" % [
+	MenuKit.label(box, Loc.t("Partidas %d · Abates %d · Faca %d · Headshots %d · Bosses %d · Tempo %dh%02d") % [
 		l.gamesPlayed, l.totalKills, l.knifeKills, l.headshots, l.bossesDefeated, minutes / 60, minutes % 60], 14, MenuKit.DIM, HORIZONTAL_ALIGNMENT_CENTER)
 
 

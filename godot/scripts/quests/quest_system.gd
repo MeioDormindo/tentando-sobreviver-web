@@ -24,6 +24,8 @@ var _last_text := ""
 var _marker: Node3D
 ## Partida em rede, num colega: a missão só mostra (pontos, peças, sinal); quem avança é o host.
 var remote := false
+## Quem concluiu o último ponto da missão (recebe o prêmio no fim).
+var _last_actor: Player
 
 
 func begin(p_title: String, p_steps: Array[QuestStep], on_complete: Callable) -> void:
@@ -119,9 +121,18 @@ func _merge_map_spots(cfg: Dictionary, key: String) -> Dictionary:
 
 
 func _spot(text: String, at: Vector3, on_done: Callable, hold := 0.0) -> QuestSpot:
-	var spot := QuestSpot.create(text, at, on_done, hold)
+	var spot := QuestSpot.create(text, at, Callable(), hold)
+	spot.on_done = _spot_done.bind(spot, on_done)
 	world.add_child(spot)
 	return spot
+
+
+## Um ponto da missão foi concluído: guarda quem foi (o prêmio vai para quem fez a última etapa).
+func _spot_done(spot: QuestSpot, on_done: Callable) -> void:
+	if spot.finished_by is Player:
+		_last_actor = spot.finished_by
+	if on_done.is_valid():
+		on_done.call()
 
 
 func _clear_spots() -> void:
@@ -196,20 +207,24 @@ func _spawn_carrier(item_art: String, toast: String, type: StringName = &"armore
 	return carrier
 
 
-## Prêmio: todos os perks que ainda dá para ter e a arma (level 1 = já no Mk II). No
-## cooperativo, cada jogador do time ganha o seu.
+## Prêmio: todos os perks que ainda dá para ter e a arma (level 1 = já no Mk II), para quem
+## concluiu a missão (quem fez a última etapa; no solo, o jogador). No cooperativo o time vê
+## quem levou.
 func _grant_rewards(weapon_data: WeaponData, level := 0) -> void:
-	for someone in Players.victims(player):
-		if not Players.coop() or (someone as Player).is_alive():
-			_reward(someone as Player, weapon_data, level)
+	var who := _last_actor if is_instance_valid(_last_actor) and _last_actor.is_inside_tree() else player
+	if who == null:
+		return
+	_reward(who, weapon_data, level)
+	if weapon_data:
+		Players.feed(Loc.fmt("%s concluiu a missão: todos os perks + %s", [Players.name_of(who), weapon_data.display_name]))
+	else:
+		Players.feed(Loc.fmt("%s concluiu a missão: todos os perks", [Players.name_of(who)]))
 
 
 func _reward(who: Player, weapon_data: WeaponData, level: int) -> void:
-	for file in DirAccess.get_files_at(perks_dir):
-		if file.ends_with(".tres") or file.ends_with(".tres.remap"):
-			var perk := load("%s/%s" % [perks_dir, file.trim_suffix(".remap")]) as PerkData
-			if perk and who.perks.can_buy(perk):
-				who.perks.grant(perk)
+	for perk in PerkCatalog.all(perks_dir):
+		if who.perks.can_buy(perk):
+			who.perks.grant(perk)
 	if weapon_data == null:
 		return
 	var dropped := who.give_weapon(weapon_data)

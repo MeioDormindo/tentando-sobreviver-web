@@ -1,0 +1,2734 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tentando Sobreviver\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+
+msgid "[SEGURE %s] FECHAR A VÁLVULA"
+msgstr "[%s長押し] バルブを閉める"
+
+msgid "ZUMBI DOURADO ABATIDO!  +%s"
+msgstr "ゴールデンゾンビ撃破！ +%s"
+
+msgid "O ZUMBI DOURADO ESCAPOU"
+msgstr "ゴールデンゾンビが逃げた"
+
+msgid "[SEGURE %s] ABRIR SUPRIMENTOS"
+msgstr "[%s長押し] 補給物資を開ける"
+
+msgid "SUPRIMENTOS"
+msgstr "補給物資"
+
+msgid "Munição cheia · Armadura · +%s"
+msgstr "弾薬満タン · アーマー · +%s"
+
+msgid "ATROPELADOS ×%s"
+msgstr "轢いた数 ×%s"
+
+msgid "O PORTAL CAIU — O TRIDENTE DE POSEIDON FICOU NO LUGAR"
+msgstr "ポータル崩壊 — ポセイドンの三叉槍が残された"
+
+msgid "O PORTÃO DO SUBMUNDO SE FECHOU"
+msgstr "冥界の門が閉じた"
+
+msgid "TREM"
+msgstr "列車"
+
+msgid "[SEGURE %s] CONSERTAR BARRICADA  ·  +%s por tábua"
+msgstr "[%s長押し] バリケード修理 · 板1枚ごとに +%s"
+
+msgid "BÊNÇÃO DE %s"
+msgstr "%sの加護"
+
+msgid "BÊNÇÃO DE %s ATIVA"
+msgstr "%sの加護 発動中"
+
+msgid "[%s] BÊNÇÃO DE %s — %s: %s  ·  DE GRAÇA"
+msgstr "[%s] %sの加護 — %s：%s · 無料"
+
+msgid "[%s] BÊNÇÃO DE %s — %s: %s  ·  %s pontos"
+msgstr "[%s] %sの加護 — %s：%s · %s ポイント"
+
+msgid "%s — %s"
+msgstr "%s — %s"
+
+msgid "DISJUNTOR"
+msgstr "ブレーカー"
+
+msgid "[SEGURE %s] LIGAR A ENERGIA"
+msgstr "[%s長押し] 電源を入れる"
+
+msgid "ENERGIA LIGADA"
+msgstr "電源オン"
+
+msgid "%s ligou a energia"
+msgstr "%sが電源を入れた"
+
+msgid "[%s] LER A PLACA"
+msgstr "[%s] 看板を読む"
+
+msgid "PORTÃO DO TEMPLO — leve Fragmentos de Alma aos 3 altares"
+msgstr "神殿の門 — 魂の欠片を3つの祭壇へ運べ"
+
+msgid "PORTÃO DO SUBMUNDO — precisa da chave do Minotauro"
+msgstr "冥界の門 — ミノタウロスの鍵が必要"
+
+msgid "PASSAGEM SELADA — ative as 12 estátuas dos deuses"
+msgstr "封印された通路 — 12柱の神像を灯せ"
+
+msgid "PORTÃO FECHADO"
+msgstr "門は閉ざされている"
+
+msgid "[%s] ABRIR PORTA  ·  %s pontos"
+msgstr "[%s] ドアを開ける · %s ポイント"
+
+msgid "[%s] ABRIR PORTA — %s  ·  %s pontos"
+msgstr "[%s] ドアを開ける — %s · %s ポイント"
+
+msgid "[%s] ABRIR PORTA — %s, %s  ·  %s pontos"
+msgstr "[%s] ドアを開ける — %s、%s · %s ポイント"
+
+msgid "%s abriu %s"
+msgstr "%sが%sを開放した"
+
+msgid "ARMADILHA"
+msgstr "トラップ"
+
+msgid "ARMADILHA ELÉTRICA LIGADA — %ss"
+msgstr "電撃トラップ作動中 — %s秒"
+
+msgid "ARMADILHA RECARREGANDO — %ss"
+msgstr "トラップ充電中 — %s秒"
+
+msgid "[%s] LIGAR ARMADILHA ELÉTRICA  ·  %s pontos"
+msgstr "[%s] 電撃トラップを起動 · %s ポイント"
+
+msgid "RELIGAR A ENERGIA"
+msgstr "電源を復旧する"
+
+msgid "PAINEL DE ENERGIA — FUNCIONANDO"
+msgstr "電源パネル — 稼働中"
+
+msgid "ENERGIA"
+msgstr "電源"
+
+msgid "DESLIGAR O ALARME"
+msgstr "警報を止める"
+
+msgid "ALARME DE EMERGÊNCIA — DESLIGADO"
+msgstr "緊急警報 — 停止"
+
+msgid "ALARME"
+msgstr "警報"
+
+msgid "[SEGURE %s] %s  ·  %s pontos"
+msgstr "[%s長押し] %s · %s ポイント"
+
+msgid "ZEUS"
+msgstr "ゼウス"
+
+msgid "HERA"
+msgstr "ヘラ"
+
+msgid "POSEIDON"
+msgstr "ポセイドン"
+
+msgid "DEMÉTER"
+msgstr "デメテル"
+
+msgid "ATENA"
+msgstr "アテナ"
+
+msgid "APOLO"
+msgstr "アポロン"
+
+msgid "ÁRTEMIS"
+msgstr "アルテミス"
+
+msgid "ARES"
+msgstr "アレス"
+
+msgid "AFRODITE"
+msgstr "アフロディーテ"
+
+msgid "HEFESTO"
+msgstr "ヘパイストス"
+
+msgid "HERMES"
+msgstr "ヘルメス"
+
+msgid "DIONÍSIO"
+msgstr "ディオニュソス"
+
+msgid "[SEGURE %s] ACENDER A ESTÁTUA DE %s"
+msgstr "[%s長押し] %sの像を灯す"
+
+msgid "ESTÁTUA DE %s ACESA (%s/%s)"
+msgstr "%sの像が灯った（%s/%s）"
+
+msgid "OS DOZE DO OLIMPO"
+msgstr "オリュンポス十二神"
+
+msgid "O templo reage... uma passagem se abriu na Floresta."
+msgstr "神殿が反応した……森に通路が開いた。"
+
+msgid "SINTONIZAR O RÁDIO"
+msgstr "ラジオを合わせる"
+
+msgid "RÁDIO — CHIADO..."
+msgstr "ラジオ — ザーッ……"
+
+msgid "[SEGURE %s] %s"
+msgstr "[%s長押し] %s"
+
+msgid "[%s] MYSTERY BOX  ·  %s pontos"
+msgstr "[%s] MYSTERY BOX · %s ポイント"
+
+msgid "MYSTERY BOX  ·  arma de %s"
+msgstr "MYSTERY BOX · %sの武器"
+
+msgid "[%s] PEGAR %s (MUNIÇÃO)"
+msgstr "[%s] %sを拾う（弾薬）"
+
+msgid "[%s] PEGAR %s"
+msgstr "[%s] %sを拾う"
+
+msgid "um colega"
+msgstr "仲間"
+
+msgid "A MYSTERY BOX MUDOU DE LUGAR — %s"
+msgstr "MYSTERY BOXが移動した — %s"
+
+msgid "A MYSTERY BOX MUDOU DE LUGAR"
+msgstr "MYSTERY BOXが移動した"
+
+msgid "SEM ENERGIA — ligue o disjuntor"
+msgstr "電源なし — ブレーカーを入れろ"
+
+msgid "%s  ·  JÁ ATIVO"
+msgstr "%s · 発動済み"
+
+msgid "%s  ·  ESGOTADO NESTA PARTIDA"
+msgstr "%s · このマッチでは売り切れ"
+
+msgid "[%s] %s — %s  ·  %s pontos"
+msgstr "[%s] %s — %s · %s ポイント"
+
+msgid "[SEGURE %s] PEGAR %s  (%s%%)"
+msgstr "[%s長押し] %sを拾う （%s%%）"
+
+msgid "%s — presente de Artemis"
+msgstr "%s — アルテミスの贈り物"
+
+msgid "[%s] PEGAR O URSINHO"
+msgstr "[%s] クマのぬいぐるみを拾う"
+
+msgid "URSINHO %s/%s"
+msgstr "クマ %s/%s"
+
+msgid "SEGREDO DOS URSINHOS"
+msgstr "クマの秘密"
+
+msgid "Você achou todos! Segredo salvo."
+msgstr "全部見つけた！ 秘密を記録した。"
+
+msgid "Todos os ursinhos de novo!"
+msgstr "またクマを全部集めた！"
+
+msgid "PAINEL DO TREM — DISPONÍVEL EM %ss"
+msgstr "列車パネル — あと%s秒で使用可能"
+
+msgid "[%s] CHAMAR O TREM  ·  %s pontos"
+msgstr "[%s] 列車を呼ぶ · %s ポイント"
+
+msgid "O TREM NÃO PODE VIR AGORA"
+msgstr "今は列車を呼べない"
+
+msgid "MUNIÇÃO"
+msgstr "弾薬"
+
+msgid "  ·  SEGURE %s: "
+msgstr " · %s長押し："
+
+msgid "MUNIÇÃO CHEIA"
+msgstr "弾薬満タン"
+
+msgid "[%s] MUNIÇÃO %s  ·  %s pontos"
+msgstr "[%s] %sの弾薬 · %s ポイント"
+
+msgid "%s  ·  MUNIÇÃO CHEIA"
+msgstr "%s · 弾薬満タン"
+
+msgid "[%s] COMPRAR %s  ·  %s pontos"
+msgstr "[%s] %sを購入 · %s ポイント"
+
+msgid "[%s] PEGAR %s  ·  %ss"
+msgstr "[%s] %sを拾う · %s秒"
+
+msgid "[%s] PEGAR %s (troca por %s)  ·  %ss"
+msgstr "[%s] %sを拾う（%sと交換） · %s秒"
+
+msgid "%s  ·  NÍVEL MÁXIMO"
+msgstr "%s · 最大レベル"
+
+msgid "Mk II"
+msgstr "Mk II"
+
+msgid "Mk III"
+msgstr "Mk III"
+
+msgid "[%s] WEAPON LAB: %s → %s  ·  %s pontos"
+msgstr "[%s] WEAPON LAB：%s → %s · %s ポイント"
+
+msgid "TREM PASSANDO"
+msgstr "列車通過中"
+
+msgid "⚠ TREM CHEGANDO"
+msgstr "⚠ 列車接近中"
+
+msgid "PRÓXIMO TREM %ds"
+msgstr "次の列車 %d秒"
+
+msgid "PRÓXIMO TREM EM BREVE"
+msgstr "次の列車 まもなく"
+
+msgid "SEM PREVISÃO"
+msgstr "予定なし"
+
+msgid "Não foi possível conectar à sala"
+msgstr "ルームに接続できませんでした"
+
+msgid "O host saiu"
+msgstr "ホストが退出しました"
+
+msgid "Tempo esgotado ao entrar na sala"
+msgstr "ルームへの参加がタイムアウトしました"
+
+msgid "Criando sala..."
+msgstr "ルームを作成中……"
+
+msgid "Não foi possível criar a sala (%s)"
+msgstr "ルームを作成できませんでした（%s）"
+
+msgid "Procurando a sala %s..."
+msgstr "ルーム %s を検索中……"
+
+msgid "Sem conexão com o servidor (%s)"
+msgstr "サーバーに接続できません（%s）"
+
+msgid "Sala %s não encontrada"
+msgstr "ルーム %s が見つかりません"
+
+msgid "Não foi possível abrir a sala (%s)"
+msgstr "ルームを開けませんでした（%s）"
+
+msgid "Sala %s aberta"
+msgstr "ルーム %s を開きました"
+
+msgid "Não foi possível entrar (%s)"
+msgstr "参加できませんでした（%s）"
+
+msgid "Conectando à sala %s..."
+msgstr "ルーム %s に接続中……"
+
+msgid "Na sala %s"
+msgstr "ルーム %s に参加中"
+
+msgid "JOGADOR"
+msgstr "プレイヤー"
+
+msgid "sem conexão"
+msgstr "接続なし"
+
+msgid "A partida já começou"
+msgstr "マッチはすでに始まっています"
+
+msgid "Sala cheia (%s jogadores)"
+msgstr "ルームが満員です（%s人）"
+
+msgid "Entrada recusada"
+msgstr "参加を拒否されました"
+
+msgid "sem sessão"
+msgstr "セッションなし"
+
+msgid "Usuário: 3 a 16 letras minúsculas, números ou _"
+msgstr "ユーザー名：小文字・数字・_ で3〜16文字"
+
+msgid "Senha: mínimo de %d caracteres"
+msgstr "パスワード：%d文字以上"
+
+msgid "Senha: máximo de %d caracteres"
+msgstr "パスワード：%d文字以下"
+
+msgid "Não foi possível entrar — tente de novo"
+msgstr "ログインできませんでした — もう一度お試しください"
+
+msgid "Sem conexão"
+msgstr "接続なし"
+
+msgid "Sessão expirada — entre de novo"
+msgstr "セッションの期限切れ — もう一度ログインしてください"
+
+msgid "Falha ao ler da nuvem"
+msgstr "クラウドの読み込みに失敗しました"
+
+msgid "Contas online indisponíveis"
+msgstr "オンラインアカウントは利用できません"
+
+msgid "Falha ao salvar na nuvem"
+msgstr "クラウドへの保存に失敗しました"
+
+msgid "Sem conexão com o servidor"
+msgstr "サーバーに接続できません"
+
+msgid "Muitas tentativas — aguarde um pouco"
+msgstr "試行回数が多すぎます — しばらくお待ちください"
+
+msgid "Esse usuário já existe"
+msgstr "そのユーザー名は既に存在します"
+
+msgid "Usuário ou senha incorretos"
+msgstr "ユーザー名またはパスワードが違います"
+
+msgid "Senha fraca demais"
+msgstr "パスワードが弱すぎます"
+
+msgid "Usuário inválido"
+msgstr "無効なユーザー名です"
+
+msgid "Não foi possível concluir — tente de novo"
+msgstr "完了できませんでした — もう一度お試しください"
+
+msgid "HACKER DETECTADO"
+msgstr "不正を検出"
+
+msgid "SOLO"
+msgstr "ソロ"
+
+msgid "DUPLA"
+msgstr "デュオ"
+
+msgid "TRIO"
+msgstr "トリオ"
+
+msgid "QUARTETO"
+msgstr "カルテット"
+
+msgid "ranking global indisponível"
+msgstr "グローバルランキングは利用できません"
+
+msgid "mapa ainda não aceito no ranking global"
+msgstr "このマップはまだグローバルランキングの対象外です"
+
+msgid "pontuação recusada"
+msgstr "スコアが拒否されました"
+
+msgid "resposta incompleta"
+msgstr "不完全な応答"
+
+msgid "não conectou ao servidor"
+msgstr "サーバーに接続できませんでした"
+
+msgid "endereço não encontrado"
+msgstr "アドレスが見つかりません"
+
+msgid "conexão caiu"
+msgstr "接続が切れました"
+
+msgid "falha de TLS"
+msgstr "TLSエラー"
+
+msgid "sem resposta"
+msgstr "応答なし"
+
+msgid "resposta grande demais"
+msgstr "応答が大きすぎます"
+
+msgid "falha ao descompactar a resposta"
+msgstr "応答の展開に失敗しました"
+
+msgid "requisição falhou"
+msgstr "リクエストに失敗しました"
+
+msgid "redirecionamentos demais"
+msgstr "リダイレクトが多すぎます"
+
+msgid "tempo esgotado"
+msgstr "タイムアウト"
+
+msgid "requisição recusada (%s)"
+msgstr "リクエストが拒否されました（%s）"
+
+msgid "erro de rede %d"
+msgstr "ネットワークエラー %d"
+
+msgid "ALIADO"
+msgstr "味方"
+
+msgid "Fúria do Trovão"
+msgstr "雷神の怒り"
+
+msgid "12% dos tiros soltam um raio"
+msgstr "射撃の12%が雷を放つ"
+
+msgid "Sede de Sangue"
+msgstr "血の渇き"
+
+msgid "abates seguidos aumentam o dano"
+msgstr "連続キルでダメージ上昇"
+
+msgid "mira precisa e golpes críticos"
+msgstr "精密な照準とクリティカル"
+
+msgid "anda, recarrega e interage mais rápido"
+msgstr "移動・リロード・操作が速くなる"
+
+msgid "Maré"
+msgstr "潮流"
+
+msgid "os tiros empurram os zumbis"
+msgstr "射撃がゾンビを押し返す"
+
+msgid "HADES"
+msgstr "ハデス"
+
+msgid "Pacto dos Mortos"
+msgstr "死者の契約"
+
+msgid "abatidos voltam como aliados"
+msgstr "倒した敵が味方として蘇る"
+
+msgid "HADES: um espírito aliado se levanta para lutar"
+msgstr "ハデス：味方の魂が立ち上がり戦う"
+
+msgid "PETRIFICADO! Não olhe para a Górgona"
+msgstr "石化！ ゴルゴンを見るな"
+
+msgid "QUICK REVIVE!"
+msgstr "QUICK REVIVE！"
+
+msgid "CAÍDO! Um colega pode te reviver"
+msgstr "ダウン！ 仲間が蘇生してくれる"
+
+msgid "%s caiu!"
+msgstr "%sがダウン！"
+
+msgid "CAÍDO · %ss para um colega te reviver"
+msgstr "ダウン · 仲間の蘇生まで残り%s秒"
+
+msgid "VOCÊ MORREU · volta no próximo round"
+msgstr "死亡 · 次のラウンドで復帰"
+
+msgid "%s levantou %s"
+msgstr "%sが%sを蘇生した"
+
+msgid "[SEGURE %s] REVIVER %s"
+msgstr "[%s長押し] %sを蘇生"
+
+msgid "O COLEGA"
+msgstr "仲間"
+
+msgid "[%s] %s"
+msgstr "[%s] %s"
+
+msgid "CADEADO ABERTO"
+msgstr "南京錠が開いた"
+
+msgid "%s concluiu a missão: todos os perks + %s"
+msgstr "%sがミッションクリア：全パーク＋%s"
+
+msgid "%s concluiu a missão: todos os perks"
+msgstr "%sがミッションクリア：全パーク"
+
+msgid "Ligue a energia (disjuntor no Necrotério)"
+msgstr "電源を入れろ（ブレーカーは霊安室）"
+
+msgid "Derrote o Paciente Zero enfurecido (round %s)"
+msgstr "激昂した患者ゼロを倒せ（ラウンド%s）"
+
+msgid "Aplique o soro no Paciente Zero"
+msgstr "患者ゼロに血清を打て"
+
+msgid "O SORO"
+msgstr "血清"
+
+msgid "Componentes do soro %s/3 — UTI · Farmácia · cartão do Blindado"
+msgstr "血清の材料 %s/3 — ICU · 薬局 · 装甲兵のカード"
+
+msgid "PEGAR AS AMOSTRAS"
+msgstr "サンプルを取る"
+
+msgid "AMOSTRAS COLETADAS"
+msgstr "サンプル入手"
+
+msgid "PEGAR O REAGENTE"
+msgstr "試薬を取る"
+
+msgid "REAGENTE COLETADO"
+msgstr "試薬入手"
+
+msgid "ARMÁRIO TRANCADO — ATIRE NO CADEADO"
+msgstr "戸棚に鍵 — 南京錠を撃て"
+
+msgid "ABRIR A GAVETA COM O CARTÃO"
+msgstr "カードで引き出しを開ける"
+
+msgid "CATALISADOR COLETADO"
+msgstr "触媒入手"
+
+msgid "GAVETA TRANCADA — PRECISA DO CARTÃO DE ACESSO"
+msgstr "引き出しに鍵 — アクセスカードが必要"
+
+msgid "PEGAR O CARTÃO DE ACESSO"
+msgstr "アクセスカードを取る"
+
+msgid "CARTÃO DE ACESSO — abra a gaveta do Necrotério"
+msgstr "アクセスカード — 霊安室の引き出しを開けろ"
+
+msgid "UM SEGURANÇA BLINDADO ESTÁ COM O CARTÃO DE ACESSO"
+msgstr "装甲警備員がアクセスカードを持っている"
+
+msgid "Leve os componentes à centrífuga do Laboratório"
+msgstr "材料を研究室の遠心分離機へ運べ"
+
+msgid "CENTRÍFUGA SOB ATAQUE! Afaste os zumbis (%ss)"
+msgstr "遠心分離機が襲われている！ ゾンビを追い払え（%s秒）"
+
+msgid "Defenda a centrífuga: %ss"
+msgstr "遠心分離機を守れ：%s秒"
+
+msgid "COLOCAR OS COMPONENTES NA CENTRÍFUGA"
+msgstr "材料を遠心分離機に入れる"
+
+msgid "A CENTRÍFUGA ESTÁ GIRANDO — DEFENDA!"
+msgstr "遠心分離機が回転中 — 守り抜け！"
+
+msgid "SORO PRONTO! O Paciente Zero sentiu o cheiro..."
+msgstr "血清完成！ 患者ゼロが匂いを嗅ぎつけた……"
+
+msgid "APLICAR O SORO"
+msgstr "血清を打つ"
+
+msgid "VOCÊ CUROU O PACIENTE ZERO"
+msgstr "患者ゼロを治療した"
+
+msgid "Todos os perks + Tornado. A luta continua..."
+msgstr "全パーク＋トルネード。戦いは続く……"
+
+msgid "Ligue o gerador dos arqueólogos (Necrópole)"
+msgstr "考古学者の発電機を動かせ（ネクロポリス）"
+
+msgid "Leve os Fragmentos aos altares do Portão do Templo (%s/3)"
+msgstr "欠片を神殿の門の祭壇へ運べ（%s/3）"
+
+msgid "O guardião despertou: derrote o Minotauro (round %s)"
+msgstr "守護者が目覚めた：ミノタウロスを倒せ（ラウンド%s）"
+
+msgid "Pegue a chave do Submundo onde o Minotauro caiu"
+msgstr "ミノタウロスが倒れた場所で冥界の鍵を拾え"
+
+msgid "Abra o Portão do Submundo (sul das Ruínas)"
+msgstr "冥界の門を開けろ（遺跡の南）"
+
+msgid "O Cérbero guarda o Submundo: derrote-o (round %s)"
+msgstr "ケルベロスが冥界を守っている：倒せ（ラウンド%s）"
+
+msgid "Sele o portão no altar da Arena Final"
+msgstr "最終アリーナの祭壇で門を封印しろ"
+
+msgid "O PORTÃO DO SUBMUNDO"
+msgstr "冥界の門"
+
+msgid "Fragmentos de Alma %s/3 — Necrópole · Floresta · um Esqueleto os carrega"
+msgstr "魂の欠片 %s/3 — ネクロポリス · 森 · スケルトンが持っている"
+
+msgid "PEGAR O FRAGMENTO DE ALMA"
+msgstr "魂の欠片を拾う"
+
+msgid "FRAGMENTO DE ALMA (%s/3)"
+msgstr "魂の欠片（%s/3）"
+
+msgid "UM ESQUELETO CARREGA UM FRAGMENTO DE ALMA"
+msgstr "スケルトンが魂の欠片を持っている"
+
+msgid "DEPOSITAR UM FRAGMENTO NO ALTAR"
+msgstr "祭壇に欠片を捧げる"
+
+msgid "ALTAR ACESO (%s/3)"
+msgstr "祭壇が灯った（%s/3）"
+
+msgid "O PORTÃO DO TEMPLO SE ABRIU... ALGO ACORDOU NO LABIRINTO"
+msgstr "神殿の門が開いた……迷宮で何かが目覚めた"
+
+msgid "PEGAR A CHAVE DO SUBMUNDO"
+msgstr "冥界の鍵を拾う"
+
+msgid "CHAVE DO SUBMUNDO — abra o portão ao sul das Ruínas"
+msgstr "冥界の鍵 — 遺跡の南にある門を開けろ"
+
+msgid "ABRIR O PORTÃO DO SUBMUNDO"
+msgstr "冥界の門を開ける"
+
+msgid "SELAR O PORTÃO DO SUBMUNDO"
+msgstr "冥界の門を封印する"
+
+msgid "O PORTÃO DO SUBMUNDO FOI SELADO"
+msgstr "冥界の門は封印された"
+
+msgid "Todos os perks + Raio de Zeus. Mas algo lá embaixo ainda respira..."
+msgstr "全パーク＋ゼウスの雷。だが地下で何かがまだ息をしている……"
+
+msgid "O ÚLTIMO TREM"
+msgstr "最終列車"
+
+msgid "Ligue a energia (disjuntor na Área Técnica)"
+msgstr "電源を入れろ（ブレーカーは技術エリア）"
+
+msgid "Derrote o Condutor enfurecido (round %s)"
+msgstr "激昂した車掌を倒せ（ラウンド%s）"
+
+msgid "Pegue a Lanterna do Condutor"
+msgstr "車掌のランタンを取れ"
+
+msgid "Peças do sinal %s/3 — fusível (Manutenção) · chave (Bilheteria) · manivela (Blindado)"
+msgstr "信号の部品 %s/3 — ヒューズ（整備区画） · 鍵（切符売り場） · クランク（装甲兵）"
+
+msgid "PEGAR O FUSÍVEL DO SINAL"
+msgstr "信号のヒューズを取る"
+
+msgid "FUSÍVEL COLETADO"
+msgstr "ヒューズ入手"
+
+msgid "PEGAR A CHAVE DO PAINEL"
+msgstr "パネルの鍵を取る"
+
+msgid "CHAVE DO PAINEL COLETADA"
+msgstr "パネルの鍵入手"
+
+msgid "COFRE TRANCADO — ATIRE NO CADEADO"
+msgstr "金庫に鍵 — 南京錠を撃て"
+
+msgid "UM BLINDADO ESTÁ COM A MANIVELA DO SINAL"
+msgstr "装甲兵が信号のクランクを持っている"
+
+msgid "PEGAR A MANIVELA DO SINAL"
+msgstr "信号のクランクを取る"
+
+msgid "MANIVELA COLETADA"
+msgstr "クランク入手"
+
+msgid "Leve as peças ao sinal da Plataforma e conserte"
+msgstr "部品をホームの信号機へ運んで修理しろ"
+
+msgid "SINAL SOB ATAQUE! Afaste os zumbis (%ss)"
+msgstr "信号機が襲われている！ ゾンビを追い払え（%s秒）"
+
+msgid "Segure o sinal até o trem passar: %ss"
+msgstr "列車が通過するまで信号を守れ：%s秒"
+
+msgid "CONSERTAR O SINAL"
+msgstr "信号機を修理する"
+
+msgid "O SINAL ESTÁ LIGADO — SEGURE ATÉ O TREM PASSAR!"
+msgstr "信号オン — 列車が通過するまで耐えろ！"
+
+msgid "O TREM PASSOU! O Condutor saiu dos túneis..."
+msgstr "列車が通過した！ 車掌がトンネルから出てきた……"
+
+msgid "PEGAR A LANTERNA DO CONDUTOR"
+msgstr "車掌のランタンを取る"
+
+msgid "O ÚLTIMO TREM PASSOU"
+msgstr "最終列車は通過した"
+
+msgid "Todos os perks + Lanterna do Condutor. A estação é sua..."
+msgstr "全パーク＋車掌のランタン。この駅はもう君のものだ……"
+
+msgid "ANDAR PARA CIMA"
+msgstr "上へ移動"
+
+msgid "ANDAR PARA BAIXO"
+msgstr "下へ移動"
+
+msgid "ANDAR PARA A ESQUERDA"
+msgstr "左へ移動"
+
+msgid "ANDAR PARA A DIREITA"
+msgstr "右へ移動"
+
+msgid "ATIRAR"
+msgstr "射撃"
+
+msgid "RECARREGAR"
+msgstr "リロード"
+
+msgid "USAR / COMPRAR"
+msgstr "使用 / 購入"
+
+msgid "TROCAR DE ARMA"
+msgstr "武器切り替え"
+
+msgid "ARMA 1"
+msgstr "武器1"
+
+msgid "ARMA 2"
+msgstr "武器2"
+
+msgid "FACA"
+msgstr "ナイフ"
+
+msgid "PULAR"
+msgstr "ジャンプ"
+
+msgid "MAPA GRANDE"
+msgstr "全体マップ"
+
+msgid "LANTERNA"
+msgstr "ライト"
+
+msgid "PAUSA"
+msgstr "ポーズ"
+
+msgid "MOUSE %d"
+msgstr "マウス %d"
+
+msgid "BOTÃO %d"
+msgstr "ボタン %d"
+
+msgid "EIXO %d"
+msgstr "軸 %d"
+
+msgid "ESPAÇO"
+msgstr "スペース"
+
+msgid "MOUSE ESQ."
+msgstr "左クリック"
+
+msgid "MOUSE DIR."
+msgstr "右クリック"
+
+msgid "MOUSE MEIO"
+msgstr "中クリック"
+
+msgid "RODA ↑"
+msgstr "ホイール ↑"
+
+msgid "RODA ↓"
+msgstr "ホイール ↓"
+
+msgid "AUTOMÁTICO (%s)"
+msgstr "自動（%s）"
+
+msgid " Mk III"
+msgstr " Mk III"
+
+msgid " Mk II"
+msgstr " Mk II"
+
+msgid "ALGUÉM"
+msgstr "誰か"
+
+msgid "Barricadas consertadas (%s tábuas) · +%s"
+msgstr "バリケード修理（板%s枚） · +%s"
+
+msgid "%s pegou %s"
+msgstr "%sが%sを入手"
+
+msgid "Perk grátis: %s"
+msgstr "無料パーク：%s"
+
+msgid "Fúria: dano x%s"
+msgstr "フューリー：ダメージ x%s"
+
+msgid "FIRE SALE! MYSTERY BOX A %s · +%s CAIXAS NO MAPA"
+msgstr "FIRE SALE！ MYSTERY BOX が %s · マップに +%s 箱"
+
+msgid "SOBREVIVENTE"
+msgstr "サバイバー"
+
+msgid "MULTI x%s"
+msgstr "MULTI x%s"
+
+msgid "VOCÊ"
+msgstr "あなた"
+
+msgid "BOT %d"
+msgstr "BOT %d"
+
+msgid "CONTA"
+msgstr "アカウント"
+
+msgid "Contas online indisponíveis nesta versão."
+msgstr "このバージョンではオンラインアカウントは利用できません。"
+
+msgid "VOLTAR"
+msgstr "戻る"
+
+msgid "LOGADO COMO %s"
+msgstr "%s としてログイン中"
+
+msgid "SINCRONIZAR AGORA"
+msgstr "今すぐ同期"
+
+msgid "SAIR DA CONTA"
+msgstr "ログアウト"
+
+msgid "USUÁRIO"
+msgstr "ユーザー名"
+
+msgid "SENHA"
+msgstr "パスワード"
+
+msgid "Sincronizando o progresso..."
+msgstr "進行状況を同期中……"
+
+msgid "ENTRAR"
+msgstr "ログイン"
+
+msgid "CRIAR CONTA"
+msgstr "アカウント作成"
+
+msgid "Entre para salvar o progresso na nuvem e jogar em qualquer aparelho (inclusive no navegador).\nNão há recuperação por e-mail: guarde bem a sua senha."
+msgstr "ログインすると進行状況をクラウドに保存し、どの端末でも（ブラウザでも）プレイできます。\nメールでの復旧はありません：パスワードは大切に保管してください。"
+
+msgid "Progresso salvo na nuvem · %s"
+msgstr "進行状況をクラウドに保存済み · %s"
+
+msgid "O progresso é salvo na nuvem automaticamente"
+msgstr "進行状況は自動でクラウドに保存されます"
+
+msgid "CONQUISTAS"
+msgstr "実績"
+
+msgid "%d / %d LIBERADAS"
+msgstr "%d / %d 解除"
+
+msgid "Segredo — continue explorando"
+msgstr "秘密 — 探索を続けよう"
+
+msgid "ESTATÍSTICAS"
+msgstr "統計"
+
+msgid "%s — melhor round %d · recorde %d pts · %d abates"
+msgstr "%s — 最高ラウンド %d · 記録 %d pt · キル %d"
+
+msgid "Partidas %d · Abates %d · Faca %d · Headshots %d · Bosses %d · Tempo %dh%02d"
+msgstr "マッチ %d · キル %d · ナイフ %d · ヘッドショット %d · ボス %d · 時間 %dh%02d"
+
+msgid "COMUM"
+msgstr "コモン"
+
+msgid "INCOMUM"
+msgstr "アンコモン"
+
+msgid "RARA"
+msgstr "レア"
+
+msgid "ÉPICA"
+msgstr "エピック"
+
+msgid "LENDÁRIA"
+msgstr "レジェンダリー"
+
+msgid "Prêmio da missão O Último Trem (Terminal) — nunca sai na Mystery Box"
+msgstr "ミッション「最終列車」（ターミナル）の報酬 — Mystery Box からは出ない"
+
+msgid "Prêmio da missão O Portão do Submundo (Templo) — nunca sai na Mystery Box"
+msgstr "ミッション「冥界の門」（神殿）の報酬 — Mystery Box からは出ない"
+
+msgid "Santuário do Olimpo: ative as 12 estátuas dos deuses no Templo"
+msgstr "オリュンポスの聖域：神殿の12柱の神像を灯せ"
+
+msgid "Evento Portão do Submundo (Templo): destrua o portal"
+msgstr "イベント「冥界の門」（神殿）：ポータルを破壊せよ"
+
+msgid "DANO"
+msgstr "ダメージ"
+
+msgid "CADÊNCIA"
+msgstr "連射速度"
+
+msgid "PENTE"
+msgstr "マガジン"
+
+msgid "RESERVA"
+msgstr "予備弾薬"
+
+msgid "RECARGA"
+msgstr "リロード"
+
+msgid "ALCANCE"
+msgstr "射程"
+
+msgid "ARMAS"
+msgstr "武器"
+
+msgid "AUTOMÁTICA"
+msgstr "フルオート"
+
+msgid "SEMIAUTOMÁTICA"
+msgstr "セミオート"
+
+msgid "Elemento %s (%d, segure E na parede): %s"
+msgstr "%s属性（%d、壁でE長押し）：%s"
+
+msgid "Weapon Lab: Mk II %d · Mk III %d%s"
+msgstr "Weapon Lab：Mk II %d · Mk III %d%s"
+
+msgid "  (vira %s)"
+msgstr " （%sに変化）"
+
+msgid "VER MK II"
+msgstr "MK II を見る"
+
+msgid "VER MK III"
+msgstr "MK III を見る"
+
+msgid "VER NORMAL"
+msgstr "通常を見る"
+
+msgid "%.1f s"
+msgstr "%.1f 秒"
+
+msgid "%.0f m"
+msgstr "%.0f m"
+
+msgid "Arma inicial do %s"
+msgstr "%sの初期武器"
+
+msgid "Parede: %d · %s · %s"
+msgstr "壁：%d · %s · %s"
+
+msgid "Mystery Box só no %s"
+msgstr "Mystery Box は %s のみ"
+
+msgid "Mystery Box (em todos os mapas)"
+msgstr "Mystery Box（全マップ）"
+
+msgid "também na Mystery Box"
+msgstr "Mystery Box にもあり"
+
+msgid "Granada explode no impacto: %d de dano em área (raio %.1f m). Não fere você."
+msgstr "着弾で爆発するグレネード：範囲ダメージ %d（半径 %.1f m）。自分にはダメージなし。"
+
+msgid "Jato contínuo que incendeia: %d de dano por segundo durante %.1f s."
+msgstr "燃え移る連続噴射：毎秒 %d ダメージを %.1f 秒間。"
+
+msgid "Raio instantâneo que salta entre até %d zumbis e os atordoa."
+msgstr "最大 %d 体のゾンビに連鎖して気絶させる瞬間の雷。"
+
+msgid "Esfera que atravessa a horda e explode numa descarga elétrica (%d em área)."
+msgstr "群れを貫通し、放電して爆発する光球（範囲 %d）。"
+
+msgid "Rajada de vento em cone (%d°, alcance %.0f m) que arremessa e destrói a horda à frente."
+msgstr "円錐状の突風（%d°、射程 %.0f m）で前方の群れを吹き飛ばして粉砕する。"
+
+msgid "Atravessa até %d zumbis por tiro."
+msgstr "1発で最大 %d 体のゾンビを貫通。"
+
+msgid "PERSONAGEM"
+msgstr "キャラクター"
+
+msgid "Libere os visuais com as conquistas."
+msgstr "実績で見た目を解除しよう。"
+
+msgid "EM USO"
+msgstr "使用中"
+
+msgid "USAR"
+msgstr "使う"
+
+msgid "TRANCADO"
+msgstr "ロック中"
+
+msgid "JOGAR"
+msgstr "プレイ"
+
+msgid "Trancado — libere com a conquista \"%s\": %s"
+msgstr "ロック中 — 実績「%s」で解除：%s"
+
+msgid "Aparece quando você enfrentar esse inimigo."
+msgstr "この敵と遭遇すると表示されます。"
+
+msgid "Aparece quando você enfrentar esse chefe."
+msgstr "このボスと遭遇すると表示されます。"
+
+msgid "Chegue perto da máquina desse perk."
+msgstr "このパークのマシンに近づこう。"
+
+msgid "Pegue esse power-up numa partida."
+msgstr "マッチ中にこのパワーアップを拾おう。"
+
+msgid "Compre esse elemento numa parede de arma."
+msgstr "武器の壁でこの属性を購入しよう。"
+
+msgid "Receba essa bênção num altar do Templo."
+msgstr "神殿の祭壇でこの加護を受けよう。"
+
+msgid "Aparece quando esse evento acontecer numa partida."
+msgstr "マッチ中にこのイベントが起きると表示されます。"
+
+msgid "Descubra jogando."
+msgstr "プレイして見つけよう。"
+
+msgid "GLOSSÁRIO"
+msgstr "図鑑"
+
+msgid "DESCOBERTOS %d DE %d"
+msgstr "発見 %d / %d"
+
+msgid "Ainda não encontrado."
+msgstr "まだ見つかっていません。"
+
+msgid "Onde: %s"
+msgstr "場所：%s"
+
+msgid "VIDA %d · VELOCIDADE %.1f m/s · DANO %d · %d PONTOS"
+msgstr "体力 %d · 速度 %.1f m/s · ダメージ %d · %d ポイント"
+
+msgid "VIDA %d · VELOCIDADE %.1f m/s · GOLPE %d"
+msgstr "体力 %d · 速度 %.1f m/s · 攻撃 %d"
+
+msgid " · ATÉ %d POR PARTIDA"
+msgstr " · 1マッチ最大 %d 回"
+
+msgid "%d PONTOS · %s%s"
+msgstr "%d ポイント · %s%s"
+
+msgid "FUNCIONA SEM ENERGIA"
+msgstr "電源なしで動作"
+
+msgid "PRECISA DE ENERGIA"
+msgstr "電源が必要"
+
+msgid "DURA %d s"
+msgstr "効果時間 %d 秒"
+
+msgid "EFEITO NA HORA"
+msgstr "即時効果"
+
+msgid "%d PONTOS NA PAREDE DA ARMA"
+msgstr "武器の壁で %d ポイント"
+
+msgid "%d PONTOS NO ALTAR"
+msgstr "祭壇で %d ポイント"
+
+msgid "A PARTIR DO ROUND %d"
+msgstr "ラウンド %d から"
+
+msgid "DICA: %s"
+msgstr "ヒント：%s"
+
+msgid "ZUMBIS RESTANTES  %d"
+msgstr "残りゾンビ  %d"
+
+msgid "ROUND %d COMPLETO"
+msgstr "ラウンド %d クリア"
+
+msgid "ÁREA LIBERADA: %s"
+msgstr "エリア開放：%s"
+
+msgid "CONQUISTA DESBLOQUEADA: %s"
+msgstr "実績解除：%s"
+
+msgid "SCORE %d"
+msgstr "スコア %d"
+
+msgid "%s DESBLOQUEADO!"
+msgstr "%s 解除！"
+
+msgid "%s SE APROXIMA"
+msgstr "%s 接近中"
+
+msgid "FASE %d"
+msgstr "フェーズ %d"
+
+msgid "%s DERROTADO  +%d"
+msgstr "%s 撃破  +%d"
+
+msgid "MAX AMMO"
+msgstr "MAX AMMO"
+
+msgid "◆ %s  %d/%d"
+msgstr "◆ %s  %d/%d"
+
+msgid "%d FPS"
+msgstr "%d FPS"
+
+msgid "ROUND"
+msgstr "ラウンド"
+
+msgid "SCORE 0"
+msgstr "スコア 0"
+
+msgid "VIDA"
+msgstr "体力"
+
+msgid "GAME OVER"
+msgstr "ゲームオーバー"
+
+msgid "ROUND %d"
+msgstr "ラウンド %d"
+
+msgid "%s  ·  FASE %d"
+msgstr "%s · フェーズ %d"
+
+msgid "RODADA DOS CÃES"
+msgstr "ドッグラウンド"
+
+msgid "VIDA  %d / %d"
+msgstr "体力  %d / %d"
+
+msgid "Fúria"
+msgstr "フューリー"
+
+msgid "RECARREGANDO"
+msgstr "リロード中"
+
+msgid "ZUMBIS ABATIDOS"
+msgstr "倒したゾンビ"
+
+msgid "HEADSHOTS"
+msgstr "ヘッドショット"
+
+msgid "PONTOS GANHOS"
+msgstr "獲得ポイント"
+
+msgid "TEMPO"
+msgstr "時間"
+
+msgid "BOSSES"
+msgstr "ボス"
+
+msgid "DANO CAUSADO"
+msgstr "与ダメージ"
+
+msgid "DISPAROS / ACERTOS"
+msgstr "射撃数 / 命中数"
+
+msgid "PRECISÃO"
+msgstr "命中率"
+
+msgid "ABATES NA FACA"
+msgstr "ナイフキル"
+
+msgid "NOVO RECORDE!"
+msgstr "新記録！"
+
+msgid "RECORDE: %d PONTOS · ROUND %d"
+msgstr "記録：%d ポイント · ラウンド %d"
+
+msgid "TIME: %s"
+msgstr "チーム：%s"
+
+msgid "PARTIDA INVALIDADA — NÃO VALE SAVE NEM RANKING"
+msgstr "無効なマッチ — セーブもランキングも対象外"
+
+msgid "JOGAR NOVAMENTE"
+msgstr "もう一度プレイ"
+
+msgid "VOLTAR À SALA"
+msgstr "ルームに戻る"
+
+msgid "RANKING"
+msgstr "ランキング"
+
+msgid "MENU"
+msgstr "メニュー"
+
+msgid "PARTIDA INVALIDADA"
+msgstr "無効なマッチ"
+
+msgid "%dº LUGAR NO RANKING %s DE %s!"
+msgstr "%d位！ %sランキング · %s"
+
+msgid "ENVIANDO O TIME AO RANKING GLOBAL..."
+msgstr "チームをグローバルランキングに送信中……"
+
+msgid "RANKING GLOBAL: %s"
+msgstr "グローバルランキング：%s"
+
+msgid "TIME ENVIADO AO RANKING GLOBAL (%s)!"
+msgstr "チームをグローバルランキングに送信しました（%s）！"
+
+msgid "ENTROU NO TOP! SEU NOME:"
+msgstr "上位入り！ 名前を入力："
+
+msgid "SEU NOME PARA O RANKING GLOBAL:"
+msgstr "グローバルランキング用の名前："
+
+msgid "%dº LUGAR NO RANKING DE %s!"
+msgstr "%d位！ %sランキング"
+
+msgid "ENVIANDO AO RANKING GLOBAL..."
+msgstr "グローバルランキングに送信中……"
+
+msgid "ENVIADO AO RANKING GLOBAL DA TEMPORADA!"
+msgstr "シーズンのグローバルランキングに送信しました！"
+
+msgid "SALVAR"
+msgstr "保存"
+
+msgid "LANTERNA %s%s"
+msgstr "ライト %s%s"
+
+msgid "LIGADA"
+msgstr "オン"
+
+msgid "DESLIGADA"
+msgstr "オフ"
+
+msgid "ESTÁ ESCURO — [%s] LIGA A LANTERNA"
+msgstr "暗い — [%s] でライトを点ける"
+
+msgid "CAÍDO %ds"
+msgstr "ダウン %d秒"
+
+msgid "FORA"
+msgstr "離脱"
+
+msgid "%d ms"
+msgstr "%d ms"
+
+msgid "COLEGA"
+msgstr "仲間"
+
+msgid "%s %ds"
+msgstr "%s %d秒"
+
+msgid "JOGAR EM GRUPO"
+msgstr "みんなでプレイ"
+
+msgid "Até 4 jogadores pela internet. Crie uma sala e passe o código, ou entre com o código de um amigo."
+msgstr "インターネットで最大4人。ルームを作ってコードを共有するか、友達のコードで参加しよう。"
+
+msgid "SEU NOME"
+msgstr "あなたの名前"
+
+msgid "NOME"
+msgstr "名前"
+
+msgid "CRIAR SALA"
+msgstr "ルーム作成"
+
+msgid "CÓDIGO DA SALA"
+msgstr "ルームコード"
+
+msgid "ENTRAR NA SALA"
+msgstr "ルームに参加"
+
+msgid "REDE LOCAL (MESMO WI-FI) — IP DO HOST"
+msgstr "ローカルネットワーク（同じWi-Fi） — ホストのIP"
+
+msgid "CRIAR SALA NA REDE LOCAL"
+msgstr "ローカルネットワークでルーム作成"
+
+msgid "Convite para a sala %s: digite seu nome e toque ENTRAR NA SALA"
+msgstr "ルーム %s への招待：名前を入力して「ルームに参加」をタップ"
+
+msgid "O código tem 5 letras"
+msgstr "コードは5文字です"
+
+msgid "Procurando a sala..."
+msgstr "ルームを検索中……"
+
+msgid "Na rede local: os amigos entram com o IP  %s"
+msgstr "ローカルネットワーク：友達はこのIPで参加  %s"
+
+msgid "COPIAR CÓDIGO"
+msgstr "コードをコピー"
+
+msgid "Código %s copiado!"
+msgstr "コード %s をコピーしました！"
+
+msgid "COPIAR CONVITE"
+msgstr "招待をコピー"
+
+msgid "Convite copiado! Quem abrir o link entra direto na sala."
+msgstr "招待をコピーしました！ リンクを開くとルームに直接参加できます。"
+
+msgid "MAPA: %s  →"
+msgstr "マップ：%s  →"
+
+msgid "MAPA: %s"
+msgstr "マップ：%s"
+
+msgid "  (VOCÊ)"
+msgstr " （あなた）"
+
+msgid "HOST"
+msgstr "ホスト"
+
+msgid "PRONTO"
+msgstr "準備完了"
+
+msgid "ESPERANDO"
+msgstr "待機中"
+
+msgid "· vaga livre"
+msgstr "· 空き枠"
+
+msgid "COMEÇAR"
+msgstr "開始"
+
+msgid "Começa quando todos estiverem prontos."
+msgstr "全員の準備ができたら開始します。"
+
+msgid "Esperando os amigos entrarem com o código."
+msgstr "友達がコードで参加するのを待っています。"
+
+msgid "CANCELAR PRONTO"
+msgstr "準備を取り消す"
+
+msgid "SAIR DA SALA"
+msgstr "ルームを出る"
+
+msgid "SEU VISUAL\n%s"
+msgstr "あなたの見た目\n%s"
+
+msgid "Bora jogar Tentando Sobreviver comigo! Sala %s: %s"
+msgstr "一緒に Tentando Sobreviver をプレイしよう！ ルーム %s：%s"
+
+msgid "— ms"
+msgstr "— ms"
+
+msgid "%s mover · mouse mirar · clique atirar · %s recarregar · %s trocar arma · %s faca · %s usar · %s pausa"
+msgstr "%s 移動 · マウス 照準 · クリック 射撃 · %s リロード · %s 武器切替 · %s ナイフ · %s 使用 · %s ポーズ"
+
+msgid "Analógico: mover · ATIRAR: mira sozinho no zumbi mais perto e atira · FACA: golpe corpo a corpo"
+msgstr "スティック：移動 · 射撃：一番近いゾンビを自動で狙って撃つ · ナイフ：近接攻撃"
+
+msgid "TENTANDO\nSOBREVIVER"
+msgstr "TENTANDO\nSOBREVIVER"
+
+msgid "CONTA: %s"
+msgstr "アカウント：%s"
+
+msgid "CONTA / SALVAR NA NUVEM"
+msgstr "アカウント / クラウド保存"
+
+msgid "CONFIGURAÇÕES"
+msgstr "設定"
+
+msgid "APOIE O PROJETO (PIX)"
+msgstr "プロジェクトを支援（PIX）"
+
+msgid "SAIR"
+msgstr "終了"
+
+msgid "MODO CABEÇÃO LIBERADO! (liga/desliga em Configurações)"
+msgstr "デカ頭モード解除！（設定でオン/オフ）"
+
+msgid "MODO CABEÇÃO LIGADO!"
+msgstr "デカ頭モード オン！"
+
+msgid "O Último Trem"
+msgstr "最終列車"
+
+msgid "O Soro do Dr. Almeida"
+msgstr "アルメイダ博士の血清"
+
+msgid "O Portão do Submundo"
+msgstr "冥界の門"
+
+msgid "ESCOLHA O MAPA"
+msgstr "マップ選択"
+
+msgid "Recorde: %d pontos · round %d"
+msgstr "記録：%d ポイント · ラウンド %d"
+
+msgid "Sem recorde ainda"
+msgstr "まだ記録なし"
+
+msgid "1º no ranking: %s · %d pts"
+msgstr "ランキング1位：%s · %d pt"
+
+msgid "✓ MISSÃO CONCLUÍDA: %s"
+msgstr "✓ ミッションクリア：%s"
+
+msgid "◆ MISSÃO: %s"
+msgstr "◆ ミッション：%s"
+
+msgid "BLOQUEADO — conclua a missão do %s"
+msgstr "ロック中 — %sのミッションをクリア"
+
+msgid " ou do "
+msgstr " または"
+
+msgid "BLOQUEADO — derrote o boss do round %d no %s"
+msgstr "ロック中 — ラウンド %d のボスを倒す（%s）"
+
+msgid "MAPA"
+msgstr "マップ"
+
+msgid "PAUSADO"
+msgstr "ポーズ中"
+
+msgid "A partida continua para o time."
+msgstr "チームのマッチは続いています。"
+
+msgid "CONTINUAR"
+msgstr "続ける"
+
+msgid "REINICIAR"
+msgstr "やり直す"
+
+msgid "SAIR DA PARTIDA"
+msgstr "マッチを抜ける"
+
+msgid "%s para continuar  ·  %s: mapa grande"
+msgstr "%s で再開  ·  %s：全体マップ"
+
+msgid "TIME"
+msgstr "チーム"
+
+msgid "PONTOS"
+msgstr "ポイント"
+
+msgid "Nenhuma partida ainda — jogue para entrar no ranking!"
+msgstr "まだマッチがありません — プレイしてランキングに載ろう！"
+
+msgid "Nenhuma partida em %s ainda — chame os amigos em JOGAR EM GRUPO!"
+msgstr "%sのマッチはまだありません — 「みんなでプレイ」で友達を誘おう！"
+
+msgid "Mapa bloqueado"
+msgstr "マップはロック中"
+
+msgid "Ranking global indisponível"
+msgstr "グローバルランキングは利用できません"
+
+msgid "Ranking global indisponível (sem conexão)"
+msgstr "グローバルランキングは利用できません（接続なし）"
+
+msgid "Ninguém pontuou nesta temporada ainda — seja o primeiro!"
+msgstr "今シーズンはまだ誰も得点していません — 一番乗りを目指そう！"
+
+msgid "TEMPORADA TERMINA EM %d %s%s"
+msgstr "シーズン終了まで %d %s%s"
+
+msgid "DIA"
+msgstr "日"
+
+msgid "DIAS"
+msgstr "日"
+
+msgid " · VOCÊ: %dº"
+msgstr " · あなた：%d位"
+
+msgid "JOGO"
+msgstr "ゲーム"
+
+msgid "VÍDEO"
+msgstr "映像"
+
+msgid "ÁUDIO"
+msgstr "サウンド"
+
+msgid "CONTROLES"
+msgstr "操作"
+
+msgid "PEQUENO"
+msgstr "小"
+
+msgid "MÉDIO"
+msgstr "中"
+
+msgid "GRANDE"
+msgstr "大"
+
+msgid "AUTO"
+msgstr "自動"
+
+msgid "LIGADO"
+msgstr "オン"
+
+msgid "DESLIGADO"
+msgstr "オフ"
+
+msgid "JANELA"
+msgstr "ウィンドウ"
+
+msgid "TELA CHEIA"
+msgstr "フルスクリーン"
+
+msgid "TELA CHEIA EXCLUSIVA"
+msgstr "排他的フルスクリーン"
+
+msgid "ADAPTATIVO"
+msgstr "アダプティブ"
+
+msgid "Q / E: trocar de aba"
+msgstr "Q / E：タブ切り替え"
+
+msgid "IDIOMA"
+msgstr "言語"
+
+msgid "NOME NO RANKING"
+msgstr "ランキングの名前"
+
+msgid "TREMOR DE TELA"
+msgstr "画面の揺れ"
+
+msgid "SANGUE"
+msgstr "血しぶき"
+
+msgid "MIRA NO MOUSE"
+msgstr "マウスで照準"
+
+msgid "MINIMAPA"
+msgstr "ミニマップ"
+
+msgid "TAMANHO DO MINIMAPA"
+msgstr "ミニマップのサイズ"
+
+msgid "MODO CABEÇÃO"
+msgstr "デカ頭モード"
+
+msgid "MODO DE TELA"
+msgstr "画面モード"
+
+msgid "RESOLUÇÃO"
+msgstr "解像度"
+
+msgid "VSYNC"
+msgstr "垂直同期"
+
+msgid "LIMITE DE FPS"
+msgstr "FPS上限"
+
+msgid "SEM LIMITE"
+msgstr "無制限"
+
+msgid "ESCALA DA INTERFACE"
+msgstr "UIスケール"
+
+msgid "BRILHO"
+msgstr "明るさ"
+
+msgid "SOMBRAS"
+msgstr "影"
+
+msgid "MOSTRAR FPS"
+msgstr "FPS表示"
+
+msgid "VOLUME GERAL"
+msgstr "マスター音量"
+
+msgid "MÚSICA"
+msgstr "音楽"
+
+msgid "EFEITOS"
+msgstr "効果音"
+
+msgid "INTERFACE"
+msgstr "UI"
+
+msgid "VOZES"
+msgstr "ボイス"
+
+msgid "SOM"
+msgstr "サウンド"
+
+msgid "CONTROLES DE TOQUE"
+msgstr "タッチ操作"
+
+msgid "AÇÃO"
+msgstr "アクション"
+
+msgid "TECLADO / MOUSE"
+msgstr "キーボード / マウス"
+
+msgid "CONTROLE"
+msgstr "コントローラー"
+
+msgid "Clique numa tecla para trocar. ESC cancela."
+msgstr "キーをクリックして変更。ESCでキャンセル。"
+
+msgid "RESTAURAR PADRÕES"
+msgstr "初期設定に戻す"
+
+msgid "Aperte uma tecla para %s… (ESC cancela)"
+msgstr "「%s」に割り当てるキーを押してください…（ESCでキャンセル）"
+
+msgid "Aperte um botão do controle para %s… (ESC cancela)"
+msgstr "「%s」に割り当てるコントローラーのボタンを押してください…（ESCでキャンセル）"
+
+msgid "CONFIRMAR: APAGAR TUDO?"
+msgstr "確認：すべて削除しますか？"
+
+msgid "APAGAR PROGRESSO"
+msgstr "進行状況を削除"
+
+msgid "Desenvolvido por %s\n%s"
+msgstr "開発：%s\n%s"
+
+msgid "APOIE O PROJETO"
+msgstr "プロジェクトを支援"
+
+msgid "O Tentando Sobreviver é gratuito e sem anúncios. Se você curtiu, um PIX de qualquer valor ajuda a manter o projeto vivo — totalmente opcional."
+msgstr "Tentando Sobreviver は無料・広告なしです。気に入ったら、金額は自由に PIX で支援していただけると、プロジェクトを続ける力になります — もちろん任意です。"
+
+msgid "PIX para %s"
+msgstr "%s への PIX"
+
+msgid "Chave aleatória: %s"
+msgstr "ランダムキー：%s"
+
+msgid "COPIAR PIX COPIA E COLA"
+msgstr "PIX「コピー＆ペースト」コードをコピー"
+
+msgid "PIX copia e cola copiado! Cole no app do seu banco."
+msgstr "PIXコードをコピーしました！ 銀行アプリに貼り付けてください。"
+
+msgid "COPIAR CHAVE"
+msgstr "キーをコピー"
+
+msgid "Chave PIX copiada!"
+msgstr "PIXキーをコピーしました！"
+
+msgid "Ideias, bugs ou parcerias: %s"
+msgstr "アイデア・バグ報告・協力：%s"
+
+msgid "Desenvolvido por %s"
+msgstr "開発：%s"
+
+msgid "RECARR."
+msgstr "リロード"
+
+msgid "TROCAR"
+msgstr "切替"
+
+msgid "Cérbero"
+msgstr "ケルベロス"
+
+msgid "The Conductor"
+msgstr "The Conductor"
+
+msgid "A Entidade do Submundo"
+msgstr "冥界の存在"
+
+msgid "O templo não era uma prisão. Era uma porta... e ela está se abrindo."
+msgstr "神殿は牢獄ではなかった。扉だったのだ……そして今、開こうとしている。"
+
+msgid "O Minotauro"
+msgstr "ミノタウロス"
+
+msgid "Paciente Zero"
+msgstr "患者ゼロ"
+
+msgid "Primeiro Sangue"
+msgstr "ファーストブラッド"
+
+msgid "Abata o primeiro zumbi"
+msgstr "最初のゾンビを倒す"
+
+msgid "Sobrevivente"
+msgstr "サバイバー"
+
+msgid "Chegue à wave 10"
+msgstr "ウェーブ10に到達"
+
+msgid "Veterano"
+msgstr "ベテラン"
+
+msgid "Chegue à wave 20"
+msgstr "ウェーブ20に到達"
+
+msgid "Energia!"
+msgstr "通電！"
+
+msgid "Ligue o disjuntor principal"
+msgstr "メインブレーカーを入れる"
+
+msgid "Maquinista"
+msgstr "機関士"
+
+msgid "Derrote o boss The Conductor"
+msgstr "ボス The Conductor を倒す"
+
+msgid "Paciente Curado"
+msgstr "患者の治癒"
+
+msgid "Derrote o Paciente Zero"
+msgstr "患者ゼロを倒す"
+
+msgid "O Soro"
+msgstr "血清"
+
+msgid "Complete a missão do Dr. Almeida"
+msgstr "アルメイダ博士のミッションをクリア"
+
+msgid "Adestrador"
+msgstr "調教師"
+
+msgid "Vença uma rodada de cães sem levar dano"
+msgstr "ノーダメージでドッグラウンドを制する"
+
+msgid "Atropelador"
+msgstr "ロードローラー"
+
+msgid "Atropele 10 zumbis com uma passagem do trem"
+msgstr "列車1回の通過でゾンビを10体轢く"
+
+msgid "Colecionador"
+msgstr "コレクター"
+
+msgid "Tenha todos os perks na mesma partida"
+msgstr "1マッチで全パークを揃える"
+
+msgid "Olho do Furacão"
+msgstr "台風の目"
+
+msgid "Transforme o Canhão de Vento no Tornado"
+msgstr "風の大砲をトルネードに変える"
+
+msgid "Liquidação"
+msgstr "大安売り"
+
+msgid "Use a Mystery Box durante um Fire Sale"
+msgstr "Fire Sale 中に Mystery Box を使う"
+
+msgid "Açougueiro"
+msgstr "肉屋"
+
+msgid "Abata 1.000 zumbis"
+msgstr "ゾンビを1,000体倒す"
+
+msgid "Faca na Caveira"
+msgstr "髑髏にナイフ"
+
+msgid "Abata 50 zumbis na faca"
+msgstr "ナイフでゾンビを50体倒す"
+
+msgid "Mira de Ouro"
+msgstr "黄金の照準"
+
+msgid "Acerte 100 headshots fatais"
+msgstr "致命的なヘッドショットを100回決める"
+
+msgid "Ursinhos"
+msgstr "クマたち"
+
+msgid "Encontre todos os ursinhos escondidos"
+msgstr "隠されたクマをすべて見つける"
+
+msgid "Cabeção"
+msgstr "デカ頭"
+
+msgid "Descubra o código secreto do menu"
+msgstr "メニューの隠しコードを見つける"
+
+msgid "Complete a missão do Terminal e pegue a Lanterna do Condutor"
+msgstr "ターミナルのミッションをクリアし、車掌のランタンを手に入れる"
+
+msgid "Fio de Ariadne"
+msgstr "アリアドネの糸"
+
+msgid "Derrote o Minotauro"
+msgstr "ミノタウロスを倒す"
+
+msgid "Os Doze do Olimpo"
+msgstr "オリュンポス十二神"
+
+msgid "Ative as 12 estátuas dos deuses no Templo"
+msgstr "神殿の12柱の神像を灯す"
+
+msgid "Complete a missão do Templo e pegue o Raio de Zeus"
+msgstr "神殿のミッションをクリアし、ゼウスの雷を手に入れる"
+
+msgid "Guardião dos Três"
+msgstr "三つ首の番人"
+
+msgid "Derrote o Cérbero"
+msgstr "ケルベロスを倒す"
+
+msgid "A Porta"
+msgstr "扉"
+
+msgid "Derrote a Entidade do Submundo"
+msgstr "冥界の存在を倒す"
+
+msgid "PARTIDA INVALIDADA — não vale save nem ranking"
+msgstr "無効なマッチ — セーブもランキングも対象外"
+
+msgid "LUZ"
+msgstr "光"
+
+msgid "Clarão que cega: atordoa os zumbis e causa +50% de dano no boss."
+msgstr "目をくらます閃光：ゾンビを気絶させ、ボスに +50% ダメージ。"
+
+msgid "SOMBRA"
+msgstr "影"
+
+msgid "Rouba vida: cada acerto recupera parte do dano causado."
+msgstr "吸血：命中するたびに与えたダメージの一部を回復。"
+
+msgid "GELO"
+msgstr "氷"
+
+msgid "Deixa os zumbis lentos e às vezes os congela."
+msgstr "ゾンビを減速させ、時々凍らせる。"
+
+msgid "RAIO"
+msgstr "雷"
+
+msgid "A eletricidade salta para 2 zumbis próximos."
+msgstr "電撃が近くのゾンビ2体に連鎖する。"
+
+msgid "FOGO"
+msgstr "炎"
+
+msgid "Incendeia: dano contínuo por alguns segundos."
+msgstr "燃焼：数秒間ダメージを与え続ける。"
+
+msgid "EXPLOSIVO"
+msgstr "爆発"
+
+msgid "Cada tiro que acerta estoura numa pequena explosão."
+msgstr "命中した弾が小さな爆発を起こす。"
+
+msgid "Terminal Central"
+msgstr "セントラル・ターミナル"
+
+msgid "Estação de trem abandonada: hall, plataforma, lojas, túneis e manutenção."
+msgstr "廃墟と化した鉄道駅：ホール、ホーム、店舗、トンネル、整備区画。"
+
+msgid "Hospital Santa Luzia"
+msgstr "サンタ・ルジア病院"
+
+msgid "Onde o vírus nasceu: recepção, UTI, centro cirúrgico, necrotério e o laboratório no subsolo."
+msgstr "ウイルスが生まれた場所：受付、ICU、手術部、霊安室、そして地下の研究室。"
+
+msgid "Templo dos Mortos"
+msgstr "死者の神殿"
+
+msgid "Ruínas gregas, uma necrópole, a floresta de Artemis e o portão para o Submundo."
+msgstr "ギリシャの遺跡、ネクロポリス、アルテミスの森、そして冥界への門。"
+
+msgid "Max Ammo"
+msgstr "Max Ammo"
+
+msgid "Double Cash"
+msgstr "Double Cash"
+
+msgid "Instant Kill"
+msgstr "Instant Kill"
+
+msgid "Nuke"
+msgstr "Nuke"
+
+msgid "Full Heal"
+msgstr "Full Heal"
+
+msgid "Armor"
+msgstr "Armor"
+
+msgid "Speed Boost"
+msgstr "Speed Boost"
+
+msgid "Carpenter"
+msgstr "Carpenter"
+
+msgid "Golden Drop"
+msgstr "Golden Drop"
+
+msgid "Fire Sale"
+msgstr "Fire Sale"
+
+msgid "O SORO DO DR. ALMEIDA"
+msgstr "アルメイダ博士の血清"
+
+msgid "Enfermeiro"
+msgstr "看護師"
+
+msgid "Agente"
+msgstr "エージェント"
+
+msgid "Guarda da Estação"
+msgstr "駅の警備員"
+
+msgid "Paciente"
+msgstr "患者"
+
+msgid "Paciente da UTI"
+msgstr "ICUの患者"
+
+msgid "Cobaia do Laboratório"
+msgstr "研究所の被験体"
+
+msgid "Arqueóloga"
+msgstr "考古学者"
+
+msgid "Caçadora do Labirinto"
+msgstr "迷宮の狩人"
+
+msgid "Sacerdotisa do Olimpo"
+msgstr "オリュンポスの巫女"
+
+msgid "Andarilha do Submundo"
+msgstr "冥界の放浪者"
+
+msgid "TENTANDO SOBREVIVER — feito com Godot + GDScript. Arte e sons 100% gerados por código."
+msgstr "TENTANDO SOBREVIVER — Godot + GDScript で制作。グラフィックとサウンドは100%コードで生成。"
+
+msgid "APAGÃO"
+msgstr "停電"
+
+msgid "As luzes caíram — use a lanterna"
+msgstr "明かりが消えた — ライトを使え"
+
+msgid "ALARME DE EMERGÊNCIA"
+msgstr "緊急警報"
+
+msgid "O barulho atrai mais zumbis"
+msgstr "騒音がさらにゾンビを引き寄せる"
+
+msgid "Saia dos trilhos da plataforma!"
+msgstr "ホームの線路から離れろ！"
+
+msgid "HORDA"
+msgstr "大群"
+
+msgid "Muito mais zumbis nesta wave"
+msgstr "このウェーブはゾンビが大幅に増加"
+
+msgid "Uma caixa caiu do céu — segure E para abrir"
+msgstr "空から箱が落ちてきた — E長押しで開ける"
+
+msgid "VAZAMENTO DE GÁS"
+msgstr "ガス漏れ"
+
+msgid "Fique longe da nuvem verde"
+msgstr "緑の雲から離れろ"
+
+msgid "ZUMBI DOURADO"
+msgstr "ゴールデンゾンビ"
+
+msgid "Mate-o antes que fuja: dinheiro e Golden Drop!"
+msgstr "逃げられる前に倒せ：お金と Golden Drop！"
+
+msgid "LUA DE SANGUE"
+msgstr "ブラッドムーン"
+
+msgid "Zumbis mais rápidos — dinheiro e pontos em dobro"
+msgstr "ゾンビが速くなる — お金とポイントが2倍"
+
+msgid "DESABAMENTO"
+msgstr "崩落"
+
+msgid "O teto está caindo: saia dos círculos vermelhos!"
+msgstr "天井が崩れる：赤い円から出ろ！"
+
+msgid "NEBLINA"
+msgstr "濃霧"
+
+msgid "Você mal enxerga — atenção aos gemidos"
+msgstr "ほとんど見えない — うめき声に耳を澄ませ"
+
+msgid "IRA DE ZEUS"
+msgstr "ゼウスの怒り"
+
+msgid "Raios caem do céu: saia dos círculos azuis!"
+msgstr "空から雷が落ちる：青い円から出ろ！"
+
+msgid "LEVANTE DOS MORTOS"
+msgstr "死者の蜂起"
+
+msgid "Os sarcófagos se abrem — esqueletos saindo!"
+msgstr "石棺が開く — スケルトンが出てくる！"
+
+msgid "CAÇADA DE ARTEMIS"
+msgstr "アルテミスの狩り"
+
+msgid "Sátiros e lobos infernais estão caçando você"
+msgstr "サテュロスと地獄の狼がお前を狩っている"
+
+msgid "PORTÃO DO SUBMUNDO"
+msgstr "冥界の門"
+
+msgid "Um portal solta criaturas — destrua-o a tiros"
+msgstr "ポータルが怪物を放つ — 撃って破壊しろ"
+
+msgid "SANGUE DOS DEUSES"
+msgstr "神々の血"
+
+msgid "Neste round as bênçãos dos altares são de graça"
+msgstr "このラウンドは祭壇の加護が無料"
+
+msgid "CONTENÇÃO ROMPIDA"
+msgstr "隔離の破綻"
+
+msgid "Zumbis entrando pelos pontos de isolamento!"
+msgstr "隔離ポイントからゾンビが侵入！"
+
+msgid "Adrenaline"
+msgstr "Adrenaline"
+
+msgid "Regenera vida 2,5x mais rápido e mais cedo"
+msgstr "体力の回復が2.5倍速く、より早く始まる"
+
+msgid "Deadeye"
+msgstr "Deadeye"
+
+msgid "Headshots causam +100% de dano"
+msgstr "ヘッドショットのダメージ +100%"
+
+msgid "Fortify"
+msgstr "Fortify"
+
+msgid "+50 de vida máxima"
+msgstr "最大体力 +50"
+
+msgid "Overload"
+msgstr "Overload"
+
+msgid "+25% de dano das armas"
+msgstr "武器ダメージ +25%"
+
+msgid "Quick Hands"
+msgstr "Quick Hands"
+
+msgid "Recarga 40% mais rápida"
+msgstr "リロードが40%速くなる"
+
+msgid "Quick Revive"
+msgstr "Quick Revive"
+
+msgid "Ao cair, levanta sozinho (gasta o perk; até 3 por partida)"
+msgstr "ダウン時に自力で起き上がる（パークを消費；1マッチ最大3回）"
+
+msgid "Sprint+"
+msgstr "Sprint+"
+
+msgid "+20% de velocidade"
+msgstr "移動速度 +20%"
+
+msgid "AK"
+msgstr "AK"
+
+msgid "Arc Gun"
+msgstr "Arc Gun"
+
+msgid "Arco de Artemis"
+msgstr "アルテミスの弓"
+
+msgid "Caçada Lunar"
+msgstr "月の狩り"
+
+msgid "Barrett .50"
+msgstr "Barrett .50"
+
+msgid "Beretta 92"
+msgstr "Beretta 92"
+
+msgid "Bren"
+msgstr "Bren"
+
+msgid "Combat Shotgun"
+msgstr "コンバットショットガン"
+
+msgid "Lanterna do Condutor"
+msgstr "車掌のランタン"
+
+msgid "Farol do Condutor"
+msgstr "車掌の灯台"
+
+msgid "Energy Cannon"
+msgstr "エネルギーキャノン"
+
+msgid "Flamethrower"
+msgstr "火炎放射器"
+
+msgid "Glock 17"
+msgstr "Glock 17"
+
+msgid "Grenade Launcher"
+msgstr "グレネードランチャー"
+
+msgid "Lança de Hefesto"
+msgstr "ヘパイストスの槍"
+
+msgid "Forja de Hefesto"
+msgstr "ヘパイストスの炉"
+
+msgid "Lee-Enfield"
+msgstr "Lee-Enfield"
+
+msgid "Lupara"
+msgstr "Lupara"
+
+msgid "M1911"
+msgstr "M1911"
+
+msgid "M4"
+msgstr "M4"
+
+msgid "Magnum .44"
+msgstr "Magnum .44"
+
+msgid "Makarov PM"
+msgstr "Makarov PM"
+
+msgid "Mauser C96"
+msgstr "Mauser C96"
+
+msgid "Minigun"
+msgstr "ミニガン"
+
+msgid "MP5"
+msgstr "MP5"
+
+msgid "Pistola de Pregos"
+msgstr "ネイルガン"
+
+msgid "P90"
+msgstr "P90"
+
+msgid "Tridente de Poseidon"
+msgstr "ポセイドンの三叉槍"
+
+msgid "Maremoto"
+msgstr "大津波"
+
+msgid "Pump Shotgun"
+msgstr "ポンプショットガン"
+
+msgid "Rail Weapon"
+msgstr "Rail Weapon"
+
+msgid "RPK"
+msgstr "RPK"
+
+msgid "Cano Serrado"
+msgstr "ソードオフ"
+
+msgid "StG 44"
+msgstr "StG 44"
+
+msgid "Thompson M1928"
+msgstr "Thompson M1928"
+
+msgid "Uzi Dupla"
+msgstr "デュアルUzi"
+
+msgid "Vector"
+msgstr "Vector"
+
+msgid "Winchester 1887"
+msgstr "Winchester 1887"
+
+msgid "Canhão de Vento"
+msgstr "風の大砲"
+
+msgid "Tornado"
+msgstr "トルネード"
+
+msgid "Raio de Zeus"
+msgstr "ゼウスの雷"
+
+msgid "Ira do Olimpo"
+msgstr "オリュンポスの怒り"
+
+msgid "Blindado"
+msgstr "装甲兵"
+
+msgid "Rastejante"
+msgstr "クローラー"
+
+msgid "Exploder"
+msgstr "エクスプローダー"
+
+msgid "Górgona"
+msgstr "ゴルゴン"
+
+msgid "Harpia"
+msgstr "ハーピー"
+
+msgid "Lobo Infernal"
+msgstr "地獄の狼"
+
+msgid "Hoplita Morto"
+msgstr "死せる重装歩兵"
+
+msgid "Hoplita com Escudo"
+msgstr "盾の重装歩兵"
+
+msgid "Cão Infernal"
+msgstr "地獄の猟犬"
+
+msgid "Runner"
+msgstr "ランナー"
+
+msgid "Sátiro"
+msgstr "サテュロス"
+
+msgid "Esqueleto Guerreiro"
+msgstr "スケルトン戦士"
+
+msgid "Esqueleto Arqueiro"
+msgstr "スケルトン弓兵"
+
+msgid "Cuspidor"
+msgstr "スピッター"
+
+msgid "Tank"
+msgstr "タンク"
+
+msgid "Walker"
+msgstr "ウォーカー"
+
+msgid "INIMIGOS"
+msgstr "敵"
+
+msgid "ZUMBIS"
+msgstr "ゾンビ"
+
+msgid "O zumbi mais comum: lento, mas nunca vem sozinho. Entra arrancando as tábuas das janelas e cerca quem fica parado. No Hospital é o paciente de camisola; no Templo, o arqueólogo da escavação."
+msgstr "最もよく見るゾンビ。動きは遅いが、決して単独では来ない。窓の板を引きはがして侵入し、立ち止まっている者を取り囲む。病院では患者衣の患者、神殿では発掘現場の考古学者。"
+
+msgid "Rápido e com pouca vida: chega antes dos outros e pune quem fica encurralado. No Hospital é o enfermeiro; no Templo, o cultista de capuz."
+msgstr "素早く体力は少ない。他より先に到着し、追い詰められた者を容赦なく襲う。病院では看護師、神殿ではフードの信者。"
+
+msgid "Grande e muito resistente: não recua com os tiros nem é empurrado. Guarde as armas pesadas para ele. No Hospital é o maqueiro; no Templo, o gladiador."
+msgstr "巨大でとても頑丈。撃たれてもひるまず、押し返されない。重火器はこいつのために取っておこう。病院では担架係、神殿では剣闘士。"
+
+msgid "Corre até você, começa a piscar e explode — e explode também ao morrer. Mate de longe: a explosão fere você e os zumbis em volta. No Hospital usa roupa de quarentena; no Templo carrega uma ânfora de fogo grego."
+msgstr "こちらへ走ってきて点滅し、爆発する — 死んだ時も爆発する。遠くから倒そう：爆発は自分にも周りのゾンビにもダメージを与える。病院では防護服姿、神殿ではギリシャ火の入った壺を抱えている。"
+
+msgid "Rasteja pelo chão, baixo e difícil de acertar na cabeça. Ao morrer solta uma nuvem de gás que fere quem ficar dentro. No Templo é a múmia."
+msgstr "地面を這っていて低く、頭を狙いにくい。死ぬと毒ガスの雲を出し、中にいる者を傷つける。神殿ではミイラ。"
+
+msgid "Para a uma certa distância e cospe ácido em arco; onde cai vira uma poça que queima. Não fique parado em cima dela. No Templo é o sacerdote do veneno."
+msgstr "距離を取って立ち止まり、弧を描いて酸を吐く。落ちた場所は焼けつく水たまりになる。その上に立たないこと。神殿では毒の神官。"
+
+msgid "A armadura absorve 75% do dano no corpo até quebrar; um tiro na cabeça derruba o capacete. Nas missões, um deles carrega um item que você precisa. No Templo é o hoplita de bronze."
+msgstr "鎧が壊れるまで胴体へのダメージを75%吸収する。頭を撃てばヘルメットが落ちる。ミッションでは、そのうち1体が必要なアイテムを持っている。神殿では青銅の重装歩兵。"
+
+msgid "Rápido e em matilha. No Hospital chega nas rodadas dos cães; no Templo, o Cérbero chama os cães de Hades. Pega fogo ao morrer e não deixa corpo."
+msgstr "素早く群れで来る。病院ではドッグラウンドに現れ、神殿ではケルベロスがハデスの猟犬を呼ぶ。死ぬと燃え上がり、死体を残さない。"
+
+msgid "Guerreiro grego morto-vivo: aguenta bastante e bate forte, mas é lento."
+msgstr "不死のギリシャ戦士。耐久力が高く一撃も重いが、動きは遅い。"
+
+msgid "O escudo segura quase todo o dano que vem de frente (só 20% passa). Acerte a cabeça, os lados ou as costas. Não é empurrado."
+msgstr "盾が正面からのダメージをほぼ防ぐ（通るのは20%だけ）。頭、側面、背中を狙え。押し返されない。"
+
+msgid "Rápido e frágil. Às vezes os ossos se juntam e ele se levanta de novo com metade da vida — só uma vez."
+msgstr "素早いが脆い。ときどき骨が集まり、体力半分で再び立ち上がる — 一度だけ。"
+
+msgid "Mantém distância e atira flechas retas. Saia da linha de tiro ou corra para cima dele."
+msgstr "距離を保ってまっすぐな矢を放つ。射線から外れるか、突っ込め。"
+
+msgid "Rápido, corre em zigue-zague e anda em bando: difícil de mirar. Aparece em peso na Caçada de Artemis."
+msgstr "素早く、ジグザグに走り、群れで動く：狙いにくい。アルテミスの狩りで大量に現れる。"
+
+msgid "Chega perto, dá um bote rápido, recua e repete. Atire enquanto ele recua."
+msgstr "近づいて素早く飛びかかり、下がってまた繰り返す。下がった瞬間に撃て。"
+
+msgid "Voa fora do alcance da faca e mergulha em você. Atire quando ela descer."
+msgstr "ナイフの届かない高さを飛び、こちらに急降下してくる。降りてきたところを撃て。"
+
+msgid "Se você estiver olhando para ela quando ela olhar, fica lento, cinza e vira pedra por 1,5 s, sem andar nem atirar. Parede, objeto ou ficar de costas protegem. Depois do olhar, ela leva dano dobrado."
+msgstr "彼女がこちらを見た時に彼女を見ていると、減速して灰色になり、1.5秒間石になる。歩くことも撃つこともできない。壁や物の陰に入るか、背を向ければ防げる。視線の後、彼女は2倍のダメージを受ける。"
+
+msgid "CHEFES"
+msgstr "ボス"
+
+msgid "O maquinista do último trem. Golpeia, investe (e fica tonto se bater na parede), cega a mira de perto com um clarão, solta ondas de choque e círculos que explodem e, na fase 3, chama zumbis. Tem 4 fases, com um rugido invulnerável a cada uma."
+msgstr "最終列車の機関士。殴り、突進し（壁にぶつかるとふらつく）、近距離では閃光で照準をくらませ、衝撃波と爆発する円を放ち、フェーズ3ではゾンビを呼ぶ。4つのフェーズがあり、それぞれ無敵の咆哮がある。"
+
+msgid "O primeiro infectado. A mordida envenena — e piora se ele morder de novo antes de passar —, vomita ácido que deixa poças, grita para deixar você lento e faz chover ácido. Enfurecido, é o chefe da missão do Hospital."
+msgstr "最初の感染者。噛みつきは毒を与え — 毒が切れる前にまた噛まれると悪化する —、水たまりを残す酸を吐き、叫んで動きを鈍らせ、酸の雨を降らせる。激昂すると病院のミッションのボスになる。"
+
+msgid "Investe derrubando as colunas no caminho, e cada coluna quebrada o deixa em Fúria, com mais dano e velocidade. Solta ondas de choque; no Colapso, caem pedras que viram escombro. Carrega a chave do Submundo."
+msgstr "進路上の柱をなぎ倒しながら突進し、柱が1本壊れるたびに激昂してダメージと速度が増す。衝撃波を放ち、崩落中は瓦礫になる石が降ってくる。冥界の鍵を持っている。"
+
+msgid "Três cabeças: morde (e morde de novo logo depois de investir), sopra um leque de fogo que deixa chamas no chão e investe. Na fase 3 chama os cães de Hades."
+msgstr "3つの頭：噛みつき（突進の直後にもう一度噛む）、地面に炎を残す扇状の火を吐き、突進する。フェーズ3ではハデスの猟犬を呼ぶ。"
+
+msgid "Solta esferas de alma em leque, levanta esqueletos e faz chover fogo que vira lava. Na fase 3 assume a forma monstruosa: investida, onda de choque e a Ruptura — some e reaparece perto de você."
+msgstr "魂の弾を扇状に放ち、スケルトンを蘇らせ、溶岩になる炎の雨を降らせる。フェーズ3では怪物の姿になる：突進、衝撃波、そして裂け目 — 消えてすぐそばに現れる。"
+
+msgid "ITENS"
+msgstr "アイテム"
+
+msgid "PERKS"
+msgstr "パーク"
+
+msgid "POWER-UPS"
+msgstr "パワーアップ"
+
+msgid "Enche o pente e a reserva de todas as suas armas."
+msgstr "すべての武器のマガジンと予備弾薬を満タンにする。"
+
+msgid "Todo ponto ganho vale em dobro enquanto durar."
+msgstr "効果中に得たポイントはすべて2倍。"
+
+msgid "Qualquer acerto de tiro ou de faca mata o zumbi na hora (não vale para chefes)."
+msgstr "弾やナイフが当たればゾンビを即死させる（ボスには無効）。"
+
+msgid "Mata na hora todos os zumbis vivos — o chefe não — e paga um bônus de pontos."
+msgstr "生きているゾンビを即座に全滅させ（ボスを除く）、ボーナスポイントを得る。"
+
+msgid "Recupera toda a vida."
+msgstr "体力を全回復する。"
+
+msgid "Enche a barra azul de armadura, que absorve o dano antes da vida."
+msgstr "体力より先にダメージを受ける青いアーマーゲージを満タンにする。"
+
+msgid "Você corre bem mais rápido enquanto durar."
+msgstr "効果中は走る速さが大きく上がる。"
+
+msgid "Conserta na hora todas as barricadas do mapa e paga um bônus."
+msgstr "マップ上のバリケードを即座にすべて修理し、ボーナスを得る。"
+
+msgid "A Mystery Box custa 10 e aparece em todos os locais das áreas abertas enquanto durar."
+msgstr "効果中は Mystery Box が10ポイントになり、開放済みエリアのすべての設置場所に現れる。"
+
+msgid "Raro. Sorteia um prêmio: uma arma especial, uma bolada de pontos, um perk grátis ou a Fúria (dano em dobro por um tempo). Cai do Zumbi Dourado, dos chefes e de quem acha todos os ursinhos."
+msgstr "レア。特別な武器、大量のポイント、無料パーク、またはフューリー（一定時間ダメージ2倍）のいずれかが当たる。ゴールデンゾンビやボスが落とすほか、クマをすべて見つけた時にも出る。"
+
+msgid "ELEMENTOS"
+msgstr "属性"
+
+msgid "BÊNÇÃOS DO TEMPLO"
+msgstr "神殿の加護"
+
+msgid "12% dos tiros soltam um raio que salta entre até 3 zumbis próximos."
+msgstr "射撃の12%が雷を放ち、近くのゾンビ最大3体に連鎖する。"
+
+msgid "Cada abate em sequência soma +8% de dano, até +40%. A sequência zera depois de 3 s sem abater."
+msgstr "連続キルごとにダメージ +8%、最大 +40%。3秒間キルがないとリセット。"
+
+msgid "40% menos dispersão nos tiros e 15% de chance de crítico, com dano em dobro."
+msgstr "弾の拡散が40%減り、15%の確率でダメージ2倍のクリティカル。"
+
+msgid "Anda, recarrega e interage 20% mais rápido."
+msgstr "移動・リロード・操作が20%速くなる。"
+
+msgid "Os tiros empurram os zumbis para trás."
+msgstr "射撃でゾンビを後ろへ押し返す。"
+
+msgid "20% dos zumbis abatidos voltam como espírito aliado por 10 s e lutam do seu lado."
+msgstr "倒したゾンビの20%が10秒間味方の魂として蘇り、一緒に戦う。"
+
+msgid "EVENTOS"
+msgstr "イベント"
+
+msgid "TODOS OS MAPAS"
+msgstr "全マップ"
+
+msgid "As luzes caem e só ficam as de emergência, fracas. Use a lanterna (F); ligar a energia de novo no disjuntor encerra o apagão. Só acontece com a energia ligada."
+msgstr "明かりが消え、弱い非常灯だけが残る。ライト（F）を使おう。ブレーカーで電源を入れ直すと停電が終わる。電源が入っている時だけ起こる。"
+
+msgid "A sirene atrai zumbis: eles chegam mais rápido e mais deles ficam vivos ao mesmo tempo. O painel do alarme desliga a sirene pagando."
+msgstr "サイレンがゾンビを引き寄せる：到着が早くなり、同時に生きている数も増える。警報パネルで料金を払えばサイレンを止められる。"
+
+msgid "Muito mais zumbis neste round, chegando mais rápido. Vem garantida no round 15 e depois a cada 10."
+msgstr "このラウンドはゾンビが大幅に増え、より速く押し寄せる。ラウンド15で必ず発生し、その後は10ラウンドごと。"
+
+msgid "Uma caixa cai de paraquedas. Segure E por alguns segundos para abrir: munição, armadura ou dinheiro. Se levar um golpe, a abertura é interrompida."
+msgstr "パラシュートで箱が降ってくる。E を数秒長押しして開ける：弾薬、アーマー、またはお金。攻撃を受けると開封が中断される。"
+
+msgid "Um cano estoura e solta uma nuvem verde que fere quem estiver dentro — zumbis também. Fique longe ou segure E na válvula para fechar."
+msgstr "パイプが破裂し、中にいる者を傷つける緑の雲を出す — ゾンビも同様。離れるか、バルブで E を長押しして閉めよう。"
+
+msgid "Um zumbi todo em ouro, com coroa, que foge de você (estrela dourada no minimapa). Mate-o antes que escape para ganhar dinheiro e um Golden Drop."
+msgstr "王冠をかぶった全身金色のゾンビで、こちらから逃げていく（ミニマップに金の星）。逃げられる前に倒せば、お金と Golden Drop が手に入る。"
+
+msgid "A lua fica vermelha: os zumbis correm mais, mas dinheiro e pontos valem em dobro."
+msgstr "月が赤く染まる：ゾンビは速く走るが、お金とポイントは2倍になる。"
+
+msgid "O teto começa a cair: círculos vermelhos marcam onde as pedras vão bater. Saia deles — as pedras também esmagam os zumbis."
+msgstr "天井が崩れ始める：赤い円が落石の場所を示す。円から出よう — 落石はゾンビも押しつぶす。"
+
+msgid "Uma neblina fecha a visão e até a lanterna ilumina menos. Fique atento aos gemidos."
+msgstr "霧で視界がふさがり、ライトの光も届きにくくなる。うめき声に耳を澄まそう。"
+
+msgid "TERMINAL CENTRAL"
+msgstr "セントラル・ターミナル"
+
+msgid "Um trem atravessa a plataforma a toda velocidade e atropela quem estiver nos trilhos — zumbis inclusive. O painel do trem chama o trem na hora."
+msgstr "列車が全速力でホームを通過し、線路上の者をすべて轢く — ゾンビも含めて。列車パネルで即座に列車を呼べる。"
+
+msgid "HOSPITAL SANTA LUZIA"
+msgstr "サンタ・ルジア病院"
+
+msgid "Os pontos de isolamento se rompem e os zumbis entram por eles, com a sirene tocando."
+msgstr "隔離ポイントが破られ、サイレンが鳴る中、ゾンビがそこから侵入してくる。"
+
+msgid "TEMPLO DOS MORTOS"
+msgstr "死者の神殿"
+
+msgid "Raios caem do céu, e círculos azuis avisam onde. Saia deles — os raios também destroem os zumbis."
+msgstr "空から雷が落ち、青い円が落ちる場所を知らせる。円から出よう — 雷はゾンビも消し飛ばす。"
+
+msgid "Os sarcófagos se abrem e soltam esqueletos, às vezes arqueiros."
+msgstr "石棺が開き、スケルトンが出てくる。弓兵がいることも。"
+
+msgid "Sátiros e lobos infernais surgem em volta de você numa caçada."
+msgstr "狩りの最中、サテュロスと地獄の狼が周りに現れる。"
+
+msgid "Um portal se abre e solta criaturas até ser destruído a tiros. Destruído, deixa o Tridente de Poseidon."
+msgstr "ポータルが開き、撃って破壊されるまで怪物を放ち続ける。破壊するとポセイドンの三叉槍が残る。"
+
+msgid "Neste round, as bênçãos dos altares são de graça."
+msgstr "このラウンドは祭壇の加護が無料。"
+
+msgid "MECÂNICAS"
+msgstr "システム"
+
+msgid "BÁSICO"
+msgstr "基本"
+
+msgid "Rounds"
+msgstr "ラウンド"
+
+msgid "A partida é uma sequência de rounds cada vez mais difíceis: mais zumbis e mais fortes. O round acaba quando o último zumbi morre, e o fim de cada um paga um bônus."
+msgstr "マッチはだんだん難しくなるラウンドの連続：ゾンビは増え、強くなる。最後のゾンビが倒れるとラウンドが終わり、毎ラウンドの終わりにボーナスが入る。"
+
+msgid "Pontos"
+msgstr "ポイント"
+
+msgid "Acertar e matar zumbis dá pontos — mais no tiro na cabeça e na faca —, e consertar barricadas também. Com eles você compra armas, portas, perks e a Mystery Box. O score do ranking é separado dos pontos."
+msgstr "ゾンビに当てたり倒したりするとポイントが入る — ヘッドショットとナイフはさらに多い —。バリケードの修理でも入る。ポイントで武器、ドア、パーク、Mystery Box を買える。ランキングのスコアはポイントとは別。"
+
+msgid "Barricadas"
+msgstr "バリケード"
+
+msgid "Os zumbis entram pelas janelas arrancando as tábuas. Segure E perto da janela para pregar as tábuas de volta — cada tábua dá 10 pontos."
+msgstr "ゾンビは板を引きはがして窓から入ってくる。窓のそばで E を長押しすると板を打ち付け直せる — 板1枚につき10ポイント。"
+
+msgid "Armas na parede"
+msgstr "壁の武器"
+
+msgid "Os desenhos de giz nas paredes vendem armas e munição (E). A munição sai mais barata que a arma."
+msgstr "壁のチョークの絵で武器と弾薬を買える（E）。弾薬は武器より安い。"
+
+msgid "Faca"
+msgstr "ナイフ"
+
+msgid "V dá um golpe com avanço que acerta um zumbi por vez: o alvo do avanço ou o mais perto à frente. Salva quando a munição acaba, e matar na faca dá mais pontos."
+msgstr "V で踏み込み攻撃を放ち、一度に1体のゾンビに当たる：踏み込みの対象か、前方の一番近い敵。弾切れの時に頼りになり、ナイフで倒すとポイントも多い。"
+
+msgid "Lanterna"
+msgstr "ライト"
+
+msgid "F liga e desliga a lanterna. Faz falta no Apagão, na Neblina e nas áreas escuras."
+msgstr "F でライトのオン/オフ。停電、濃霧、暗いエリアで必要になる。"
+
+msgid "Duas armas"
+msgstr "2つの武器"
+
+msgid "Você carrega duas armas (Q troca). Ao pegar uma terceira, a que está em mãos cai no chão e pode ser pega de volta por 60 s, com a munição e as melhorias."
+msgstr "武器は2つ持てる（Q で切替）。3つ目を拾うと手に持っている武器が地面に落ち、60秒間は弾薬と強化をそのままに拾い直せる。"
+
+msgid "AVANÇADO"
+msgstr "応用"
+
+msgid "Portas e áreas"
+msgstr "ドアとエリア"
+
+msgid "Portas compráveis (E) abrem novas áreas — e também os pontos de onde os zumbis nascem nelas. A placa no chão mostra o nome da área do outro lado."
+msgstr "購入できるドア（E）で新しいエリアが開く — そこのゾンビの出現地点も。床の看板が向こう側のエリア名を示す。"
+
+msgid "Energia"
+msgstr "電源"
+
+msgid "Segure E no disjuntor para ligar a energia: as máquinas de perk e o Weapon Lab passam a funcionar e as luzes voltam."
+msgstr "ブレーカーで E を長押しして電源を入れる：パークマシンと Weapon Lab が動き出し、明かりが戻る。"
+
+msgid "Máquinas de perk"
+msgstr "パークマシン"
+
+msgid "Cada máquina vende um perk que vale pela partida inteira. Quase todas precisam da energia ligada — o Quick Revive não."
+msgstr "各マシンはマッチ中ずっと有効なパークを売っている。ほとんどは電源が必要 — Quick Revive は不要。"
+
+msgid "Mystery Box"
+msgstr "Mystery Box"
+
+msgid "Paga e sorteia uma arma, às vezes já com um elemento. Depois de alguns usos, a caixa troca de lugar; o feixe de luz dourada mostra onde ela está."
+msgstr "お金を払うと武器が当たる。属性付きのこともある。何回か使うと箱は移動する。金色の光の柱が場所を示す。"
+
+msgid "Weapon Lab"
+msgstr "Weapon Lab"
+
+msgid "Melhora a arma em mãos para Mk II e depois Mk III: mais dano, mais munição e visual novo — algumas viram outra arma, como o Canhão de Vento, que vira Tornado. Precisa de energia."
+msgstr "手に持った武器を Mk II、さらに Mk III に強化する：ダメージと弾薬が増え、見た目も変わる — 風の大砲がトルネードになるように、別の武器に変わるものもある。電源が必要。"
+
+msgid "Elementos"
+msgstr "属性"
+
+msgid "Com uma arma na mão, segure E na parede dela para comprar o elemento dela: Luz, Sombra, Gelo, Raio, Fogo ou Explosivo mudam o efeito dos tiros. A Mystery Box também pode entregar arma com elemento."
+msgstr "武器を持った状態でその武器の壁で E を長押しすると属性を買える：光、影、氷、雷、炎、爆発が射撃の効果を変える。Mystery Box から属性付きの武器が出ることもある。"
+
+msgid "Power-ups"
+msgstr "パワーアップ"
+
+msgid "Zumbis abatidos às vezes deixam um power-up no chão. Passe por cima para pegar antes que ele suma; os que duram mostram o tempo na tela."
+msgstr "倒したゾンビがパワーアップを落とすことがある。消える前に上を通って拾おう。効果時間のあるものは画面に残り時間が表示される。"
+
+msgid "Rodada dos cães"
+msgstr "ドッグラウンド"
+
+msgid "No Hospital, os rounds 5, 11, 17… são só de cães, com névoa e raios. O último cão deixa munição cheia."
+msgstr "病院ではラウンド5、11、17……は犬だけで、霧と雷を伴う。最後の犬は弾薬満タンを落とす。"
+
+msgid "Round de chefe"
+msgstr "ボスラウンド"
+
+msgid "Nos rounds 10, 20 e 30 vem um chefe, com uma escolta menor e a barra de vida no alto da tela. Derrotado, deixa um Golden Drop e um Max Ammo."
+msgstr "ラウンド10、20、30では、少なめの護衛と画面上部の体力ゲージとともにボスが現れる。倒すと Golden Drop と Max Ammo を落とす。"
+
+msgid "Missões"
+msgstr "ミッション"
+
+msgid "Cada mapa tem uma missão em etapas, com o objetivo na tela e no minimapa: O Último Trem (Terminal), O Soro do Dr. Almeida (Hospital) e O Portão do Submundo (Templo). O prêmio é todos os perks e uma arma exclusiva."
+msgstr "各マップには段階式のミッションがあり、目標は画面とミニマップに表示される：最終列車（ターミナル）、アルメイダ博士の血清（病院）、冥界の門（神殿）。報酬は全パークと専用武器。"
+
+msgid "Bênçãos dos Deuses"
+msgstr "神々の加護"
+
+msgid "No Templo, 3 altares oferecem a bênção de um deus, sorteado a cada round, por 1500 pontos. Só uma bênção por vez, e cair faz perder a que você tem."
+msgstr "神殿では3つの祭壇で、ラウンドごとに選ばれる神の加護を1500ポイントで受けられる。加護は同時に1つだけで、ダウンすると失う。"
+
+msgid "SEGREDOS"
+msgstr "秘密"
+
+msgid "Ursinhos escondidos"
+msgstr "隠されたクマ"
+
+msgid "Cada mapa esconde ursinhos de pelúcia. Achar todos na mesma partida solta um Golden Drop e libera uma conquista."
+msgstr "各マップにはクマのぬいぐるみが隠されている。1マッチで全部見つけると Golden Drop が出て、実績が解除される。"
+
+msgid "Rádios e gravadores"
+msgstr "ラジオとレコーダー"
+
+msgid "Rádios e gravadores espalhados contam a história de cada mapa. Segure E para sintonizar; cada uso traz a próxima mensagem."
+msgstr "あちこちにあるラジオとレコーダーが各マップの物語を語る。E 長押しで受信。使うたびに次のメッセージが流れる。"
+
+msgid "Estátuas dos deuses"
+msgstr "神々の像"
+
+msgid "No Templo, acender as 12 estátuas dos deuses abre a passagem para o Santuário do Olimpo, onde está o Arco de Artemis."
+msgstr "神殿で12柱の神像を灯すと、アルテミスの弓が眠るオリュンポスの聖域への通路が開く。"
+
+msgid "Recepção"
+msgstr "受付"
+
+msgid "Centro Cirúrgico"
+msgstr "手術部"
+
+msgid "UTI"
+msgstr "ICU"
+
+msgid "Enfermaria"
+msgstr "病棟"
+
+msgid "Radiologia"
+msgstr "放射線科"
+
+msgid "Farmácia"
+msgstr "薬局"
+
+msgid "Pediatria"
+msgstr "小児科"
+
+msgid "Necrotério"
+msgstr "霊安室"
+
+msgid "Refeitório"
+msgstr "食堂"
+
+msgid "Laboratório"
+msgstr "研究室"
+
+msgid "OUVIR O GRAVADOR"
+msgstr "レコーダーを聞く"
+
+msgid "📼 \"Diário do Dr. Almeida, dia 3: a amostra do Paciente Zero reagiu ao soro. As células não param de se dividir.\""
+msgstr "📼「アルメイダ博士の日誌、3日目：患者ゼロのサンプルが血清に反応した。細胞の分裂が止まらない。」"
+
+msgid "📼 \"Dia 9: a febre some e volta. O Paciente Zero arrancou as amarras. Três enfermeiros foram mordidos.\""
+msgstr "📼「9日目：熱は引いてはぶり返す。患者ゼロが拘束具を引きちぎった。看護師が3人噛まれた。」"
+
+msgid "📼 \"Dia 12: lacramos o laboratório e mandamos as amostras de trem para a Estação Central. Que Deus nos perdoe.\""
+msgstr "📼「12日目：研究室を封鎖し、サンプルを列車で中央駅へ送った。神よ、我らを許したまえ。」"
+
+msgid "📼 \"...se estiver ouvindo isto: não deixe o Paciente Zero chegar à superfície. O soro está na câmara.\""
+msgstr "📼「……これを聞いているなら：患者ゼロを地上に出すな。血清は保管室にある。」"
+
+msgid "Ruínas Gregas"
+msgstr "ギリシャ遺跡"
+
+msgid "Necrópole"
+msgstr "ネクロポリス"
+
+msgid "Labirinto"
+msgstr "迷宮"
+
+msgid "Floresta de Artemis"
+msgstr "アルテミスの森"
+
+msgid "Templo da Górgona"
+msgstr "ゴルゴンの神殿"
+
+msgid "Submundo"
+msgstr "冥界"
+
+msgid "Arena Final"
+msgstr "最終アリーナ"
+
+msgid "Santuário do Olimpo"
+msgstr "オリュンポスの聖域"
+
+msgid "LER A INSCRIÇÃO"
+msgstr "碑文を読む"
+
+msgid "📜 \"Diário da Dra. Helena, escavação 7: as inscrições falam de mortos que voltam quando o portão é tocado.\""
+msgstr "📜「ヘレナ博士の日誌、発掘区7：碑文によれば、門に触れると死者が戻ってくるという。」"
+
+msgid "📜 \"Chegou a caixa do Hospital Santa Luzia: amostras do Dr. Almeida. Ele disse que o soro veio DAQUI.\""
+msgstr "📜「サンタ・ルジア病院から箱が届いた：アルメイダ博士のサンプルだ。血清はここから来たのだと彼は言った。」"
+
+msgid "📜 \"Os trens da Estação Central traziam os caixotes à noite. Nenhum carregador voltou para a segunda viagem.\""
+msgstr "📜「中央駅からの列車は夜に木箱を運んできた。2往復目に戻ってきた運搬人は一人もいない。」"
+
+msgid "📜 \"O templo não era uma prisão. Era uma porta. E alguém, do outro lado, está batendo.\""
+msgstr "📜「神殿は牢獄ではなかった。扉だった。そして向こう側から、誰かが叩いている。」"
+
+msgid "Hall Central"
+msgstr "中央ホール"
+
+msgid "Plataforma Norte"
+msgstr "北ホーム"
+
+msgid "Bilheteria"
+msgstr "切符売り場"
+
+msgid "Lojas"
+msgstr "店舗"
+
+msgid "Área Técnica"
+msgstr "技術エリア"
+
+msgid "Túneis"
+msgstr "トンネル"
+
+msgid "Manutenção"
+msgstr "整備区画"
+
+msgid "📻 \"...controle da Estação Central. O trem das 23h40 NÃO deve parar. Repito: não parem o trem...\""
+msgstr "📻「……中央駅の管制室。23時40分の列車は停車させるな。繰り返す：列車を止めるな……」"
+
+msgid "📻 \"...o maquinista não responde. Alguém viu o Condutor? Ele desceu nos túneis e voltou... diferente.\""
+msgstr "📻「……機関士が応答しない。誰か車掌を見たか？ トンネルに降りて、戻ってきたら……別人だった。」"
+
+msgid "📻 \"...quarentena decretada. Portas lacradas. Quem ficou lá dentro está por conta própria.\""
+msgstr "📻「……隔離が宣言された。扉は封鎖された。中に残った者は自力で何とかしろ。」"
+
+msgid "📻 \"...se alguém ouvir isto: tentem sobreviver. O resgate chega ao amanhecer. Talvez.\""
+msgstr "📻「……誰かこれを聞いているなら：生き延びろ。救助は夜明けに来る。たぶん。」"

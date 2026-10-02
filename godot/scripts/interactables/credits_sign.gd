@@ -11,7 +11,7 @@ func _ready() -> void:
 
 
 func get_interaction_prompt(_player: Node3D) -> String:
-	return "[E] LER A PLACA"
+	return Loc.fmt("[%s] LER A PLACA", [Loc.key(&"interact")])
 
 
 func interact(player: Node3D) -> bool:

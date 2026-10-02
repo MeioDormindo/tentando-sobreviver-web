@@ -108,6 +108,25 @@ func add_enemies(count: int) -> void:
 	Events.round_remaining_changed.emit(total - killed)
 
 
+## Uma leva de uma vez (começo da Horda e do Alarme: o evento se vê na hora), até `count` zumbis
+## do round, dentro do limite de vivos e do total. Devolve quantos nasceram.
+func burst(count: int) -> int:
+	var made := 0
+	for i in count:
+		if phase != Phase.ACTIVE or spawned >= total or spawn_manager.alive_count() >= _max_alive():
+			break
+		var type := data.pick_type(round_number, _map_id(), spawn_manager.alive_by_type(), _rng)
+		if type == &"":
+			break
+		var zombie := spawn_manager.spawn_zombie(
+			data.health_multiplier(round_number), data.damage_multiplier(round_number), data.speed_multiplier(round_number), round_number, type)
+		if zombie == null:
+			break
+		spawned += 1
+		made += 1
+	return made
+
+
 func _max_alive() -> int:
 	var bonus := 0
 	for modifier: Dictionary in spawn_modifiers.values():
@@ -142,6 +161,8 @@ func _try_spawn() -> void:
 	if spawn_manager.alive_count() >= _max_alive():
 		_spawn_timer = 0.25
 		return
+	if not is_boss_round and _try_spawn_mixed_hound():
+		return
 	var map_id := _map_id()
 	var type := data.pick_type(round_number, map_id, spawn_manager.alive_by_type(), _rng)
 	if type == &"":
@@ -154,6 +175,21 @@ func _try_spawn() -> void:
 		_spawn_timer = _spawn_interval()
 	else:
 		_spawn_timer = 0.5
+
+
+## Cão misturado na horda (todos os mapas, a partir do round de `hound_mix`): às vezes o próximo
+## inimigo do round é um cão, que surge com um raio perto do time. Devolve true se nasceu.
+func _try_spawn_mixed_hound() -> bool:
+	var hounds := int(spawn_manager.alive_by_type().get(&"hound", 0))
+	if not data.hound_mix_roll(round_number, hounds, _rng, Session.player_count()):
+		return false
+	var hound := spawn_manager.spawn_near_player(&"hound", float(data.hound_mix.get("spawn_distance_min", 6.9)), float(data.hound_mix.get("spawn_distance_max", 13.1)),
+		data.health_multiplier(round_number), data.damage_multiplier(round_number), data.speed_multiplier(round_number))
+	if hound == null:
+		return false
+	spawned += 1
+	_spawn_timer = _spawn_interval()
+	return true
 
 
 ## Cães: surgem com um raio perto do jogador, poucos vivos de cada vez.

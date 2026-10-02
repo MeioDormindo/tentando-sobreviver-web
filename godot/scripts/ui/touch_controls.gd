@@ -207,7 +207,11 @@ func _draw() -> void:
 		draw_circle(b.pos, b.r, Color(color, 0.6 if held else (0.35 if is_fire else 0.25)))
 		draw_arc(b.pos, b.r, 0.0, TAU, 40, Color(color, 0.95 if held else 0.6), 3.0 if is_fire else 2.0)
 		var font_size := MenuKit.px(roundi(b.r * (0.3 if is_fire else 0.42)))
-		var text: String = def[1]
+		var text := Loc.t(def[1])
 		var text_size := font.get_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size)
+		# Tradução comprida: um tamanho de pixel menor por vez, até caber no círculo.
+		while text_size.x > b.r * 1.8 and font_size > MenuKit.FONT_CELL:
+			font_size -= MenuKit.FONT_CELL
+			text_size = font.get_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size)
 		draw_string(font, b.pos + Vector2(-text_size.x * 0.5, font.get_ascent(font_size) * 0.5 - 2.0), text,
 			HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, LIGHT)

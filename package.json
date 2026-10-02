@@ -15,13 +15,17 @@
     "godot:sprites:vram": "node scripts/godot/pixel/vram_import.mjs",
     "godot:scenery": "node scripts/godot/pixel/scenery.mjs",
     "godot:maps": "esbuild scripts/godot/maps/build.ts --bundle --platform=node --format=esm --log-level=warning --outfile=node_modules/.cache/godot-maps.mjs && node node_modules/.cache/godot-maps.mjs",
-    "godot:font": "node scripts/godot/pixel/font.mjs"
+    "godot:font": "node scripts/godot/pixel/font.mjs",
+    "godot:i18n": "node scripts/godot/i18n/extract.mjs",
+    "godot:i18n:fonts": "node scripts/godot/i18n/cjk-fonts.mjs",
+    "godot:i18n:check": "node scripts/godot/i18n/check.mjs"
   },
   "dependencies": {
     "phaser": "^3.90.0"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",
+    "subset-font": "^2.9.0",
     "typescript": "^5.8.0",
     "vite": "^6.3.0"
   }

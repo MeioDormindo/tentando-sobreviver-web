@@ -137,6 +137,11 @@ func cancel_reload() -> void:
 		_emit_ammo()
 
 
+## Espalhamento atual (graus): o da arma mais o coice dos últimos tiros, vezes o Ofuscar.
+func current_spread() -> float:
+	return (data.spread_degrees + _recoil) * spread_multiplier
+
+
 ## Atira de `origin` em direção a `target`: gasta a bala e dispara `pellets` raios (com
 ## spread e coice), cada um atravessando até `pierce` zumbis extras. Devolve os acertos.
 func shoot(space: PhysicsDirectSpaceState3D, origin: Vector3, target: Vector3, exclude: Array[RID], shooter: Node) -> Array[DamageInfo]:
@@ -146,7 +151,7 @@ func shoot(space: PhysicsDirectSpaceState3D, origin: Vector3, target: Vector3, e
 	var aim := (target - origin).normalized()
 	if aim.is_zero_approx():
 		aim = -global_basis.z
-	var deviation := (data.spread_degrees + _recoil) * spread_multiplier
+	var deviation := current_spread()
 	if data.special_type != &"":
 		# Granada, plasma, chama, raio, vento (special_fire.gd).
 		var special_dir := aim.rotated(Vector3.UP, deg_to_rad(randf_range(-deviation, deviation))) if data.special_type != &"flame" else aim

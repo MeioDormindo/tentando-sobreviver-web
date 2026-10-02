@@ -59,7 +59,7 @@ func reroll() -> void:
 func set_god(id: StringName) -> void:
 	god = id
 	var info: Dictionary = BlessingSystem.GODS[god]
-	_label.text = "BÊNÇÃO DE %s" % info.name
+	_label.text = Loc.t("BÊNÇÃO DE %s") % Loc.t(info.name)
 	_label.modulate = info.color
 	_light.light_color = info.color
 
@@ -72,8 +72,10 @@ func get_interaction_prompt(player: Node3D) -> String:
 	var info: Dictionary = BlessingSystem.GODS[god]
 	var blessings := _blessings(player)
 	if blessings and blessings.active == god:
-		return "BÊNÇÃO DE %s ATIVA" % info.name
-	return "[E] BÊNÇÃO DE %s — %s: %s  ·  %s" % [info.name, String(info.title).to_upper(), info.hint, "DE GRAÇA" if is_free() else "%d pontos" % PRICE]
+		return Loc.fmt("BÊNÇÃO DE %s ATIVA", [info.name])
+	if is_free():
+		return Loc.fmt("[%s] BÊNÇÃO DE %s — %s: %s  ·  DE GRAÇA", [Loc.key(&"interact"), info.name, Loc.up(info.title), info.hint])
+	return Loc.fmt("[%s] BÊNÇÃO DE %s — %s: %s  ·  %s pontos", [Loc.key(&"interact"), info.name, Loc.up(info.title), info.hint, PRICE])
 
 
 func get_interaction_icon(_player: Node3D) -> String:
@@ -93,7 +95,7 @@ func interact(player: Node3D) -> bool:
 	var info: Dictionary = BlessingSystem.GODS[god]
 	SpecialFire.flash(get_tree(), global_position + Vector3.UP * 1.4, 2.5, info.color)
 	Audio.play("powerup", "ui", 0.9)
-	Events.power_up_collected.emit(&"blessing", "BÊNÇÃO DE %s" % info.name, info.color, "%s — %s" % [info.title, info.hint])
+	Events.power_up_collected.emit(&"blessing", Loc.fmt("BÊNÇÃO DE %s", [info.name]), info.color, Loc.fmt("%s — %s", [info.title, info.hint]))
 	return true
 
 

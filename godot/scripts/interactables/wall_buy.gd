@@ -123,9 +123,9 @@ func _element_text(p: Player) -> String:
 		return ""
 	var catalog := ElementCatalog.shared()
 	if weapon.element != &"":
-		return "  ·  %s ✓" % catalog.label(weapon.element)
+		return Loc.cat(["  ·  ", catalog.label_msg(weapon.element), " ✓"])
 	var info := catalog.info(weapon.data.element)
-	var text := "  ·  SEGURE E: %s %d" % [catalog.label(weapon.data.element), int(info.get("price", 0))]
+	var text := Loc.cat([Loc.fmt("  ·  SEGURE %s: ", [Loc.key(&"interact")]), catalog.label_msg(weapon.data.element), " %d" % int(info.get("price", 0))])
 	var hold := _press(p).hold
 	if hold > 0.0:
 		var filled := int(clampf(hold / HOLD_TIME, 0.0, 1.0) * 6.0)
@@ -157,7 +157,7 @@ func hold_interact(player: Node3D, delta: float) -> bool:
 	weapon.element = weapon.data.element
 	press.bought = true
 	p.hud_sound("lab_upgrade", 0.8, 1.3)
-	p.hud(&"toast", ["%s — %s" % [catalog.label(weapon.element), info.get("description", "")]])
+	p.hud(&"toast", [Loc.cat([catalog.label_msg(weapon.element), " — ", String(info.get("description", ""))])])
 	p.hud(&"weapon_element_changed", [weapon.data.id, weapon.element])
 	return true
 
@@ -166,7 +166,7 @@ func get_interaction_prompt(player: Node3D) -> String:
 	var p := player as Player
 	if p == null:
 		return ""
-	return _base_prompt(p) + _element_text(p)
+	return Loc.cat([_base_prompt(p), _element_text(p)])
 
 
 ## Ícone da arma (a que está sendo comprada, ou a munição da que já está em mãos).
@@ -183,13 +183,13 @@ func _base_prompt(p: Player) -> String:
 		var current := p.weapon
 		if current.is_ammo_full():
 			return "MUNIÇÃO CHEIA"
-		return "[E] MUNIÇÃO %s  ·  %d pontos" % [current.data.display_name.to_upper(), current.data.ammo_price]
+		return Loc.fmt("[%s] MUNIÇÃO %s  ·  %s pontos", [Loc.key(&"interact"), Loc.up(current.data.display_name), current.data.ammo_price])
 	var owned := p.inventory.find(weapon_data.id)
 	if owned:
 		if owned.is_ammo_full():
-			return "%s  ·  MUNIÇÃO CHEIA" % weapon_data.display_name.to_upper()
-		return "[E] MUNIÇÃO %s  ·  %d pontos" % [weapon_data.display_name.to_upper(), weapon_data.ammo_price]
-	return "[E] COMPRAR %s  ·  %d pontos" % [weapon_data.display_name.to_upper(), weapon_data.price]
+			return Loc.fmt("%s  ·  MUNIÇÃO CHEIA", [Loc.up(weapon_data.display_name)])
+		return Loc.fmt("[%s] MUNIÇÃO %s  ·  %s pontos", [Loc.key(&"interact"), Loc.up(weapon_data.display_name), weapon_data.ammo_price])
+	return Loc.fmt("[%s] COMPRAR %s  ·  %s pontos", [Loc.key(&"interact"), Loc.up(weapon_data.display_name), weapon_data.price])
 
 
 func interact(player: Node3D) -> bool:

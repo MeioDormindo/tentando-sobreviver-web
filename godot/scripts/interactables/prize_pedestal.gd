@@ -42,7 +42,7 @@ func _process(delta: float) -> void:
 func get_interaction_prompt(_player: Node3D) -> String:
 	if taken or _weapon == null:
 		return ""
-	return "[SEGURE E] PEGAR %s  (%d%%)" % [_weapon.display_name.to_upper(), roundi(_hold / HOLD_TIME * 100.0)]
+	return Loc.fmt("[SEGURE %s] PEGAR %s  (%s%%)", [Loc.key(&"interact"), Loc.up(_weapon.display_name), roundi(_hold / HOLD_TIME * 100.0)])
 
 
 func interact(_player: Node3D) -> bool:
@@ -67,7 +67,7 @@ func hold_interact(player: Node3D, delta: float) -> bool:
 	if art:
 		art.visible = false
 	SpecialFire.flash(get_tree(), global_position + Vector3.UP * 1.5, 3.0, Color(0.85, 0.94, 1.0))
-	Events.toast.emit("%s — presente de Artemis" % _weapon.display_name.to_upper())
+	Events.toast.emit(Loc.fmt("%s — presente de Artemis", [Loc.up(_weapon.display_name)]))
 	return true
 
 

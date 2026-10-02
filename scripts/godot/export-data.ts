@@ -278,6 +278,10 @@ function exportRoundsAndPoints(): void {
     coop_alive_per_extra_player: 0.25,
     coop_alive_cap: 40,
     coop_boss_health_per_extra_player: 0.5,
+    // Só do Godot: cães misturados na horda de todos os mapas a partir do round 5, surgindo com um
+    // raio perto do time (as rodadas só de cães do Hospital continuam). A chance de o próximo inimigo
+    // ser um cão cresce por round até o teto, com poucos vivos de cada vez.
+    hound_mix: raw('{ "from_round": 5, "chance": 0.05, "chance_per_round": 0.006, "max_chance": 0.14, "max_alive": 3, "late_max_alive": 4, "spawn_distance_min": 6.875, "spawn_distance_max": 13.125 }'),
   }));
   const e = economyConfig;
   write('configs/points.tres', tres('PointsData', 'res://scripts/systems/points_data.gd', {

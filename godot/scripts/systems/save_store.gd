@@ -36,6 +36,11 @@ func load_from(path: String) -> void:
 	_persist()
 	apply_audio()
 	apply_display()
+	InputBindings.apply_saved()
+	# O idioma (o Loc é carregado depois deste autoload; na primeira carga ele mesmo aplica).
+	var loc := get_node_or_null(^"/root/Loc")
+	if loc:
+		loc.call(&"apply")
 
 
 ## Texto de um save antigo (JSON) → dados crus para o sanitize, ou null se vazio/inválido.
@@ -62,23 +67,70 @@ func reset() -> void:
 
 # ───────────────────────── Configurações ─────────────────────────
 
-## Volume geral, mudo e música (barramentos de áudio).
+## Volumes (barramentos de áudio): geral e mudo, música (também a chave musicOn do jogo web),
+## efeitos (SFX, que leva armas, zumbis e ambiente), interface e vozes.
 func apply_audio() -> void:
-	var master := AudioServer.get_bus_index(&"Master")
-	AudioServer.set_bus_volume_db(master, linear_to_db(clampf(float(data.settings.volume), 0.0001, 1.0)))
-	AudioServer.set_bus_mute(master, bool(data.settings.muted) or float(data.settings.volume) <= 0.0)
-	var music := AudioServer.get_bus_index(&"Music")
-	if music >= 0:
-		AudioServer.set_bus_mute(music, not bool(data.settings.musicOn))
+	var s: Dictionary = data.settings
+	_bus(&"Master", 0.0 if bool(s.muted) else float(s.volume))
+	_bus(&"Music", float(s.get("musicVolume", 1.0)) if bool(s.musicOn) else 0.0)
+	_bus(&"SFX", float(s.get("sfxVolume", 1.0)))
+	_bus(&"UI", float(s.get("uiVolume", 1.0)))
+	_bus(&"Voice", float(s.get("voiceVolume", 1.0)))
 
 
-## Tela cheia (sem janela não vale; na Web o navegador aplica no próximo toque/clique).
+static func _bus(bus: StringName, linear: float) -> void:
+	var index := AudioServer.get_bus_index(bus)
+	if index < 0:
+		return
+	AudioServer.set_bus_mute(index, linear <= 0.0)
+	AudioServer.set_bus_volume_db(index, linear_to_db(clampf(linear, 0.0001, 1.0)))
+
+
+## Modo de tela (janela, tela cheia, exclusiva), resolução da janela, VSync, limite de FPS e
+## escala da interface. Sem janela (testes) não vale; na Web o navegador aplica a tela cheia no
+## próximo toque ou clique. Brilho e sombras ficam com o mapa e o jogador (Events.settings_changed).
 func apply_display() -> void:
+	var s: Dictionary = data.settings
+	Engine.max_fps = maxi(0, int(s.get("maxFps", 0.0)))
 	if DisplayServer.get_name() == "headless":
 		return
-	var want := DisplayServer.WINDOW_MODE_FULLSCREEN if bool(data.settings.get("fullscreen", false)) else DisplayServer.WINDOW_MODE_WINDOWED
+	var tree := get_tree()
+	if tree and tree.root:
+		tree.root.content_scale_factor = clampf(float(s.get("uiScale", 1.0)), 0.5, 2.0)
+	var mode := window_mode()
+	var want := DisplayServer.WINDOW_MODE_WINDOWED
+	if mode == "fullscreen":
+		want = DisplayServer.WINDOW_MODE_FULLSCREEN
+	elif mode == "exclusive" and not OS.has_feature("web"):
+		want = DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN
 	if DisplayServer.window_get_mode() != want:
 		DisplayServer.window_set_mode(want)
+	if OS.has_feature("web") or OS.has_feature("mobile"):
+		return
+	var vsync := {"on": DisplayServer.VSYNC_ENABLED, "off": DisplayServer.VSYNC_DISABLED, "adaptive": DisplayServer.VSYNC_ADAPTIVE}
+	DisplayServer.window_set_vsync_mode(vsync.get(String(s.get("vsync", "on")), DisplayServer.VSYNC_ENABLED))
+	if want == DisplayServer.WINDOW_MODE_WINDOWED:
+		var size := parse_resolution(String(s.get("resolution", "")))
+		var screen := DisplayServer.screen_get_size()
+		if size.x > 0 and size.x <= screen.x and size.y <= screen.y and DisplayServer.window_get_size() != size:
+			DisplayServer.window_set_size(size)
+			DisplayServer.window_set_position(DisplayServer.screen_get_position() + (screen - size) / 2)
+
+
+## Modo de tela: o escolhido, ou (save antigo) a chave fullscreen do jogo web.
+func window_mode() -> String:
+	var mode := String(data.settings.get("windowMode", ""))
+	if mode in ["windowed", "fullscreen", "exclusive"]:
+		return mode
+	return "fullscreen" if bool(data.settings.get("fullscreen", false)) else "windowed"
+
+
+## "1920x1080" → Vector2i(1920, 1080) (zero se não der).
+static func parse_resolution(text: String) -> Vector2i:
+	var parts := text.split("x")
+	if parts.size() != 2 or not parts[0].is_valid_int() or not parts[1].is_valid_int():
+		return Vector2i.ZERO
+	return Vector2i(int(parts[0]), int(parts[1]))
 
 
 func get_setting(key: String) -> Variant:
@@ -392,7 +444,10 @@ func _defaults() -> Dictionary:
 		"settings": {"muted": false, "musicOn": true, "playerName": "SOBREVIVENTE", "volume": 1.0, "minimap": true,
 			"minimapSize": "medium", "touchMode": "auto", "screenShake": true, "bigHeads": false, "skin": "default",
 			# Só no Godot (o jogo web ignora chaves que não conhece).
-			"fullscreen": false, "skinHospital": "patient", "skinTemple": "archaeologist", "blood": false},
+			"fullscreen": false, "skinHospital": "patient", "skinTemple": "archaeologist", "blood": false, "crosshair": true,
+			"language": "auto", "windowMode": "", "resolution": "1280x720", "vsync": "on", "maxFps": 0.0, "uiScale": 1.0,
+			"brightness": 1.0, "shadows": true, "showFps": false, "musicVolume": 1.0, "sfxVolume": 1.0, "uiVolume": 1.0,
+			"voiceVolume": 1.0, "bindings": {}},
 		"records": recs,
 		"unlockedMaps": unlocked,
 		"ranking": rank,

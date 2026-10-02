@@ -38,7 +38,7 @@ func _build() -> void:
 
 
 func _logged_in() -> void:
-	MenuKit.label(_column, "LOGADO COMO %s" % Account.current_user().to_upper(), 22, MenuKit.GOLD, HORIZONTAL_ALIGNMENT_CENTER)
+	MenuKit.label(_column, Loc.t("LOGADO COMO %s") % Account.current_user().to_upper(), 22, MenuKit.GOLD, HORIZONTAL_ALIGNMENT_CENTER)
 	MenuKit.button(_column, "SINCRONIZAR AGORA", func() -> void: Account.sync_now(), 20)
 	MenuKit.button(_column, "SAIR DA CONTA", func() -> void:
 		await Account.sign_out()
@@ -99,7 +99,7 @@ func _refresh_status() -> void:
 		var detail: String = Online.last_error if Account.error.begins_with("Sem conexão") else ""
 		_message.text = Account.error + ("\n(%s)" % detail if detail != "" else "")
 	elif Account.last_sync > 0.0:
-		_message.text = "Progresso salvo na nuvem · %s" % Time.get_time_string_from_unix_time(int(Account.last_sync))
+		_message.text = Loc.t("Progresso salvo na nuvem · %s") % Time.get_time_string_from_unix_time(int(Account.last_sync))
 	else:
 		_message.text = "O progresso é salvo na nuvem automaticamente"
 

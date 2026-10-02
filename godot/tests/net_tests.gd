@@ -125,8 +125,8 @@ func _match() -> void:
 		Save.load_from("user://test_save.json")
 	Net.host_local("ANA", "", PORT)
 	var pid := OS.create_process(OS.get_executable_path(), ["--headless", "--path", ProjectSettings.globalize_path("res://"),
-		"-s", "res://tests/net_peer.gd", "--", "--port=%d" % PORT, "--out=" + out])
-	check(pid > 0, "abre o colega (outro processo)")
+		"-s", "res://tests/net_peer.gd", "--", "--port=%d" % PORT, "--out=" + out, "--lang=en"])
+	check(pid > 0, "abre o colega (outro processo, jogando em inglês)")
 	var joined := await _wait(func() -> bool: return Net.players.size() == 2 and Net.everyone_ready(), 25.0)
 	check(joined, "o colega entra na sala e fica pronto (%d jogadores)" % Net.players.size())
 	if not joined:
@@ -212,12 +212,23 @@ func _match() -> void:
 	if fuse:
 		fuse.finish()
 	await _tree.create_timer(1.0).timeout
+	# Etapa final (o chefe caiu ali): o colega pega a Lanterna segurando E na máquina dele, e o
+	# prêmio (todos os perks + a Lanterna) é só dele, que concluiu.
+	quest.boss_down = host.global_position + Vector3(3.0, 0.0, 0.0)
+	quest.index = 3
+	var finished_quest := await _wait(func() -> bool: return quest.done, 20.0)
+	check(finished_quest, "o colega conclui a missão segurando E na lanterna (etapa %d)" % quest.index)
+	var mate_perks := mate.perks.owned.size()
+	check(mate_perks >= 7 and mate.inventory.owns(&"conductor_lantern"), "prêmio da missão para quem concluiu: todos os perks (%d) e a Lanterna" % mate_perks)
+	check(host.perks.owned.size() < 7 and not host.inventory.owns(&"conductor_lantern"), "o host, que não concluiu, fica sem o prêmio")
+	await _tree.create_timer(1.0).timeout
 	# O time inteiro cai: fim de jogo para os dois.
 	host.health.invulnerable = false
 	mate.take_damage(DamageInfo.new(999, DamageInfo.Kind.ENVIRONMENT, null, false, mate.global_position))
 	host.take_damage(DamageInfo.new(999, DamageInfo.Kind.ENVIRONMENT, null, false, host.global_position))
 	var game := main.get_node("GameManager") as GameManager
 	check(game.over, "todos caídos: fim de jogo no host")
+	check(Net.ping_of(mate.peer_id) >= 0, "o host mede a latência do colega (%d ms)" % Net.ping_of(mate.peer_id))
 	var finished := await _wait(func() -> bool: return not OS.is_process_running(pid), 20.0)
 	if not finished:
 		OS.kill(pid)
@@ -237,6 +248,12 @@ func _match() -> void:
 	check(bool(peer.get("quest_text", false)), "no colega: o objetivo da missão chega na HUD")
 	check(bool(peer.get("fuse_seen", false)) and bool(peer.get("padlock_seen", false)), "no colega: as peças da missão aparecem (fusível, cadeado)")
 	check(bool(peer.get("padlock_gone", false)) and bool(peer.get("fuse_used", false)), "no colega: o cadeado abre e o fusível é pego quando o host faz")
+	check(int(peer.get("perks", 0)) >= 7 and bool(peer.get("lantern", false)), "no colega: a HUD mostra os perks do prêmio (%d) e a Lanterna chega nas armas dele" % int(peer.get("perks", 0)))
+	check(String(peer.get("feed", "")).contains("levantou"), "no colega: o feed mostra quem levantou quem (%s)" % peer.get("feed", ""))
+	var shown := String(peer.get("feed_shown", ""))
+	check(String(peer.get("lang", "")) == "en" and shown.contains(" revived ") and not shown.contains("levantou"),
+		"no colega em inglês: o feed do host (em português) aparece em inglês (%s)" % shown)
+	check(bool(peer.get("ping", false)), "no colega: chega a latência medida pelo host")
 	check(bool(peer.get("game_over", false)) and int(peer.get("summary_players", 0)) == 2 and int(peer.get("summary_kills", 0)) > 0, "no colega: fim de jogo com o resumo dele (%d abates)" % int(peer.get("summary_kills", 0)))
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(out))
 	Net.leave()

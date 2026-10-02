@@ -40,7 +40,7 @@ func _ready() -> void:
 		icon.double_sided = true
 		icon.alpha_cut = SpriteBase3D.ALPHA_CUT_DISCARD
 		icon.pixel_size = 0.9 / float(icon.texture.get_width())
-		icon.position.y = 0.06
+		icon.position.y = PixelShapes.GROUND_Y + 0.02
 		_model.add_child(icon)
 		var ring := PixelShapes.flat("ring", Color(1.0, 0.91, 0.66, 0.6), 0.6)
 		add_child(ring)
@@ -82,8 +82,8 @@ func get_interaction_prompt(player: Node3D) -> String:
 		return ""
 	var left := ceili(LIFETIME - age)
 	if p.inventory.weapons.size() < p.inventory.slots:
-		return "[E] PEGAR %s  ·  %ds" % [weapon.data.display_name.to_upper(), left]
-	return "[E] PEGAR %s (troca por %s)  ·  %ds" % [weapon.data.display_name.to_upper(), p.weapon.data.display_name.to_upper(), left]
+		return Loc.fmt("[%s] PEGAR %s  ·  %ss", [Loc.key(&"interact"), Loc.up(weapon.data.display_name), left])
+	return Loc.fmt("[%s] PEGAR %s (troca por %s)  ·  %ss", [Loc.key(&"interact"), Loc.up(weapon.data.display_name), Loc.up(p.weapon.data.display_name), left])
 
 
 func interact(player: Node3D) -> bool:

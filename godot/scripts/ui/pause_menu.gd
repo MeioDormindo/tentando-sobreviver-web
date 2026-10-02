@@ -1,9 +1,11 @@
 class_name PauseMenu
 extends Control
-## Menu de pausa (como no jogo web): CONTINUAR, REINICIAR e MENU, e as configurações que valem
-## na hora (volume, som, música, minimapa, tremor...). Aparece com Events.pause_changed.
+## Menu de pausa (como no jogo web): CONTINUAR, REINICIAR e MENU, e as configurações em abas
+## (JOGO, VÍDEO, ÁUDIO, CONTROLES), que valem na hora. Aparece com Events.pause_changed.
 
 const MENU := "res://scenes/ui/main_menu.tscn"
+
+var _tab := "game"
 
 
 func _ready() -> void:
@@ -39,7 +41,21 @@ func _build() -> void:
 		get_tree().paused = false
 		get_tree().change_scene_to_file(MENU), 22)
 	MenuKit.spacer(column, 6)
-	SettingsRows.add(column, _build, 18)
+	SettingsRows.build(column, _tab, _set_tab, _build, 18, true)
 	MenuKit.spacer(column, 6)
-	MenuKit.label(column, "ESC para continuar  ·  Tab: mapa grande", 13, MenuKit.DIM, HORIZONTAL_ALIGNMENT_CENTER)
+	MenuKit.label(column, Loc.t("%s para continuar  ·  %s: mapa grande") % [InputBindings.hint_label(&"pause"), InputBindings.hint_label(&"map")], 13, MenuKit.DIM, HORIZONTAL_ALIGNMENT_CENTER)
 	resume.grab_focus.call_deferred()
+
+
+func _set_tab(tab: String) -> void:
+	_tab = tab
+	_build.call_deferred()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not visible:
+		return
+	var step := SettingsRows.tab_step(event)
+	if step != 0:
+		get_viewport().set_input_as_handled()
+		_set_tab(SettingsRows.next_tab(_tab, step))

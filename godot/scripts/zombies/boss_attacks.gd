@@ -73,9 +73,9 @@ static func area_at(tree: SceneTree, points: Array[Vector3], cfg: Dictionary, ac
 	# freed") mesmo com o "player and player.is_alive()" dentro dele.
 	var victim_ids := _victim_ids(player)
 	for point in points:
-		var mark := PixelShapes.flat("disc", Color(FIRE_COLOR if fire else (ACID_COLOR if acid else BLAST_COLOR), 0.3), radius)
+		var mark := PixelShapes.flat("disc", Color(FIRE_COLOR if fire else (ACID_COLOR if acid else BLAST_COLOR), 0.55), radius)
 		root.add_child(mark)
-		mark.global_position = Vector3(point.x, 0.06, point.z)
+		mark.global_position = Vector3(point.x, PixelShapes.GROUND_Y + 0.01, point.z)
 		var tween := mark.create_tween()
 		tween.tween_property(mark, "modulate:a", 1.0, float(cfg.get("telegraph_time", 1.0)))
 		tween.tween_callback(func() -> void:

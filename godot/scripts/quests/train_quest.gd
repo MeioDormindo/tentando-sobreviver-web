@@ -61,7 +61,7 @@ func _start() -> void:
 	var parts := QuestStep.make(_parts_text, _parts_target, _parts_update, _parts_enter, _clear_spots)
 	var defense := QuestStep.make(_signal_text, func() -> Variant: return _at(cfg.signal), _signal_update, _signal_enter, _signal_exit)
 	var boss := QuestStep.make(
-		func() -> String: return "Derrote o Condutor enfurecido (round %d)" % boss_round,
+		func() -> String: return Loc.fmt("Derrote o Condutor enfurecido (round %s)", [boss_round]),
 		func() -> Variant: return null,
 		func(_d: float) -> bool: return boss_down != null,
 		func() -> void: boss_round = round_manager.force_boss_next_round(float(cfg.get("boss_health_multiplier", 1.5))))
@@ -84,7 +84,7 @@ func _collected(what: String) -> void:
 # ── 2. Peças do sinal ──
 
 func _parts_text() -> String:
-	return "Peças do sinal %d/3 — fusível (Manutenção) · chave (Bilheteria) · manivela (Blindado)" % _count()
+	return Loc.fmt("Peças do sinal %s/3 — fusível (Manutenção) · chave (Bilheteria) · manivela (Blindado)", [_count()])
 
 
 func _parts_target() -> Variant:
@@ -150,7 +150,7 @@ func _signal_text() -> String:
 	if not signal_running:
 		return "Leve as peças ao sinal da Plataforma e conserte"
 	var left := ceili(float(cfg.signal.get("defend_time", 60.0)) - signal_progress)
-	return "SINAL SOB ATAQUE! Afaste os zumbis (%ds)" % left if under_attack else "Segure o sinal até o trem passar: %ds" % left
+	return Loc.fmt("SINAL SOB ATAQUE! Afaste os zumbis (%ss)", [left]) if under_attack else Loc.fmt("Segure o sinal até o trem passar: %ss", [left])
 
 
 func _signal_enter() -> void:

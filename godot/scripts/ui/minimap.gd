@@ -110,7 +110,7 @@ func _draw() -> void:
 	draw_rect(Rect2(Vector2(-3, -3), size + Vector2(6, 6)), Color(0, 0, 0, 0.55))
 	draw_rect(Rect2(Vector2(-3, -3), size + Vector2(6, 6)), Color8(106, 109, 100, 230), false, 1.0)
 	draw_texture_rect(_texture, Rect2(Vector2.ZERO, size), false)
-	draw_string(get_theme_default_font(), Vector2(0, size.y + 24), "MAPA", HORIZONTAL_ALIGNMENT_LEFT, -1, 26, Color8(138, 141, 132))
+	draw_string(get_theme_default_font(), Vector2(0, size.y + 24), Loc.t("MAPA"), HORIZONTAL_ALIGNMENT_LEFT, -1, 26, Color8(138, 141, 132))
 	if _state.is_empty():
 		return
 	var zoom := 2.4 if expanded else 1.0
@@ -146,12 +146,13 @@ func _draw() -> void:
 		var pulse := 3.5 + sin(_clock * 6.0)
 		draw_circle(to_local_point(boss), pulse, Color8(255, 42, 26))
 		draw_arc(to_local_point(boss), pulse + 1.0, 0.0, TAU, 16, Color.WHITE, 1.0)
-	# Colegas (cooperativo): ponto azul-claro; caído, vermelho piscando.
+	# Colegas (cooperativo): ponto na cor da vaga; caído, vermelho piscando.
 	for mate: Array in _state.get("mates", []):
 		var down: bool = mate[1]
 		if down and int(_clock * 4.0) % 2 == 0:
 			continue
-		draw_circle(to_local_point(mate[0]), 2.6 * zoom, Color8(255, 80, 60) if down else Color8(120, 205, 255))
+		var color: Color = mate[2] if mate.size() > 2 else Color8(120, 205, 255)
+		draw_circle(to_local_point(mate[0]), 2.6 * zoom, Color8(255, 80, 60) if down else color)
 		draw_arc(to_local_point(mate[0]), 2.6 * zoom, 0.0, TAU, 12, Color(0, 0, 0, 0.9), 1.0)
 	# Jogador: seta apontando para a mira.
 	var center := to_local_point(_state.get("player", Vector2.ZERO))

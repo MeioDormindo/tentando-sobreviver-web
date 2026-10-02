@@ -4,6 +4,9 @@ extends RefCounted
 ## chão: anel pontilhado (onda de choque) e disco de aviso (anel com o miolo em pontilhado).
 
 const SIZE := 64
+## Altura das marcas no chão (poças, avisos, halos): acima do topo do piso visual dos mapas
+## (0,05 m, `LayoutMap._build_floor`). Abaixo disso elas somem embaixo dele.
+const GROUND_Y := 0.08
 
 static var _textures: Dictionary = {}
 
@@ -56,5 +59,5 @@ static func flat(kind: String, color: Color, radius: float) -> Sprite3D:
 	sprite.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	sprite.pixel_size = radius * 2.0 / float(SIZE)
 	sprite.modulate = color
-	sprite.position.y = 0.03
+	sprite.position.y = GROUND_Y
 	return sprite

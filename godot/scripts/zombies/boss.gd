@@ -528,7 +528,9 @@ func _show_telegraph() -> void:
 	_telegraph.mesh = mesh
 	_telegraph.top_level = true
 	add_child(_telegraph)
-	_telegraph.global_position = global_position + _charge_dir * length * 0.5 + Vector3.UP * 0.05
+	var middle := global_position + _charge_dir * length * 0.5
+	# Sempre acima do piso visual (o corpo do chefe pode estar alguns centímetros acima do chão).
+	_telegraph.global_position = Vector3(middle.x, PixelShapes.GROUND_Y, middle.z)
 	_telegraph.rotation.y = atan2(-_charge_dir.x, -_charge_dir.z)
 
 

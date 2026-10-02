@@ -88,14 +88,14 @@ func _element_purchase() -> void:
 	var glock := _player.inventory.find(&"glock")
 	_player.inventory.switch_to(_player.inventory.weapons.find(glock))
 	glock.magazine = 3  # pente incompleto
-	check(glock_buy.get_interaction_prompt(_player).contains("SEGURE E"), "a parede oferece o elemento (%s)" % glock_buy.get_interaction_prompt(_player))
+	check(Loc.text(glock_buy.get_interaction_prompt(_player)).contains("SEGURE E"), "a parede oferece o elemento (%s)" % Loc.text(glock_buy.get_interaction_prompt(_player)))
 	var before := points.points
 	await _press_and_hold(glock_buy, 1.1)
 	await _tree.create_timer(0.3).timeout
 	var price := int(ElementCatalog.shared().info(&"shadow").price)
 	check(glock.element == &"shadow" and glock.magazine == 3 and points.points == before - price,
 		"pente incompleto + segurar E: compra só o elemento, não a munição (%d pontos)" % (before - points.points))
-	check(glock_buy.get_interaction_prompt(_player).contains("✓"), "a parede mostra o elemento comprado")
+	check(Loc.text(glock_buy.get_interaction_prompt(_player)).contains("✓"), "a parede mostra o elemento comprado")
 	# Toque rápido (com elemento já comprado): munição na hora.
 	glock.magazine = 2
 	check(glock_buy.interact(_player) and glock.magazine == glock.data.magazine_size, "com o elemento comprado, o toque compra munição")

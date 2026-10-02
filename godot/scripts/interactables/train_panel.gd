@@ -22,8 +22,8 @@ func _process(delta: float) -> void:
 
 func get_interaction_prompt(_player: Node3D) -> String:
 	if _ready_in > 0.0:
-		return "PAINEL DO TREM — DISPONÍVEL EM %ds" % ceili(_ready_in)
-	return "[E] CHAMAR O TREM  ·  %d pontos" % price
+		return Loc.fmt("PAINEL DO TREM — DISPONÍVEL EM %ss", [ceili(_ready_in)])
+	return Loc.fmt("[%s] CHAMAR O TREM  ·  %s pontos", [Loc.key(&"interact"), price])
 
 
 func interact(player: Node3D) -> bool:

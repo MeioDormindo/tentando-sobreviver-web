@@ -40,7 +40,7 @@ func get_interaction_prompt(_player: Node3D) -> String:
 	if not _active():
 		_progress.reset()
 		return idle_text
-	return "[SEGURE E] %s  ·  %d pontos" % [action_text, price]
+	return Loc.fmt("[SEGURE %s] %s  ·  %s pontos", [Loc.key(&"interact"), action_text, price])
 
 
 func get_interaction_progress(player: Node3D) -> float:

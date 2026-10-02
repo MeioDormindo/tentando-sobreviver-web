@@ -11,6 +11,7 @@ var _out := ""
 var _clock := 0.0
 var _door_asked := false
 var _door_name := ""
+var _lantern_at := 0.0
 
 
 func run(p_tree: SceneTree) -> void:
@@ -20,6 +21,11 @@ func run(p_tree: SceneTree) -> void:
 	var save := root.get_node("Save")
 	save.call(&"load_from", "user://test_save_peer.json")
 	save.call(&"reset")
+	# O idioma vem da linha de comando (--lang=), senão português (o host confere os textos).
+	var loc := root.get_node("Loc")
+	if loc.get(&"forced") == "":
+		loc.set(&"forced", "pt_BR")
+	loc.call(&"apply")
 	var port := 24711
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--port="):
@@ -36,6 +42,14 @@ func run(p_tree: SceneTree) -> void:
 			_seen.quest_text = true)
 	events.connect(&"boss_state", func(_n: String, _c: float, _m: float, _p: int) -> void: _seen.boss_bar = true)
 	events.connect(&"boss_defeated", func(_id: StringName, _n: String, _r: int, _at: Vector3) -> void: _seen.boss_defeated = true)
+	_seen.lang = loc.get(&"current")
+	# O feed chega como modelo + argumentos (a chave é o texto em português) e é traduzido aqui.
+	events.connect(&"team_feed", func(text: String) -> void:
+		if text.contains("levantou"):
+			_seen.feed = text
+			_seen.feed_shown = String(loc.call(&"text", text)))
+	# O máximo: no fim o time cai, e quem cai perde os perks (chega uma lista vazia).
+	events.connect(&"perks_changed", func(ids: Array[StringName]) -> void: _seen.perks = maxi(int(_seen.get("perks", 0)), ids.size()))
 	# O fantoche morre quando o host avisa (sai do grupo "zombies" ao morrer: conta pelo aviso).
 	events.connect(&"zombie_killed", func(zombie: Node3D, _info: DamageInfo) -> void:
 		if zombie is ZombieBase and (zombie as ZombieBase).puppet:
@@ -84,6 +98,8 @@ func _step(net: Node) -> void:
 	var me := Players.local_player()
 	if me == null:
 		return
+	if (net.get(&"pings") as Dictionary).has(int(net.call(&"my_id"))):
+		_seen.ping = true
 	_seen.own_local = me.is_local and not me.net_puppet and me.peer_id == int(net.call(&"my_id"))
 	for node in tree.get_nodes_in_group(&"bosses"):
 		if node is Boss and (node as Boss).puppet:
@@ -108,6 +124,17 @@ func _step(net: Node) -> void:
 		_seen.padlock_seen = true
 	elif _seen.has("padlock_seen"):
 		_seen.padlock_gone = true
+	# Etapa final da missão: vai até a Lanterna e segura E (o host decide; o prêmio é de quem
+	# concluiu).
+	var lantern := main.find_child("ConductorLantern", true, false) as QuestSpot
+	if lantern and not lantern.used and me.is_standing():
+		if me.global_position.distance_to(lantern.global_position) > 0.8:
+			me.global_position = lantern.global_position + Vector3(0.5, 0.1, 0.0)
+			_lantern_at = _clock
+		elif _clock - _lantern_at > 0.6:
+			me.net.request(&"hold", [0.05])
+	if me.inventory.owns(&"conductor_lantern"):
+		_seen.lantern = true
 	# Zumbis fantoches: mira no mais perto e atira (o host acerta de verdade).
 	var target: ZombieBase = null
 	for node in tree.get_nodes_in_group(&"zombies"):

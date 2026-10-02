@@ -32,6 +32,8 @@ func run(tree: SceneTree) -> int:
 	_test_score()
 	_test_anti_cheat()
 	_test_achievements()
+	_test_coop_batch()
+	_test_i18n_and_settings()
 	print("\n%d ok, %d falharam" % [_passed, _failed])
 	return _failed
 
@@ -547,3 +549,137 @@ func _test_achievements() -> void:
 	walker.free()
 	system.queue_free()
 	Save.reset()
+
+
+## Lote do cooperativo: spawn longe de todos, cães misturados, dinheiro na HUD, código da sala,
+## PIX e catálogo de perks (funções puras).
+func _test_coop_batch() -> void:
+	print("Cooperativo (spawn, cães misturados, dinheiro, sala, PIX)")
+	var points: Array[Vector3] = [Vector3(2, 0, 0), Vector3(20, 0, 0), Vector3(40, 0, 0)]
+	var others: Array[Vector3] = [Vector3(21, 0, 0)]
+	var far_from_all := true
+	for i in 20:
+		far_from_all = far_from_all and SpawnManager.pick_spawn_index(points, Vector3.ZERO, 8.0, others) == 2
+	check(far_from_all, "cooperativo: o ponto de spawn fica longe de todos os jogadores, não só de um")
+	var data := load("res://data/configs/rounds.tres") as RoundData
+	check(data.hound_mix_chance(4) == 0.0 and is_equal_approx(data.hound_mix_chance(5), 0.05) and is_equal_approx(data.hound_mix_chance(10), 0.08) and is_equal_approx(data.hound_mix_chance(40), 0.14),
+		"cães misturados: nada antes do round 5, 5%% no 5, sobem por round até 14%%")
+	check(data.hound_mix_cap(5) == 3 and data.hound_mix_cap(16) == 4 and data.hound_mix_cap(5, 3) == 5, "cães misturados vivos: 3 (4 no fim de jogo), +1 por jogador a mais")
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 7
+	var hounds := 0
+	for i in 2000:
+		if data.hound_mix_roll(10, 0, rng):
+			hounds += 1
+	var capped := true
+	for i in 200:
+		capped = capped and not data.hound_mix_roll(10, 3, rng)
+	check(hounds > 110 and hounds < 210 and capped, "round 10: cerca de 8%% dos inimigos são cães (%d de 2000), nunca acima do limite" % hounds)
+	check(Hud.money_text(0) == "$0" and Hud.money_text(1250) == "$1.250" and Hud.money_text(1234567) == "$1.234.567" and Hud.money_text(-500) == "-$500" and Hud.money_text(50, true) == "+$50",
+		"dinheiro com cifrão e milhar com ponto ($1.250, +$50, -$500)")
+	check(Net.code_from_text(" ab cde ") == "ABCDE" and Net.code_from_text("https://site/?sala=xy7kq&x=1") == "XY7KQ"
+		and Net.code_from_text("Bora jogar! Sala QWERT: https://site/?sala=QWERT") == "QWERT" and Net.code_from_text("abc") == "",
+		"código da sala colado: com espaços, minúsculas ou o link inteiro do convite")
+	var payload := SupportInfo.PIX_PAYLOAD
+	check(payload.contains(SupportInfo.PIX_KEY) and payload.contains(SupportInfo.PIX_NAME) and _crc16(payload.left(payload.length() - 4)) == payload.right(4),
+		"PIX copia e cola com a chave, o nome e o CRC certo (%s)" % payload.right(4))
+	check(PerkCatalog.all().size() >= 7 and PerkCatalog.all().all(func(p: PerkData) -> bool: return p.id != &""), "catálogo de perks: todos da pasta (%d)" % PerkCatalog.all().size())
+
+
+## CRC16-CCITT (0xFFFF) do PIX, em hexadecimal maiúsculo.
+static func _crc16(text: String) -> String:
+	var crc := 0xFFFF
+	for byte in text.to_utf8_buffer():
+		crc ^= byte << 8
+		for i in 8:
+			crc = ((crc << 1) ^ 0x1021) & 0xFFFF if crc & 0x8000 else (crc << 1) & 0xFFFF
+	return "%04X" % crc
+
+
+## Idiomas: o do aparelho, mensagens montadas em quem lê; atalhos trocados; resoluções.
+func _test_i18n_and_settings() -> void:
+	print("Idiomas, atalhos e vídeo")
+	var cases := {"pt_BR": "pt_BR", "pt-PT": "pt_BR", "pt": "pt_BR", "zh_TW": "zh_TW", "zh_HK": "zh_TW", "zh-Hant": "zh_TW", "zh_CN": "zh_CN",
+		"zh": "zh_CN", "en_US": "en", "de_AT": "de", "in_ID": "id", "uk_UA": "uk", "ja_JP": "ja", "ko": "ko", "tr_TR": "tr", "xx": "en", "": "en"}
+	var wrong := []
+	for os_locale: String in cases:
+		if Loc.detect(os_locale) != cases[os_locale]:
+			wrong.append("%s→%s" % [os_locale, Loc.detect(os_locale)])
+	check(wrong.is_empty(), "idioma do aparelho: o da lista ou inglês (errados: %s)" % [wrong])
+	check(Loc.wanted("de", "pt_BR") == "de" and Loc.wanted("auto", "fr_FR") == "fr" and Loc.wanted("xx", "ko_KR") == "ko", "a escolha nas Configurações vale mais que o aparelho")
+	var door := Loc.fmt("[%s] ABRIR PORTA — %s  ·  %s pontos", [Loc.key(&"interact"), Loc.up("Bilheteria"), 750])
+	check(Loc.text(door) == "[E] ABRIR PORTA — BILHETERIA  ·  750 pontos", "mensagem montada em quem lê (tecla e maiúsculas): %s" % Loc.text(door))
+	check(Loc.text(Loc.cat(["HORDA", " + ", "TREM"])) == "HORDA + TREM" and Loc.text("JOGAR") == "JOGAR", "mensagens juntadas e texto comum")
+	var esperanto := Translation.new()
+	esperanto.locale = "eo"
+	esperanto.add_message("%s abriu %s", "%s malfermis %s")
+	esperanto.add_message("Bilheteria", "Biletejo")
+	esperanto.add_message("Tornado", "Ventego")
+	TranslationServer.add_translation(esperanto)
+	var before := TranslationServer.get_locale()
+	TranslationServer.set_locale("eo")
+	var feed := Loc.text(Loc.fmt("%s abriu %s", ["ANA", "Bilheteria"]))
+	var upgraded := Loc.t("Tornado Mk II")
+	TranslationServer.set_locale(before)
+	TranslationServer.remove_translation(esperanto)
+	check(feed == "ANA malfermis Biletejo" and upgraded == "Ventego Mk II", "traduz o modelo e os argumentos no idioma de quem lê (%s · %s)" % [feed, upgraded])
+	# Atalhos: trocar, a outra ação fica com o antigo, sobrevive ao save (JSON) e volta ao padrão.
+	var saved: Variant = Save.get_setting("bindings")
+	InputBindings.reset_bindings()
+	var key_f := InputEventKey.new()
+	key_f.physical_keycode = KEY_F
+	var pad_a := InputEventJoypadButton.new()
+	pad_a.button_index = JOY_BUTTON_A
+	check(InputBindings.binding_of(&"reload", InputBindings.KEYBOARD) == ["key", KEY_R] and InputBindings.rebind(&"reload", InputBindings.KEYBOARD, key_f), "trocar a tecla de recarregar para F")
+	check(InputBindings.binding_of(&"reload", InputBindings.KEYBOARD) == ["key", KEY_F] and InputBindings.binding_of(&"flashlight", InputBindings.KEYBOARD) == ["key", KEY_R],
+		"a lanterna, que usava o F, fica com o R (troca)")
+	check(InputMap.action_get_events(&"reload").any(func(e: InputEvent) -> bool: return e is InputEventKey and (e as InputEventKey).physical_keycode == KEY_F), "o F já recarrega (InputMap)")
+	check(not InputBindings.rebind(&"reload", InputBindings.KEYBOARD, pad_a), "botão do controle não entra no lugar do teclado")
+	Save.set_setting("bindings", JSON.parse_string(JSON.stringify(Save.get_setting("bindings"))))
+	check(InputBindings.binding_of(&"reload", InputBindings.KEYBOARD) == ["key", KEY_F], "a troca sobrevive ao save (números do JSON)")
+	check(InputBindings.binding_label(["mouse", MOUSE_BUTTON_LEFT]) == "MOUSE ESQ." and InputBindings.binding_label(["joy_button", JOY_BUTTON_A]) == "A"
+		and InputBindings.binding_label(["key", KEY_SPACE]) == "ESPAÇO" and InputBindings.hint_label(&"interact") == "E", "nomes das teclas e dos botões")
+	InputBindings.reset_bindings()
+	check(InputBindings.binding_of(&"reload", InputBindings.KEYBOARD) == ["key", KEY_R] and InputBindings.binding_of(&"flashlight", InputBindings.KEYBOARD) == ["key", KEY_F], "restaurar padrões")
+	Save.set_setting("bindings", saved if saved is Dictionary else {})
+	InputBindings.apply_saved()
+	var full_hd := SettingsRows.resolutions_for(Vector2i(1920, 1080))
+	var laptop := SettingsRows.resolutions_for(Vector2i(1440, 900))
+	check(full_hd == [Vector2i(1280, 720), Vector2i(1366, 768), Vector2i(1600, 900), Vector2i(1920, 1080)] and laptop.has(Vector2i(1440, 900)) and not laptop.has(Vector2i(1600, 900)),
+		"resoluções: só as que cabem na tela, mais a da tela")
+	check(SaveStore.parse_resolution("1920x1080") == Vector2i(1920, 1080) and SaveStore.parse_resolution("x") == Vector2i.ZERO, "resolução salva como texto")
+	# Catálogo: os 15 idiomas registrados, cada um com todos os textos do .pot, e cada caractere
+	# na fonte pixel ou na de reserva do idioma (nada de quadradinho).
+	var pot := FileAccess.get_file_as_string("res://locale/messages.pot")
+	var expected := pot.split("\nmsgid \"").size() - 1
+	var registered := Array(ProjectSettings.get_setting("internationalization/locale/translations", PackedStringArray()))
+	var pixel := load(String(ProjectSettings.get_setting("gui/theme/custom_font"))) as Font
+	var short := []
+	var missing := {}
+	for code: String in Loc.LANGUAGES:
+		var path := "res://locale/%s.po" % code
+		var translation := load(path) as Translation if registered.has(path) else null
+		if translation == null or translation.get_message_count() != expected:
+			short.append("%s=%d" % [code, translation.get_message_count() if translation else -1])
+			continue
+		var cjk: Font = load(Loc.CJK_FONTS[code]) if Loc.CJK_FONTS.has(code) else null
+		var absent := {}
+		for message: String in translation.get_translated_message_list():
+			for i in message.length():
+				var c := message.unicode_at(i)
+				if c != 10 and not pixel.has_char(c) and not (cjk and cjk.has_char(c)):
+					absent[String.chr(c)] = true
+		if not absent.is_empty():
+			missing[code] = "".join(absent.keys().slice(0, 12))
+	check(short.is_empty() and expected > 800, "os 15 idiomas registrados com os %d textos (faltando: %s)" % [expected, short])
+	check(missing.is_empty(), "todo caractere das traduções existe na fonte do idioma (sem: %s)" % [missing])
+	var names_ok := Loc.LANGUAGES.values().all(func(name: String) -> bool:
+		for i in name.length():
+			if not pixel.has_char(name.unicode_at(i)):
+				return false
+		return true)
+	check(names_ok, "os nomes dos idiomas (日本語, 한국어...) aparecem na lista mesmo jogando em português")
+	TranslationServer.set_locale("en")
+	var english := [Loc.t("JOGAR"), Loc.text(Loc.fmt("%s abriu %s", ["ANA", Loc.up("Bilheteria")])), Loc.t("Tornado Mk II")]
+	TranslationServer.set_locale(Loc.current)
+	check(english == ["PLAY", "ANA opened TICKET OFFICE", "Tornado Mk II"], "em inglês: menu, feed e arma melhorada (%s)" % [english])

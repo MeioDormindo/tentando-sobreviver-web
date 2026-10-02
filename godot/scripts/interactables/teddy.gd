@@ -32,7 +32,7 @@ func _ready() -> void:
 
 
 func get_interaction_prompt(_player: Node3D) -> String:
-	return "[E] PEGAR O URSINHO"
+	return Loc.fmt("[%s] PEGAR O URSINHO", [Loc.key(&"interact")])
 
 
 func interact(player: Node3D) -> bool:
@@ -45,7 +45,7 @@ func interact(player: Node3D) -> bool:
 	var found := total - left
 	Events.teddy_found.emit(found, total)
 	if left > 0:
-		Events.toast.emit("URSINHO %d/%d" % [found, total])
+		Events.toast.emit(Loc.fmt("URSINHO %s/%s", [found, total]))
 	else:
 		var first := not bool(Save.data.secrets.get("teddies", false))
 		Save.discover("teddies")

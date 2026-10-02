@@ -1,0 +1,47 @@
+# Literais com cara de texto que não aparecem na tela (o extrator de textos pula estes).
+# Um por linha, exatamente como no código. Linhas com # são comentários.
+# Cabeçalhos HTTP.
+Content-Type: application/json
+Authorization: Bearer
+Prefer: return=minimal
+Prefer: resolution=merge-duplicates,return=minimal
+# Mensagens do servidor (Supabase), só para comparar.
+rate limit
+too many
+already registered
+already exists
+invalid login credentials
+check constraint
+row-level security
+inválido
+# Código da sala local (não é texto).
+LOCAL
+# PIX e autor (nunca traduzir).
+00020126580014br.gov.bcb.pix01362108ccd9-3137-493e-a1a0-65da48ea840c5204000053039865802BR5913Siryus Canuto6009SAO PAULO62070503***6304378B
+Siryus Canuto
+# Nomes dos idiomas (aparecem sempre no próprio idioma).
+Português (Brasil)
+Español
+Français
+Türkçe
+Bahasa Indonesia
+# Teclas e botões com o mesmo nome em todo lugar.
+ESC
+TAB
+ENTER
+SHIFT
+CTRL
+ALT
+BACKSPACE
+LB
+RB
+LT
+RT
+SELECT
+START
+MOUSE 4
+MOUSE 5
+# Outros: códigos de piso, exemplo de código de sala, numeral romano.
+DW
+ABCDE
+II

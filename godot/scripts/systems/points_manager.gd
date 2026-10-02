@@ -49,6 +49,9 @@ func _ready() -> void:
 
 
 func _emit_initial_state() -> void:
+	# O dinheiro de cada um no próprio jogador (o painel do time mostra; vai aos colegas nos vitals).
+	for player in Players.all():
+		player.money = points_of(player)
 	Events.points_changed.emit(points, 0)
 
 
@@ -124,6 +127,8 @@ func spend(amount: int, who: Node = null) -> bool:
 ## Avisa a HUD de quem é a carteira (na rede, a máquina dele).
 func _tell(peer: int, total: int, delta: int) -> void:
 	var owner := Players.by_peer(peer)
+	if owner:
+		owner.money = total
 	if owner and (owner.net or not owner.is_local):
 		owner.hud(&"points_changed", [total, delta])
 	elif peer == _local_peer():

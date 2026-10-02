@@ -63,7 +63,7 @@ func _weapon_drop() -> void:
 	if drops.is_empty():
 		return
 	var drop := drops[0] as WeaponDrop
-	check(drop.get_interaction_prompt(_player).contains("troca por GLOCK"), "aviso: %s" % drop.get_interaction_prompt(_player))
+	check(Loc.text(drop.get_interaction_prompt(_player)).contains("troca por GLOCK"), "aviso: %s" % Loc.text(drop.get_interaction_prompt(_player)))
 	await _tree.create_timer(0.5).timeout
 	check(drop.interact(_player), "pegar a arma de volta")
 	await _tree.process_frame
@@ -141,12 +141,18 @@ func _pause_menu() -> void:
 	await _tree.process_frame
 	check(menu.visible and _tree.paused, "ESC: pausa com o menu de pausa")
 	var size_button := menu.find_child("MinimapSize", true, false) as Button
-	check(size_button != null and menu.find_child("minimap", true, false) != null and menu.find_child("Volume", true, false) != null, "configurações no menu de pausa (volume, minimapa, tamanho...)")
+	check(size_button != null and menu.find_child("minimap", true, false) != null and menu.find_child("Tabs", true, false) != null, "configurações em abas no menu de pausa (aba JOGO: minimapa, tamanho...)")
 	if size_button:
 		size_button.pressed.emit()
 		await _tree.process_frame
 		check(String(Save.get_setting("minimapSize")) == "large", "mudar o tamanho do minimapa na pausa")
 		Save.set_setting("minimapSize", "medium")
+	var audio_tab := menu.find_child("Tab_audio", true, false) as Button
+	if audio_tab:
+		audio_tab.pressed.emit()
+	await _tree.process_frame
+	await _tree.process_frame
+	check(menu.find_child("Volume", true, false) != null and menu.find_child("MusicVolume", true, false) != null, "aba ÁUDIO na pausa: volume geral e da música")
 	var resume := menu.find_child("Resume", true, false) as Button
 	if resume:
 		resume.pressed.emit()

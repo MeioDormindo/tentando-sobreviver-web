@@ -28,8 +28,7 @@ func can_start() -> bool:
 func start() -> void:
 	duration = float(config.get("duration_time", 22.0))
 	var range_m: Array = config.get("distance", [5.3, 11.9])
-	var point: Variant = system.pick_floor_point(float(range_m[0]), float(range_m[1]))
-	center = point if point is Vector3 else system.focus().global_position + Vector3(float(range_m[0]), 0, 0)
+	center = system.floor_point_near(float(range_m[0]), float(range_m[1]))
 	_build()
 
 
@@ -51,7 +50,7 @@ func _build() -> void:
 		pool.billboard = BaseMaterial3D.BILLBOARD_DISABLED
 		pool.axis = Vector3.AXIS_Y
 		pool.alpha_cut = SpriteBase3D.ALPHA_CUT_DISABLED
-		pool.position.y = 0.03
+		pool.position.y = PixelShapes.GROUND_Y
 		pool.modulate = Color(GAS, 0.35)
 	for i in 6:
 		var puff := PixelFx.attach_loop(_cloud, "gas", radius * 1.1)

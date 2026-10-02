@@ -8,6 +8,8 @@ const RED := Color(0.72, 0.18, 0.16)
 const GOLD := Color(0.89, 0.78, 0.48)
 const TEXT := Color(0.91, 0.89, 0.78)
 const DIM := Color(0.6, 0.6, 0.56)
+## Dinheiro (o seu e o dos colegas), em verde com cifrão.
+const MONEY := Color(0.45, 0.88, 0.38)
 const MARGIN := 24
 
 ## Selo hexagonal dos ícones de power-up/perk (scripts/godot/pixel/badge.mjs): moldura metálica
@@ -92,17 +94,17 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build()
 	Events.round_started.connect(_on_round_started)
-	Events.round_remaining_changed.connect(func(remaining: int) -> void: _remaining_label.text = "ZUMBIS RESTANTES  %d" % remaining)
-	Events.round_completed.connect(func(n: int) -> void: _show_banner("ROUND %d COMPLETO" % n, GOLD))
+	Events.round_remaining_changed.connect(func(remaining: int) -> void: _remaining_label.text = Loc.t("ZUMBIS RESTANTES  %d") % remaining)
+	Events.round_completed.connect(func(n: int) -> void: _show_banner(Loc.t("ROUND %d COMPLETO") % n, GOLD))
 	Events.points_changed.connect(_on_points_changed)
 	Events.player_health_changed.connect(_on_health_changed)
 	Events.ammo_changed.connect(_on_ammo_changed)
 	Events.weapon_visual_changed.connect(func(weapon_id: StringName, level: int, other_id: StringName, other_level: int) -> void:
 		_set_icon(_weapon_icon, weapon_id, level)
 		_set_icon(_other_weapon_icon, other_id, other_level))
-	Events.weapon_changed.connect(func(_current: String, other: String) -> void: _other_weapon_label.text = ("[Q] " + other.to_upper()) if other != "" else "")
+	Events.weapon_changed.connect(func(_current: String, other: String) -> void: _other_weapon_label.text = ("[%s] " % InputBindings.hint_label(&"switch_weapon") + Loc.t(other).to_upper()) if other != "" else "")
 	Events.interaction_prompt.connect(func(text: String, icon: String, progress: float) -> void:
-		_prompt_label.text = text
+		_prompt_label.text = Loc.text(text)
 		_prompt_icon.visible = icon != "" and ResourceLoader.exists(icon)
 		if _prompt_icon.visible:
 			_prompt_icon.texture = load(icon)
@@ -111,9 +113,11 @@ func _ready() -> void:
 			_prompt_bar.value = progress * 100.0)
 	Events.zombie_hit.connect(func(_z: Node3D, info: DamageInfo) -> void: if info.kind != DamageInfo.Kind.BURN: _flash_hit(TEXT))
 	Events.zombie_killed.connect(func(_z: Node3D, info: DamageInfo) -> void: _flash_hit(RED if info.is_headshot else GOLD))
-	Events.area_opened.connect(func(_id: StringName, area_name: String) -> void: _show_banner("ÁREA LIBERADA: " + area_name.to_upper(), GOLD))
+	Events.area_opened.connect(func(_id: StringName, area_name: String) -> void: _show_banner(Loc.t("ÁREA LIBERADA: %s") % Loc.t(area_name).to_upper(), GOLD))
 	Events.purchase_denied.connect(func() -> void: _flash_points_denied())
 	Events.toast.connect(_show_toast)
+	Events.team_feed.connect(_on_team_feed)
+	Events.player_downed.connect(_on_player_downed)
 	Events.cheat_detected.connect(_on_cheat_detected)
 	Events.player_armor_changed.connect(func(current: float, maximum: float) -> void:
 		_armor_bar.get_parent().visible = current > 0.0
@@ -121,30 +125,30 @@ func _ready() -> void:
 		_armor_bar.value = current)
 	Events.power_up_timers.connect(_on_power_up_timers)
 	Events.power_up_collected.connect(func(_id: StringName, power_up_name: String, color: Color, detail: String) -> void:
-		_show_banner(power_up_name.to_upper(), color)
+		_show_banner(Loc.text(power_up_name).to_upper(), color)
 		if detail != "":
 			_show_toast(detail))
 	Events.achievement_unlocked.connect(func(id: String, achievement_name: String, _d: String) -> void:
 		var catalog := load("res://data/configs/achievements.tres") as AchievementCatalog
 		var info := catalog.find(id) if catalog else {}
-		_show_toast("CONQUISTA DESBLOQUEADA: " + achievement_name.to_upper(), String(info.get("icon", ""))))
-	Events.score_changed.connect(func(total: int, _delta: int) -> void: _score_label.text = "SCORE %d" % total)
-	Events.map_unlocked.connect(func(_id: String, map_name: String) -> void: _show_banner(map_name.to_upper() + " DESBLOQUEADO!", GOLD))
-	Events.boss_incoming.connect(func(boss_name: String) -> void: _show_banner(boss_name.to_upper() + " SE APROXIMA", RED))
+		_show_toast(Loc.t("CONQUISTA DESBLOQUEADA: %s") % Loc.t(achievement_name).to_upper(), String(info.get("icon", ""))))
+	Events.score_changed.connect(func(total: int, _delta: int) -> void: _score_label.text = Loc.t("SCORE %d") % total)
+	Events.map_unlocked.connect(func(_id: String, map_name: String) -> void: _show_banner(Loc.t("%s DESBLOQUEADO!") % Loc.t(map_name).to_upper(), GOLD))
+	Events.boss_incoming.connect(func(boss_name: String) -> void: _show_banner(Loc.t("%s SE APROXIMA") % Loc.t(boss_name).to_upper(), RED))
 	Events.boss_state.connect(_on_boss_state)
-	Events.boss_phase.connect(func(_n: String, phase: int) -> void: _show_toast("FASE %d" % phase))
+	Events.boss_phase.connect(func(_n: String, phase: int) -> void: _show_toast(Loc.t("FASE %d") % phase))
 	Events.boss_defeated.connect(func(_id: StringName, boss_name: String, reward: int, _at: Vector3) -> void:
 		_boss_bar.visible = false
 		_boss_row.visible = false
 		_boss_label.text = ""
-		_show_banner("%s DERROTADO  +%d" % [boss_name.to_upper(), reward], GOLD))
+		_show_banner(Loc.t("%s DERROTADO  +%d") % [Loc.t(boss_name).to_upper(), reward], GOLD))
 	Events.hound_round_changed.connect(_on_hound_round)
 	Events.max_ammo.connect(func(_at: Vector3) -> void: _show_toast("MAX AMMO"))
 	Events.power_changed.connect(func(on: bool) -> void: if on: _show_banner("ENERGIA LIGADA", GOLD))
 	Events.perks_changed.connect(_on_perks_changed)
 	Events.blessing_changed.connect(func(god: StringName, text: String, color: Color) -> void:
 		_blessing_row.visible = text != ""
-		_blessing_label.text = "BÊNÇÃO DE " + text
+		_blessing_label.text = Loc.t("BÊNÇÃO DE %s") % Loc.text(text)
 		_blessing_label.add_theme_color_override(&"font_color", color)
 		if _blessing_badge:
 			_blessing_badge.queue_free()
@@ -162,7 +166,7 @@ func _ready() -> void:
 			_event_label.text = ""
 			return
 		var remaining := float(state.remaining)
-		_event_label.text = String(state.name) + ("  %ds" % ceili(remaining) if remaining >= 0.0 else "")
+		_event_label.text = Loc.text(String(state.name)) + ("  %ds" % ceili(remaining) if remaining >= 0.0 else "")
 		_event_label.add_theme_color_override(&"font_color", state.color)
 		var ring := _event_badge.find_child("Ring", true, false) as TextureRect
 		if ring:
@@ -172,8 +176,8 @@ func _ready() -> void:
 			_quest_title.text = ""
 			_quest_text.text = ""
 			return
-		_quest_title.text = "◆ %s  %d/%d" % [state.title, state.step, state.total]
-		_quest_text.text = String(state.objective))
+		_quest_title.text = "◆ %s  %d/%d" % [Loc.text(String(state.title)), state.step, state.total]
+		_quest_text.text = Loc.text(String(state.objective)))
 	Events.quest_completed.connect(func(_id: StringName, title: String, subtitle: String) -> void:
 		_show_banner(title, GOLD)
 		_show_toast(subtitle))
@@ -197,6 +201,11 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_update_team(delta)
+	_update_down_marks()
+	_update_crosshair()
+	_fps_label.visible = Save.get_setting("showFps") == true
+	if _fps_label.visible:
+		_fps_label.text = "%d FPS" % Engine.get_frames_per_second()
 	for label in _auto_hide:
 		label.visible = label.text != ""
 	var screen := get_viewport().get_visible_rect().size
@@ -221,6 +230,7 @@ func _process(delta: float) -> void:
 
 func _exit_tree() -> void:
 	InputBindings.set_touch_active(false)
+	_set_cursor_hidden(false)
 
 
 ## Controles de toque: aparecem conforme a configuração (auto = celular) e somem na pausa,
@@ -259,11 +269,11 @@ func _build() -> void:
 	_remaining_label = _text(round_box, "", 26, TEXT)
 
 	var points_box := _corner_panel(root, Control.PRESET_TOP_RIGHT)
-	_points_label = _text(points_box, "0", 39, GOLD, HORIZONTAL_ALIGNMENT_RIGHT)
+	_points_label = _text(points_box, money_text(0), 39, MONEY, HORIZONTAL_ALIGNMENT_RIGHT)
 	_score_label = _text(points_box, "SCORE 0", 26, DIM, HORIZONTAL_ALIGNMENT_RIGHT)
 	_invalid_label = _text(points_box, "", 26, RED, HORIZONTAL_ALIGNMENT_RIGHT)
 	# Ganho de pontos: fora do painel, logo abaixo (some sozinho).
-	_points_delta = _label(root, "", 26, GOLD, Control.PRESET_TOP_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, 108)
+	_points_delta = _label(root, "", 26, MONEY, Control.PRESET_TOP_RIGHT, HORIZONTAL_ALIGNMENT_RIGHT, 108)
 
 	var health_box := _corner_panel(root, Control.PRESET_BOTTOM_LEFT)
 	_perks_row = HBoxContainer.new()
@@ -379,6 +389,12 @@ func _build() -> void:
 
 	_hit_marker = _label(root, "✕", 26, TEXT, Control.PRESET_TOP_LEFT, HORIZONTAL_ALIGNMENT_CENTER)
 	_hit_marker.modulate.a = 0.0
+	_crosshair = Crosshair.new()
+	root.add_child(_crosshair)
+	_crosshair.visible = false
+	# Contador de FPS (Configurações → VÍDEO → MOSTRAR FPS).
+	_fps_label = _label(root, "", 13, DIM, Control.PRESET_CENTER_TOP, HORIZONTAL_ALIGNMENT_CENTER, -16)
+	_fps_label.name = "Fps"
 
 	minimap = Minimap.new()
 	minimap.name = "Minimap"
@@ -543,9 +559,9 @@ func _flat(color: Color) -> StyleBoxFlat:
 # ───────────────────────── Eventos ─────────────────────────
 
 func _on_round_started(round_number: int, total: int) -> void:
-	_round_label.text = "ROUND %d" % round_number
-	_remaining_label.text = "ZUMBIS RESTANTES  %d" % total
-	_show_banner("ROUND %d" % round_number, RED)
+	_round_label.text = Loc.t("ROUND %d") % round_number
+	_remaining_label.text = Loc.t("ZUMBIS RESTANTES  %d") % total
+	_show_banner(Loc.t("ROUND %d") % round_number, RED)
 
 
 func _on_boss_state(boss_name: String, current: float, maximum: float, phase: int) -> void:
@@ -553,7 +569,7 @@ func _on_boss_state(boss_name: String, current: float, maximum: float, phase: in
 	_boss_bar.max_value = maximum
 	_boss_bar.value = current
 	_boss_row.visible = current > 0.0
-	_boss_label.text = "%s  ·  FASE %d" % [boss_name.to_upper(), phase] if current > 0.0 else ""
+	_boss_label.text = Loc.t("%s  ·  FASE %d") % [Loc.t(boss_name).to_upper(), phase] if current > 0.0 else ""
 
 
 func _on_hound_round(active: bool, _config: Dictionary) -> void:
@@ -562,11 +578,11 @@ func _on_hound_round(active: bool, _config: Dictionary) -> void:
 
 
 func _on_points_changed(total: int, delta: int) -> void:
-	_points_label.text = str(total)
+	_points_label.text = money_text(total)
 	if delta == 0:
 		return
-	_points_delta.text = ("+%d" % delta) if delta > 0 else str(delta)
-	_points_delta.add_theme_color_override(&"font_color", GOLD if delta > 0 else RED)
+	_points_delta.text = money_text(delta, true)
+	_points_delta.add_theme_color_override(&"font_color", MONEY if delta > 0 else RED)
 	_points_delta.modulate.a = 1.0
 	create_tween().tween_property(_points_delta, "modulate:a", 0.0, 0.8).set_delay(0.4)
 
@@ -574,7 +590,7 @@ func _on_points_changed(total: int, delta: int) -> void:
 func _on_health_changed(current: float, maximum: float) -> void:
 	_health_bar.max_value = maximum
 	_health_bar.value = current
-	_health_label.text = "VIDA  %d / %d" % [roundi(current), roundi(maximum)]
+	_health_label.text = Loc.t("VIDA  %d / %d") % [roundi(current), roundi(maximum)]
 
 
 ## Um ícone por power-up ativo (Max Ammo, Fúria...), com a contagem regressiva e piscando nos
@@ -676,8 +692,8 @@ func _on_ammo_changed(weapon_name: String, magazine: int, reserve: int, reloadin
 	var element := ""
 	var player := Players.local_player()
 	if player and player.weapon and player.weapon.element != &"":
-		element = "  " + ElementCatalog.shared().label(player.weapon.element)
-	_weapon_label.text = weapon_name.to_upper() + element + ("  ·  RECARREGANDO" if reloading else "")
+		element = "  " + Loc.t(ElementCatalog.shared().label(player.weapon.element))
+	_weapon_label.text = Loc.t(weapon_name).to_upper() + element + (("  ·  " + Loc.t("RECARREGANDO")) if reloading else "")
 	_ammo_label.text = "%d / %d" % [magazine, reserve]
 	_ammo_label.add_theme_color_override(&"font_color", RED if magazine == 0 else TEXT)
 
@@ -686,7 +702,7 @@ func _on_ammo_changed(weapon_name: String, magazine: int, reserve: int, reloadin
 ## no top do mapa, o nome para o ranking.
 func _on_game_over(summary: Dictionary) -> void:
 	var box := _game_over_panel.get_node("Box") as VBoxContainer
-	_game_over_text.text = "SCORE %d" % summary.score
+	_game_over_text.text = Loc.t("SCORE %d") % summary.score
 	_game_over_text.add_theme_font_size_override(&"font_size", MenuKit.px(32))
 	var accuracy := roundi(100.0 * summary.shots_hit / summary.shots_fired) if summary.shots_fired > 0 else 0
 	var rows := [
@@ -710,9 +726,9 @@ func _on_game_over(summary: Dictionary) -> void:
 	var team_game := int(summary.get("players", 1)) > 1
 	var record := Label.new()
 	record.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	record.text = "NOVO RECORDE!" if summary.new_record else "RECORDE: %d PONTOS · ROUND %d" % [summary.best_score, summary.best_wave]
+	record.text = "NOVO RECORDE!" if summary.new_record else Loc.t("RECORDE: %d PONTOS · ROUND %d") % [summary.best_score, summary.best_wave]
 	if team_game:
-		record.text = "TIME: %s" % String(summary.get("team", ""))
+		record.text = Loc.t("TIME: %s") % String(summary.get("team", ""))
 	record.add_theme_font_size_override(&"font_size", MenuKit.px(26 if summary.new_record else 15))
 	record.add_theme_color_override(&"font_color", GOLD if summary.new_record else DIM)
 	box.add_child(record)
@@ -721,7 +737,7 @@ func _on_game_over(summary: Dictionary) -> void:
 		record.add_theme_color_override(&"font_color", RED)
 		var taunt := Label.new()
 		taunt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		taunt.text = summary.cheat_taunt
+		taunt.text = Loc.text(String(summary.cheat_taunt))
 		taunt.add_theme_font_size_override(&"font_size", MenuKit.px(26))
 		taunt.add_theme_color_override(&"font_color", Color(1.0, 0.48, 0.36))
 		box.add_child(taunt)
@@ -753,7 +769,7 @@ func _on_game_over(summary: Dictionary) -> void:
 ## Anti-trapaça: zoa o jogador e deixa um aviso fixo de partida invalidada.
 func _on_cheat_detected(taunt: String, subtitle: String) -> void:
 	_invalid_label.text = "PARTIDA INVALIDADA"
-	var message := _label(_banner.get_parent() as Control, "%s\n%s" % [taunt, subtitle], 30, Color(1.0, 0.48, 0.36), Control.PRESET_CENTER, HORIZONTAL_ALIGNMENT_CENTER, -60)
+	var message := _label(_banner.get_parent() as Control, "%s\n%s" % [Loc.text(taunt), Loc.text(subtitle)], 30, Color(1.0, 0.48, 0.36), Control.PRESET_CENTER, HORIZONTAL_ALIGNMENT_CENTER, -60)
 	message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	message.custom_minimum_size = Vector2(900, 0)
 	message.set_anchors_and_offsets_preset(Control.PRESET_CENTER, Control.PRESET_MODE_KEEP_SIZE)
@@ -771,7 +787,7 @@ func _add_team_result(box: VBoxContainer, summary: Dictionary) -> void:
 	var result := Label.new()
 	result.name = "RankResult"
 	result.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	result.text = "%dº LUGAR NO RANKING %s DE %s!" % [position, mode, Save.catalog.display_name(summary.map_id).to_upper()] if position > 0 else ""
+	result.text = Loc.t("%dº LUGAR NO RANKING %s DE %s!") % [position, Loc.t(mode), Loc.t(Save.catalog.display_name(summary.map_id)).to_upper()] if position > 0 else ""
 	result.add_theme_color_override(&"font_color", GOLD)
 	box.add_child(result)
 	if not bool(summary.get("global_submit", false)):
@@ -785,7 +801,7 @@ func _add_team_result(box: VBoxContainer, summary: Dictionary) -> void:
 	var host_name := String(Net.players.get(1, {}).get("name", Save.player_name))
 	var error_text: String = await Leaderboard.submit(Online, summary.map_id, host_name, summary.score, summary.round, int(summary.get("team_kills", summary.kills)), int(summary.players), String(summary.team))
 	if is_instance_valid(global):
-		global.text = ("RANKING GLOBAL: " + error_text.to_upper()) if error_text != "" else "TIME ENVIADO AO RANKING GLOBAL (%s)!" % mode
+		global.text = (Loc.t("RANKING GLOBAL: %s") % Loc.t(error_text).to_upper()) if error_text != "" else Loc.t("TIME ENVIADO AO RANKING GLOBAL (%s)!") % Loc.t(mode)
 		global.add_theme_color_override(&"font_color", RED if error_text != "" else GOLD)
 
 
@@ -816,7 +832,7 @@ func _add_ranking_entry(box: VBoxContainer, summary: Dictionary) -> void:
 		var result := Label.new()
 		result.name = "RankResult"
 		result.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		result.text = "%dº LUGAR NO RANKING DE %s!" % [position, Save.catalog.display_name(summary.map_id).to_upper()] if position > 0 else ""
+		result.text = Loc.t("%dº LUGAR NO RANKING DE %s!") % [position, Loc.t(Save.catalog.display_name(summary.map_id)).to_upper()] if position > 0 else ""
 		result.add_theme_color_override(&"font_color", GOLD)
 		box.add_child(result)
 		box.move_child(result, index)
@@ -830,7 +846,7 @@ func _add_ranking_entry(box: VBoxContainer, summary: Dictionary) -> void:
 			box.move_child(global, index + 1)
 			var error_text: String = await Leaderboard.submit(Online, summary.map_id, player, summary.score, summary.round, summary.kills)
 			if is_instance_valid(global):
-				global.text = ("RANKING GLOBAL: " + error_text.to_upper()) if error_text != "" else "ENVIADO AO RANKING GLOBAL DA TEMPORADA!"
+				global.text = (Loc.t("RANKING GLOBAL: %s") % Loc.t(error_text).to_upper()) if error_text != "" else "ENVIADO AO RANKING GLOBAL DA TEMPORADA!"
 				global.add_theme_color_override(&"font_color", RED if error_text != "" else GOLD)
 	edit.text_submitted.connect(func(_t: String) -> void: submit.call())
 	_menu_button(line, "SALVAR", submit)
@@ -847,7 +863,7 @@ func _menu_button(parent: Control, text: String, on_press: Callable) -> Button:
 
 
 func _show_banner(text: String, color: Color) -> void:
-	_banner.text = text
+	_banner.text = Loc.text(text)
 	_banner.add_theme_color_override(&"font_color", color)
 	var tween := create_tween()
 	tween.tween_property(_banner, "modulate:a", 1.0, 0.3)
@@ -856,7 +872,7 @@ func _show_banner(text: String, color: Color) -> void:
 
 
 func _update_flashlight_label() -> void:
-	_flashlight_label.text = "LANTERNA %s%s" % ["LIGADA" if _flashlight_on else "DESLIGADA", "" if InputBindings.touch_active else "  [F]"]
+	_flashlight_label.text = Loc.t("LANTERNA %s%s") % [Loc.t("LIGADA" if _flashlight_on else "DESLIGADA"), "" if InputBindings.touch_active else "  [%s]" % InputBindings.hint_label(&"flashlight")]
 	_flashlight_label.modulate = GOLD if _flashlight_on else DIM
 
 
@@ -867,11 +883,11 @@ func _on_lighting_changed(lighting: String) -> void:
 	var tween := create_tween()
 	tween.tween_property(_vignette.material, "shader_parameter/strength", float(VIGNETTE.get(lighting, VIGNETTE.dim)), 1.2)
 	if lighting == "dark" and was != "dark" and not _flashlight_on:
-		_show_toast("ESTÁ ESCURO — [F] LIGA A LANTERNA")
+		_show_toast(Loc.fmt("ESTÁ ESCURO — [%s] LIGA A LANTERNA", [Loc.key(&"flashlight")]))
 
 
 func _show_toast(text: String, icon := "") -> void:
-	_toast.text = text
+	_toast.text = Loc.text(text)
 	_toast_icon.visible = icon != "" and ResourceLoader.exists(icon)
 	if _toast_icon.visible:
 		_toast_icon.texture = load(icon)
@@ -886,7 +902,7 @@ func _flash_points_denied() -> void:
 	_points_label.add_theme_color_override(&"font_color", RED)
 	var tween := create_tween()
 	tween.tween_interval(0.35)
-	tween.tween_callback(func() -> void: _points_label.add_theme_color_override(&"font_color", GOLD))
+	tween.tween_callback(func() -> void: _points_label.add_theme_color_override(&"font_color", MONEY))
 
 
 func _flash_hit(color: Color) -> void:
@@ -899,15 +915,31 @@ func _flash_hit(color: Color) -> void:
 
 ## Raiz dos controles da HUD.
 var _root: Control
-## Painel dos colegas (à esquerda, no meio): nome, vida e "CAÍDO 23s" / "FORA". Montado aos
+## Colegas no canto direito, logo abaixo do seu dinheiro (como no CoD e no L4D): um cartão por
+## colega com nome na cor da vaga, dinheiro, vida, "CAÍDO 23s"/"FORA" e latência. Montado aos
 ## poucos: os colegas podem ficar prontos depois da HUD.
 var _team_box: VBoxContainer
-## Player → [nome, barra, estado].
+## Player → {panel, name, cash, bar, state, ping}.
 var _team_rows: Dictionary = {}
 var _team_check := 0.0
+## Player caído → marca (seta na borda da tela quando ele está fora dela; cruz sobre ele quando
+## está na tela).
+var _down_marks: Dictionary = {}
+## Quem fez o quê (cooperativo): lista curta embaixo, à esquerda, logo acima da vida.
+var _feed: VBoxContainer
+const FEED_LINES := 4
+const FEED_TIME := 4.0
+var _crosshair: Crosshair
+var _fps_label: Label
+const TEAM_WIDTH := 230.0
 
 
 func _update_team(delta: float) -> void:
+	if _team_box and Players.coop():
+		_place_team_box()
+	if _feed:
+		var health_panel := _health_label.get_parent().get_parent() as Control
+		_feed.position = Vector2(MARGIN, health_panel.position.y - 8.0 - _feed.size.y)
 	_team_check -= delta
 	if _team_check > 0.0:
 		return
@@ -915,31 +947,259 @@ func _update_team(delta: float) -> void:
 	if not Players.coop():
 		return
 	if _team_box == null:
-		_team_box = _corner_panel(_root, Control.PRESET_CENTER_LEFT)
+		_team_box = VBoxContainer.new()
 		_team_box.name = "Team"
+		_team_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_team_box.add_theme_constant_override(&"separation", 6)
+		_root.add_child(_team_box)
 	var local := Players.local_player()
 	for someone in Players.all():
 		if someone == local:
 			continue
 		if not _team_rows.has(someone):
-			var name_label := _text(_team_box, someone.player_name if someone.player_name != "" else "COLEGA", 20, Color(0.55, 0.85, 1.0))
-			var bar: Array = PixelSkin.bar(RED, 160.0, 6.0)
-			_team_box.add_child(bar[0])
-			var state_label := _text(_team_box, "", 20, RED)
-			_team_rows[someone] = [name_label, bar[1], state_label, bar[0]]
-		var row: Array = _team_rows[someone]
-		(row[1] as ProgressBar).value = 100.0 * someone.health.current / maxf(1.0, someone.health.max_health)
+			_team_rows[someone] = _team_card(someone)
+		var row: Dictionary = _team_rows[someone]
+		(row.bar as ProgressBar).value = 100.0 * someone.health.current / maxf(1.0, someone.health.max_health)
+		(row.cash as Label).text = money_text(someone.money)
 		var state := ""
 		if someone.bleeding:
-			state = "CAÍDO %ds" % ceili(maxf(0.0, someone.bleed_left))
+			state = Loc.t("CAÍDO %ds") % ceili(maxf(0.0, someone.bleed_left))
 		elif not someone.is_alive():
 			state = "FORA"
-		(row[2] as Label).text = state
+		(row.state as Label).text = state
+		(row.panel as Control).modulate.a = 0.55 if state == "FORA" else 1.0
+		var ms := Net.ping_of(someone.peer_id) if Net.is_online() and someone.peer_id != 1 else -1
+		(row.ping as Label).text = ("%d ms" % ms) if ms >= 0 else ""
+		(row.ping as Label).add_theme_color_override(&"font_color", Net.ping_color(ms))
 	for gone: Variant in _team_rows.keys():
 		if not is_instance_valid(gone) or not (gone as Player).is_inside_tree():
-			for part: Variant in _team_rows[gone]:
-				if part is Label:
-					_auto_hide.erase(part)
-				if is_instance_valid(part) and part is Control and not part is ProgressBar:
-					(part as Control).queue_free()
+			var panel: Variant = _team_rows[gone].panel
+			if is_instance_valid(panel):
+				(panel as Control).queue_free()
 			_team_rows.erase(gone)
+
+
+## Cartão de um colega: faixa na cor da vaga | nome ............ $1.250
+##                                            | [vida]
+##                                            | CAÍDO 23s ......... 42 ms
+func _team_card(someone: Player) -> Dictionary:
+	var panel := PanelContainer.new()
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_theme_stylebox_override(&"panel", PixelSkin.panel(false, 8.0))
+	panel.custom_minimum_size.x = TEAM_WIDTH
+	_team_box.add_child(panel)
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_theme_constant_override(&"separation", 8)
+	panel.add_child(row)
+	var stripe := ColorRect.new()
+	stripe.color = Players.color_of(someone)
+	stripe.custom_minimum_size = Vector2(4, 0)
+	stripe.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(stripe)
+	var column := VBoxContainer.new()
+	column.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	column.add_theme_constant_override(&"separation", 2)
+	row.add_child(column)
+	var top := HBoxContainer.new()
+	top.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	column.add_child(top)
+	var title := _plain(top, someone.player_name if someone.player_name != "" else "COLEGA", 20, Players.color_of(someone))
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var cash := _plain(top, money_text(someone.money), 20, MONEY, HORIZONTAL_ALIGNMENT_RIGHT)
+	var bar: Array = PixelSkin.bar(RED, TEAM_WIDTH - 30.0, 6.0)
+	column.add_child(bar[0])
+	var bottom := HBoxContainer.new()
+	bottom.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	column.add_child(bottom)
+	var state := _plain(bottom, "", 16, RED)
+	state.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var ping := _plain(bottom, "", 14, DIM, HORIZONTAL_ALIGNMENT_RIGHT)
+	return {"panel": panel, "name": title, "cash": cash, "bar": bar[1], "state": state, "ping": ping}
+
+
+## Logo abaixo do painel do dinheiro, encostado na direita.
+func _place_team_box() -> void:
+	var money_panel := _points_label.get_parent().get_parent() as Control
+	var screen := get_viewport().get_visible_rect().size
+	_team_box.position = Vector2(screen.x - 12.0 - _team_box.size.x, money_panel.position.y + money_panel.size.y + 8.0)
+
+
+## Rótulo simples (fora da lista dos que somem quando vazios).
+func _plain(parent: Control, text: String, size: int, color: Color, align: HorizontalAlignment = HORIZONTAL_ALIGNMENT_LEFT) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.horizontal_alignment = align
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override(&"font_size", MenuKit.px(size))
+	label.add_theme_color_override(&"font_color", color)
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	parent.add_child(label)
+	return label
+
+
+## Dinheiro como no jogo ("$1.250", milhar com ponto); `signed` põe o + nos ganhos.
+static func money_text(amount: int, signed := false) -> String:
+	var digits := str(absi(amount))
+	var grouped := ""
+	while digits.length() > 3:
+		grouped = "." + digits.right(3) + grouped
+		digits = digits.left(digits.length() - 3)
+	grouped = digits + grouped
+	var prefix := "-" if amount < 0 else ("+" if signed else "")
+	return "%s$%s" % [prefix, grouped]
+
+
+## Colega caído: na tela, uma cruz vermelha sobre ele com os segundos; fora dela, uma seta na
+## borda apontando para onde ele está, com o nome e os segundos.
+func _update_down_marks() -> void:
+	var camera := get_viewport().get_camera_3d()
+	var local := Players.local_player()
+	var screen := get_viewport().get_visible_rect().size
+	for someone in Players.all():
+		var down := Players.coop() and someone != local and someone.bleeding
+		if not down:
+			if _down_marks.has(someone):
+				(_down_marks[someone] as Node).queue_free()
+				_down_marks.erase(someone)
+			continue
+		if not _down_marks.has(someone):
+			var mark := DownMark.new()
+			mark.name = "DownMark"
+			_root.add_child(mark)
+			mark.label = _plain(mark, "", 16, DownMark.COLOR, HORIZONTAL_ALIGNMENT_CENTER)
+			_down_marks[someone] = mark
+		var marker := _down_marks[someone] as DownMark
+		marker.visible = camera != null and not get_tree().paused
+		if camera == null:
+			continue
+		var head := someone.global_position + Vector3.UP * 3.1
+		var behind := camera.is_position_behind(head)
+		var at := camera.unproject_position(head)
+		var free := _free_area(screen)
+		var inside := not behind and free.has_point(at)
+		var seconds := ceili(maxf(0.0, someone.bleed_left))
+		if inside:
+			marker.point(at, NAN)
+			marker.label.text = "%ds" % seconds
+		else:
+			var center := free.get_center()
+			var toward := (center - at) if behind else (at - center)
+			if toward.length_squared() < 1.0:
+				toward = Vector2.DOWN
+			marker.point(_edge_point(center, toward.normalized(), free), toward.angle())
+			marker.label.text = Loc.t("%s %ds") % [someone.player_name, seconds]
+	for gone: Variant in _down_marks.keys():
+		if not is_instance_valid(gone):
+			(_down_marks[gone] as Node).queue_free()
+			_down_marks.erase(gone)
+
+
+## Onde a reta do centro na direção `dir` cruza a borda da área `area`.
+static func _edge_point(center: Vector2, dir: Vector2, area: Rect2) -> Vector2:
+	var half := area.size * 0.5
+	var scale_x := half.x / absf(dir.x) if absf(dir.x) > 0.0001 else INF
+	var scale_y := half.y / absf(dir.y) if absf(dir.y) > 0.0001 else INF
+	return center + dir * minf(scale_x, scale_y)
+
+
+## Parte da tela sem painéis (as setas dos caídos ficam dentro dela): sem os cartões do time à
+## direita e sem os painéis de baixo.
+func _free_area(screen: Vector2) -> Rect2:
+	var right := screen.x - 48.0
+	if _team_box and _team_box.visible:
+		right = _team_box.position.x - 24.0
+	return Rect2(Vector2(48, 60), Vector2(right - 48.0, screen.y - 60.0 - 150.0))
+
+
+## Marca de colega caído: cruz (na tela) ou seta (na borda, apontando para ele), piscando, com um
+## texto embaixo.
+class DownMark extends Control:
+	const COLOR := Color(1.0, 0.32, 0.26)
+	var label: Label
+	## Direção da seta (rad); NAN = cruz sobre o colega.
+	var angle := NAN
+
+	func _init() -> void:
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	func point(at: Vector2, new_angle: float) -> void:
+		position = at.round()
+		angle = new_angle
+		if label == null:
+			return
+		label.size = Vector2(180, 20)
+		if is_nan(angle):
+			# Cruz: os segundos em cima dela (embaixo fica o nome do colega).
+			label.position = Vector2(-90, -40)
+			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		else:
+			# Seta: o texto do lado de dentro da tela (oposto ao que ela aponta).
+			var side := cos(angle)
+			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT if side > 0.4 else (HORIZONTAL_ALIGNMENT_LEFT if side < -0.4 else HORIZONTAL_ALIGNMENT_CENTER)
+			label.position = Vector2(-196.0 if side > 0.4 else (16.0 if side < -0.4 else -90.0), 16)
+
+	func _process(_delta: float) -> void:
+		queue_redraw()
+
+	func _draw() -> void:
+		var color := Color(COLOR, 0.55 + 0.45 * sin(Time.get_ticks_msec() / 160.0))
+		var shade := Color(0, 0, 0, 0.8)
+		if is_nan(angle):
+			draw_rect(Rect2(-4, -12, 8, 24), shade)
+			draw_rect(Rect2(-12, -4, 24, 8), shade)
+			draw_rect(Rect2(-2, -10, 4, 20), color)
+			draw_rect(Rect2(-10, -2, 20, 4), color)
+			return
+		var forward := Vector2.RIGHT.rotated(angle)
+		var side := forward.orthogonal()
+		draw_colored_polygon(PackedVector2Array([forward * 16.0, -forward * 6.0 + side * 11.0, -forward * 6.0 - side * 11.0]), shade)
+		draw_colored_polygon(PackedVector2Array([forward * 12.0, -forward * 4.0 + side * 8.0, -forward * 4.0 - side * 8.0]), color)
+
+
+## Quem fez o quê: uma linha nova embaixo; as velhas somem em `FEED_TIME` s (no máximo
+## `FEED_LINES` na tela).
+func _on_team_feed(text: String) -> void:
+	if _feed == null:
+		_feed = VBoxContainer.new()
+		_feed.name = "Feed"
+		_feed.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_feed.add_theme_constant_override(&"separation", 2)
+		_root.add_child(_feed)
+	while _feed.get_child_count() >= FEED_LINES:
+		var oldest := _feed.get_child(0)
+		_feed.remove_child(oldest)
+		oldest.queue_free()
+	var line := _plain(_feed, Loc.text(text), 16, TEXT)
+	var tween := line.create_tween()
+	tween.tween_interval(FEED_TIME)
+	tween.tween_property(line, "modulate:a", 0.0, 0.6)
+	tween.tween_callback(line.queue_free)
+
+
+## Um colega caiu: alerta curto (a seta e o painel mostram onde e quanto tempo falta).
+func _on_player_downed(who: Node3D) -> void:
+	if Players.coop() and who != Players.local_player():
+		Audio.play("boss_warning", "ui", 0.55, 0.0, 1.3)
+
+
+## Mini mira do PC: na posição do mouse enquanto se mira com ele (não no toque, nem com o
+## analógico, nem na pausa ou no fim de jogo). O cursor do sistema some enquanto ela aparece.
+func _update_crosshair() -> void:
+	var player := Players.local_player()
+	var wanted: bool = Save.get_setting("crosshair") != false and not InputBindings.touch_active and player != null \
+		and player.mouse_aim and player.is_alive() and not get_tree().paused and not _game_over_panel.visible \
+		and not (_pause_menu and _pause_menu.visible)
+	_crosshair.visible = wanted
+	_set_cursor_hidden(wanted)
+	if not wanted:
+		return
+	_crosshair.position = get_viewport().get_mouse_position()
+	_crosshair.show_state(player.weapon.current_spread() if player.weapon else 0.0, player.aiming_at_enemy)
+
+
+func _set_cursor_hidden(hidden: bool) -> void:
+	var mode := Input.MOUSE_MODE_HIDDEN if hidden else Input.MOUSE_MODE_VISIBLE
+	if Input.mouse_mode != mode and Input.mouse_mode in [Input.MOUSE_MODE_VISIBLE, Input.MOUSE_MODE_HIDDEN]:
+		Input.mouse_mode = mode

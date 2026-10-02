@@ -121,7 +121,18 @@ func _ready() -> void:
 	_build_spawns()
 	open_area(StringName(data.start_area))
 	Events.hound_round_changed.connect(_on_hound_round)
+	Events.settings_changed.connect(_on_settings_changed)
+	_on_settings_changed()
 	nav_region.bake_navigation_mesh(false)
+
+
+## Brilho e sombras (Configurações → VÍDEO): o brilho entra no ambiente; as sombras, na luz
+## principal do mapa.
+func _on_settings_changed() -> void:
+	var moon := get_node_or_null(^"Moon") as Light3D
+	if moon:
+		moon.shadow_enabled = Save.get_setting("shadows") != false
+	_apply_environment()
 
 
 ## Névoa azulada e mais escuro durante a rodada dos cães.
@@ -194,6 +205,10 @@ func _apply_environment() -> void:
 	env.ambient_light_energy = energy * _light_energy
 	env.ambient_light_color = color.lerp(WARM_LIGHT, _light_warm)
 	_base_env["area_color"] = env.ambient_light_color
+	# Brilho escolhido nas Configurações (1,0 = o do mapa).
+	var brightness := clampf(float(Save.get_setting("brightness") if Save.get_setting("brightness") != null else 1.0), 0.5, 1.6)
+	env.adjustment_enabled = not is_equal_approx(brightness, 1.0)
+	env.adjustment_brightness = brightness
 
 
 func is_open_floor(point: Vector3) -> bool:
@@ -203,6 +218,13 @@ func is_open_floor(point: Vector3) -> bool:
 		for dx in range(-1, 2):
 			if not _is_floor(cell(tx + dx, tz + dz)):
 				return false
+	var area := area_of(point)
+	return area != &"" and is_area_open(area)
+
+
+func is_spawnable(point: Vector3) -> bool:
+	if not _is_floor(cell(floori(point.x), floori(point.z))):
+		return false
 	var area := area_of(point)
 	return area != &"" and is_area_open(area)
 

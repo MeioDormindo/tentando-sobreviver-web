@@ -57,9 +57,9 @@ func get_interaction_prompt(player: Node3D) -> String:
 		return "SEM ENERGIA — ligue o disjuntor"
 	var weapon := p.weapon
 	if weapon.level >= WeaponUpgrade.MAX_LEVEL:
-		return "%s  ·  NÍVEL MÁXIMO" % weapon.data.display_name.to_upper()
+		return Loc.fmt("%s  ·  NÍVEL MÁXIMO", [Loc.up(weapon.data.display_name)])
 	var next := "Mk II" if weapon.level == 0 else "Mk III"
-	return "[E] WEAPON LAB: %s → %s  ·  %d pontos" % [weapon.data.display_name.to_upper(), next, price_for(weapon.level)]
+	return Loc.fmt("[%s] WEAPON LAB: %s → %s  ·  %s pontos", [Loc.key(&"interact"), Loc.up(weapon.data.display_name), next, price_for(weapon.level)])
 
 
 func interact(player: Node3D) -> bool:

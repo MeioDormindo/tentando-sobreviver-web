@@ -1,0 +1,2734 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tentando Sobreviver\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: id\n"
+
+msgid "[SEGURE %s] FECHAR A VÁLVULA"
+msgstr "[TAHAN %s] TUTUP KATUP"
+
+msgid "ZUMBI DOURADO ABATIDO!  +%s"
+msgstr "ZOMBI EMAS TUMBANG!  +%s"
+
+msgid "O ZUMBI DOURADO ESCAPOU"
+msgstr "ZOMBI EMAS KABUR"
+
+msgid "[SEGURE %s] ABRIR SUPRIMENTOS"
+msgstr "[TAHAN %s] BUKA PERSEDIAAN"
+
+msgid "SUPRIMENTOS"
+msgstr "PERSEDIAAN"
+
+msgid "Munição cheia · Armadura · +%s"
+msgstr "Amunisi penuh · Zirah · +%s"
+
+msgid "ATROPELADOS ×%s"
+msgstr "TERLINDAS ×%s"
+
+msgid "O PORTAL CAIU — O TRIDENTE DE POSEIDON FICOU NO LUGAR"
+msgstr "PORTAL HANCUR — TRISULA POSEIDON TERTINGGAL"
+
+msgid "O PORTÃO DO SUBMUNDO SE FECHOU"
+msgstr "GERBANG DUNIA BAWAH TERTUTUP"
+
+msgid "TREM"
+msgstr "KERETA"
+
+msgid "[SEGURE %s] CONSERTAR BARRICADA  ·  +%s por tábua"
+msgstr "[TAHAN %s] PERBAIKI BARIKADE  ·  +%s per papan"
+
+msgid "BÊNÇÃO DE %s"
+msgstr "BERKAT %s"
+
+msgid "BÊNÇÃO DE %s ATIVA"
+msgstr "BERKAT %s AKTIF"
+
+msgid "[%s] BÊNÇÃO DE %s — %s: %s  ·  DE GRAÇA"
+msgstr "[%s] BERKAT %s — %s: %s  ·  GRATIS"
+
+msgid "[%s] BÊNÇÃO DE %s — %s: %s  ·  %s pontos"
+msgstr "[%s] BERKAT %s — %s: %s  ·  %s poin"
+
+msgid "%s — %s"
+msgstr "%s — %s"
+
+msgid "DISJUNTOR"
+msgstr "SAKLAR LISTRIK"
+
+msgid "[SEGURE %s] LIGAR A ENERGIA"
+msgstr "[TAHAN %s] NYALAKAN LISTRIK"
+
+msgid "ENERGIA LIGADA"
+msgstr "LISTRIK MENYALA"
+
+msgid "%s ligou a energia"
+msgstr "%s menyalakan listrik"
+
+msgid "[%s] LER A PLACA"
+msgstr "[%s] BACA PAPAN"
+
+msgid "PORTÃO DO TEMPLO — leve Fragmentos de Alma aos 3 altares"
+msgstr "GERBANG KUIL — bawa Pecahan Jiwa ke 3 altar"
+
+msgid "PORTÃO DO SUBMUNDO — precisa da chave do Minotauro"
+msgstr "GERBANG DUNIA BAWAH — butuh kunci Minotaur"
+
+msgid "PASSAGEM SELADA — ative as 12 estátuas dos deuses"
+msgstr "LORONG TERSEGEL — nyalakan 12 patung dewa"
+
+msgid "PORTÃO FECHADO"
+msgstr "GERBANG TERTUTUP"
+
+msgid "[%s] ABRIR PORTA  ·  %s pontos"
+msgstr "[%s] BUKA PINTU  ·  %s poin"
+
+msgid "[%s] ABRIR PORTA — %s  ·  %s pontos"
+msgstr "[%s] BUKA PINTU — %s  ·  %s poin"
+
+msgid "[%s] ABRIR PORTA — %s, %s  ·  %s pontos"
+msgstr "[%s] BUKA PINTU — %s, %s  ·  %s poin"
+
+msgid "%s abriu %s"
+msgstr "%s membuka %s"
+
+msgid "ARMADILHA"
+msgstr "JEBAKAN"
+
+msgid "ARMADILHA ELÉTRICA LIGADA — %ss"
+msgstr "JEBAKAN LISTRIK AKTIF — %sd"
+
+msgid "ARMADILHA RECARREGANDO — %ss"
+msgstr "JEBAKAN MENGISI ULANG — %sd"
+
+msgid "[%s] LIGAR ARMADILHA ELÉTRICA  ·  %s pontos"
+msgstr "[%s] NYALAKAN JEBAKAN LISTRIK  ·  %s poin"
+
+msgid "RELIGAR A ENERGIA"
+msgstr "NYALAKAN LAGI LISTRIK"
+
+msgid "PAINEL DE ENERGIA — FUNCIONANDO"
+msgstr "PANEL LISTRIK — BERFUNGSI"
+
+msgid "ENERGIA"
+msgstr "LISTRIK"
+
+msgid "DESLIGAR O ALARME"
+msgstr "MATIKAN ALARM"
+
+msgid "ALARME DE EMERGÊNCIA — DESLIGADO"
+msgstr "ALARM DARURAT — MATI"
+
+msgid "ALARME"
+msgstr "ALARM"
+
+msgid "[SEGURE %s] %s  ·  %s pontos"
+msgstr "[TAHAN %s] %s  ·  %s poin"
+
+msgid "ZEUS"
+msgstr "ZEUS"
+
+msgid "HERA"
+msgstr "HERA"
+
+msgid "POSEIDON"
+msgstr "POSEIDON"
+
+msgid "DEMÉTER"
+msgstr "DEMETER"
+
+msgid "ATENA"
+msgstr "ATHENA"
+
+msgid "APOLO"
+msgstr "APOLLO"
+
+msgid "ÁRTEMIS"
+msgstr "ARTEMIS"
+
+msgid "ARES"
+msgstr "ARES"
+
+msgid "AFRODITE"
+msgstr "APHRODITE"
+
+msgid "HEFESTO"
+msgstr "HEPHAISTOS"
+
+msgid "HERMES"
+msgstr "HERMES"
+
+msgid "DIONÍSIO"
+msgstr "DIONYSUS"
+
+msgid "[SEGURE %s] ACENDER A ESTÁTUA DE %s"
+msgstr "[TAHAN %s] NYALAKAN PATUNG %s"
+
+msgid "ESTÁTUA DE %s ACESA (%s/%s)"
+msgstr "PATUNG %s MENYALA (%s/%s)"
+
+msgid "OS DOZE DO OLIMPO"
+msgstr "DUA BELAS DEWA OLYMPUS"
+
+msgid "O templo reage... uma passagem se abriu na Floresta."
+msgstr "Kuil bereaksi... sebuah lorong terbuka di Hutan."
+
+msgid "SINTONIZAR O RÁDIO"
+msgstr "SETEL RADIO"
+
+msgid "RÁDIO — CHIADO..."
+msgstr "RADIO — DESIS..."
+
+msgid "[SEGURE %s] %s"
+msgstr "[TAHAN %s] %s"
+
+msgid "[%s] MYSTERY BOX  ·  %s pontos"
+msgstr "[%s] MYSTERY BOX  ·  %s poin"
+
+msgid "MYSTERY BOX  ·  arma de %s"
+msgstr "MYSTERY BOX  ·  senjata milik %s"
+
+msgid "[%s] PEGAR %s (MUNIÇÃO)"
+msgstr "[%s] AMBIL %s (AMUNISI)"
+
+msgid "[%s] PEGAR %s"
+msgstr "[%s] AMBIL %s"
+
+msgid "um colega"
+msgstr "seorang rekan"
+
+msgid "A MYSTERY BOX MUDOU DE LUGAR — %s"
+msgstr "MYSTERY BOX PINDAH TEMPAT — %s"
+
+msgid "A MYSTERY BOX MUDOU DE LUGAR"
+msgstr "MYSTERY BOX PINDAH TEMPAT"
+
+msgid "SEM ENERGIA — ligue o disjuntor"
+msgstr "TIDAK ADA LISTRIK — nyalakan saklar"
+
+msgid "%s  ·  JÁ ATIVO"
+msgstr "%s  ·  SUDAH AKTIF"
+
+msgid "%s  ·  ESGOTADO NESTA PARTIDA"
+msgstr "%s  ·  HABIS DI PERTANDINGAN INI"
+
+msgid "[%s] %s — %s  ·  %s pontos"
+msgstr "[%s] %s — %s  ·  %s poin"
+
+msgid "[SEGURE %s] PEGAR %s  (%s%%)"
+msgstr "[TAHAN %s] AMBIL %s  (%s%%)"
+
+msgid "%s — presente de Artemis"
+msgstr "%s — hadiah dari Artemis"
+
+msgid "[%s] PEGAR O URSINHO"
+msgstr "[%s] AMBIL BONEKA BERUANG"
+
+msgid "URSINHO %s/%s"
+msgstr "BONEKA BERUANG %s/%s"
+
+msgid "SEGREDO DOS URSINHOS"
+msgstr "RAHASIA BONEKA BERUANG"
+
+msgid "Você achou todos! Segredo salvo."
+msgstr "Kamu menemukan semuanya! Rahasia tersimpan."
+
+msgid "Todos os ursinhos de novo!"
+msgstr "Semua boneka beruang lagi!"
+
+msgid "PAINEL DO TREM — DISPONÍVEL EM %ss"
+msgstr "PANEL KERETA — TERSEDIA DALAM %sd"
+
+msgid "[%s] CHAMAR O TREM  ·  %s pontos"
+msgstr "[%s] PANGGIL KERETA  ·  %s poin"
+
+msgid "O TREM NÃO PODE VIR AGORA"
+msgstr "KERETA TIDAK BISA DATANG SEKARANG"
+
+msgid "MUNIÇÃO"
+msgstr "AMUNISI"
+
+msgid "  ·  SEGURE %s: "
+msgstr "  ·  TAHAN %s:"
+
+msgid "MUNIÇÃO CHEIA"
+msgstr "AMUNISI PENUH"
+
+msgid "[%s] MUNIÇÃO %s  ·  %s pontos"
+msgstr "[%s] AMUNISI %s  ·  %s poin"
+
+msgid "%s  ·  MUNIÇÃO CHEIA"
+msgstr "%s  ·  AMUNISI PENUH"
+
+msgid "[%s] COMPRAR %s  ·  %s pontos"
+msgstr "[%s] BELI %s  ·  %s poin"
+
+msgid "[%s] PEGAR %s  ·  %ss"
+msgstr "[%s] AMBIL %s  ·  %sd"
+
+msgid "[%s] PEGAR %s (troca por %s)  ·  %ss"
+msgstr "[%s] AMBIL %s (tukar dengan %s)  ·  %sd"
+
+msgid "%s  ·  NÍVEL MÁXIMO"
+msgstr "%s  ·  LEVEL MAKSIMUM"
+
+msgid "Mk II"
+msgstr "Mk II"
+
+msgid "Mk III"
+msgstr "Mk III"
+
+msgid "[%s] WEAPON LAB: %s → %s  ·  %s pontos"
+msgstr "[%s] WEAPON LAB: %s → %s  ·  %s poin"
+
+msgid "TREM PASSANDO"
+msgstr "KERETA LEWAT"
+
+msgid "⚠ TREM CHEGANDO"
+msgstr "⚠ KERETA DATANG"
+
+msgid "PRÓXIMO TREM %ds"
+msgstr "KERETA BERIKUTNYA %dd"
+
+msgid "PRÓXIMO TREM EM BREVE"
+msgstr "KERETA BERIKUTNYA SEGERA"
+
+msgid "SEM PREVISÃO"
+msgstr "TIDAK ADA PERKIRAAN"
+
+msgid "Não foi possível conectar à sala"
+msgstr "Tidak dapat terhubung ke room"
+
+msgid "O host saiu"
+msgstr "Host keluar"
+
+msgid "Tempo esgotado ao entrar na sala"
+msgstr "Waktu habis saat masuk ke room"
+
+msgid "Criando sala..."
+msgstr "Membuat room..."
+
+msgid "Não foi possível criar a sala (%s)"
+msgstr "Tidak dapat membuat room (%s)"
+
+msgid "Procurando a sala %s..."
+msgstr "Mencari room %s..."
+
+msgid "Sem conexão com o servidor (%s)"
+msgstr "Tidak ada koneksi ke server (%s)"
+
+msgid "Sala %s não encontrada"
+msgstr "Room %s tidak ditemukan"
+
+msgid "Não foi possível abrir a sala (%s)"
+msgstr "Tidak dapat membuka room (%s)"
+
+msgid "Sala %s aberta"
+msgstr "Room %s terbuka"
+
+msgid "Não foi possível entrar (%s)"
+msgstr "Tidak dapat masuk (%s)"
+
+msgid "Conectando à sala %s..."
+msgstr "Menghubungkan ke room %s..."
+
+msgid "Na sala %s"
+msgstr "Di room %s"
+
+msgid "JOGADOR"
+msgstr "PEMAIN"
+
+msgid "sem conexão"
+msgstr "tidak ada koneksi"
+
+msgid "A partida já começou"
+msgstr "Pertandingan sudah dimulai"
+
+msgid "Sala cheia (%s jogadores)"
+msgstr "Room penuh (%s pemain)"
+
+msgid "Entrada recusada"
+msgstr "Masuk ditolak"
+
+msgid "sem sessão"
+msgstr "tidak ada sesi"
+
+msgid "Usuário: 3 a 16 letras minúsculas, números ou _"
+msgstr "Nama pengguna: 3–16 huruf kecil, angka, atau _"
+
+msgid "Senha: mínimo de %d caracteres"
+msgstr "Kata sandi: minimal %d karakter"
+
+msgid "Senha: máximo de %d caracteres"
+msgstr "Kata sandi: maksimal %d karakter"
+
+msgid "Não foi possível entrar — tente de novo"
+msgstr "Tidak dapat masuk — coba lagi"
+
+msgid "Sem conexão"
+msgstr "Tidak ada koneksi"
+
+msgid "Sessão expirada — entre de novo"
+msgstr "Sesi berakhir — masuk lagi"
+
+msgid "Falha ao ler da nuvem"
+msgstr "Gagal membaca dari cloud"
+
+msgid "Contas online indisponíveis"
+msgstr "Akun online tidak tersedia"
+
+msgid "Falha ao salvar na nuvem"
+msgstr "Gagal menyimpan ke cloud"
+
+msgid "Sem conexão com o servidor"
+msgstr "Tidak ada koneksi ke server"
+
+msgid "Muitas tentativas — aguarde um pouco"
+msgstr "Terlalu banyak percobaan — tunggu sebentar"
+
+msgid "Esse usuário já existe"
+msgstr "Nama pengguna itu sudah ada"
+
+msgid "Usuário ou senha incorretos"
+msgstr "Nama pengguna atau kata sandi salah"
+
+msgid "Senha fraca demais"
+msgstr "Kata sandi terlalu lemah"
+
+msgid "Usuário inválido"
+msgstr "Nama pengguna tidak valid"
+
+msgid "Não foi possível concluir — tente de novo"
+msgstr "Tidak dapat diselesaikan — coba lagi"
+
+msgid "HACKER DETECTADO"
+msgstr "HACKER TERDETEKSI"
+
+msgid "SOLO"
+msgstr "SOLO"
+
+msgid "DUPLA"
+msgstr "DUO"
+
+msgid "TRIO"
+msgstr "TRIO"
+
+msgid "QUARTETO"
+msgstr "KUARTET"
+
+msgid "ranking global indisponível"
+msgstr "peringkat global tidak tersedia"
+
+msgid "mapa ainda não aceito no ranking global"
+msgstr "peta belum diterima di peringkat global"
+
+msgid "pontuação recusada"
+msgstr "skor ditolak"
+
+msgid "resposta incompleta"
+msgstr "respons tidak lengkap"
+
+msgid "não conectou ao servidor"
+msgstr "tidak terhubung ke server"
+
+msgid "endereço não encontrado"
+msgstr "alamat tidak ditemukan"
+
+msgid "conexão caiu"
+msgstr "koneksi terputus"
+
+msgid "falha de TLS"
+msgstr "kegagalan TLS"
+
+msgid "sem resposta"
+msgstr "tidak ada respons"
+
+msgid "resposta grande demais"
+msgstr "respons terlalu besar"
+
+msgid "falha ao descompactar a resposta"
+msgstr "gagal mengekstrak respons"
+
+msgid "requisição falhou"
+msgstr "permintaan gagal"
+
+msgid "redirecionamentos demais"
+msgstr "terlalu banyak pengalihan"
+
+msgid "tempo esgotado"
+msgstr "waktu habis"
+
+msgid "requisição recusada (%s)"
+msgstr "permintaan ditolak (%s)"
+
+msgid "erro de rede %d"
+msgstr "kesalahan jaringan %d"
+
+msgid "ALIADO"
+msgstr "SEKUTU"
+
+msgid "Fúria do Trovão"
+msgstr "Amukan Guntur"
+
+msgid "12% dos tiros soltam um raio"
+msgstr "12% tembakan melepaskan petir"
+
+msgid "Sede de Sangue"
+msgstr "Haus Darah"
+
+msgid "abates seguidos aumentam o dano"
+msgstr "pembunuhan beruntun menambah damage"
+
+msgid "mira precisa e golpes críticos"
+msgstr "bidikan tepat dan serangan kritis"
+
+msgid "anda, recarrega e interage mais rápido"
+msgstr "berjalan, mengisi ulang, dan berinteraksi lebih cepat"
+
+msgid "Maré"
+msgstr "Pasang Laut"
+
+msgid "os tiros empurram os zumbis"
+msgstr "tembakan mendorong zombi"
+
+msgid "HADES"
+msgstr "HADES"
+
+msgid "Pacto dos Mortos"
+msgstr "Pakta Orang Mati"
+
+msgid "abatidos voltam como aliados"
+msgstr "yang tumbang kembali sebagai sekutu"
+
+msgid "HADES: um espírito aliado se levanta para lutar"
+msgstr "HADES: roh sekutu bangkit untuk bertarung"
+
+msgid "PETRIFICADO! Não olhe para a Górgona"
+msgstr "MEMBATU! Jangan lihat Gorgon"
+
+msgid "QUICK REVIVE!"
+msgstr "QUICK REVIVE!"
+
+msgid "CAÍDO! Um colega pode te reviver"
+msgstr "TUMBANG! Rekan bisa menghidupkanmu"
+
+msgid "%s caiu!"
+msgstr "%s tumbang!"
+
+msgid "CAÍDO · %ss para um colega te reviver"
+msgstr "TUMBANG · %sd agar rekan menghidupkanmu"
+
+msgid "VOCÊ MORREU · volta no próximo round"
+msgstr "KAMU MATI · kembali di ronde berikutnya"
+
+msgid "%s levantou %s"
+msgstr "%s menghidupkan %s"
+
+msgid "[SEGURE %s] REVIVER %s"
+msgstr "[TAHAN %s] HIDUPKAN %s"
+
+msgid "O COLEGA"
+msgstr "REKAN"
+
+msgid "[%s] %s"
+msgstr "[%s] %s"
+
+msgid "CADEADO ABERTO"
+msgstr "GEMBOK TERBUKA"
+
+msgid "%s concluiu a missão: todos os perks + %s"
+msgstr "%s menyelesaikan misi: semua perk + %s"
+
+msgid "%s concluiu a missão: todos os perks"
+msgstr "%s menyelesaikan misi: semua perk"
+
+msgid "Ligue a energia (disjuntor no Necrotério)"
+msgstr "Nyalakan listrik (saklar di Kamar Mayat)"
+
+msgid "Derrote o Paciente Zero enfurecido (round %s)"
+msgstr "Kalahkan Pasien Nol yang mengamuk (ronde %s)"
+
+msgid "Aplique o soro no Paciente Zero"
+msgstr "Suntikkan serum ke Pasien Nol"
+
+msgid "O SORO"
+msgstr "SERUM"
+
+msgid "Componentes do soro %s/3 — UTI · Farmácia · cartão do Blindado"
+msgstr "Komponen serum %s/3 — ICU · Apotek · kartu si Lapis Baja"
+
+msgid "PEGAR AS AMOSTRAS"
+msgstr "AMBIL SAMPEL"
+
+msgid "AMOSTRAS COLETADAS"
+msgstr "SAMPEL TERKUMPUL"
+
+msgid "PEGAR O REAGENTE"
+msgstr "AMBIL REAGEN"
+
+msgid "REAGENTE COLETADO"
+msgstr "REAGEN TERKUMPUL"
+
+msgid "ARMÁRIO TRANCADO — ATIRE NO CADEADO"
+msgstr "LEMARI TERKUNCI — TEMBAK GEMBOKNYA"
+
+msgid "ABRIR A GAVETA COM O CARTÃO"
+msgstr "BUKA LACI DENGAN KARTU"
+
+msgid "CATALISADOR COLETADO"
+msgstr "KATALIS TERKUMPUL"
+
+msgid "GAVETA TRANCADA — PRECISA DO CARTÃO DE ACESSO"
+msgstr "LACI TERKUNCI — BUTUH KARTU AKSES"
+
+msgid "PEGAR O CARTÃO DE ACESSO"
+msgstr "AMBIL KARTU AKSES"
+
+msgid "CARTÃO DE ACESSO — abra a gaveta do Necrotério"
+msgstr "KARTU AKSES — buka laci di Kamar Mayat"
+
+msgid "UM SEGURANÇA BLINDADO ESTÁ COM O CARTÃO DE ACESSO"
+msgstr "SEORANG SATPAM LAPIS BAJA MEMBAWA KARTU AKSES"
+
+msgid "Leve os componentes à centrífuga do Laboratório"
+msgstr "Bawa komponen ke sentrifus di Laboratorium"
+
+msgid "CENTRÍFUGA SOB ATAQUE! Afaste os zumbis (%ss)"
+msgstr "SENTRIFUS DISERANG! Usir para zombi (%sd)"
+
+msgid "Defenda a centrífuga: %ss"
+msgstr "Pertahankan sentrifus: %sd"
+
+msgid "COLOCAR OS COMPONENTES NA CENTRÍFUGA"
+msgstr "MASUKKAN KOMPONEN KE SENTRIFUS"
+
+msgid "A CENTRÍFUGA ESTÁ GIRANDO — DEFENDA!"
+msgstr "SENTRIFUS BERPUTAR — PERTAHANKAN!"
+
+msgid "SORO PRONTO! O Paciente Zero sentiu o cheiro..."
+msgstr "SERUM SIAP! Pasien Nol mencium baunya..."
+
+msgid "APLICAR O SORO"
+msgstr "SUNTIKKAN SERUM"
+
+msgid "VOCÊ CUROU O PACIENTE ZERO"
+msgstr "KAMU MENYEMBUHKAN PASIEN NOL"
+
+msgid "Todos os perks + Tornado. A luta continua..."
+msgstr "Semua perk + Tornado. Pertarungan berlanjut..."
+
+msgid "Ligue o gerador dos arqueólogos (Necrópole)"
+msgstr "Nyalakan generator para arkeolog (Nekropolis)"
+
+msgid "Leve os Fragmentos aos altares do Portão do Templo (%s/3)"
+msgstr "Bawa Pecahan ke altar Gerbang Kuil (%s/3)"
+
+msgid "O guardião despertou: derrote o Minotauro (round %s)"
+msgstr "Sang penjaga terbangun: kalahkan Minotaur (ronde %s)"
+
+msgid "Pegue a chave do Submundo onde o Minotauro caiu"
+msgstr "Ambil kunci Dunia Bawah di tempat Minotaur tumbang"
+
+msgid "Abra o Portão do Submundo (sul das Ruínas)"
+msgstr "Buka Gerbang Dunia Bawah (selatan Reruntuhan)"
+
+msgid "O Cérbero guarda o Submundo: derrote-o (round %s)"
+msgstr "Cerberus menjaga Dunia Bawah: kalahkan dia (ronde %s)"
+
+msgid "Sele o portão no altar da Arena Final"
+msgstr "Segel gerbang di altar Arena Akhir"
+
+msgid "O PORTÃO DO SUBMUNDO"
+msgstr "GERBANG DUNIA BAWAH"
+
+msgid "Fragmentos de Alma %s/3 — Necrópole · Floresta · um Esqueleto os carrega"
+msgstr "Pecahan Jiwa %s/3 — Nekropolis · Hutan · dibawa seekor Kerangka"
+
+msgid "PEGAR O FRAGMENTO DE ALMA"
+msgstr "AMBIL PECAHAN JIWA"
+
+msgid "FRAGMENTO DE ALMA (%s/3)"
+msgstr "PECAHAN JIWA (%s/3)"
+
+msgid "UM ESQUELETO CARREGA UM FRAGMENTO DE ALMA"
+msgstr "SEEKOR KERANGKA MEMBAWA PECAHAN JIWA"
+
+msgid "DEPOSITAR UM FRAGMENTO NO ALTAR"
+msgstr "TARUH PECAHAN DI ALTAR"
+
+msgid "ALTAR ACESO (%s/3)"
+msgstr "ALTAR MENYALA (%s/3)"
+
+msgid "O PORTÃO DO TEMPLO SE ABRIU... ALGO ACORDOU NO LABIRINTO"
+msgstr "GERBANG KUIL TERBUKA... SESUATU TERBANGUN DI LABIRIN"
+
+msgid "PEGAR A CHAVE DO SUBMUNDO"
+msgstr "AMBIL KUNCI DUNIA BAWAH"
+
+msgid "CHAVE DO SUBMUNDO — abra o portão ao sul das Ruínas"
+msgstr "KUNCI DUNIA BAWAH — buka gerbang di selatan Reruntuhan"
+
+msgid "ABRIR O PORTÃO DO SUBMUNDO"
+msgstr "BUKA GERBANG DUNIA BAWAH"
+
+msgid "SELAR O PORTÃO DO SUBMUNDO"
+msgstr "SEGEL GERBANG DUNIA BAWAH"
+
+msgid "O PORTÃO DO SUBMUNDO FOI SELADO"
+msgstr "GERBANG DUNIA BAWAH TELAH DISEGEL"
+
+msgid "Todos os perks + Raio de Zeus. Mas algo lá embaixo ainda respira..."
+msgstr "Semua perk + Petir Zeus. Tapi sesuatu di bawah sana masih bernapas..."
+
+msgid "O ÚLTIMO TREM"
+msgstr "KERETA TERAKHIR"
+
+msgid "Ligue a energia (disjuntor na Área Técnica)"
+msgstr "Nyalakan listrik (saklar di Area Teknis)"
+
+msgid "Derrote o Condutor enfurecido (round %s)"
+msgstr "Kalahkan Kondektur yang mengamuk (ronde %s)"
+
+msgid "Pegue a Lanterna do Condutor"
+msgstr "Ambil Lentera Kondektur"
+
+msgid "Peças do sinal %s/3 — fusível (Manutenção) · chave (Bilheteria) · manivela (Blindado)"
+msgstr "Komponen sinyal %s/3 — sekring (Perawatan) · kunci (Loket) · engkol (si Lapis Baja)"
+
+msgid "PEGAR O FUSÍVEL DO SINAL"
+msgstr "AMBIL SEKRING SINYAL"
+
+msgid "FUSÍVEL COLETADO"
+msgstr "SEKRING TERKUMPUL"
+
+msgid "PEGAR A CHAVE DO PAINEL"
+msgstr "AMBIL KUNCI PANEL"
+
+msgid "CHAVE DO PAINEL COLETADA"
+msgstr "KUNCI PANEL TERKUMPUL"
+
+msgid "COFRE TRANCADO — ATIRE NO CADEADO"
+msgstr "BRANKAS TERKUNCI — TEMBAK GEMBOKNYA"
+
+msgid "UM BLINDADO ESTÁ COM A MANIVELA DO SINAL"
+msgstr "SEORANG LAPIS BAJA MEMBAWA ENGKOL SINYAL"
+
+msgid "PEGAR A MANIVELA DO SINAL"
+msgstr "AMBIL ENGKOL SINYAL"
+
+msgid "MANIVELA COLETADA"
+msgstr "ENGKOL TERKUMPUL"
+
+msgid "Leve as peças ao sinal da Plataforma e conserte"
+msgstr "Bawa komponen ke sinyal di Peron dan perbaiki"
+
+msgid "SINAL SOB ATAQUE! Afaste os zumbis (%ss)"
+msgstr "SINYAL DISERANG! Usir para zombi (%sd)"
+
+msgid "Segure o sinal até o trem passar: %ss"
+msgstr "Tahan sinyal sampai kereta lewat: %sd"
+
+msgid "CONSERTAR O SINAL"
+msgstr "PERBAIKI SINYAL"
+
+msgid "O SINAL ESTÁ LIGADO — SEGURE ATÉ O TREM PASSAR!"
+msgstr "SINYAL MENYALA — TAHAN SAMPAI KERETA LEWAT!"
+
+msgid "O TREM PASSOU! O Condutor saiu dos túneis..."
+msgstr "KERETA SUDAH LEWAT! Kondektur keluar dari terowongan..."
+
+msgid "PEGAR A LANTERNA DO CONDUTOR"
+msgstr "AMBIL LENTERA KONDEKTUR"
+
+msgid "O ÚLTIMO TREM PASSOU"
+msgstr "KERETA TERAKHIR TELAH LEWAT"
+
+msgid "Todos os perks + Lanterna do Condutor. A estação é sua..."
+msgstr "Semua perk + Lentera Kondektur. Stasiun ini milikmu..."
+
+msgid "ANDAR PARA CIMA"
+msgstr "JALAN KE ATAS"
+
+msgid "ANDAR PARA BAIXO"
+msgstr "JALAN KE BAWAH"
+
+msgid "ANDAR PARA A ESQUERDA"
+msgstr "JALAN KE KIRI"
+
+msgid "ANDAR PARA A DIREITA"
+msgstr "JALAN KE KANAN"
+
+msgid "ATIRAR"
+msgstr "TEMBAK"
+
+msgid "RECARREGAR"
+msgstr "ISI ULANG"
+
+msgid "USAR / COMPRAR"
+msgstr "PAKAI / BELI"
+
+msgid "TROCAR DE ARMA"
+msgstr "GANTI SENJATA"
+
+msgid "ARMA 1"
+msgstr "SENJATA 1"
+
+msgid "ARMA 2"
+msgstr "SENJATA 2"
+
+msgid "FACA"
+msgstr "PISAU"
+
+msgid "PULAR"
+msgstr "LOMPAT"
+
+msgid "MAPA GRANDE"
+msgstr "PETA BESAR"
+
+msgid "LANTERNA"
+msgstr "SENTER"
+
+msgid "PAUSA"
+msgstr "JEDA"
+
+msgid "MOUSE %d"
+msgstr "MOUSE %d"
+
+msgid "BOTÃO %d"
+msgstr "TOMBOL %d"
+
+msgid "EIXO %d"
+msgstr "SUMBU %d"
+
+msgid "ESPAÇO"
+msgstr "SPASI"
+
+msgid "MOUSE ESQ."
+msgstr "KLIK KIRI"
+
+msgid "MOUSE DIR."
+msgstr "KLIK KANAN"
+
+msgid "MOUSE MEIO"
+msgstr "KLIK TENGAH"
+
+msgid "RODA ↑"
+msgstr "RODA ↑"
+
+msgid "RODA ↓"
+msgstr "RODA ↓"
+
+msgid "AUTOMÁTICO (%s)"
+msgstr "OTOMATIS (%s)"
+
+msgid " Mk III"
+msgstr " Mk III"
+
+msgid " Mk II"
+msgstr " Mk II"
+
+msgid "ALGUÉM"
+msgstr "SESEORANG"
+
+msgid "Barricadas consertadas (%s tábuas) · +%s"
+msgstr "Barikade diperbaiki (%s papan) · +%s"
+
+msgid "%s pegou %s"
+msgstr "%s mengambil %s"
+
+msgid "Perk grátis: %s"
+msgstr "Perk gratis: %s"
+
+msgid "Fúria: dano x%s"
+msgstr "Amukan: damage x%s"
+
+msgid "FIRE SALE! MYSTERY BOX A %s · +%s CAIXAS NO MAPA"
+msgstr "FIRE SALE! MYSTERY BOX SEHARGA %s · +%s KOTAK DI PETA"
+
+msgid "SOBREVIVENTE"
+msgstr "PENYINTAS"
+
+msgid "MULTI x%s"
+msgstr "MULTI x%s"
+
+msgid "VOCÊ"
+msgstr "KAMU"
+
+msgid "BOT %d"
+msgstr "BOT %d"
+
+msgid "CONTA"
+msgstr "AKUN"
+
+msgid "Contas online indisponíveis nesta versão."
+msgstr "Akun online tidak tersedia di versi ini."
+
+msgid "VOLTAR"
+msgstr "KEMBALI"
+
+msgid "LOGADO COMO %s"
+msgstr "MASUK SEBAGAI %s"
+
+msgid "SINCRONIZAR AGORA"
+msgstr "SINKRONKAN SEKARANG"
+
+msgid "SAIR DA CONTA"
+msgstr "KELUAR AKUN"
+
+msgid "USUÁRIO"
+msgstr "NAMA PENGGUNA"
+
+msgid "SENHA"
+msgstr "KATA SANDI"
+
+msgid "Sincronizando o progresso..."
+msgstr "Menyinkronkan progres..."
+
+msgid "ENTRAR"
+msgstr "MASUK"
+
+msgid "CRIAR CONTA"
+msgstr "BUAT AKUN"
+
+msgid "Entre para salvar o progresso na nuvem e jogar em qualquer aparelho (inclusive no navegador).\nNão há recuperação por e-mail: guarde bem a sua senha."
+msgstr "Masuk untuk menyimpan progres di cloud dan bermain di perangkat apa pun (termasuk di browser).\nTidak ada pemulihan lewat e-mail: simpan kata sandimu baik-baik."
+
+msgid "Progresso salvo na nuvem · %s"
+msgstr "Progres tersimpan di cloud · %s"
+
+msgid "O progresso é salvo na nuvem automaticamente"
+msgstr "Progres disimpan ke cloud secara otomatis"
+
+msgid "CONQUISTAS"
+msgstr "PENCAPAIAN"
+
+msgid "%d / %d LIBERADAS"
+msgstr "%d / %d TERBUKA"
+
+msgid "Segredo — continue explorando"
+msgstr "Rahasia — terus menjelajah"
+
+msgid "ESTATÍSTICAS"
+msgstr "STATISTIK"
+
+msgid "%s — melhor round %d · recorde %d pts · %d abates"
+msgstr "%s — ronde terbaik %d · rekor %d poin · %d kill"
+
+msgid "Partidas %d · Abates %d · Faca %d · Headshots %d · Bosses %d · Tempo %dh%02d"
+msgstr "Pertandingan %d · Kill %d · Pisau %d · Headshot %d · Bos %d · Waktu %dh%02d"
+
+msgid "COMUM"
+msgstr "BIASA"
+
+msgid "INCOMUM"
+msgstr "TIDAK BIASA"
+
+msgid "RARA"
+msgstr "LANGKA"
+
+msgid "ÉPICA"
+msgstr "EPIK"
+
+msgid "LENDÁRIA"
+msgstr "LEGENDARIS"
+
+msgid "Prêmio da missão O Último Trem (Terminal) — nunca sai na Mystery Box"
+msgstr "Hadiah misi Kereta Terakhir (Terminal) — tidak pernah keluar dari Mystery Box"
+
+msgid "Prêmio da missão O Portão do Submundo (Templo) — nunca sai na Mystery Box"
+msgstr "Hadiah misi Gerbang Dunia Bawah (Kuil) — tidak pernah keluar dari Mystery Box"
+
+msgid "Santuário do Olimpo: ative as 12 estátuas dos deuses no Templo"
+msgstr "Tempat Suci Olympus: nyalakan 12 patung dewa di Kuil"
+
+msgid "Evento Portão do Submundo (Templo): destrua o portal"
+msgstr "Event Gerbang Dunia Bawah (Kuil): hancurkan portalnya"
+
+msgid "DANO"
+msgstr "DAMAGE"
+
+msgid "CADÊNCIA"
+msgstr "LAJU TEMBAK"
+
+msgid "PENTE"
+msgstr "MAGASIN"
+
+msgid "RESERVA"
+msgstr "CADANGAN"
+
+msgid "RECARGA"
+msgstr "ISI ULANG"
+
+msgid "ALCANCE"
+msgstr "JANGKAUAN"
+
+msgid "ARMAS"
+msgstr "SENJATA"
+
+msgid "AUTOMÁTICA"
+msgstr "OTOMATIS"
+
+msgid "SEMIAUTOMÁTICA"
+msgstr "SEMI-OTOMATIS"
+
+msgid "Elemento %s (%d, segure E na parede): %s"
+msgstr "Elemen %s (%d, tahan E di dinding): %s"
+
+msgid "Weapon Lab: Mk II %d · Mk III %d%s"
+msgstr "Weapon Lab: Mk II %d · Mk III %d%s"
+
+msgid "  (vira %s)"
+msgstr "  (menjadi %s)"
+
+msgid "VER MK II"
+msgstr "LIHAT MK II"
+
+msgid "VER MK III"
+msgstr "LIHAT MK III"
+
+msgid "VER NORMAL"
+msgstr "LIHAT NORMAL"
+
+msgid "%.1f s"
+msgstr "%.1f d"
+
+msgid "%.0f m"
+msgstr "%.0f m"
+
+msgid "Arma inicial do %s"
+msgstr "Senjata awal %s"
+
+msgid "Parede: %d · %s · %s"
+msgstr "Dinding: %d · %s · %s"
+
+msgid "Mystery Box só no %s"
+msgstr "Mystery Box hanya di %s"
+
+msgid "Mystery Box (em todos os mapas)"
+msgstr "Mystery Box (di semua peta)"
+
+msgid "também na Mystery Box"
+msgstr "juga di Mystery Box"
+
+msgid "Granada explode no impacto: %d de dano em área (raio %.1f m). Não fere você."
+msgstr "Granat meledak saat menghantam: %d damage area (radius %.1f m). Tidak melukaimu."
+
+msgid "Jato contínuo que incendeia: %d de dano por segundo durante %.1f s."
+msgstr "Semburan terus-menerus yang membakar: %d damage per detik selama %.1f d."
+
+msgid "Raio instantâneo que salta entre até %d zumbis e os atordoa."
+msgstr "Petir instan yang melompat di antara hingga %d zombi dan membuat mereka pingsan."
+
+msgid "Esfera que atravessa a horda e explode numa descarga elétrica (%d em área)."
+msgstr "Bola yang menembus gerombolan dan meledak dalam lepasan listrik (%d area)."
+
+msgid "Rajada de vento em cone (%d°, alcance %.0f m) que arremessa e destrói a horda à frente."
+msgstr "Hembusan angin berbentuk kerucut (%d°, jangkauan %.0f m) yang melempar dan menghancurkan gerombolan di depan."
+
+msgid "Atravessa até %d zumbis por tiro."
+msgstr "Menembus hingga %d zombi per tembakan."
+
+msgid "PERSONAGEM"
+msgstr "KARAKTER"
+
+msgid "Libere os visuais com as conquistas."
+msgstr "Buka tampilan lewat pencapaian."
+
+msgid "EM USO"
+msgstr "DIPAKAI"
+
+msgid "USAR"
+msgstr "PAKAI"
+
+msgid "TRANCADO"
+msgstr "TERKUNCI"
+
+msgid "JOGAR"
+msgstr "MAIN"
+
+msgid "Trancado — libere com a conquista \"%s\": %s"
+msgstr "Terkunci — buka dengan pencapaian \"%s\": %s"
+
+msgid "Aparece quando você enfrentar esse inimigo."
+msgstr "Muncul saat kamu menghadapi musuh ini."
+
+msgid "Aparece quando você enfrentar esse chefe."
+msgstr "Muncul saat kamu menghadapi bos ini."
+
+msgid "Chegue perto da máquina desse perk."
+msgstr "Dekati mesin perk ini."
+
+msgid "Pegue esse power-up numa partida."
+msgstr "Ambil power-up ini dalam pertandingan."
+
+msgid "Compre esse elemento numa parede de arma."
+msgstr "Beli elemen ini di dinding senjata."
+
+msgid "Receba essa bênção num altar do Templo."
+msgstr "Terima berkat ini di altar Kuil."
+
+msgid "Aparece quando esse evento acontecer numa partida."
+msgstr "Muncul saat event ini terjadi dalam pertandingan."
+
+msgid "Descubra jogando."
+msgstr "Temukan sambil bermain."
+
+msgid "GLOSSÁRIO"
+msgstr "GLOSARIUM"
+
+msgid "DESCOBERTOS %d DE %d"
+msgstr "DITEMUKAN %d DARI %d"
+
+msgid "Ainda não encontrado."
+msgstr "Belum ditemukan."
+
+msgid "Onde: %s"
+msgstr "Lokasi: %s"
+
+msgid "VIDA %d · VELOCIDADE %.1f m/s · DANO %d · %d PONTOS"
+msgstr "NYAWA %d · KECEPATAN %.1f m/d · DAMAGE %d · %d POIN"
+
+msgid "VIDA %d · VELOCIDADE %.1f m/s · GOLPE %d"
+msgstr "NYAWA %d · KECEPATAN %.1f m/d · SERANGAN %d"
+
+msgid " · ATÉ %d POR PARTIDA"
+msgstr " · HINGGA %d PER PERTANDINGAN"
+
+msgid "%d PONTOS · %s%s"
+msgstr "%d POIN · %s%s"
+
+msgid "FUNCIONA SEM ENERGIA"
+msgstr "BERFUNGSI TANPA LISTRIK"
+
+msgid "PRECISA DE ENERGIA"
+msgstr "BUTUH LISTRIK"
+
+msgid "DURA %d s"
+msgstr "BERTAHAN %d d"
+
+msgid "EFEITO NA HORA"
+msgstr "EFEK INSTAN"
+
+msgid "%d PONTOS NA PAREDE DA ARMA"
+msgstr "%d POIN DI DINDING SENJATA"
+
+msgid "%d PONTOS NO ALTAR"
+msgstr "%d POIN DI ALTAR"
+
+msgid "A PARTIR DO ROUND %d"
+msgstr "MULAI RONDE %d"
+
+msgid "DICA: %s"
+msgstr "TIPS: %s"
+
+msgid "ZUMBIS RESTANTES  %d"
+msgstr "SISA ZOMBI  %d"
+
+msgid "ROUND %d COMPLETO"
+msgstr "RONDE %d SELESAI"
+
+msgid "ÁREA LIBERADA: %s"
+msgstr "AREA TERBUKA: %s"
+
+msgid "CONQUISTA DESBLOQUEADA: %s"
+msgstr "PENCAPAIAN TERBUKA: %s"
+
+msgid "SCORE %d"
+msgstr "SKOR %d"
+
+msgid "%s DESBLOQUEADO!"
+msgstr "%s TERBUKA!"
+
+msgid "%s SE APROXIMA"
+msgstr "%s MENDEKAT"
+
+msgid "FASE %d"
+msgstr "FASE %d"
+
+msgid "%s DERROTADO  +%d"
+msgstr "%s DIKALAHKAN  +%d"
+
+msgid "MAX AMMO"
+msgstr "MAX AMMO"
+
+msgid "◆ %s  %d/%d"
+msgstr "◆ %s  %d/%d"
+
+msgid "%d FPS"
+msgstr "%d FPS"
+
+msgid "ROUND"
+msgstr "RONDE"
+
+msgid "SCORE 0"
+msgstr "SKOR 0"
+
+msgid "VIDA"
+msgstr "NYAWA"
+
+msgid "GAME OVER"
+msgstr "GAME OVER"
+
+msgid "ROUND %d"
+msgstr "RONDE %d"
+
+msgid "%s  ·  FASE %d"
+msgstr "%s  ·  FASE %d"
+
+msgid "RODADA DOS CÃES"
+msgstr "RONDE ANJING"
+
+msgid "VIDA  %d / %d"
+msgstr "NYAWA  %d / %d"
+
+msgid "Fúria"
+msgstr "Amukan"
+
+msgid "RECARREGANDO"
+msgstr "MENGISI ULANG"
+
+msgid "ZUMBIS ABATIDOS"
+msgstr "ZOMBI TUMBANG"
+
+msgid "HEADSHOTS"
+msgstr "HEADSHOT"
+
+msgid "PONTOS GANHOS"
+msgstr "POIN DIDAPAT"
+
+msgid "TEMPO"
+msgstr "WAKTU"
+
+msgid "BOSSES"
+msgstr "BOS"
+
+msgid "DANO CAUSADO"
+msgstr "DAMAGE DIBERIKAN"
+
+msgid "DISPAROS / ACERTOS"
+msgstr "TEMBAKAN / KENA"
+
+msgid "PRECISÃO"
+msgstr "AKURASI"
+
+msgid "ABATES NA FACA"
+msgstr "KILL DENGAN PISAU"
+
+msgid "NOVO RECORDE!"
+msgstr "REKOR BARU!"
+
+msgid "RECORDE: %d PONTOS · ROUND %d"
+msgstr "REKOR: %d POIN · RONDE %d"
+
+msgid "TIME: %s"
+msgstr "TIM: %s"
+
+msgid "PARTIDA INVALIDADA — NÃO VALE SAVE NEM RANKING"
+msgstr "PERTANDINGAN TIDAK SAH — TIDAK DISIMPAN DAN TIDAK MASUK PERINGKAT"
+
+msgid "JOGAR NOVAMENTE"
+msgstr "MAIN LAGI"
+
+msgid "VOLTAR À SALA"
+msgstr "KEMBALI KE ROOM"
+
+msgid "RANKING"
+msgstr "PERINGKAT"
+
+msgid "MENU"
+msgstr "MENU"
+
+msgid "PARTIDA INVALIDADA"
+msgstr "PERTANDINGAN TIDAK SAH"
+
+msgid "%dº LUGAR NO RANKING %s DE %s!"
+msgstr "PERINGKAT KE-%d DI PERINGKAT %s — %s!"
+
+msgid "ENVIANDO O TIME AO RANKING GLOBAL..."
+msgstr "MENGIRIM TIM KE PERINGKAT GLOBAL..."
+
+msgid "RANKING GLOBAL: %s"
+msgstr "PERINGKAT GLOBAL: %s"
+
+msgid "TIME ENVIADO AO RANKING GLOBAL (%s)!"
+msgstr "TIM TERKIRIM KE PERINGKAT GLOBAL (%s)!"
+
+msgid "ENTROU NO TOP! SEU NOME:"
+msgstr "MASUK TOP! NAMAMU:"
+
+msgid "SEU NOME PARA O RANKING GLOBAL:"
+msgstr "NAMAMU UNTUK PERINGKAT GLOBAL:"
+
+msgid "%dº LUGAR NO RANKING DE %s!"
+msgstr "PERINGKAT KE-%d DI PERINGKAT %s!"
+
+msgid "ENVIANDO AO RANKING GLOBAL..."
+msgstr "MENGIRIM KE PERINGKAT GLOBAL..."
+
+msgid "ENVIADO AO RANKING GLOBAL DA TEMPORADA!"
+msgstr "TERKIRIM KE PERINGKAT GLOBAL MUSIM INI!"
+
+msgid "SALVAR"
+msgstr "SIMPAN"
+
+msgid "LANTERNA %s%s"
+msgstr "SENTER %s%s"
+
+msgid "LIGADA"
+msgstr "NYALA"
+
+msgid "DESLIGADA"
+msgstr "MATI"
+
+msgid "ESTÁ ESCURO — [%s] LIGA A LANTERNA"
+msgstr "GELAP — [%s] MENYALAKAN SENTER"
+
+msgid "CAÍDO %ds"
+msgstr "TUMBANG %dd"
+
+msgid "FORA"
+msgstr "KELUAR"
+
+msgid "%d ms"
+msgstr "%d ms"
+
+msgid "COLEGA"
+msgstr "REKAN"
+
+msgid "%s %ds"
+msgstr "%s %dd"
+
+msgid "JOGAR EM GRUPO"
+msgstr "MAIN BERSAMA TEMAN"
+
+msgid "Até 4 jogadores pela internet. Crie uma sala e passe o código, ou entre com o código de um amigo."
+msgstr "Hingga 4 pemain lewat internet. Buat room dan bagikan kodenya, atau masuk dengan kode dari teman."
+
+msgid "SEU NOME"
+msgstr "NAMAMU"
+
+msgid "NOME"
+msgstr "NAMA"
+
+msgid "CRIAR SALA"
+msgstr "BUAT ROOM"
+
+msgid "CÓDIGO DA SALA"
+msgstr "KODE ROOM"
+
+msgid "ENTRAR NA SALA"
+msgstr "MASUK ROOM"
+
+msgid "REDE LOCAL (MESMO WI-FI) — IP DO HOST"
+msgstr "JARINGAN LOKAL (WI-FI YANG SAMA) — IP HOST"
+
+msgid "CRIAR SALA NA REDE LOCAL"
+msgstr "BUAT ROOM DI JARINGAN LOKAL"
+
+msgid "Convite para a sala %s: digite seu nome e toque ENTRAR NA SALA"
+msgstr "Undangan ke room %s: ketik namamu lalu ketuk MASUK ROOM"
+
+msgid "O código tem 5 letras"
+msgstr "Kode terdiri dari 5 huruf"
+
+msgid "Procurando a sala..."
+msgstr "Mencari room..."
+
+msgid "Na rede local: os amigos entram com o IP  %s"
+msgstr "Di jaringan lokal: teman masuk dengan IP  %s"
+
+msgid "COPIAR CÓDIGO"
+msgstr "SALIN KODE"
+
+msgid "Código %s copiado!"
+msgstr "Kode %s disalin!"
+
+msgid "COPIAR CONVITE"
+msgstr "SALIN UNDANGAN"
+
+msgid "Convite copiado! Quem abrir o link entra direto na sala."
+msgstr "Undangan disalin! Siapa pun yang membuka tautannya langsung masuk ke room."
+
+msgid "MAPA: %s  →"
+msgstr "PETA: %s  →"
+
+msgid "MAPA: %s"
+msgstr "PETA: %s"
+
+msgid "  (VOCÊ)"
+msgstr "  (KAMU)"
+
+msgid "HOST"
+msgstr "HOST"
+
+msgid "PRONTO"
+msgstr "SIAP"
+
+msgid "ESPERANDO"
+msgstr "MENUNGGU"
+
+msgid "· vaga livre"
+msgstr "· slot kosong"
+
+msgid "COMEÇAR"
+msgstr "MULAI"
+
+msgid "Começa quando todos estiverem prontos."
+msgstr "Dimulai saat semua sudah siap."
+
+msgid "Esperando os amigos entrarem com o código."
+msgstr "Menunggu teman masuk dengan kode."
+
+msgid "CANCELAR PRONTO"
+msgstr "BATAL SIAP"
+
+msgid "SAIR DA SALA"
+msgstr "KELUAR DARI ROOM"
+
+msgid "SEU VISUAL\n%s"
+msgstr "TAMPILANMU\n%s"
+
+msgid "Bora jogar Tentando Sobreviver comigo! Sala %s: %s"
+msgstr "Ayo main Tentando Sobreviver bareng aku! Room %s: %s"
+
+msgid "— ms"
+msgstr "— ms"
+
+msgid "%s mover · mouse mirar · clique atirar · %s recarregar · %s trocar arma · %s faca · %s usar · %s pausa"
+msgstr "%s gerak · mouse bidik · klik tembak · %s isi ulang · %s ganti senjata · %s pisau · %s pakai · %s jeda"
+
+msgid "Analógico: mover · ATIRAR: mira sozinho no zumbi mais perto e atira · FACA: golpe corpo a corpo"
+msgstr "Analog: gerak · TEMBAK: otomatis membidik zombi terdekat lalu menembak · PISAU: serangan jarak dekat"
+
+msgid "TENTANDO\nSOBREVIVER"
+msgstr "TENTANDO\nSOBREVIVER"
+
+msgid "CONTA: %s"
+msgstr "AKUN: %s"
+
+msgid "CONTA / SALVAR NA NUVEM"
+msgstr "AKUN / SIMPAN DI CLOUD"
+
+msgid "CONFIGURAÇÕES"
+msgstr "PENGATURAN"
+
+msgid "APOIE O PROJETO (PIX)"
+msgstr "DUKUNG PROYEK INI (PIX)"
+
+msgid "SAIR"
+msgstr "KELUAR"
+
+msgid "MODO CABEÇÃO LIBERADO! (liga/desliga em Configurações)"
+msgstr "MODE KEPALA BESAR TERBUKA! (nyalakan/matikan di Pengaturan)"
+
+msgid "MODO CABEÇÃO LIGADO!"
+msgstr "MODE KEPALA BESAR AKTIF!"
+
+msgid "O Último Trem"
+msgstr "Kereta Terakhir"
+
+msgid "O Soro do Dr. Almeida"
+msgstr "Serum Dr. Almeida"
+
+msgid "O Portão do Submundo"
+msgstr "Gerbang Dunia Bawah"
+
+msgid "ESCOLHA O MAPA"
+msgstr "PILIH PETA"
+
+msgid "Recorde: %d pontos · round %d"
+msgstr "Rekor: %d poin · ronde %d"
+
+msgid "Sem recorde ainda"
+msgstr "Belum ada rekor"
+
+msgid "1º no ranking: %s · %d pts"
+msgstr "Peringkat 1: %s · %d poin"
+
+msgid "✓ MISSÃO CONCLUÍDA: %s"
+msgstr "✓ MISI SELESAI: %s"
+
+msgid "◆ MISSÃO: %s"
+msgstr "◆ MISI: %s"
+
+msgid "BLOQUEADO — conclua a missão do %s"
+msgstr "TERKUNCI — selesaikan misi di %s"
+
+msgid " ou do "
+msgstr " atau di"
+
+msgid "BLOQUEADO — derrote o boss do round %d no %s"
+msgstr "TERKUNCI — kalahkan bos ronde %d di %s"
+
+msgid "MAPA"
+msgstr "PETA"
+
+msgid "PAUSADO"
+msgstr "DIJEDA"
+
+msgid "A partida continua para o time."
+msgstr "Pertandingan tetap berjalan untuk tim."
+
+msgid "CONTINUAR"
+msgstr "LANJUTKAN"
+
+msgid "REINICIAR"
+msgstr "ULANG"
+
+msgid "SAIR DA PARTIDA"
+msgstr "KELUAR DARI PERTANDINGAN"
+
+msgid "%s para continuar  ·  %s: mapa grande"
+msgstr "%s untuk lanjut  ·  %s: peta besar"
+
+msgid "TIME"
+msgstr "TIM"
+
+msgid "PONTOS"
+msgstr "POIN"
+
+msgid "Nenhuma partida ainda — jogue para entrar no ranking!"
+msgstr "Belum ada pertandingan — main untuk masuk peringkat!"
+
+msgid "Nenhuma partida em %s ainda — chame os amigos em JOGAR EM GRUPO!"
+msgstr "Belum ada pertandingan %s — ajak teman di MAIN BERSAMA TEMAN!"
+
+msgid "Mapa bloqueado"
+msgstr "Peta terkunci"
+
+msgid "Ranking global indisponível"
+msgstr "Peringkat global tidak tersedia"
+
+msgid "Ranking global indisponível (sem conexão)"
+msgstr "Peringkat global tidak tersedia (tidak ada koneksi)"
+
+msgid "Ninguém pontuou nesta temporada ainda — seja o primeiro!"
+msgstr "Belum ada yang mencetak skor musim ini — jadilah yang pertama!"
+
+msgid "TEMPORADA TERMINA EM %d %s%s"
+msgstr "MUSIM BERAKHIR DALAM %d %s%s"
+
+msgid "DIA"
+msgstr "HARI"
+
+msgid "DIAS"
+msgstr "HARI"
+
+msgid " · VOCÊ: %dº"
+msgstr " · KAMU: #%d"
+
+msgid "JOGO"
+msgstr "GAME"
+
+msgid "VÍDEO"
+msgstr "VIDEO"
+
+msgid "ÁUDIO"
+msgstr "AUDIO"
+
+msgid "CONTROLES"
+msgstr "KONTROL"
+
+msgid "PEQUENO"
+msgstr "KECIL"
+
+msgid "MÉDIO"
+msgstr "SEDANG"
+
+msgid "GRANDE"
+msgstr "BESAR"
+
+msgid "AUTO"
+msgstr "OTOMATIS"
+
+msgid "LIGADO"
+msgstr "NYALA"
+
+msgid "DESLIGADO"
+msgstr "MATI"
+
+msgid "JANELA"
+msgstr "JENDELA"
+
+msgid "TELA CHEIA"
+msgstr "LAYAR PENUH"
+
+msgid "TELA CHEIA EXCLUSIVA"
+msgstr "LAYAR PENUH EKSKLUSIF"
+
+msgid "ADAPTATIVO"
+msgstr "ADAPTIF"
+
+msgid "Q / E: trocar de aba"
+msgstr "Q / E: ganti tab"
+
+msgid "IDIOMA"
+msgstr "BAHASA"
+
+msgid "NOME NO RANKING"
+msgstr "NAMA DI PERINGKAT"
+
+msgid "TREMOR DE TELA"
+msgstr "GUNCANGAN LAYAR"
+
+msgid "SANGUE"
+msgstr "DARAH"
+
+msgid "MIRA NO MOUSE"
+msgstr "BIDIK DENGAN MOUSE"
+
+msgid "MINIMAPA"
+msgstr "MINIMAP"
+
+msgid "TAMANHO DO MINIMAPA"
+msgstr "UKURAN MINIMAP"
+
+msgid "MODO CABEÇÃO"
+msgstr "MODE KEPALA BESAR"
+
+msgid "MODO DE TELA"
+msgstr "MODE LAYAR"
+
+msgid "RESOLUÇÃO"
+msgstr "RESOLUSI"
+
+msgid "VSYNC"
+msgstr "VSYNC"
+
+msgid "LIMITE DE FPS"
+msgstr "BATAS FPS"
+
+msgid "SEM LIMITE"
+msgstr "TANPA BATAS"
+
+msgid "ESCALA DA INTERFACE"
+msgstr "SKALA ANTARMUKA"
+
+msgid "BRILHO"
+msgstr "KECERAHAN"
+
+msgid "SOMBRAS"
+msgstr "BAYANGAN"
+
+msgid "MOSTRAR FPS"
+msgstr "TAMPILKAN FPS"
+
+msgid "VOLUME GERAL"
+msgstr "VOLUME UTAMA"
+
+msgid "MÚSICA"
+msgstr "MUSIK"
+
+msgid "EFEITOS"
+msgstr "EFEK"
+
+msgid "INTERFACE"
+msgstr "ANTARMUKA"
+
+msgid "VOZES"
+msgstr "SUARA KARAKTER"
+
+msgid "SOM"
+msgstr "SUARA"
+
+msgid "CONTROLES DE TOQUE"
+msgstr "KONTROL SENTUH"
+
+msgid "AÇÃO"
+msgstr "AKSI"
+
+msgid "TECLADO / MOUSE"
+msgstr "KEYBOARD / MOUSE"
+
+msgid "CONTROLE"
+msgstr "GAMEPAD"
+
+msgid "Clique numa tecla para trocar. ESC cancela."
+msgstr "Klik tombol untuk menggantinya. ESC untuk batal."
+
+msgid "RESTAURAR PADRÕES"
+msgstr "KEMBALIKAN DEFAULT"
+
+msgid "Aperte uma tecla para %s… (ESC cancela)"
+msgstr "Tekan tombol untuk %s… (ESC untuk batal)"
+
+msgid "Aperte um botão do controle para %s… (ESC cancela)"
+msgstr "Tekan tombol gamepad untuk %s… (ESC untuk batal)"
+
+msgid "CONFIRMAR: APAGAR TUDO?"
+msgstr "KONFIRMASI: HAPUS SEMUANYA?"
+
+msgid "APAGAR PROGRESSO"
+msgstr "HAPUS PROGRES"
+
+msgid "Desenvolvido por %s\n%s"
+msgstr "Dikembangkan oleh %s\n%s"
+
+msgid "APOIE O PROJETO"
+msgstr "DUKUNG PROYEK INI"
+
+msgid "O Tentando Sobreviver é gratuito e sem anúncios. Se você curtiu, um PIX de qualquer valor ajuda a manter o projeto vivo — totalmente opcional."
+msgstr "Tentando Sobreviver gratis dan tanpa iklan. Kalau kamu suka, PIX berapa pun membantu proyek ini tetap hidup — sepenuhnya opsional."
+
+msgid "PIX para %s"
+msgstr "PIX untuk %s"
+
+msgid "Chave aleatória: %s"
+msgstr "Kunci acak: %s"
+
+msgid "COPIAR PIX COPIA E COLA"
+msgstr "SALIN KODE PIX \"COPIA E COLA\""
+
+msgid "PIX copia e cola copiado! Cole no app do seu banco."
+msgstr "Kode PIX disalin! Tempel di aplikasi bankmu."
+
+msgid "COPIAR CHAVE"
+msgstr "SALIN KUNCI"
+
+msgid "Chave PIX copiada!"
+msgstr "Kunci PIX disalin!"
+
+msgid "Ideias, bugs ou parcerias: %s"
+msgstr "Ide, bug, atau kerja sama: %s"
+
+msgid "Desenvolvido por %s"
+msgstr "Dikembangkan oleh %s"
+
+msgid "RECARR."
+msgstr "ISI ULANG"
+
+msgid "TROCAR"
+msgstr "GANTI"
+
+msgid "Cérbero"
+msgstr "Cerberus"
+
+msgid "The Conductor"
+msgstr "The Conductor"
+
+msgid "A Entidade do Submundo"
+msgstr "Entitas Dunia Bawah"
+
+msgid "O templo não era uma prisão. Era uma porta... e ela está se abrindo."
+msgstr "Kuil itu bukan penjara. Kuil itu sebuah pintu... dan pintu itu sedang terbuka."
+
+msgid "O Minotauro"
+msgstr "Minotaur"
+
+msgid "Paciente Zero"
+msgstr "Pasien Nol"
+
+msgid "Primeiro Sangue"
+msgstr "Darah Pertama"
+
+msgid "Abata o primeiro zumbi"
+msgstr "Bunuh zombi pertama"
+
+msgid "Sobrevivente"
+msgstr "Penyintas"
+
+msgid "Chegue à wave 10"
+msgstr "Capai wave 10"
+
+msgid "Veterano"
+msgstr "Veteran"
+
+msgid "Chegue à wave 20"
+msgstr "Capai wave 20"
+
+msgid "Energia!"
+msgstr "Listrik!"
+
+msgid "Ligue o disjuntor principal"
+msgstr "Nyalakan saklar utama"
+
+msgid "Maquinista"
+msgstr "Masinis"
+
+msgid "Derrote o boss The Conductor"
+msgstr "Kalahkan bos The Conductor"
+
+msgid "Paciente Curado"
+msgstr "Pasien Sembuh"
+
+msgid "Derrote o Paciente Zero"
+msgstr "Kalahkan Pasien Nol"
+
+msgid "O Soro"
+msgstr "Serum"
+
+msgid "Complete a missão do Dr. Almeida"
+msgstr "Selesaikan misi Dr. Almeida"
+
+msgid "Adestrador"
+msgstr "Pelatih Anjing"
+
+msgid "Vença uma rodada de cães sem levar dano"
+msgstr "Menangkan ronde anjing tanpa terkena damage"
+
+msgid "Atropelador"
+msgstr "Penggilas"
+
+msgid "Atropele 10 zumbis com uma passagem do trem"
+msgstr "Lindas 10 zombi dalam satu lintasan kereta"
+
+msgid "Colecionador"
+msgstr "Kolektor"
+
+msgid "Tenha todos os perks na mesma partida"
+msgstr "Miliki semua perk dalam satu pertandingan"
+
+msgid "Olho do Furacão"
+msgstr "Mata Badai"
+
+msgid "Transforme o Canhão de Vento no Tornado"
+msgstr "Ubah Meriam Angin menjadi Tornado"
+
+msgid "Liquidação"
+msgstr "Obral"
+
+msgid "Use a Mystery Box durante um Fire Sale"
+msgstr "Gunakan Mystery Box saat Fire Sale"
+
+msgid "Açougueiro"
+msgstr "Jagal"
+
+msgid "Abata 1.000 zumbis"
+msgstr "Bunuh 1.000 zombi"
+
+msgid "Faca na Caveira"
+msgstr "Pisau di Tengkorak"
+
+msgid "Abata 50 zumbis na faca"
+msgstr "Bunuh 50 zombi dengan pisau"
+
+msgid "Mira de Ouro"
+msgstr "Bidikan Emas"
+
+msgid "Acerte 100 headshots fatais"
+msgstr "Lakukan 100 headshot mematikan"
+
+msgid "Ursinhos"
+msgstr "Boneka Beruang"
+
+msgid "Encontre todos os ursinhos escondidos"
+msgstr "Temukan semua boneka beruang tersembunyi"
+
+msgid "Cabeção"
+msgstr "Kepala Besar"
+
+msgid "Descubra o código secreto do menu"
+msgstr "Temukan kode rahasia di menu"
+
+msgid "Complete a missão do Terminal e pegue a Lanterna do Condutor"
+msgstr "Selesaikan misi Terminal dan ambil Lentera Kondektur"
+
+msgid "Fio de Ariadne"
+msgstr "Benang Ariadne"
+
+msgid "Derrote o Minotauro"
+msgstr "Kalahkan Minotaur"
+
+msgid "Os Doze do Olimpo"
+msgstr "Dua Belas Dewa Olympus"
+
+msgid "Ative as 12 estátuas dos deuses no Templo"
+msgstr "Nyalakan 12 patung dewa di Kuil"
+
+msgid "Complete a missão do Templo e pegue o Raio de Zeus"
+msgstr "Selesaikan misi Kuil dan ambil Petir Zeus"
+
+msgid "Guardião dos Três"
+msgstr "Penjaga Tiga Kepala"
+
+msgid "Derrote o Cérbero"
+msgstr "Kalahkan Cerberus"
+
+msgid "A Porta"
+msgstr "Sang Pintu"
+
+msgid "Derrote a Entidade do Submundo"
+msgstr "Kalahkan Entitas Dunia Bawah"
+
+msgid "PARTIDA INVALIDADA — não vale save nem ranking"
+msgstr "PERTANDINGAN TIDAK SAH — tidak disimpan dan tidak masuk peringkat"
+
+msgid "LUZ"
+msgstr "CAHAYA"
+
+msgid "Clarão que cega: atordoa os zumbis e causa +50% de dano no boss."
+msgstr "Kilatan menyilaukan: membuat zombi pingsan dan memberi +50% damage ke bos."
+
+msgid "SOMBRA"
+msgstr "BAYANGAN"
+
+msgid "Rouba vida: cada acerto recupera parte do dano causado."
+msgstr "Curi nyawa: setiap tembakan yang kena memulihkan sebagian damage yang diberikan."
+
+msgid "GELO"
+msgstr "ES"
+
+msgid "Deixa os zumbis lentos e às vezes os congela."
+msgstr "Memperlambat zombi dan kadang membekukannya."
+
+msgid "RAIO"
+msgstr "PETIR"
+
+msgid "A eletricidade salta para 2 zumbis próximos."
+msgstr "Listrik melompat ke 2 zombi terdekat."
+
+msgid "FOGO"
+msgstr "API"
+
+msgid "Incendeia: dano contínuo por alguns segundos."
+msgstr "Membakar: damage terus-menerus selama beberapa detik."
+
+msgid "EXPLOSIVO"
+msgstr "PELEDAK"
+
+msgid "Cada tiro que acerta estoura numa pequena explosão."
+msgstr "Setiap tembakan yang kena pecah menjadi ledakan kecil."
+
+msgid "Terminal Central"
+msgstr "Terminal Pusat"
+
+msgid "Estação de trem abandonada: hall, plataforma, lojas, túneis e manutenção."
+msgstr "Stasiun kereta terbengkalai: aula, peron, toko, terowongan, dan area perawatan."
+
+msgid "Hospital Santa Luzia"
+msgstr "Rumah Sakit Santa Luzia"
+
+msgid "Onde o vírus nasceu: recepção, UTI, centro cirúrgico, necrotério e o laboratório no subsolo."
+msgstr "Tempat virus lahir: resepsionis, ICU, ruang operasi, kamar mayat, dan laboratorium di ruang bawah tanah."
+
+msgid "Templo dos Mortos"
+msgstr "Kuil Orang Mati"
+
+msgid "Ruínas gregas, uma necrópole, a floresta de Artemis e o portão para o Submundo."
+msgstr "Reruntuhan Yunani, sebuah nekropolis, hutan Artemis, dan gerbang ke Dunia Bawah."
+
+msgid "Max Ammo"
+msgstr "Max Ammo"
+
+msgid "Double Cash"
+msgstr "Double Cash"
+
+msgid "Instant Kill"
+msgstr "Instant Kill"
+
+msgid "Nuke"
+msgstr "Nuke"
+
+msgid "Full Heal"
+msgstr "Full Heal"
+
+msgid "Armor"
+msgstr "Armor"
+
+msgid "Speed Boost"
+msgstr "Speed Boost"
+
+msgid "Carpenter"
+msgstr "Carpenter"
+
+msgid "Golden Drop"
+msgstr "Golden Drop"
+
+msgid "Fire Sale"
+msgstr "Fire Sale"
+
+msgid "O SORO DO DR. ALMEIDA"
+msgstr "SERUM DR. ALMEIDA"
+
+msgid "Enfermeiro"
+msgstr "Perawat"
+
+msgid "Agente"
+msgstr "Agen"
+
+msgid "Guarda da Estação"
+msgstr "Penjaga Stasiun"
+
+msgid "Paciente"
+msgstr "Pasien"
+
+msgid "Paciente da UTI"
+msgstr "Pasien ICU"
+
+msgid "Cobaia do Laboratório"
+msgstr "Kelinci Percobaan Lab"
+
+msgid "Arqueóloga"
+msgstr "Arkeolog"
+
+msgid "Caçadora do Labirinto"
+msgstr "Pemburu Labirin"
+
+msgid "Sacerdotisa do Olimpo"
+msgstr "Pendeta Olympus"
+
+msgid "Andarilha do Submundo"
+msgstr "Pengembara Dunia Bawah"
+
+msgid "TENTANDO SOBREVIVER — feito com Godot + GDScript. Arte e sons 100% gerados por código."
+msgstr "TENTANDO SOBREVIVER — dibuat dengan Godot + GDScript. Grafis dan suara 100% dihasilkan oleh kode."
+
+msgid "APAGÃO"
+msgstr "PEMADAMAN"
+
+msgid "As luzes caíram — use a lanterna"
+msgstr "Lampu padam — gunakan senter"
+
+msgid "ALARME DE EMERGÊNCIA"
+msgstr "ALARM DARURAT"
+
+msgid "O barulho atrai mais zumbis"
+msgstr "Kebisingan menarik lebih banyak zombi"
+
+msgid "Saia dos trilhos da plataforma!"
+msgstr "Keluar dari rel peron!"
+
+msgid "HORDA"
+msgstr "GEROMBOLAN"
+
+msgid "Muito mais zumbis nesta wave"
+msgstr "Jauh lebih banyak zombi di wave ini"
+
+msgid "Uma caixa caiu do céu — segure E para abrir"
+msgstr "Sebuah peti jatuh dari langit — tahan E untuk membuka"
+
+msgid "VAZAMENTO DE GÁS"
+msgstr "KEBOCORAN GAS"
+
+msgid "Fique longe da nuvem verde"
+msgstr "Jauhi awan hijau"
+
+msgid "ZUMBI DOURADO"
+msgstr "ZOMBI EMAS"
+
+msgid "Mate-o antes que fuja: dinheiro e Golden Drop!"
+msgstr "Bunuh sebelum kabur: uang dan Golden Drop!"
+
+msgid "LUA DE SANGUE"
+msgstr "BULAN DARAH"
+
+msgid "Zumbis mais rápidos — dinheiro e pontos em dobro"
+msgstr "Zombi lebih cepat — uang dan poin dua kali lipat"
+
+msgid "DESABAMENTO"
+msgstr "RUNTUHAN"
+
+msgid "O teto está caindo: saia dos círculos vermelhos!"
+msgstr "Langit-langit runtuh: keluar dari lingkaran merah!"
+
+msgid "NEBLINA"
+msgstr "KABUT"
+
+msgid "Você mal enxerga — atenção aos gemidos"
+msgstr "Kamu hampir tidak bisa melihat — dengarkan erangannya"
+
+msgid "IRA DE ZEUS"
+msgstr "MURKA ZEUS"
+
+msgid "Raios caem do céu: saia dos círculos azuis!"
+msgstr "Petir menyambar dari langit: keluar dari lingkaran biru!"
+
+msgid "LEVANTE DOS MORTOS"
+msgstr "KEBANGKITAN ORANG MATI"
+
+msgid "Os sarcófagos se abrem — esqueletos saindo!"
+msgstr "Sarkofagus terbuka — kerangka keluar!"
+
+msgid "CAÇADA DE ARTEMIS"
+msgstr "PERBURUAN ARTEMIS"
+
+msgid "Sátiros e lobos infernais estão caçando você"
+msgstr "Satir dan serigala neraka memburumu"
+
+msgid "PORTÃO DO SUBMUNDO"
+msgstr "GERBANG DUNIA BAWAH"
+
+msgid "Um portal solta criaturas — destrua-o a tiros"
+msgstr "Sebuah portal melepaskan makhluk — hancurkan dengan tembakan"
+
+msgid "SANGUE DOS DEUSES"
+msgstr "DARAH PARA DEWA"
+
+msgid "Neste round as bênçãos dos altares são de graça"
+msgstr "Di ronde ini berkat altar gratis"
+
+msgid "CONTENÇÃO ROMPIDA"
+msgstr "KARANTINA JEBOL"
+
+msgid "Zumbis entrando pelos pontos de isolamento!"
+msgstr "Zombi masuk lewat titik isolasi!"
+
+msgid "Adrenaline"
+msgstr "Adrenaline"
+
+msgid "Regenera vida 2,5x mais rápido e mais cedo"
+msgstr "Memulihkan nyawa 2,5x lebih cepat dan lebih awal"
+
+msgid "Deadeye"
+msgstr "Deadeye"
+
+msgid "Headshots causam +100% de dano"
+msgstr "Headshot memberi +100% damage"
+
+msgid "Fortify"
+msgstr "Fortify"
+
+msgid "+50 de vida máxima"
+msgstr "+50 nyawa maksimum"
+
+msgid "Overload"
+msgstr "Overload"
+
+msgid "+25% de dano das armas"
+msgstr "+25% damage senjata"
+
+msgid "Quick Hands"
+msgstr "Quick Hands"
+
+msgid "Recarga 40% mais rápida"
+msgstr "Isi ulang 40% lebih cepat"
+
+msgid "Quick Revive"
+msgstr "Quick Revive"
+
+msgid "Ao cair, levanta sozinho (gasta o perk; até 3 por partida)"
+msgstr "Saat tumbang, bangkit sendiri (menghabiskan perk; hingga 3 per pertandingan)"
+
+msgid "Sprint+"
+msgstr "Sprint+"
+
+msgid "+20% de velocidade"
+msgstr "+20% kecepatan"
+
+msgid "AK"
+msgstr "AK"
+
+msgid "Arc Gun"
+msgstr "Arc Gun"
+
+msgid "Arco de Artemis"
+msgstr "Busur Artemis"
+
+msgid "Caçada Lunar"
+msgstr "Perburuan Bulan"
+
+msgid "Barrett .50"
+msgstr "Barrett .50"
+
+msgid "Beretta 92"
+msgstr "Beretta 92"
+
+msgid "Bren"
+msgstr "Bren"
+
+msgid "Combat Shotgun"
+msgstr "Shotgun Tempur"
+
+msgid "Lanterna do Condutor"
+msgstr "Lentera Kondektur"
+
+msgid "Farol do Condutor"
+msgstr "Mercusuar Kondektur"
+
+msgid "Energy Cannon"
+msgstr "Meriam Energi"
+
+msgid "Flamethrower"
+msgstr "Pelontar Api"
+
+msgid "Glock 17"
+msgstr "Glock 17"
+
+msgid "Grenade Launcher"
+msgstr "Pelontar Granat"
+
+msgid "Lança de Hefesto"
+msgstr "Tombak Hephaistos"
+
+msgid "Forja de Hefesto"
+msgstr "Tungku Hephaistos"
+
+msgid "Lee-Enfield"
+msgstr "Lee-Enfield"
+
+msgid "Lupara"
+msgstr "Lupara"
+
+msgid "M1911"
+msgstr "M1911"
+
+msgid "M4"
+msgstr "M4"
+
+msgid "Magnum .44"
+msgstr "Magnum .44"
+
+msgid "Makarov PM"
+msgstr "Makarov PM"
+
+msgid "Mauser C96"
+msgstr "Mauser C96"
+
+msgid "Minigun"
+msgstr "Minigun"
+
+msgid "MP5"
+msgstr "MP5"
+
+msgid "Pistola de Pregos"
+msgstr "Pistol Paku"
+
+msgid "P90"
+msgstr "P90"
+
+msgid "Tridente de Poseidon"
+msgstr "Trisula Poseidon"
+
+msgid "Maremoto"
+msgstr "Tsunami"
+
+msgid "Pump Shotgun"
+msgstr "Shotgun Pompa"
+
+msgid "Rail Weapon"
+msgstr "Rail Weapon"
+
+msgid "RPK"
+msgstr "RPK"
+
+msgid "Cano Serrado"
+msgstr "Laras Gergaji"
+
+msgid "StG 44"
+msgstr "StG 44"
+
+msgid "Thompson M1928"
+msgstr "Thompson M1928"
+
+msgid "Uzi Dupla"
+msgstr "Uzi Ganda"
+
+msgid "Vector"
+msgstr "Vector"
+
+msgid "Winchester 1887"
+msgstr "Winchester 1887"
+
+msgid "Canhão de Vento"
+msgstr "Meriam Angin"
+
+msgid "Tornado"
+msgstr "Tornado"
+
+msgid "Raio de Zeus"
+msgstr "Petir Zeus"
+
+msgid "Ira do Olimpo"
+msgstr "Murka Olympus"
+
+msgid "Blindado"
+msgstr "Lapis Baja"
+
+msgid "Rastejante"
+msgstr "Perayap"
+
+msgid "Exploder"
+msgstr "Peledak"
+
+msgid "Górgona"
+msgstr "Gorgon"
+
+msgid "Harpia"
+msgstr "Harpy"
+
+msgid "Lobo Infernal"
+msgstr "Serigala Neraka"
+
+msgid "Hoplita Morto"
+msgstr "Hoplite Mati"
+
+msgid "Hoplita com Escudo"
+msgstr "Hoplite Berperisai"
+
+msgid "Cão Infernal"
+msgstr "Anjing Neraka"
+
+msgid "Runner"
+msgstr "Pelari"
+
+msgid "Sátiro"
+msgstr "Satir"
+
+msgid "Esqueleto Guerreiro"
+msgstr "Kerangka Prajurit"
+
+msgid "Esqueleto Arqueiro"
+msgstr "Kerangka Pemanah"
+
+msgid "Cuspidor"
+msgstr "Peludah"
+
+msgid "Tank"
+msgstr "Tank"
+
+msgid "Walker"
+msgstr "Pejalan"
+
+msgid "INIMIGOS"
+msgstr "MUSUH"
+
+msgid "ZUMBIS"
+msgstr "ZOMBI"
+
+msgid "O zumbi mais comum: lento, mas nunca vem sozinho. Entra arrancando as tábuas das janelas e cerca quem fica parado. No Hospital é o paciente de camisola; no Templo, o arqueólogo da escavação."
+msgstr "Zombi paling umum: lambat, tapi tidak pernah datang sendirian. Masuk dengan mencabut papan jendela dan mengepung siapa pun yang diam. Di Rumah Sakit dia pasien berbaju rumah sakit; di Kuil, arkeolog dari situs penggalian."
+
+msgid "Rápido e com pouca vida: chega antes dos outros e pune quem fica encurralado. No Hospital é o enfermeiro; no Templo, o cultista de capuz."
+msgstr "Cepat dan nyawanya sedikit: datang lebih dulu dan menghukum siapa pun yang terpojok. Di Rumah Sakit dia perawat; di Kuil, pemuja bertudung."
+
+msgid "Grande e muito resistente: não recua com os tiros nem é empurrado. Guarde as armas pesadas para ele. No Hospital é o maqueiro; no Templo, o gladiador."
+msgstr "Besar dan sangat tangguh: tidak mundur ditembak dan tidak bisa didorong. Simpan senjata berat untuknya. Di Rumah Sakit dia petugas tandu; di Kuil, gladiator."
+
+msgid "Corre até você, começa a piscar e explode — e explode também ao morrer. Mate de longe: a explosão fere você e os zumbis em volta. No Hospital usa roupa de quarentena; no Templo carrega uma ânfora de fogo grego."
+msgstr "Berlari ke arahmu, mulai berkedip, lalu meledak — dan juga meledak saat mati. Bunuh dari jauh: ledakannya melukaimu dan zombi di sekitarnya. Di Rumah Sakit dia memakai baju karantina; di Kuil dia membawa amfora berisi api Yunani."
+
+msgid "Rasteja pelo chão, baixo e difícil de acertar na cabeça. Ao morrer solta uma nuvem de gás que fere quem ficar dentro. No Templo é a múmia."
+msgstr "Merayap di lantai, rendah dan sulit ditembak kepalanya. Saat mati melepaskan awan gas yang melukai siapa pun di dalamnya. Di Kuil dia mumi."
+
+msgid "Para a uma certa distância e cospe ácido em arco; onde cai vira uma poça que queima. Não fique parado em cima dela. No Templo é o sacerdote do veneno."
+msgstr "Berhenti di kejauhan dan meludahkan asam melengkung; tempat jatuhnya menjadi genangan yang membakar. Jangan berdiri di atasnya. Di Kuil dia pendeta racun."
+
+msgid "A armadura absorve 75% do dano no corpo até quebrar; um tiro na cabeça derruba o capacete. Nas missões, um deles carrega um item que você precisa. No Templo é o hoplita de bronze."
+msgstr "Zirahnya menyerap 75% damage ke tubuh sampai hancur; tembakan ke kepala menjatuhkan helmnya. Dalam misi, salah satunya membawa barang yang kamu butuhkan. Di Kuil dia hoplite perunggu."
+
+msgid "Rápido e em matilha. No Hospital chega nas rodadas dos cães; no Templo, o Cérbero chama os cães de Hades. Pega fogo ao morrer e não deixa corpo."
+msgstr "Cepat dan berkelompok. Di Rumah Sakit datang di ronde anjing; di Kuil, Cerberus memanggil anjing-anjing Hades. Terbakar saat mati dan tidak meninggalkan mayat."
+
+msgid "Guerreiro grego morto-vivo: aguenta bastante e bate forte, mas é lento."
+msgstr "Prajurit Yunani mayat hidup: tahan banyak serangan dan memukul keras, tapi lambat."
+
+msgid "O escudo segura quase todo o dano que vem de frente (só 20% passa). Acerte a cabeça, os lados ou as costas. Não é empurrado."
+msgstr "Perisainya menahan hampir semua damage dari depan (hanya 20% yang tembus). Bidik kepala, samping, atau punggung. Tidak bisa didorong."
+
+msgid "Rápido e frágil. Às vezes os ossos se juntam e ele se levanta de novo com metade da vida — só uma vez."
+msgstr "Cepat dan rapuh. Kadang tulangnya menyatu dan dia bangkit lagi dengan setengah nyawa — hanya sekali."
+
+msgid "Mantém distância e atira flechas retas. Saia da linha de tiro ou corra para cima dele."
+msgstr "Menjaga jarak dan menembakkan panah lurus. Keluar dari garis tembak atau serbu dia."
+
+msgid "Rápido, corre em zigue-zague e anda em bando: difícil de mirar. Aparece em peso na Caçada de Artemis."
+msgstr "Cepat, berlari zig-zag, dan bergerombol: sulit dibidik. Muncul dalam jumlah besar di Perburuan Artemis."
+
+msgid "Chega perto, dá um bote rápido, recua e repete. Atire enquanto ele recua."
+msgstr "Mendekat, menerjang cepat, mundur, lalu mengulang. Tembak saat dia mundur."
+
+msgid "Voa fora do alcance da faca e mergulha em você. Atire quando ela descer."
+msgstr "Terbang di luar jangkauan pisau dan menukik ke arahmu. Tembak saat dia turun."
+
+msgid "Se você estiver olhando para ela quando ela olhar, fica lento, cinza e vira pedra por 1,5 s, sem andar nem atirar. Parede, objeto ou ficar de costas protegem. Depois do olhar, ela leva dano dobrado."
+msgstr "Kalau kamu menatapnya saat dia menatapmu, kamu melambat, berubah abu-abu, dan menjadi batu selama 1,5 d tanpa bisa berjalan atau menembak. Dinding, benda, atau membelakanginya melindungimu. Setelah tatapannya, dia menerima damage dua kali lipat."
+
+msgid "CHEFES"
+msgstr "BOS"
+
+msgid "O maquinista do último trem. Golpeia, investe (e fica tonto se bater na parede), cega a mira de perto com um clarão, solta ondas de choque e círculos que explodem e, na fase 3, chama zumbis. Tem 4 fases, com um rugido invulnerável a cada uma."
+msgstr "Masinis kereta terakhir. Memukul, menyeruduk (dan pusing jika menabrak dinding), membutakan bidikan dari dekat dengan kilatan, melepaskan gelombang kejut dan lingkaran yang meledak, dan di fase 3 memanggil zombi. Punya 4 fase, masing-masing dengan raungan kebal."
+
+msgid "O primeiro infectado. A mordida envenena — e piora se ele morder de novo antes de passar —, vomita ácido que deixa poças, grita para deixar você lento e faz chover ácido. Enfurecido, é o chefe da missão do Hospital."
+msgstr "Yang pertama terinfeksi. Gigitannya meracuni — dan makin parah jika dia menggigit lagi sebelum hilang —, memuntahkan asam yang meninggalkan genangan, berteriak untuk memperlambatmu, dan menurunkan hujan asam. Saat mengamuk, dia bos misi Rumah Sakit."
+
+msgid "Investe derrubando as colunas no caminho, e cada coluna quebrada o deixa em Fúria, com mais dano e velocidade. Solta ondas de choque; no Colapso, caem pedras que viram escombro. Carrega a chave do Submundo."
+msgstr "Menyeruduk sambil merobohkan pilar di jalannya, dan setiap pilar yang roboh membuatnya Mengamuk: damage dan kecepatan bertambah. Melepaskan gelombang kejut; saat Runtuhan, batu berjatuhan dan menjadi puing. Membawa kunci Dunia Bawah."
+
+msgid "Três cabeças: morde (e morde de novo logo depois de investir), sopra um leque de fogo que deixa chamas no chão e investe. Na fase 3 chama os cães de Hades."
+msgstr "Tiga kepala: menggigit (dan menggigit lagi tepat setelah menyeruduk), menyemburkan kipas api yang meninggalkan nyala di tanah, dan menyeruduk. Di fase 3 memanggil anjing-anjing Hades."
+
+msgid "Solta esferas de alma em leque, levanta esqueletos e faz chover fogo que vira lava. Na fase 3 assume a forma monstruosa: investida, onda de choque e a Ruptura — some e reaparece perto de você."
+msgstr "Melepaskan bola jiwa berbentuk kipas, membangkitkan kerangka, dan menurunkan hujan api yang menjadi lava. Di fase 3 berubah ke wujud mengerikan: serudukan, gelombang kejut, dan Robekan — menghilang lalu muncul di dekatmu."
+
+msgid "ITENS"
+msgstr "ITEM"
+
+msgid "PERKS"
+msgstr "PERK"
+
+msgid "POWER-UPS"
+msgstr "POWER-UP"
+
+msgid "Enche o pente e a reserva de todas as suas armas."
+msgstr "Mengisi magasin dan cadangan semua senjatamu."
+
+msgid "Todo ponto ganho vale em dobro enquanto durar."
+msgstr "Setiap poin yang didapat bernilai dua kali selama berlaku."
+
+msgid "Qualquer acerto de tiro ou de faca mata o zumbi na hora (não vale para chefes)."
+msgstr "Setiap tembakan atau tusukan pisau langsung membunuh zombi (tidak berlaku untuk bos)."
+
+msgid "Mata na hora todos os zumbis vivos — o chefe não — e paga um bônus de pontos."
+msgstr "Langsung membunuh semua zombi yang hidup — kecuali bos — dan memberi bonus poin."
+
+msgid "Recupera toda a vida."
+msgstr "Memulihkan seluruh nyawa."
+
+msgid "Enche a barra azul de armadura, que absorve o dano antes da vida."
+msgstr "Mengisi bar zirah biru, yang menyerap damage sebelum nyawa."
+
+msgid "Você corre bem mais rápido enquanto durar."
+msgstr "Kamu berlari jauh lebih cepat selama berlaku."
+
+msgid "Conserta na hora todas as barricadas do mapa e paga um bônus."
+msgstr "Langsung memperbaiki semua barikade di peta dan memberi bonus."
+
+msgid "A Mystery Box custa 10 e aparece em todos os locais das áreas abertas enquanto durar."
+msgstr "Mystery Box berharga 10 dan muncul di semua titik area yang terbuka selama berlaku."
+
+msgid "Raro. Sorteia um prêmio: uma arma especial, uma bolada de pontos, um perk grátis ou a Fúria (dano em dobro por um tempo). Cai do Zumbi Dourado, dos chefes e de quem acha todos os ursinhos."
+msgstr "Langka. Mengundi hadiah: senjata khusus, setumpuk poin, perk gratis, atau Amukan (damage dua kali lipat untuk sementara). Jatuh dari Zombi Emas, bos, dan saat menemukan semua boneka beruang."
+
+msgid "ELEMENTOS"
+msgstr "ELEMEN"
+
+msgid "BÊNÇÃOS DO TEMPLO"
+msgstr "BERKAT KUIL"
+
+msgid "12% dos tiros soltam um raio que salta entre até 3 zumbis próximos."
+msgstr "12% tembakan melepaskan petir yang melompat di antara hingga 3 zombi terdekat."
+
+msgid "Cada abate em sequência soma +8% de dano, até +40%. A sequência zera depois de 3 s sem abater."
+msgstr "Setiap kill beruntun menambah +8% damage, hingga +40%. Rentetan direset setelah 3 d tanpa kill."
+
+msgid "40% menos dispersão nos tiros e 15% de chance de crítico, com dano em dobro."
+msgstr "Sebaran tembakan 40% lebih kecil dan 15% peluang kritis dengan damage dua kali lipat."
+
+msgid "Anda, recarrega e interage 20% mais rápido."
+msgstr "Berjalan, mengisi ulang, dan berinteraksi 20% lebih cepat."
+
+msgid "Os tiros empurram os zumbis para trás."
+msgstr "Tembakan mendorong zombi ke belakang."
+
+msgid "20% dos zumbis abatidos voltam como espírito aliado por 10 s e lutam do seu lado."
+msgstr "20% zombi yang tumbang kembali sebagai roh sekutu selama 10 d dan bertarung di pihakmu."
+
+msgid "EVENTOS"
+msgstr "EVENT"
+
+msgid "TODOS OS MAPAS"
+msgstr "SEMUA PETA"
+
+msgid "As luzes caem e só ficam as de emergência, fracas. Use a lanterna (F); ligar a energia de novo no disjuntor encerra o apagão. Só acontece com a energia ligada."
+msgstr "Lampu padam dan hanya tersisa lampu darurat yang redup. Gunakan senter (F); menyalakan lagi listrik di saklar mengakhiri pemadaman. Hanya terjadi saat listrik menyala."
+
+msgid "A sirene atrai zumbis: eles chegam mais rápido e mais deles ficam vivos ao mesmo tempo. O painel do alarme desliga a sirene pagando."
+msgstr "Sirene menarik zombi: mereka datang lebih cepat dan lebih banyak yang hidup bersamaan. Panel alarm mematikan sirene dengan bayaran."
+
+msgid "Muito mais zumbis neste round, chegando mais rápido. Vem garantida no round 15 e depois a cada 10."
+msgstr "Jauh lebih banyak zombi di ronde ini, dan datang lebih cepat. Pasti muncul di ronde 15, lalu setiap 10 ronde."
+
+msgid "Uma caixa cai de paraquedas. Segure E por alguns segundos para abrir: munição, armadura ou dinheiro. Se levar um golpe, a abertura é interrompida."
+msgstr "Sebuah peti turun dengan parasut. Tahan E beberapa detik untuk membuka: amunisi, zirah, atau uang. Jika terkena serangan, pembukaan terputus."
+
+msgid "Um cano estoura e solta uma nuvem verde que fere quem estiver dentro — zumbis também. Fique longe ou segure E na válvula para fechar."
+msgstr "Sebuah pipa pecah dan melepaskan awan hijau yang melukai siapa pun di dalamnya — zombi juga. Menjauhlah atau tahan E di katup untuk menutupnya."
+
+msgid "Um zumbi todo em ouro, com coroa, que foge de você (estrela dourada no minimapa). Mate-o antes que escape para ganhar dinheiro e um Golden Drop."
+msgstr "Zombi serba emas bermahkota yang kabur darimu (bintang emas di minimap). Bunuh sebelum kabur untuk mendapat uang dan Golden Drop."
+
+msgid "A lua fica vermelha: os zumbis correm mais, mas dinheiro e pontos valem em dobro."
+msgstr "Bulan berubah merah: zombi berlari lebih cepat, tapi uang dan poin bernilai dua kali lipat."
+
+msgid "O teto começa a cair: círculos vermelhos marcam onde as pedras vão bater. Saia deles — as pedras também esmagam os zumbis."
+msgstr "Langit-langit mulai runtuh: lingkaran merah menandai tempat batu akan jatuh. Keluar dari sana — batu juga meremukkan zombi."
+
+msgid "Uma neblina fecha a visão e até a lanterna ilumina menos. Fique atento aos gemidos."
+msgstr "Kabut menutup pandangan dan bahkan senter jadi lebih redup. Dengarkan erangannya."
+
+msgid "TERMINAL CENTRAL"
+msgstr "TERMINAL PUSAT"
+
+msgid "Um trem atravessa a plataforma a toda velocidade e atropela quem estiver nos trilhos — zumbis inclusive. O painel do trem chama o trem na hora."
+msgstr "Kereta melintasi peron dengan kecepatan penuh dan melindas siapa pun di rel — termasuk zombi. Panel kereta langsung memanggil kereta."
+
+msgid "HOSPITAL SANTA LUZIA"
+msgstr "RUMAH SAKIT SANTA LUZIA"
+
+msgid "Os pontos de isolamento se rompem e os zumbis entram por eles, com a sirene tocando."
+msgstr "Titik isolasi jebol dan zombi masuk lewat sana diiringi sirene."
+
+msgid "TEMPLO DOS MORTOS"
+msgstr "KUIL ORANG MATI"
+
+msgid "Raios caem do céu, e círculos azuis avisam onde. Saia deles — os raios também destroem os zumbis."
+msgstr "Petir menyambar dari langit, dan lingkaran biru menandai tempatnya. Keluar dari sana — petir juga menghancurkan zombi."
+
+msgid "Os sarcófagos se abrem e soltam esqueletos, às vezes arqueiros."
+msgstr "Sarkofagus terbuka dan melepaskan kerangka, kadang pemanah."
+
+msgid "Sátiros e lobos infernais surgem em volta de você numa caçada."
+msgstr "Satir dan serigala neraka muncul di sekitarmu dalam perburuan."
+
+msgid "Um portal se abre e solta criaturas até ser destruído a tiros. Destruído, deixa o Tridente de Poseidon."
+msgstr "Sebuah portal terbuka dan melepaskan makhluk sampai dihancurkan dengan tembakan. Setelah hancur, meninggalkan Trisula Poseidon."
+
+msgid "Neste round, as bênçãos dos altares são de graça."
+msgstr "Di ronde ini, berkat altar gratis."
+
+msgid "MECÂNICAS"
+msgstr "MEKANIK"
+
+msgid "BÁSICO"
+msgstr "DASAR"
+
+msgid "Rounds"
+msgstr "Ronde"
+
+msgid "A partida é uma sequência de rounds cada vez mais difíceis: mais zumbis e mais fortes. O round acaba quando o último zumbi morre, e o fim de cada um paga um bônus."
+msgstr "Pertandingan adalah rangkaian ronde yang makin sulit: zombi makin banyak dan makin kuat. Ronde berakhir saat zombi terakhir mati, dan akhir setiap ronde memberi bonus."
+
+msgid "Pontos"
+msgstr "Poin"
+
+msgid "Acertar e matar zumbis dá pontos — mais no tiro na cabeça e na faca —, e consertar barricadas também. Com eles você compra armas, portas, perks e a Mystery Box. O score do ranking é separado dos pontos."
+msgstr "Menembak dan membunuh zombi memberi poin — lebih banyak lewat headshot dan pisau —, begitu juga memperbaiki barikade. Dengan poin kamu membeli senjata, pintu, perk, dan Mystery Box. Skor peringkat terpisah dari poin."
+
+msgid "Barricadas"
+msgstr "Barikade"
+
+msgid "Os zumbis entram pelas janelas arrancando as tábuas. Segure E perto da janela para pregar as tábuas de volta — cada tábua dá 10 pontos."
+msgstr "Zombi masuk lewat jendela dengan mencabut papannya. Tahan E di dekat jendela untuk memaku papan kembali — setiap papan memberi 10 poin."
+
+msgid "Armas na parede"
+msgstr "Senjata di dinding"
+
+msgid "Os desenhos de giz nas paredes vendem armas e munição (E). A munição sai mais barata que a arma."
+msgstr "Gambar kapur di dinding menjual senjata dan amunisi (E). Amunisi lebih murah daripada senjatanya."
+
+msgid "Faca"
+msgstr "Pisau"
+
+msgid "V dá um golpe com avanço que acerta um zumbi por vez: o alvo do avanço ou o mais perto à frente. Salva quando a munição acaba, e matar na faca dá mais pontos."
+msgstr "V melakukan serangan menerjang yang mengenai satu zombi setiap kali: target terjangan atau yang terdekat di depan. Menyelamatkan saat amunisi habis, dan kill dengan pisau memberi lebih banyak poin."
+
+msgid "Lanterna"
+msgstr "Senter"
+
+msgid "F liga e desliga a lanterna. Faz falta no Apagão, na Neblina e nas áreas escuras."
+msgstr "F menyalakan dan mematikan senter. Dibutuhkan saat Pemadaman, Kabut, dan di area gelap."
+
+msgid "Duas armas"
+msgstr "Dua senjata"
+
+msgid "Você carrega duas armas (Q troca). Ao pegar uma terceira, a que está em mãos cai no chão e pode ser pega de volta por 60 s, com a munição e as melhorias."
+msgstr "Kamu membawa dua senjata (Q untuk ganti). Saat mengambil yang ketiga, senjata di tangan jatuh ke tanah dan bisa diambil lagi selama 60 d, lengkap dengan amunisi dan peningkatannya."
+
+msgid "AVANÇADO"
+msgstr "LANJUTAN"
+
+msgid "Portas e áreas"
+msgstr "Pintu dan area"
+
+msgid "Portas compráveis (E) abrem novas áreas — e também os pontos de onde os zumbis nascem nelas. A placa no chão mostra o nome da área do outro lado."
+msgstr "Pintu yang bisa dibeli (E) membuka area baru — dan juga titik munculnya zombi di sana. Papan di lantai menunjukkan nama area di baliknya."
+
+msgid "Energia"
+msgstr "Listrik"
+
+msgid "Segure E no disjuntor para ligar a energia: as máquinas de perk e o Weapon Lab passam a funcionar e as luzes voltam."
+msgstr "Tahan E di saklar untuk menyalakan listrik: mesin perk dan Weapon Lab mulai berfungsi dan lampu kembali menyala."
+
+msgid "Máquinas de perk"
+msgstr "Mesin perk"
+
+msgid "Cada máquina vende um perk que vale pela partida inteira. Quase todas precisam da energia ligada — o Quick Revive não."
+msgstr "Setiap mesin menjual perk yang berlaku sepanjang pertandingan. Hampir semuanya butuh listrik — Quick Revive tidak."
+
+msgid "Mystery Box"
+msgstr "Mystery Box"
+
+msgid "Paga e sorteia uma arma, às vezes já com um elemento. Depois de alguns usos, a caixa troca de lugar; o feixe de luz dourada mostra onde ela está."
+msgstr "Bayar dan dia mengundi senjata, kadang sudah dengan elemen. Setelah beberapa kali dipakai, kotaknya pindah tempat; berkas cahaya emas menunjukkan lokasinya."
+
+msgid "Weapon Lab"
+msgstr "Weapon Lab"
+
+msgid "Melhora a arma em mãos para Mk II e depois Mk III: mais dano, mais munição e visual novo — algumas viram outra arma, como o Canhão de Vento, que vira Tornado. Precisa de energia."
+msgstr "Meningkatkan senjata di tangan ke Mk II lalu Mk III: damage lebih besar, amunisi lebih banyak, dan tampilan baru — beberapa berubah menjadi senjata lain, seperti Meriam Angin yang menjadi Tornado. Butuh listrik."
+
+msgid "Elementos"
+msgstr "Elemen"
+
+msgid "Com uma arma na mão, segure E na parede dela para comprar o elemento dela: Luz, Sombra, Gelo, Raio, Fogo ou Explosivo mudam o efeito dos tiros. A Mystery Box também pode entregar arma com elemento."
+msgstr "Sambil memegang senjata, tahan E di dindingnya untuk membeli elemennya: Cahaya, Bayangan, Es, Petir, Api, atau Peledak mengubah efek tembakan. Mystery Box juga bisa memberi senjata berelemen."
+
+msgid "Power-ups"
+msgstr "Power-up"
+
+msgid "Zumbis abatidos às vezes deixam um power-up no chão. Passe por cima para pegar antes que ele suma; os que duram mostram o tempo na tela."
+msgstr "Zombi yang tumbang kadang menjatuhkan power-up. Lewati untuk mengambilnya sebelum hilang; yang punya durasi menampilkan waktunya di layar."
+
+msgid "Rodada dos cães"
+msgstr "Ronde anjing"
+
+msgid "No Hospital, os rounds 5, 11, 17… são só de cães, com névoa e raios. O último cão deixa munição cheia."
+msgstr "Di Rumah Sakit, ronde 5, 11, 17… hanya berisi anjing, dengan kabut dan petir. Anjing terakhir menjatuhkan amunisi penuh."
+
+msgid "Round de chefe"
+msgstr "Ronde bos"
+
+msgid "Nos rounds 10, 20 e 30 vem um chefe, com uma escolta menor e a barra de vida no alto da tela. Derrotado, deixa um Golden Drop e um Max Ammo."
+msgstr "Di ronde 10, 20, dan 30 datang bos dengan pengawal lebih sedikit dan bar nyawa di atas layar. Setelah kalah, dia menjatuhkan Golden Drop dan Max Ammo."
+
+msgid "Missões"
+msgstr "Misi"
+
+msgid "Cada mapa tem uma missão em etapas, com o objetivo na tela e no minimapa: O Último Trem (Terminal), O Soro do Dr. Almeida (Hospital) e O Portão do Submundo (Templo). O prêmio é todos os perks e uma arma exclusiva."
+msgstr "Setiap peta punya misi bertahap, dengan tujuan di layar dan di minimap: Kereta Terakhir (Terminal), Serum Dr. Almeida (Rumah Sakit), dan Gerbang Dunia Bawah (Kuil). Hadiahnya semua perk dan senjata eksklusif."
+
+msgid "Bênçãos dos Deuses"
+msgstr "Berkat Para Dewa"
+
+msgid "No Templo, 3 altares oferecem a bênção de um deus, sorteado a cada round, por 1500 pontos. Só uma bênção por vez, e cair faz perder a que você tem."
+msgstr "Di Kuil, 3 altar menawarkan berkat satu dewa, diundi setiap ronde, seharga 1500 poin. Hanya satu berkat sekaligus, dan tumbang membuatmu kehilangan berkat yang dimiliki."
+
+msgid "SEGREDOS"
+msgstr "RAHASIA"
+
+msgid "Ursinhos escondidos"
+msgstr "Boneka beruang tersembunyi"
+
+msgid "Cada mapa esconde ursinhos de pelúcia. Achar todos na mesma partida solta um Golden Drop e libera uma conquista."
+msgstr "Setiap peta menyembunyikan boneka beruang. Menemukan semuanya dalam satu pertandingan menjatuhkan Golden Drop dan membuka pencapaian."
+
+msgid "Rádios e gravadores"
+msgstr "Radio dan perekam"
+
+msgid "Rádios e gravadores espalhados contam a história de cada mapa. Segure E para sintonizar; cada uso traz a próxima mensagem."
+msgstr "Radio dan perekam yang tersebar menceritakan kisah setiap peta. Tahan E untuk menyetel; setiap penggunaan memutar pesan berikutnya."
+
+msgid "Estátuas dos deuses"
+msgstr "Patung para dewa"
+
+msgid "No Templo, acender as 12 estátuas dos deuses abre a passagem para o Santuário do Olimpo, onde está o Arco de Artemis."
+msgstr "Di Kuil, menyalakan 12 patung dewa membuka lorong ke Tempat Suci Olympus, tempat Busur Artemis berada."
+
+msgid "Recepção"
+msgstr "Resepsionis"
+
+msgid "Centro Cirúrgico"
+msgstr "Ruang Operasi"
+
+msgid "UTI"
+msgstr "ICU"
+
+msgid "Enfermaria"
+msgstr "Bangsal"
+
+msgid "Radiologia"
+msgstr "Radiologi"
+
+msgid "Farmácia"
+msgstr "Apotek"
+
+msgid "Pediatria"
+msgstr "Pediatri"
+
+msgid "Necrotério"
+msgstr "Kamar Mayat"
+
+msgid "Refeitório"
+msgstr "Kantin"
+
+msgid "Laboratório"
+msgstr "Laboratorium"
+
+msgid "OUVIR O GRAVADOR"
+msgstr "DENGARKAN PEREKAM"
+
+msgid "📼 \"Diário do Dr. Almeida, dia 3: a amostra do Paciente Zero reagiu ao soro. As células não param de se dividir.\""
+msgstr "📼 \"Catatan Dr. Almeida, hari ke-3: sampel Pasien Nol bereaksi terhadap serum. Sel-selnya tidak berhenti membelah.\""
+
+msgid "📼 \"Dia 9: a febre some e volta. O Paciente Zero arrancou as amarras. Três enfermeiros foram mordidos.\""
+msgstr "📼 \"Hari ke-9: demamnya hilang lalu kembali. Pasien Nol merobek tali pengikatnya. Tiga perawat digigit.\""
+
+msgid "📼 \"Dia 12: lacramos o laboratório e mandamos as amostras de trem para a Estação Central. Que Deus nos perdoe.\""
+msgstr "📼 \"Hari ke-12: kami menyegel laboratorium dan mengirim sampel dengan kereta ke Stasiun Pusat. Semoga Tuhan mengampuni kami.\""
+
+msgid "📼 \"...se estiver ouvindo isto: não deixe o Paciente Zero chegar à superfície. O soro está na câmara.\""
+msgstr "📼 \"...kalau kamu mendengar ini: jangan biarkan Pasien Nol mencapai permukaan. Serumnya ada di dalam ruangan.\""
+
+msgid "Ruínas Gregas"
+msgstr "Reruntuhan Yunani"
+
+msgid "Necrópole"
+msgstr "Nekropolis"
+
+msgid "Labirinto"
+msgstr "Labirin"
+
+msgid "Floresta de Artemis"
+msgstr "Hutan Artemis"
+
+msgid "Templo da Górgona"
+msgstr "Kuil Gorgon"
+
+msgid "Submundo"
+msgstr "Dunia Bawah"
+
+msgid "Arena Final"
+msgstr "Arena Akhir"
+
+msgid "Santuário do Olimpo"
+msgstr "Tempat Suci Olympus"
+
+msgid "LER A INSCRIÇÃO"
+msgstr "BACA PRASASTI"
+
+msgid "📜 \"Diário da Dra. Helena, escavação 7: as inscrições falam de mortos que voltam quando o portão é tocado.\""
+msgstr "📜 \"Catatan Dr. Helena, galian 7: prasasti itu bercerita tentang orang mati yang kembali saat gerbangnya disentuh.\""
+
+msgid "📜 \"Chegou a caixa do Hospital Santa Luzia: amostras do Dr. Almeida. Ele disse que o soro veio DAQUI.\""
+msgstr "📜 \"Peti dari Rumah Sakit Santa Luzia tiba: sampel Dr. Almeida. Dia bilang serumnya berasal DARI SINI.\""
+
+msgid "📜 \"Os trens da Estação Central traziam os caixotes à noite. Nenhum carregador voltou para a segunda viagem.\""
+msgstr "📜 \"Kereta dari Stasiun Pusat membawa peti-peti itu di malam hari. Tak satu pun kuli kembali untuk perjalanan kedua.\""
+
+msgid "📜 \"O templo não era uma prisão. Era uma porta. E alguém, do outro lado, está batendo.\""
+msgstr "📜 \"Kuil itu bukan penjara. Kuil itu sebuah pintu. Dan seseorang di seberang sana sedang mengetuk.\""
+
+msgid "Hall Central"
+msgstr "Aula Utama"
+
+msgid "Plataforma Norte"
+msgstr "Peron Utara"
+
+msgid "Bilheteria"
+msgstr "Loket Tiket"
+
+msgid "Lojas"
+msgstr "Toko"
+
+msgid "Área Técnica"
+msgstr "Area Teknis"
+
+msgid "Túneis"
+msgstr "Terowongan"
+
+msgid "Manutenção"
+msgstr "Perawatan"
+
+msgid "📻 \"...controle da Estação Central. O trem das 23h40 NÃO deve parar. Repito: não parem o trem...\""
+msgstr "📻 \"...kendali Stasiun Pusat. Kereta pukul 23.40 TIDAK boleh berhenti. Saya ulangi: jangan hentikan kereta...\""
+
+msgid "📻 \"...o maquinista não responde. Alguém viu o Condutor? Ele desceu nos túneis e voltou... diferente.\""
+msgstr "📻 \"...masinis tidak menjawab. Ada yang melihat Kondektur? Dia turun ke terowongan dan kembali... berbeda.\""
+
+msgid "📻 \"...quarentena decretada. Portas lacradas. Quem ficou lá dentro está por conta própria.\""
+msgstr "📻 \"...karantina diberlakukan. Pintu disegel. Siapa pun yang tertinggal di dalam harus berjuang sendiri.\""
+
+msgid "📻 \"...se alguém ouvir isto: tentem sobreviver. O resgate chega ao amanhecer. Talvez.\""
+msgstr "📻 \"...kalau ada yang mendengar ini: berusahalah bertahan hidup. Bantuan datang saat fajar. Mungkin.\""

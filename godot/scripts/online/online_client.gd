@@ -44,7 +44,7 @@ func request(method: HTTPClient.Method, path: String, body: Variant = null, toke
 	var error := http.request(data.url + path, headers, method, "" if body == null else JSON.stringify(body))
 	if error != OK:
 		http.queue_free()
-		last_error = "requisição recusada (%s)" % error_string(error)
+		last_error = Loc.t("requisição recusada (%s)") % error_string(error)
 		return {"ok": false, "status": 0, "message": "sem conexão"}
 	var result: Array = await http.request_completed
 	http.queue_free()
@@ -71,7 +71,7 @@ static func make_http(timeout: float) -> HTTPRequest:
 
 
 static func result_text(result: int) -> String:
-	return String(RESULT_TEXT.get(result, "erro de rede %d" % result))
+	return String(RESULT_TEXT.get(result, Loc.t("erro de rede %d") % result))
 
 
 func _message(parsed: Variant, text: String) -> String:

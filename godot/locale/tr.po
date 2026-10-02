@@ -1,0 +1,2734 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tentando Sobreviver\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: tr\n"
+
+msgid "[SEGURE %s] FECHAR A VÁLVULA"
+msgstr "[%s BASILI TUT] VANAYI KAPAT"
+
+msgid "ZUMBI DOURADO ABATIDO!  +%s"
+msgstr "ALTIN ZOMBİ ÖLDÜRÜLDÜ!  +%s"
+
+msgid "O ZUMBI DOURADO ESCAPOU"
+msgstr "ALTIN ZOMBİ KAÇTI"
+
+msgid "[SEGURE %s] ABRIR SUPRIMENTOS"
+msgstr "[%s BASILI TUT] ERZAKI AÇ"
+
+msgid "SUPRIMENTOS"
+msgstr "ERZAK"
+
+msgid "Munição cheia · Armadura · +%s"
+msgstr "Tam cephane · Zırh · +%s"
+
+msgid "ATROPELADOS ×%s"
+msgstr "EZİLENLER ×%s"
+
+msgid "O PORTAL CAIU — O TRIDENTE DE POSEIDON FICOU NO LUGAR"
+msgstr "PORTAL DÜŞTÜ — POSEIDON'UN ÜÇ DİŞLİ MIZRAĞI GERİDE KALDI"
+
+msgid "O PORTÃO DO SUBMUNDO SE FECHOU"
+msgstr "YERALTI DÜNYASI KAPISI KAPANDI"
+
+msgid "TREM"
+msgstr "TREN"
+
+msgid "[SEGURE %s] CONSERTAR BARRICADA  ·  +%s por tábua"
+msgstr "[%s BASILI TUT] BARİKATI ONAR  ·  tahta başına +%s"
+
+msgid "BÊNÇÃO DE %s"
+msgstr "%s KUTSAMASI"
+
+msgid "BÊNÇÃO DE %s ATIVA"
+msgstr "%s KUTSAMASI AKTİF"
+
+msgid "[%s] BÊNÇÃO DE %s — %s: %s  ·  DE GRAÇA"
+msgstr "[%s] %s KUTSAMASI — %s: %s  ·  ÜCRETSİZ"
+
+msgid "[%s] BÊNÇÃO DE %s — %s: %s  ·  %s pontos"
+msgstr "[%s] %s KUTSAMASI — %s: %s  ·  %s puan"
+
+msgid "%s — %s"
+msgstr "%s — %s"
+
+msgid "DISJUNTOR"
+msgstr "ŞALTER"
+
+msgid "[SEGURE %s] LIGAR A ENERGIA"
+msgstr "[%s BASILI TUT] ELEKTRİĞİ AÇ"
+
+msgid "ENERGIA LIGADA"
+msgstr "ELEKTRİK AÇIK"
+
+msgid "%s ligou a energia"
+msgstr "%s elektriği açtı"
+
+msgid "[%s] LER A PLACA"
+msgstr "[%s] TABELAYI OKU"
+
+msgid "PORTÃO DO TEMPLO — leve Fragmentos de Alma aos 3 altares"
+msgstr "TAPINAK KAPISI — Ruh Parçalarını 3 sunağa götür"
+
+msgid "PORTÃO DO SUBMUNDO — precisa da chave do Minotauro"
+msgstr "YERALTI DÜNYASI KAPISI — Minotor'un anahtarı gerekli"
+
+msgid "PASSAGEM SELADA — ative as 12 estátuas dos deuses"
+msgstr "MÜHÜRLÜ GEÇİT — 12 tanrı heykelini yak"
+
+msgid "PORTÃO FECHADO"
+msgstr "KAPI KAPALI"
+
+msgid "[%s] ABRIR PORTA  ·  %s pontos"
+msgstr "[%s] KAPIYI AÇ  ·  %s puan"
+
+msgid "[%s] ABRIR PORTA — %s  ·  %s pontos"
+msgstr "[%s] KAPIYI AÇ — %s  ·  %s puan"
+
+msgid "[%s] ABRIR PORTA — %s, %s  ·  %s pontos"
+msgstr "[%s] KAPIYI AÇ — %s, %s  ·  %s puan"
+
+msgid "%s abriu %s"
+msgstr "%s açtı: %s"
+
+msgid "ARMADILHA"
+msgstr "TUZAK"
+
+msgid "ARMADILHA ELÉTRICA LIGADA — %ss"
+msgstr "ELEKTRİKLİ TUZAK AÇIK — %ss"
+
+msgid "ARMADILHA RECARREGANDO — %ss"
+msgstr "TUZAK DOLUYOR — %ss"
+
+msgid "[%s] LIGAR ARMADILHA ELÉTRICA  ·  %s pontos"
+msgstr "[%s] ELEKTRİKLİ TUZAĞI AÇ  ·  %s puan"
+
+msgid "RELIGAR A ENERGIA"
+msgstr "ELEKTRİĞİ GERİ AÇ"
+
+msgid "PAINEL DE ENERGIA — FUNCIONANDO"
+msgstr "ELEKTRİK PANOSU — ÇALIŞIYOR"
+
+msgid "ENERGIA"
+msgstr "ELEKTRİK"
+
+msgid "DESLIGAR O ALARME"
+msgstr "ALARMI KAPAT"
+
+msgid "ALARME DE EMERGÊNCIA — DESLIGADO"
+msgstr "ACİL DURUM ALARMI — KAPALI"
+
+msgid "ALARME"
+msgstr "ALARM"
+
+msgid "[SEGURE %s] %s  ·  %s pontos"
+msgstr "[%s BASILI TUT] %s  ·  %s puan"
+
+msgid "ZEUS"
+msgstr "ZEUS"
+
+msgid "HERA"
+msgstr "HERA"
+
+msgid "POSEIDON"
+msgstr "POSEIDON"
+
+msgid "DEMÉTER"
+msgstr "DEMETER"
+
+msgid "ATENA"
+msgstr "ATHENA"
+
+msgid "APOLO"
+msgstr "APOLLON"
+
+msgid "ÁRTEMIS"
+msgstr "ARTEMİS"
+
+msgid "ARES"
+msgstr "ARES"
+
+msgid "AFRODITE"
+msgstr "AFRODİT"
+
+msgid "HEFESTO"
+msgstr "HEFAİSTOS"
+
+msgid "HERMES"
+msgstr "HERMES"
+
+msgid "DIONÍSIO"
+msgstr "DİONİSOS"
+
+msgid "[SEGURE %s] ACENDER A ESTÁTUA DE %s"
+msgstr "[%s BASILI TUT] %s HEYKELİNİ YAK"
+
+msgid "ESTÁTUA DE %s ACESA (%s/%s)"
+msgstr "%s HEYKELİ YANDI (%s/%s)"
+
+msgid "OS DOZE DO OLIMPO"
+msgstr "OLİMPOS'UN ON İKİLERİ"
+
+msgid "O templo reage... uma passagem se abriu na Floresta."
+msgstr "Tapınak tepki veriyor... Orman'da bir geçit açıldı."
+
+msgid "SINTONIZAR O RÁDIO"
+msgstr "RADYOYU AYARLA"
+
+msgid "RÁDIO — CHIADO..."
+msgstr "RADYO — PARAZİT..."
+
+msgid "[SEGURE %s] %s"
+msgstr "[%s BASILI TUT] %s"
+
+msgid "[%s] MYSTERY BOX  ·  %s pontos"
+msgstr "[%s] MYSTERY BOX  ·  %s puan"
+
+msgid "MYSTERY BOX  ·  arma de %s"
+msgstr "MYSTERY BOX  ·  silah sahibi: %s"
+
+msgid "[%s] PEGAR %s (MUNIÇÃO)"
+msgstr "[%s] AL: %s (CEPHANE)"
+
+msgid "[%s] PEGAR %s"
+msgstr "[%s] AL: %s"
+
+msgid "um colega"
+msgstr "bir takım arkadaşı"
+
+msgid "A MYSTERY BOX MUDOU DE LUGAR — %s"
+msgstr "MYSTERY BOX YER DEĞİŞTİRDİ — %s"
+
+msgid "A MYSTERY BOX MUDOU DE LUGAR"
+msgstr "MYSTERY BOX YER DEĞİŞTİRDİ"
+
+msgid "SEM ENERGIA — ligue o disjuntor"
+msgstr "ELEKTRİK YOK — şalteri aç"
+
+msgid "%s  ·  JÁ ATIVO"
+msgstr "%s  ·  ZATEN AKTİF"
+
+msgid "%s  ·  ESGOTADO NESTA PARTIDA"
+msgstr "%s  ·  BU MAÇTA TÜKENDİ"
+
+msgid "[%s] %s — %s  ·  %s pontos"
+msgstr "[%s] %s — %s  ·  %s puan"
+
+msgid "[SEGURE %s] PEGAR %s  (%s%%)"
+msgstr "[%s BASILI TUT] AL: %s  (%s%%)"
+
+msgid "%s — presente de Artemis"
+msgstr "%s — Artemis'in hediyesi"
+
+msgid "[%s] PEGAR O URSINHO"
+msgstr "[%s] AYICIĞI AL"
+
+msgid "URSINHO %s/%s"
+msgstr "AYICIK %s/%s"
+
+msgid "SEGREDO DOS URSINHOS"
+msgstr "AYICIKLARIN SIRRI"
+
+msgid "Você achou todos! Segredo salvo."
+msgstr "Hepsini buldun! Sır kaydedildi."
+
+msgid "Todos os ursinhos de novo!"
+msgstr "Yine bütün ayıcıklar!"
+
+msgid "PAINEL DO TREM — DISPONÍVEL EM %ss"
+msgstr "TREN PANOSU — %ss SONRA HAZIR"
+
+msgid "[%s] CHAMAR O TREM  ·  %s pontos"
+msgstr "[%s] TRENİ ÇAĞIR  ·  %s puan"
+
+msgid "O TREM NÃO PODE VIR AGORA"
+msgstr "TREN ŞU AN GELEMEZ"
+
+msgid "MUNIÇÃO"
+msgstr "CEPHANE"
+
+msgid "  ·  SEGURE %s: "
+msgstr "  ·  %s BASILI TUT:"
+
+msgid "MUNIÇÃO CHEIA"
+msgstr "CEPHANE DOLU"
+
+msgid "[%s] MUNIÇÃO %s  ·  %s pontos"
+msgstr "[%s] CEPHANE %s  ·  %s puan"
+
+msgid "%s  ·  MUNIÇÃO CHEIA"
+msgstr "%s  ·  CEPHANE DOLU"
+
+msgid "[%s] COMPRAR %s  ·  %s pontos"
+msgstr "[%s] SATIN AL: %s  ·  %s puan"
+
+msgid "[%s] PEGAR %s  ·  %ss"
+msgstr "[%s] AL: %s  ·  %ss"
+
+msgid "[%s] PEGAR %s (troca por %s)  ·  %ss"
+msgstr "[%s] AL: %s (%s yerine)  ·  %ss"
+
+msgid "%s  ·  NÍVEL MÁXIMO"
+msgstr "%s  ·  MAKSİMUM SEVİYE"
+
+msgid "Mk II"
+msgstr "Mk II"
+
+msgid "Mk III"
+msgstr "Mk III"
+
+msgid "[%s] WEAPON LAB: %s → %s  ·  %s pontos"
+msgstr "[%s] WEAPON LAB: %s → %s  ·  %s puan"
+
+msgid "TREM PASSANDO"
+msgstr "TREN GEÇİYOR"
+
+msgid "⚠ TREM CHEGANDO"
+msgstr "⚠ TREN GELİYOR"
+
+msgid "PRÓXIMO TREM %ds"
+msgstr "SONRAKİ TREN %ds"
+
+msgid "PRÓXIMO TREM EM BREVE"
+msgstr "SONRAKİ TREN YAKINDA"
+
+msgid "SEM PREVISÃO"
+msgstr "TAHMİN YOK"
+
+msgid "Não foi possível conectar à sala"
+msgstr "Odaya bağlanılamadı"
+
+msgid "O host saiu"
+msgstr "Host ayrıldı"
+
+msgid "Tempo esgotado ao entrar na sala"
+msgstr "Odaya girerken süre doldu"
+
+msgid "Criando sala..."
+msgstr "Oda oluşturuluyor..."
+
+msgid "Não foi possível criar a sala (%s)"
+msgstr "Oda oluşturulamadı (%s)"
+
+msgid "Procurando a sala %s..."
+msgstr "%s odası aranıyor..."
+
+msgid "Sem conexão com o servidor (%s)"
+msgstr "Sunucuya bağlantı yok (%s)"
+
+msgid "Sala %s não encontrada"
+msgstr "%s odası bulunamadı"
+
+msgid "Não foi possível abrir a sala (%s)"
+msgstr "Oda açılamadı (%s)"
+
+msgid "Sala %s aberta"
+msgstr "%s odası açık"
+
+msgid "Não foi possível entrar (%s)"
+msgstr "Girilemedi (%s)"
+
+msgid "Conectando à sala %s..."
+msgstr "%s odasına bağlanılıyor..."
+
+msgid "Na sala %s"
+msgstr "%s odasında"
+
+msgid "JOGADOR"
+msgstr "OYUNCU"
+
+msgid "sem conexão"
+msgstr "bağlantı yok"
+
+msgid "A partida já começou"
+msgstr "Maç çoktan başladı"
+
+msgid "Sala cheia (%s jogadores)"
+msgstr "Oda dolu (%s oyuncu)"
+
+msgid "Entrada recusada"
+msgstr "Giriş reddedildi"
+
+msgid "sem sessão"
+msgstr "oturum yok"
+
+msgid "Usuário: 3 a 16 letras minúsculas, números ou _"
+msgstr "Kullanıcı: 3–16 küçük harf, rakam veya _"
+
+msgid "Senha: mínimo de %d caracteres"
+msgstr "Şifre: en az %d karakter"
+
+msgid "Senha: máximo de %d caracteres"
+msgstr "Şifre: en fazla %d karakter"
+
+msgid "Não foi possível entrar — tente de novo"
+msgstr "Giriş yapılamadı — tekrar dene"
+
+msgid "Sem conexão"
+msgstr "Bağlantı yok"
+
+msgid "Sessão expirada — entre de novo"
+msgstr "Oturum süresi doldu — tekrar giriş yap"
+
+msgid "Falha ao ler da nuvem"
+msgstr "Buluttan okunamadı"
+
+msgid "Contas online indisponíveis"
+msgstr "Çevrim içi hesaplar kullanılamıyor"
+
+msgid "Falha ao salvar na nuvem"
+msgstr "Buluta kaydedilemedi"
+
+msgid "Sem conexão com o servidor"
+msgstr "Sunucuya bağlantı yok"
+
+msgid "Muitas tentativas — aguarde um pouco"
+msgstr "Çok fazla deneme — biraz bekle"
+
+msgid "Esse usuário já existe"
+msgstr "Bu kullanıcı zaten var"
+
+msgid "Usuário ou senha incorretos"
+msgstr "Kullanıcı adı veya şifre yanlış"
+
+msgid "Senha fraca demais"
+msgstr "Şifre çok zayıf"
+
+msgid "Usuário inválido"
+msgstr "Geçersiz kullanıcı adı"
+
+msgid "Não foi possível concluir — tente de novo"
+msgstr "Tamamlanamadı — tekrar dene"
+
+msgid "HACKER DETECTADO"
+msgstr "HİLECİ TESPİT EDİLDİ"
+
+msgid "SOLO"
+msgstr "SOLO"
+
+msgid "DUPLA"
+msgstr "İKİLİ"
+
+msgid "TRIO"
+msgstr "ÜÇLÜ"
+
+msgid "QUARTETO"
+msgstr "DÖRTLÜ"
+
+msgid "ranking global indisponível"
+msgstr "küresel sıralama kullanılamıyor"
+
+msgid "mapa ainda não aceito no ranking global"
+msgstr "harita henüz küresel sıralamada değil"
+
+msgid "pontuação recusada"
+msgstr "skor reddedildi"
+
+msgid "resposta incompleta"
+msgstr "eksik yanıt"
+
+msgid "não conectou ao servidor"
+msgstr "sunucuya bağlanılamadı"
+
+msgid "endereço não encontrado"
+msgstr "adres bulunamadı"
+
+msgid "conexão caiu"
+msgstr "bağlantı koptu"
+
+msgid "falha de TLS"
+msgstr "TLS hatası"
+
+msgid "sem resposta"
+msgstr "yanıt yok"
+
+msgid "resposta grande demais"
+msgstr "yanıt çok büyük"
+
+msgid "falha ao descompactar a resposta"
+msgstr "yanıtın açılması başarısız"
+
+msgid "requisição falhou"
+msgstr "istek başarısız"
+
+msgid "redirecionamentos demais"
+msgstr "çok fazla yönlendirme"
+
+msgid "tempo esgotado"
+msgstr "süre doldu"
+
+msgid "requisição recusada (%s)"
+msgstr "istek reddedildi (%s)"
+
+msgid "erro de rede %d"
+msgstr "ağ hatası %d"
+
+msgid "ALIADO"
+msgstr "MÜTTEFİK"
+
+msgid "Fúria do Trovão"
+msgstr "Gök Gürültüsü Öfkesi"
+
+msgid "12% dos tiros soltam um raio"
+msgstr "Atışların %12'si yıldırım saçar"
+
+msgid "Sede de Sangue"
+msgstr "Kan Susuzluğu"
+
+msgid "abates seguidos aumentam o dano"
+msgstr "art arda öldürmeler hasarı artırır"
+
+msgid "mira precisa e golpes críticos"
+msgstr "isabetli nişan ve kritik vuruşlar"
+
+msgid "anda, recarrega e interage mais rápido"
+msgstr "daha hızlı yürür, doldurur ve etkileşirsin"
+
+msgid "Maré"
+msgstr "Dalga"
+
+msgid "os tiros empurram os zumbis"
+msgstr "atışlar zombileri iter"
+
+msgid "HADES"
+msgstr "HADES"
+
+msgid "Pacto dos Mortos"
+msgstr "Ölülerin Antlaşması"
+
+msgid "abatidos voltam como aliados"
+msgstr "öldürülenler müttefik olarak döner"
+
+msgid "HADES: um espírito aliado se levanta para lutar"
+msgstr "HADES: müttefik bir ruh savaşmak için kalkıyor"
+
+msgid "PETRIFICADO! Não olhe para a Górgona"
+msgstr "TAŞLAŞTIN! Gorgon'a bakma"
+
+msgid "QUICK REVIVE!"
+msgstr "QUICK REVIVE!"
+
+msgid "CAÍDO! Um colega pode te reviver"
+msgstr "YERE DÜŞTÜN! Bir arkadaşın seni kaldırabilir"
+
+msgid "%s caiu!"
+msgstr "%s yere düştü!"
+
+msgid "CAÍDO · %ss para um colega te reviver"
+msgstr "YERDESİN · arkadaşının seni kaldırması için %ss"
+
+msgid "VOCÊ MORREU · volta no próximo round"
+msgstr "ÖLDÜN · sonraki turda dönersin"
+
+msgid "%s levantou %s"
+msgstr "%s kaldırdı: %s"
+
+msgid "[SEGURE %s] REVIVER %s"
+msgstr "[%s BASILI TUT] KALDIR: %s"
+
+msgid "O COLEGA"
+msgstr "ARKADAŞ"
+
+msgid "[%s] %s"
+msgstr "[%s] %s"
+
+msgid "CADEADO ABERTO"
+msgstr "KİLİT AÇILDI"
+
+msgid "%s concluiu a missão: todos os perks + %s"
+msgstr "%s görevi tamamladı: tüm perkler + %s"
+
+msgid "%s concluiu a missão: todos os perks"
+msgstr "%s görevi tamamladı: tüm perkler"
+
+msgid "Ligue a energia (disjuntor no Necrotério)"
+msgstr "Elektriği aç (şalter Morg'da)"
+
+msgid "Derrote o Paciente Zero enfurecido (round %s)"
+msgstr "Öfkeli Sıfır Numaralı Hasta'yı yen (tur %s)"
+
+msgid "Aplique o soro no Paciente Zero"
+msgstr "Serumu Sıfır Numaralı Hasta'ya uygula"
+
+msgid "O SORO"
+msgstr "SERUM"
+
+msgid "Componentes do soro %s/3 — UTI · Farmácia · cartão do Blindado"
+msgstr "Serum bileşenleri %s/3 — Yoğun Bakım · Eczane · Zırhlı'nın kartı"
+
+msgid "PEGAR AS AMOSTRAS"
+msgstr "NUMUNELERİ AL"
+
+msgid "AMOSTRAS COLETADAS"
+msgstr "NUMUNELER ALINDI"
+
+msgid "PEGAR O REAGENTE"
+msgstr "REAKTİFİ AL"
+
+msgid "REAGENTE COLETADO"
+msgstr "REAKTİF ALINDI"
+
+msgid "ARMÁRIO TRANCADO — ATIRE NO CADEADO"
+msgstr "DOLAP KİLİTLİ — KİLİDE ATEŞ ET"
+
+msgid "ABRIR A GAVETA COM O CARTÃO"
+msgstr "ÇEKMECEYİ KARTLA AÇ"
+
+msgid "CATALISADOR COLETADO"
+msgstr "KATALİZÖR ALINDI"
+
+msgid "GAVETA TRANCADA — PRECISA DO CARTÃO DE ACESSO"
+msgstr "ÇEKMECE KİLİTLİ — GİRİŞ KARTI GEREKLİ"
+
+msgid "PEGAR O CARTÃO DE ACESSO"
+msgstr "GİRİŞ KARTINI AL"
+
+msgid "CARTÃO DE ACESSO — abra a gaveta do Necrotério"
+msgstr "GİRİŞ KARTI — Morg'daki çekmeceyi aç"
+
+msgid "UM SEGURANÇA BLINDADO ESTÁ COM O CARTÃO DE ACESSO"
+msgstr "ZIRHLI BİR GÜVENLİKÇİDE GİRİŞ KARTI VAR"
+
+msgid "Leve os componentes à centrífuga do Laboratório"
+msgstr "Bileşenleri Laboratuvar'daki santrifüje götür"
+
+msgid "CENTRÍFUGA SOB ATAQUE! Afaste os zumbis (%ss)"
+msgstr "SANTRİFÜJ SALDIRI ALTINDA! Zombileri uzak tut (%ss)"
+
+msgid "Defenda a centrífuga: %ss"
+msgstr "Santrifüjü savun: %ss"
+
+msgid "COLOCAR OS COMPONENTES NA CENTRÍFUGA"
+msgstr "BİLEŞENLERİ SANTRİFÜJE KOY"
+
+msgid "A CENTRÍFUGA ESTÁ GIRANDO — DEFENDA!"
+msgstr "SANTRİFÜJ DÖNÜYOR — SAVUN!"
+
+msgid "SORO PRONTO! O Paciente Zero sentiu o cheiro..."
+msgstr "SERUM HAZIR! Sıfır Numaralı Hasta kokuyu aldı..."
+
+msgid "APLICAR O SORO"
+msgstr "SERUMU UYGULA"
+
+msgid "VOCÊ CUROU O PACIENTE ZERO"
+msgstr "SIFIR NUMARALI HASTA'YI İYİLEŞTİRDİN"
+
+msgid "Todos os perks + Tornado. A luta continua..."
+msgstr "Tüm perkler + Tornado. Savaş sürüyor..."
+
+msgid "Ligue o gerador dos arqueólogos (Necrópole)"
+msgstr "Arkeologların jeneratörünü çalıştır (Nekropol)"
+
+msgid "Leve os Fragmentos aos altares do Portão do Templo (%s/3)"
+msgstr "Parçaları Tapınak Kapısı sunaklarına götür (%s/3)"
+
+msgid "O guardião despertou: derrote o Minotauro (round %s)"
+msgstr "Bekçi uyandı: Minotor'u yen (tur %s)"
+
+msgid "Pegue a chave do Submundo onde o Minotauro caiu"
+msgstr "Minotor'un düştüğü yerden Yeraltı anahtarını al"
+
+msgid "Abra o Portão do Submundo (sul das Ruínas)"
+msgstr "Yeraltı Dünyası Kapısı'nı aç (Harabeler'in güneyi)"
+
+msgid "O Cérbero guarda o Submundo: derrote-o (round %s)"
+msgstr "Kerberos Yeraltı'nı koruyor: onu yen (tur %s)"
+
+msgid "Sele o portão no altar da Arena Final"
+msgstr "Kapıyı Son Arena'daki sunakta mühürle"
+
+msgid "O PORTÃO DO SUBMUNDO"
+msgstr "YERALTI DÜNYASI KAPISI"
+
+msgid "Fragmentos de Alma %s/3 — Necrópole · Floresta · um Esqueleto os carrega"
+msgstr "Ruh Parçaları %s/3 — Nekropol · Orman · bir İskelet taşıyor"
+
+msgid "PEGAR O FRAGMENTO DE ALMA"
+msgstr "RUH PARÇASINI AL"
+
+msgid "FRAGMENTO DE ALMA (%s/3)"
+msgstr "RUH PARÇASI (%s/3)"
+
+msgid "UM ESQUELETO CARREGA UM FRAGMENTO DE ALMA"
+msgstr "BİR İSKELET RUH PARÇASI TAŞIYOR"
+
+msgid "DEPOSITAR UM FRAGMENTO NO ALTAR"
+msgstr "SUNAĞA BİR PARÇA KOY"
+
+msgid "ALTAR ACESO (%s/3)"
+msgstr "SUNAK YANDI (%s/3)"
+
+msgid "O PORTÃO DO TEMPLO SE ABRIU... ALGO ACORDOU NO LABIRINTO"
+msgstr "TAPINAK KAPISI AÇILDI... LABİRENTTE BİR ŞEY UYANDI"
+
+msgid "PEGAR A CHAVE DO SUBMUNDO"
+msgstr "YERALTI ANAHTARINI AL"
+
+msgid "CHAVE DO SUBMUNDO — abra o portão ao sul das Ruínas"
+msgstr "YERALTI ANAHTARI — Harabeler'in güneyindeki kapıyı aç"
+
+msgid "ABRIR O PORTÃO DO SUBMUNDO"
+msgstr "YERALTI DÜNYASI KAPISINI AÇ"
+
+msgid "SELAR O PORTÃO DO SUBMUNDO"
+msgstr "YERALTI DÜNYASI KAPISINI MÜHÜRLE"
+
+msgid "O PORTÃO DO SUBMUNDO FOI SELADO"
+msgstr "YERALTI DÜNYASI KAPISI MÜHÜRLENDİ"
+
+msgid "Todos os perks + Raio de Zeus. Mas algo lá embaixo ainda respira..."
+msgstr "Tüm perkler + Zeus'un Yıldırımı. Ama aşağıda bir şey hâlâ nefes alıyor..."
+
+msgid "O ÚLTIMO TREM"
+msgstr "SON TREN"
+
+msgid "Ligue a energia (disjuntor na Área Técnica)"
+msgstr "Elektriği aç (şalter Teknik Alan'da)"
+
+msgid "Derrote o Condutor enfurecido (round %s)"
+msgstr "Öfkeli Kondüktör'ü yen (tur %s)"
+
+msgid "Pegue a Lanterna do Condutor"
+msgstr "Kondüktör'ün Fenerini al"
+
+msgid "Peças do sinal %s/3 — fusível (Manutenção) · chave (Bilheteria) · manivela (Blindado)"
+msgstr "Sinyal parçaları %s/3 — sigorta (Bakım) · anahtar (Gişe) · kol (Zırhlı)"
+
+msgid "PEGAR O FUSÍVEL DO SINAL"
+msgstr "SİNYAL SİGORTASINI AL"
+
+msgid "FUSÍVEL COLETADO"
+msgstr "SİGORTA ALINDI"
+
+msgid "PEGAR A CHAVE DO PAINEL"
+msgstr "PANO ANAHTARINI AL"
+
+msgid "CHAVE DO PAINEL COLETADA"
+msgstr "PANO ANAHTARI ALINDI"
+
+msgid "COFRE TRANCADO — ATIRE NO CADEADO"
+msgstr "KASA KİLİTLİ — KİLİDE ATEŞ ET"
+
+msgid "UM BLINDADO ESTÁ COM A MANIVELA DO SINAL"
+msgstr "BİR ZIRHLIDA SİNYAL KOLU VAR"
+
+msgid "PEGAR A MANIVELA DO SINAL"
+msgstr "SİNYAL KOLUNU AL"
+
+msgid "MANIVELA COLETADA"
+msgstr "KOL ALINDI"
+
+msgid "Leve as peças ao sinal da Plataforma e conserte"
+msgstr "Parçaları Peron'daki sinyale götür ve onar"
+
+msgid "SINAL SOB ATAQUE! Afaste os zumbis (%ss)"
+msgstr "SİNYAL SALDIRI ALTINDA! Zombileri uzak tut (%ss)"
+
+msgid "Segure o sinal até o trem passar: %ss"
+msgstr "Tren geçene kadar sinyali tut: %ss"
+
+msgid "CONSERTAR O SINAL"
+msgstr "SİNYALİ ONAR"
+
+msgid "O SINAL ESTÁ LIGADO — SEGURE ATÉ O TREM PASSAR!"
+msgstr "SİNYAL AÇIK — TREN GEÇENE KADAR DAYAN!"
+
+msgid "O TREM PASSOU! O Condutor saiu dos túneis..."
+msgstr "TREN GEÇTİ! Kondüktör tünellerden çıktı..."
+
+msgid "PEGAR A LANTERNA DO CONDUTOR"
+msgstr "KONDÜKTÖR'ÜN FENERİNİ AL"
+
+msgid "O ÚLTIMO TREM PASSOU"
+msgstr "SON TREN GEÇTİ"
+
+msgid "Todos os perks + Lanterna do Condutor. A estação é sua..."
+msgstr "Tüm perkler + Kondüktör'ün Feneri. İstasyon artık senin..."
+
+msgid "ANDAR PARA CIMA"
+msgstr "YUKARI YÜRÜ"
+
+msgid "ANDAR PARA BAIXO"
+msgstr "AŞAĞI YÜRÜ"
+
+msgid "ANDAR PARA A ESQUERDA"
+msgstr "SOLA YÜRÜ"
+
+msgid "ANDAR PARA A DIREITA"
+msgstr "SAĞA YÜRÜ"
+
+msgid "ATIRAR"
+msgstr "ATEŞ ET"
+
+msgid "RECARREGAR"
+msgstr "DOLDUR"
+
+msgid "USAR / COMPRAR"
+msgstr "KULLAN / SATIN AL"
+
+msgid "TROCAR DE ARMA"
+msgstr "SİLAH DEĞİŞTİR"
+
+msgid "ARMA 1"
+msgstr "SİLAH 1"
+
+msgid "ARMA 2"
+msgstr "SİLAH 2"
+
+msgid "FACA"
+msgstr "BIÇAK"
+
+msgid "PULAR"
+msgstr "ZIPLA"
+
+msgid "MAPA GRANDE"
+msgstr "BÜYÜK HARİTA"
+
+msgid "LANTERNA"
+msgstr "FENER"
+
+msgid "PAUSA"
+msgstr "DURAKLAT"
+
+msgid "MOUSE %d"
+msgstr "FARE %d"
+
+msgid "BOTÃO %d"
+msgstr "TUŞ %d"
+
+msgid "EIXO %d"
+msgstr "EKSEN %d"
+
+msgid "ESPAÇO"
+msgstr "BOŞLUK"
+
+msgid "MOUSE ESQ."
+msgstr "SOL TIK"
+
+msgid "MOUSE DIR."
+msgstr "SAĞ TIK"
+
+msgid "MOUSE MEIO"
+msgstr "ORTA TIK"
+
+msgid "RODA ↑"
+msgstr "TEKERLEK ↑"
+
+msgid "RODA ↓"
+msgstr "TEKERLEK ↓"
+
+msgid "AUTOMÁTICO (%s)"
+msgstr "OTOMATİK (%s)"
+
+msgid " Mk III"
+msgstr " Mk III"
+
+msgid " Mk II"
+msgstr " Mk II"
+
+msgid "ALGUÉM"
+msgstr "BİRİSİ"
+
+msgid "Barricadas consertadas (%s tábuas) · +%s"
+msgstr "Barikatlar onarıldı (%s tahta) · +%s"
+
+msgid "%s pegou %s"
+msgstr "%s aldı: %s"
+
+msgid "Perk grátis: %s"
+msgstr "Bedava perk: %s"
+
+msgid "Fúria: dano x%s"
+msgstr "Öfke: hasar x%s"
+
+msgid "FIRE SALE! MYSTERY BOX A %s · +%s CAIXAS NO MAPA"
+msgstr "FIRE SALE! MYSTERY BOX %s · HARİTADA +%s KUTU"
+
+msgid "SOBREVIVENTE"
+msgstr "HAYATTA KALAN"
+
+msgid "MULTI x%s"
+msgstr "MULTI x%s"
+
+msgid "VOCÊ"
+msgstr "SEN"
+
+msgid "BOT %d"
+msgstr "BOT %d"
+
+msgid "CONTA"
+msgstr "HESAP"
+
+msgid "Contas online indisponíveis nesta versão."
+msgstr "Bu sürümde çevrim içi hesaplar yok."
+
+msgid "VOLTAR"
+msgstr "GERİ"
+
+msgid "LOGADO COMO %s"
+msgstr "%s OLARAK GİRİŞ YAPILDI"
+
+msgid "SINCRONIZAR AGORA"
+msgstr "ŞİMDİ EŞİTLE"
+
+msgid "SAIR DA CONTA"
+msgstr "ÇIKIŞ YAP"
+
+msgid "USUÁRIO"
+msgstr "KULLANICI"
+
+msgid "SENHA"
+msgstr "ŞİFRE"
+
+msgid "Sincronizando o progresso..."
+msgstr "İlerleme eşitleniyor..."
+
+msgid "ENTRAR"
+msgstr "GİRİŞ YAP"
+
+msgid "CRIAR CONTA"
+msgstr "HESAP OLUŞTUR"
+
+msgid "Entre para salvar o progresso na nuvem e jogar em qualquer aparelho (inclusive no navegador).\nNão há recuperação por e-mail: guarde bem a sua senha."
+msgstr "İlerlemeni buluta kaydetmek ve her cihazda (tarayıcı dahil) oynamak için giriş yap.\nE-postayla kurtarma yok: şifreni iyi sakla."
+
+msgid "Progresso salvo na nuvem · %s"
+msgstr "İlerleme buluta kaydedildi · %s"
+
+msgid "O progresso é salvo na nuvem automaticamente"
+msgstr "İlerleme otomatik olarak buluta kaydedilir"
+
+msgid "CONQUISTAS"
+msgstr "BAŞARIMLAR"
+
+msgid "%d / %d LIBERADAS"
+msgstr "%d / %d AÇILDI"
+
+msgid "Segredo — continue explorando"
+msgstr "Sır — keşfetmeye devam et"
+
+msgid "ESTATÍSTICAS"
+msgstr "İSTATİSTİKLER"
+
+msgid "%s — melhor round %d · recorde %d pts · %d abates"
+msgstr "%s — en iyi tur %d · rekor %d puan · %d öldürme"
+
+msgid "Partidas %d · Abates %d · Faca %d · Headshots %d · Bosses %d · Tempo %dh%02d"
+msgstr "Maç %d · Öldürme %d · Bıçak %d · Headshot %d · Boss %d · Süre %dh%02d"
+
+msgid "COMUM"
+msgstr "SIRADAN"
+
+msgid "INCOMUM"
+msgstr "SIRA DIŞI"
+
+msgid "RARA"
+msgstr "NADİR"
+
+msgid "ÉPICA"
+msgstr "EPİK"
+
+msgid "LENDÁRIA"
+msgstr "EFSANEVİ"
+
+msgid "Prêmio da missão O Último Trem (Terminal) — nunca sai na Mystery Box"
+msgstr "Son Tren görevinin ödülü (Terminal) — Mystery Box'tan asla çıkmaz"
+
+msgid "Prêmio da missão O Portão do Submundo (Templo) — nunca sai na Mystery Box"
+msgstr "Yeraltı Dünyası Kapısı görevinin ödülü (Tapınak) — Mystery Box'tan asla çıkmaz"
+
+msgid "Santuário do Olimpo: ative as 12 estátuas dos deuses no Templo"
+msgstr "Olimpos Mabedi: Tapınak'taki 12 tanrı heykelini yak"
+
+msgid "Evento Portão do Submundo (Templo): destrua o portal"
+msgstr "Yeraltı Dünyası Kapısı olayı (Tapınak): portalı yok et"
+
+msgid "DANO"
+msgstr "HASAR"
+
+msgid "CADÊNCIA"
+msgstr "ATIŞ HIZI"
+
+msgid "PENTE"
+msgstr "ŞARJÖR"
+
+msgid "RESERVA"
+msgstr "YEDEK"
+
+msgid "RECARGA"
+msgstr "DOLDURMA"
+
+msgid "ALCANCE"
+msgstr "MENZİL"
+
+msgid "ARMAS"
+msgstr "SİLAHLAR"
+
+msgid "AUTOMÁTICA"
+msgstr "OTOMATİK"
+
+msgid "SEMIAUTOMÁTICA"
+msgstr "YARI OTOMATİK"
+
+msgid "Elemento %s (%d, segure E na parede): %s"
+msgstr "%s elementi (%d, duvarda E'yi basılı tut): %s"
+
+msgid "Weapon Lab: Mk II %d · Mk III %d%s"
+msgstr "Weapon Lab: Mk II %d · Mk III %d%s"
+
+msgid "  (vira %s)"
+msgstr "  (dönüşür: %s)"
+
+msgid "VER MK II"
+msgstr "MK II'Yİ GÖSTER"
+
+msgid "VER MK III"
+msgstr "MK III'Ü GÖSTER"
+
+msgid "VER NORMAL"
+msgstr "NORMALİ GÖSTER"
+
+msgid "%.1f s"
+msgstr "%.1f s"
+
+msgid "%.0f m"
+msgstr "%.0f m"
+
+msgid "Arma inicial do %s"
+msgstr "Başlangıç silahı: %s"
+
+msgid "Parede: %d · %s · %s"
+msgstr "Duvar: %d · %s · %s"
+
+msgid "Mystery Box só no %s"
+msgstr "Mystery Box sadece şurada: %s"
+
+msgid "Mystery Box (em todos os mapas)"
+msgstr "Mystery Box (tüm haritalarda)"
+
+msgid "também na Mystery Box"
+msgstr "Mystery Box'ta da var"
+
+msgid "Granada explode no impacto: %d de dano em área (raio %.1f m). Não fere você."
+msgstr "El bombası çarpınca patlar: alana %d hasar (yarıçap %.1f m). Sana zarar vermez."
+
+msgid "Jato contínuo que incendeia: %d de dano por segundo durante %.1f s."
+msgstr "Tutuşturan sürekli alev: saniyede %d hasar, %.1f s boyunca."
+
+msgid "Raio instantâneo que salta entre até %d zumbis e os atordoa."
+msgstr "En fazla %d zombi arasında sekip onları sersemleten anlık yıldırım."
+
+msgid "Esfera que atravessa a horda e explode numa descarga elétrica (%d em área)."
+msgstr "Sürünün içinden geçip elektrik boşalmasıyla patlayan küre (alana %d)."
+
+msgid "Rajada de vento em cone (%d°, alcance %.0f m) que arremessa e destrói a horda à frente."
+msgstr "Önündeki sürüyü savurup yok eden koni şeklinde rüzgâr (%d°, menzil %.0f m)."
+
+msgid "Atravessa até %d zumbis por tiro."
+msgstr "Atış başına en fazla %d zombiyi deler."
+
+msgid "PERSONAGEM"
+msgstr "KARAKTER"
+
+msgid "Libere os visuais com as conquistas."
+msgstr "Görünümlerin kilidini başarımlarla aç."
+
+msgid "EM USO"
+msgstr "KULLANILIYOR"
+
+msgid "USAR"
+msgstr "KULLAN"
+
+msgid "TRANCADO"
+msgstr "KİLİTLİ"
+
+msgid "JOGAR"
+msgstr "OYNA"
+
+msgid "Trancado — libere com a conquista \"%s\": %s"
+msgstr "Kilitli — \"%s\" başarımıyla aç: %s"
+
+msgid "Aparece quando você enfrentar esse inimigo."
+msgstr "Bu düşmanla karşılaşınca görünür."
+
+msgid "Aparece quando você enfrentar esse chefe."
+msgstr "Bu boss ile karşılaşınca görünür."
+
+msgid "Chegue perto da máquina desse perk."
+msgstr "Bu perkin makinesine yaklaş."
+
+msgid "Pegue esse power-up numa partida."
+msgstr "Bir maçta bu power-up'ı al."
+
+msgid "Compre esse elemento numa parede de arma."
+msgstr "Bu elementi bir silah duvarından satın al."
+
+msgid "Receba essa bênção num altar do Templo."
+msgstr "Bu kutsamayı Tapınak'taki bir sunaktan al."
+
+msgid "Aparece quando esse evento acontecer numa partida."
+msgstr "Bu olay bir maçta yaşanınca görünür."
+
+msgid "Descubra jogando."
+msgstr "Oynayarak keşfet."
+
+msgid "GLOSSÁRIO"
+msgstr "SÖZLÜK"
+
+msgid "DESCOBERTOS %d DE %d"
+msgstr "KEŞFEDİLEN %d / %d"
+
+msgid "Ainda não encontrado."
+msgstr "Henüz bulunmadı."
+
+msgid "Onde: %s"
+msgstr "Nerede: %s"
+
+msgid "VIDA %d · VELOCIDADE %.1f m/s · DANO %d · %d PONTOS"
+msgstr "CAN %d · HIZ %.1f m/s · HASAR %d · %d PUAN"
+
+msgid "VIDA %d · VELOCIDADE %.1f m/s · GOLPE %d"
+msgstr "CAN %d · HIZ %.1f m/s · DARBE %d"
+
+msgid " · ATÉ %d POR PARTIDA"
+msgstr " · MAÇ BAŞINA EN FAZLA %d"
+
+msgid "%d PONTOS · %s%s"
+msgstr "%d PUAN · %s%s"
+
+msgid "FUNCIONA SEM ENERGIA"
+msgstr "ELEKTRİKSİZ ÇALIŞIR"
+
+msgid "PRECISA DE ENERGIA"
+msgstr "ELEKTRİK GEREKİR"
+
+msgid "DURA %d s"
+msgstr "%d s SÜRER"
+
+msgid "EFEITO NA HORA"
+msgstr "ANINDA ETKİ"
+
+msgid "%d PONTOS NA PAREDE DA ARMA"
+msgstr "SİLAH DUVARINDA %d PUAN"
+
+msgid "%d PONTOS NO ALTAR"
+msgstr "SUNAKTA %d PUAN"
+
+msgid "A PARTIR DO ROUND %d"
+msgstr "%d. TURDAN İTİBAREN"
+
+msgid "DICA: %s"
+msgstr "İPUCU: %s"
+
+msgid "ZUMBIS RESTANTES  %d"
+msgstr "KALAN ZOMBİ  %d"
+
+msgid "ROUND %d COMPLETO"
+msgstr "TUR %d TAMAMLANDI"
+
+msgid "ÁREA LIBERADA: %s"
+msgstr "ALAN AÇILDI: %s"
+
+msgid "CONQUISTA DESBLOQUEADA: %s"
+msgstr "BAŞARIM AÇILDI: %s"
+
+msgid "SCORE %d"
+msgstr "SKOR %d"
+
+msgid "%s DESBLOQUEADO!"
+msgstr "%s AÇILDI!"
+
+msgid "%s SE APROXIMA"
+msgstr "%s YAKLAŞIYOR"
+
+msgid "FASE %d"
+msgstr "AŞAMA %d"
+
+msgid "%s DERROTADO  +%d"
+msgstr "%s YENİLDİ  +%d"
+
+msgid "MAX AMMO"
+msgstr "MAX AMMO"
+
+msgid "◆ %s  %d/%d"
+msgstr "◆ %s  %d/%d"
+
+msgid "%d FPS"
+msgstr "%d FPS"
+
+msgid "ROUND"
+msgstr "TUR"
+
+msgid "SCORE 0"
+msgstr "SKOR 0"
+
+msgid "VIDA"
+msgstr "CAN"
+
+msgid "GAME OVER"
+msgstr "OYUN BİTTİ"
+
+msgid "ROUND %d"
+msgstr "TUR %d"
+
+msgid "%s  ·  FASE %d"
+msgstr "%s  ·  AŞAMA %d"
+
+msgid "RODADA DOS CÃES"
+msgstr "KÖPEK TURU"
+
+msgid "VIDA  %d / %d"
+msgstr "CAN  %d / %d"
+
+msgid "Fúria"
+msgstr "Öfke"
+
+msgid "RECARREGANDO"
+msgstr "DOLDURULUYOR"
+
+msgid "ZUMBIS ABATIDOS"
+msgstr "ÖLDÜRÜLEN ZOMBİ"
+
+msgid "HEADSHOTS"
+msgstr "HEADSHOT"
+
+msgid "PONTOS GANHOS"
+msgstr "KAZANILAN PUAN"
+
+msgid "TEMPO"
+msgstr "SÜRE"
+
+msgid "BOSSES"
+msgstr "BOSSLAR"
+
+msgid "DANO CAUSADO"
+msgstr "VERİLEN HASAR"
+
+msgid "DISPAROS / ACERTOS"
+msgstr "ATIŞ / İSABET"
+
+msgid "PRECISÃO"
+msgstr "İSABET ORANI"
+
+msgid "ABATES NA FACA"
+msgstr "BIÇAKLA ÖLDÜRME"
+
+msgid "NOVO RECORDE!"
+msgstr "YENİ REKOR!"
+
+msgid "RECORDE: %d PONTOS · ROUND %d"
+msgstr "REKOR: %d PUAN · TUR %d"
+
+msgid "TIME: %s"
+msgstr "TAKIM: %s"
+
+msgid "PARTIDA INVALIDADA — NÃO VALE SAVE NEM RANKING"
+msgstr "MAÇ GEÇERSİZ — KAYIT VE SIRALAMA YOK"
+
+msgid "JOGAR NOVAMENTE"
+msgstr "TEKRAR OYNA"
+
+msgid "VOLTAR À SALA"
+msgstr "ODAYA DÖN"
+
+msgid "RANKING"
+msgstr "SIRALAMA"
+
+msgid "MENU"
+msgstr "MENÜ"
+
+msgid "PARTIDA INVALIDADA"
+msgstr "MAÇ GEÇERSİZ"
+
+msgid "%dº LUGAR NO RANKING %s DE %s!"
+msgstr "%d. SIRA: %s SIRALAMASI · %s!"
+
+msgid "ENVIANDO O TIME AO RANKING GLOBAL..."
+msgstr "TAKIM KÜRESEL SIRALAMAYA GÖNDERİLİYOR..."
+
+msgid "RANKING GLOBAL: %s"
+msgstr "KÜRESEL SIRALAMA: %s"
+
+msgid "TIME ENVIADO AO RANKING GLOBAL (%s)!"
+msgstr "TAKIM KÜRESEL SIRALAMAYA GÖNDERİLDİ (%s)!"
+
+msgid "ENTROU NO TOP! SEU NOME:"
+msgstr "ZİRVEYE GİRDİN! ADIN:"
+
+msgid "SEU NOME PARA O RANKING GLOBAL:"
+msgstr "KÜRESEL SIRALAMA İÇİN ADIN:"
+
+msgid "%dº LUGAR NO RANKING DE %s!"
+msgstr "%d. SIRA: %s SIRALAMASI!"
+
+msgid "ENVIANDO AO RANKING GLOBAL..."
+msgstr "KÜRESEL SIRALAMAYA GÖNDERİLİYOR..."
+
+msgid "ENVIADO AO RANKING GLOBAL DA TEMPORADA!"
+msgstr "SEZONUN KÜRESEL SIRALAMASINA GÖNDERİLDİ!"
+
+msgid "SALVAR"
+msgstr "KAYDET"
+
+msgid "LANTERNA %s%s"
+msgstr "FENER %s%s"
+
+msgid "LIGADA"
+msgstr "AÇIK"
+
+msgid "DESLIGADA"
+msgstr "KAPALI"
+
+msgid "ESTÁ ESCURO — [%s] LIGA A LANTERNA"
+msgstr "KARANLIK — [%s] FENERİ AÇAR"
+
+msgid "CAÍDO %ds"
+msgstr "YERDE %ds"
+
+msgid "FORA"
+msgstr "OYUN DIŞI"
+
+msgid "%d ms"
+msgstr "%d ms"
+
+msgid "COLEGA"
+msgstr "ARKADAŞ"
+
+msgid "%s %ds"
+msgstr "%s %ds"
+
+msgid "JOGAR EM GRUPO"
+msgstr "ARKADAŞLARLA OYNA"
+
+msgid "Até 4 jogadores pela internet. Crie uma sala e passe o código, ou entre com o código de um amigo."
+msgstr "İnternet üzerinden 4 oyuncuya kadar. Bir oda oluştur ve kodu paylaş ya da bir arkadaşının koduyla gir."
+
+msgid "SEU NOME"
+msgstr "ADIN"
+
+msgid "NOME"
+msgstr "AD"
+
+msgid "CRIAR SALA"
+msgstr "ODA OLUŞTUR"
+
+msgid "CÓDIGO DA SALA"
+msgstr "ODA KODU"
+
+msgid "ENTRAR NA SALA"
+msgstr "ODAYA GİR"
+
+msgid "REDE LOCAL (MESMO WI-FI) — IP DO HOST"
+msgstr "YEREL AĞ (AYNI WI-FI) — HOST IP'Sİ"
+
+msgid "CRIAR SALA NA REDE LOCAL"
+msgstr "YEREL AĞDA ODA OLUŞTUR"
+
+msgid "Convite para a sala %s: digite seu nome e toque ENTRAR NA SALA"
+msgstr "%s odasına davet: adını yaz ve ODAYA GİR'e dokun"
+
+msgid "O código tem 5 letras"
+msgstr "Kod 5 harflidir"
+
+msgid "Procurando a sala..."
+msgstr "Oda aranıyor..."
+
+msgid "Na rede local: os amigos entram com o IP  %s"
+msgstr "Yerel ağda: arkadaşların şu IP ile girer  %s"
+
+msgid "COPIAR CÓDIGO"
+msgstr "KODU KOPYALA"
+
+msgid "Código %s copiado!"
+msgstr "%s kodu kopyalandı!"
+
+msgid "COPIAR CONVITE"
+msgstr "DAVETİ KOPYALA"
+
+msgid "Convite copiado! Quem abrir o link entra direto na sala."
+msgstr "Davet kopyalandı! Bağlantıyı açan doğrudan odaya girer."
+
+msgid "MAPA: %s  →"
+msgstr "HARİTA: %s  →"
+
+msgid "MAPA: %s"
+msgstr "HARİTA: %s"
+
+msgid "  (VOCÊ)"
+msgstr "  (SEN)"
+
+msgid "HOST"
+msgstr "HOST"
+
+msgid "PRONTO"
+msgstr "HAZIR"
+
+msgid "ESPERANDO"
+msgstr "BEKLİYOR"
+
+msgid "· vaga livre"
+msgstr "· boş yer"
+
+msgid "COMEÇAR"
+msgstr "BAŞLA"
+
+msgid "Começa quando todos estiverem prontos."
+msgstr "Herkes hazır olunca başlar."
+
+msgid "Esperando os amigos entrarem com o código."
+msgstr "Arkadaşların kodla girmesi bekleniyor."
+
+msgid "CANCELAR PRONTO"
+msgstr "HAZIRI İPTAL ET"
+
+msgid "SAIR DA SALA"
+msgstr "ODADAN ÇIK"
+
+msgid "SEU VISUAL\n%s"
+msgstr "GÖRÜNÜMÜN\n%s"
+
+msgid "Bora jogar Tentando Sobreviver comigo! Sala %s: %s"
+msgstr "Tentando Sobreviver'ı benimle oyna! Oda %s: %s"
+
+msgid "— ms"
+msgstr "— ms"
+
+msgid "%s mover · mouse mirar · clique atirar · %s recarregar · %s trocar arma · %s faca · %s usar · %s pausa"
+msgstr "%s hareket · fare nişan · tık ateş · %s doldur · %s silah değiştir · %s bıçak · %s kullan · %s duraklat"
+
+msgid "Analógico: mover · ATIRAR: mira sozinho no zumbi mais perto e atira · FACA: golpe corpo a corpo"
+msgstr "Analog: hareket · ATEŞ: en yakın zombiye kendisi nişan alıp ateş eder · BIÇAK: yakın dövüş darbesi"
+
+msgid "TENTANDO\nSOBREVIVER"
+msgstr "TENTANDO\nSOBREVIVER"
+
+msgid "CONTA: %s"
+msgstr "HESAP: %s"
+
+msgid "CONTA / SALVAR NA NUVEM"
+msgstr "HESAP / BULUTA KAYDET"
+
+msgid "CONFIGURAÇÕES"
+msgstr "AYARLAR"
+
+msgid "APOIE O PROJETO (PIX)"
+msgstr "PROJEYİ DESTEKLE (PIX)"
+
+msgid "SAIR"
+msgstr "ÇIKIŞ"
+
+msgid "MODO CABEÇÃO LIBERADO! (liga/desliga em Configurações)"
+msgstr "KOCA KAFA MODU AÇILDI! (Ayarlar'dan açılıp kapanır)"
+
+msgid "MODO CABEÇÃO LIGADO!"
+msgstr "KOCA KAFA MODU AÇIK!"
+
+msgid "O Último Trem"
+msgstr "Son Tren"
+
+msgid "O Soro do Dr. Almeida"
+msgstr "Dr. Almeida'nın Serumu"
+
+msgid "O Portão do Submundo"
+msgstr "Yeraltı Dünyası Kapısı"
+
+msgid "ESCOLHA O MAPA"
+msgstr "HARİTA SEÇ"
+
+msgid "Recorde: %d pontos · round %d"
+msgstr "Rekor: %d puan · tur %d"
+
+msgid "Sem recorde ainda"
+msgstr "Henüz rekor yok"
+
+msgid "1º no ranking: %s · %d pts"
+msgstr "Sıralamada 1.: %s · %d puan"
+
+msgid "✓ MISSÃO CONCLUÍDA: %s"
+msgstr "✓ GÖREV TAMAMLANDI: %s"
+
+msgid "◆ MISSÃO: %s"
+msgstr "◆ GÖREV: %s"
+
+msgid "BLOQUEADO — conclua a missão do %s"
+msgstr "KİLİTLİ — şu haritanın görevini tamamla: %s"
+
+msgid " ou do "
+msgstr " veya"
+
+msgid "BLOQUEADO — derrote o boss do round %d no %s"
+msgstr "KİLİTLİ — %d. turun bossunu yen: %s"
+
+msgid "MAPA"
+msgstr "HARİTA"
+
+msgid "PAUSADO"
+msgstr "DURAKLATILDI"
+
+msgid "A partida continua para o time."
+msgstr "Maç takım için devam ediyor."
+
+msgid "CONTINUAR"
+msgstr "DEVAM ET"
+
+msgid "REINICIAR"
+msgstr "YENİDEN BAŞLAT"
+
+msgid "SAIR DA PARTIDA"
+msgstr "MAÇTAN ÇIK"
+
+msgid "%s para continuar  ·  %s: mapa grande"
+msgstr "%s devam  ·  %s: büyük harita"
+
+msgid "TIME"
+msgstr "TAKIM"
+
+msgid "PONTOS"
+msgstr "PUAN"
+
+msgid "Nenhuma partida ainda — jogue para entrar no ranking!"
+msgstr "Henüz maç yok — sıralamaya girmek için oyna!"
+
+msgid "Nenhuma partida em %s ainda — chame os amigos em JOGAR EM GRUPO!"
+msgstr "%s modunda henüz maç yok — ARKADAŞLARLA OYNA'dan arkadaşlarını çağır!"
+
+msgid "Mapa bloqueado"
+msgstr "Harita kilitli"
+
+msgid "Ranking global indisponível"
+msgstr "Küresel sıralama kullanılamıyor"
+
+msgid "Ranking global indisponível (sem conexão)"
+msgstr "Küresel sıralama kullanılamıyor (bağlantı yok)"
+
+msgid "Ninguém pontuou nesta temporada ainda — seja o primeiro!"
+msgstr "Bu sezon henüz kimse puan almadı — ilk sen ol!"
+
+msgid "TEMPORADA TERMINA EM %d %s%s"
+msgstr "SEZONUN BİTMESİNE %d %s%s"
+
+msgid "DIA"
+msgstr "GÜN"
+
+msgid "DIAS"
+msgstr "GÜN"
+
+msgid " · VOCÊ: %dº"
+msgstr " · SEN: %d."
+
+msgid "JOGO"
+msgstr "OYUN"
+
+msgid "VÍDEO"
+msgstr "GÖRÜNTÜ"
+
+msgid "ÁUDIO"
+msgstr "SES"
+
+msgid "CONTROLES"
+msgstr "KONTROLLER"
+
+msgid "PEQUENO"
+msgstr "KÜÇÜK"
+
+msgid "MÉDIO"
+msgstr "ORTA"
+
+msgid "GRANDE"
+msgstr "BÜYÜK"
+
+msgid "AUTO"
+msgstr "OTO"
+
+msgid "LIGADO"
+msgstr "AÇIK"
+
+msgid "DESLIGADO"
+msgstr "KAPALI"
+
+msgid "JANELA"
+msgstr "PENCERE"
+
+msgid "TELA CHEIA"
+msgstr "TAM EKRAN"
+
+msgid "TELA CHEIA EXCLUSIVA"
+msgstr "ÖZEL TAM EKRAN"
+
+msgid "ADAPTATIVO"
+msgstr "UYARLANABİLİR"
+
+msgid "Q / E: trocar de aba"
+msgstr "Q / E: sekme değiştir"
+
+msgid "IDIOMA"
+msgstr "DİL"
+
+msgid "NOME NO RANKING"
+msgstr "SIRALAMADAKİ ADIN"
+
+msgid "TREMOR DE TELA"
+msgstr "EKRAN SARSINTISI"
+
+msgid "SANGUE"
+msgstr "KAN"
+
+msgid "MIRA NO MOUSE"
+msgstr "FAREYLE NİŞAN"
+
+msgid "MINIMAPA"
+msgstr "MİNİ HARİTA"
+
+msgid "TAMANHO DO MINIMAPA"
+msgstr "MİNİ HARİTA BOYUTU"
+
+msgid "MODO CABEÇÃO"
+msgstr "KOCA KAFA MODU"
+
+msgid "MODO DE TELA"
+msgstr "EKRAN MODU"
+
+msgid "RESOLUÇÃO"
+msgstr "ÇÖZÜNÜRLÜK"
+
+msgid "VSYNC"
+msgstr "VSYNC"
+
+msgid "LIMITE DE FPS"
+msgstr "FPS SINIRI"
+
+msgid "SEM LIMITE"
+msgstr "SINIRSIZ"
+
+msgid "ESCALA DA INTERFACE"
+msgstr "ARAYÜZ ÖLÇEĞİ"
+
+msgid "BRILHO"
+msgstr "PARLAKLIK"
+
+msgid "SOMBRAS"
+msgstr "GÖLGELER"
+
+msgid "MOSTRAR FPS"
+msgstr "FPS GÖSTER"
+
+msgid "VOLUME GERAL"
+msgstr "GENEL SES"
+
+msgid "MÚSICA"
+msgstr "MÜZİK"
+
+msgid "EFEITOS"
+msgstr "EFEKTLER"
+
+msgid "INTERFACE"
+msgstr "ARAYÜZ"
+
+msgid "VOZES"
+msgstr "SESLER"
+
+msgid "SOM"
+msgstr "SES"
+
+msgid "CONTROLES DE TOQUE"
+msgstr "DOKUNMATİK KONTROLLER"
+
+msgid "AÇÃO"
+msgstr "EYLEM"
+
+msgid "TECLADO / MOUSE"
+msgstr "KLAVYE / FARE"
+
+msgid "CONTROLE"
+msgstr "OYUN KUMANDASI"
+
+msgid "Clique numa tecla para trocar. ESC cancela."
+msgstr "Değiştirmek için bir tuşa tıkla. ESC iptal eder."
+
+msgid "RESTAURAR PADRÕES"
+msgstr "VARSAYILANLARA DÖN"
+
+msgid "Aperte uma tecla para %s… (ESC cancela)"
+msgstr "\"%s\" için bir tuşa bas… (ESC iptal)"
+
+msgid "Aperte um botão do controle para %s… (ESC cancela)"
+msgstr "\"%s\" için kumandada bir tuşa bas… (ESC iptal)"
+
+msgid "CONFIRMAR: APAGAR TUDO?"
+msgstr "ONAYLA: HER ŞEY SİLİNSİN Mİ?"
+
+msgid "APAGAR PROGRESSO"
+msgstr "İLERLEMEYİ SİL"
+
+msgid "Desenvolvido por %s\n%s"
+msgstr "Geliştirici: %s\n%s"
+
+msgid "APOIE O PROJETO"
+msgstr "PROJEYİ DESTEKLE"
+
+msgid "O Tentando Sobreviver é gratuito e sem anúncios. Se você curtiu, um PIX de qualquer valor ajuda a manter o projeto vivo — totalmente opcional."
+msgstr "Tentando Sobreviver ücretsiz ve reklamsızdır. Beğendiysen, istediğin tutarda bir PIX projeyi yaşatmaya yardım eder — tamamen isteğe bağlı."
+
+msgid "PIX para %s"
+msgstr "%s için PIX"
+
+msgid "Chave aleatória: %s"
+msgstr "Rastgele anahtar: %s"
+
+msgid "COPIAR PIX COPIA E COLA"
+msgstr "PIX \"KOPYALA YAPIŞTIR\" KODUNU KOPYALA"
+
+msgid "PIX copia e cola copiado! Cole no app do seu banco."
+msgstr "PIX kodu kopyalandı! Banka uygulamana yapıştır."
+
+msgid "COPIAR CHAVE"
+msgstr "ANAHTARI KOPYALA"
+
+msgid "Chave PIX copiada!"
+msgstr "PIX anahtarı kopyalandı!"
+
+msgid "Ideias, bugs ou parcerias: %s"
+msgstr "Fikir, hata veya iş birliği: %s"
+
+msgid "Desenvolvido por %s"
+msgstr "Geliştirici: %s"
+
+msgid "RECARR."
+msgstr "DOLDUR"
+
+msgid "TROCAR"
+msgstr "DEĞİŞTİR"
+
+msgid "Cérbero"
+msgstr "Kerberos"
+
+msgid "The Conductor"
+msgstr "The Conductor"
+
+msgid "A Entidade do Submundo"
+msgstr "Yeraltı Varlığı"
+
+msgid "O templo não era uma prisão. Era uma porta... e ela está se abrindo."
+msgstr "Tapınak bir hapishane değildi. Bir kapıydı... ve açılıyor."
+
+msgid "O Minotauro"
+msgstr "Minotor"
+
+msgid "Paciente Zero"
+msgstr "Sıfır Numaralı Hasta"
+
+msgid "Primeiro Sangue"
+msgstr "İlk Kan"
+
+msgid "Abata o primeiro zumbi"
+msgstr "İlk zombiyi öldür"
+
+msgid "Sobrevivente"
+msgstr "Hayatta Kalan"
+
+msgid "Chegue à wave 10"
+msgstr "10. dalgaya ulaş"
+
+msgid "Veterano"
+msgstr "Kıdemli"
+
+msgid "Chegue à wave 20"
+msgstr "20. dalgaya ulaş"
+
+msgid "Energia!"
+msgstr "Elektrik!"
+
+msgid "Ligue o disjuntor principal"
+msgstr "Ana şalteri aç"
+
+msgid "Maquinista"
+msgstr "Makinist"
+
+msgid "Derrote o boss The Conductor"
+msgstr "The Conductor bossunu yen"
+
+msgid "Paciente Curado"
+msgstr "Hasta İyileşti"
+
+msgid "Derrote o Paciente Zero"
+msgstr "Sıfır Numaralı Hasta'yı yen"
+
+msgid "O Soro"
+msgstr "Serum"
+
+msgid "Complete a missão do Dr. Almeida"
+msgstr "Dr. Almeida'nın görevini tamamla"
+
+msgid "Adestrador"
+msgstr "Terbiyeci"
+
+msgid "Vença uma rodada de cães sem levar dano"
+msgstr "Hasar almadan bir köpek turunu kazan"
+
+msgid "Atropelador"
+msgstr "Silindir"
+
+msgid "Atropele 10 zumbis com uma passagem do trem"
+msgstr "Trenin tek geçişiyle 10 zombi ez"
+
+msgid "Colecionador"
+msgstr "Koleksiyoncu"
+
+msgid "Tenha todos os perks na mesma partida"
+msgstr "Aynı maçta tüm perklere sahip ol"
+
+msgid "Olho do Furacão"
+msgstr "Kasırganın Gözü"
+
+msgid "Transforme o Canhão de Vento no Tornado"
+msgstr "Rüzgâr Topu'nu Tornado'ya dönüştür"
+
+msgid "Liquidação"
+msgstr "İndirim"
+
+msgid "Use a Mystery Box durante um Fire Sale"
+msgstr "Fire Sale sırasında Mystery Box kullan"
+
+msgid "Açougueiro"
+msgstr "Kasap"
+
+msgid "Abata 1.000 zumbis"
+msgstr "1.000 zombi öldür"
+
+msgid "Faca na Caveira"
+msgstr "Kafatasına Bıçak"
+
+msgid "Abata 50 zumbis na faca"
+msgstr "Bıçakla 50 zombi öldür"
+
+msgid "Mira de Ouro"
+msgstr "Altın Nişan"
+
+msgid "Acerte 100 headshots fatais"
+msgstr "100 ölümcül headshot yap"
+
+msgid "Ursinhos"
+msgstr "Ayıcıklar"
+
+msgid "Encontre todos os ursinhos escondidos"
+msgstr "Tüm gizli ayıcıkları bul"
+
+msgid "Cabeção"
+msgstr "Koca Kafa"
+
+msgid "Descubra o código secreto do menu"
+msgstr "Menünün gizli kodunu keşfet"
+
+msgid "Complete a missão do Terminal e pegue a Lanterna do Condutor"
+msgstr "Terminal görevini tamamla ve Kondüktör'ün Fenerini al"
+
+msgid "Fio de Ariadne"
+msgstr "Ariadne'nin İpi"
+
+msgid "Derrote o Minotauro"
+msgstr "Minotor'u yen"
+
+msgid "Os Doze do Olimpo"
+msgstr "Olimpos'un On İkileri"
+
+msgid "Ative as 12 estátuas dos deuses no Templo"
+msgstr "Tapınak'taki 12 tanrı heykelini yak"
+
+msgid "Complete a missão do Templo e pegue o Raio de Zeus"
+msgstr "Tapınak görevini tamamla ve Zeus'un Yıldırımını al"
+
+msgid "Guardião dos Três"
+msgstr "Üçlerin Bekçisi"
+
+msgid "Derrote o Cérbero"
+msgstr "Kerberos'u yen"
+
+msgid "A Porta"
+msgstr "Kapı"
+
+msgid "Derrote a Entidade do Submundo"
+msgstr "Yeraltı Varlığı'nı yen"
+
+msgid "PARTIDA INVALIDADA — não vale save nem ranking"
+msgstr "MAÇ GEÇERSİZ — kayıt ve sıralama yok"
+
+msgid "LUZ"
+msgstr "IŞIK"
+
+msgid "Clarão que cega: atordoa os zumbis e causa +50% de dano no boss."
+msgstr "Kör eden parıltı: zombileri sersemletir ve bosslara +%50 hasar verir."
+
+msgid "SOMBRA"
+msgstr "GÖLGE"
+
+msgid "Rouba vida: cada acerto recupera parte do dano causado."
+msgstr "Can çalma: her isabet verilen hasarın bir kısmını geri kazandırır."
+
+msgid "GELO"
+msgstr "BUZ"
+
+msgid "Deixa os zumbis lentos e às vezes os congela."
+msgstr "Zombileri yavaşlatır ve bazen dondurur."
+
+msgid "RAIO"
+msgstr "YILDIRIM"
+
+msgid "A eletricidade salta para 2 zumbis próximos."
+msgstr "Elektrik yakındaki 2 zombiye sıçrar."
+
+msgid "FOGO"
+msgstr "ATEŞ"
+
+msgid "Incendeia: dano contínuo por alguns segundos."
+msgstr "Tutuşturur: birkaç saniye boyunca hasar."
+
+msgid "EXPLOSIVO"
+msgstr "PATLAYICI"
+
+msgid "Cada tiro que acerta estoura numa pequena explosão."
+msgstr "İsabet eden her atış küçük bir patlamayla patlar."
+
+msgid "Terminal Central"
+msgstr "Merkez Terminal"
+
+msgid "Estação de trem abandonada: hall, plataforma, lojas, túneis e manutenção."
+msgstr "Terk edilmiş tren istasyonu: salon, peron, dükkânlar, tüneller ve bakım."
+
+msgid "Hospital Santa Luzia"
+msgstr "Santa Luzia Hastanesi"
+
+msgid "Onde o vírus nasceu: recepção, UTI, centro cirúrgico, necrotério e o laboratório no subsolo."
+msgstr "Virüsün doğduğu yer: kabul, yoğun bakım, ameliyathane, morg ve bodrumdaki laboratuvar."
+
+msgid "Templo dos Mortos"
+msgstr "Ölüler Tapınağı"
+
+msgid "Ruínas gregas, uma necrópole, a floresta de Artemis e o portão para o Submundo."
+msgstr "Yunan harabeleri, bir nekropol, Artemis ormanı ve Yeraltı Dünyası'nın kapısı."
+
+msgid "Max Ammo"
+msgstr "Max Ammo"
+
+msgid "Double Cash"
+msgstr "Double Cash"
+
+msgid "Instant Kill"
+msgstr "Instant Kill"
+
+msgid "Nuke"
+msgstr "Nuke"
+
+msgid "Full Heal"
+msgstr "Full Heal"
+
+msgid "Armor"
+msgstr "Armor"
+
+msgid "Speed Boost"
+msgstr "Speed Boost"
+
+msgid "Carpenter"
+msgstr "Carpenter"
+
+msgid "Golden Drop"
+msgstr "Golden Drop"
+
+msgid "Fire Sale"
+msgstr "Fire Sale"
+
+msgid "O SORO DO DR. ALMEIDA"
+msgstr "DR. ALMEIDA'NIN SERUMU"
+
+msgid "Enfermeiro"
+msgstr "Hemşire"
+
+msgid "Agente"
+msgstr "Ajan"
+
+msgid "Guarda da Estação"
+msgstr "İstasyon Bekçisi"
+
+msgid "Paciente"
+msgstr "Hasta"
+
+msgid "Paciente da UTI"
+msgstr "Yoğun Bakım Hastası"
+
+msgid "Cobaia do Laboratório"
+msgstr "Laboratuvar Deneği"
+
+msgid "Arqueóloga"
+msgstr "Arkeolog"
+
+msgid "Caçadora do Labirinto"
+msgstr "Labirent Avcısı"
+
+msgid "Sacerdotisa do Olimpo"
+msgstr "Olimpos Rahibesi"
+
+msgid "Andarilha do Submundo"
+msgstr "Yeraltı Gezgini"
+
+msgid "TENTANDO SOBREVIVER — feito com Godot + GDScript. Arte e sons 100% gerados por código."
+msgstr "TENTANDO SOBREVIVER — Godot + GDScript ile yapıldı. Görseller ve sesler %100 kodla üretildi."
+
+msgid "APAGÃO"
+msgstr "KARARTMA"
+
+msgid "As luzes caíram — use a lanterna"
+msgstr "Işıklar söndü — feneri kullan"
+
+msgid "ALARME DE EMERGÊNCIA"
+msgstr "ACİL DURUM ALARMI"
+
+msgid "O barulho atrai mais zumbis"
+msgstr "Gürültü daha çok zombi çeker"
+
+msgid "Saia dos trilhos da plataforma!"
+msgstr "Peron raylarından çık!"
+
+msgid "HORDA"
+msgstr "SÜRÜ"
+
+msgid "Muito mais zumbis nesta wave"
+msgstr "Bu dalgada çok daha fazla zombi"
+
+msgid "Uma caixa caiu do céu — segure E para abrir"
+msgstr "Gökten bir sandık düştü — açmak için E'yi basılı tut"
+
+msgid "VAZAMENTO DE GÁS"
+msgstr "GAZ SIZINTISI"
+
+msgid "Fique longe da nuvem verde"
+msgstr "Yeşil buluttan uzak dur"
+
+msgid "ZUMBI DOURADO"
+msgstr "ALTIN ZOMBİ"
+
+msgid "Mate-o antes que fuja: dinheiro e Golden Drop!"
+msgstr "Kaçmadan öldür: para ve Golden Drop!"
+
+msgid "LUA DE SANGUE"
+msgstr "KANLI AY"
+
+msgid "Zumbis mais rápidos — dinheiro e pontos em dobro"
+msgstr "Zombiler daha hızlı — para ve puan iki kat"
+
+msgid "DESABAMENTO"
+msgstr "ÇÖKÜŞ"
+
+msgid "O teto está caindo: saia dos círculos vermelhos!"
+msgstr "Tavan çöküyor: kırmızı dairelerden çık!"
+
+msgid "NEBLINA"
+msgstr "SİS"
+
+msgid "Você mal enxerga — atenção aos gemidos"
+msgstr "Neredeyse hiçbir şey görünmüyor — iniltilere kulak ver"
+
+msgid "IRA DE ZEUS"
+msgstr "ZEUS'UN GAZABI"
+
+msgid "Raios caem do céu: saia dos círculos azuis!"
+msgstr "Gökten yıldırımlar düşüyor: mavi dairelerden çık!"
+
+msgid "LEVANTE DOS MORTOS"
+msgstr "ÖLÜLERİN AYAKLANMASI"
+
+msgid "Os sarcófagos se abrem — esqueletos saindo!"
+msgstr "Lahitler açılıyor — iskeletler çıkıyor!"
+
+msgid "CAÇADA DE ARTEMIS"
+msgstr "ARTEMİS'İN AVI"
+
+msgid "Sátiros e lobos infernais estão caçando você"
+msgstr "Satirler ve cehennem kurtları seni avlıyor"
+
+msgid "PORTÃO DO SUBMUNDO"
+msgstr "YERALTI DÜNYASI KAPISI"
+
+msgid "Um portal solta criaturas — destrua-o a tiros"
+msgstr "Bir portal yaratıklar salıyor — ateş ederek yok et"
+
+msgid "SANGUE DOS DEUSES"
+msgstr "TANRILARIN KANI"
+
+msgid "Neste round as bênçãos dos altares são de graça"
+msgstr "Bu turda sunak kutsamaları ücretsiz"
+
+msgid "CONTENÇÃO ROMPIDA"
+msgstr "KARANTİNA İHLALİ"
+
+msgid "Zumbis entrando pelos pontos de isolamento!"
+msgstr "Zombiler izolasyon noktalarından giriyor!"
+
+msgid "Adrenaline"
+msgstr "Adrenaline"
+
+msgid "Regenera vida 2,5x mais rápido e mais cedo"
+msgstr "Canı 2,5 kat daha hızlı ve daha erken yeniler"
+
+msgid "Deadeye"
+msgstr "Deadeye"
+
+msgid "Headshots causam +100% de dano"
+msgstr "Headshotlar +%100 hasar verir"
+
+msgid "Fortify"
+msgstr "Fortify"
+
+msgid "+50 de vida máxima"
+msgstr "+50 maksimum can"
+
+msgid "Overload"
+msgstr "Overload"
+
+msgid "+25% de dano das armas"
+msgstr "Silah hasarına +%25"
+
+msgid "Quick Hands"
+msgstr "Quick Hands"
+
+msgid "Recarga 40% mais rápida"
+msgstr "%40 daha hızlı doldurma"
+
+msgid "Quick Revive"
+msgstr "Quick Revive"
+
+msgid "Ao cair, levanta sozinho (gasta o perk; até 3 por partida)"
+msgstr "Yere düşünce kendi kendine kalkarsın (perki harcar; maç başına en fazla 3)"
+
+msgid "Sprint+"
+msgstr "Sprint+"
+
+msgid "+20% de velocidade"
+msgstr "+%20 hız"
+
+msgid "AK"
+msgstr "AK"
+
+msgid "Arc Gun"
+msgstr "Arc Gun"
+
+msgid "Arco de Artemis"
+msgstr "Artemis'in Yayı"
+
+msgid "Caçada Lunar"
+msgstr "Ay Avı"
+
+msgid "Barrett .50"
+msgstr "Barrett .50"
+
+msgid "Beretta 92"
+msgstr "Beretta 92"
+
+msgid "Bren"
+msgstr "Bren"
+
+msgid "Combat Shotgun"
+msgstr "Savaş Pompalısı"
+
+msgid "Lanterna do Condutor"
+msgstr "Kondüktör'ün Feneri"
+
+msgid "Farol do Condutor"
+msgstr "Kondüktör'ün Işıldağı"
+
+msgid "Energy Cannon"
+msgstr "Enerji Topu"
+
+msgid "Flamethrower"
+msgstr "Alev Silahı"
+
+msgid "Glock 17"
+msgstr "Glock 17"
+
+msgid "Grenade Launcher"
+msgstr "Bombaatar"
+
+msgid "Lança de Hefesto"
+msgstr "Hephaistos'un Mızrağı"
+
+msgid "Forja de Hefesto"
+msgstr "Hephaistos'un Ocağı"
+
+msgid "Lee-Enfield"
+msgstr "Lee-Enfield"
+
+msgid "Lupara"
+msgstr "Lupara"
+
+msgid "M1911"
+msgstr "M1911"
+
+msgid "M4"
+msgstr "M4"
+
+msgid "Magnum .44"
+msgstr "Magnum .44"
+
+msgid "Makarov PM"
+msgstr "Makarov PM"
+
+msgid "Mauser C96"
+msgstr "Mauser C96"
+
+msgid "Minigun"
+msgstr "Minigun"
+
+msgid "MP5"
+msgstr "MP5"
+
+msgid "Pistola de Pregos"
+msgstr "Çivi Tabancası"
+
+msgid "P90"
+msgstr "P90"
+
+msgid "Tridente de Poseidon"
+msgstr "Poseidon'un Üç Dişlisi"
+
+msgid "Maremoto"
+msgstr "Tsunami"
+
+msgid "Pump Shotgun"
+msgstr "Pompalı Tüfek"
+
+msgid "Rail Weapon"
+msgstr "Rail Weapon"
+
+msgid "RPK"
+msgstr "RPK"
+
+msgid "Cano Serrado"
+msgstr "Kesik Namlu"
+
+msgid "StG 44"
+msgstr "StG 44"
+
+msgid "Thompson M1928"
+msgstr "Thompson M1928"
+
+msgid "Uzi Dupla"
+msgstr "Çift Uzi"
+
+msgid "Vector"
+msgstr "Vector"
+
+msgid "Winchester 1887"
+msgstr "Winchester 1887"
+
+msgid "Canhão de Vento"
+msgstr "Rüzgâr Topu"
+
+msgid "Tornado"
+msgstr "Tornado"
+
+msgid "Raio de Zeus"
+msgstr "Zeus'un Yıldırımı"
+
+msgid "Ira do Olimpo"
+msgstr "Olimpos'un Gazabı"
+
+msgid "Blindado"
+msgstr "Zırhlı"
+
+msgid "Rastejante"
+msgstr "Sürüngen"
+
+msgid "Exploder"
+msgstr "Patlayan"
+
+msgid "Górgona"
+msgstr "Gorgon"
+
+msgid "Harpia"
+msgstr "Harpi"
+
+msgid "Lobo Infernal"
+msgstr "Cehennem Kurdu"
+
+msgid "Hoplita Morto"
+msgstr "Ölü Hoplit"
+
+msgid "Hoplita com Escudo"
+msgstr "Kalkanlı Hoplit"
+
+msgid "Cão Infernal"
+msgstr "Cehennem Köpeği"
+
+msgid "Runner"
+msgstr "Koşucu"
+
+msgid "Sátiro"
+msgstr "Satir"
+
+msgid "Esqueleto Guerreiro"
+msgstr "İskelet Savaşçı"
+
+msgid "Esqueleto Arqueiro"
+msgstr "İskelet Okçu"
+
+msgid "Cuspidor"
+msgstr "Tükürücü"
+
+msgid "Tank"
+msgstr "Tank"
+
+msgid "Walker"
+msgstr "Yürüyen"
+
+msgid "INIMIGOS"
+msgstr "DÜŞMANLAR"
+
+msgid "ZUMBIS"
+msgstr "ZOMBİLER"
+
+msgid "O zumbi mais comum: lento, mas nunca vem sozinho. Entra arrancando as tábuas das janelas e cerca quem fica parado. No Hospital é o paciente de camisola; no Templo, o arqueólogo da escavação."
+msgstr "En yaygın zombi: yavaştır ama asla yalnız gelmez. Pencerelerin tahtalarını sökerek girer ve yerinde duranı kuşatır. Hastanede önlüklü hasta, Tapınakta kazıdaki arkeolog."
+
+msgid "Rápido e com pouca vida: chega antes dos outros e pune quem fica encurralado. No Hospital é o enfermeiro; no Templo, o cultista de capuz."
+msgstr "Hızlı ve canı az: diğerlerinden önce gelir ve köşeye sıkışanı cezalandırır. Hastanede hemşire, Tapınakta kukuletalı tarikatçı."
+
+msgid "Grande e muito resistente: não recua com os tiros nem é empurrado. Guarde as armas pesadas para ele. No Hospital é o maqueiro; no Templo, o gladiador."
+msgstr "İri ve çok dayanıklı: atışlarla geri çekilmez, itilemez. Ağır silahları ona sakla. Hastanede sedyeci, Tapınakta gladyatör."
+
+msgid "Corre até você, começa a piscar e explode — e explode também ao morrer. Mate de longe: a explosão fere você e os zumbis em volta. No Hospital usa roupa de quarentena; no Templo carrega uma ânfora de fogo grego."
+msgstr "Sana koşar, yanıp sönmeye başlar ve patlar — öldüğünde de patlar. Uzaktan öldür: patlama seni ve etraftaki zombileri yaralar. Hastanede karantina kıyafeti giyer, Tapınakta Yunan ateşi dolu bir amfora taşır."
+
+msgid "Rasteja pelo chão, baixo e difícil de acertar na cabeça. Ao morrer solta uma nuvem de gás que fere quem ficar dentro. No Templo é a múmia."
+msgstr "Yerde, alçaktan sürünür; kafasına isabet ettirmek zordur. Ölünce içindekileri yaralayan bir gaz bulutu bırakır. Tapınakta mumyadır."
+
+msgid "Para a uma certa distância e cospe ácido em arco; onde cai vira uma poça que queima. Não fique parado em cima dela. No Templo é o sacerdote do veneno."
+msgstr "Belli bir mesafede durur ve kavisli asit tükürür; düştüğü yer yakan bir birikintiye dönüşür. Üstünde durma. Tapınakta zehir rahibidir."
+
+msgid "A armadura absorve 75% do dano no corpo até quebrar; um tiro na cabeça derruba o capacete. Nas missões, um deles carrega um item que você precisa. No Templo é o hoplita de bronze."
+msgstr "Zırh kırılana kadar gövdeye gelen hasarın %75'ini emer; kafaya bir atış miğferi düşürür. Görevlerde biri ihtiyacın olan bir eşyayı taşır. Tapınakta bronz hoplittir."
+
+msgid "Rápido e em matilha. No Hospital chega nas rodadas dos cães; no Templo, o Cérbero chama os cães de Hades. Pega fogo ao morrer e não deixa corpo."
+msgstr "Hızlı ve sürü hâlinde. Hastanede köpek turlarında gelir; Tapınakta Kerberos Hades'in köpeklerini çağırır. Ölünce alev alır ve ceset bırakmaz."
+
+msgid "Guerreiro grego morto-vivo: aguenta bastante e bate forte, mas é lento."
+msgstr "Ölümsüz Yunan savaşçısı: çok dayanır ve sert vurur ama yavaştır."
+
+msgid "O escudo segura quase todo o dano que vem de frente (só 20% passa). Acerte a cabeça, os lados ou as costas. Não é empurrado."
+msgstr "Kalkan önden gelen hasarın neredeyse tamamını tutar (yalnızca %20'si geçer). Kafaya, yanlara veya sırta vur. İtilemez."
+
+msgid "Rápido e frágil. Às vezes os ossos se juntam e ele se levanta de novo com metade da vida — só uma vez."
+msgstr "Hızlı ve kırılgan. Bazen kemikleri birleşir ve canının yarısıyla yeniden kalkar — yalnızca bir kez."
+
+msgid "Mantém distância e atira flechas retas. Saia da linha de tiro ou corra para cima dele."
+msgstr "Mesafesini korur ve düz oklar atar. Ateş hattından çık ya da üstüne koş."
+
+msgid "Rápido, corre em zigue-zague e anda em bando: difícil de mirar. Aparece em peso na Caçada de Artemis."
+msgstr "Hızlıdır, zikzak koşar ve sürüyle gezer: nişan almak zordur. Artemis'in Avı'nda yoğun gelir."
+
+msgid "Chega perto, dá um bote rápido, recua e repete. Atire enquanto ele recua."
+msgstr "Yaklaşır, hızlı bir atak yapar, geri çekilir ve tekrarlar. Geri çekilirken ateş et."
+
+msgid "Voa fora do alcance da faca e mergulha em você. Atire quando ela descer."
+msgstr "Bıçağın erişemeyeceği yükseklikte uçar ve üstüne dalar. Alçaldığında ateş et."
+
+msgid "Se você estiver olhando para ela quando ela olhar, fica lento, cinza e vira pedra por 1,5 s, sem andar nem atirar. Parede, objeto ou ficar de costas protegem. Depois do olhar, ela leva dano dobrado."
+msgstr "O bakarken sen de ona bakıyorsan yavaşlarsın, griye döner ve 1,5 s taşa kesilirsin; ne yürüyebilir ne ateş edebilirsin. Duvar, bir nesne ya da sırtını dönmek korur. Bakıştan sonra iki kat hasar alır."
+
+msgid "CHEFES"
+msgstr "BOSSLAR"
+
+msgid "O maquinista do último trem. Golpeia, investe (e fica tonto se bater na parede), cega a mira de perto com um clarão, solta ondas de choque e círculos que explodem e, na fase 3, chama zumbis. Tem 4 fases, com um rugido invulnerável a cada uma."
+msgstr "Son trenin makinisti. Vurur, hücum eder (duvara çarparsa sersemler), yakından bir parıltıyla nişanı kör eder, şok dalgaları ve patlayan daireler salar, 3. aşamada zombi çağırır. 4 aşaması vardır, her birinde dokunulmaz bir kükreme."
+
+msgid "O primeiro infectado. A mordida envenena — e piora se ele morder de novo antes de passar —, vomita ácido que deixa poças, grita para deixar você lento e faz chover ácido. Enfurecido, é o chefe da missão do Hospital."
+msgstr "İlk enfekte. Isırığı zehirler — ve geçmeden yine ısırırsa kötüleşir —, birikinti bırakan asit kusar, seni yavaşlatmak için çığlık atar ve asit yağdırır. Öfkelendiğinde Hastane görevinin bossudur."
+
+msgid "Investe derrubando as colunas no caminho, e cada coluna quebrada o deixa em Fúria, com mais dano e velocidade. Solta ondas de choque; no Colapso, caem pedras que viram escombro. Carrega a chave do Submundo."
+msgstr "Yolundaki sütunları devirerek hücum eder ve kırılan her sütun onu Öfke'ye sokar: daha fazla hasar ve hız. Şok dalgaları salar; Çöküş'te enkaza dönüşen taşlar düşer. Yeraltı anahtarını taşır."
+
+msgid "Três cabeças: morde (e morde de novo logo depois de investir), sopra um leque de fogo que deixa chamas no chão e investe. Na fase 3 chama os cães de Hades."
+msgstr "Üç kafa: ısırır (ve hücumdan hemen sonra yine ısırır), yerde alev bırakan yelpaze şeklinde ateş üfler ve hücum eder. 3. aşamada Hades'in köpeklerini çağırır."
+
+msgid "Solta esferas de alma em leque, levanta esqueletos e faz chover fogo que vira lava. Na fase 3 assume a forma monstruosa: investida, onda de choque e a Ruptura — some e reaparece perto de você."
+msgstr "Yelpaze şeklinde ruh küreleri salar, iskeletleri diriltir ve lavaya dönüşen ateş yağdırır. 3. aşamada canavarca biçimine girer: hücum, şok dalgası ve Yarık — kaybolup yanında belirir."
+
+msgid "ITENS"
+msgstr "EŞYALAR"
+
+msgid "PERKS"
+msgstr "PERKLER"
+
+msgid "POWER-UPS"
+msgstr "POWER-UP'LAR"
+
+msgid "Enche o pente e a reserva de todas as suas armas."
+msgstr "Tüm silahlarının şarjörünü ve yedeğini doldurur."
+
+msgid "Todo ponto ganho vale em dobro enquanto durar."
+msgstr "Süresince kazandığın her puan iki kat sayılır."
+
+msgid "Qualquer acerto de tiro ou de faca mata o zumbi na hora (não vale para chefes)."
+msgstr "Herhangi bir mermi veya bıçak isabeti zombiyi anında öldürür (bosslarda işlemez)."
+
+msgid "Mata na hora todos os zumbis vivos — o chefe não — e paga um bônus de pontos."
+msgstr "Boss hariç tüm canlı zombileri anında öldürür ve puan bonusu verir."
+
+msgid "Recupera toda a vida."
+msgstr "Tüm canı geri verir."
+
+msgid "Enche a barra azul de armadura, que absorve o dano antes da vida."
+msgstr "Candan önce hasarı karşılayan mavi zırh çubuğunu doldurur."
+
+msgid "Você corre bem mais rápido enquanto durar."
+msgstr "Süresince çok daha hızlı koşarsın."
+
+msgid "Conserta na hora todas as barricadas do mapa e paga um bônus."
+msgstr "Haritadaki tüm barikatları anında onarır ve bonus verir."
+
+msgid "A Mystery Box custa 10 e aparece em todos os locais das áreas abertas enquanto durar."
+msgstr "Süresince Mystery Box 10'a mal olur ve açık alanlardaki tüm noktalarda çıkar."
+
+msgid "Raro. Sorteia um prêmio: uma arma especial, uma bolada de pontos, um perk grátis ou a Fúria (dano em dobro por um tempo). Cai do Zumbi Dourado, dos chefes e de quem acha todos os ursinhos."
+msgstr "Nadir. Bir ödül çeker: özel bir silah, yığınla puan, bedava bir perk ya da Öfke (bir süre iki kat hasar). Altın Zombi'den, bosslardan ve tüm ayıcıkları bulunca düşer."
+
+msgid "ELEMENTOS"
+msgstr "ELEMENTLER"
+
+msgid "BÊNÇÃOS DO TEMPLO"
+msgstr "TAPINAK KUTSAMALARI"
+
+msgid "12% dos tiros soltam um raio que salta entre até 3 zumbis próximos."
+msgstr "Atışların %12'si yakındaki en fazla 3 zombi arasında sekip yayılan bir yıldırım saçar."
+
+msgid "Cada abate em sequência soma +8% de dano, até +40%. A sequência zera depois de 3 s sem abater."
+msgstr "Art arda her öldürme +%8 hasar ekler, en fazla +%40. Seri, öldürmeden 3 s geçince sıfırlanır."
+
+msgid "40% menos dispersão nos tiros e 15% de chance de crítico, com dano em dobro."
+msgstr "%40 daha az saçılma ve iki kat hasarlı %15 kritik şansı."
+
+msgid "Anda, recarrega e interage 20% mais rápido."
+msgstr "%20 daha hızlı yürür, doldurur ve etkileşirsin."
+
+msgid "Os tiros empurram os zumbis para trás."
+msgstr "Atışlar zombileri geri iter."
+
+msgid "20% dos zumbis abatidos voltam como espírito aliado por 10 s e lutam do seu lado."
+msgstr "Öldürülen zombilerin %20'si 10 s boyunca müttefik ruh olarak döner ve senin tarafında savaşır."
+
+msgid "EVENTOS"
+msgstr "OLAYLAR"
+
+msgid "TODOS OS MAPAS"
+msgstr "TÜM HARİTALAR"
+
+msgid "As luzes caem e só ficam as de emergência, fracas. Use a lanterna (F); ligar a energia de novo no disjuntor encerra o apagão. Só acontece com a energia ligada."
+msgstr "Işıklar söner, yalnızca zayıf acil durum ışıkları kalır. Feneri kullan (F); şalterden elektriği yeniden açmak karartmayı bitirir. Yalnızca elektrik açıkken olur."
+
+msgid "A sirene atrai zumbis: eles chegam mais rápido e mais deles ficam vivos ao mesmo tempo. O painel do alarme desliga a sirene pagando."
+msgstr "Siren zombileri çeker: daha hızlı gelirler ve aynı anda daha çoğu hayatta kalır. Alarm panosu ücret karşılığında sireni kapatır."
+
+msgid "Muito mais zumbis neste round, chegando mais rápido. Vem garantida no round 15 e depois a cada 10."
+msgstr "Bu turda çok daha fazla zombi, daha hızlı geliyor. 15. turda kesin gelir, sonra her 10 turda bir."
+
+msgid "Uma caixa cai de paraquedas. Segure E por alguns segundos para abrir: munição, armadura ou dinheiro. Se levar um golpe, a abertura é interrompida."
+msgstr "Paraşütle bir sandık iner. Açmak için E'yi birkaç saniye basılı tut: cephane, zırh ya da para. Darbe alırsan açma yarıda kalır."
+
+msgid "Um cano estoura e solta uma nuvem verde que fere quem estiver dentro — zumbis também. Fique longe ou segure E na válvula para fechar."
+msgstr "Bir boru patlar ve içindekileri yaralayan yeşil bir bulut salar — zombiler dahil. Uzak dur ya da kapatmak için vanada E'yi basılı tut."
+
+msgid "Um zumbi todo em ouro, com coroa, que foge de você (estrela dourada no minimapa). Mate-o antes que escape para ganhar dinheiro e um Golden Drop."
+msgstr "Senden kaçan, taçlı, baştan aşağı altın bir zombi (mini haritada altın yıldız). Kaçmadan öldürürsen para ve bir Golden Drop kazanırsın."
+
+msgid "A lua fica vermelha: os zumbis correm mais, mas dinheiro e pontos valem em dobro."
+msgstr "Ay kızıla döner: zombiler daha hızlı koşar ama para ve puan iki kat değerlidir."
+
+msgid "O teto começa a cair: círculos vermelhos marcam onde as pedras vão bater. Saia deles — as pedras também esmagam os zumbis."
+msgstr "Tavan çökmeye başlar: kırmızı daireler taşların düşeceği yeri gösterir. Onlardan çık — taşlar zombileri de ezer."
+
+msgid "Uma neblina fecha a visão e até a lanterna ilumina menos. Fique atento aos gemidos."
+msgstr "Sis görüşü kapatır, fener bile daha az aydınlatır. İniltilere kulak ver."
+
+msgid "TERMINAL CENTRAL"
+msgstr "MERKEZ TERMİNAL"
+
+msgid "Um trem atravessa a plataforma a toda velocidade e atropela quem estiver nos trilhos — zumbis inclusive. O painel do trem chama o trem na hora."
+msgstr "Bir tren perondan tam hızla geçer ve raylardaki herkesi ezer — zombiler dahil. Tren panosu treni hemen çağırır."
+
+msgid "HOSPITAL SANTA LUZIA"
+msgstr "SANTA LUZIA HASTANESİ"
+
+msgid "Os pontos de isolamento se rompem e os zumbis entram por eles, com a sirene tocando."
+msgstr "İzolasyon noktaları yarılır ve siren çalarken zombiler oradan girer."
+
+msgid "TEMPLO DOS MORTOS"
+msgstr "ÖLÜLER TAPINAĞI"
+
+msgid "Raios caem do céu, e círculos azuis avisam onde. Saia deles — os raios também destroem os zumbis."
+msgstr "Gökten yıldırımlar düşer, mavi daireler yerini haber verir. Onlardan çık — yıldırımlar zombileri de yok eder."
+
+msgid "Os sarcófagos se abrem e soltam esqueletos, às vezes arqueiros."
+msgstr "Lahitler açılır ve iskeletler, bazen de okçular salar."
+
+msgid "Sátiros e lobos infernais surgem em volta de você numa caçada."
+msgstr "Satirler ve cehennem kurtları bir av sırasında etrafında belirir."
+
+msgid "Um portal se abre e solta criaturas até ser destruído a tiros. Destruído, deixa o Tridente de Poseidon."
+msgstr "Bir portal açılır ve ateşle yok edilene kadar yaratıklar salar. Yok edilince Poseidon'un Üç Dişlisi'ni bırakır."
+
+msgid "Neste round, as bênçãos dos altares são de graça."
+msgstr "Bu turda sunak kutsamaları ücretsiz."
+
+msgid "MECÂNICAS"
+msgstr "MEKANİKLER"
+
+msgid "BÁSICO"
+msgstr "TEMEL"
+
+msgid "Rounds"
+msgstr "Turlar"
+
+msgid "A partida é uma sequência de rounds cada vez mais difíceis: mais zumbis e mais fortes. O round acaba quando o último zumbi morre, e o fim de cada um paga um bônus."
+msgstr "Maç giderek zorlaşan turlardan oluşur: daha çok ve daha güçlü zombiler. Son zombi ölünce tur biter ve her turun sonu bir bonus verir."
+
+msgid "Pontos"
+msgstr "Puanlar"
+
+msgid "Acertar e matar zumbis dá pontos — mais no tiro na cabeça e na faca —, e consertar barricadas também. Com eles você compra armas, portas, perks e a Mystery Box. O score do ranking é separado dos pontos."
+msgstr "Zombilere isabet ettirmek ve onları öldürmek puan verir — kafaya ve bıçakla daha fazla —, barikat onarmak da öyle. Onlarla silah, kapı, perk ve Mystery Box alırsın. Sıralama skoru puanlardan ayrıdır."
+
+msgid "Barricadas"
+msgstr "Barikatlar"
+
+msgid "Os zumbis entram pelas janelas arrancando as tábuas. Segure E perto da janela para pregar as tábuas de volta — cada tábua dá 10 pontos."
+msgstr "Zombiler tahtaları sökerek pencerelerden girer. Tahtaları geri çakmak için pencerenin yanında E'yi basılı tut — her tahta 10 puan verir."
+
+msgid "Armas na parede"
+msgstr "Duvar silahları"
+
+msgid "Os desenhos de giz nas paredes vendem armas e munição (E). A munição sai mais barata que a arma."
+msgstr "Duvarlardaki tebeşir çizimleri silah ve cephane satar (E). Cephane silahtan ucuzdur."
+
+msgid "Faca"
+msgstr "Bıçak"
+
+msgid "V dá um golpe com avanço que acerta um zumbi por vez: o alvo do avanço ou o mais perto à frente. Salva quando a munição acaba, e matar na faca dá mais pontos."
+msgstr "V, bir seferde tek zombiye isabet eden atılımlı bir darbe vurur: atılımın hedefi ya da öndeki en yakın. Cephane bitince kurtarır ve bıçakla öldürmek daha çok puan verir."
+
+msgid "Lanterna"
+msgstr "Fener"
+
+msgid "F liga e desliga a lanterna. Faz falta no Apagão, na Neblina e nas áreas escuras."
+msgstr "F feneri açıp kapatır. Karartma'da, Sis'te ve karanlık alanlarda gerekir."
+
+msgid "Duas armas"
+msgstr "İki silah"
+
+msgid "Você carrega duas armas (Q troca). Ao pegar uma terceira, a que está em mãos cai no chão e pode ser pega de volta por 60 s, com a munição e as melhorias."
+msgstr "İki silah taşırsın (Q değiştirir). Üçüncüsünü alınca elindeki yere düşer ve 60 s boyunca cephanesi ve geliştirmeleriyle geri alınabilir."
+
+msgid "AVANÇADO"
+msgstr "İLERİ DÜZEY"
+
+msgid "Portas e áreas"
+msgstr "Kapılar ve alanlar"
+
+msgid "Portas compráveis (E) abrem novas áreas — e também os pontos de onde os zumbis nascem nelas. A placa no chão mostra o nome da área do outro lado."
+msgstr "Satın alınabilen kapılar (E) yeni alanlar açar — oradaki zombi doğma noktalarını da. Yerdeki tabela öbür taraftaki alanın adını gösterir."
+
+msgid "Energia"
+msgstr "Elektrik"
+
+msgid "Segure E no disjuntor para ligar a energia: as máquinas de perk e o Weapon Lab passam a funcionar e as luzes voltam."
+msgstr "Elektriği açmak için şalterde E'yi basılı tut: perk makineleri ve Weapon Lab çalışmaya başlar, ışıklar geri gelir."
+
+msgid "Máquinas de perk"
+msgstr "Perk makineleri"
+
+msgid "Cada máquina vende um perk que vale pela partida inteira. Quase todas precisam da energia ligada — o Quick Revive não."
+msgstr "Her makine tüm maç boyunca geçerli bir perk satar. Neredeyse hepsi elektrik ister — Quick Revive istemez."
+
+msgid "Mystery Box"
+msgstr "Mystery Box"
+
+msgid "Paga e sorteia uma arma, às vezes já com um elemento. Depois de alguns usos, a caixa troca de lugar; o feixe de luz dourada mostra onde ela está."
+msgstr "Ödersin ve bir silah çeker, bazen elementli. Birkaç kullanımdan sonra kutu yer değiştirir; altın ışık sütunu nerede olduğunu gösterir."
+
+msgid "Weapon Lab"
+msgstr "Weapon Lab"
+
+msgid "Melhora a arma em mãos para Mk II e depois Mk III: mais dano, mais munição e visual novo — algumas viram outra arma, como o Canhão de Vento, que vira Tornado. Precisa de energia."
+msgstr "Elindeki silahı Mk II'ye, sonra Mk III'e yükseltir: daha fazla hasar, daha fazla cephane ve yeni görünüm — bazıları başka bir silaha dönüşür, Tornado'ya dönüşen Rüzgâr Topu gibi. Elektrik gerekir."
+
+msgid "Elementos"
+msgstr "Elementler"
+
+msgid "Com uma arma na mão, segure E na parede dela para comprar o elemento dela: Luz, Sombra, Gelo, Raio, Fogo ou Explosivo mudam o efeito dos tiros. A Mystery Box também pode entregar arma com elemento."
+msgstr "Silah elindeyken elementini almak için onun duvarında E'yi basılı tut: Işık, Gölge, Buz, Yıldırım, Ateş veya Patlayıcı atışların etkisini değiştirir. Mystery Box da elementli silah verebilir."
+
+msgid "Power-ups"
+msgstr "Power-up'lar"
+
+msgid "Zumbis abatidos às vezes deixam um power-up no chão. Passe por cima para pegar antes que ele suma; os que duram mostram o tempo na tela."
+msgstr "Öldürülen zombiler bazen yere power-up bırakır. Kaybolmadan almak için üstünden geç; süreli olanlar süreyi ekranda gösterir."
+
+msgid "Rodada dos cães"
+msgstr "Köpek turu"
+
+msgid "No Hospital, os rounds 5, 11, 17… são só de cães, com névoa e raios. O último cão deixa munição cheia."
+msgstr "Hastanede 5, 11, 17… turları sis ve yıldırımlarla yalnızca köpeklerdir. Son köpek tam cephane bırakır."
+
+msgid "Round de chefe"
+msgstr "Boss turu"
+
+msgid "Nos rounds 10, 20 e 30 vem um chefe, com uma escolta menor e a barra de vida no alto da tela. Derrotado, deixa um Golden Drop e um Max Ammo."
+msgstr "10, 20 ve 30. turlarda daha küçük bir eskort ve ekranın üstünde can çubuğuyla bir boss gelir. Yenilince Golden Drop ve Max Ammo bırakır."
+
+msgid "Missões"
+msgstr "Görevler"
+
+msgid "Cada mapa tem uma missão em etapas, com o objetivo na tela e no minimapa: O Último Trem (Terminal), O Soro do Dr. Almeida (Hospital) e O Portão do Submundo (Templo). O prêmio é todos os perks e uma arma exclusiva."
+msgstr "Her haritada ekranda ve mini haritada hedefi gösterilen aşamalı bir görev vardır: Son Tren (Terminal), Dr. Almeida'nın Serumu (Hastane) ve Yeraltı Dünyası Kapısı (Tapınak). Ödül tüm perkler ve özel bir silahtır."
+
+msgid "Bênçãos dos Deuses"
+msgstr "Tanrıların Kutsamaları"
+
+msgid "No Templo, 3 altares oferecem a bênção de um deus, sorteado a cada round, por 1500 pontos. Só uma bênção por vez, e cair faz perder a que você tem."
+msgstr "Tapınakta 3 sunak, her tur rastgele seçilen bir tanrının kutsamasını 1500 puana sunar. Aynı anda tek kutsama olur ve yere düşmek sahip olduğunu kaybettirir."
+
+msgid "SEGREDOS"
+msgstr "SIRLAR"
+
+msgid "Ursinhos escondidos"
+msgstr "Gizli ayıcıklar"
+
+msgid "Cada mapa esconde ursinhos de pelúcia. Achar todos na mesma partida solta um Golden Drop e libera uma conquista."
+msgstr "Her haritada oyuncak ayılar saklıdır. Hepsini aynı maçta bulmak bir Golden Drop düşürür ve bir başarımın kilidini açar."
+
+msgid "Rádios e gravadores"
+msgstr "Radyolar ve kayıt cihazları"
+
+msgid "Rádios e gravadores espalhados contam a história de cada mapa. Segure E para sintonizar; cada uso traz a próxima mensagem."
+msgstr "Etrafa dağılmış radyolar ve kayıt cihazları her haritanın hikâyesini anlatır. Ayarlamak için E'yi basılı tut; her kullanım sonraki mesajı getirir."
+
+msgid "Estátuas dos deuses"
+msgstr "Tanrı heykelleri"
+
+msgid "No Templo, acender as 12 estátuas dos deuses abre a passagem para o Santuário do Olimpo, onde está o Arco de Artemis."
+msgstr "Tapınakta 12 tanrı heykelini yakmak, Artemis'in Yayı'nın bulunduğu Olimpos Mabedi'ne giden geçidi açar."
+
+msgid "Recepção"
+msgstr "Kabul"
+
+msgid "Centro Cirúrgico"
+msgstr "Ameliyathane"
+
+msgid "UTI"
+msgstr "Yoğun Bakım"
+
+msgid "Enfermaria"
+msgstr "Koğuş"
+
+msgid "Radiologia"
+msgstr "Radyoloji"
+
+msgid "Farmácia"
+msgstr "Eczane"
+
+msgid "Pediatria"
+msgstr "Pediatri"
+
+msgid "Necrotério"
+msgstr "Morg"
+
+msgid "Refeitório"
+msgstr "Yemekhane"
+
+msgid "Laboratório"
+msgstr "Laboratuvar"
+
+msgid "OUVIR O GRAVADOR"
+msgstr "KAYDI DİNLE"
+
+msgid "📼 \"Diário do Dr. Almeida, dia 3: a amostra do Paciente Zero reagiu ao soro. As células não param de se dividir.\""
+msgstr "📼 \"Dr. Almeida'nın günlüğü, 3. gün: Sıfır Numaralı Hasta'nın örneği seruma tepki verdi. Hücreler bölünmeyi bırakmıyor.\""
+
+msgid "📼 \"Dia 9: a febre some e volta. O Paciente Zero arrancou as amarras. Três enfermeiros foram mordidos.\""
+msgstr "📼 \"9. gün: ateş gidip geliyor. Sıfır Numaralı Hasta kayışlarını kopardı. Üç hemşire ısırıldı.\""
+
+msgid "📼 \"Dia 12: lacramos o laboratório e mandamos as amostras de trem para a Estação Central. Que Deus nos perdoe.\""
+msgstr "📼 \"12. gün: laboratuvarı mühürledik ve örnekleri trenle Merkez İstasyon'a gönderdik. Tanrı bizi affetsin.\""
+
+msgid "📼 \"...se estiver ouvindo isto: não deixe o Paciente Zero chegar à superfície. O soro está na câmara.\""
+msgstr "📼 \"...bunu duyuyorsan: Sıfır Numaralı Hasta'nın yüzeye çıkmasına izin verme. Serum odada.\""
+
+msgid "Ruínas Gregas"
+msgstr "Yunan Harabeleri"
+
+msgid "Necrópole"
+msgstr "Nekropol"
+
+msgid "Labirinto"
+msgstr "Labirent"
+
+msgid "Floresta de Artemis"
+msgstr "Artemis Ormanı"
+
+msgid "Templo da Górgona"
+msgstr "Gorgon Tapınağı"
+
+msgid "Submundo"
+msgstr "Yeraltı Dünyası"
+
+msgid "Arena Final"
+msgstr "Son Arena"
+
+msgid "Santuário do Olimpo"
+msgstr "Olimpos Mabedi"
+
+msgid "LER A INSCRIÇÃO"
+msgstr "YAZITI OKU"
+
+msgid "📜 \"Diário da Dra. Helena, escavação 7: as inscrições falam de mortos que voltam quando o portão é tocado.\""
+msgstr "📜 \"Dr. Helena'nın günlüğü, 7. kazı: yazıtlar, kapıya dokunulunca geri dönen ölülerden söz ediyor.\""
+
+msgid "📜 \"Chegou a caixa do Hospital Santa Luzia: amostras do Dr. Almeida. Ele disse que o soro veio DAQUI.\""
+msgstr "📜 \"Santa Luzia Hastanesi'nden sandık geldi: Dr. Almeida'nın örnekleri. Serumun BURADAN geldiğini söyledi.\""
+
+msgid "📜 \"Os trens da Estação Central traziam os caixotes à noite. Nenhum carregador voltou para a segunda viagem.\""
+msgstr "📜 \"Merkez İstasyon'un trenleri sandıkları gece getirirdi. Hiçbir hamal ikinci sefere dönmedi.\""
+
+msgid "📜 \"O templo não era uma prisão. Era uma porta. E alguém, do outro lado, está batendo.\""
+msgstr "📜 \"Tapınak bir hapishane değildi. Bir kapıydı. Ve öbür taraftan biri kapıyı çalıyor.\""
+
+msgid "Hall Central"
+msgstr "Ana Salon"
+
+msgid "Plataforma Norte"
+msgstr "Kuzey Peronu"
+
+msgid "Bilheteria"
+msgstr "Gişe"
+
+msgid "Lojas"
+msgstr "Dükkânlar"
+
+msgid "Área Técnica"
+msgstr "Teknik Alan"
+
+msgid "Túneis"
+msgstr "Tüneller"
+
+msgid "Manutenção"
+msgstr "Bakım"
+
+msgid "📻 \"...controle da Estação Central. O trem das 23h40 NÃO deve parar. Repito: não parem o trem...\""
+msgstr "📻 \"...Merkez İstasyon kontrol merkezi. 23.40 treni DURMAMALI. Tekrar ediyorum: treni durdurmayın...\""
+
+msgid "📻 \"...o maquinista não responde. Alguém viu o Condutor? Ele desceu nos túneis e voltou... diferente.\""
+msgstr "📻 \"...makinist cevap vermiyor. Kondüktör'ü gören var mı? Tünellere indi ve... farklı döndü.\""
+
+msgid "📻 \"...quarentena decretada. Portas lacradas. Quem ficou lá dentro está por conta própria.\""
+msgstr "📻 \"...karantina ilan edildi. Kapılar mühürlendi. İçeride kalan başının çaresine baksın.\""
+
+msgid "📻 \"...se alguém ouvir isto: tentem sobreviver. O resgate chega ao amanhecer. Talvez.\""
+msgstr "📻 \"...bunu duyan varsa: hayatta kalmaya çalışın. Kurtarma ekibi şafakta geliyor. Belki.\""

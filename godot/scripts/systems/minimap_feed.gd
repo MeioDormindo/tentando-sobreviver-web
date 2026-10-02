@@ -51,7 +51,7 @@ func build_state() -> Dictionary:
 	var mates: Array = []
 	for mate in Players.all():
 		if mate != player and (mate.is_alive() or mate.bleeding):
-			mates.append([_flat(mate.global_position), mate.bleeding])
+			mates.append([_flat(mate.global_position), mate.bleeding, Players.color_of(mate)])
 	var aim := player.aim_point - player.global_position
 	return {
 		"player": _flat(player.global_position),

@@ -40,6 +40,10 @@ signal area_opened(area_id: StringName, area_name: String)
 signal purchase_denied()
 ## Aviso curto no meio da tela (a caixa mudou de lugar, arma melhorada...).
 signal toast(text: String)
+## Cooperativo: quem fez o quê ("ANA abriu a porta"), numa lista curta na lateral da HUD.
+signal team_feed(text: String)
+## O idioma do jogo mudou (código do Godot: "en", "pt_BR"...). As telas se refazem.
+signal language_changed(code: String)
 ## Energia do mapa ligada/desligada.
 signal power_changed(on: bool)
 ## Perks ativos do jogador (nomes).

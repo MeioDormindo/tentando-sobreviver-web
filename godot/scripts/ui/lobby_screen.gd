@@ -6,6 +6,7 @@ extends Control
 const MENU := "res://scenes/ui/main_menu.tscn"
 ## Mapa da sala ao criar (o host troca na sala).
 const COOP_MAP := "terminal"
+const CharacterScreen := preload("res://scripts/ui/character_screen.gd")
 
 var _column: VBoxContainer
 var _status: Label
@@ -15,15 +16,24 @@ var _ip_edit: LineEdit
 var _list: VBoxContainer
 var _ready_button: Button
 var _start_button: Button
+## peer → rótulo da latência na lista (atualizado sem refazer a tela).
+var _ping_labels: Dictionary = {}
+var _skins: SkinCatalog
+## O que foi copiado por último (os testes leem; a área de transferência pode não existir).
+var last_copied := ""
+## Botão que volta a ter o foco depois que a sala se refaz (trocar o visual pelo teclado).
+var _refocus := ""
 
 
 func _ready() -> void:
+	_skins = load("res://data/configs/skins.tres") as SkinCatalog
 	_column = MenuKit.screen(self, 620.0)
 	# Métodos (não funções anônimas): o Net vive o jogo todo, e o Godot desliga sozinho a ligação
 	# com um método quando a tela sai.
 	Net.room_changed.connect(_rebuild)
 	Net.status_changed.connect(_on_status)
 	Net.disconnected.connect(_on_disconnected)
+	Net.pings_changed.connect(_update_pings)
 	_rebuild()
 
 
@@ -36,7 +46,7 @@ func _focus(button: Button) -> void:
 
 func _on_status(text: String) -> void:
 	if is_instance_valid(_status):
-		_status.text = text
+		_status.text = Loc.text(text)
 
 
 func _on_disconnected(_reason: String) -> void:
@@ -82,16 +92,17 @@ func _build_entry() -> void:
 	MenuKit.label(_column, "CÓDIGO DA SALA", 16, MenuKit.GOLD)
 	_code_edit = LineEdit.new()
 	_code_edit.name = "Code"
-	_code_edit.max_length = 5
 	_code_edit.placeholder_text = "ABCDE"
 	MenuKit.style_edit(_code_edit, 32)
+	# Aceita colar o código com espaços ou o link inteiro do convite (fica só o código).
 	_code_edit.text_changed.connect(func(text: String) -> void:
 		var caret := _code_edit.caret_column
-		_code_edit.text = text.to_upper()
-		_code_edit.caret_column = caret)
+		var found := Net.code_from_text(text)
+		_code_edit.text = found if found != "" else text.to_upper().substr(0, 5)
+		_code_edit.caret_column = mini(caret, _code_edit.text.length()))
 	_code_edit.text_submitted.connect(func(_t: String) -> void: _join())
 	_column.add_child(_code_edit)
-	MenuKit.button(_column, "ENTRAR", _join).name = "Join"
+	MenuKit.button(_column, "ENTRAR NA SALA", _join).name = "Join"
 	# Rede local (mesmo PC ou mesmo Wi-Fi), sem servidor. O navegador não tem ENet.
 	if not OS.has_feature("web"):
 		MenuKit.spacer(_column, 6)
@@ -105,7 +116,7 @@ func _build_entry() -> void:
 		_ip_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		MenuKit.style_edit(_ip_edit, 20)
 		lan.add_child(_ip_edit)
-		MenuKit.button(lan, "ENTRAR", func() -> void:
+		MenuKit.button(lan, "ENTRAR NA SALA", func() -> void:
 			Net.last_error = ""
 			Net.join_local(_my_name(), _my_skin(), _ip_edit.text.strip_edges())
 			_rebuild(), 18).name = "LanJoin"
@@ -114,11 +125,22 @@ func _build_entry() -> void:
 			Net.map_id = COOP_MAP
 			Net.host_local(_my_name(), _my_skin())
 			_rebuild(), 18).name = "LanCreate"
-	_status = MenuKit.label(_column, Net.last_error, 16, MenuKit.RED, HORIZONTAL_ALIGNMENT_CENTER)
+	_status = MenuKit.label(_column, Loc.text(Net.last_error), 16, MenuKit.RED, HORIZONTAL_ALIGNMENT_CENTER)
 	_status.name = "Status"
 	MenuKit.spacer(_column, 10)
 	MenuKit.button(_column, "VOLTAR", func() -> void: MenuKit.go(self, MENU)).name = "Back"
 	_focus(create)
+	# Convite pelo link (?sala=ABCDE): entra sozinho com o nome salvo; com o nome padrão, espera
+	# a pessoa conferir o nome.
+	if Net.invite_code != "":
+		_code_edit.text = Net.invite_code
+		Net.invite_code = ""
+		if Save.player_name != "" and Save.player_name != "SOBREVIVENTE":
+			_join.call_deferred()
+		else:
+			_status.text = Loc.t("Convite para a sala %s: digite seu nome e toque ENTRAR NA SALA") % _code_edit.text
+			_status.add_theme_color_override(&"font_color", MenuKit.GOLD)
+			_name_edit.grab_focus.call_deferred()
 
 
 func _my_name() -> String:
@@ -174,30 +196,54 @@ func _build_room() -> void:
 	MenuKit.label(_column, "CÓDIGO DA SALA", 16, MenuKit.DIM, HORIZONTAL_ALIGNMENT_CENTER)
 	MenuKit.title(_column, Net.code if Net.code != "" else "...", 64, MenuKit.GOLD).name = "RoomCode"
 	if Net.code == "LOCAL" and Net.is_host():
-		MenuKit.label(_column, "Na rede local: os amigos entram com o IP  %s" % _lan_ips(), 14, MenuKit.DIM, HORIZONTAL_ALIGNMENT_CENTER)
-	var map_name := Save.catalog.display_name(Net.map_id).to_upper()
+		MenuKit.label(_column, Loc.t("Na rede local: os amigos entram com o IP  %s") % _lan_ips(), 14, MenuKit.DIM, HORIZONTAL_ALIGNMENT_CENTER)
+	elif Net.code != "" and Net.code != "LOCAL":
+		# Passar o código: copiar só ele ou o link que já entra na sala.
+		var share := HBoxContainer.new()
+		share.alignment = BoxContainer.ALIGNMENT_CENTER
+		share.add_theme_constant_override(&"separation", 16)
+		_column.add_child(share)
+		MenuKit.button(share, "COPIAR CÓDIGO", func() -> void: _copy(Net.code, Loc.t("Código %s copiado!") % Net.code), 16).name = "CopyCode"
+		MenuKit.button(share, "COPIAR CONVITE", func() -> void: _copy(_invite_text(), "Convite copiado! Quem abrir o link entra direto na sala."), 16).name = "CopyInvite"
+	var map_name := Loc.t(Save.catalog.display_name(Net.map_id)).to_upper()
 	if Net.is_host():
-		MenuKit.button(_column, "MAPA: %s  ›" % map_name, _next_map, 18).name = "Map"
+		MenuKit.button(_column, Loc.t("MAPA: %s  →") % map_name, _next_map, 18).name = "Map"
 	else:
-		MenuKit.label(_column, "MAPA: %s" % map_name, 16, MenuKit.TEXT, HORIZONTAL_ALIGNMENT_CENTER)
+		MenuKit.label(_column, Loc.t("MAPA: %s") % map_name, 16, MenuKit.TEXT, HORIZONTAL_ALIGNMENT_CENTER)
 	# O mapa mudou: o seu visual passa a ser o do personagem dele.
 	if Net.state == Net.State.ROOM and Net.players.has(Net.my_id()) and String(Net.players[Net.my_id()].skin) != _my_skin():
 		Net.set_skin.call_deferred(_my_skin())
+	if Net.state == Net.State.ROOM:
+		_build_skin_picker()
 	MenuKit.spacer(_column, 6)
 	_list = VBoxContainer.new()
 	_list.name = "Players"
 	_list.add_theme_constant_override(&"separation", 6)
 	_column.add_child(_list)
+	_ping_labels.clear()
 	var ids := Net.players.keys()
 	ids.sort()
 	for id: int in ids:
 		var info: Dictionary = Net.players[id]
 		var row := HBoxContainer.new()
+		row.add_theme_constant_override(&"separation", 10)
 		_list.add_child(row)
-		var who := MenuKit.label(row, String(info.name) + ("  (VOCÊ)" if id == Net.my_id() else ""), 20)
+		var skin := _skins.find(String(info.get("skin", "")))
+		if not skin.is_empty():
+			row.add_child(CharacterScreen.portrait(skin, 0.5, Vector2(48, 60)))
+		var who := MenuKit.label(row, String(info.name) + (Loc.t("  (VOCÊ)") if id == Net.my_id() else ""), 20)
 		who.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		who.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		if id != 1:
+			var ping := MenuKit.label(row, "", 14, MenuKit.DIM)
+			ping.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			ping.autowrap_mode = TextServer.AUTOWRAP_OFF
+			_ping_labels[id] = ping
 		var tag := "HOST" if id == 1 else ("PRONTO" if bool(info.ready) else "ESPERANDO")
-		MenuKit.label(row, tag, 20, MenuKit.GOLD if id == 1 or bool(info.ready) else MenuKit.DIM)
+		var tag_label := MenuKit.label(row, tag, 20, MenuKit.GOLD if id == 1 or bool(info.ready) else MenuKit.DIM)
+		tag_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		tag_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	_update_pings()
 	for i in range(ids.size(), Net.MAX_PLAYERS):
 		MenuKit.label(_list, "· vaga livre", 16, MenuKit.DIM)
 	MenuKit.spacer(_column, 6)
@@ -217,7 +263,64 @@ func _build_room() -> void:
 	MenuKit.button(_column, "SAIR DA SALA", func() -> void:
 		Net.leave()
 		_rebuild()).name = "Leave"
-	if _start_button:
+	var again: Button = _column.find_child(_refocus, true, false) as Button if _refocus != "" else null
+	_refocus = ""
+	if again:
+		_focus(again)
+	elif _start_button:
 		_focus(_start_button)
 	elif _ready_button:
 		_focus(_ready_button)
+
+
+## Seu visual na sala: o retrato e ← NOME →, só entre os liberados do personagem do mapa da sala.
+func _build_skin_picker() -> void:
+	var skin := _skins.find(_my_skin())
+	var row := HBoxContainer.new()
+	row.name = "Skin"
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_theme_constant_override(&"separation", 12)
+	_column.add_child(row)
+	row.add_child(CharacterScreen.portrait(skin, 1.0, Vector2(72, 72)))
+	MenuKit.button(row, "←", _cycle_skin.bind(-1), 22).name = "SkinPrev"
+	var label := MenuKit.label(row, Loc.t("SEU VISUAL\n%s") % Loc.t(String(skin.get("name", ""))).to_upper(), 16, MenuKit.TEXT, HORIZONTAL_ALIGNMENT_CENTER)
+	label.name = "SkinName"
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.custom_minimum_size.x = 200
+	MenuKit.button(row, "→", _cycle_skin.bind(1), 22).name = "SkinNext"
+
+
+## Próximo (ou anterior) visual liberado: fica salvo como o seu nesse mapa e vai para a sala.
+func _cycle_skin(step: int) -> void:
+	var list := _skins.for_map(Net.map_id).filter(func(s: Dictionary) -> bool: return CharacterScreen.is_unlocked(s))
+	if list.is_empty():
+		return
+	var at := list.map(func(s: Dictionary) -> String: return String(s.id)).find(_my_skin())
+	var next: Dictionary = list[posmod(at + step, list.size())]
+	Save.set_setting(SkinCatalog.setting_key(Net.map_id), next.id)
+	_refocus = "SkinNext" if step > 0 else "SkinPrev"
+	Net.set_skin(String(next.id))
+
+
+func _copy(text: String, message: String) -> void:
+	DisplayServer.clipboard_set(text)
+	last_copied = text
+	if is_instance_valid(_status):
+		_status.text = message
+		_status.add_theme_color_override(&"font_color", MenuKit.GOLD)
+
+
+## Convite para colar numa conversa: o código e o link que já entra na sala.
+func _invite_text() -> String:
+	return Loc.t("Bora jogar Tentando Sobreviver comigo! Sala %s: %s") % [Net.code, Net.invite_link()]
+
+
+## Latência de cada colega ao lado do nome (verde, amarelo, vermelho).
+func _update_pings() -> void:
+	for id: int in _ping_labels:
+		var label := _ping_labels[id] as Label
+		if not is_instance_valid(label):
+			continue
+		var ms := Net.ping_of(id)
+		label.text = (Loc.t("%d ms") % ms) if ms >= 0 else "— ms"
+		label.add_theme_color_override(&"font_color", Net.ping_color(ms))

@@ -44,7 +44,7 @@ func _ready() -> void:
 	tabs.add_theme_constant_override(&"separation", 30)
 	column.add_child(tabs)
 	for id in catalog.order:
-		_tabs[id] = MenuKit.button(tabs, catalog.display_name(id).to_upper(), _show.bind(id), 18)
+		_tabs[id] = MenuKit.button(tabs, Loc.t(catalog.display_name(id)).to_upper(), _show.bind(id), 18)
 	_table = VBoxContainer.new()
 	column.add_child(_table)
 	MenuKit.spacer(column, 16)
@@ -70,7 +70,7 @@ func _show(id: String) -> void:
 		return
 	var list := Save.ranking(id) if _players == 1 else Save.ranking_coop(id, _players)
 	if list.is_empty():
-		var empty := "Nenhuma partida ainda — jogue para entrar no ranking!" if _players == 1 else "Nenhuma partida em %s ainda — chame os amigos em JOGAR EM GRUPO!" % Leaderboard.MODES[_players - 1]
+		var empty := "Nenhuma partida ainda — jogue para entrar no ranking!" if _players == 1 else Loc.t("Nenhuma partida em %s ainda — chame os amigos em JOGAR EM GRUPO!") % Loc.t(Leaderboard.MODES[_players - 1])
 		MenuKit.label(_table, empty if Save.is_unlocked(id) else "Mapa bloqueado", 16, MenuKit.DIM, HORIZONTAL_ALIGNMENT_CENTER)
 		return
 	_fill(list)
@@ -99,7 +99,7 @@ func _show_global(id: String) -> void:
 		if String(list[i].get("team", list[i].name) if _players > 1 else list[i].name).to_upper().contains(Save.player_name.to_upper()):
 			mine = i
 			break
-	MenuKit.label(_table, "TEMPORADA TERMINA EM %d %s%s" % [days, "DIA" if days == 1 else "DIAS", (" · VOCÊ: %dº" % (mine + 1)) if mine >= 0 else ""],
+	MenuKit.label(_table, Loc.t("TEMPORADA TERMINA EM %d %s%s") % [days, Loc.t("DIA" if days == 1 else "DIAS"), (Loc.t(" · VOCÊ: %dº") % (mine + 1)) if mine >= 0 else ""],
 		14, MenuKit.DIM, HORIZONTAL_ALIGNMENT_CENTER)
 
 

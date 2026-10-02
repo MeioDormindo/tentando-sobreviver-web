@@ -13,6 +13,8 @@ func start() -> void:
 	duration = float(config.get("duration_time", 20.0))
 	system.world.set_event_mood(id, true, config)
 	system.round_manager.set_spawn_modifier(id, config)
+	# O barulho atrai uma leva na hora (o resto vem mais rápido enquanto dura).
+	system.round_manager.burst(int(config.get("burst", 4)) + Session.player_count() - 1)
 
 
 func end() -> void:

@@ -24,8 +24,7 @@ func can_start() -> bool:
 func start() -> void:
 	duration = float(config.get("duration_time", 60.0))
 	destroyed = false
-	var point: Variant = system.pick_floor_point(float(config.get("min_distance", 10.0)), float(config.get("max_distance", 18.0)))
-	var at: Vector3 = point if point is Vector3 else system.focus().global_position + Vector3(10, 0, 0)
+	var at := system.floor_point_near(float(config.get("min_distance", 10.0)), float(config.get("max_distance", 18.0)))
 	_build(at)
 
 

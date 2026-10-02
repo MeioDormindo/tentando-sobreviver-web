@@ -106,7 +106,7 @@ func _components() -> void:
 	var fridge := _spot("SampleFridge")
 	check(fridge != null and _hold(fridge, fridge.hold_time + 0.1) and _quest.got.fridge, "segurar E na geladeira: amostras")
 	var cabinet := _spot("MedCabinet")
-	check(cabinet != null and not cabinet.available() and cabinet.get_interaction_prompt(_player).contains("ATIRE NO CADEADO"), "armário trancado")
+	check(cabinet != null and not cabinet.available() and Loc.text(cabinet.get_interaction_prompt(_player)).contains("ATIRE NO CADEADO"), "armário trancado")
 	# Um tiro de verdade no cadeado (raio da arma).
 	var lock_at := _quest.lock.global_position
 	var space := _player.get_world_3d().direct_space_state

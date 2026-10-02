@@ -1,0 +1,2734 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tentando Sobreviver\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pl\n"
+
+msgid "[SEGURE %s] FECHAR A VÁLVULA"
+msgstr "[PRZYTRZYMAJ %s] ZAKRĘĆ ZAWÓR"
+
+msgid "ZUMBI DOURADO ABATIDO!  +%s"
+msgstr "ZŁOTY ZOMBIE ZABITY!  +%s"
+
+msgid "O ZUMBI DOURADO ESCAPOU"
+msgstr "ZŁOTY ZOMBIE UCIEKŁ"
+
+msgid "[SEGURE %s] ABRIR SUPRIMENTOS"
+msgstr "[PRZYTRZYMAJ %s] OTWÓRZ ZAOPATRZENIE"
+
+msgid "SUPRIMENTOS"
+msgstr "ZAOPATRZENIE"
+
+msgid "Munição cheia · Armadura · +%s"
+msgstr "Pełna amunicja · Pancerz · +%s"
+
+msgid "ATROPELADOS ×%s"
+msgstr "PRZEJECHANI ×%s"
+
+msgid "O PORTAL CAIU — O TRIDENTE DE POSEIDON FICOU NO LUGAR"
+msgstr "PORTAL UPADŁ — TRÓJZĄB POSEJDONA ZOSTAŁ NA MIEJSCU"
+
+msgid "O PORTÃO DO SUBMUNDO SE FECHOU"
+msgstr "BRAMA PODZIEMIA SIĘ ZAMKNĘŁA"
+
+msgid "TREM"
+msgstr "POCIĄG"
+
+msgid "[SEGURE %s] CONSERTAR BARRICADA  ·  +%s por tábua"
+msgstr "[PRZYTRZYMAJ %s] NAPRAW BARYKADĘ  ·  +%s za deskę"
+
+msgid "BÊNÇÃO DE %s"
+msgstr "BŁOGOSŁAWIEŃSTWO: %s"
+
+msgid "BÊNÇÃO DE %s ATIVA"
+msgstr "BŁOGOSŁAWIEŃSTWO: %s AKTYWNE"
+
+msgid "[%s] BÊNÇÃO DE %s — %s: %s  ·  DE GRAÇA"
+msgstr "[%s] BŁOGOSŁAWIEŃSTWO: %s — %s: %s  ·  ZA DARMO"
+
+msgid "[%s] BÊNÇÃO DE %s — %s: %s  ·  %s pontos"
+msgstr "[%s] BŁOGOSŁAWIEŃSTWO: %s — %s: %s  ·  %s pkt"
+
+msgid "%s — %s"
+msgstr "%s — %s"
+
+msgid "DISJUNTOR"
+msgstr "BEZPIECZNIK"
+
+msgid "[SEGURE %s] LIGAR A ENERGIA"
+msgstr "[PRZYTRZYMAJ %s] WŁĄCZ ZASILANIE"
+
+msgid "ENERGIA LIGADA"
+msgstr "ZASILANIE WŁĄCZONE"
+
+msgid "%s ligou a energia"
+msgstr "%s włącza zasilanie"
+
+msgid "[%s] LER A PLACA"
+msgstr "[%s] PRZECZYTAJ TABLICZKĘ"
+
+msgid "PORTÃO DO TEMPLO — leve Fragmentos de Alma aos 3 altares"
+msgstr "BRAMA ŚWIĄTYNI — zanieś Fragmenty Duszy do 3 ołtarzy"
+
+msgid "PORTÃO DO SUBMUNDO — precisa da chave do Minotauro"
+msgstr "BRAMA PODZIEMIA — potrzebny klucz Minotaura"
+
+msgid "PASSAGEM SELADA — ative as 12 estátuas dos deuses"
+msgstr "ZAPIECZĘTOWANE PRZEJŚCIE — zapal 12 posągów bogów"
+
+msgid "PORTÃO FECHADO"
+msgstr "BRAMA ZAMKNIĘTA"
+
+msgid "[%s] ABRIR PORTA  ·  %s pontos"
+msgstr "[%s] OTWÓRZ DRZWI  ·  %s pkt"
+
+msgid "[%s] ABRIR PORTA — %s  ·  %s pontos"
+msgstr "[%s] OTWÓRZ DRZWI — %s  ·  %s pkt"
+
+msgid "[%s] ABRIR PORTA — %s, %s  ·  %s pontos"
+msgstr "[%s] OTWÓRZ DRZWI — %s, %s  ·  %s pkt"
+
+msgid "%s abriu %s"
+msgstr "%s otwiera: %s"
+
+msgid "ARMADILHA"
+msgstr "PUŁAPKA"
+
+msgid "ARMADILHA ELÉTRICA LIGADA — %ss"
+msgstr "PUŁAPKA ELEKTRYCZNA WŁĄCZONA — %ss"
+
+msgid "ARMADILHA RECARREGANDO — %ss"
+msgstr "PUŁAPKA SIĘ ŁADUJE — %ss"
+
+msgid "[%s] LIGAR ARMADILHA ELÉTRICA  ·  %s pontos"
+msgstr "[%s] WŁĄCZ PUŁAPKĘ ELEKTRYCZNĄ  ·  %s pkt"
+
+msgid "RELIGAR A ENERGIA"
+msgstr "PRZYWRÓĆ ZASILANIE"
+
+msgid "PAINEL DE ENERGIA — FUNCIONANDO"
+msgstr "PANEL ZASILANIA — DZIAŁA"
+
+msgid "ENERGIA"
+msgstr "ZASILANIE"
+
+msgid "DESLIGAR O ALARME"
+msgstr "WYŁĄCZ ALARM"
+
+msgid "ALARME DE EMERGÊNCIA — DESLIGADO"
+msgstr "ALARM AWARYJNY — WYŁĄCZONY"
+
+msgid "ALARME"
+msgstr "ALARM"
+
+msgid "[SEGURE %s] %s  ·  %s pontos"
+msgstr "[PRZYTRZYMAJ %s] %s  ·  %s pkt"
+
+msgid "ZEUS"
+msgstr "ZEUS"
+
+msgid "HERA"
+msgstr "HERA"
+
+msgid "POSEIDON"
+msgstr "POSEJDON"
+
+msgid "DEMÉTER"
+msgstr "DEMETER"
+
+msgid "ATENA"
+msgstr "ATENA"
+
+msgid "APOLO"
+msgstr "APOLLO"
+
+msgid "ÁRTEMIS"
+msgstr "ARTEMIDA"
+
+msgid "ARES"
+msgstr "ARES"
+
+msgid "AFRODITE"
+msgstr "AFRODYTA"
+
+msgid "HEFESTO"
+msgstr "HEFAJSTOS"
+
+msgid "HERMES"
+msgstr "HERMES"
+
+msgid "DIONÍSIO"
+msgstr "DIONIZOS"
+
+msgid "[SEGURE %s] ACENDER A ESTÁTUA DE %s"
+msgstr "[PRZYTRZYMAJ %s] ZAPAL POSĄG: %s"
+
+msgid "ESTÁTUA DE %s ACESA (%s/%s)"
+msgstr "POSĄG ZAPALONY: %s (%s/%s)"
+
+msgid "OS DOZE DO OLIMPO"
+msgstr "DWUNASTU Z OLIMPU"
+
+msgid "O templo reage... uma passagem se abriu na Floresta."
+msgstr "Świątynia reaguje... w Lesie otworzyło się przejście."
+
+msgid "SINTONIZAR O RÁDIO"
+msgstr "DOSTRÓJ RADIO"
+
+msgid "RÁDIO — CHIADO..."
+msgstr "RADIO — SZUMY..."
+
+msgid "[SEGURE %s] %s"
+msgstr "[PRZYTRZYMAJ %s] %s"
+
+msgid "[%s] MYSTERY BOX  ·  %s pontos"
+msgstr "[%s] MYSTERY BOX  ·  %s pkt"
+
+msgid "MYSTERY BOX  ·  arma de %s"
+msgstr "MYSTERY BOX  ·  broń gracza %s"
+
+msgid "[%s] PEGAR %s (MUNIÇÃO)"
+msgstr "[%s] WEŹ %s (AMUNICJA)"
+
+msgid "[%s] PEGAR %s"
+msgstr "[%s] WEŹ %s"
+
+msgid "um colega"
+msgstr "towarzysz"
+
+msgid "A MYSTERY BOX MUDOU DE LUGAR — %s"
+msgstr "MYSTERY BOX ZMIENIŁ MIEJSCE — %s"
+
+msgid "A MYSTERY BOX MUDOU DE LUGAR"
+msgstr "MYSTERY BOX ZMIENIŁ MIEJSCE"
+
+msgid "SEM ENERGIA — ligue o disjuntor"
+msgstr "BRAK ZASILANIA — włącz bezpiecznik"
+
+msgid "%s  ·  JÁ ATIVO"
+msgstr "%s  ·  JUŻ AKTYWNY"
+
+msgid "%s  ·  ESGOTADO NESTA PARTIDA"
+msgstr "%s  ·  WYCZERPANY W TYM MECZU"
+
+msgid "[%s] %s — %s  ·  %s pontos"
+msgstr "[%s] %s — %s  ·  %s pkt"
+
+msgid "[SEGURE %s] PEGAR %s  (%s%%)"
+msgstr "[PRZYTRZYMAJ %s] WEŹ %s  (%s%%)"
+
+msgid "%s — presente de Artemis"
+msgstr "%s — dar Artemidy"
+
+msgid "[%s] PEGAR O URSINHO"
+msgstr "[%s] WEŹ MISIA"
+
+msgid "URSINHO %s/%s"
+msgstr "MIŚ %s/%s"
+
+msgid "SEGREDO DOS URSINHOS"
+msgstr "SEKRET MISIÓW"
+
+msgid "Você achou todos! Segredo salvo."
+msgstr "Znalazłeś wszystkie! Sekret zapisany."
+
+msgid "Todos os ursinhos de novo!"
+msgstr "Znowu wszystkie misie!"
+
+msgid "PAINEL DO TREM — DISPONÍVEL EM %ss"
+msgstr "PANEL POCIĄGU — DOSTĘPNY ZA %ss"
+
+msgid "[%s] CHAMAR O TREM  ·  %s pontos"
+msgstr "[%s] WEZWIJ POCIĄG  ·  %s pkt"
+
+msgid "O TREM NÃO PODE VIR AGORA"
+msgstr "POCIĄG NIE MOŻE TERAZ PRZYJECHAĆ"
+
+msgid "MUNIÇÃO"
+msgstr "AMUNICJA"
+
+msgid "  ·  SEGURE %s: "
+msgstr "  ·  PRZYTRZYMAJ %s:"
+
+msgid "MUNIÇÃO CHEIA"
+msgstr "PEŁNA AMUNICJA"
+
+msgid "[%s] MUNIÇÃO %s  ·  %s pontos"
+msgstr "[%s] AMUNICJA %s  ·  %s pkt"
+
+msgid "%s  ·  MUNIÇÃO CHEIA"
+msgstr "%s  ·  PEŁNA AMUNICJA"
+
+msgid "[%s] COMPRAR %s  ·  %s pontos"
+msgstr "[%s] KUP %s  ·  %s pkt"
+
+msgid "[%s] PEGAR %s  ·  %ss"
+msgstr "[%s] WEŹ %s  ·  %ss"
+
+msgid "[%s] PEGAR %s (troca por %s)  ·  %ss"
+msgstr "[%s] WEŹ %s (zamiast %s)  ·  %ss"
+
+msgid "%s  ·  NÍVEL MÁXIMO"
+msgstr "%s  ·  MAKSYMALNY POZIOM"
+
+msgid "Mk II"
+msgstr "Mk II"
+
+msgid "Mk III"
+msgstr "Mk III"
+
+msgid "[%s] WEAPON LAB: %s → %s  ·  %s pontos"
+msgstr "[%s] WEAPON LAB: %s → %s  ·  %s pkt"
+
+msgid "TREM PASSANDO"
+msgstr "POCIĄG PRZEJEŻDŻA"
+
+msgid "⚠ TREM CHEGANDO"
+msgstr "⚠ NADJEŻDŻA POCIĄG"
+
+msgid "PRÓXIMO TREM %ds"
+msgstr "NASTĘPNY POCIĄG %ds"
+
+msgid "PRÓXIMO TREM EM BREVE"
+msgstr "NASTĘPNY POCIĄG WKRÓTCE"
+
+msgid "SEM PREVISÃO"
+msgstr "BRAK PROGNOZY"
+
+msgid "Não foi possível conectar à sala"
+msgstr "Nie udało się połączyć z pokojem"
+
+msgid "O host saiu"
+msgstr "Host wyszedł"
+
+msgid "Tempo esgotado ao entrar na sala"
+msgstr "Przekroczono czas przy wchodzeniu do pokoju"
+
+msgid "Criando sala..."
+msgstr "Tworzenie pokoju..."
+
+msgid "Não foi possível criar a sala (%s)"
+msgstr "Nie udało się utworzyć pokoju (%s)"
+
+msgid "Procurando a sala %s..."
+msgstr "Szukanie pokoju %s..."
+
+msgid "Sem conexão com o servidor (%s)"
+msgstr "Brak połączenia z serwerem (%s)"
+
+msgid "Sala %s não encontrada"
+msgstr "Nie znaleziono pokoju %s"
+
+msgid "Não foi possível abrir a sala (%s)"
+msgstr "Nie udało się otworzyć pokoju (%s)"
+
+msgid "Sala %s aberta"
+msgstr "Pokój %s otwarty"
+
+msgid "Não foi possível entrar (%s)"
+msgstr "Nie udało się wejść (%s)"
+
+msgid "Conectando à sala %s..."
+msgstr "Łączenie z pokojem %s..."
+
+msgid "Na sala %s"
+msgstr "W pokoju %s"
+
+msgid "JOGADOR"
+msgstr "GRACZ"
+
+msgid "sem conexão"
+msgstr "brak połączenia"
+
+msgid "A partida já começou"
+msgstr "Mecz już się zaczął"
+
+msgid "Sala cheia (%s jogadores)"
+msgstr "Pokój pełny (%s graczy)"
+
+msgid "Entrada recusada"
+msgstr "Odmowa wejścia"
+
+msgid "sem sessão"
+msgstr "brak sesji"
+
+msgid "Usuário: 3 a 16 letras minúsculas, números ou _"
+msgstr "Użytkownik: od 3 do 16 małych liter, cyfr lub _"
+
+msgid "Senha: mínimo de %d caracteres"
+msgstr "Hasło: minimum %d znaków"
+
+msgid "Senha: máximo de %d caracteres"
+msgstr "Hasło: maksimum %d znaków"
+
+msgid "Não foi possível entrar — tente de novo"
+msgstr "Nie udało się zalogować — spróbuj ponownie"
+
+msgid "Sem conexão"
+msgstr "Brak połączenia"
+
+msgid "Sessão expirada — entre de novo"
+msgstr "Sesja wygasła — zaloguj się ponownie"
+
+msgid "Falha ao ler da nuvem"
+msgstr "Błąd odczytu z chmury"
+
+msgid "Contas online indisponíveis"
+msgstr "Konta online niedostępne"
+
+msgid "Falha ao salvar na nuvem"
+msgstr "Błąd zapisu w chmurze"
+
+msgid "Sem conexão com o servidor"
+msgstr "Brak połączenia z serwerem"
+
+msgid "Muitas tentativas — aguarde um pouco"
+msgstr "Zbyt wiele prób — poczekaj chwilę"
+
+msgid "Esse usuário já existe"
+msgstr "Taki użytkownik już istnieje"
+
+msgid "Usuário ou senha incorretos"
+msgstr "Nieprawidłowy użytkownik lub hasło"
+
+msgid "Senha fraca demais"
+msgstr "Hasło jest zbyt słabe"
+
+msgid "Usuário inválido"
+msgstr "Nieprawidłowa nazwa użytkownika"
+
+msgid "Não foi possível concluir — tente de novo"
+msgstr "Nie udało się dokończyć — spróbuj ponownie"
+
+msgid "HACKER DETECTADO"
+msgstr "WYKRYTO HAKERA"
+
+msgid "SOLO"
+msgstr "SOLO"
+
+msgid "DUPLA"
+msgstr "DUET"
+
+msgid "TRIO"
+msgstr "TRIO"
+
+msgid "QUARTETO"
+msgstr "KWARTET"
+
+msgid "ranking global indisponível"
+msgstr "globalny ranking niedostępny"
+
+msgid "mapa ainda não aceito no ranking global"
+msgstr "mapa nie jest jeszcze w globalnym rankingu"
+
+msgid "pontuação recusada"
+msgstr "wynik odrzucony"
+
+msgid "resposta incompleta"
+msgstr "niepełna odpowiedź"
+
+msgid "não conectou ao servidor"
+msgstr "nie połączono z serwerem"
+
+msgid "endereço não encontrado"
+msgstr "nie znaleziono adresu"
+
+msgid "conexão caiu"
+msgstr "połączenie zerwane"
+
+msgid "falha de TLS"
+msgstr "błąd TLS"
+
+msgid "sem resposta"
+msgstr "brak odpowiedzi"
+
+msgid "resposta grande demais"
+msgstr "odpowiedź zbyt duża"
+
+msgid "falha ao descompactar a resposta"
+msgstr "błąd rozpakowania odpowiedzi"
+
+msgid "requisição falhou"
+msgstr "żądanie nie powiodło się"
+
+msgid "redirecionamentos demais"
+msgstr "zbyt wiele przekierowań"
+
+msgid "tempo esgotado"
+msgstr "przekroczono czas"
+
+msgid "requisição recusada (%s)"
+msgstr "żądanie odrzucone (%s)"
+
+msgid "erro de rede %d"
+msgstr "błąd sieci %d"
+
+msgid "ALIADO"
+msgstr "SOJUSZNIK"
+
+msgid "Fúria do Trovão"
+msgstr "Furia Gromu"
+
+msgid "12% dos tiros soltam um raio"
+msgstr "12% strzałów wypuszcza piorun"
+
+msgid "Sede de Sangue"
+msgstr "Żądza Krwi"
+
+msgid "abates seguidos aumentam o dano"
+msgstr "kolejne zabójstwa zwiększają obrażenia"
+
+msgid "mira precisa e golpes críticos"
+msgstr "precyzyjne celowanie i trafienia krytyczne"
+
+msgid "anda, recarrega e interage mais rápido"
+msgstr "szybciej chodzisz, przeładowujesz i wchodzisz w interakcję"
+
+msgid "Maré"
+msgstr "Przypływ"
+
+msgid "os tiros empurram os zumbis"
+msgstr "strzały odpychają zombie"
+
+msgid "HADES"
+msgstr "HADES"
+
+msgid "Pacto dos Mortos"
+msgstr "Pakt Umarłych"
+
+msgid "abatidos voltam como aliados"
+msgstr "zabici wracają jako sojusznicy"
+
+msgid "HADES: um espírito aliado se levanta para lutar"
+msgstr "HADES: duch sojusznika powstaje do walki"
+
+msgid "PETRIFICADO! Não olhe para a Górgona"
+msgstr "SKAMIENIAŁY! Nie patrz na Gorgonę"
+
+msgid "QUICK REVIVE!"
+msgstr "QUICK REVIVE!"
+
+msgid "CAÍDO! Um colega pode te reviver"
+msgstr "POWALONY! Towarzysz może cię ocucić"
+
+msgid "%s caiu!"
+msgstr "%s jest powalony!"
+
+msgid "CAÍDO · %ss para um colega te reviver"
+msgstr "POWALONY · %ss, by towarzysz cię ocucił"
+
+msgid "VOCÊ MORREU · volta no próximo round"
+msgstr "NIE ŻYJESZ · wracasz w następnej rundzie"
+
+msgid "%s levantou %s"
+msgstr "%s ocucił(a): %s"
+
+msgid "[SEGURE %s] REVIVER %s"
+msgstr "[PRZYTRZYMAJ %s] OCUĆ: %s"
+
+msgid "O COLEGA"
+msgstr "TOWARZYSZA"
+
+msgid "[%s] %s"
+msgstr "[%s] %s"
+
+msgid "CADEADO ABERTO"
+msgstr "KŁÓDKA OTWARTA"
+
+msgid "%s concluiu a missão: todos os perks + %s"
+msgstr "%s ukończył(a) misję: wszystkie perki + %s"
+
+msgid "%s concluiu a missão: todos os perks"
+msgstr "%s ukończył(a) misję: wszystkie perki"
+
+msgid "Ligue a energia (disjuntor no Necrotério)"
+msgstr "Włącz zasilanie (bezpiecznik w Kostnicy)"
+
+msgid "Derrote o Paciente Zero enfurecido (round %s)"
+msgstr "Pokonaj rozwścieczonego Pacjenta Zero (runda %s)"
+
+msgid "Aplique o soro no Paciente Zero"
+msgstr "Podaj serum Pacjentowi Zero"
+
+msgid "O SORO"
+msgstr "SERUM"
+
+msgid "Componentes do soro %s/3 — UTI · Farmácia · cartão do Blindado"
+msgstr "Składniki serum %s/3 — OIOM · Apteka · karta Opancerzonego"
+
+msgid "PEGAR AS AMOSTRAS"
+msgstr "WEŹ PRÓBKI"
+
+msgid "AMOSTRAS COLETADAS"
+msgstr "PRÓBKI ZEBRANE"
+
+msgid "PEGAR O REAGENTE"
+msgstr "WEŹ ODCZYNNIK"
+
+msgid "REAGENTE COLETADO"
+msgstr "ODCZYNNIK ZEBRANY"
+
+msgid "ARMÁRIO TRANCADO — ATIRE NO CADEADO"
+msgstr "SZAFKA ZAMKNIĘTA — STRZEL W KŁÓDKĘ"
+
+msgid "ABRIR A GAVETA COM O CARTÃO"
+msgstr "OTWÓRZ SZUFLADĘ KARTĄ"
+
+msgid "CATALISADOR COLETADO"
+msgstr "KATALIZATOR ZEBRANY"
+
+msgid "GAVETA TRANCADA — PRECISA DO CARTÃO DE ACESSO"
+msgstr "SZUFLADA ZAMKNIĘTA — POTRZEBNA KARTA DOSTĘPU"
+
+msgid "PEGAR O CARTÃO DE ACESSO"
+msgstr "WEŹ KARTĘ DOSTĘPU"
+
+msgid "CARTÃO DE ACESSO — abra a gaveta do Necrotério"
+msgstr "KARTA DOSTĘPU — otwórz szufladę w Kostnicy"
+
+msgid "UM SEGURANÇA BLINDADO ESTÁ COM O CARTÃO DE ACESSO"
+msgstr "OPANCERZONY STRAŻNIK MA KARTĘ DOSTĘPU"
+
+msgid "Leve os componentes à centrífuga do Laboratório"
+msgstr "Zanieś składniki do wirówki w Laboratorium"
+
+msgid "CENTRÍFUGA SOB ATAQUE! Afaste os zumbis (%ss)"
+msgstr "WIRÓWKA ATAKOWANA! Odpędź zombie (%ss)"
+
+msgid "Defenda a centrífuga: %ss"
+msgstr "Broń wirówki: %ss"
+
+msgid "COLOCAR OS COMPONENTES NA CENTRÍFUGA"
+msgstr "WŁÓŻ SKŁADNIKI DO WIRÓWKI"
+
+msgid "A CENTRÍFUGA ESTÁ GIRANDO — DEFENDA!"
+msgstr "WIRÓWKA SIĘ KRĘCI — BROŃ JEJ!"
+
+msgid "SORO PRONTO! O Paciente Zero sentiu o cheiro..."
+msgstr "SERUM GOTOWE! Pacjent Zero poczuł zapach..."
+
+msgid "APLICAR O SORO"
+msgstr "PODAJ SERUM"
+
+msgid "VOCÊ CUROU O PACIENTE ZERO"
+msgstr "WYLECZYŁEŚ PACJENTA ZERO"
+
+msgid "Todos os perks + Tornado. A luta continua..."
+msgstr "Wszystkie perki + Tornado. Walka trwa..."
+
+msgid "Ligue o gerador dos arqueólogos (Necrópole)"
+msgstr "Włącz generator archeologów (Nekropolia)"
+
+msgid "Leve os Fragmentos aos altares do Portão do Templo (%s/3)"
+msgstr "Zanieś Fragmenty do ołtarzy przy Bramie Świątyni (%s/3)"
+
+msgid "O guardião despertou: derrote o Minotauro (round %s)"
+msgstr "Strażnik się przebudził: pokonaj Minotaura (runda %s)"
+
+msgid "Pegue a chave do Submundo onde o Minotauro caiu"
+msgstr "Weź klucz Podziemia tam, gdzie padł Minotaur"
+
+msgid "Abra o Portão do Submundo (sul das Ruínas)"
+msgstr "Otwórz Bramę Podziemia (na południe od Ruin)"
+
+msgid "O Cérbero guarda o Submundo: derrote-o (round %s)"
+msgstr "Cerber strzeże Podziemia: pokonaj go (runda %s)"
+
+msgid "Sele o portão no altar da Arena Final"
+msgstr "Zapieczętuj bramę przy ołtarzu na Arenie Finałowej"
+
+msgid "O PORTÃO DO SUBMUNDO"
+msgstr "BRAMA PODZIEMIA"
+
+msgid "Fragmentos de Alma %s/3 — Necrópole · Floresta · um Esqueleto os carrega"
+msgstr "Fragmenty Duszy %s/3 — Nekropolia · Las · niesie je Szkielet"
+
+msgid "PEGAR O FRAGMENTO DE ALMA"
+msgstr "WEŹ FRAGMENT DUSZY"
+
+msgid "FRAGMENTO DE ALMA (%s/3)"
+msgstr "FRAGMENT DUSZY (%s/3)"
+
+msgid "UM ESQUELETO CARREGA UM FRAGMENTO DE ALMA"
+msgstr "SZKIELET NIESIE FRAGMENT DUSZY"
+
+msgid "DEPOSITAR UM FRAGMENTO NO ALTAR"
+msgstr "ZŁÓŻ FRAGMENT NA OŁTARZU"
+
+msgid "ALTAR ACESO (%s/3)"
+msgstr "OŁTARZ ZAPALONY (%s/3)"
+
+msgid "O PORTÃO DO TEMPLO SE ABRIU... ALGO ACORDOU NO LABIRINTO"
+msgstr "BRAMA ŚWIĄTYNI SIĘ OTWORZYŁA... COŚ OBUDZIŁO SIĘ W LABIRYNCIE"
+
+msgid "PEGAR A CHAVE DO SUBMUNDO"
+msgstr "WEŹ KLUCZ PODZIEMIA"
+
+msgid "CHAVE DO SUBMUNDO — abra o portão ao sul das Ruínas"
+msgstr "KLUCZ PODZIEMIA — otwórz bramę na południe od Ruin"
+
+msgid "ABRIR O PORTÃO DO SUBMUNDO"
+msgstr "OTWÓRZ BRAMĘ PODZIEMIA"
+
+msgid "SELAR O PORTÃO DO SUBMUNDO"
+msgstr "ZAPIECZĘTUJ BRAMĘ PODZIEMIA"
+
+msgid "O PORTÃO DO SUBMUNDO FOI SELADO"
+msgstr "BRAMA PODZIEMIA ZOSTAŁA ZAPIECZĘTOWANA"
+
+msgid "Todos os perks + Raio de Zeus. Mas algo lá embaixo ainda respira..."
+msgstr "Wszystkie perki + Piorun Zeusa. Ale coś tam w dole wciąż oddycha..."
+
+msgid "O ÚLTIMO TREM"
+msgstr "OSTATNI POCIĄG"
+
+msgid "Ligue a energia (disjuntor na Área Técnica)"
+msgstr "Włącz zasilanie (bezpiecznik w Strefie Technicznej)"
+
+msgid "Derrote o Condutor enfurecido (round %s)"
+msgstr "Pokonaj rozwścieczonego Konduktora (runda %s)"
+
+msgid "Pegue a Lanterna do Condutor"
+msgstr "Weź Latarnię Konduktora"
+
+msgid "Peças do sinal %s/3 — fusível (Manutenção) · chave (Bilheteria) · manivela (Blindado)"
+msgstr "Części sygnału %s/3 — bezpiecznik (Konserwacja) · klucz (Kasa) · korba (Opancerzony)"
+
+msgid "PEGAR O FUSÍVEL DO SINAL"
+msgstr "WEŹ BEZPIECZNIK SYGNAŁU"
+
+msgid "FUSÍVEL COLETADO"
+msgstr "BEZPIECZNIK ZEBRANY"
+
+msgid "PEGAR A CHAVE DO PAINEL"
+msgstr "WEŹ KLUCZ DO PANELU"
+
+msgid "CHAVE DO PAINEL COLETADA"
+msgstr "KLUCZ DO PANELU ZEBRANY"
+
+msgid "COFRE TRANCADO — ATIRE NO CADEADO"
+msgstr "SEJF ZAMKNIĘTY — STRZEL W KŁÓDKĘ"
+
+msgid "UM BLINDADO ESTÁ COM A MANIVELA DO SINAL"
+msgstr "OPANCERZONY MA KORBĘ SYGNAŁU"
+
+msgid "PEGAR A MANIVELA DO SINAL"
+msgstr "WEŹ KORBĘ SYGNAŁU"
+
+msgid "MANIVELA COLETADA"
+msgstr "KORBA ZEBRANA"
+
+msgid "Leve as peças ao sinal da Plataforma e conserte"
+msgstr "Zanieś części do sygnału na Peronie i napraw go"
+
+msgid "SINAL SOB ATAQUE! Afaste os zumbis (%ss)"
+msgstr "SYGNAŁ ATAKOWANY! Odpędź zombie (%ss)"
+
+msgid "Segure o sinal até o trem passar: %ss"
+msgstr "Utrzymaj sygnał, aż przejedzie pociąg: %ss"
+
+msgid "CONSERTAR O SINAL"
+msgstr "NAPRAW SYGNAŁ"
+
+msgid "O SINAL ESTÁ LIGADO — SEGURE ATÉ O TREM PASSAR!"
+msgstr "SYGNAŁ WŁĄCZONY — UTRZYMAJ, AŻ PRZEJEDZIE POCIĄG!"
+
+msgid "O TREM PASSOU! O Condutor saiu dos túneis..."
+msgstr "POCIĄG PRZEJECHAŁ! Konduktor wyszedł z tuneli..."
+
+msgid "PEGAR A LANTERNA DO CONDUTOR"
+msgstr "WEŹ LATARNIĘ KONDUKTORA"
+
+msgid "O ÚLTIMO TREM PASSOU"
+msgstr "OSTATNI POCIĄG PRZEJECHAŁ"
+
+msgid "Todos os perks + Lanterna do Condutor. A estação é sua..."
+msgstr "Wszystkie perki + Latarnia Konduktora. Stacja jest twoja..."
+
+msgid "ANDAR PARA CIMA"
+msgstr "IDŹ W GÓRĘ"
+
+msgid "ANDAR PARA BAIXO"
+msgstr "IDŹ W DÓŁ"
+
+msgid "ANDAR PARA A ESQUERDA"
+msgstr "IDŹ W LEWO"
+
+msgid "ANDAR PARA A DIREITA"
+msgstr "IDŹ W PRAWO"
+
+msgid "ATIRAR"
+msgstr "STRZAŁ"
+
+msgid "RECARREGAR"
+msgstr "PRZEŁADUJ"
+
+msgid "USAR / COMPRAR"
+msgstr "UŻYJ / KUP"
+
+msgid "TROCAR DE ARMA"
+msgstr "ZMIEŃ BROŃ"
+
+msgid "ARMA 1"
+msgstr "BROŃ 1"
+
+msgid "ARMA 2"
+msgstr "BROŃ 2"
+
+msgid "FACA"
+msgstr "NÓŻ"
+
+msgid "PULAR"
+msgstr "SKOK"
+
+msgid "MAPA GRANDE"
+msgstr "DUŻA MAPA"
+
+msgid "LANTERNA"
+msgstr "LATARKA"
+
+msgid "PAUSA"
+msgstr "PAUZA"
+
+msgid "MOUSE %d"
+msgstr "MYSZ %d"
+
+msgid "BOTÃO %d"
+msgstr "PRZYCISK %d"
+
+msgid "EIXO %d"
+msgstr "OŚ %d"
+
+msgid "ESPAÇO"
+msgstr "SPACJA"
+
+msgid "MOUSE ESQ."
+msgstr "LPM"
+
+msgid "MOUSE DIR."
+msgstr "PPM"
+
+msgid "MOUSE MEIO"
+msgstr "ŚPM"
+
+msgid "RODA ↑"
+msgstr "KÓŁKO ↑"
+
+msgid "RODA ↓"
+msgstr "KÓŁKO ↓"
+
+msgid "AUTOMÁTICO (%s)"
+msgstr "AUTOMATYCZNY (%s)"
+
+msgid " Mk III"
+msgstr " Mk III"
+
+msgid " Mk II"
+msgstr " Mk II"
+
+msgid "ALGUÉM"
+msgstr "KTOŚ"
+
+msgid "Barricadas consertadas (%s tábuas) · +%s"
+msgstr "Naprawione barykady (%s desek) · +%s"
+
+msgid "%s pegou %s"
+msgstr "%s podnosi: %s"
+
+msgid "Perk grátis: %s"
+msgstr "Darmowy perk: %s"
+
+msgid "Fúria: dano x%s"
+msgstr "Furia: obrażenia x%s"
+
+msgid "FIRE SALE! MYSTERY BOX A %s · +%s CAIXAS NO MAPA"
+msgstr "FIRE SALE! MYSTERY BOX ZA %s · +%s SKRZYŃ NA MAPIE"
+
+msgid "SOBREVIVENTE"
+msgstr "OCALAŁY"
+
+msgid "MULTI x%s"
+msgstr "MULTI x%s"
+
+msgid "VOCÊ"
+msgstr "TY"
+
+msgid "BOT %d"
+msgstr "BOT %d"
+
+msgid "CONTA"
+msgstr "KONTO"
+
+msgid "Contas online indisponíveis nesta versão."
+msgstr "Konta online niedostępne w tej wersji."
+
+msgid "VOLTAR"
+msgstr "WSTECZ"
+
+msgid "LOGADO COMO %s"
+msgstr "ZALOGOWANO JAKO %s"
+
+msgid "SINCRONIZAR AGORA"
+msgstr "SYNCHRONIZUJ TERAZ"
+
+msgid "SAIR DA CONTA"
+msgstr "WYLOGUJ"
+
+msgid "USUÁRIO"
+msgstr "UŻYTKOWNIK"
+
+msgid "SENHA"
+msgstr "HASŁO"
+
+msgid "Sincronizando o progresso..."
+msgstr "Synchronizowanie postępu..."
+
+msgid "ENTRAR"
+msgstr "ZALOGUJ"
+
+msgid "CRIAR CONTA"
+msgstr "UTWÓRZ KONTO"
+
+msgid "Entre para salvar o progresso na nuvem e jogar em qualquer aparelho (inclusive no navegador).\nNão há recuperação por e-mail: guarde bem a sua senha."
+msgstr "Zaloguj się, aby zapisywać postęp w chmurze i grać na każdym urządzeniu (także w przeglądarce).\nNie ma odzyskiwania przez e-mail: dobrze zapamiętaj hasło."
+
+msgid "Progresso salvo na nuvem · %s"
+msgstr "Postęp zapisany w chmurze · %s"
+
+msgid "O progresso é salvo na nuvem automaticamente"
+msgstr "Postęp zapisuje się w chmurze automatycznie"
+
+msgid "CONQUISTAS"
+msgstr "OSIĄGNIĘCIA"
+
+msgid "%d / %d LIBERADAS"
+msgstr "ODBLOKOWANE: %d / %d"
+
+msgid "Segredo — continue explorando"
+msgstr "Sekret — eksploruj dalej"
+
+msgid "ESTATÍSTICAS"
+msgstr "STATYSTYKI"
+
+msgid "%s — melhor round %d · recorde %d pts · %d abates"
+msgstr "%s — najlepsza runda %d · rekord %d pkt · %d zabójstw"
+
+msgid "Partidas %d · Abates %d · Faca %d · Headshots %d · Bosses %d · Tempo %dh%02d"
+msgstr "Mecze %d · Zabójstwa %d · Nóż %d · Headshoty %d · Bossowie %d · Czas %dh%02d"
+
+msgid "COMUM"
+msgstr "POSPOLITA"
+
+msgid "INCOMUM"
+msgstr "NIEPOSPOLITA"
+
+msgid "RARA"
+msgstr "RZADKA"
+
+msgid "ÉPICA"
+msgstr "EPICKA"
+
+msgid "LENDÁRIA"
+msgstr "LEGENDARNA"
+
+msgid "Prêmio da missão O Último Trem (Terminal) — nunca sai na Mystery Box"
+msgstr "Nagroda za misję Ostatni Pociąg (Terminal) — nigdy nie wypada z Mystery Box"
+
+msgid "Prêmio da missão O Portão do Submundo (Templo) — nunca sai na Mystery Box"
+msgstr "Nagroda za misję Brama Podziemia (Świątynia) — nigdy nie wypada z Mystery Box"
+
+msgid "Santuário do Olimpo: ative as 12 estátuas dos deuses no Templo"
+msgstr "Sanktuarium Olimpu: zapal 12 posągów bogów w Świątyni"
+
+msgid "Evento Portão do Submundo (Templo): destrua o portal"
+msgstr "Wydarzenie Brama Podziemia (Świątynia): zniszcz portal"
+
+msgid "DANO"
+msgstr "OBRAŻENIA"
+
+msgid "CADÊNCIA"
+msgstr "SZYBKOSTRZELNOŚĆ"
+
+msgid "PENTE"
+msgstr "MAGAZYNEK"
+
+msgid "RESERVA"
+msgstr "ZAPAS"
+
+msgid "RECARGA"
+msgstr "PRZEŁADOWANIE"
+
+msgid "ALCANCE"
+msgstr "ZASIĘG"
+
+msgid "ARMAS"
+msgstr "BROŃ"
+
+msgid "AUTOMÁTICA"
+msgstr "AUTOMATYCZNA"
+
+msgid "SEMIAUTOMÁTICA"
+msgstr "PÓŁAUTOMATYCZNA"
+
+msgid "Elemento %s (%d, segure E na parede): %s"
+msgstr "Żywioł %s (%d, przytrzymaj E przy ścianie): %s"
+
+msgid "Weapon Lab: Mk II %d · Mk III %d%s"
+msgstr "Weapon Lab: Mk II %d · Mk III %d%s"
+
+msgid "  (vira %s)"
+msgstr "  (staje się: %s)"
+
+msgid "VER MK II"
+msgstr "POKAŻ MK II"
+
+msgid "VER MK III"
+msgstr "POKAŻ MK III"
+
+msgid "VER NORMAL"
+msgstr "POKAŻ ZWYKŁĄ"
+
+msgid "%.1f s"
+msgstr "%.1f s"
+
+msgid "%.0f m"
+msgstr "%.0f m"
+
+msgid "Arma inicial do %s"
+msgstr "Broń startowa: %s"
+
+msgid "Parede: %d · %s · %s"
+msgstr "Ściana: %d · %s · %s"
+
+msgid "Mystery Box só no %s"
+msgstr "Mystery Box tylko na mapie %s"
+
+msgid "Mystery Box (em todos os mapas)"
+msgstr "Mystery Box (na wszystkich mapach)"
+
+msgid "também na Mystery Box"
+msgstr "także w Mystery Box"
+
+msgid "Granada explode no impacto: %d de dano em área (raio %.1f m). Não fere você."
+msgstr "Granat wybucha przy uderzeniu: %d obrażeń obszarowych (promień %.1f m). Nie rani ciebie."
+
+msgid "Jato contínuo que incendeia: %d de dano por segundo durante %.1f s."
+msgstr "Ciągły strumień, który podpala: %d obrażeń na sekundę przez %.1f s."
+
+msgid "Raio instantâneo que salta entre até %d zumbis e os atordoa."
+msgstr "Natychmiastowy piorun, który przeskakuje między maks. %d zombie i je ogłusza."
+
+msgid "Esfera que atravessa a horda e explode numa descarga elétrica (%d em área)."
+msgstr "Kula, która przebija hordę i wybucha wyładowaniem elektrycznym (%d obszarowo)."
+
+msgid "Rajada de vento em cone (%d°, alcance %.0f m) que arremessa e destrói a horda à frente."
+msgstr "Podmuch wiatru w stożku (%d°, zasięg %.0f m), który odrzuca i niszczy hordę przed tobą."
+
+msgid "Atravessa até %d zumbis por tiro."
+msgstr "Przebija do %d zombie na strzał."
+
+msgid "PERSONAGEM"
+msgstr "POSTAĆ"
+
+msgid "Libere os visuais com as conquistas."
+msgstr "Odblokuj wygląd dzięki osiągnięciom."
+
+msgid "EM USO"
+msgstr "W UŻYCIU"
+
+msgid "USAR"
+msgstr "UŻYJ"
+
+msgid "TRANCADO"
+msgstr "ZABLOKOWANE"
+
+msgid "JOGAR"
+msgstr "GRAJ"
+
+msgid "Trancado — libere com a conquista \"%s\": %s"
+msgstr "Zablokowane — odblokuj osiągnięciem „%s”: %s"
+
+msgid "Aparece quando você enfrentar esse inimigo."
+msgstr "Pojawi się, gdy zmierzysz się z tym wrogiem."
+
+msgid "Aparece quando você enfrentar esse chefe."
+msgstr "Pojawi się, gdy zmierzysz się z tym bossem."
+
+msgid "Chegue perto da máquina desse perk."
+msgstr "Podejdź do maszyny z tym perkiem."
+
+msgid "Pegue esse power-up numa partida."
+msgstr "Podnieś ten power-up w meczu."
+
+msgid "Compre esse elemento numa parede de arma."
+msgstr "Kup ten żywioł przy ścianie z bronią."
+
+msgid "Receba essa bênção num altar do Templo."
+msgstr "Otrzymaj to błogosławieństwo przy ołtarzu w Świątyni."
+
+msgid "Aparece quando esse evento acontecer numa partida."
+msgstr "Pojawi się, gdy to wydarzenie zajdzie w meczu."
+
+msgid "Descubra jogando."
+msgstr "Odkryj w trakcie gry."
+
+msgid "GLOSSÁRIO"
+msgstr "GLOSARIUSZ"
+
+msgid "DESCOBERTOS %d DE %d"
+msgstr "ODKRYTO %d Z %d"
+
+msgid "Ainda não encontrado."
+msgstr "Jeszcze nie znaleziono."
+
+msgid "Onde: %s"
+msgstr "Gdzie: %s"
+
+msgid "VIDA %d · VELOCIDADE %.1f m/s · DANO %d · %d PONTOS"
+msgstr "ZDROWIE %d · PRĘDKOŚĆ %.1f m/s · OBRAŻENIA %d · %d PKT"
+
+msgid "VIDA %d · VELOCIDADE %.1f m/s · GOLPE %d"
+msgstr "ZDROWIE %d · PRĘDKOŚĆ %.1f m/s · CIOS %d"
+
+msgid " · ATÉ %d POR PARTIDA"
+msgstr " · DO %d NA MECZ"
+
+msgid "%d PONTOS · %s%s"
+msgstr "%d PKT · %s%s"
+
+msgid "FUNCIONA SEM ENERGIA"
+msgstr "DZIAŁA BEZ ZASILANIA"
+
+msgid "PRECISA DE ENERGIA"
+msgstr "WYMAGA ZASILANIA"
+
+msgid "DURA %d s"
+msgstr "TRWA %d s"
+
+msgid "EFEITO NA HORA"
+msgstr "DZIAŁA OD RAZU"
+
+msgid "%d PONTOS NA PAREDE DA ARMA"
+msgstr "%d PKT PRZY ŚCIANIE BRONI"
+
+msgid "%d PONTOS NO ALTAR"
+msgstr "%d PKT PRZY OŁTARZU"
+
+msgid "A PARTIR DO ROUND %d"
+msgstr "OD RUNDY %d"
+
+msgid "DICA: %s"
+msgstr "WSKAZÓWKA: %s"
+
+msgid "ZUMBIS RESTANTES  %d"
+msgstr "POZOSTAŁE ZOMBIE  %d"
+
+msgid "ROUND %d COMPLETO"
+msgstr "RUNDA %d UKOŃCZONA"
+
+msgid "ÁREA LIBERADA: %s"
+msgstr "OTWARTY OBSZAR: %s"
+
+msgid "CONQUISTA DESBLOQUEADA: %s"
+msgstr "ODBLOKOWANO OSIĄGNIĘCIE: %s"
+
+msgid "SCORE %d"
+msgstr "WYNIK %d"
+
+msgid "%s DESBLOQUEADO!"
+msgstr "ODBLOKOWANO: %s!"
+
+msgid "%s SE APROXIMA"
+msgstr "NADCHODZI: %s"
+
+msgid "FASE %d"
+msgstr "FAZA %d"
+
+msgid "%s DERROTADO  +%d"
+msgstr "%s POKONANY  +%d"
+
+msgid "MAX AMMO"
+msgstr "MAX AMMO"
+
+msgid "◆ %s  %d/%d"
+msgstr "◆ %s  %d/%d"
+
+msgid "%d FPS"
+msgstr "%d FPS"
+
+msgid "ROUND"
+msgstr "RUNDA"
+
+msgid "SCORE 0"
+msgstr "WYNIK 0"
+
+msgid "VIDA"
+msgstr "ZDROWIE"
+
+msgid "GAME OVER"
+msgstr "KONIEC GRY"
+
+msgid "ROUND %d"
+msgstr "RUNDA %d"
+
+msgid "%s  ·  FASE %d"
+msgstr "%s  ·  FAZA %d"
+
+msgid "RODADA DOS CÃES"
+msgstr "RUNDA PSÓW"
+
+msgid "VIDA  %d / %d"
+msgstr "ZDROWIE  %d / %d"
+
+msgid "Fúria"
+msgstr "Furia"
+
+msgid "RECARREGANDO"
+msgstr "PRZEŁADOWANIE"
+
+msgid "ZUMBIS ABATIDOS"
+msgstr "ZABITE ZOMBIE"
+
+msgid "HEADSHOTS"
+msgstr "HEADSHOTY"
+
+msgid "PONTOS GANHOS"
+msgstr "ZDOBYTE PUNKTY"
+
+msgid "TEMPO"
+msgstr "CZAS"
+
+msgid "BOSSES"
+msgstr "BOSSOWIE"
+
+msgid "DANO CAUSADO"
+msgstr "ZADANE OBRAŻENIA"
+
+msgid "DISPAROS / ACERTOS"
+msgstr "STRZAŁY / TRAFIENIA"
+
+msgid "PRECISÃO"
+msgstr "CELNOŚĆ"
+
+msgid "ABATES NA FACA"
+msgstr "ZABÓJSTWA NOŻEM"
+
+msgid "NOVO RECORDE!"
+msgstr "NOWY REKORD!"
+
+msgid "RECORDE: %d PONTOS · ROUND %d"
+msgstr "REKORD: %d PKT · RUNDA %d"
+
+msgid "TIME: %s"
+msgstr "DRUŻYNA: %s"
+
+msgid "PARTIDA INVALIDADA — NÃO VALE SAVE NEM RANKING"
+msgstr "MECZ UNIEWAŻNIONY — BEZ ZAPISU I RANKINGU"
+
+msgid "JOGAR NOVAMENTE"
+msgstr "ZAGRAJ PONOWNIE"
+
+msgid "VOLTAR À SALA"
+msgstr "WRÓĆ DO POKOJU"
+
+msgid "RANKING"
+msgstr "RANKING"
+
+msgid "MENU"
+msgstr "MENU"
+
+msgid "PARTIDA INVALIDADA"
+msgstr "MECZ UNIEWAŻNIONY"
+
+msgid "%dº LUGAR NO RANKING %s DE %s!"
+msgstr "%d. MIEJSCE W RANKINGU %s NA MAPIE %s!"
+
+msgid "ENVIANDO O TIME AO RANKING GLOBAL..."
+msgstr "WYSYŁANIE DRUŻYNY DO GLOBALNEGO RANKINGU..."
+
+msgid "RANKING GLOBAL: %s"
+msgstr "GLOBALNY RANKING: %s"
+
+msgid "TIME ENVIADO AO RANKING GLOBAL (%s)!"
+msgstr "DRUŻYNA WYSŁANA DO GLOBALNEGO RANKINGU (%s)!"
+
+msgid "ENTROU NO TOP! SEU NOME:"
+msgstr "JESTEŚ W CZOŁÓWCE! TWOJE IMIĘ:"
+
+msgid "SEU NOME PARA O RANKING GLOBAL:"
+msgstr "TWOJE IMIĘ W GLOBALNYM RANKINGU:"
+
+msgid "%dº LUGAR NO RANKING DE %s!"
+msgstr "%d. MIEJSCE W RANKINGU MAPY %s!"
+
+msgid "ENVIANDO AO RANKING GLOBAL..."
+msgstr "WYSYŁANIE DO GLOBALNEGO RANKINGU..."
+
+msgid "ENVIADO AO RANKING GLOBAL DA TEMPORADA!"
+msgstr "WYSŁANO DO GLOBALNEGO RANKINGU SEZONU!"
+
+msgid "SALVAR"
+msgstr "ZAPISZ"
+
+msgid "LANTERNA %s%s"
+msgstr "LATARKA %s%s"
+
+msgid "LIGADA"
+msgstr "WŁĄCZONA"
+
+msgid "DESLIGADA"
+msgstr "WYŁĄCZONA"
+
+msgid "ESTÁ ESCURO — [%s] LIGA A LANTERNA"
+msgstr "JEST CIEMNO — [%s] WŁĄCZA LATARKĘ"
+
+msgid "CAÍDO %ds"
+msgstr "POWALONY %ds"
+
+msgid "FORA"
+msgstr "POZA GRĄ"
+
+msgid "%d ms"
+msgstr "%d ms"
+
+msgid "COLEGA"
+msgstr "TOWARZYSZ"
+
+msgid "%s %ds"
+msgstr "%s %ds"
+
+msgid "JOGAR EM GRUPO"
+msgstr "GRAJ ZE ZNAJOMYMI"
+
+msgid "Até 4 jogadores pela internet. Crie uma sala e passe o código, ou entre com o código de um amigo."
+msgstr "Do 4 graczy przez internet. Utwórz pokój i podaj kod albo wejdź z kodem znajomego."
+
+msgid "SEU NOME"
+msgstr "TWOJE IMIĘ"
+
+msgid "NOME"
+msgstr "IMIĘ"
+
+msgid "CRIAR SALA"
+msgstr "UTWÓRZ POKÓJ"
+
+msgid "CÓDIGO DA SALA"
+msgstr "KOD POKOJU"
+
+msgid "ENTRAR NA SALA"
+msgstr "WEJDŹ DO POKOJU"
+
+msgid "REDE LOCAL (MESMO WI-FI) — IP DO HOST"
+msgstr "SIEĆ LOKALNA (TO SAMO WI-FI) — IP HOSTA"
+
+msgid "CRIAR SALA NA REDE LOCAL"
+msgstr "UTWÓRZ POKÓJ W SIECI LOKALNEJ"
+
+msgid "Convite para a sala %s: digite seu nome e toque ENTRAR NA SALA"
+msgstr "Zaproszenie do pokoju %s: wpisz imię i naciśnij WEJDŹ DO POKOJU"
+
+msgid "O código tem 5 letras"
+msgstr "Kod ma 5 liter"
+
+msgid "Procurando a sala..."
+msgstr "Szukanie pokoju..."
+
+msgid "Na rede local: os amigos entram com o IP  %s"
+msgstr "W sieci lokalnej: znajomi wchodzą przez IP  %s"
+
+msgid "COPIAR CÓDIGO"
+msgstr "KOPIUJ KOD"
+
+msgid "Código %s copiado!"
+msgstr "Kod %s skopiowany!"
+
+msgid "COPIAR CONVITE"
+msgstr "KOPIUJ ZAPROSZENIE"
+
+msgid "Convite copiado! Quem abrir o link entra direto na sala."
+msgstr "Zaproszenie skopiowane! Kto otworzy link, wejdzie prosto do pokoju."
+
+msgid "MAPA: %s  →"
+msgstr "MAPA: %s  →"
+
+msgid "MAPA: %s"
+msgstr "MAPA: %s"
+
+msgid "  (VOCÊ)"
+msgstr "  (TY)"
+
+msgid "HOST"
+msgstr "HOST"
+
+msgid "PRONTO"
+msgstr "GOTOWY"
+
+msgid "ESPERANDO"
+msgstr "CZEKA"
+
+msgid "· vaga livre"
+msgstr "· wolne miejsce"
+
+msgid "COMEÇAR"
+msgstr "START"
+
+msgid "Começa quando todos estiverem prontos."
+msgstr "Start, gdy wszyscy będą gotowi."
+
+msgid "Esperando os amigos entrarem com o código."
+msgstr "Czekamy, aż znajomi wejdą z kodem."
+
+msgid "CANCELAR PRONTO"
+msgstr "ANULUJ GOTOWOŚĆ"
+
+msgid "SAIR DA SALA"
+msgstr "WYJDŹ Z POKOJU"
+
+msgid "SEU VISUAL\n%s"
+msgstr "TWÓJ WYGLĄD\n%s"
+
+msgid "Bora jogar Tentando Sobreviver comigo! Sala %s: %s"
+msgstr "Zagraj ze mną w Tentando Sobreviver! Pokój %s: %s"
+
+msgid "— ms"
+msgstr "— ms"
+
+msgid "%s mover · mouse mirar · clique atirar · %s recarregar · %s trocar arma · %s faca · %s usar · %s pausa"
+msgstr "%s ruch · mysz celowanie · klik strzał · %s przeładuj · %s zmień broń · %s nóż · %s użyj · %s pauza"
+
+msgid "Analógico: mover · ATIRAR: mira sozinho no zumbi mais perto e atira · FACA: golpe corpo a corpo"
+msgstr "Gałka: ruch · STRZAŁ: sam celuje w najbliższego zombie i strzela · NÓŻ: cios wręcz"
+
+msgid "TENTANDO\nSOBREVIVER"
+msgstr "TENTANDO\nSOBREVIVER"
+
+msgid "CONTA: %s"
+msgstr "KONTO: %s"
+
+msgid "CONTA / SALVAR NA NUVEM"
+msgstr "KONTO / ZAPIS W CHMURZE"
+
+msgid "CONFIGURAÇÕES"
+msgstr "USTAWIENIA"
+
+msgid "APOIE O PROJETO (PIX)"
+msgstr "WESPRZYJ PROJEKT (PIX)"
+
+msgid "SAIR"
+msgstr "WYJDŹ"
+
+msgid "MODO CABEÇÃO LIBERADO! (liga/desliga em Configurações)"
+msgstr "TRYB WIELKICH GŁÓW ODBLOKOWANY! (włączasz w Ustawieniach)"
+
+msgid "MODO CABEÇÃO LIGADO!"
+msgstr "TRYB WIELKICH GŁÓW WŁĄCZONY!"
+
+msgid "O Último Trem"
+msgstr "Ostatni Pociąg"
+
+msgid "O Soro do Dr. Almeida"
+msgstr "Serum doktora Almeidy"
+
+msgid "O Portão do Submundo"
+msgstr "Brama Podziemia"
+
+msgid "ESCOLHA O MAPA"
+msgstr "WYBIERZ MAPĘ"
+
+msgid "Recorde: %d pontos · round %d"
+msgstr "Rekord: %d pkt · runda %d"
+
+msgid "Sem recorde ainda"
+msgstr "Brak rekordu"
+
+msgid "1º no ranking: %s · %d pts"
+msgstr "1. w rankingu: %s · %d pkt"
+
+msgid "✓ MISSÃO CONCLUÍDA: %s"
+msgstr "✓ MISJA UKOŃCZONA: %s"
+
+msgid "◆ MISSÃO: %s"
+msgstr "◆ MISJA: %s"
+
+msgid "BLOQUEADO — conclua a missão do %s"
+msgstr "ZABLOKOWANE — ukończ misję na mapie %s"
+
+msgid " ou do "
+msgstr " lub na mapie"
+
+msgid "BLOQUEADO — derrote o boss do round %d no %s"
+msgstr "ZABLOKOWANE — pokonaj bossa rundy %d na mapie %s"
+
+msgid "MAPA"
+msgstr "MAPA"
+
+msgid "PAUSADO"
+msgstr "PAUZA"
+
+msgid "A partida continua para o time."
+msgstr "Mecz trwa dalej dla drużyny."
+
+msgid "CONTINUAR"
+msgstr "KONTYNUUJ"
+
+msgid "REINICIAR"
+msgstr "OD NOWA"
+
+msgid "SAIR DA PARTIDA"
+msgstr "OPUŚĆ MECZ"
+
+msgid "%s para continuar  ·  %s: mapa grande"
+msgstr "%s — kontynuuj  ·  %s: duża mapa"
+
+msgid "TIME"
+msgstr "DRUŻYNA"
+
+msgid "PONTOS"
+msgstr "PUNKTY"
+
+msgid "Nenhuma partida ainda — jogue para entrar no ranking!"
+msgstr "Brak meczów — zagraj, by trafić do rankingu!"
+
+msgid "Nenhuma partida em %s ainda — chame os amigos em JOGAR EM GRUPO!"
+msgstr "Brak meczów w trybie %s — zaproś znajomych w GRAJ ZE ZNAJOMYMI!"
+
+msgid "Mapa bloqueado"
+msgstr "Mapa zablokowana"
+
+msgid "Ranking global indisponível"
+msgstr "Globalny ranking niedostępny"
+
+msgid "Ranking global indisponível (sem conexão)"
+msgstr "Globalny ranking niedostępny (brak połączenia)"
+
+msgid "Ninguém pontuou nesta temporada ainda — seja o primeiro!"
+msgstr "Nikt jeszcze nie zdobył punktów w tym sezonie — bądź pierwszy!"
+
+msgid "TEMPORADA TERMINA EM %d %s%s"
+msgstr "SEZON KOŃCZY SIĘ ZA %d %s%s"
+
+msgid "DIA"
+msgstr "DZIEŃ"
+
+msgid "DIAS"
+msgstr "DNI"
+
+msgid " · VOCÊ: %dº"
+msgstr " · TY: %dº"
+
+msgid "JOGO"
+msgstr "GRA"
+
+msgid "VÍDEO"
+msgstr "OBRAZ"
+
+msgid "ÁUDIO"
+msgstr "DŹWIĘK"
+
+msgid "CONTROLES"
+msgstr "STEROWANIE"
+
+msgid "PEQUENO"
+msgstr "MAŁY"
+
+msgid "MÉDIO"
+msgstr "ŚREDNI"
+
+msgid "GRANDE"
+msgstr "DUŻY"
+
+msgid "AUTO"
+msgstr "AUTO"
+
+msgid "LIGADO"
+msgstr "WŁ."
+
+msgid "DESLIGADO"
+msgstr "WYŁ."
+
+msgid "JANELA"
+msgstr "OKNO"
+
+msgid "TELA CHEIA"
+msgstr "PEŁNY EKRAN"
+
+msgid "TELA CHEIA EXCLUSIVA"
+msgstr "WYŁĄCZNY PEŁNY EKRAN"
+
+msgid "ADAPTATIVO"
+msgstr "ADAPTACYJNA"
+
+msgid "Q / E: trocar de aba"
+msgstr "Q / E: zmień kartę"
+
+msgid "IDIOMA"
+msgstr "JĘZYK"
+
+msgid "NOME NO RANKING"
+msgstr "IMIĘ W RANKINGU"
+
+msgid "TREMOR DE TELA"
+msgstr "WSTRZĄSY EKRANU"
+
+msgid "SANGUE"
+msgstr "KREW"
+
+msgid "MIRA NO MOUSE"
+msgstr "CELOWANIE MYSZĄ"
+
+msgid "MINIMAPA"
+msgstr "MINIMAPA"
+
+msgid "TAMANHO DO MINIMAPA"
+msgstr "ROZMIAR MINIMAPY"
+
+msgid "MODO CABEÇÃO"
+msgstr "TRYB WIELKICH GŁÓW"
+
+msgid "MODO DE TELA"
+msgstr "TRYB EKRANU"
+
+msgid "RESOLUÇÃO"
+msgstr "ROZDZIELCZOŚĆ"
+
+msgid "VSYNC"
+msgstr "VSYNC"
+
+msgid "LIMITE DE FPS"
+msgstr "LIMIT FPS"
+
+msgid "SEM LIMITE"
+msgstr "BEZ LIMITU"
+
+msgid "ESCALA DA INTERFACE"
+msgstr "SKALA INTERFEJSU"
+
+msgid "BRILHO"
+msgstr "JASNOŚĆ"
+
+msgid "SOMBRAS"
+msgstr "CIENIE"
+
+msgid "MOSTRAR FPS"
+msgstr "POKAŻ FPS"
+
+msgid "VOLUME GERAL"
+msgstr "GŁOŚNOŚĆ OGÓLNA"
+
+msgid "MÚSICA"
+msgstr "MUZYKA"
+
+msgid "EFEITOS"
+msgstr "EFEKTY"
+
+msgid "INTERFACE"
+msgstr "INTERFEJS"
+
+msgid "VOZES"
+msgstr "GŁOSY"
+
+msgid "SOM"
+msgstr "DŹWIĘK"
+
+msgid "CONTROLES DE TOQUE"
+msgstr "STEROWANIE DOTYKOWE"
+
+msgid "AÇÃO"
+msgstr "AKCJA"
+
+msgid "TECLADO / MOUSE"
+msgstr "KLAWIATURA / MYSZ"
+
+msgid "CONTROLE"
+msgstr "PAD"
+
+msgid "Clique numa tecla para trocar. ESC cancela."
+msgstr "Kliknij klawisz, aby go zmienić. ESC anuluje."
+
+msgid "RESTAURAR PADRÕES"
+msgstr "PRZYWRÓĆ DOMYŚLNE"
+
+msgid "Aperte uma tecla para %s… (ESC cancela)"
+msgstr "Naciśnij klawisz dla akcji „%s”… (ESC anuluje)"
+
+msgid "Aperte um botão do controle para %s… (ESC cancela)"
+msgstr "Naciśnij przycisk pada dla akcji „%s”… (ESC anuluje)"
+
+msgid "CONFIRMAR: APAGAR TUDO?"
+msgstr "POTWIERDŹ: USUNĄĆ WSZYSTKO?"
+
+msgid "APAGAR PROGRESSO"
+msgstr "USUŃ POSTĘP"
+
+msgid "Desenvolvido por %s\n%s"
+msgstr "Autor: %s\n%s"
+
+msgid "APOIE O PROJETO"
+msgstr "WESPRZYJ PROJEKT"
+
+msgid "O Tentando Sobreviver é gratuito e sem anúncios. Se você curtiu, um PIX de qualquer valor ajuda a manter o projeto vivo — totalmente opcional."
+msgstr "Tentando Sobreviver jest darmowa i bez reklam. Jeśli ci się podoba, PIX na dowolną kwotę pomoże utrzymać projekt przy życiu — całkowicie opcjonalnie."
+
+msgid "PIX para %s"
+msgstr "PIX dla %s"
+
+msgid "Chave aleatória: %s"
+msgstr "Klucz losowy: %s"
+
+msgid "COPIAR PIX COPIA E COLA"
+msgstr "KOPIUJ KOD PIX „KOPIUJ I WKLEJ”"
+
+msgid "PIX copia e cola copiado! Cole no app do seu banco."
+msgstr "Kod PIX skopiowany! Wklej go w aplikacji banku."
+
+msgid "COPIAR CHAVE"
+msgstr "KOPIUJ KLUCZ"
+
+msgid "Chave PIX copiada!"
+msgstr "Klucz PIX skopiowany!"
+
+msgid "Ideias, bugs ou parcerias: %s"
+msgstr "Pomysły, błędy lub współpraca: %s"
+
+msgid "Desenvolvido por %s"
+msgstr "Autor: %s"
+
+msgid "RECARR."
+msgstr "PRZEŁAD."
+
+msgid "TROCAR"
+msgstr "ZMIEŃ"
+
+msgid "Cérbero"
+msgstr "Cerber"
+
+msgid "The Conductor"
+msgstr "The Conductor"
+
+msgid "A Entidade do Submundo"
+msgstr "Istota z Podziemia"
+
+msgid "O templo não era uma prisão. Era uma porta... e ela está se abrindo."
+msgstr "Świątynia nie była więzieniem. Była drzwiami... i one się otwierają."
+
+msgid "O Minotauro"
+msgstr "Minotaur"
+
+msgid "Paciente Zero"
+msgstr "Pacjent Zero"
+
+msgid "Primeiro Sangue"
+msgstr "Pierwsza Krew"
+
+msgid "Abata o primeiro zumbi"
+msgstr "Zabij pierwszego zombie"
+
+msgid "Sobrevivente"
+msgstr "Ocalały"
+
+msgid "Chegue à wave 10"
+msgstr "Dotrzyj do 10. fali"
+
+msgid "Veterano"
+msgstr "Weteran"
+
+msgid "Chegue à wave 20"
+msgstr "Dotrzyj do 20. fali"
+
+msgid "Energia!"
+msgstr "Zasilanie!"
+
+msgid "Ligue o disjuntor principal"
+msgstr "Włącz główny bezpiecznik"
+
+msgid "Maquinista"
+msgstr "Maszynista"
+
+msgid "Derrote o boss The Conductor"
+msgstr "Pokonaj bossa The Conductor"
+
+msgid "Paciente Curado"
+msgstr "Pacjent Wyleczony"
+
+msgid "Derrote o Paciente Zero"
+msgstr "Pokonaj Pacjenta Zero"
+
+msgid "O Soro"
+msgstr "Serum"
+
+msgid "Complete a missão do Dr. Almeida"
+msgstr "Ukończ misję doktora Almeidy"
+
+msgid "Adestrador"
+msgstr "Treser"
+
+msgid "Vença uma rodada de cães sem levar dano"
+msgstr "Wygraj rundę psów bez otrzymania obrażeń"
+
+msgid "Atropelador"
+msgstr "Walec"
+
+msgid "Atropele 10 zumbis com uma passagem do trem"
+msgstr "Przejedź 10 zombie jednym przejazdem pociągu"
+
+msgid "Colecionador"
+msgstr "Kolekcjoner"
+
+msgid "Tenha todos os perks na mesma partida"
+msgstr "Miej wszystkie perki w jednym meczu"
+
+msgid "Olho do Furacão"
+msgstr "Oko Cyklonu"
+
+msgid "Transforme o Canhão de Vento no Tornado"
+msgstr "Zmień Działo Wiatru w Tornado"
+
+msgid "Liquidação"
+msgstr "Wyprzedaż"
+
+msgid "Use a Mystery Box durante um Fire Sale"
+msgstr "Użyj Mystery Box podczas Fire Sale"
+
+msgid "Açougueiro"
+msgstr "Rzeźnik"
+
+msgid "Abata 1.000 zumbis"
+msgstr "Zabij 1000 zombie"
+
+msgid "Faca na Caveira"
+msgstr "Nóż w Czaszkę"
+
+msgid "Abata 50 zumbis na faca"
+msgstr "Zabij 50 zombie nożem"
+
+msgid "Mira de Ouro"
+msgstr "Złoty Celownik"
+
+msgid "Acerte 100 headshots fatais"
+msgstr "Zalicz 100 śmiertelnych headshotów"
+
+msgid "Ursinhos"
+msgstr "Misie"
+
+msgid "Encontre todos os ursinhos escondidos"
+msgstr "Znajdź wszystkie ukryte misie"
+
+msgid "Cabeção"
+msgstr "Wielka Głowa"
+
+msgid "Descubra o código secreto do menu"
+msgstr "Odkryj tajny kod menu"
+
+msgid "Complete a missão do Terminal e pegue a Lanterna do Condutor"
+msgstr "Ukończ misję Terminalu i weź Latarnię Konduktora"
+
+msgid "Fio de Ariadne"
+msgstr "Nić Ariadny"
+
+msgid "Derrote o Minotauro"
+msgstr "Pokonaj Minotaura"
+
+msgid "Os Doze do Olimpo"
+msgstr "Dwunastu z Olimpu"
+
+msgid "Ative as 12 estátuas dos deuses no Templo"
+msgstr "Zapal 12 posągów bogów w Świątyni"
+
+msgid "Complete a missão do Templo e pegue o Raio de Zeus"
+msgstr "Ukończ misję Świątyni i weź Piorun Zeusa"
+
+msgid "Guardião dos Três"
+msgstr "Strażnik Trzech"
+
+msgid "Derrote o Cérbero"
+msgstr "Pokonaj Cerbera"
+
+msgid "A Porta"
+msgstr "Drzwi"
+
+msgid "Derrote a Entidade do Submundo"
+msgstr "Pokonaj Istotę z Podziemia"
+
+msgid "PARTIDA INVALIDADA — não vale save nem ranking"
+msgstr "MECZ UNIEWAŻNIONY — bez zapisu i rankingu"
+
+msgid "LUZ"
+msgstr "ŚWIATŁO"
+
+msgid "Clarão que cega: atordoa os zumbis e causa +50% de dano no boss."
+msgstr "Oślepiający błysk: ogłusza zombie i zadaje bossom +50% obrażeń."
+
+msgid "SOMBRA"
+msgstr "CIEŃ"
+
+msgid "Rouba vida: cada acerto recupera parte do dano causado."
+msgstr "Kradzież życia: każde trafienie odzyskuje część zadanych obrażeń."
+
+msgid "GELO"
+msgstr "LÓD"
+
+msgid "Deixa os zumbis lentos e às vezes os congela."
+msgstr "Spowalnia zombie, a czasem je zamraża."
+
+msgid "RAIO"
+msgstr "PIORUN"
+
+msgid "A eletricidade salta para 2 zumbis próximos."
+msgstr "Elektryczność przeskakuje na 2 pobliskie zombie."
+
+msgid "FOGO"
+msgstr "OGIEŃ"
+
+msgid "Incendeia: dano contínuo por alguns segundos."
+msgstr "Podpala: obrażenia przez kilka sekund."
+
+msgid "EXPLOSIVO"
+msgstr "WYBUCH"
+
+msgid "Cada tiro que acerta estoura numa pequena explosão."
+msgstr "Każde trafienie kończy się małą eksplozją."
+
+msgid "Terminal Central"
+msgstr "Terminal Centralny"
+
+msgid "Estação de trem abandonada: hall, plataforma, lojas, túneis e manutenção."
+msgstr "Opuszczony dworzec: hala, peron, sklepy, tunele i konserwacja."
+
+msgid "Hospital Santa Luzia"
+msgstr "Szpital Santa Luzia"
+
+msgid "Onde o vírus nasceu: recepção, UTI, centro cirúrgico, necrotério e o laboratório no subsolo."
+msgstr "Tu narodził się wirus: rejestracja, OIOM, blok operacyjny, kostnica i laboratorium w podziemiach."
+
+msgid "Templo dos Mortos"
+msgstr "Świątynia Umarłych"
+
+msgid "Ruínas gregas, uma necrópole, a floresta de Artemis e o portão para o Submundo."
+msgstr "Greckie ruiny, nekropolia, las Artemidy i brama do Podziemia."
+
+msgid "Max Ammo"
+msgstr "Max Ammo"
+
+msgid "Double Cash"
+msgstr "Double Cash"
+
+msgid "Instant Kill"
+msgstr "Instant Kill"
+
+msgid "Nuke"
+msgstr "Nuke"
+
+msgid "Full Heal"
+msgstr "Full Heal"
+
+msgid "Armor"
+msgstr "Armor"
+
+msgid "Speed Boost"
+msgstr "Speed Boost"
+
+msgid "Carpenter"
+msgstr "Carpenter"
+
+msgid "Golden Drop"
+msgstr "Golden Drop"
+
+msgid "Fire Sale"
+msgstr "Fire Sale"
+
+msgid "O SORO DO DR. ALMEIDA"
+msgstr "SERUM DOKTORA ALMEIDY"
+
+msgid "Enfermeiro"
+msgstr "Pielęgniarz"
+
+msgid "Agente"
+msgstr "Agent"
+
+msgid "Guarda da Estação"
+msgstr "Strażnik Dworca"
+
+msgid "Paciente"
+msgstr "Pacjent"
+
+msgid "Paciente da UTI"
+msgstr "Pacjent OIOM-u"
+
+msgid "Cobaia do Laboratório"
+msgstr "Królik Doświadczalny"
+
+msgid "Arqueóloga"
+msgstr "Archeolożka"
+
+msgid "Caçadora do Labirinto"
+msgstr "Łowczyni Labiryntu"
+
+msgid "Sacerdotisa do Olimpo"
+msgstr "Kapłanka Olimpu"
+
+msgid "Andarilha do Submundo"
+msgstr "Wędrowniczka Podziemia"
+
+msgid "TENTANDO SOBREVIVER — feito com Godot + GDScript. Arte e sons 100% gerados por código."
+msgstr "TENTANDO SOBREVIVER — stworzone w Godot + GDScript. Grafika i dźwięki w 100% generowane kodem."
+
+msgid "APAGÃO"
+msgstr "ZACIEMNIENIE"
+
+msgid "As luzes caíram — use a lanterna"
+msgstr "Światła zgasły — użyj latarki"
+
+msgid "ALARME DE EMERGÊNCIA"
+msgstr "ALARM AWARYJNY"
+
+msgid "O barulho atrai mais zumbis"
+msgstr "Hałas przyciąga więcej zombie"
+
+msgid "Saia dos trilhos da plataforma!"
+msgstr "Zejdź z torów na peronie!"
+
+msgid "HORDA"
+msgstr "HORDA"
+
+msgid "Muito mais zumbis nesta wave"
+msgstr "Dużo więcej zombie w tej fali"
+
+msgid "Uma caixa caiu do céu — segure E para abrir"
+msgstr "Z nieba spadła skrzynia — przytrzymaj E, by otworzyć"
+
+msgid "VAZAMENTO DE GÁS"
+msgstr "WYCIEK GAZU"
+
+msgid "Fique longe da nuvem verde"
+msgstr "Trzymaj się z dala od zielonej chmury"
+
+msgid "ZUMBI DOURADO"
+msgstr "ZŁOTY ZOMBIE"
+
+msgid "Mate-o antes que fuja: dinheiro e Golden Drop!"
+msgstr "Zabij go, zanim ucieknie: pieniądze i Golden Drop!"
+
+msgid "LUA DE SANGUE"
+msgstr "KRWAWY KSIĘŻYC"
+
+msgid "Zumbis mais rápidos — dinheiro e pontos em dobro"
+msgstr "Szybsze zombie — podwójne pieniądze i punkty"
+
+msgid "DESABAMENTO"
+msgstr "ZAWALENIE"
+
+msgid "O teto está caindo: saia dos círculos vermelhos!"
+msgstr "Sufit się wali: wyjdź z czerwonych kręgów!"
+
+msgid "NEBLINA"
+msgstr "MGŁA"
+
+msgid "Você mal enxerga — atenção aos gemidos"
+msgstr "Prawie nic nie widać — nasłuchuj jęków"
+
+msgid "IRA DE ZEUS"
+msgstr "GNIEW ZEUSA"
+
+msgid "Raios caem do céu: saia dos círculos azuis!"
+msgstr "Z nieba biją pioruny: wyjdź z niebieskich kręgów!"
+
+msgid "LEVANTE DOS MORTOS"
+msgstr "POWSTANIE UMARŁYCH"
+
+msgid "Os sarcófagos se abrem — esqueletos saindo!"
+msgstr "Sarkofagi się otwierają — wychodzą szkielety!"
+
+msgid "CAÇADA DE ARTEMIS"
+msgstr "ŁOWY ARTEMIDY"
+
+msgid "Sátiros e lobos infernais estão caçando você"
+msgstr "Satyry i piekielne wilki na ciebie polują"
+
+msgid "PORTÃO DO SUBMUNDO"
+msgstr "BRAMA PODZIEMIA"
+
+msgid "Um portal solta criaturas — destrua-o a tiros"
+msgstr "Portal wypuszcza stwory — zniszcz go strzałami"
+
+msgid "SANGUE DOS DEUSES"
+msgstr "KREW BOGÓW"
+
+msgid "Neste round as bênçãos dos altares são de graça"
+msgstr "W tej rundzie błogosławieństwa ołtarzy są za darmo"
+
+msgid "CONTENÇÃO ROMPIDA"
+msgstr "NARUSZENIE IZOLACJI"
+
+msgid "Zumbis entrando pelos pontos de isolamento!"
+msgstr "Zombie wchodzą przez punkty izolacji!"
+
+msgid "Adrenaline"
+msgstr "Adrenaline"
+
+msgid "Regenera vida 2,5x mais rápido e mais cedo"
+msgstr "Regeneruje zdrowie 2,5x szybciej i wcześniej"
+
+msgid "Deadeye"
+msgstr "Deadeye"
+
+msgid "Headshots causam +100% de dano"
+msgstr "Headshoty zadają +100% obrażeń"
+
+msgid "Fortify"
+msgstr "Fortify"
+
+msgid "+50 de vida máxima"
+msgstr "+50 do maksymalnego zdrowia"
+
+msgid "Overload"
+msgstr "Overload"
+
+msgid "+25% de dano das armas"
+msgstr "+25% obrażeń broni"
+
+msgid "Quick Hands"
+msgstr "Quick Hands"
+
+msgid "Recarga 40% mais rápida"
+msgstr "Przeładowanie 40% szybsze"
+
+msgid "Quick Revive"
+msgstr "Quick Revive"
+
+msgid "Ao cair, levanta sozinho (gasta o perk; até 3 por partida)"
+msgstr "Po powaleniu wstajesz sam (zużywa perk; do 3 na mecz)"
+
+msgid "Sprint+"
+msgstr "Sprint+"
+
+msgid "+20% de velocidade"
+msgstr "+20% prędkości"
+
+msgid "AK"
+msgstr "AK"
+
+msgid "Arc Gun"
+msgstr "Arc Gun"
+
+msgid "Arco de Artemis"
+msgstr "Łuk Artemidy"
+
+msgid "Caçada Lunar"
+msgstr "Księżycowe Łowy"
+
+msgid "Barrett .50"
+msgstr "Barrett .50"
+
+msgid "Beretta 92"
+msgstr "Beretta 92"
+
+msgid "Bren"
+msgstr "Bren"
+
+msgid "Combat Shotgun"
+msgstr "Strzelba bojowa"
+
+msgid "Lanterna do Condutor"
+msgstr "Latarnia Konduktora"
+
+msgid "Farol do Condutor"
+msgstr "Latarnia Morska Konduktora"
+
+msgid "Energy Cannon"
+msgstr "Działo energetyczne"
+
+msgid "Flamethrower"
+msgstr "Miotacz ognia"
+
+msgid "Glock 17"
+msgstr "Glock 17"
+
+msgid "Grenade Launcher"
+msgstr "Granatnik"
+
+msgid "Lança de Hefesto"
+msgstr "Włócznia Hefajstosa"
+
+msgid "Forja de Hefesto"
+msgstr "Kuźnia Hefajstosa"
+
+msgid "Lee-Enfield"
+msgstr "Lee-Enfield"
+
+msgid "Lupara"
+msgstr "Lupara"
+
+msgid "M1911"
+msgstr "M1911"
+
+msgid "M4"
+msgstr "M4"
+
+msgid "Magnum .44"
+msgstr "Magnum .44"
+
+msgid "Makarov PM"
+msgstr "Makarov PM"
+
+msgid "Mauser C96"
+msgstr "Mauser C96"
+
+msgid "Minigun"
+msgstr "Minigun"
+
+msgid "MP5"
+msgstr "MP5"
+
+msgid "Pistola de Pregos"
+msgstr "Gwoździarka"
+
+msgid "P90"
+msgstr "P90"
+
+msgid "Tridente de Poseidon"
+msgstr "Trójząb Posejdona"
+
+msgid "Maremoto"
+msgstr "Tsunami"
+
+msgid "Pump Shotgun"
+msgstr "Strzelba pompowa"
+
+msgid "Rail Weapon"
+msgstr "Rail Weapon"
+
+msgid "RPK"
+msgstr "RPK"
+
+msgid "Cano Serrado"
+msgstr "Obrzyn"
+
+msgid "StG 44"
+msgstr "StG 44"
+
+msgid "Thompson M1928"
+msgstr "Thompson M1928"
+
+msgid "Uzi Dupla"
+msgstr "Podwójne Uzi"
+
+msgid "Vector"
+msgstr "Vector"
+
+msgid "Winchester 1887"
+msgstr "Winchester 1887"
+
+msgid "Canhão de Vento"
+msgstr "Działo Wiatru"
+
+msgid "Tornado"
+msgstr "Tornado"
+
+msgid "Raio de Zeus"
+msgstr "Piorun Zeusa"
+
+msgid "Ira do Olimpo"
+msgstr "Gniew Olimpu"
+
+msgid "Blindado"
+msgstr "Opancerzony"
+
+msgid "Rastejante"
+msgstr "Pełzacz"
+
+msgid "Exploder"
+msgstr "Wybuchowiec"
+
+msgid "Górgona"
+msgstr "Gorgona"
+
+msgid "Harpia"
+msgstr "Harpia"
+
+msgid "Lobo Infernal"
+msgstr "Piekielny Wilk"
+
+msgid "Hoplita Morto"
+msgstr "Martwy Hoplita"
+
+msgid "Hoplita com Escudo"
+msgstr "Hoplita z Tarczą"
+
+msgid "Cão Infernal"
+msgstr "Piekielny Pies"
+
+msgid "Runner"
+msgstr "Biegacz"
+
+msgid "Sátiro"
+msgstr "Satyr"
+
+msgid "Esqueleto Guerreiro"
+msgstr "Szkielet Wojownik"
+
+msgid "Esqueleto Arqueiro"
+msgstr "Szkielet Łucznik"
+
+msgid "Cuspidor"
+msgstr "Pluwacz"
+
+msgid "Tank"
+msgstr "Czołg"
+
+msgid "Walker"
+msgstr "Łazęga"
+
+msgid "INIMIGOS"
+msgstr "WROGOWIE"
+
+msgid "ZUMBIS"
+msgstr "ZOMBIE"
+
+msgid "O zumbi mais comum: lento, mas nunca vem sozinho. Entra arrancando as tábuas das janelas e cerca quem fica parado. No Hospital é o paciente de camisola; no Templo, o arqueólogo da escavação."
+msgstr "Najzwyklejszy zombie: powolny, ale nigdy nie przychodzi sam. Wchodzi, wyrywając deski z okien, i otacza tych, którzy stoją w miejscu. W Szpitalu to pacjent w koszuli; w Świątyni — archeolog z wykopalisk."
+
+msgid "Rápido e com pouca vida: chega antes dos outros e pune quem fica encurralado. No Hospital é o enfermeiro; no Templo, o cultista de capuz."
+msgstr "Szybki i z małą ilością zdrowia: dociera przed innymi i karze tych, których zapędzono w kąt. W Szpitalu to pielęgniarz; w Świątyni — kultysta w kapturze."
+
+msgid "Grande e muito resistente: não recua com os tiros nem é empurrado. Guarde as armas pesadas para ele. No Hospital é o maqueiro; no Templo, o gladiador."
+msgstr "Duży i bardzo wytrzymały: nie cofa się od strzałów i nie da się go odepchnąć. Zachowaj dla niego ciężką broń. W Szpitalu to sanitariusz; w Świątyni — gladiator."
+
+msgid "Corre até você, começa a piscar e explode — e explode também ao morrer. Mate de longe: a explosão fere você e os zumbis em volta. No Hospital usa roupa de quarentena; no Templo carrega uma ânfora de fogo grego."
+msgstr "Biegnie do ciebie, zaczyna migać i wybucha — wybucha też po śmierci. Zabijaj z daleka: eksplozja rani ciebie i zombie wokół. W Szpitalu nosi strój kwarantannowy; w Świątyni niesie amforę z greckim ogniem."
+
+msgid "Rasteja pelo chão, baixo e difícil de acertar na cabeça. Ao morrer solta uma nuvem de gás que fere quem ficar dentro. No Templo é a múmia."
+msgstr "Pełza po ziemi, nisko, trudno trafić go w głowę. Ginąc, wypuszcza chmurę gazu, która rani każdego w środku. W Świątyni to mumia."
+
+msgid "Para a uma certa distância e cospe ácido em arco; onde cai vira uma poça que queima. Não fique parado em cima dela. No Templo é o sacerdote do veneno."
+msgstr "Zatrzymuje się w pewnej odległości i pluje kwasem po łuku; gdzie spadnie, powstaje parząca kałuża. Nie stój w niej. W Świątyni to kapłan trucizny."
+
+msgid "A armadura absorve 75% do dano no corpo até quebrar; um tiro na cabeça derruba o capacete. Nas missões, um deles carrega um item que você precisa. No Templo é o hoplita de bronze."
+msgstr "Pancerz pochłania 75% obrażeń w ciało, dopóki się nie rozpadnie; strzał w głowę strąca hełm. W misjach jeden z nich niesie potrzebny ci przedmiot. W Świątyni to brązowy hoplita."
+
+msgid "Rápido e em matilha. No Hospital chega nas rodadas dos cães; no Templo, o Cérbero chama os cães de Hades. Pega fogo ao morrer e não deixa corpo."
+msgstr "Szybkie i w sforze. W Szpitalu przychodzą w rundach psów; w Świątyni Cerber przyzywa psy Hadesa. Płoną po śmierci i nie zostawiają ciała."
+
+msgid "Guerreiro grego morto-vivo: aguenta bastante e bate forte, mas é lento."
+msgstr "Nieumarły grecki wojownik: dużo wytrzyma i mocno bije, ale jest powolny."
+
+msgid "O escudo segura quase todo o dano que vem de frente (só 20% passa). Acerte a cabeça, os lados ou as costas. Não é empurrado."
+msgstr "Tarcza zatrzymuje prawie wszystkie obrażenia od przodu (przechodzi tylko 20%). Trafiaj w głowę, boki lub plecy. Nie da się go odepchnąć."
+
+msgid "Rápido e frágil. Às vezes os ossos se juntam e ele se levanta de novo com metade da vida — só uma vez."
+msgstr "Szybki i kruchy. Czasem kości się składają i wstaje znowu z połową zdrowia — tylko raz."
+
+msgid "Mantém distância e atira flechas retas. Saia da linha de tiro ou corra para cima dele."
+msgstr "Trzyma dystans i strzela prostymi strzałami. Zejdź z linii strzału albo biegnij na niego."
+
+msgid "Rápido, corre em zigue-zague e anda em bando: difícil de mirar. Aparece em peso na Caçada de Artemis."
+msgstr "Szybki, biega zygzakiem i chodzi w stadzie: trudno wycelować. Pojawia się masowo podczas Łowów Artemidy."
+
+msgid "Chega perto, dá um bote rápido, recua e repete. Atire enquanto ele recua."
+msgstr "Podchodzi, robi szybki wypad, cofa się i powtarza. Strzelaj, gdy się cofa."
+
+msgid "Voa fora do alcance da faca e mergulha em você. Atire quando ela descer."
+msgstr "Lata poza zasięgiem noża i nurkuje na ciebie. Strzelaj, gdy się zniża."
+
+msgid "Se você estiver olhando para ela quando ela olhar, fica lento, cinza e vira pedra por 1,5 s, sem andar nem atirar. Parede, objeto ou ficar de costas protegem. Depois do olhar, ela leva dano dobrado."
+msgstr "Jeśli patrzysz na nią, gdy ona patrzy, zwalniasz, szarzejesz i zamieniasz się w kamień na 1,5 s — bez ruchu i strzelania. Chronią ściana, obiekt albo odwrócenie się plecami. Po spojrzeniu otrzymuje podwójne obrażenia."
+
+msgid "CHEFES"
+msgstr "BOSSOWIE"
+
+msgid "O maquinista do último trem. Golpeia, investe (e fica tonto se bater na parede), cega a mira de perto com um clarão, solta ondas de choque e círculos que explodem e, na fase 3, chama zumbis. Tem 4 fases, com um rugido invulnerável a cada uma."
+msgstr "Maszynista ostatniego pociągu. Uderza, szarżuje (i jest oszołomiony, gdy uderzy w ścianę), z bliska oślepia celownik błyskiem, wypuszcza fale uderzeniowe i wybuchające kręgi, a w fazie 3 przyzywa zombie. Ma 4 fazy, a przy każdej nietykalny ryk."
+
+msgid "O primeiro infectado. A mordida envenena — e piora se ele morder de novo antes de passar —, vomita ácido que deixa poças, grita para deixar você lento e faz chover ácido. Enfurecido, é o chefe da missão do Hospital."
+msgstr "Pierwszy zarażony. Jego ugryzienie zatruwa — i jest gorzej, jeśli ugryzie znowu, zanim minie — wymiotuje kwasem zostawiającym kałuże, krzyczy, by cię spowolnić, i sprowadza kwasowy deszcz. Rozwścieczony, jest bossem misji Szpitala."
+
+msgid "Investe derrubando as colunas no caminho, e cada coluna quebrada o deixa em Fúria, com mais dano e velocidade. Solta ondas de choque; no Colapso, caem pedras que viram escombro. Carrega a chave do Submundo."
+msgstr "Szarżuje, burząc kolumny na drodze, a każda zburzona kolumna wprawia go we Wściekłość: więcej obrażeń i szybkości. Wypuszcza fale uderzeniowe; podczas Zawalenia spadają kamienie, które stają się gruzem. Niesie klucz Podziemia."
+
+msgid "Três cabeças: morde (e morde de novo logo depois de investir), sopra um leque de fogo que deixa chamas no chão e investe. Na fase 3 chama os cães de Hades."
+msgstr "Trzy głowy: gryzie (i gryzie znowu tuż po szarży), zieje wachlarzem ognia, który zostawia płomienie na ziemi, i szarżuje. W fazie 3 przyzywa psy Hadesa."
+
+msgid "Solta esferas de alma em leque, levanta esqueletos e faz chover fogo que vira lava. Na fase 3 assume a forma monstruosa: investida, onda de choque e a Ruptura — some e reaparece perto de você."
+msgstr "Wypuszcza wachlarz kul dusz, wskrzesza szkielety i sprowadza ognisty deszcz, który zmienia się w lawę. W fazie 3 przybiera potworną postać: szarża, fala uderzeniowa i Rozdarcie — znika i pojawia się obok ciebie."
+
+msgid "ITENS"
+msgstr "PRZEDMIOTY"
+
+msgid "PERKS"
+msgstr "PERKI"
+
+msgid "POWER-UPS"
+msgstr "POWER-UPY"
+
+msgid "Enche o pente e a reserva de todas as suas armas."
+msgstr "Uzupełnia magazynek i zapas całej twojej broni."
+
+msgid "Todo ponto ganho vale em dobro enquanto durar."
+msgstr "Każdy zdobyty punkt liczy się podwójnie, dopóki trwa."
+
+msgid "Qualquer acerto de tiro ou de faca mata o zumbi na hora (não vale para chefes)."
+msgstr "Każde trafienie kulą lub nożem od razu zabija zombie (nie działa na bossów)."
+
+msgid "Mata na hora todos os zumbis vivos — o chefe não — e paga um bônus de pontos."
+msgstr "Od razu zabija wszystkie żywe zombie — poza bossem — i daje premię punktową."
+
+msgid "Recupera toda a vida."
+msgstr "Przywraca całe zdrowie."
+
+msgid "Enche a barra azul de armadura, que absorve o dano antes da vida."
+msgstr "Wypełnia niebieski pasek pancerza, który przyjmuje obrażenia przed zdrowiem."
+
+msgid "Você corre bem mais rápido enquanto durar."
+msgstr "Biegasz dużo szybciej, dopóki trwa."
+
+msgid "Conserta na hora todas as barricadas do mapa e paga um bônus."
+msgstr "Od razu naprawia wszystkie barykady na mapie i daje premię."
+
+msgid "A Mystery Box custa 10 e aparece em todos os locais das áreas abertas enquanto durar."
+msgstr "Mystery Box kosztuje 10 i pojawia się we wszystkich miejscach otwartych obszarów, dopóki trwa."
+
+msgid "Raro. Sorteia um prêmio: uma arma especial, uma bolada de pontos, um perk grátis ou a Fúria (dano em dobro por um tempo). Cai do Zumbi Dourado, dos chefes e de quem acha todos os ursinhos."
+msgstr "Rzadki. Losuje nagrodę: broń specjalną, górę punktów, darmowy perk lub Furię (podwójne obrażenia na jakiś czas). Wypada ze Złotego Zombie, bossów i gdy znajdziesz wszystkie misie."
+
+msgid "ELEMENTOS"
+msgstr "ŻYWIOŁY"
+
+msgid "BÊNÇÃOS DO TEMPLO"
+msgstr "BŁOGOSŁAWIEŃSTWA ŚWIĄTYNI"
+
+msgid "12% dos tiros soltam um raio que salta entre até 3 zumbis próximos."
+msgstr "12% strzałów wypuszcza piorun, który przeskakuje między maks. 3 pobliskimi zombie."
+
+msgid "Cada abate em sequência soma +8% de dano, até +40%. A sequência zera depois de 3 s sem abater."
+msgstr "Każde kolejne zabójstwo dodaje +8% obrażeń, do +40%. Seria zeruje się po 3 s bez zabójstwa."
+
+msgid "40% menos dispersão nos tiros e 15% de chance de crítico, com dano em dobro."
+msgstr "40% mniejszy rozrzut i 15% szansy na trafienie krytyczne z podwójnymi obrażeniami."
+
+msgid "Anda, recarrega e interage 20% mais rápido."
+msgstr "Chodzisz, przeładowujesz i wchodzisz w interakcję 20% szybciej."
+
+msgid "Os tiros empurram os zumbis para trás."
+msgstr "Strzały odpychają zombie do tyłu."
+
+msgid "20% dos zumbis abatidos voltam como espírito aliado por 10 s e lutam do seu lado."
+msgstr "20% zabitych zombie wraca jako duch sojusznika na 10 s i walczy po twojej stronie."
+
+msgid "EVENTOS"
+msgstr "WYDARZENIA"
+
+msgid "TODOS OS MAPAS"
+msgstr "WSZYSTKIE MAPY"
+
+msgid "As luzes caem e só ficam as de emergência, fracas. Use a lanterna (F); ligar a energia de novo no disjuntor encerra o apagão. Só acontece com a energia ligada."
+msgstr "Światła gasną i zostaje tylko słabe oświetlenie awaryjne. Użyj latarki (F); ponowne włączenie zasilania przy bezpieczniku kończy zaciemnienie. Zdarza się tylko przy włączonym zasilaniu."
+
+msgid "A sirene atrai zumbis: eles chegam mais rápido e mais deles ficam vivos ao mesmo tempo. O painel do alarme desliga a sirene pagando."
+msgstr "Syrena przyciąga zombie: przychodzą szybciej, a więcej z nich żyje jednocześnie. Panel alarmu wyłącza syrenę za opłatą."
+
+msgid "Muito mais zumbis neste round, chegando mais rápido. Vem garantida no round 15 e depois a cada 10."
+msgstr "Dużo więcej zombie w tej rundzie i przychodzą szybciej. Na pewno w rundzie 15, potem co 10."
+
+msgid "Uma caixa cai de paraquedas. Segure E por alguns segundos para abrir: munição, armadura ou dinheiro. Se levar um golpe, a abertura é interrompida."
+msgstr "Skrzynia spada na spadochronie. Przytrzymaj E przez kilka sekund, by otworzyć: amunicja, pancerz lub pieniądze. Jeśli oberwiesz, otwieranie zostanie przerwane."
+
+msgid "Um cano estoura e solta uma nuvem verde que fere quem estiver dentro — zumbis também. Fique longe ou segure E na válvula para fechar."
+msgstr "Pęka rura i wypuszcza zieloną chmurę, która rani każdego w środku — zombie też. Trzymaj się z dala albo przytrzymaj E przy zaworze, by go zakręcić."
+
+msgid "Um zumbi todo em ouro, com coroa, que foge de você (estrela dourada no minimapa). Mate-o antes que escape para ganhar dinheiro e um Golden Drop."
+msgstr "Cały złoty zombie w koronie, który przed tobą ucieka (złota gwiazda na minimapie). Zabij go, zanim ucieknie, a dostaniesz pieniądze i Golden Drop."
+
+msgid "A lua fica vermelha: os zumbis correm mais, mas dinheiro e pontos valem em dobro."
+msgstr "Księżyc robi się czerwony: zombie biegają szybciej, ale pieniądze i punkty są podwójne."
+
+msgid "O teto começa a cair: círculos vermelhos marcam onde as pedras vão bater. Saia deles — as pedras também esmagam os zumbis."
+msgstr "Sufit zaczyna spadać: czerwone kręgi pokazują, gdzie uderzą kamienie. Wyjdź z nich — kamienie miażdżą też zombie."
+
+msgid "Uma neblina fecha a visão e até a lanterna ilumina menos. Fique atento aos gemidos."
+msgstr "Mgła zasłania widok, a nawet latarka świeci słabiej. Nasłuchuj jęków."
+
+msgid "TERMINAL CENTRAL"
+msgstr "TERMINAL CENTRALNY"
+
+msgid "Um trem atravessa a plataforma a toda velocidade e atropela quem estiver nos trilhos — zumbis inclusive. O painel do trem chama o trem na hora."
+msgstr "Pociąg przejeżdża przez peron z pełną prędkością i przejeżdża każdego na torach — zombie też. Panel pociągu wzywa go od razu."
+
+msgid "HOSPITAL SANTA LUZIA"
+msgstr "SZPITAL SANTA LUZIA"
+
+msgid "Os pontos de isolamento se rompem e os zumbis entram por eles, com a sirene tocando."
+msgstr "Punkty izolacji pękają, a zombie wchodzą przez nie przy wyjącej syrenie."
+
+msgid "TEMPLO DOS MORTOS"
+msgstr "ŚWIĄTYNIA UMARŁYCH"
+
+msgid "Raios caem do céu, e círculos azuis avisam onde. Saia deles — os raios também destroem os zumbis."
+msgstr "Z nieba biją pioruny, a niebieskie kręgi ostrzegają gdzie. Wyjdź z nich — pioruny niszczą też zombie."
+
+msgid "Os sarcófagos se abrem e soltam esqueletos, às vezes arqueiros."
+msgstr "Sarkofagi się otwierają i wypuszczają szkielety, czasem łuczników."
+
+msgid "Sátiros e lobos infernais surgem em volta de você numa caçada."
+msgstr "Satyry i piekielne wilki pojawiają się wokół ciebie podczas łowów."
+
+msgid "Um portal se abre e solta criaturas até ser destruído a tiros. Destruído, deixa o Tridente de Poseidon."
+msgstr "Otwiera się portal i wypuszcza stwory, dopóki nie zostanie zniszczony strzałami. Zniszczony zostawia Trójząb Posejdona."
+
+msgid "Neste round, as bênçãos dos altares são de graça."
+msgstr "W tej rundzie błogosławieństwa ołtarzy są za darmo."
+
+msgid "MECÂNICAS"
+msgstr "MECHANIKI"
+
+msgid "BÁSICO"
+msgstr "PODSTAWY"
+
+msgid "Rounds"
+msgstr "Rundy"
+
+msgid "A partida é uma sequência de rounds cada vez mais difíceis: mais zumbis e mais fortes. O round acaba quando o último zumbi morre, e o fim de cada um paga um bônus."
+msgstr "Mecz to seria coraz trudniejszych rund: więcej zombie i silniejsze. Runda kończy się, gdy zginie ostatni zombie, a koniec każdej daje premię."
+
+msgid "Pontos"
+msgstr "Punkty"
+
+msgid "Acertar e matar zumbis dá pontos — mais no tiro na cabeça e na faca —, e consertar barricadas também. Com eles você compra armas, portas, perks e a Mystery Box. O score do ranking é separado dos pontos."
+msgstr "Trafianie i zabijanie zombie daje punkty — więcej za strzał w głowę i nóż — tak samo naprawa barykad. Za nie kupujesz broń, drzwi, perki i Mystery Box. Wynik rankingu jest osobny od punktów."
+
+msgid "Barricadas"
+msgstr "Barykady"
+
+msgid "Os zumbis entram pelas janelas arrancando as tábuas. Segure E perto da janela para pregar as tábuas de volta — cada tábua dá 10 pontos."
+msgstr "Zombie wchodzą przez okna, wyrywając deski. Przytrzymaj E przy oknie, by przybić deski z powrotem — każda deska daje 10 pkt."
+
+msgid "Armas na parede"
+msgstr "Broń na ścianach"
+
+msgid "Os desenhos de giz nas paredes vendem armas e munição (E). A munição sai mais barata que a arma."
+msgstr "Rysunki kredą na ścianach sprzedają broń i amunicję (E). Amunicja jest tańsza od broni."
+
+msgid "Faca"
+msgstr "Nóż"
+
+msgid "V dá um golpe com avanço que acerta um zumbi por vez: o alvo do avanço ou o mais perto à frente. Salva quando a munição acaba, e matar na faca dá mais pontos."
+msgstr "V zadaje cios z wypadem, który trafia jednego zombie naraz: cel wypadu lub najbliższego z przodu. Ratuje, gdy skończy się amunicja, a zabójstwa nożem dają więcej punktów."
+
+msgid "Lanterna"
+msgstr "Latarka"
+
+msgid "F liga e desliga a lanterna. Faz falta no Apagão, na Neblina e nas áreas escuras."
+msgstr "F włącza i wyłącza latarkę. Przydaje się podczas Zaciemnienia, we Mgle i w ciemnych strefach."
+
+msgid "Duas armas"
+msgstr "Dwie bronie"
+
+msgid "Você carrega duas armas (Q troca). Ao pegar uma terceira, a que está em mãos cai no chão e pode ser pega de volta por 60 s, com a munição e as melhorias."
+msgstr "Nosisz dwie bronie (Q zmienia). Gdy podniesiesz trzecią, ta w rękach spada na ziemię i możesz ją podnieść przez 60 s, z amunicją i ulepszeniami."
+
+msgid "AVANÇADO"
+msgstr "ZAAWANSOWANE"
+
+msgid "Portas e áreas"
+msgstr "Drzwi i obszary"
+
+msgid "Portas compráveis (E) abrem novas áreas — e também os pontos de onde os zumbis nascem nelas. A placa no chão mostra o nome da área do outro lado."
+msgstr "Drzwi do kupienia (E) otwierają nowe obszary — a także miejsca, w których rodzą się tam zombie. Tabliczka na podłodze pokazuje nazwę obszaru po drugiej stronie."
+
+msgid "Energia"
+msgstr "Zasilanie"
+
+msgid "Segure E no disjuntor para ligar a energia: as máquinas de perk e o Weapon Lab passam a funcionar e as luzes voltam."
+msgstr "Przytrzymaj E przy bezpieczniku, by włączyć zasilanie: maszyny z perkami i Weapon Lab zaczynają działać, a światła wracają."
+
+msgid "Máquinas de perk"
+msgstr "Maszyny z perkami"
+
+msgid "Cada máquina vende um perk que vale pela partida inteira. Quase todas precisam da energia ligada — o Quick Revive não."
+msgstr "Każda maszyna sprzedaje perk, który działa przez cały mecz. Prawie wszystkie wymagają zasilania — Quick Revive nie."
+
+msgid "Mystery Box"
+msgstr "Mystery Box"
+
+msgid "Paga e sorteia uma arma, às vezes já com um elemento. Depois de alguns usos, a caixa troca de lugar; o feixe de luz dourada mostra onde ela está."
+msgstr "Płacisz, a on losuje broń, czasem już z żywiołem. Po kilku użyciach skrzynia zmienia miejsce; słup złotego światła pokazuje, gdzie jest."
+
+msgid "Weapon Lab"
+msgstr "Weapon Lab"
+
+msgid "Melhora a arma em mãos para Mk II e depois Mk III: mais dano, mais munição e visual novo — algumas viram outra arma, como o Canhão de Vento, que vira Tornado. Precisa de energia."
+msgstr "Ulepsza broń w rękach do Mk II, a potem Mk III: więcej obrażeń, więcej amunicji i nowy wygląd — niektóre stają się inną bronią, jak Działo Wiatru, które zmienia się w Tornado. Wymaga zasilania."
+
+msgid "Elementos"
+msgstr "Żywioły"
+
+msgid "Com uma arma na mão, segure E na parede dela para comprar o elemento dela: Luz, Sombra, Gelo, Raio, Fogo ou Explosivo mudam o efeito dos tiros. A Mystery Box também pode entregar arma com elemento."
+msgstr "Z bronią w ręku przytrzymaj E przy jej ścianie, by kupić jej żywioł: Światło, Cień, Lód, Piorun, Ogień lub Wybuch zmieniają efekt strzałów. Mystery Box też może dać broń z żywiołem."
+
+msgid "Power-ups"
+msgstr "Power-upy"
+
+msgid "Zumbis abatidos às vezes deixam um power-up no chão. Passe por cima para pegar antes que ele suma; os que duram mostram o tempo na tela."
+msgstr "Zabite zombie czasem zostawiają power-up. Przejdź po nim, by go podnieść, zanim zniknie; te z czasem trwania pokazują czas na ekranie."
+
+msgid "Rodada dos cães"
+msgstr "Runda psów"
+
+msgid "No Hospital, os rounds 5, 11, 17… são só de cães, com névoa e raios. O último cão deixa munição cheia."
+msgstr "W Szpitalu rundy 5, 11, 17… to same psy, z mgłą i piorunami. Ostatni pies zostawia pełną amunicję."
+
+msgid "Round de chefe"
+msgstr "Runda bossa"
+
+msgid "Nos rounds 10, 20 e 30 vem um chefe, com uma escolta menor e a barra de vida no alto da tela. Derrotado, deixa um Golden Drop e um Max Ammo."
+msgstr "W rundach 10, 20 i 30 przychodzi boss z mniejszą eskortą i paskiem zdrowia u góry ekranu. Pokonany zostawia Golden Drop i Max Ammo."
+
+msgid "Missões"
+msgstr "Misje"
+
+msgid "Cada mapa tem uma missão em etapas, com o objetivo na tela e no minimapa: O Último Trem (Terminal), O Soro do Dr. Almeida (Hospital) e O Portão do Submundo (Templo). O prêmio é todos os perks e uma arma exclusiva."
+msgstr "Każda mapa ma misję z etapami, z celem na ekranie i na minimapie: Ostatni Pociąg (Terminal), Serum doktora Almeidy (Szpital) i Brama Podziemia (Świątynia). Nagroda to wszystkie perki i ekskluzywna broń."
+
+msgid "Bênçãos dos Deuses"
+msgstr "Błogosławieństwa Bogów"
+
+msgid "No Templo, 3 altares oferecem a bênção de um deus, sorteado a cada round, por 1500 pontos. Só uma bênção por vez, e cair faz perder a que você tem."
+msgstr "W Świątyni 3 ołtarze dają błogosławieństwo boga, losowanego co rundę, za 1500 pkt. Tylko jedno błogosławieństwo naraz, a powalenie odbiera to, które masz."
+
+msgid "SEGREDOS"
+msgstr "SEKRETY"
+
+msgid "Ursinhos escondidos"
+msgstr "Ukryte misie"
+
+msgid "Cada mapa esconde ursinhos de pelúcia. Achar todos na mesma partida solta um Golden Drop e libera uma conquista."
+msgstr "Na każdej mapie ukryto pluszowe misie. Znalezienie wszystkich w jednym meczu daje Golden Drop i odblokowuje osiągnięcie."
+
+msgid "Rádios e gravadores"
+msgstr "Radia i dyktafony"
+
+msgid "Rádios e gravadores espalhados contam a história de cada mapa. Segure E para sintonizar; cada uso traz a próxima mensagem."
+msgstr "Rozrzucone radia i dyktafony opowiadają historię każdej mapy. Przytrzymaj E, by dostroić; każde użycie daje kolejną wiadomość."
+
+msgid "Estátuas dos deuses"
+msgstr "Posągi bogów"
+
+msgid "No Templo, acender as 12 estátuas dos deuses abre a passagem para o Santuário do Olimpo, onde está o Arco de Artemis."
+msgstr "W Świątyni zapalenie 12 posągów bogów otwiera przejście do Sanktuarium Olimpu, gdzie leży Łuk Artemidy."
+
+msgid "Recepção"
+msgstr "Rejestracja"
+
+msgid "Centro Cirúrgico"
+msgstr "Blok Operacyjny"
+
+msgid "UTI"
+msgstr "OIOM"
+
+msgid "Enfermaria"
+msgstr "Sala Chorych"
+
+msgid "Radiologia"
+msgstr "Radiologia"
+
+msgid "Farmácia"
+msgstr "Apteka"
+
+msgid "Pediatria"
+msgstr "Pediatria"
+
+msgid "Necrotério"
+msgstr "Kostnica"
+
+msgid "Refeitório"
+msgstr "Stołówka"
+
+msgid "Laboratório"
+msgstr "Laboratorium"
+
+msgid "OUVIR O GRAVADOR"
+msgstr "ODSŁUCHAJ DYKTAFON"
+
+msgid "📼 \"Diário do Dr. Almeida, dia 3: a amostra do Paciente Zero reagiu ao soro. As células não param de se dividir.\""
+msgstr "📼 „Dziennik doktora Almeidy, dzień 3: próbka Pacjenta Zero zareagowała na serum. Komórki nie przestają się dzielić.”"
+
+msgid "📼 \"Dia 9: a febre some e volta. O Paciente Zero arrancou as amarras. Três enfermeiros foram mordidos.\""
+msgstr "📼 „Dzień 9: gorączka znika i wraca. Pacjent Zero zerwał pasy. Trzech pielęgniarzy zostało pogryzionych.”"
+
+msgid "📼 \"Dia 12: lacramos o laboratório e mandamos as amostras de trem para a Estação Central. Que Deus nos perdoe.\""
+msgstr "📼 „Dzień 12: zapieczętowaliśmy laboratorium i wysłaliśmy próbki pociągiem na Dworzec Centralny. Niech Bóg nam wybaczy.”"
+
+msgid "📼 \"...se estiver ouvindo isto: não deixe o Paciente Zero chegar à superfície. O soro está na câmara.\""
+msgstr "📼 „...jeśli to słyszysz: nie pozwól, by Pacjent Zero wydostał się na powierzchnię. Serum jest w komorze.”"
+
+msgid "Ruínas Gregas"
+msgstr "Greckie Ruiny"
+
+msgid "Necrópole"
+msgstr "Nekropolia"
+
+msgid "Labirinto"
+msgstr "Labirynt"
+
+msgid "Floresta de Artemis"
+msgstr "Las Artemidy"
+
+msgid "Templo da Górgona"
+msgstr "Świątynia Gorgony"
+
+msgid "Submundo"
+msgstr "Podziemie"
+
+msgid "Arena Final"
+msgstr "Arena Finałowa"
+
+msgid "Santuário do Olimpo"
+msgstr "Sanktuarium Olimpu"
+
+msgid "LER A INSCRIÇÃO"
+msgstr "PRZECZYTAJ NAPIS"
+
+msgid "📜 \"Diário da Dra. Helena, escavação 7: as inscrições falam de mortos que voltam quando o portão é tocado.\""
+msgstr "📜 „Dziennik doktor Heleny, wykop 7: napisy mówią o umarłych, którzy wracają, gdy ktoś dotknie bramy.”"
+
+msgid "📜 \"Chegou a caixa do Hospital Santa Luzia: amostras do Dr. Almeida. Ele disse que o soro veio DAQUI.\""
+msgstr "📜 „Przyszła skrzynia ze Szpitala Santa Luzia: próbki doktora Almeidy. Powiedział, że serum pochodzi STĄD.”"
+
+msgid "📜 \"Os trens da Estação Central traziam os caixotes à noite. Nenhum carregador voltou para a segunda viagem.\""
+msgstr "📜 „Pociągi z Dworca Centralnego przywoziły skrzynie nocą. Żaden tragarz nie wrócił na drugi kurs.”"
+
+msgid "📜 \"O templo não era uma prisão. Era uma porta. E alguém, do outro lado, está batendo.\""
+msgstr "📜 „Świątynia nie była więzieniem. Była drzwiami. A ktoś po drugiej stronie puka.”"
+
+msgid "Hall Central"
+msgstr "Hala Główna"
+
+msgid "Plataforma Norte"
+msgstr "Peron Północny"
+
+msgid "Bilheteria"
+msgstr "Kasa Biletowa"
+
+msgid "Lojas"
+msgstr "Sklepy"
+
+msgid "Área Técnica"
+msgstr "Strefa Techniczna"
+
+msgid "Túneis"
+msgstr "Tunele"
+
+msgid "Manutenção"
+msgstr "Konserwacja"
+
+msgid "📻 \"...controle da Estação Central. O trem das 23h40 NÃO deve parar. Repito: não parem o trem...\""
+msgstr "📻 „...dyspozytornia Dworca Centralnego. Pociąg o 23:40 NIE może się zatrzymać. Powtarzam: nie zatrzymujcie pociągu...”"
+
+msgid "📻 \"...o maquinista não responde. Alguém viu o Condutor? Ele desceu nos túneis e voltou... diferente.\""
+msgstr "📻 „...maszynista nie odpowiada. Ktoś widział Konduktora? Zszedł do tuneli i wrócił... inny.”"
+
+msgid "📻 \"...quarentena decretada. Portas lacradas. Quem ficou lá dentro está por conta própria.\""
+msgstr "📻 „...ogłoszono kwarantannę. Drzwi zapieczętowane. Kto został w środku, jest zdany na siebie.”"
+
+msgid "📻 \"...se alguém ouvir isto: tentem sobreviver. O resgate chega ao amanhecer. Talvez.\""
+msgstr "📻 „...jeśli ktoś to słyszy: spróbujcie przetrwać. Pomoc przybędzie o świcie. Może.”"
