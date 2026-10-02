@@ -49,7 +49,7 @@ msgstr ""
 msgid "[SEGURE %s] CONSERTAR BARRICADA  ·  +%s por tábua"
 msgstr ""
 
-#: scripts/interactables/blessing_altar.gd:62 scripts/interactables/blessing_altar.gd:98 scripts/ui/hud.gd:154
+#: scripts/interactables/blessing_altar.gd:62 scripts/interactables/blessing_altar.gd:98 scripts/ui/hud.gd:156
 msgid "BÊNÇÃO DE %s"
 msgstr ""
 
@@ -77,7 +77,7 @@ msgstr ""
 msgid "[SEGURE %s] LIGAR A ENERGIA"
 msgstr ""
 
-#: scripts/interactables/breaker.gd:81 scripts/ui/hud.gd:150
+#: scripts/interactables/breaker.gd:81 scripts/ui/hud.gd:152
 msgid "ENERGIA LIGADA"
 msgstr ""
 
@@ -673,35 +673,35 @@ msgstr ""
 msgid "PETRIFICADO! Não olhe para a Górgona"
 msgstr ""
 
-#: scripts/player/player.gd:866
+#: scripts/player/player.gd:892
 msgid "QUICK REVIVE!"
 msgstr ""
 
-#: scripts/player/player.gd:1283
+#: scripts/player/player.gd:1309
 msgid "CAÍDO! Um colega pode te reviver"
 msgstr ""
 
-#: scripts/player/player.gd:1285
+#: scripts/player/player.gd:1311
 msgid "%s caiu!"
 msgstr ""
 
-#: scripts/player/player.gd:1293
+#: scripts/player/player.gd:1319
 msgid "CAÍDO · %ss para um colega te reviver"
 msgstr ""
 
-#: scripts/player/player.gd:1305
+#: scripts/player/player.gd:1331
 msgid "VOCÊ MORREU · volta no próximo round"
 msgstr ""
 
-#: scripts/player/player.gd:1325
+#: scripts/player/player.gd:1351
 msgid "%s levantou %s"
 msgstr ""
 
-#: scripts/player/player.gd:1366
+#: scripts/player/player.gd:1392
 msgid "[SEGURE %s] REVIVER %s"
 msgstr ""
 
-#: scripts/player/player.gd:1366
+#: scripts/player/player.gd:1392
 msgid "O COLEGA"
 msgstr ""
 
@@ -1125,7 +1125,7 @@ msgstr ""
 msgid "FIRE SALE! MYSTERY BOX A %s · +%s CAIXAS NO MAPA"
 msgstr ""
 
-#: scripts/systems/save_store.gd:207 scripts/systems/save_store.gd:446 scripts/ui/hud.gd:846
+#: scripts/systems/save_store.gd:207 scripts/systems/save_store.gd:446 scripts/ui/hud.gd:851
 msgid "SOBREVIVENTE"
 msgstr ""
 
@@ -1493,239 +1493,239 @@ msgstr ""
 msgid "DICA: %s"
 msgstr ""
 
-#: scripts/ui/hud.gd:97 scripts/ui/hud.gd:579
+#: scripts/ui/hud.gd:100 scripts/ui/hud.gd:584
 msgid "ZUMBIS RESTANTES  %d"
 msgstr ""
 
-#: scripts/ui/hud.gd:98
+#: scripts/ui/hud.gd:101
 msgid "ROUND %d COMPLETO"
 msgstr ""
 
-#: scripts/ui/hud.gd:118
+#: scripts/ui/hud.gd:120
 msgid "ÁREA LIBERADA: %s"
 msgstr ""
 
-#: scripts/ui/hud.gd:137
+#: scripts/ui/hud.gd:139
 msgid "CONQUISTA DESBLOQUEADA: %s"
 msgstr ""
 
-#: scripts/ui/hud.gd:138 scripts/ui/hud.gd:724
+#: scripts/ui/hud.gd:140 scripts/ui/hud.gd:729
 msgid "SCORE %d"
 msgstr ""
 
-#: scripts/ui/hud.gd:139
+#: scripts/ui/hud.gd:141
 msgid "%s DESBLOQUEADO!"
 msgstr ""
 
-#: scripts/ui/hud.gd:140
+#: scripts/ui/hud.gd:142
 msgid "%s SE APROXIMA"
 msgstr ""
 
-#: scripts/ui/hud.gd:142
+#: scripts/ui/hud.gd:144
 msgid "FASE %d"
 msgstr ""
 
-#: scripts/ui/hud.gd:147
+#: scripts/ui/hud.gd:149
 msgid "%s DERROTADO  +%d"
 msgstr ""
 
-#: scripts/ui/hud.gd:149
+#: scripts/ui/hud.gd:151
 msgid "MAX AMMO"
 msgstr ""
 
-#: scripts/ui/hud.gd:182
+#: scripts/ui/hud.gd:184
 msgid "◆ %s  %d/%d"
 msgstr ""
 
-#: scripts/ui/hud.gd:212
+#: scripts/ui/hud.gd:214
 msgid "%d FPS"
 msgstr ""
 
-#: scripts/ui/hud.gd:281 scripts/ui/hud.gd:728 scripts/ui/ranking_screen.gd:67
+#: scripts/ui/hud.gd:283 scripts/ui/hud.gd:733 scripts/ui/ranking_screen.gd:67
 msgid "ROUND"
 msgstr ""
 
-#: scripts/ui/hud.gd:286
+#: scripts/ui/hud.gd:288
 msgid "SCORE 0"
 msgstr ""
 
-#: scripts/ui/hud.gd:296
+#: scripts/ui/hud.gd:298
 msgid "VIDA"
 msgstr ""
 
-#: scripts/ui/hud.gd:430
+#: scripts/ui/hud.gd:435
 msgid "GAME OVER"
 msgstr ""
 
-#: scripts/ui/hud.gd:578 scripts/ui/hud.gd:580
+#: scripts/ui/hud.gd:583 scripts/ui/hud.gd:585
 msgid "ROUND %d"
 msgstr ""
 
-#: scripts/ui/hud.gd:588
+#: scripts/ui/hud.gd:593
 msgid "%s  ·  FASE %d"
 msgstr ""
 
-#: scripts/ui/hud.gd:593
+#: scripts/ui/hud.gd:598
 msgid "RODADA DOS CÃES"
 msgstr ""
 
-#: scripts/ui/hud.gd:612
+#: scripts/ui/hud.gd:617
 msgid "VIDA  %d / %d"
 msgstr ""
 
-#: scripts/ui/hud.gd:678
+#: scripts/ui/hud.gd:683
 msgid "Fúria"
 msgstr ""
 
-#: scripts/ui/hud.gd:715
+#: scripts/ui/hud.gd:720
 msgid "RECARREGANDO"
 msgstr ""
 
-#: scripts/ui/hud.gd:728
+#: scripts/ui/hud.gd:733
 msgid "ZUMBIS ABATIDOS"
 msgstr ""
 
-#: scripts/ui/hud.gd:728
+#: scripts/ui/hud.gd:733
 msgid "HEADSHOTS"
 msgstr ""
 
-#: scripts/ui/hud.gd:729
+#: scripts/ui/hud.gd:734
 msgid "PONTOS GANHOS"
 msgstr ""
 
-#: scripts/ui/hud.gd:729
+#: scripts/ui/hud.gd:734
 msgid "TEMPO"
 msgstr ""
 
-#: scripts/ui/hud.gd:730
+#: scripts/ui/hud.gd:735
 msgid "BOSSES"
 msgstr ""
 
-#: scripts/ui/hud.gd:730
+#: scripts/ui/hud.gd:735
 msgid "DANO CAUSADO"
 msgstr ""
 
-#: scripts/ui/hud.gd:730
+#: scripts/ui/hud.gd:735
 msgid "DISPAROS / ACERTOS"
 msgstr ""
 
-#: scripts/ui/hud.gd:731
+#: scripts/ui/hud.gd:736
 msgid "PRECISÃO"
 msgstr ""
 
-#: scripts/ui/hud.gd:731
+#: scripts/ui/hud.gd:736
 msgid "ABATES NA FACA"
 msgstr ""
 
-#: scripts/ui/hud.gd:748
+#: scripts/ui/hud.gd:753
 msgid "NOVO RECORDE!"
 msgstr ""
 
-#: scripts/ui/hud.gd:748 scripts/ui/main_menu.gd:32
+#: scripts/ui/hud.gd:753 scripts/ui/main_menu.gd:32
 msgid "RECORDE: %d PONTOS · ROUND %d"
 msgstr ""
 
-#: scripts/ui/hud.gd:750
+#: scripts/ui/hud.gd:755
 msgid "TIME: %s"
 msgstr ""
 
-#: scripts/ui/hud.gd:755
+#: scripts/ui/hud.gd:760
 msgid "PARTIDA INVALIDADA — NÃO VALE SAVE NEM RANKING"
 msgstr ""
 
-#: scripts/ui/hud.gd:771
+#: scripts/ui/hud.gd:776
 msgid "JOGAR NOVAMENTE"
 msgstr ""
 
-#: scripts/ui/hud.gd:771 scripts/ui/pause_menu.gd:38
+#: scripts/ui/hud.gd:776 scripts/ui/pause_menu.gd:38
 msgid "VOLTAR À SALA"
 msgstr ""
 
-#: scripts/ui/hud.gd:774 scripts/ui/main_menu.gd:40 scripts/ui/ranking_screen.gd:23
+#: scripts/ui/hud.gd:779 scripts/ui/main_menu.gd:40 scripts/ui/ranking_screen.gd:23
 msgid "RANKING"
 msgstr ""
 
-#: scripts/ui/hud.gd:778 scripts/ui/pause_menu.gd:28 scripts/ui/pause_menu.gd:39
+#: scripts/ui/hud.gd:783 scripts/ui/pause_menu.gd:28 scripts/ui/pause_menu.gd:39
 msgid "MENU"
 msgstr ""
 
-#: scripts/ui/hud.gd:790
+#: scripts/ui/hud.gd:795
 msgid "PARTIDA INVALIDADA"
 msgstr ""
 
-#: scripts/ui/hud.gd:809
+#: scripts/ui/hud.gd:814
 msgid "%dº LUGAR NO RANKING %s DE %s!"
 msgstr ""
 
-#: scripts/ui/hud.gd:817
+#: scripts/ui/hud.gd:822
 msgid "ENVIANDO O TIME AO RANKING GLOBAL..."
 msgstr ""
 
-#: scripts/ui/hud.gd:823 scripts/ui/hud.gd:868
+#: scripts/ui/hud.gd:828 scripts/ui/hud.gd:873
 msgid "RANKING GLOBAL: %s"
 msgstr ""
 
-#: scripts/ui/hud.gd:823
+#: scripts/ui/hud.gd:828
 msgid "TIME ENVIADO AO RANKING GLOBAL (%s)!"
 msgstr ""
 
-#: scripts/ui/hud.gd:833
+#: scripts/ui/hud.gd:838
 msgid "ENTROU NO TOP! SEU NOME:"
 msgstr ""
 
-#: scripts/ui/hud.gd:833
+#: scripts/ui/hud.gd:838
 msgid "SEU NOME PARA O RANKING GLOBAL:"
 msgstr ""
 
-#: scripts/ui/hud.gd:854
+#: scripts/ui/hud.gd:859
 msgid "%dº LUGAR NO RANKING DE %s!"
 msgstr ""
 
-#: scripts/ui/hud.gd:862
+#: scripts/ui/hud.gd:867
 msgid "ENVIANDO AO RANKING GLOBAL..."
 msgstr ""
 
-#: scripts/ui/hud.gd:868
+#: scripts/ui/hud.gd:873
 msgid "ENVIADO AO RANKING GLOBAL DA TEMPORADA!"
 msgstr ""
 
-#: scripts/ui/hud.gd:871
+#: scripts/ui/hud.gd:876
 msgid "SALVAR"
 msgstr ""
 
-#: scripts/ui/hud.gd:894
+#: scripts/ui/hud.gd:899
 msgid "LANTERNA %s%s"
 msgstr ""
 
-#: scripts/ui/hud.gd:894
+#: scripts/ui/hud.gd:899
 msgid "LIGADA"
 msgstr ""
 
-#: scripts/ui/hud.gd:894
+#: scripts/ui/hud.gd:899
 msgid "DESLIGADA"
 msgstr ""
 
-#: scripts/ui/hud.gd:905
+#: scripts/ui/hud.gd:910
 msgid "ESTÁ ESCURO — [%s] LIGA A LANTERNA"
 msgstr ""
 
-#: scripts/ui/hud.gd:994
+#: scripts/ui/hud.gd:1017
 msgid "CAÍDO %ds"
 msgstr ""
 
-#: scripts/ui/hud.gd:996 scripts/ui/hud.gd:998
+#: scripts/ui/hud.gd:1019 scripts/ui/hud.gd:1021
 msgid "FORA"
 msgstr ""
 
-#: scripts/ui/hud.gd:1000 scripts/ui/lobby_screen.gd:325
+#: scripts/ui/hud.gd:1023 scripts/ui/lobby_screen.gd:325
 msgid "%d ms"
 msgstr ""
 
-#: scripts/ui/hud.gd:1036
+#: scripts/ui/hud.gd:1059
 msgid "COLEGA"
 msgstr ""
 
-#: scripts/ui/hud.gd:1120
+#: scripts/ui/hud.gd:1143
 msgid "%s %ds"
 msgstr ""
 
@@ -2041,7 +2041,7 @@ msgstr ""
 msgid "PEQUENO"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:11 scripts/ui/settings_rows.gd:92 scripts/ui/settings_rows.gd:160
+#: scripts/ui/settings_rows.gd:11 scripts/ui/settings_rows.gd:93 scripts/ui/settings_rows.gd:161
 msgid "MÉDIO"
 msgstr ""
 
@@ -2049,23 +2049,23 @@ msgstr ""
 msgid "GRANDE"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:14 scripts/ui/settings_rows.gd:155
+#: scripts/ui/settings_rows.gd:14 scripts/ui/settings_rows.gd:156
 msgid "AUTO"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:14 scripts/ui/settings_rows.gd:19 scripts/ui/settings_rows.gd:124
+#: scripts/ui/settings_rows.gd:14 scripts/ui/settings_rows.gd:19 scripts/ui/settings_rows.gd:125
 msgid "LIGADO"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:14 scripts/ui/settings_rows.gd:19 scripts/ui/settings_rows.gd:235
+#: scripts/ui/settings_rows.gd:14 scripts/ui/settings_rows.gd:19 scripts/ui/settings_rows.gd:236
 msgid "DESLIGADO"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:16 scripts/ui/settings_rows.gd:118
+#: scripts/ui/settings_rows.gd:16 scripts/ui/settings_rows.gd:119
 msgid "JANELA"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:16 scripts/ui/settings_rows.gd:126
+#: scripts/ui/settings_rows.gd:16 scripts/ui/settings_rows.gd:127
 msgid "TELA CHEIA"
 msgstr ""
 
@@ -2098,130 +2098,134 @@ msgid "SANGUE"
 msgstr ""
 
 #: scripts/ui/settings_rows.gd:90
-msgid "MIRA NO MOUSE"
+msgid "NÚMEROS DE DANO"
 msgstr ""
 
 #: scripts/ui/settings_rows.gd:91
-msgid "MINIMAPA"
+msgid "MIRA NO MOUSE"
 msgstr ""
 
 #: scripts/ui/settings_rows.gd:92
+msgid "MINIMAPA"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:93
 msgid "TAMANHO DO MINIMAPA"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:94
+#: scripts/ui/settings_rows.gd:95
 msgid "MODO CABEÇÃO"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:118
+#: scripts/ui/settings_rows.gd:119
 msgid "MODO DE TELA"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:123
+#: scripts/ui/settings_rows.gd:124
 msgid "RESOLUÇÃO"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:124
+#: scripts/ui/settings_rows.gd:125
 msgid "VSYNC"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:127
+#: scripts/ui/settings_rows.gd:128
 msgid "LIMITE DE FPS"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:127
+#: scripts/ui/settings_rows.gd:128
 msgid "SEM LIMITE"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:129
+#: scripts/ui/settings_rows.gd:130
 msgid "ESCALA DA INTERFACE"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:130
+#: scripts/ui/settings_rows.gd:131
 msgid "BRILHO"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:131
+#: scripts/ui/settings_rows.gd:132
 msgid "SOMBRAS"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:132
+#: scripts/ui/settings_rows.gd:133
 msgid "MOSTRAR FPS"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:142
+#: scripts/ui/settings_rows.gd:143
 msgid "VOLUME GERAL"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:144
+#: scripts/ui/settings_rows.gd:145
 msgid "MÚSICA"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:145
+#: scripts/ui/settings_rows.gd:146
 msgid "EFEITOS"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:146
+#: scripts/ui/settings_rows.gd:147
 msgid "INTERFACE"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:147
+#: scripts/ui/settings_rows.gd:148
 msgid "VOZES"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:148
+#: scripts/ui/settings_rows.gd:149
 msgid "SOM"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:155
+#: scripts/ui/settings_rows.gd:156
 msgid "CONTROLES DE TOQUE"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:158
+#: scripts/ui/settings_rows.gd:159
 msgid "MIRA AUTOMÁTICA"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:159
+#: scripts/ui/settings_rows.gd:160
 msgid "TIRO AUTOMÁTICO"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:160
+#: scripts/ui/settings_rows.gd:161
 msgid "TAMANHO DOS BOTÕES"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:161
+#: scripts/ui/settings_rows.gd:162
 msgid "MODO CANHOTO"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:162
+#: scripts/ui/settings_rows.gd:163
 msgid "VIBRAÇÃO"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:165
+#: scripts/ui/settings_rows.gd:166
 msgid "AÇÃO"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:167
+#: scripts/ui/settings_rows.gd:168
 msgid "TECLADO / MOUSE"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:168
+#: scripts/ui/settings_rows.gd:169
 msgid "CONTROLE"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:183
+#: scripts/ui/settings_rows.gd:184
 msgid "Clique numa tecla para trocar. ESC cancela."
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:184
+#: scripts/ui/settings_rows.gd:185
 msgid "RESTAURAR PADRÕES"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:212
+#: scripts/ui/settings_rows.gd:213
 msgid "Aperte uma tecla para %s… (ESC cancela)"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:212
+#: scripts/ui/settings_rows.gd:213
 msgid "Aperte um botão do controle para %s… (ESC cancela)"
 msgstr ""
 

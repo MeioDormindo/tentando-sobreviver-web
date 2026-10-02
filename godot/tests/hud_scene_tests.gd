@@ -28,6 +28,7 @@ func run(tree: SceneTree) -> int:
 	await _minimap()
 	await _pause_menu()
 	await _perk_icons()
+	await _hit_hud()
 
 	tree.paused = false
 	_main.queue_free()
@@ -36,6 +37,43 @@ func run(tree: SceneTree) -> int:
 	await tree.physics_frame
 	print("\n%d ok, %d falharam (partida)" % [_passed, _failed])
 	return _failed
+
+
+## Feedback de acerto na HUD: marcador com a cor do tipo (o abate vence), no ponto do acerto
+## sem mira de mouse; números de dano que somam no mesmo alvo; desligados nas Configurações.
+func _hit_hud() -> void:
+	var hud := _main.get_node("HUD")
+	var marker := hud.get("_hit_marker") as HitMarker
+	var numbers := hud.get("_damage_numbers") as DamageNumbers
+	numbers.clear()
+	_player.mouse_aim = false
+	var at := _player.global_position + Vector3(1.5, 1.2, -2.0)
+	Events.hit_confirmed.emit(901, at, 30.0, false, false, false)
+	await _tree.process_frame
+	check(marker.visible and marker.kind == HitMarker.Kind.HIT, "acerto: marcador branco aparece")
+	var camera := _player.get_viewport().get_camera_3d()
+	check(camera != null and marker.position.distance_to(camera.unproject_position(at)) < 2.0, "sem mira de mouse (toque/controle): o marcador fica no ponto do acerto")
+	Events.hit_confirmed.emit(901, at, 40.0, true, false, false)
+	await _tree.process_frame
+	check(marker.kind == HitMarker.Kind.HEADSHOT and numbers.text_of(901) == "70", "headshot: marcador amarelo e o número soma no mesmo alvo (%s)" % numbers.text_of(901))
+	Events.hit_confirmed.emit(902, at + Vector3(2, 0, 0), 15.0, false, false, true)
+	await _tree.process_frame
+	check(marker.kind == HitMarker.Kind.HEADSHOT and numbers.count() == 2 and numbers.text_of(902) == "15",
+		"bloqueado logo depois não apaga o amarelo; outro alvo ganha número próprio")
+	Events.hit_confirmed.emit(902, at, 10.0, false, true, false)
+	await _tree.process_frame
+	check(marker.kind == HitMarker.Kind.KILL, "abate: marcador vermelho")
+	await _tree.create_timer(HitMarker.LIFE + 0.1).timeout
+	check(not marker.visible, "o marcador some sozinho")
+	await _tree.create_timer(DamageNumbers.LIFE).timeout
+	check(numbers.count() == 0, "os números somem sozinhos")
+	Save.set_setting("damageNumbers", false)
+	Events.hit_confirmed.emit(903, at, 30.0, false, false, false)
+	await _tree.process_frame
+	check(numbers.count() == 0 and marker.visible, "NÚMEROS DE DANO desligado: só o marcador")
+	Save.set_setting("damageNumbers", true)
+	check(DamageNumbers.style_of(true, true, true) == &"kill" and DamageNumbers.style_of(false, false, true) == &"blocked"
+		and HitMarker.kind_of(true, false, true) == HitMarker.Kind.HEADSHOT, "prioridade: abate > headshot > bloqueado > acerto")
 
 
 func check(condition: bool, description: String) -> void:

@@ -1575,6 +1575,9 @@ msgstr "GUNCANGAN LAYAR"
 msgid "SANGUE"
 msgstr "DARAH"
 
+msgid "NÚMEROS DE DANO"
+msgstr "ANGKA DAMAGE"
+
 msgid "MIRA NO MOUSE"
 msgstr "BIDIK DENGAN MOUSE"
 

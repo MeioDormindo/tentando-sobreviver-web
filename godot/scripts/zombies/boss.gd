@@ -468,10 +468,13 @@ func _line_of_sight() -> bool:
 
 func _on_damaged(info: DamageInfo, current: float) -> void:
 	Events.zombie_hit.emit(self, info)
+	HitFeedback.report(self, info, current)
+	if info.kind in [DamageInfo.Kind.WEAPON, DamageInfo.Kind.MELEE]:
+		_feel_hit(info)
 	if info.is_headshot and is_alive() and mode not in [Mode.ROAR, Mode.CHARGING, Mode.STUNNED, Mode.DEAD]:
 		_hesitate_left = maxf(_hesitate_left, HEADSHOT_HESITATE)
 		if model:
-			model.flash(Color(1.0, 0.92, 0.9))
+			model.flash(Color(1.0, 0.75, 0.7), 0.12)
 	var ratio := current / health.max_health
 	var new_phase := 1
 	for threshold in data.phase_thresholds:
@@ -671,9 +674,34 @@ func net_fx(kind: StringName, args: Array) -> void:
 
 
 ## Acerto avisado pelo host: só o pisca.
-func net_hit(_at: Vector3, _headshot: bool, _kind: int) -> void:
-	if model and is_alive():
-		model.flash(Color(1.0, 0.92, 0.9))
+func net_hit(at: Vector3, headshot: bool, kind: int, amount: float = 0.0) -> void:
+	if model and is_alive() and kind in [DamageInfo.Kind.WEAPON, DamageInfo.Kind.MELEE]:
+		_feel_hit(DamageInfo.new(amount, kind as DamageInfo.Kind, null, headshot, at))
+
+
+## O corpo sente o tiro (sem sair do lugar: grande demais para ser empurrado): pisca e dá um
+## solavanco menor que o dos zumbis comuns, mais forte quanto maior o dano do quadro.
+var _feel_frame := -1
+var _feel_damage := 0.0
+
+
+func _feel_hit(info: DamageInfo) -> void:
+	if model == null or not is_alive():
+		return
+	var frame := Engine.get_physics_frames()
+	if frame != _feel_frame:
+		_feel_frame = frame
+		_feel_damage = 0.0
+	_feel_damage += info.amount
+	var factor := ZombieBase.flinch_factor(_feel_damage, info.is_headshot)
+	var push := Vector3.ZERO
+	var source := info.source as Node3D
+	if source and is_instance_valid(source):
+		push = global_position - source.global_position
+	elif info.hit_position != Vector3.ZERO:
+		push = global_position - info.hit_position
+	model.flash(Color(1.0, 0.75, 0.7) if info.is_headshot else ZombieBase.HIT_FLASH, 0.06)
+	HitFeedback.jolt(model, push, ZombieBase.JOLT_DISTANCE * factor * 0.4, ZombieBase.JOLT_SQUASH * minf(factor, 1.8) * 0.4)
 
 
 ## Morte avisada pelo host: o mesmo fim do solo, direto (sem passar pelo dano, que trocaria de

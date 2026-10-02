@@ -451,7 +451,9 @@ func _defaults() -> Dictionary:
 			"brightness": 1.0, "shadows": true, "showFps": false, "musicVolume": 1.0, "sfxVolume": 1.0, "uiVolume": 1.0,
 			"voiceVolume": 1.0, "bindings": {},
 			# Celular: mira que acompanha o zumbi mais perto, tiro automático, botões e vibração.
-			"autoAim": true, "autoFire": false, "touchButtons": "medium", "touchLeftHanded": false, "vibration": true},
+			"autoAim": true, "autoFire": false, "touchButtons": "medium", "touchLeftHanded": false, "vibration": true,
+			# Números de dano saindo do zumbi a cada acerto seu.
+			"damageNumbers": true},
 		"records": recs,
 		"unlockedMaps": unlocked,
 		"ranking": rank,

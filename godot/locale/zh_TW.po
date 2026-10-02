@@ -1575,6 +1575,9 @@ msgstr "螢幕震動"
 msgid "SANGUE"
 msgstr "血液"
 
+msgid "NÚMEROS DE DANO"
+msgstr "傷害數字"
+
 msgid "MIRA NO MOUSE"
 msgstr "滑鼠瞄準"
 

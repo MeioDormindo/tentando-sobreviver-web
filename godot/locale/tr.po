@@ -1575,6 +1575,9 @@ msgstr "EKRAN SARSINTISI"
 msgid "SANGUE"
 msgstr "KAN"
 
+msgid "NÚMEROS DE DANO"
+msgstr "HASAR SAYILARI"
+
 msgid "MIRA NO MOUSE"
 msgstr "FAREYLE NİŞAN"
 

@@ -14,6 +14,7 @@ import { rng } from '../../src/audio/dsp';
 import { audioConfig, musicConfig, ambientEvents, ambienceAlias, stepAlias } from '../../src/config/audio.config';
 import { TEMPLE_SOUNDS, TEMPLE_AMBIENCE_ALIAS, TEMPLE_AMBIENT_EVENTS, TEMPLE_STEP_ALIAS } from './temple-audio';
 import { AREA_MUSIC } from './area-music';
+import { FEEDBACK_SOUNDS } from './feedback-audio';
 
 const OUT = 'godot/assets/audio';
 const PX = 32;
@@ -53,8 +54,8 @@ for (const file of readdirSync(OUT)) if (file.endsWith('.wav')) rmSync(join(OUT,
 
 const sounds: Record<string, number> = {};
 let total = 0;
-// Os do jogo web e os só do Godot (ambiente do Templo).
-for (const def of [...SOUND_DEFS, ...TEMPLE_SOUNDS, ...AREA_MUSIC]) {
+// Os do jogo web e os só do Godot (ambiente do Templo, músicas das áreas, feedback de acerto).
+for (const def of [...SOUND_DEFS, ...TEMPLE_SOUNDS, ...AREA_MUSIC, ...FEEDBACK_SOUNDS]) {
   for (let v = 0; v < def.variants; v++) {
     const data = def.make(def.sr, rng(hash(def.key) + v * 7919));
     if (def.gain && def.gain !== 1) for (let i = 0; i < data.length; i++) data[i] = Math.max(-1, Math.min(1, data[i] * def.gain));

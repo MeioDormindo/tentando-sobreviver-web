@@ -157,11 +157,17 @@ func _match() -> void:
 	Events.area_opened.connect(func(_id: StringName, _n: String) -> void: opened[0] = true)
 	var points := main.get_node("PointsManager") as PointsManager
 	points.add(5000, false, mate)
+	# O aviso de acerto (marcador, som, número) dos tiros do colega vai só para ele.
+	var host_hits := [0]
+	var count_hits := func(_k: int, _a: Vector3, _m: float, _h: bool, _x: bool, _b: bool) -> void: host_hits[0] += 1
+	Events.hit_confirmed.connect(count_hits)
 	var spawn := main.get_node("SpawnManager") as SpawnManager
 	for i in 3:
 		spawn.spawn_at(&"walker", mate.global_position + Vector3(6.0, 0.0, -2.0 + i * 2.0))
 	var paid := await _wait(func() -> bool: return points.earned_of(mate) > 5000, 30.0)
 	check(paid, "o tiro do colega mata no host e os pontos vão para ele (+%d)" % (points.earned_of(mate) - 5000))
+	Events.hit_confirmed.disconnect(count_hits)
+	check(host_hits[0] == 0, "os acertos do colega não mostram marcador nem número no host (%d)" % host_hits[0])
 	var door := await _wait(func() -> bool: return opened[0], 15.0)
 	check(door and points.points_of(mate) < points.earned_of(mate) + 500, "o colega compra uma porta com a carteira dele")
 	# Cai e um colega revive (o host faz e a máquina do colega vê).
@@ -249,6 +255,7 @@ func _match() -> void:
 	check(bool(peer.get("fuse_seen", false)) and bool(peer.get("padlock_seen", false)), "no colega: as peças da missão aparecem (fusível, cadeado)")
 	check(bool(peer.get("padlock_gone", false)) and bool(peer.get("fuse_used", false)), "no colega: o cadeado abre e o fusível é pego quando o host faz")
 	check(int(peer.get("perks", 0)) >= 7 and bool(peer.get("lantern", false)), "no colega: a HUD mostra os perks do prêmio (%d) e a Lanterna chega nas armas dele" % int(peer.get("perks", 0)))
+	check(int(peer.get("hits", 0)) > 0 and int(peer.get("hit_kills", 0)) > 0, "no colega: os próprios acertos e abates chegam (marcador, som, número): %d acertos, %d abates" % [int(peer.get("hits", 0)), int(peer.get("hit_kills", 0))])
 	check(String(peer.get("feed", "")).contains("levantou"), "no colega: o feed mostra quem levantou quem (%s)" % peer.get("feed", ""))
 	var shown := String(peer.get("feed_shown", ""))
 	check(String(peer.get("lang", "")) == "en" and shown.contains(" revived ") and not shown.contains("levantou"),

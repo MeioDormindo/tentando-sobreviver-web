@@ -1575,6 +1575,9 @@ msgstr "ТРУСІННЯ ЕКРАНА"
 msgid "SANGUE"
 msgstr "КРОВ"
 
+msgid "NÚMEROS DE DANO"
+msgstr "ЦИФРИ ШКОДИ"
+
 msgid "MIRA NO MOUSE"
 msgstr "ПРИЦІЛ МИШІ"
 

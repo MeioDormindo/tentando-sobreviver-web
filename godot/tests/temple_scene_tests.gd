@@ -207,11 +207,12 @@ func _enemies() -> void:
 	front.global_position = hoplite.global_position + Vector3(0, 0, -4)
 	back.global_position = hoplite.global_position + Vector3(0, 0, 4)
 	var start := hoplite.health.current
-	(hoplite.get_node("BodyHurtbox") as Hurtbox).receive_hit(100.0, 1.0, DamageInfo.Kind.WEAPON, front, hoplite.global_position)
+	var front_hit := (hoplite.get_node("BodyHurtbox") as Hurtbox).receive_hit(100.0, 1.0, DamageInfo.Kind.WEAPON, front, hoplite.global_position)
 	var frontal := start - hoplite.health.current
 	start = hoplite.health.current
-	(hoplite.get_node("BodyHurtbox") as Hurtbox).receive_hit(100.0, 1.0, DamageInfo.Kind.WEAPON, back, hoplite.global_position)
+	var back_hit := (hoplite.get_node("BodyHurtbox") as Hurtbox).receive_hit(100.0, 1.0, DamageInfo.Kind.WEAPON, back, hoplite.global_position)
 	var behind := start - hoplite.health.current
+	check(front_hit.blocked and not back_hit.blocked, "Hoplita: o escudo de frente marca o acerto como bloqueado (marcador cinza); de costas não")
 	check(is_equal_approx(frontal, 20.0) and is_equal_approx(behind, 100.0), "Hoplita: escudo segura de frente (%.0f) e não de costas (%.0f)" % [frontal, behind])
 	check(ResourceLoader.exists("res://assets/sprites/zombie_hoplite_shield.png"), "Hoplita com escudo tem sprite próprio")
 	hoplite.queue_free()

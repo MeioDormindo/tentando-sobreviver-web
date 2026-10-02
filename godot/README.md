@@ -7,6 +7,18 @@ de conceitos: ver `docs/analise-typescript.md`.
 **Estado: combate, mapas, loja, máquinas, inimigos e progressão local migrados do jogo web.** Tem:
 - **sangue** opcional (Configurações → SANGUE, desligado por padrão): jato no acerto, gotas e poça no
   chão; os **corpos ficam no chão** por 45 s (até 40 de uma vez, o mais antigo afunda);
+- **feedback de acerto** (só para quem acertou, também no cooperativo em rede: o host manda o
+  aviso `hit_confirmed` ao dono do tiro, já somado no quadro):
+  - marcador de quatro tracinhos na mira (no toque e no controle, no ponto do acerto): branco no
+    acerto, amarelo na cabeça, vermelho e maior no abate, cinza quando a armadura do Blindado ou
+    o escudo do Hoplita seguram o tiro;
+  - sons próprios (estalo, "tim" do headshot, baque do abate e clanque do bloqueado, em
+    `scripts/godot/feedback-audio.ts`);
+  - números de dano que sobem do zumbi e somam os tiros seguidos no mesmo alvo (Configurações →
+    JOGO → NÚMEROS DE DANO, ligados por padrão);
+  - o zumbi pisca de verdade (shader do personagem, até no escuro), recua e achata no golpe,
+    mais quanto maior o dano (os chumbos da espingarda somam), e o abate na cabeça estoura; só
+    os seus abates tremem a sua tela;
 - eventos com mais frequência (quase todo round) e o trem passando quase todo round, muitas vezes duas;
 - **menu principal**, escolha de mapa (o Hospital libera ao vencer o boss do round 10 no
   Terminal; o Templo dos Mortos, ao concluir a missão do Terminal ou a do Hospital), ranking local por mapa, configurações

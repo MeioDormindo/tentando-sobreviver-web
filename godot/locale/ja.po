@@ -1575,6 +1575,9 @@ msgstr "画面の揺れ"
 msgid "SANGUE"
 msgstr "血しぶき"
 
+msgid "NÚMEROS DE DANO"
+msgstr "ダメージ表示"
+
 msgid "MIRA NO MOUSE"
 msgstr "マウスで照準"
 

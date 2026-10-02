@@ -14,6 +14,9 @@ var is_headshot: bool
 var hit_position: Vector3
 ## Quem levou o golpe (preenchido pela Hurtbox).
 var target: Node
+## A armadura do Blindado ou o escudo do Hoplita seguraram parte do golpe (o marcador de acerto
+## fica cinza).
+var blocked := false
 
 
 func _init(p_amount: float = 0.0, p_kind: Kind = Kind.WEAPON, p_source: Node = null, p_headshot: bool = false, p_position: Vector3 = Vector3.ZERO) -> void:

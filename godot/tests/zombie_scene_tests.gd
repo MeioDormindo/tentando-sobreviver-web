@@ -36,6 +36,8 @@ func run(tree: SceneTree) -> int:
 	await _tank_stomp()
 	await _hoplite_reach()
 	await _blood_and_corpses()
+	await _hit_feedback()
+	await _impact()
 
 	_player.queue_free()
 	_arena.queue_free()
@@ -290,6 +292,110 @@ func _hound_round() -> void:
 	for node in [rounds, spawner, container, player, map]:
 		node.queue_free()
 	await _tree.physics_frame
+
+
+## Aviso de acerto (marcador, som, número): só os acertos do jogador desta máquina, com arma ou
+## faca, somados no quadro; abate, headshot e bloqueado (armadura) marcados.
+func _hit_feedback() -> void:
+	var seen: Array = []
+	var listen := func(key: int, at: Vector3, amount: float, headshot: bool, kill: bool, blocked: bool) -> void:
+		seen.append({"key": key, "at": at, "amount": amount, "headshot": headshot, "kill": kill, "blocked": blocked})
+	Events.hit_confirmed.connect(listen)
+	var zombie := _spawn(&"walker", Vector3(-3, 0, -10), 0.0)
+	zombie.health.reset(100000.0)
+	await _tree.physics_frame
+	var body := zombie.get_node("BodyHurtbox") as Hurtbox
+	var head := zombie.get_node("HeadHurtbox") as Hurtbox
+	body.receive_hit(30.0, 1.5, DamageInfo.Kind.WEAPON, _player, zombie.global_position)
+	await _tree.process_frame
+	check(seen.size() == 1 and is_equal_approx(float(seen[0].amount), 30.0) and not seen[0].headshot and not seen[0].kill
+		and int(seen[0].key) == HitFeedback.key_of(zombie), "acerto seu: um aviso com o dano (%s)" % [seen])
+	# Espingarda: 7 chumbos no mesmo quadro viram um aviso só, com a soma.
+	seen.clear()
+	for i in 7:
+		body.receive_hit(10.0, 1.5, DamageInfo.Kind.WEAPON, _player, zombie.global_position)
+	await _tree.process_frame
+	check(seen.size() == 1 and is_equal_approx(float(seen[0].amount), 70.0), "chumbos do mesmo disparo: um aviso com a soma (%s)" % [seen])
+	seen.clear()
+	head.receive_hit(20.0, 2.0, DamageInfo.Kind.WEAPON, _player, zombie.global_position + Vector3.UP * 1.6)
+	await _tree.process_frame
+	check(seen.size() == 1 and bool(seen[0].headshot), "headshot marcado no aviso")
+	# Outro jogador (colega/bot, não desta máquina), queimadura e golpe sem atirador: nada.
+	seen.clear()
+	var mate := (load("res://scenes/player/player.tscn") as PackedScene).instantiate() as Player
+	mate.is_local = false
+	mate.controlled = false
+	mate.position = Vector3(6, 0.1, 5)
+	_tree.root.add_child(mate)
+	await _tree.physics_frame
+	body.receive_hit(30.0, 1.5, DamageInfo.Kind.WEAPON, mate, zombie.global_position)
+	zombie.take_damage(DamageInfo.new(5.0, DamageInfo.Kind.BURN, _player, false, zombie.global_position))
+	body.receive_hit(30.0, 1.5, DamageInfo.Kind.WEAPON, null, zombie.global_position)
+	await _tree.process_frame
+	check(seen.is_empty(), "acerto do colega, queimadura e golpe sem atirador não avisam você (%d)" % seen.size())
+	mate.queue_free()
+	# Abate.
+	zombie.health.current = 10.0
+	body.receive_hit(50.0, 1.5, DamageInfo.Kind.WEAPON, _player, zombie.global_position)
+	await _tree.process_frame
+	check(seen.size() == 1 and bool(seen[0].kill), "abate marcado no aviso")
+	# Blindado: o corpo com armadura marca "bloqueado"; a cabeça não.
+	seen.clear()
+	var armored := _spawn(&"armored", Vector3(3, 0, -10), 0.0)
+	armored.health.reset(100000.0)
+	await _tree.physics_frame
+	(armored.get_node("BodyHurtbox") as Hurtbox).receive_hit(40.0, 1.5, DamageInfo.Kind.WEAPON, _player, armored.global_position)
+	await _tree.process_frame
+	var body_blocked: bool = seen.size() == 1 and bool(seen[0].blocked)
+	seen.clear()
+	(armored.get_node("HeadHurtbox") as Hurtbox).receive_hit(40.0, 1.5, DamageInfo.Kind.WEAPON, _player, armored.global_position)
+	await _tree.process_frame
+	check(body_blocked and seen.size() == 1 and not bool(seen[0].blocked), "Blindado: armadura no corpo marca bloqueado; headshot não")
+	armored.queue_free()
+	Events.hit_confirmed.disconnect(listen)
+	await _tree.physics_frame
+
+
+## O corpo sente o tiro: pisca de verdade (shader), dá um solavanco e volta, e o empurrão cresce
+## com o dano. Sem sangue, o acerto solta poeira e o headshot que mata, um estouro.
+func _impact() -> void:
+	check(ZombieBase.flinch_factor(25.0, false) < ZombieBase.flinch_factor(160.0, false)
+		and ZombieBase.flinch_factor(160.0, true) > ZombieBase.flinch_factor(160.0, false)
+		and is_equal_approx(ZombieBase.flinch_factor(0.0, false), ZombieBase.FLINCH_MIN), "tranco: cresce com o dano e na cabeça (mínimo sem dano)")
+	var weak := _spawn(&"walker", Vector3(-3, 0, -12), 0.0)
+	var strong := _spawn(&"walker", Vector3(3, 0, -12), 0.0)
+	weak.health.reset(100000.0)
+	strong.health.reset(100000.0)
+	await _tree.physics_frame
+	var base: Vector3 = strong.model.position
+	(weak.get_node("BodyHurtbox") as Hurtbox).receive_hit(25.0, 1.5, DamageInfo.Kind.WEAPON, _player, weak.global_position)
+	for i in 8:
+		(strong.get_node("BodyHurtbox") as Hurtbox).receive_hit(20.0, 1.5, DamageInfo.Kind.WEAPON, _player, strong.global_position)
+	var weak_push: float = (weak.get(&"_knockback") as Vector3).length()
+	var strong_push: float = (strong.get(&"_knockback") as Vector3).length()
+	check(strong_push > weak_push * 1.5, "espingarda (8 chumbos) empurra mais que a pistola (%.1f × %.1f)" % [strong_push, weak_push])
+	check(strong.model.flash_amount() > 0.5, "o zumbi pisca de verdade ao levar tiro (%.2f)" % strong.model.flash_amount())
+	await _tree.process_frame
+	check(strong.model.position.distance_to(base) > 0.05 and not strong.model.scale.is_equal_approx(Vector3.ONE), "solavanco: o sprite recua e achata")
+	await _tree.create_timer(0.35).timeout
+	check(strong.model.flash_amount() == 0.0 and strong.model.position.distance_to(base) < 0.01 and strong.model.scale.is_equal_approx(Vector3.ONE),
+		"depois o piscar apaga e o sprite volta ao lugar")
+	# Sem sangue (padrão): o acerto solta poeira e o headshot que mata, faíscas e poeira na cabeça.
+	var dust_before := _fx_like("dust")
+	(weak.get_node("BodyHurtbox") as Hurtbox).receive_hit(10.0, 1.5, DamageInfo.Kind.WEAPON, _player, weak.global_position + Vector3.UP)
+	check(_fx_like("dust") > dust_before, "sem sangue, o acerto mostra poeira (o efeito existe)")
+	var spark_before := _fx_like("spark")
+	weak.health.current = 5.0
+	(weak.get_node("HeadHurtbox") as Hurtbox).receive_hit(50.0, 2.0, DamageInfo.Kind.WEAPON, _player, weak.global_position + Vector3.UP * 1.6)
+	check(_fx_like("spark") > spark_before, "headshot que mata: estouro na cabeça")
+	weak.queue_free()
+	strong.queue_free()
+	await _tree.create_timer(0.6).timeout
+
+
+## Efeitos de um tipo na cena (o nome pode ganhar número quando há vários).
+func _fx_like(fx_name: String) -> int:
+	return _tree.root.find_children("*Fx_" + fx_name + "*", "Sprite3D", true, false).size()
 
 
 func _spawn(type: StringName, offset: Vector3, speed_mult: float) -> ZombieBase:

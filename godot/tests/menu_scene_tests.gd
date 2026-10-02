@@ -246,6 +246,8 @@ func _settings_tabs(tree: SceneTree) -> void:
 	Loc.apply()
 	await tree.process_frame
 	await tree.process_frame
+	var numbers := screen.find_child("damageNumbers", true, false) as Button
+	check(numbers != null and numbers.text == "NÚMEROS DE DANO: LIGADO", "aba JOGO: números de dano, ligados por padrão (%s)" % [numbers.text if numbers else "?"])
 	(screen.find_child("Tab_video", true, false) as Button).pressed.emit()
 	await tree.process_frame
 	await tree.process_frame

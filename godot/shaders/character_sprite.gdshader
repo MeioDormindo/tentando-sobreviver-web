@@ -10,6 +10,9 @@ uniform sampler2D tex : source_color, filter_nearest;
 uniform float toward_camera = 0.9;
 /// Brilho próprio por personagem (zumbi dourado): cor × força em alfa.
 instance uniform vec4 glow_color = vec4(0.0);
+/// Piscar do golpe (CharacterSprite.flash): o quadro vira essa cor por alfa e brilha (aparece
+/// até no escuro).
+instance uniform vec4 hit_flash = vec4(0.0);
 
 void vertex() {
 	// Billboard: eixos da câmera, com a escala do nó.
@@ -31,7 +34,7 @@ void fragment() {
 	if (color.a < 0.5) {
 		discard;
 	}
-	ALBEDO = color.rgb;
+	ALBEDO = mix(color.rgb, hit_flash.rgb, hit_flash.a);
 	ROUGHNESS = 1.0;
-	EMISSION = color.rgb * glow_color.rgb * glow_color.a;
+	EMISSION = color.rgb * glow_color.rgb * glow_color.a + hit_flash.rgb * hit_flash.a * 0.7;
 }

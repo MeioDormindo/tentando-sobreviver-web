@@ -104,6 +104,7 @@ func _connect_events() -> void:
 		if info.kind == DamageInfo.Kind.WEAPON and _clock - _last_hit_sound > 0.05:
 			_last_hit_sound = _clock
 			Audio.play_at("impact_flesh", zombie.global_position, "world", 0.6))
+	Events.hit_confirmed.connect(_on_hit_confirmed)
 	Events.zombie_killed.connect(func(zombie: Node3D, _info: DamageInfo) -> void:
 		var type := String((zombie as ZombieBase).data.id) if zombie is ZombieBase else ""
 		Audio.play_at("zombie_%s_death" % type, zombie.global_position, "zombie", 0.9))
@@ -185,6 +186,27 @@ func _footsteps() -> void:
 	var surface := world.surface_at(here) if world else "concrete"
 	surface = String(Audio.config.get("step_alias", {}).get(surface, surface))
 	Audio.play_at("step_" + surface, here, "player", 0.55, -1.0, 0.08)
+
+
+## Feedback de acerto (só quem acertou ouve, na interface): estalo a cada acerto (no máximo um a
+## cada TICK_GAP, para a arma automática não virar zumbido), "tim" no headshot, baque no abate e
+## clanque quando a armadura ou o escudo seguram o tiro.
+const TICK_GAP := 0.045
+var _last_tick := -INF
+
+
+func _on_hit_confirmed(_key: int, _at: Vector3, _amount: float, headshot: bool, kill: bool, blocked: bool) -> void:
+	if kill:
+		Audio.play("hit_kill", "ui", 0.75, 0.05)
+		if headshot:
+			Audio.play("hit_head", "ui", 0.55, 0.03)
+	elif headshot:
+		Audio.play("hit_head", "ui", 0.6, 0.04)
+	elif blocked:
+		Audio.play("hit_blocked", "ui", 0.6, 0.06)
+	elif _clock - _last_tick >= TICK_GAP:
+		_last_tick = _clock
+		Audio.play("hit_tick", "ui", 0.45, 0.08)
 
 
 func _on_health(current: float, maximum: float) -> void:

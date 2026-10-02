@@ -302,6 +302,7 @@ func _filter_shield(info: DamageInfo) -> float:
 		return info.amount
 	Audio.play_at("armor_hit", zombie.global_position, "zombie", 0.7)
 	PixelFx.spawn(zombie.get_tree(), "spark", zombie.global_position + Vector3.UP * 1.1 - zombie.pivot.global_basis.z * 0.4, 0.5)
+	info.blocked = true
 	return info.amount * float(zombie.data.shield.get("factor", 0.2))
 
 
@@ -400,6 +401,7 @@ func _filter_armor(info: DamageInfo) -> float:
 		Audio.play_at("armor_break", zombie.global_position, "zombie", 1.0)
 	else:
 		Audio.play_at("armor_hit", zombie.global_position, "zombie", 0.8)
+	info.blocked = true
 	return info.amount * factor
 
 

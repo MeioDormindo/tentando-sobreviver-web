@@ -66,6 +66,10 @@ signal score_changed(total: int, delta: int)
 signal shot_fired()
 ## O disparo acertou pelo menos um alvo (um por disparo, mesmo com vários chumbos ou perfurante).
 signal shot_connected()
+## Um acerto SEU (arma ou faca) num inimigo, já somado no quadro (os chumbos viram um só): marcador,
+## som e número de dano. Vem só para quem atirou (no cooperativo, o host manda ao dono do tiro).
+## `key` identifica o alvo (os números seguidos no mesmo alvo somam).
+signal hit_confirmed(key: int, at: Vector3, amount: float, headshot: bool, kill: bool, blocked: bool)
 ## Um mapa foi liberado (fica salvo).
 signal map_unlocked(map_id: String, map_name: String)
 ## Anti-trapaça: a partida foi invalidada (zoeira e aviso).

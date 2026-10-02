@@ -1575,6 +1575,9 @@ msgstr "ТРЯСКА ЭКРАНА"
 msgid "SANGUE"
 msgstr "КРОВЬ"
 
+msgid "NÚMEROS DE DANO"
+msgstr "ЦИФРЫ УРОНА"
+
 msgid "MIRA NO MOUSE"
 msgstr "ПРИЦЕЛ МЫШИ"
 

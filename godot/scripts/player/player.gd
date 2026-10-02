@@ -630,6 +630,32 @@ func fire() -> Array[DamageInfo]:
 	return hits
 
 
+## Acertos deste personagem ainda no quadro, por alvo: key → [ponto, dano, headshot, abate,
+## bloqueado]. Enviados juntos no fim do quadro (os chumbos da espingarda viram um só aviso).
+var _hit_batch := {}
+
+
+## Host (ou sozinho): este personagem acertou um inimigo com arma ou faca. O aviso
+## (Events.hit_confirmed: marcador, som, número de dano) vai só para quem joga com ele.
+func confirm_hit(key: int, at: Vector3, amount: float, headshot: bool, kill: bool, blocked: bool) -> void:
+	if _hit_batch.is_empty():
+		_flush_hits.call_deferred()
+	var hit: Array = _hit_batch.get(key, [at, 0.0, false, false, false])
+	hit[0] = at
+	hit[1] = float(hit[1]) + amount
+	hit[2] = bool(hit[2]) or headshot
+	hit[3] = bool(hit[3]) or kill
+	hit[4] = bool(hit[4]) or blocked
+	_hit_batch[key] = hit
+
+
+func _flush_hits() -> void:
+	for key: int in _hit_batch:
+		var hit: Array = _hit_batch[key]
+		hud(&"hit_confirmed", [key, hit[0], hit[1], hit[2], hit[3], hit[4]])
+	_hit_batch.clear()
+
+
 ## Usa o interagível mais perto (tecla E). Devolve true se algo aconteceu.
 func interact() -> bool:
 	if _interactable == null or not is_instance_valid(_interactable):

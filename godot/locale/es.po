@@ -1575,6 +1575,9 @@ msgstr "TEMBLOR DE PANTALLA"
 msgid "SANGUE"
 msgstr "SANGRE"
 
+msgid "NÚMEROS DE DANO"
+msgstr "NÚMEROS DE DAÑO"
+
 msgid "MIRA NO MOUSE"
 msgstr "MIRA DEL RATÓN"
 

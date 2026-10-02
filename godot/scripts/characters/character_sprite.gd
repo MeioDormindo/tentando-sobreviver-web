@@ -33,6 +33,10 @@ var _layer_behind: Array = []
 var _frame := 0.0
 var _speed := 1.0
 var _flash_left := 0.0
+var _flash_time := 0.08
+var _flash_color := Color.WHITE
+## Quanto o piscar cobre a cor do quadro no começo (0..1).
+const FLASH_STRENGTH := 0.85
 var _tint := Color.WHITE
 var _glow := Color(0, 0, 0, 0)
 
@@ -171,10 +175,25 @@ func finished() -> bool:
 	return not anim.is_empty() and not bool(anim.loop) and _frame >= float(anim.count) - 1.0
 
 
-## Pisca numa cor (dano, raio) por um instante.
+## Pisca numa cor (dano, raio) por um instante: o quadro vira a cor (shader, hit_flash) e
+## volta ao normal ao longo de `seconds`. O alfa da cor diz a força (1 = FLASH_STRENGTH).
 func flash(color: Color, seconds := 0.08) -> void:
 	_flash_left = seconds
-	_set_modulate(color.lightened(0.3))
+	_flash_time = maxf(seconds, 0.001)
+	_flash_color = color
+	_set_flash(flash_amount())
+
+
+## Força do piscar agora (0 = apagado).
+func flash_amount() -> float:
+	return FLASH_STRENGTH * _flash_color.a * clampf(_flash_left / _flash_time, 0.0, 1.0) if _flash_left > 0.0 else 0.0
+
+
+func _set_flash(strength: float) -> void:
+	var value := Color(_flash_color.r, _flash_color.g, _flash_color.b, strength)
+	for child in get_children():
+		if child is Sprite3D:
+			(child as Sprite3D).set_instance_shader_parameter(&"hit_flash", value)
 
 
 ## Brilho próprio (brilha no escuro): cor e força em alfa; Color(0,0,0,0) apaga.
@@ -188,15 +207,13 @@ func set_glow(color: Color) -> void:
 ## Cor fixa (atordoado, congelado); branco = normal.
 func tint(color: Color) -> void:
 	_tint = color
-	if _flash_left <= 0.0:
-		_set_modulate(color)
+	_set_modulate(color)
 
 
 func _process(delta: float) -> void:
 	if _flash_left > 0.0:
 		_flash_left -= delta
-		if _flash_left <= 0.0:
-			_set_modulate(_tint)
+		_set_flash(flash_amount())
 	var anim: Dictionary = _meta.get("animations", {}).get(String(playing), {})
 	if anim.is_empty():
 		return

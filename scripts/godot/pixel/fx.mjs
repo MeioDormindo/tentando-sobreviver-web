@@ -25,6 +25,8 @@ const ACID = [[40, 70, 10], [80, 130, 20], [140, 200, 40], [200, 245, 110], [240
 /** Cinza claro: recebe a cor no jogo (modulate), para poça de ácido e nuvem de gás. */
 const GRAY = [[110, 110, 110], [150, 150, 150], [190, 190, 190], [225, 225, 225], [255, 255, 255]];
 const OLIVE = [[40, 48, 26], [70, 84, 42], [104, 122, 64], [150, 168, 100]];
+/** Poeira e lascas do impacto sem sangue (do escuro ao estalo branco). */
+const DUST = [[64, 58, 52], [104, 96, 86], [150, 142, 128], [205, 198, 184], [250, 246, 232]];
 
 function strip(frames, w, h, draw) {
   const sheet = new Pixels(w * frames, h);
@@ -78,6 +80,29 @@ export function buildFx() {
       const x = Math.round(8 + Math.cos(a) * v * (i + 1)), y = Math.round(8 + Math.sin(a) * v * (i + 1));
       px.set(x, y, ramp(FIRE, 1 - i * 0.2));
       if (i < 2) px.set(x - Math.sign(Math.cos(a)), y - Math.sign(Math.sin(a)), ramp(FIRE, 0.7));
+    }
+  }) };
+  // Impacto sem sangue (configuração SANGUE desligada, esqueletos): estalo branco no centro e
+  // lascas e poeira cinza que voam para fora e somem.
+  out.dust = { fps: 26, loop: false, sheet: strip(5, 22, 22, (px, i, n) => {
+    const r = rng(29);
+    const t = i / (n - 1);
+    if (i < 2) {
+      const arm = i === 0 ? 3 : 5;
+      for (let k = -arm; k <= arm; k++) {
+        const c = Math.abs(k) <= 1 ? DUST[4] : DUST[3];
+        px.set(11 + k, 11, c);
+        px.set(11, 11 + k, c);
+      }
+      if (i === 0) for (const [dx, dy] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) px.set(11 + dx, 11 + dy, DUST[4]);
+    }
+    if (i >= 1) {
+      blob(px, 11, 12 - t * 2, 2 + 5 * t, angularNoise(rng(31), 0.4, 5), (d, x, y) => (dither(x, y, 0.75 - t * 0.7) ? ramp(DUST, 0.55 - d * 0.4) : null));
+    }
+    for (let j = 0; j < 9; j++) {
+      const a = r() * Math.PI * 2, v = 1.6 + r() * 2.2;
+      const x = Math.round(11 + Math.cos(a) * v * (i + 1)), y = Math.round(11 + Math.sin(a) * v * (i + 1) + i * i * 0.35);
+      px.set(x, y, ramp(DUST, 1 - t * 0.75 - r() * 0.15));
     }
   }) };
   // Explosão: bola de fogo que cresce, esfria e vira fumaça que se desfaz.

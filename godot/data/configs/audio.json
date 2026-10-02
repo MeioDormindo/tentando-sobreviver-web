@@ -171,7 +171,11 @@
   "mus_area_gorgon_temple": 1,
   "mus_area_underworld": 1,
   "mus_area_arena": 1,
-  "mus_area_sanctuary": 1
+  "mus_area_sanctuary": 1,
+  "hit_tick": 3,
+  "hit_head": 2,
+  "hit_kill": 2,
+  "hit_blocked": 2
  },
  "master": 0.8,
  "categories": {

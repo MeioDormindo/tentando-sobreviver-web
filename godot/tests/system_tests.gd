@@ -687,7 +687,7 @@ func _test_i18n_and_settings() -> void:
 	# vibração com intervalo mínimo e a permissão de vibrar no Android.
 	var fresh := Save.sanitize({"settings": {"touchButtons": "gigante"}})
 	check(fresh.settings.autoAim == true and fresh.settings.autoFire == false and fresh.settings.touchButtons == "medium"
-		and fresh.settings.touchLeftHanded == false and fresh.settings.vibration == true, "celular: mira automática ligada e tiro automático desligado por padrão")
+		and fresh.settings.touchLeftHanded == false and fresh.settings.vibration == true and fresh.settings.damageNumbers == true, "celular: mira automática ligada e tiro automático desligado por padrão; números de dano ligados")
 	check(not Haptics.allowed(&"hurt", 10.1, 10.0) and Haptics.allowed(&"hurt", 10.31, 10.0) and Haptics.allowed(&"down", 5.0, -INF),
 		"vibração: no máximo uma por golpe a cada 0,3 s")
 	check(not Haptics.enabled() or InputBindings.touch_active, "vibração só com os controles de toque")

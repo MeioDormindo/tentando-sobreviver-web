@@ -47,13 +47,24 @@ var _speed_mult := 1.0
 var _repath_left := 0.0
 ## Empurrão (faca, explosões) que se soma ao movimento e some rápido.
 var _knockback := Vector3.ZERO
-## Tranco do tiro: tempo andando mais devagar e o quadro do último recuo (não empilha chumbos).
+## Tranco do tiro: anda mais devagar por um instante e é empurrado para trás, mais quanto maior
+## o dano do quadro (os chumbos de uma espingarda somam): fator √(dano / FLINCH_REF_DAMAGE),
+## entre FLINCH_MIN e FLINCH_MAX. Na cabeça, HEADSHOT_FLINCH vezes mais.
 const FLINCH_TIME := 0.12
 const FLINCH_SPEED := 0.35
-const FLINCH_PUSH := 1.6
-## Na cabeça, o tranco é mais forte (reação maior, mais visível).
+const FLINCH_PUSH := 2.2
+const FLINCH_REF_DAMAGE := 40.0
+const FLINCH_MIN := 0.7
+const FLINCH_MAX := 2.4
+const HEADSHOT_FLINCH := 1.5
 const HEADSHOT_FLINCH_TIME := 0.22
-const HEADSHOT_FLINCH_PUSH := 2.6
+## Solavanco do sprite (m de recuo e quanto achata) num golpe de fator 1.
+const JOLT_DISTANCE := 0.12
+const JOLT_SQUASH := 0.12
+## Piscar do golpe (o alfa é a força): acerto, cabeça e bloqueado (armadura, escudo).
+const HIT_FLASH := Color(1.0, 1.0, 1.0, 0.75)
+const HIT_FLASH_HEAD := Color(1.0, 0.78, 0.72, 1.0)
+const HIT_FLASH_BLOCKED := Color(0.62, 0.72, 0.86, 0.6)
 ## Desvio lateral leve dos tipos sem habilidade própria (Walker, Runner, Tank, Hoplita comum),
 ## para não andarem em fileira reta como clones (mesma técnica do zigue-zague do Sátiro, com
 ## amplitude bem menor).
@@ -63,6 +74,8 @@ const WANDER_FREQUENCY := 1.4
 const BONE_TYPES: Array[StringName] = [&"skeleton", &"skeleton_archer"]
 var _flinch_left := 0.0
 var _flinch_frame := -1
+## Dano somado no quadro do último tranco (os chumbos do mesmo disparo).
+var _flinch_damage := 0.0
 var _wander_clock := 0.0
 ## Jitter por instância em move_speed/attack_interval (±8%), para zumbis do mesmo tipo pararem
 ## de andar e atacar em lockstep perfeito.
@@ -126,8 +139,9 @@ func _ready() -> void:
 		_abilities = ZombieAbilities.new()
 		add_child(_abilities)
 		_abilities.setup(self)
-	health.damaged.connect(func(info: DamageInfo, _current: float) -> void:
+	health.damaged.connect(func(info: DamageInfo, current: float) -> void:
 		Events.zombie_hit.emit(self, info)
+		HitFeedback.report(self, info, current)
 		if info.kind in [DamageInfo.Kind.WEAPON, DamageInfo.Kind.MELEE] and is_inside_tree():
 			var at: Vector3 = info.hit_position if info.hit_position != Vector3.ZERO else global_position + Vector3.UP * 1.2
 			_hit_fx(at)
@@ -396,20 +410,53 @@ func has_line_of_sight_to(other: Node3D) -> bool:
 ## hesita por um instante e pisca. Uma vez por quadro (os chumbos de uma espingarda contam
 ## como um tranco só). Tank e Blindado não recuam (apply_knockback ignora), só hesitam.
 func _flinch(info: DamageInfo) -> void:
-	var frame := Engine.get_physics_frames()
-	if frame == _flinch_frame or not is_alive():
+	if not is_alive():
 		return
-	_flinch_frame = frame
-	var push_strength := HEADSHOT_FLINCH_PUSH if info.is_headshot else FLINCH_PUSH
-	_flinch_left = HEADSHOT_FLINCH_TIME if info.is_headshot else FLINCH_TIME
+	# Os chumbos do mesmo disparo chegam no mesmo quadro: somam e o tranco cresce.
+	var frame := Engine.get_physics_frames()
+	if frame != _flinch_frame:
+		_flinch_frame = frame
+		_flinch_damage = 0.0
+	_flinch_damage += info.amount
+	var factor := flinch_factor(_flinch_damage, info.is_headshot)
+	_flinch_left = maxf(_flinch_left, (HEADSHOT_FLINCH_TIME if info.is_headshot else FLINCH_TIME) * clampf(factor, 1.0, 1.8))
+	var push := _hit_direction(info)
+	var push_strength := FLINCH_PUSH * factor
+	if push.length() > 0.01 and _knockback.length() < push_strength:
+		apply_knockback(push.normalized() * push_strength)
+	if model:
+		# Branco no acerto, forte e avermelhado na cabeça, "aço" fraco quando a armadura ou o
+		# escudo seguram.
+		if info.is_headshot:
+			model.flash(HIT_FLASH_HEAD, 0.12)
+		elif info.blocked:
+			model.flash(HIT_FLASH_BLOCKED, 0.08)
+		else:
+			model.flash(HIT_FLASH, 0.08)
+		# Tank e Blindado não saem do lugar, mas o corpo sente o golpe (um pouco menos); bloqueado,
+		# bem menos.
+		var body := (1.0 if data.pushable else 0.6) * (0.5 if info.blocked else 1.0)
+		HitFeedback.jolt(model, push, JOLT_DISTANCE * factor * body, JOLT_SQUASH * minf(factor, 1.8) * body)
+
+
+## Força do tranco (função pura): √(dano / FLINCH_REF_DAMAGE) entre FLINCH_MIN e FLINCH_MAX,
+## vezes HEADSHOT_FLINCH na cabeça. Sem dano conhecido (fantoche da rede), o mínimo.
+static func flinch_factor(damage: float, headshot: bool) -> float:
+	var factor := clampf(sqrt(maxf(damage, 0.0) / FLINCH_REF_DAMAGE), FLINCH_MIN, FLINCH_MAX)
+	return factor * (HEADSHOT_FLINCH if headshot else 1.0)
+
+
+## Para onde o golpe empurra (no chão): de quem atirou para o zumbi; sem atirador conhecido
+## (fantoche da rede), do ponto do acerto (no corpo, do lado de quem atirou) para o centro.
+func _hit_direction(info: DamageInfo) -> Vector3:
+	var push := Vector3.ZERO
 	var source := info.source as Node3D
 	if source and is_instance_valid(source):
-		var push := global_position - source.global_position
-		push.y = 0.0
-		if push.length() > 0.01 and _knockback.length() < push_strength:
-			apply_knockback(push.normalized() * push_strength)
-	if model:
-		model.flash(Color(1.0, 0.92, 0.9))
+		push = global_position - source.global_position
+	elif info.hit_position != Vector3.ZERO:
+		push = global_position - info.hit_position
+	push.y = 0.0
+	return push
 
 
 ## Brilho rápido no corpo (aviso de explosão, preparo do cuspe).
@@ -564,7 +611,9 @@ func _on_health_died(info: DamageInfo) -> void:
 	remove_from_group(&"zombies")
 	super(info)
 	Events.zombie_killed.emit(self, info)
-	Events.screen_shake.emit(0.12 if info.is_headshot else 0.06, 0.08 if info.is_headshot else 0.035)
+	# O tremor do abate vem do aviso de acerto (só quem abateu sente: HUD, hit_confirmed).
+	if info.is_headshot and info.kind in [DamageInfo.Kind.WEAPON, DamageInfo.Kind.MELEE]:
+		_head_pop()
 	if _abilities:
 		_abilities.on_death(info)
 	# Não bloqueia mais ninguém nem recebe tiros; cai e afunda no chão.
@@ -627,6 +676,27 @@ func _sink() -> void:
 ## Sangue ligado nas configurações (desligado por padrão).
 static func blood_enabled() -> bool:
 	return bool(Save.get_setting("blood"))
+
+
+## Abate na cabeça: um estouro na altura da cabeça (sangue grande e gotas; sem sangue, faíscas e
+## poeira; nos esqueletos, osso virando pó). Aparece para todos (o fantoche morre igual).
+func _head_pop() -> void:
+	if not is_inside_tree():
+		return
+	var head := global_position + Vector3.UP * (1.55 * data.model_scale * (0.45 if data.crawls else 1.0))
+	var tree := get_tree()
+	if data.id in BONE_TYPES:
+		PixelFx.spawn(tree, "dust", head, 1.1)
+		PixelFx.spawn(tree, "spark", head, 0.6)
+	elif blood_enabled():
+		PixelFx.spawn(tree, "blood_splat", head, 1.7)
+		PixelFx.spawn(tree, "blood_splat", head + Vector3(randf_range(-0.2, 0.2), 0.15, randf_range(-0.2, 0.2)), 1.1, 1.3)
+		for i in 2:
+			var drop := global_position + Vector3(randf_range(-0.7, 0.7), 0.0, randf_range(-0.7, 0.7))
+			PixelFx.decal(tree, "blood_pool", drop, randf_range(0.3, 0.5), CORPSE_STAY)
+	else:
+		PixelFx.spawn(tree, "spark", head, 0.9)
+		PixelFx.spawn(tree, "dust", head, 0.8)
 
 
 ## Efeito do acerto: com sangue, um jato e gotas no chão; sem (ou esqueleto, que é osso, não
@@ -724,10 +794,10 @@ func net_attack() -> void:
 
 
 ## Acerto avisado pelo host: sangue/faísca e o tranco, sem dano.
-func net_hit(at: Vector3, headshot: bool, kind: int) -> void:
+func net_hit(at: Vector3, headshot: bool, kind: int, amount: float = 0.0) -> void:
 	if state == State.DEAD or not is_inside_tree():
 		return
-	var info := DamageInfo.new(0.0, kind as DamageInfo.Kind, null, headshot, at)
+	var info := DamageInfo.new(amount, kind as DamageInfo.Kind, null, headshot, at)
 	info.hit_position = at
 	if kind in [DamageInfo.Kind.WEAPON, DamageInfo.Kind.MELEE]:
 		_hit_fx(at if at != Vector3.ZERO else global_position + Vector3.UP * 1.2)

@@ -43,6 +43,10 @@ func run(p_tree: SceneTree) -> void:
 	events.connect(&"boss_state", func(_n: String, _c: float, _m: float, _p: int) -> void: _seen.boss_bar = true)
 	events.connect(&"boss_defeated", func(_id: StringName, _n: String, _r: int, _at: Vector3) -> void: _seen.boss_defeated = true)
 	_seen.lang = loc.get(&"current")
+	events.connect(&"hit_confirmed", func(_k: int, _a: Vector3, _m: float, _h: bool, kill: bool, _b: bool) -> void:
+		_seen.hits = int(_seen.get("hits", 0)) + 1
+		if kill:
+			_seen.hit_kills = int(_seen.get("hit_kills", 0)) + 1)
 	# O feed chega como modelo + argumentos (a chave é o texto em português) e é traduzido aqui.
 	events.connect(&"team_feed", func(text: String) -> void:
 		if text.contains("levantou"):

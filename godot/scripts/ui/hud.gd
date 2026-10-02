@@ -72,7 +72,10 @@ var _quest_title: Label
 var _quest_text: Label
 var _boss_bar: ProgressBar
 var _boss_label: Label
-var _hit_marker: Label
+## Marcador de acerto (só os seus acertos) e onde ele está no mundo (toque e controle).
+var _hit_marker: HitMarker
+var _hit_at := Vector3.ZERO
+var _damage_numbers: DamageNumbers
 var _pause_menu: PauseMenu
 var minimap: Minimap
 var _game_over_panel: Control
@@ -113,8 +116,7 @@ func _ready() -> void:
 		_prompt_bar_frame.visible = progress >= 0.0
 		if _prompt_bar_frame.visible:
 			_prompt_bar.value = progress * 100.0)
-	Events.zombie_hit.connect(func(_z: Node3D, info: DamageInfo) -> void: if info.kind != DamageInfo.Kind.BURN: _flash_hit(TEXT))
-	Events.zombie_killed.connect(func(_z: Node3D, info: DamageInfo) -> void: _flash_hit(RED if info.is_headshot else GOLD))
+	Events.hit_confirmed.connect(_on_hit_confirmed)
 	Events.area_opened.connect(func(_id: StringName, area_name: String) -> void: _show_banner(Loc.t("ÁREA LIBERADA: %s") % Loc.t(area_name).to_upper(), GOLD))
 	Events.purchase_denied.connect(func() -> void: _flash_points_denied())
 	Events.toast.connect(_show_toast)
@@ -238,7 +240,7 @@ func _process(delta: float) -> void:
 		_quest_title.position = Vector2(MARGIN, top)
 		_quest_text.position = Vector2(MARGIN, top + 28.0)
 	# O marcador de acerto acompanha a mira do mouse.
-	_hit_marker.position = get_viewport().get_mouse_position() - _hit_marker.size * 0.5
+	_place_hit_marker()
 
 
 func _exit_tree() -> void:
@@ -400,8 +402,11 @@ func _build() -> void:
 	_boss_bar.visible = false
 	_toast_row.modulate.a = 0.0
 
-	_hit_marker = _label(root, "✕", 26, TEXT, Control.PRESET_TOP_LEFT, HORIZONTAL_ALIGNMENT_CENTER)
-	_hit_marker.modulate.a = 0.0
+	_damage_numbers = DamageNumbers.new()
+	root.add_child(_damage_numbers)
+	_hit_marker = HitMarker.new()
+	root.add_child(_hit_marker)
+	_hit_marker.visible = false
 	_crosshair = Crosshair.new()
 	root.add_child(_crosshair)
 	_crosshair.visible = false
@@ -924,10 +929,28 @@ func _flash_points_denied() -> void:
 	tween.tween_callback(func() -> void: _points_label.add_theme_color_override(&"font_color", MONEY))
 
 
-func _flash_hit(color: Color) -> void:
-	_hit_marker.add_theme_color_override(&"font_color", color)
-	_hit_marker.modulate.a = 1.0
-	create_tween().tween_property(_hit_marker, "modulate:a", 0.0, 0.18)
+## Um acerto seu (já somado no quadro): marcador, número de dano e, no abate, o tranco de câmera
+## (só quem abateu sente; respeita TREMOR DE TELA). O som é do AudioManager.
+func _on_hit_confirmed(key: int, at: Vector3, amount: float, headshot: bool, kill: bool, blocked: bool) -> void:
+	_hit_at = at
+	_hit_marker.show_hit(HitMarker.kind_of(headshot, kill, blocked))
+	_place_hit_marker()
+	if Save.get_setting("damageNumbers") != false:
+		_damage_numbers.add_hit(key, at, amount, headshot, kill, blocked)
+	if kill:
+		Events.screen_shake.emit(0.12 if headshot else 0.06, 0.08 if headshot else 0.035)
+
+
+## Mirando com o mouse, o marcador fica na mira; no toque e no controle, no ponto do acerto.
+func _place_hit_marker() -> void:
+	if not _hit_marker.visible:
+		return
+	var player := Players.local_player()
+	var camera := get_viewport().get_camera_3d()
+	if player and player.mouse_aim and not InputBindings.touch_active:
+		_hit_marker.position = get_viewport().get_mouse_position()
+	elif camera and not camera.is_position_behind(_hit_at):
+		_hit_marker.position = camera.unproject_position(_hit_at).round()
 
 
 # ───────────────────────── Cooperativo ─────────────────────────

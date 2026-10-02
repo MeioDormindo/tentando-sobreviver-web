@@ -119,7 +119,8 @@ func _playing(key: String) -> Array[Node]:
 
 func _catalog() -> void:
 	var sounds: Dictionary = _audio.config.get("sounds", {})
-	check(sounds.size() == 172, "catálogo do jogo web + 4 ambientes do Templo + 25 temas de sala: %d sons" % sounds.size())
+	check(sounds.size() == 176, "catálogo do jogo web + 4 ambientes do Templo + 25 temas de sala + 4 de acerto: %d sons" % sounds.size())
+	check(["hit_tick", "hit_head", "hit_kill", "hit_blocked"].all(func(k: String) -> bool: return sounds.has(k)), "sons de acerto (estalo, headshot, abate, bloqueado)")
 	var missing: Array[String] = []
 	for key: String in sounds:
 		for v in int(sounds[key]):

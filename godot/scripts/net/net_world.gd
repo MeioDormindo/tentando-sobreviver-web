@@ -246,7 +246,7 @@ func _send_snapshot() -> void:
 
 func _on_zombie_hit(node: Node3D, info: DamageInfo) -> void:
 	if Net.live and node and node.has_meta(&"net_id"):
-		_z_hit.rpc(int(node.get_meta(&"net_id")), info.hit_position, info.is_headshot, int(info.kind))
+		_z_hit.rpc(int(node.get_meta(&"net_id")), info.hit_position, info.is_headshot, int(info.kind), info.amount)
 
 
 func _on_zombie_attacked(node: Node3D) -> void:
@@ -297,10 +297,10 @@ func _puppet_u16(short_id: int) -> ZombieBase:
 
 
 @rpc("authority", "unreliable")
-func _z_hit(id: int, at: Vector3, headshot: bool, kind: int) -> void:
+func _z_hit(id: int, at: Vector3, headshot: bool, kind: int, amount: float) -> void:
 	var zombie := _puppet(id)
 	if zombie and zombie.has_method(&"net_hit"):
-		zombie.call(&"net_hit", at, headshot, kind)
+		zombie.call(&"net_hit", at, headshot, kind, amount)
 
 
 ## Host: um clarão (o raio que traz um cão, a chegada do chefe) aparece também nos colegas.

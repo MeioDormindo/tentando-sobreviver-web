@@ -87,6 +87,7 @@ static func game(column: VBoxContainer, rebuild: Callable, size: int, in_game: b
 		column.add_child(name_edit)
 	_toggle(column, rebuild, size, "TREMOR DE TELA", "screenShake")
 	_toggle(column, rebuild, size, "SANGUE", "blood")
+	_toggle(column, rebuild, size, "NÚMEROS DE DANO", "damageNumbers")
 	_toggle(column, rebuild, size, "MIRA NO MOUSE", "crosshair")
 	_toggle(column, rebuild, size, "MINIMAPA", "minimap")
 	_cycle(column, rebuild, size, "TAMANHO DO MINIMAPA", "minimapSize", MINIMAP_SIZES, func(v: Variant) -> String: return MINIMAP_LABELS.get(v, "MÉDIO")).name = "MinimapSize"

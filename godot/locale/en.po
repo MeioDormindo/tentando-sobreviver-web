@@ -1575,6 +1575,9 @@ msgstr "SCREEN SHAKE"
 msgid "SANGUE"
 msgstr "BLOOD"
 
+msgid "NÚMEROS DE DANO"
+msgstr "DAMAGE NUMBERS"
+
 msgid "MIRA NO MOUSE"
 msgstr "MOUSE CROSSHAIR"
 
