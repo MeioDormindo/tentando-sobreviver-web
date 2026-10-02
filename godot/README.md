@@ -336,7 +336,7 @@ passam a ser editados direto no Godot.
 # jogador não muda) e o bot joga offline (não envia nada ao ranking global):
 Godot --headless --path godot -s res://tests/run_tests.gd
 # Uma suíte só (unit, weapons, zombies, bosses, menus, powerups, match, events, quest, audio,
-# sprites, online, elements, temple, stuck, touch, coop):
+# sprites, online, elements, temple, stuck, touch, coop, net):
 Godot --headless --path godot -s res://tests/run_tests.gd -- --only=events
 
 # Jogado (abre uma janela), no Terminal migrado: um bot joga até o round 3 e confere
@@ -360,6 +360,11 @@ scripts/systems/events.gd        autoload Events: barramento de sinais (sistemas
 scripts/systems/save_store.gd    autoload Save: save no formato do jogo web (+ mesclagem da nuvem)
 scripts/systems/session.gd       autoload Session: mapa escolhido e a roster (quem joga a partida)
 scripts/systems/players.gd       Players: registro dos jogadores (todos, de pé, o local, o mais perto)
+scripts/net/                     autoload Net (sala, código, lista de jogadores, começo da partida),
+                                 WebRTCTransport / ENetTransport, Signaling / SupabaseSignaling,
+                                 NetPlayer (rede de cada jogador) e NetWorld (a partida em rede)
+addons/webrtc_native/            extensão oficial webrtc-native (Windows x86_64 e Android arm64;
+                                 fora do export Web, que usa o WebRTC do navegador)
 scripts/main.gd                  troca o mapa pelo escolhido, cria um jogador por pessoa da roster
                                  e liga câmera/HUD/áudio/minimapa ao jogador local
 scripts/online/                  autoloads Online (cliente REST) e Account (conta e nuvem),
@@ -423,7 +428,8 @@ Decisões:
   (seção 11). O caminho é recalculado a cada 0,25s, espalhado entre os zumbis.
 - **Munição:** como no jogo web, vem das compras na parede. O reabastecimento automático no fim do
   round (`RoundData.refill_ammo_on_round_end`) ficou desligado.
-- **Nenhum addon externo.**
+- **Um addon externo só:** a extensão oficial `webrtc-native` (godotengine/webrtc-native 1.2.2, MIT),
+  para o multiplayer pela internet no Windows e no Android.
 - **Base do cooperativo (Etapa 0, sem rede ainda).** A partida aceita até 4 jogadores na
   `Session.roster` (vazia = solo, que segue idêntico):
   - o nó `Player` da cena é o do host (peer 1); cada colega vira `Player<peer>`. Só o jogador
@@ -450,6 +456,33 @@ Decisões:
   - os nós do mapa montados do JSON têm nome estável e único (`tipo`, `tipo_2`...): a busca acha
     todos (o Levante dos Mortos agora usa os 6 sarcófagos, não só o primeiro) e, em rede, o mesmo
     nó tem o mesmo caminho em todas as máquinas.
+- **Multiplayer pela internet (Etapa 1).** JOGAR EM GRUPO no menu: CRIAR SALA mostra um código de 5
+  letras; os amigos entram com ele (até 4). Sem rede de verdade? "REDE LOCAL" (Windows e Android,
+  mesmo Wi-Fi ou duas janelas no mesmo PC) cria ou entra pelo IP, sem servidor.
+  - **Conexão:** WebRTC em estrela (o host é o peer 1). A combinação (entrar, oferta, resposta,
+    candidatos) passa pelo Supabase por funções (`supabase/net.sql`: `net_create_room`,
+    `net_send`, `net_poll`), lidas a cada 0,5 s só enquanto a sala está aberta; as tabelas não são
+    lidas direto. STUN do Google, sem TURN (algumas redes de celular podem não conectar).
+  - **Quem decide:** o host roda o jogo (zumbis, tiros, dano, munição, compras, pontos); cada um
+    move e mira o próprio personagem e pede as ações (tiro, recarga, troca, faca, E, lanterna),
+    com o efeito na hora na própria máquina. O acerto do tiro é calculado no host (zumbis vêm de
+    frente; dá para compensar o atraso depois, se precisar).
+  - **O que vai pela rede:** posição e mira de cada um (20/s); vida e estado (10/s) e armas, do
+    host; os avisos de HUD de cada personagem vão para a máquina do dono; zumbis viram "fantoches"
+    nos colegas (nascimento, posição a 20/s, golpe, acerto e morte); avisos de todos (round,
+    power-ups, score) e o estado do mapa (portas, tábuas, energia, Mystery Box, armas e
+    power-ups no chão).
+  - **Regras desta etapa:** só o Terminal; rounds de chefe viram normais; eventos, missões e o
+    Fire Sale ficam de fora na rede; o menu de pausa não para o mundo; no fim, o host leva todos
+    de volta à sala (VOLTAR À SALA); quem sai some do mapa; o host sair leva todos ao menu.
+  - **Ranking por modo:** SOLO, DUPLA, TRIO e QUARTETO no ranking local (`rankingCoop` no save) e
+    no global (`supabase/coop_ranking.sql`: colunas `players` e `team`). Na partida em grupo o
+    time entra sozinho no ranking do modo (sem pedir nome); o host envia ao global pelo time.
+    Antes da migração, o solo segue funcionando como antes.
+  - **Testes:** a suíte `net` liga o WebRTC com a sinalização em memória e joga uma partida com
+    dois processos (este é o host; `tests/net_peer.gd` é o colega, por ENet local): entrar, tiro
+    do colega com pontos para ele, porta comprada com a carteira dele, cair e levantar, fim de
+    jogo com o resumo dele.
 - **Anti-trapaça ligado de verdade.** A ligação `anti_cheat` estava no nó errado do `main.tscn`, então
   o fim de jogo nunca invalidava uma partida marcada. Agora está no `GameManager` (a suíte `match`
   confere).

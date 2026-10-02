@@ -123,3 +123,17 @@ func _update() -> void:
 	collision_layer = PhysicsLayers.PLAYER_ONLY | (PhysicsLayers.BARRICADES if planks > 0 else 0)
 	collision_mask = 0
 	planks_changed.emit(planks, data.max_planks)
+
+
+## Rede (colega): as tábuas que o host tem (com o som de quebrar ou de pregar).
+func net_set_planks(count: int) -> void:
+	if count == planks:
+		return
+	if count < planks:
+		Audio.play_at("wood_break", global_position, "world", 0.9)
+		if count <= 0:
+			Audio.play_at("barricade_down", global_position, "world", 1.0)
+	else:
+		Audio.play_at("hammer", global_position, "world", 0.9)
+	planks = count
+	_update()

@@ -100,8 +100,7 @@ func interact(player: Node3D) -> bool:
 		PointsManager.deny(p)
 		return false
 	p.perks.grant(perk)
-	if p.is_local:
-		Events.toast.emit(perk.display_name.to_upper())
+	p.hud(&"toast", [perk.display_name.to_upper()])
 	return true
 
 

@@ -54,7 +54,7 @@ func score_of(who: Node) -> int:
 ## Soma para `who` (null = o jogador local).
 func add(points: float, who: Node = null) -> void:
 	var delta := roundi(points * _event_multiplier)
-	if delta <= 0:
+	if delta <= 0 or Net.is_client():
 		return
 	var peer := PointsManager._peer(who)
 	var value := int(_scores.get(peer, 0)) + delta
@@ -108,8 +108,11 @@ func _on_kill(zombie: Node3D, info: DamageInfo) -> void:
 		_streaks[peer] = streak
 		if int(streak[0]) > 0:
 			points += mini(int(streak[0]), data.multi_kill_max_steps) * data.multi_kill_bonus_per_step
-			if int(streak[0]) >= 2 and (killer == null or killer.is_local):
-				Events.toast.emit("MULTI x%d" % (int(streak[0]) + 1))
+			if int(streak[0]) >= 2:
+				if killer:
+					killer.hud(&"toast", ["MULTI x%d" % (int(streak[0]) + 1)])
+				else:
+					Events.toast.emit("MULTI x%d" % (int(streak[0]) + 1))
 	else:
 		points *= data.indirect_factor
 	add(points, killer)

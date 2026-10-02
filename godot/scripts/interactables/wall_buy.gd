@@ -134,10 +134,9 @@ func hold_interact(player: Node3D, delta: float) -> bool:
 		return false
 	weapon.element = weapon.data.element
 	_bought_this_press = true
-	if p.is_local:
-		Audio.play("lab_upgrade", "ui", 0.8, 0.0, 1.3)
-		Events.toast.emit("%s — %s" % [catalog.label(weapon.element), info.get("description", "")])
-		Events.weapon_element_changed.emit(weapon.data.id, weapon.element)
+	p.hud_sound("lab_upgrade", 0.8, 1.3)
+	p.hud(&"toast", ["%s — %s" % [catalog.label(weapon.element), info.get("description", "")]])
+	p.hud(&"weapon_element_changed", [weapon.data.id, weapon.element])
 	return true
 
 

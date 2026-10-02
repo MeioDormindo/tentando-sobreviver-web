@@ -21,6 +21,15 @@ static var _corpses: Array[ZombieBase] = []
 ## Lua de Sangue: todos os zumbis mais rápidos.
 static var event_speed: float = 1.0
 
+## Partida em rede, numa máquina que não é o host: "fantoche" que só segue o que o host manda
+## (posição, direção, ataque, acerto e morte), sem IA, navegação nem colisão, e sem levar dano
+## (o tiro local é só visual: quem acerta de verdade é o host).
+var puppet := false
+var _net_target := Vector3.ZERO
+var _net_velocity := Vector3.ZERO
+var _net_yaw := 0.0
+var _net_has_target := false
+
 ## Quem persegue: o jogador de pé mais perto, reavaliado a cada RETARGET_TIME (e logo que o
 ## alvo cai ou morre). Sem ninguém de pé, fica com o último.
 var target: CharacterBase
@@ -108,6 +117,8 @@ func _ready() -> void:
 	_attack_interval_jitter = randf_range(0.92, 1.08)
 	attack_damage = data.damage * _damage_mult
 	add_to_group(&"zombies")
+	if puppet:
+		health.invulnerable = true
 	_apply_look()
 	if not (data.explosive.is_empty() and data.ranged.is_empty() and data.armor.is_empty() and data.death_cloud.is_empty()
 			and data.shield.is_empty() and data.revive.is_empty() and data.zigzag.is_empty() and data.hit_and_run.is_empty()
@@ -127,6 +138,9 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if state == State.DEAD:
+		return
+	if puppet:
+		_follow_net(delta)
 		return
 	if _burn_left > 0.0:
 		_burn_left -= delta
@@ -623,3 +637,59 @@ func _hit_fx(at: Vector3) -> void:
 			PixelFx.decal(get_tree(), "blood_pool", drop, randf_range(0.25, 0.45), CORPSE_STAY)
 	else:
 		PixelFx.spawn(get_tree(), "dust", at, 0.45)
+
+
+# ───────────────────────── Rede (fantoche) ─────────────────────────
+
+## Vira fantoche (antes de entrar na árvore): sem IA, colisão nem dano.
+func make_puppet() -> void:
+	puppet = true
+	collision_layer = 0
+	collision_mask = 0
+
+
+## Estado mandado pelo host (posição no chão, velocidade e direção do corpo).
+func net_state(at: Vector3, moving: Vector3, yaw: float) -> void:
+	if not _net_has_target:
+		global_position = at
+	_net_target = at
+	_net_velocity = moving
+	_net_yaw = yaw
+	_net_has_target = true
+
+
+## Desliza até a última posição recebida (com a velocidade, para não andar aos trancos).
+func _follow_net(delta: float) -> void:
+	if not _net_has_target:
+		return
+	_net_target += _net_velocity * delta
+	global_position = global_position.lerp(_net_target, clampf(12.0 * delta, 0.0, 1.0))
+	velocity = _net_velocity
+	pivot.rotation.y = lerp_angle(pivot.rotation.y, _net_yaw, clampf(14.0 * delta, 0.0, 1.0))
+
+
+## Golpe (som e animação) avisado pelo host.
+func net_attack() -> void:
+	Events.zombie_attacked.emit(self)
+	if model and not data.crawls:
+		model.play_once(&"Attack")
+		_attack_anim_left = 0.55
+
+
+## Acerto avisado pelo host: sangue/faísca e o tranco, sem dano.
+func net_hit(at: Vector3, headshot: bool, kind: int) -> void:
+	if state == State.DEAD or not is_inside_tree():
+		return
+	var info := DamageInfo.new(0.0, kind as DamageInfo.Kind, null, headshot, at)
+	info.hit_position = at
+	if kind in [DamageInfo.Kind.WEAPON, DamageInfo.Kind.MELEE]:
+		_hit_fx(at if at != Vector3.ZERO else global_position + Vector3.UP * 1.2)
+		_flinch(info)
+
+
+## Morte avisada pelo host: o mesmo fim do solo (animação, corpo, sons).
+func net_die(headshot: bool, kind: int, at: Vector3) -> void:
+	if state == State.DEAD:
+		return
+	health.invulnerable = false
+	take_damage(DamageInfo.new(health.current + 1.0, kind as DamageInfo.Kind, null, headshot, at))

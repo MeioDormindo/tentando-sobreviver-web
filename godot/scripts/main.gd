@@ -10,7 +10,33 @@ const PLAYER_SCENE := "res://scenes/player/player.tscn"
 func _enter_tree() -> void:
 	_swap_world()
 	var local := _create_players()
+	if Net.is_online():
+		_setup_network()
 	bind_local_player(local)
+
+
+## Partida em grupo pela rede: cada personagem ganha o seu NetPlayer (o dos outros segue as
+## posições que chegam) e a cena ganha o NetWorld. Eventos do mapa e missões ficam para depois
+## (Etapa 2 do cooperativo).
+func _setup_network() -> void:
+	for system in ["WorldEventSystem", "SerumQuest", "TrainQuest", "TempleQuest"]:
+		var node := get_node_or_null(system)
+		if node:
+			remove_child(node)
+			node.free()
+	for someone in get_children():
+		if someone is Player:
+			var player := someone as Player
+			var link := NetPlayer.new()
+			link.name = "Net"
+			link.player = player
+			link.owner_peer = player.peer_id
+			player.net = link
+			player.net_puppet = not player.is_local
+			player.add_child(link)
+	var world := NetWorld.new()
+	world.name = "NetWorld"
+	add_child(world)
 
 
 func _swap_world() -> void:

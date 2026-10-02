@@ -46,7 +46,10 @@ func _ready() -> void:
 			damage_dealt += info.amount)
 	Events.boss_defeated.connect(_on_boss_defeated)
 	# Arma que saiu do inventário cai no chão (pode ser pega de volta por 60s).
-	Events.weapon_dropped.connect(func(weapon: Weapon, at: Vector3) -> void: WeaponDrop.spawn(get_tree(), weapon, at))
+	Events.weapon_dropped.connect(func(weapon: Weapon, at: Vector3) -> void:
+		var drop := WeaponDrop.spawn(get_tree(), weapon, at)
+		if Net.world and Net.is_host():
+			Net.world.on_drop(drop))
 
 
 ## Jogadores no início do mapa (os colegas em volta do primeiro). O mapa trocado pelo menu
@@ -83,29 +86,39 @@ func _process(delta: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed(&"pause") and player and player.is_alive() and not over:
-		set_paused(not get_tree().paused)
+		set_paused(not (Net.menu_open if Net.is_online() else get_tree().paused))
 
 
 ## Cooperativo: ninguém mais de pé (todos caídos ou mortos) = fim da partida.
 func _check_team() -> void:
-	if over or not Players.coop():
+	# Em rede, no colega: quem decide o fim é o host.
+	if over or not Players.coop() or Net.is_client():
 		return
 	if Players.standing().is_empty():
 		Events.player_died.emit()
 
 
+## Pausa. Em rede o mundo não para (os colegas continuam jogando): só abre o menu por cima.
 func set_paused(value: bool) -> void:
-	get_tree().paused = value
+	if Net.is_online():
+		Net.menu_open = value
+	else:
+		get_tree().paused = value
 	Events.pause_changed.emit(value)
 
 
 func restart() -> void:
+	# Em rede: o host leva todos de volta à sala.
+	if Net.is_online():
+		Net.return_to_room()
+		return
 	get_tree().paused = false
 	get_tree().reload_current_scene()
 
 
 func _on_zombie_killed(_zombie: Node3D, info: DamageInfo) -> void:
 	team_kills += 1
+	_count_for(info)
 	# Estatísticas pessoais: no cooperativo, só os abates do jogador desta máquina.
 	if Players.is_remote(info.source):
 		return
@@ -149,10 +162,12 @@ func _on_player_died() -> void:
 	var run := {"wave": round_manager.round_number, "kills": kills, "score": score, "bosses": bosses,
 		"time_ms": int(elapsed * 1000.0), "knife_kills": knife_kills, "headshots": headshots}
 	var flagged := anti_cheat != null and anti_cheat.flagged
-	# Partida invalidada pelo anti-trapaça não entra em recordes, totais nem ranking.
-	var before := Save.records(map_id).duplicate() if flagged else Save.finish_run(map_id, run)
+	# Partida invalidada pelo anti-trapaça não entra em recordes, totais nem ranking. A partida em
+	# grupo também não (ela vai para o ranking do modo dela, não para os recordes do solo).
+	var counts := not flagged and not Players.coop()
+	var before := Save.finish_run(map_id, run) if counts else Save.records(map_id).duplicate()
 	var best := Save.records(map_id)
-	Events.game_over.emit({
+	var summary := {
 		"map_id": map_id,
 		"round": round_manager.round_number,
 		"kills": kills,
@@ -170,12 +185,91 @@ func _on_player_died() -> void:
 		"score": score,
 		"best_score": int(best.bestScore),
 		"best_wave": int(best.bestWave),
-		"new_record": not flagged and score > int(before.bestScore),
-		"rank_eligible": not flagged and Save.qualifies(map_id, score),
+		"new_record": counts and score > int(before.bestScore),
+		"rank_eligible": counts and Save.qualifies(map_id, score),
 		"cheat_taunt": anti_cheat.taunt if flagged else "",
-	})
+	}
+	_team_result(summary, flagged)
+	Events.game_over.emit(summary)
+	if Net.world and Net.is_host():
+		Net.world.send_game_over(self)
 
 
 func go_to_menu() -> void:
+	Net.leave()
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
+
+
+# ───────────────────────── Partida em grupo ─────────────────────────
+
+## Abates de cada jogador (peer → {kills, headshots, knife_kills}), para o resumo de cada um.
+var _peer_stats: Dictionary = {}
+
+
+func _count_for(info: DamageInfo) -> void:
+	var shooter := info.source as Player if is_instance_valid(info.source) else null
+	if shooter == null:
+		return
+	var stats: Dictionary = _peer_stats.get(shooter.peer_id, {"kills": 0, "headshots": 0, "knife_kills": 0})
+	stats.kills += 1
+	if info.is_headshot:
+		stats.headshots += 1
+	if info.kind == DamageInfo.Kind.MELEE:
+		stats.knife_kills += 1
+	_peer_stats[shooter.peer_id] = stats
+
+
+## Host: o resumo do fim de jogo para o colega `peer` (o do time + os números dele).
+func summary_for(peer: int) -> Dictionary:
+	var stats: Dictionary = _peer_stats.get(peer, {"kills": 0, "headshots": 0, "knife_kills": 0})
+	var someone := Players.by_peer(peer)
+	return {
+		"map_id": current_map(),
+		"round": round_manager.round_number,
+		"kills": int(stats.kills),
+		"team_kills": team_kills,
+		"players": Players.all().size(),
+		"headshots": int(stats.headshots),
+		"knife_kills": int(stats.knife_kills),
+		"points": points_manager.points_of(someone) if someone else 0,
+		"points_earned": points_manager.earned_of(someone) if someone else 0,
+		"time_seconds": int(elapsed),
+		"bosses": bosses,
+		"score": score_manager.score if score_manager else 0,
+		"best_score": 0,
+		"best_wave": 0,
+		"new_record": false,
+		"rank_eligible": false,
+		"cheat_taunt": "",
+	}
+
+
+## Colega: o host avisou o fim de jogo (com os tiros contados aqui).
+func net_game_over(summary: Dictionary) -> void:
+	if over:
+		return
+	over = true
+	summary.shots_fired = shots_fired
+	summary.shots_hit = mini(shots_hit, shots_fired)
+	summary.damage = roundi(damage_dealt)
+	_team_result(summary, false)
+	Events.game_over.emit(summary)
+
+
+## Partida em grupo: o resultado do time vai para o ranking local do modo (sem pedir nome: os
+## nomes vêm da sala) e o host o envia ao global. Com bots (teste) ou invalidada, não conta.
+func _team_result(summary: Dictionary, flagged: bool) -> void:
+	var count := Session.player_count()
+	if count <= 1:
+		return
+	var names := PackedStringArray()
+	for entry: Dictionary in Session.roster:
+		names.append(String(entry.get("name", "")).to_upper())
+	var team := " · ".join(names)
+	var bots := Session.roster.any(func(entry: Dictionary) -> bool: return bool(entry.get("bot", false)))
+	var counts := not bots and not flagged
+	summary.team = team
+	summary.players = count
+	summary.coop_rank = Save.add_ranking_coop(String(summary.map_id), count, team, int(summary.score), int(summary.round), int(summary.get("team_kills", summary.kills))) if counts else 0
+	summary.global_submit = counts and Net.is_host() and Online.is_configured() and int(summary.score) > 0

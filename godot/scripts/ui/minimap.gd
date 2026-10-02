@@ -146,6 +146,13 @@ func _draw() -> void:
 		var pulse := 3.5 + sin(_clock * 6.0)
 		draw_circle(to_local_point(boss), pulse, Color8(255, 42, 26))
 		draw_arc(to_local_point(boss), pulse + 1.0, 0.0, TAU, 16, Color.WHITE, 1.0)
+	# Colegas (cooperativo): ponto azul-claro; caído, vermelho piscando.
+	for mate: Array in _state.get("mates", []):
+		var down: bool = mate[1]
+		if down and int(_clock * 4.0) % 2 == 0:
+			continue
+		draw_circle(to_local_point(mate[0]), 2.6 * zoom, Color8(255, 80, 60) if down else Color8(120, 205, 255))
+		draw_arc(to_local_point(mate[0]), 2.6 * zoom, 0.0, TAU, 12, Color(0, 0, 0, 0.9), 1.0)
 	# Jogador: seta apontando para a mira.
 	var center := to_local_point(_state.get("player", Vector2.ZERO))
 	var facing: float = _state.get("facing", 0.0)

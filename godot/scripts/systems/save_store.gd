@@ -164,6 +164,54 @@ func add_ranking(map_id: String, player: String, score: int, wave: int, kills: i
 	return list.find(row) + 1
 
 
+# ───────────────────────── Ranking local do cooperativo ─────────────────────────
+
+const COOP_MODES := ["2", "3", "4"]
+
+
+## Ranking das partidas em grupo (players = 2, 3 ou 4) no mapa: {team, score, wave, kills, date}.
+func ranking_coop(map_id: String, players: int) -> Array:
+	var maps: Dictionary = data.get("rankingCoop", {})
+	return (maps.get(map_id, {}) as Dictionary).get(str(players), [])
+
+
+## O resultado do time entra no top do modo?
+func qualifies_coop(map_id: String, players: int, score: int) -> bool:
+	var list := ranking_coop(map_id, players)
+	return score > 0 and (list.size() < catalog.ranking_size or score > int(list.back().score))
+
+
+## Grava o resultado do time (`team`: os nomes da sala). Devolve a posição (1 = primeiro), ou 0.
+func add_ranking_coop(map_id: String, players: int, team: String, score: int, wave: int, kills: int) -> int:
+	if not str(players) in COOP_MODES or not qualifies_coop(map_id, players, score):
+		return 0
+	var row := _coop_row({"team": team, "score": score, "wave": wave, "kills": kills, "date": Time.get_datetime_string_from_system(true) + "Z"})
+	var position := _insert_coop(map_id, str(players), row)
+	_persist()
+	return position
+
+
+func _insert_coop(map_id: String, mode: String, row: Dictionary) -> int:
+	if not data.has("rankingCoop"):
+		data.rankingCoop = {}
+	if not data.rankingCoop.has(map_id):
+		data.rankingCoop[map_id] = {}
+	var list: Array = (data.rankingCoop[map_id] as Dictionary).get(mode, []).duplicate()
+	for other: Dictionary in list:
+		if other.team == row.team and int(other.score) == int(row.score) and other.date == row.date:
+			return 0
+	list.append(row)
+	list.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a.score) > int(b.score))
+	list = list.slice(0, catalog.ranking_size)
+	data.rankingCoop[map_id][mode] = list
+	return list.find(row) + 1
+
+
+func _coop_row(row: Dictionary) -> Dictionary:
+	return {"team": String(row.get("team", "")).strip_edges().substr(0, 64).to_upper(), "score": _num(row.get("score")),
+		"wave": _num(row.get("wave")), "kills": _num(row.get("kills")), "date": String(row.get("date", "")).substr(0, 40)}
+
+
 # ───────────────────────── Segredos e conquistas ─────────────────────────
 
 func discover(secret: String) -> bool:
@@ -247,6 +295,11 @@ func merge_from(raw: Variant, take_settings: bool = false) -> void:
 		var date: String = other.achievements[id]
 		if not data.achievements.has(id) or date < String(data.achievements[id]):
 			data.achievements[id] = date
+	for id: String in other.get("rankingCoop", {}):
+		for mode: String in COOP_MODES:
+			var theirs: Array = other.rankingCoop[id].get(mode, []) if other.rankingCoop[id] is Dictionary else []
+			for row: Dictionary in theirs:
+				_insert_coop(id, mode, row)
 	for key: String in other.glossary:
 		var date: String = other.glossary[key]
 		if not data.glossary.has(key) or date < String(data.glossary[key]):
@@ -302,6 +355,21 @@ func sanitize(raw: Variant) -> Dictionary:
 	for key: Variant in seen:
 		if key is String and String(key).length() <= 64 and seen[key] is String:
 			d.glossary[key] = String(seen[key]).substr(0, 40)
+	var coop: Dictionary = r.get("rankingCoop", {}) if r.get("rankingCoop") is Dictionary else {}
+	for id: String in catalog.maps:
+		if not coop.get(id) is Dictionary:
+			continue
+		for mode: String in COOP_MODES:
+			var rows: Array = []
+			if coop[id].get(mode) is Array:
+				for row: Variant in coop[id][mode]:
+					if row is Dictionary and row.get("team") is String:
+						rows.append(_coop_row(row))
+			if not rows.is_empty():
+				rows.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a.score > b.score)
+				if not d.rankingCoop.has(id):
+					d.rankingCoop[id] = {}
+				d.rankingCoop[id][mode] = rows.slice(0, catalog.ranking_size)
 	# Mapas liberados por conquista (saves de antes do Templo já com a missão feita).
 	for id: String in d.achievements:
 		for map_id in catalog.unlocked_by_achievement(id):
@@ -333,6 +401,8 @@ func _defaults() -> Dictionary:
 		"achievements": {},
 		# Só no Godot: entradas do glossário já encontradas (chave → data).
 		"glossary": {},
+		# Só no Godot: ranking local das partidas em grupo, por mapa e modo ("2", "3", "4").
+		"rankingCoop": {},
 	}
 
 

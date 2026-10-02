@@ -50,6 +50,19 @@ var _revive_held_at := -INF
 var _revive_spot: ReviveSpot
 var _last_reviver: Player
 
+## Partida em rede: o componente que troca o estado deste jogador (null no solo). O host decide
+## tudo (vida, munição, compras, tiro de verdade); o dono só move e mira o próprio personagem e
+## pede as ações. `net_puppet`: este personagem segue as posições que chegam (o de outra
+## máquina; no host, também o dos colegas).
+var net: NetPlayer
+var net_puppet := false
+## Velocidade decidida pelo host (perks × Speed Boost × bênção), usada pelo dono ao andar.
+var net_speed := 1.0
+var _net_target := Vector3.ZERO
+var _net_velocity := Vector3.ZERO
+var _net_has_target := false
+var _loadout_sig := ""
+
 ## Relógio de jogo (s): para com a pausa e acompanha a velocidade do jogo.
 var _clock := 0.0
 var _invulnerable_until := 0.0
@@ -138,8 +151,7 @@ func _ready() -> void:
 	inventory.weapon_changed.connect(_on_weapon_changed)
 	melee.swung.connect(func() -> void:
 		_play_action(&"Knife", 0.36)
-		if is_local:
-			Events.knife_swung.emit())
+		_fx(&"knife_swung"))
 	perks.perks_changed.connect(_on_perks_changed)
 	var blessings := BlessingSystem.new()
 	blessings.player = self
@@ -150,9 +162,7 @@ func _ready() -> void:
 	Events.hound_round_changed.connect(_on_hound_round)
 	Events.round_started.connect(_on_round_started)
 	inventory.give(data.starting_weapon)
-	health.health_changed.connect(func(current: float, maximum: float) -> void:
-		if is_local:
-			Events.player_health_changed.emit(current, maximum))
+	health.health_changed.connect(func(current: float, maximum: float) -> void: hud(&"player_health_changed", [current, maximum]))
 	aim_point = global_position - global_basis.z * 3.0
 	# Depois que a cena inteira estiver pronta (a HUD fica pronta por último).
 	call_deferred(&"_emit_initial_state")
@@ -242,8 +252,7 @@ func _add_name_tag() -> void:
 
 
 func _emit_initial_state() -> void:
-	if is_local:
-		Events.player_health_changed.emit(health.current, health.max_health)
+	hud(&"player_health_changed", [health.current, health.max_health])
 	_on_weapon_changed(inventory.current, inventory.other())
 
 
@@ -254,26 +263,242 @@ func is_standing() -> bool:
 
 func _physics_process(delta: float) -> void:
 	_clock += delta
-	if bleeding:
+	# Vida, veneno, cair e interagir: decide quem manda na partida (o solo ou o host).
+	var authority := not Net.is_client()
+	if bleeding and authority:
 		_tick_bleed(delta)
 	if not is_alive() or is_down:
 		velocity = Vector3.ZERO
 		return
 	_firing = false
-	_update_petrify(delta)
+	if net_puppet:
+		_follow_net(delta)
+		if authority:
+			_update_petrify(delta)
+			_regenerate(delta)
+			_tick_poison(delta)
+			_tick_blind()
+			_update_interaction()
+		return
+	if authority:
+		_update_petrify(delta)
 	if is_stone():
 		velocity = Vector3.ZERO
 		move_and_slide()
 		return
 	if controlled:
-		_read_input()
-	_regenerate(delta)
-	_tick_poison(delta)
+		if Net.menu_open:
+			move_input = Vector2.ZERO
+		else:
+			_read_input()
+	if authority:
+		_regenerate(delta)
+		_tick_poison(delta)
 	_tick_blind()
-	_update_interaction()
+	if authority:
+		_update_interaction()
 	_move(delta)
 	_face_aim()
 	_check_unstuck(delta)
+
+
+# ───────────────────────── Rede ─────────────────────────
+
+## Aviso para a HUD de quem joga com este personagem: no solo e no host (o próprio), direto no
+## Events; no host, para a máquina do colega dono dele; nos colegas, nada (quem avisa é o host).
+func hud(signal_name: StringName, args: Array = []) -> void:
+	if net:
+		net.hud(signal_name, args)
+	elif is_local:
+		Events.emit_signal.callv([signal_name] + args)
+
+
+## Som de interface para quem joga com este personagem (compra, Weapon Lab...).
+func hud_sound(sound: String, volume := 0.9, rate := 1.0) -> void:
+	if net:
+		net.hud_sound(sound, volume, rate)
+	elif is_local:
+		Audio.play(sound, "ui", volume, 0.0, rate)
+
+
+## Efeito da ação do próprio jogador (som do tiro, faca, recarga, lanterna): na máquina dele, na
+## hora, sem esperar o host.
+func _fx(signal_name: StringName, args: Array = []) -> void:
+	if is_local:
+		Events.emit_signal.callv([signal_name] + args)
+
+
+## Colega pedindo uma ação ao host. Devolve true se foi pedida (e não deve rodar aqui).
+func _request(action: StringName, args: Array = []) -> bool:
+	if net == null or not Net.is_client():
+		return false
+	net.request(action, args)
+	return true
+
+
+## Posição, mira e velocidade que chegaram do dono deste personagem.
+func net_target(at: Vector3, aim: Vector3, moving: Vector3) -> void:
+	if not _net_has_target or at.distance_to(global_position) > 6.0:
+		global_position = at
+	_net_target = at
+	_net_velocity = moving
+	aim_point = aim
+	_net_has_target = true
+
+
+func _follow_net(delta: float) -> void:
+	if not _net_has_target:
+		return
+	_net_target += _net_velocity * delta
+	global_position = global_position.lerp(_net_target, clampf(14.0 * delta, 0.0, 1.0))
+	velocity = _net_velocity
+	_face_aim()
+
+
+## Host: a ação pedida pelo colega dono deste personagem (o mesmo caminho dos bots).
+func net_action(action: StringName, args: Array) -> void:
+	match action:
+		&"fire":
+			aim_point = args[0]
+			if weapon:
+				weapon.force_ready()
+			fire()
+		&"reload":
+			if weapon:
+				weapon.start_reload()
+		&"switch":
+			inventory.switch_to(int(args[0]))
+		&"knife":
+			aim_point = args[0]
+			knife()
+		&"interact":
+			interact()
+		&"hold":
+			hold_interact(clampf(float(args[0]), 0.0, 0.1))
+		&"flashlight":
+			toggle_flashlight(bool(args[0]))
+
+
+## Outra máquina viu este personagem atirar: só o visual (clarão, rastro, som), sem dano.
+func fire_visual(aim: Vector3) -> void:
+	if weapon == null:
+		return
+	aim_point = aim
+	weapon.force_ready()
+	if weapon.magazine <= 0:
+		weapon.magazine = weapon.data.magazine_size
+	weapon.reloading = false
+	fire()
+
+
+## Armas decididas pelo host: [[id, nível, elemento], ...] e a que está em mãos.
+func mirror_loadout(list: Array, current: int) -> void:
+	var sig := str(list)
+	if sig != _loadout_sig:
+		_loadout_sig = sig
+		var lab := load("res://data/configs/weapon_lab.tres") as WeaponLabData
+		var entries: Array = []
+		for entry: Array in list:
+			var base := load("res://data/weapons/%s.tres" % entry[0]) as WeaponData
+			if base:
+				entries.append([base, int(entry[1]), StringName(entry[2])])
+		inventory.rebuild(entries, current, lab)
+	elif current != inventory.current_index:
+		inventory.switch_to(current)
+
+
+## O que o host manda das armas, para o espelho do dono (munição).
+func loadout() -> Array:
+	var list: Array = []
+	for w in inventory.weapons:
+		list.append([String(_base_id(w)), w.level, String(w.element)])
+	return list
+
+
+static func _base_id(w: Weapon) -> StringName:
+	return w.data.id
+
+
+## Munição decidida pelo host (o dono atira na frente, então só corrige quando não está atirando).
+func mirror_ammo(magazine: int, reserve: int, reloading: bool) -> void:
+	if weapon == null or _clock - _last_shot_at < 0.4:
+		return
+	weapon.magazine = magazine
+	weapon.reserve = reserve
+	if reloading and not weapon.reloading:
+		weapon.start_reload()
+
+
+var _last_shot_at := -INF
+
+
+## Estado decidido pelo host: vida, armadura, cair/levantar/morrer, lentidão, pedra, velocidade.
+func mirror_vitals(v: Dictionary) -> void:
+	health.max_health = float(v.get("max", health.max_health))
+	var hp := float(v.get("hp", health.current))
+	var state := int(v.get("state", 0))
+	armor = float(v.get("armor", armor))
+	net_speed = float(v.get("speed", 1.0))
+	flashlight_on = bool(v.get("light", flashlight_on))
+	var flashlight := pivot.get_node_or_null("Flashlight") as SpotLight3D
+	if flashlight:
+		flashlight.visible = flashlight_on
+	var slow_left := float(v.get("slow_left", 0.0))
+	if slow_left > 0.0:
+		_slow_factor = float(v.get("slow", 1.0))
+		_slow_until = _clock + slow_left
+	_stone_until = _clock + float(v.get("stone_left", 0.0))
+	bleed_left = float(v.get("bleed", bleed_left))
+	var was := 0 if is_standing() else (1 if bleeding else 2)
+	# As mesmas notícias do host (caiu, levantou, saiu) também aqui: som, painel do time.
+	if state != was:
+		match state:
+			0:
+				bleeding = false
+				is_down = false
+				visible = true
+				health.is_dead = false
+				pivot.rotation.z = 0.0
+				Events.player_revived.emit(self)
+			1:
+				bleeding = true
+				is_down = true
+				visible = true
+				health.is_dead = true
+				create_tween().tween_property(pivot, "rotation:z", deg_to_rad(70.0), 0.3)
+				Events.player_downed.emit(self)
+			2:
+				bleeding = false
+				is_down = false
+				visible = false
+				health.is_dead = true
+				Events.player_bled_out.emit(self)
+	health.current = hp
+	health.health_changed.emit(health.current, health.max_health)
+
+
+## Host: o estado que vai para as outras máquinas.
+func vitals() -> Dictionary:
+	return {
+		"hp": health.current,
+		"max": health.max_health,
+		"armor": armor,
+		"state": 0 if is_standing() else (1 if bleeding else 2),
+		"bleed": bleed_left,
+		"speed": perks.speed_multiplier * speed_buff * blessing_speed,
+		"slow": _slow_factor,
+		"slow_left": maxf(0.0, _slow_until - _clock),
+		"stone_left": maxf(0.0, _stone_until - _clock),
+		"light": flashlight_on,
+	}
+
+
+## Host: põe o colega num lugar (volta no round) — a posição é dele, então avisa a máquina dele.
+func net_place(at: Vector3) -> void:
+	global_position = at
+	_net_target = at
+	if net and Net.is_host() and not is_local:
+		net.teleport(at)
 
 
 ## Olhar da Górgona: soma à petrificação. Estágios: lento → cinza (metade) → pedra (inteira).
@@ -285,9 +510,8 @@ func petrify(amount: float) -> void:
 	if petrification >= 1.0:
 		petrification = 0.0
 		_stone_until = _clock + STONE_TIME
-		if is_local:
-			Events.toast.emit("PETRIFICADO! Não olhe para a Górgona")
-			Events.screen_shake.emit(0.3, 0.1)
+		hud(&"toast", ["PETRIFICADO! Não olhe para a Górgona"])
+		hud(&"screen_shake", [0.3, 0.1])
 		if model:
 			model.tint(STONE_COLOR * 0.85)
 			_stone_tint = true
@@ -347,8 +571,8 @@ func fire() -> Array[DamageInfo]:
 	_firing = true
 	_face_aim()
 	var hits := weapon.shoot(get_world_3d().direct_space_state, muzzle.global_position, aim_point, [get_rid()], self)
-	if not hits.is_empty() and is_local:
-		Events.shot_connected.emit()
+	if not hits.is_empty():
+		hud(&"shot_connected")
 	return hits
 
 
@@ -369,8 +593,7 @@ func hold_interact(delta: float) -> bool:
 ## Armadura cheia (power-up Armor).
 func refill_armor() -> void:
 	armor = data.max_armor
-	if is_local:
-		Events.player_armor_changed.emit(armor, data.max_armor)
+	hud(&"player_armor_changed", [armor, data.max_armor])
 
 
 ## Deixa o jogador mais lento por `seconds` (fator de velocidade).
@@ -440,6 +663,9 @@ func knife() -> bool:
 
 
 func take_damage(info: DamageInfo) -> float:
+	# Em rede, no colega: quem fere é o host (o dano chega pelo estado que ele manda).
+	if Net.is_client():
+		return 0.0
 	# Invulnerável por um instante só contra golpes (ácido e gás ferem continuamente).
 	var is_blow := info.kind == DamageInfo.Kind.ZOMBIE
 	if is_blow and _clock < _invulnerable_until:
@@ -451,8 +677,7 @@ func take_damage(info: DamageInfo) -> float:
 		var absorbed := minf(armor, info.amount)
 		armor -= absorbed
 		info.amount -= absorbed
-		if is_local:
-			Events.player_armor_changed.emit(armor, data.max_armor)
+		hud(&"player_armor_changed", [armor, data.max_armor])
 		if info.amount <= 0.0:
 			if is_blow:
 				_invulnerable_until = _clock + data.invulnerability_time
@@ -494,10 +719,10 @@ func _show_gun(_kind: StringName = &"") -> void:
 
 ## Avisa a HUD da arma em mãos e da reserva (também quando a HUD fica pronta depois do jogador).
 func announce_weapon() -> void:
-	if weapon == null or not is_local:
+	if weapon == null:
 		return
 	var other := inventory.other()
-	Events.weapon_visual_changed.emit(weapon.data.id, weapon.level, other.data.id if other else &"", other.level if other else 0)
+	hud(&"weapon_visual_changed", [weapon.data.id, weapon.level, other.data.id if other else &"", other.level if other else 0])
 
 
 ## Clarão do disparo: sprite de fogo e luz rápida na boca da arma. Nada se o quadro da arma
@@ -583,9 +808,8 @@ func set_flashlight_factor(factor: float) -> void:
 func _go_down(revive: PerkData) -> void:
 	is_down = true
 	health.invulnerable = true
-	if is_local:
-		Events.interaction_prompt.emit("", "", -1.0)
-		Events.toast.emit("QUICK REVIVE!")
+	hud(&"interaction_prompt", ["", "", -1.0])
+	hud(&"toast", ["QUICK REVIVE!"])
 	var tween := create_tween()
 	tween.tween_property(pivot, "rotation:z", deg_to_rad(70.0), 0.3)
 	tween.tween_interval(revive.down_time)
@@ -619,28 +843,41 @@ func _read_input() -> void:
 		fire()
 	elif Input.is_action_pressed(&"fire"):
 		weapon.hold_trigger()  # minigun gira o cano enquanto o gatilho está seguro
+	# Em rede (colega): o efeito sai aqui na hora e o host faz de verdade (_request).
 	if Input.is_action_just_pressed(&"reload"):
 		weapon.start_reload()
+		_request(&"reload")
 	if Input.is_action_just_pressed(&"interact"):
-		interact()
+		if not _request(&"interact"):
+			interact()
 	elif Input.is_action_pressed(&"interact"):
-		hold_interact(get_physics_process_delta_time() * blessing_speed)
+		var held := get_physics_process_delta_time() * blessing_speed
+		if not _request(&"hold", [held]):
+			hold_interact(held)
 	if Input.is_action_just_pressed(&"melee"):
 		knife()
+		_request(&"knife", [aim_point])
 	if Input.is_action_just_pressed(&"flashlight"):
 		toggle_flashlight()
+		_request(&"flashlight", [flashlight_on])
+	var slot := -1
 	if Input.is_action_just_pressed(&"switch_weapon") or Input.is_action_just_pressed(&"weapon_next") or Input.is_action_just_pressed(&"weapon_prev"):
-		inventory.switch_next()
-	elif Input.is_action_just_pressed(&"weapon_1"):
-		inventory.switch_to(0)
-	elif Input.is_action_just_pressed(&"weapon_2"):
-		inventory.switch_to(1)
+		if inventory.switch_next():
+			slot = inventory.current_index
+	elif Input.is_action_just_pressed(&"weapon_1") and inventory.switch_to(0):
+		slot = 0
+	elif Input.is_action_just_pressed(&"weapon_2") and inventory.switch_to(1):
+		slot = 1
+	if slot >= 0:
+		_request(&"switch", [slot])
 
 
 func _move(delta: float) -> void:
 	var direction := Vector3(move_input.x, 0.0, move_input.y)
 	var slow := slow_factor()
-	var speed := data.move_speed * _speed_factor(direction) * perks.speed_multiplier * slow * speed_buff * blessing_speed
+	# Em rede, no colega: a velocidade (perks, Speed Boost, bênção) vem do host.
+	var boost := net_speed if Net.is_client() else perks.speed_multiplier * speed_buff * blessing_speed
+	var speed := data.move_speed * _speed_factor(direction) * slow * boost
 	var target := direction * speed
 	if melee.lunge_left > 0.0:
 		target = melee.lunge_velocity
@@ -693,9 +930,9 @@ func _update_interaction() -> void:
 			progress = _interactable.call(&"get_interaction_progress", self)
 	# A barra muda a cada quadro enquanto segura E, mesmo com o texto igual (por isso não fica
 	# só atrás do "if prompt != _last_prompt", que existe pra não gastar toa quando nada muda).
-	if (prompt != _last_prompt or progress >= 0.0) and is_local:
+	if prompt != _last_prompt or progress >= 0.0:
 		_last_prompt = prompt
-		Events.interaction_prompt.emit(prompt, icon, progress)
+		hud(&"interaction_prompt", [prompt, icon, progress])
 
 
 func _regenerate(delta: float) -> void:
@@ -790,8 +1027,7 @@ func _on_perks_changed() -> void:
 	var ids: Array[StringName] = []
 	for perk in perks.owned:
 		ids.append(perk.id)
-	if is_local:
-		Events.perks_changed.emit(ids)
+	hud(&"perks_changed", [ids])
 
 
 func _apply_weapon_modifiers() -> void:
@@ -819,25 +1055,30 @@ func _on_weapon_changed(current: Weapon, other: Weapon) -> void:
 		if w.ammo_changed.is_connected(_on_ammo_changed):
 			w.ammo_changed.disconnect(_on_ammo_changed)
 	current.ammo_changed.connect(_on_ammo_changed)
-	if is_local:
-		Events.weapon_changed.emit(current.data.display_name, other.data.display_name if other else "")
+	hud(&"weapon_changed", [current.data.display_name, other.data.display_name if other else ""])
 	_on_ammo_changed(current.magazine, current.reserve, current.reloading)
 
 
 func _on_fired() -> void:
 	_play_action(&"Shoot", 0.15)
 	_muzzle_flash()
+	_last_shot_at = _clock
 	if is_local:
 		Events.shot_fired.emit()
 		Events.weapon_fired.emit(weapon.data.id, weapon.level)
+	else:
+		# Tiro de outro jogador: o som sai de onde ele está.
+		var shot := AudioManager.shot_sound(weapon.data.id)
+		Audio.play_at(shot[0], muzzle.global_position, "weapon", 0.7, 30.0, 0.05, shot[1])
+	if net:
+		net.on_fired(aim_point)
 
 
 func _on_ammo_changed(magazine: int, reserve: int, reloading: bool) -> void:
 	if reloading and not _was_reloading and is_local:
 		Events.weapon_reload_started.emit(weapon.data.kind)
 	_was_reloading = reloading
-	if is_local:
-		Events.ammo_changed.emit(weapon.data.display_name, magazine, reserve, reloading)
+	hud(&"ammo_changed", [weapon.data.display_name, magazine, reserve, reloading])
 
 
 ## A partida tem colegas (cair vira sangrar esperando ajuda, não o fim)?
@@ -855,8 +1096,7 @@ func _on_health_died(info: DamageInfo) -> void:
 		_go_down(revive)
 		return
 	super(info)
-	if is_local:
-		Events.interaction_prompt.emit("", "", -1.0)
+	hud(&"interaction_prompt", ["", "", -1.0])
 	# Cai de lado.
 	create_tween().tween_property(pivot, "rotation:z", deg_to_rad(80.0), 0.4)
 	Events.player_died.emit()
@@ -876,8 +1116,7 @@ func _bleed(_info: DamageInfo) -> void:
 	perks.lose_all()
 	_revive_spot_on(true)
 	create_tween().tween_property(pivot, "rotation:z", deg_to_rad(70.0), 0.3)
-	if is_local:
-		Events.toast.emit("CAÍDO! Um colega pode te reviver")
+	hud(&"toast", ["CAÍDO! Um colega pode te reviver"])
 	Events.player_downed.emit(self)
 
 
@@ -886,8 +1125,7 @@ func _tick_bleed(delta: float) -> void:
 	if _clock - _revive_held_at > 0.25:
 		_revive_progress = 0.0
 		bleed_left -= delta
-	if is_local:
-		Events.interaction_prompt.emit("CAÍDO · %ds para um colega te reviver" % ceili(maxf(0.0, bleed_left)), "", -1.0 if _revive_progress <= 0.0 else _revive_progress / _revive_time_for(_last_reviver))
+	hud(&"interaction_prompt", ["CAÍDO · %ds para um colega te reviver" % ceili(maxf(0.0, bleed_left)), "", -1.0 if _revive_progress <= 0.0 else _revive_progress / _revive_time_for(_last_reviver)])
 	if bleed_left <= 0.0:
 		_bleed_out()
 
@@ -898,9 +1136,8 @@ func _bleed_out() -> void:
 	is_down = false
 	_revive_spot_on(false)
 	visible = false
-	if is_local:
-		Events.interaction_prompt.emit("", "", -1.0)
-		Events.toast.emit("VOCÊ MORREU · volta no próximo round")
+	hud(&"interaction_prompt", ["", "", -1.0])
+	hud(&"toast", ["VOCÊ MORREU · volta no próximo round"])
 	Events.player_bled_out.emit(self)
 
 
@@ -917,8 +1154,7 @@ func revive() -> void:
 	_last_hurt_at = _clock
 	_invulnerable_until = _clock + 1.5
 	create_tween().tween_property(pivot, "rotation:z", 0.0, 0.3)
-	if is_local:
-		Events.interaction_prompt.emit("", "", -1.0)
+	hud(&"interaction_prompt", ["", "", -1.0])
 	Events.player_revived.emit(self)
 
 
@@ -936,7 +1172,7 @@ func _on_round_started(_round_number: int, _total: int) -> void:
 	armor = 0.0
 	pivot.rotation.z = 0.0
 	inventory.reset_to(_start_weapon if _start_weapon else data.starting_weapon)
-	global_position = SpawnManager.safe_point(get_world_3d(), mate.global_position + Vector3(1.2, 0.0, 0.0), 0.4) + Vector3.UP * 0.05
+	net_place(SpawnManager.safe_point(get_world_3d(), mate.global_position + Vector3(1.2, 0.0, 0.0), 0.4) + Vector3.UP * 0.05)
 	_last_hurt_at = _clock
 	_invulnerable_until = _clock + 2.0
 	Events.player_revived.emit(self)

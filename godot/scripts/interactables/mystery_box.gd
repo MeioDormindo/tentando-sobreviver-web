@@ -24,6 +24,8 @@ var result: WeaponData
 var result_element: StringName = &""
 ## Quem pagou o sorteio em andamento (só essa pessoa pega a arma).
 var buyer: Player
+## Partida em rede, num colega: a caixa só mostra o que o host decide (sorteio, arma, mudança).
+var remote := false
 ## Chance de a arma da caixa já vir com um elemento.
 const ELEMENT_CHANCE := 0.3
 var uses: int = 0
@@ -128,11 +130,11 @@ func _process(delta: float) -> void:
 				var any := catalog.weapons.pick_random() as WeaponData
 				_label.text = any.display_name.to_upper()
 				_label.modulate = Color.WHITE
-			if _timer <= 0.0:
+			if _timer <= 0.0 and not remote:
 				_reveal()
 		State.READY:
 			_timer -= delta
-			if _timer <= 0.0:
+			if _timer <= 0.0 and not remote:
 				_reset()
 
 
@@ -179,8 +181,7 @@ func interact(player: Node3D) -> bool:
 			var taken := p.inventory.find(result.id)
 			if taken and result_element != &"":
 				taken.element = result_element
-				if p.is_local:
-					Events.weapon_element_changed.emit(result.id, result_element)
+				p.hud(&"weapon_element_changed", [result.id, result_element])
 			_reset()
 			return true
 	return false
@@ -236,6 +237,7 @@ func _roll() -> void:
 	Events.mystery_box_rolled.emit(price < data.price)
 	_timer = data.roll_time
 	_cycle = 0.0
+	_net(&"roll", {})
 
 
 func _reveal() -> void:
@@ -246,6 +248,7 @@ func _reveal() -> void:
 	_label.text = result.display_name.to_upper() + (("  " + ElementCatalog.shared().label(result_element)) if result_element != &"" else "")
 	_label.modulate = RARITY_COLORS.get(result.rarity, Color.WHITE)
 	_show_icon(result)
+	_net(&"reveal", {"id": String(result.id), "element": String(result_element)})
 
 
 ## Abre (gira para trás pela dobradiça de trás) ou fecha a tampa.
@@ -289,6 +292,7 @@ func _reset() -> void:
 	state = State.IDLE
 	result = null
 	buyer = null
+	_net(&"reset", {})
 	_label.text = ""
 	_label.modulate = Color.WHITE
 	if _dismiss_pending:
@@ -312,6 +316,13 @@ func _move_away() -> void:
 	if options.is_empty():
 		return
 	var spot: Vector3 = options.pick_random()
+	_net(&"move", {"spot": spot})
+	_move_to(spot)
+
+
+## Sobe, some e reaparece em `spot` (no host, depois do sorteio do lugar; no colega, quando o
+## host avisa).
+func _move_to(spot: Vector3) -> void:
 	Audio.play_at("box_move", global_position, "world", 1.0)
 	state = State.MOVING
 	remove_from_group(&"interactable")
@@ -323,7 +334,10 @@ func _move_away() -> void:
 	tween.tween_interval(data.move_gap_time)
 	tween.tween_callback(func() -> void: _appear_at(spot))
 	var area := world.area_of(spot) if world else &""
+	# Cada máquina mostra o aviso ao ver a caixa sair (não vai pela rede).
+	Net.relay_mute += 1
 	Events.toast.emit("A MYSTERY BOX MUDOU DE LUGAR — %s" % world.area_display_name(area).to_upper() if area != &"" else "A MYSTERY BOX MUDOU DE LUGAR")
+	Net.relay_mute -= 1
 
 
 func _appear_at(spot: Vector3) -> void:
@@ -338,3 +352,43 @@ func _appear_at(spot: Vector3) -> void:
 	# O lugar antigo fica livre e o novo, ocupado: a navegação dos zumbis acompanha.
 	if world:
 		world.rebake_navigation()
+
+
+# ───────────────────────── Rede ─────────────────────────
+
+## Host: avisa os colegas do que mudou na caixa.
+func _net(kind: StringName, info: Dictionary) -> void:
+	if Net.world and Net.is_host():
+		Net.world.on_box(self, kind, info)
+
+
+## Colega: aplica o que o host decidiu (o visual é o mesmo do solo).
+func net_apply(kind: StringName, info: Dictionary) -> void:
+	match kind:
+		&"roll":
+			state = State.ROLLING
+			uses += 1
+			_set_lid(true)
+			_timer = data.roll_time
+			_cycle = 0.0
+		&"reveal":
+			result = load("res://data/weapons/%s.tres" % String(info.get("id", ""))) as WeaponData
+			if result == null:
+				return
+			result_element = StringName(info.get("element", ""))
+			Audio.play_at("box_reveal", global_position, "ui", 1.0)
+			state = State.READY
+			_timer = data.take_time
+			_label.text = result.display_name.to_upper() + (("  " + ElementCatalog.shared().label(result_element)) if result_element != &"" else "")
+			_label.modulate = RARITY_COLORS.get(result.rarity, Color.WHITE)
+			_show_icon(result)
+		&"reset":
+			_show_icon(null)
+			_set_lid(false)
+			state = State.IDLE
+			result = null
+			_label.text = ""
+			_label.modulate = Color.WHITE
+		&"move":
+			uses = 0
+			_move_to(info.get("spot", global_position))

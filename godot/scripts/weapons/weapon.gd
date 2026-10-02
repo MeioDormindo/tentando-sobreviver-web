@@ -67,6 +67,14 @@ func upgrade_to(upgraded: WeaponData) -> void:
 	reset_ammo()
 
 
+## Rede: tiro pedido pelo colega (o tempo entre tiros já foi contado na máquina dele; aqui a
+## chegada pela internet pode vir mais junta). Também gira o cano da minigun.
+func force_ready() -> void:
+	_cooldown = 0.0
+	_spin = data.spin_up_time
+	_trigger_held = true
+
+
 func is_ammo_full() -> bool:
 	return magazine >= data.magazine_size and reserve >= data.reserve_ammo
 

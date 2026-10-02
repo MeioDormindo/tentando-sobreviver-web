@@ -57,7 +57,8 @@ func _desired_position() -> Vector3:
 ## o colega de pé mais perto.
 func _followed() -> Node3D:
 	var player := target as Player
-	if player and Players.coop() and not player.is_alive() and not player.bleeding:
+	# O personagem criado pela roster pode ficar pronto depois da câmera.
+	if player and player.is_node_ready() and Players.coop() and not player.is_alive() and not player.bleeding:
 		var mate := Players.nearest(player.global_position)
 		if mate:
 			return mate

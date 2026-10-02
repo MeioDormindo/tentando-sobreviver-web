@@ -144,7 +144,8 @@ func on_death(_info: DamageInfo) -> void:
 		_explode()
 	if not data.death_cloud.is_empty():
 		_spawn_pool(data.death_cloud, GAS_COLOR, zombie.global_position)
-	if not data.revive.is_empty() and not zombie.has_meta(&"revived") and randf() < float(data.revive.get("chance", 0.0)):
+	# Fantoche (rede): quem decide se o esqueleto levanta é o host.
+	if not data.revive.is_empty() and not zombie.puppet and not zombie.has_meta(&"revived") and randf() < float(data.revive.get("chance", 0.0)):
 		_schedule_revive()
 
 

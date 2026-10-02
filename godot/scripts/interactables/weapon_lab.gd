@@ -75,9 +75,8 @@ func interact(player: Node3D) -> bool:
 		PointsManager.deny(p)
 		return false
 	weapon.upgrade_to(upgraded)
-	if p.is_local:
-		Audio.play("lab_upgrade", "ui", 0.9, 0.0)
-		Events.toast.emit("%s!" % upgraded.display_name.to_upper())
+	p.hud_sound("lab_upgrade", 0.9)
+	p.hud(&"toast", ["%s!" % upgraded.display_name.to_upper()])
 	return true
 
 

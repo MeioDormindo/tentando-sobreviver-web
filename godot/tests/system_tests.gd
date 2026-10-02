@@ -28,6 +28,7 @@ func run(tree: SceneTree) -> int:
 	_test_perks()
 	_test_composition()
 	_test_save()
+	_test_coop_ranking()
 	_test_score()
 	_test_anti_cheat()
 	_test_achievements()
@@ -424,6 +425,24 @@ func _test_save() -> void:
 	check(odd.glossary.keys() == ["event:fog"], "glossário no save: ignora entrada inválida")
 	Save.merge_from({"glossary": {"zombie:tank": "2026-09-01T00:00:00Z"}})
 	check(Save.has_seen("zombie:tank") and Save.has_seen("zombie:walker"), "mescla da nuvem soma as descobertas do glossário")
+	Save.reset()
+
+
+## Ranking local por modo: o time entra no ranking da dupla/trio/quarteto, separado do solo (o
+## formato do jogo web), e passa pela validação e pela mescla com a nuvem.
+func _test_coop_ranking() -> void:
+	print("Ranking local por modo (cooperativo)")
+	Save.reset()
+	check(Save.add_ranking_coop("terminal", 2, "ana · beto", 900, 6, 40) == 1, "dupla: o time entra em 1º")
+	check(Save.add_ranking_coop("terminal", 2, "caio · dani", 1500, 8, 60) == 1, "dupla: o melhor passa à frente")
+	var duo := Save.ranking_coop("terminal", 2)
+	check(duo.size() == 2 and duo[0].team == "CAIO · DANI" and duo[1].team == "ANA · BETO", "dupla: ordenado, nomes em maiúsculas")
+	check(Save.ranking("terminal").is_empty() and Save.ranking_coop("terminal", 3).is_empty(), "o solo e o trio não mudam")
+	check(Save.add_ranking_coop("terminal", 1, "x", 100, 1, 1) == 0 and Save.add_ranking_coop("terminal", 5, "x", 100, 1, 1) == 0, "só dupla, trio e quarteto")
+	var clean := Save.sanitize({"rankingCoop": {"terminal": {"4": [{"team": "A · B · C · D", "score": 10, "wave": 2, "kills": 3}, {"score": 5}], "9": [{"team": "X", "score": 1}]}, "lixo": 3}})
+	check((clean.rankingCoop.terminal as Dictionary).keys() == ["4"] and clean.rankingCoop.terminal["4"].size() == 1, "save: ignora modo e linha inválidos")
+	Save.merge_from({"rankingCoop": {"terminal": {"2": [{"team": "EVA · FABIO", "score": 1200, "wave": 7, "kills": 50, "date": "2026-10-01T00:00:00Z"}]}}})
+	check(Save.ranking_coop("terminal", 2).size() == 3 and Save.ranking_coop("terminal", 2)[1].team == "EVA · FABIO", "mescla da nuvem junta os times")
 	Save.reset()
 
 

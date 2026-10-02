@@ -78,8 +78,9 @@ func unlock(id: String) -> void:
 func _on_kill(_zombie: Node3D, info: DamageInfo) -> void:
 	if not info.kind in [DamageInfo.Kind.WEAPON, DamageInfo.Kind.MELEE, DamageInfo.Kind.BURN]:
 		return
-	# Cooperativo: só os abates de quem joga nesta máquina contam para as conquistas dele.
-	if Players.is_remote(info.source):
+	# Cooperativo: só os abates de quem joga nesta máquina contam para as conquistas dele (em rede,
+	# no colega, a morte do fantoche não diz de quem foi: fica para depois).
+	if Net.is_client() or Players.is_remote(info.source):
 		return
 	_run.kills += 1
 	if info.kind == DamageInfo.Kind.MELEE:

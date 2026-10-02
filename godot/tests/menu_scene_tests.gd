@@ -42,10 +42,63 @@ func run(tree: SceneTree) -> int:
 	character.queue_free()
 	Session.map_id = "terminal"
 	await _glossary(tree)
+	await _lobby(tree)
+	await _ranking_modes(tree)
 	Save.reset()
 	await tree.process_frame
 	print("\n%d ok, %d falharam (menus)" % [_passed, _failed])
 	return _failed
+
+
+## RANKING: abas SOLO, DUPLA, TRIO e QUARTETO; na DUPLA aparece o time (coluna TIME).
+func _ranking_modes(tree: SceneTree) -> void:
+	Save.reset()
+	Save.add_ranking_coop("terminal", 2, "ANA · BETO", 900, 6, 40)
+	var screen := (load("res://scenes/ui/ranking.tscn") as PackedScene).instantiate()
+	tree.root.add_child(screen)
+	await tree.process_frame
+	var modes := screen.find_child("Modes", true, false)
+	var labels: Array = modes.get_children().map(func(b: Node) -> String: return (b as Button).text) if modes else []
+	check(labels == ["SOLO", "DUPLA", "TRIO", "QUARTETO"], "ranking: abas dos modos (%s)" % [labels])
+	var texts := func() -> Array: return screen.find_children("*", "Label", true, false).filter(func(l: Label) -> bool: return not l.is_queued_for_deletion()).map(func(l: Label) -> String: return l.text)
+	check(not texts.call().has("ANA · BETO"), "no SOLO o time não aparece")
+	if modes:
+		(modes.get_child(1) as Button).pressed.emit()
+	await tree.process_frame
+	check(texts.call().has("ANA · BETO") and texts.call().has("TIME"), "na DUPLA: o time no ranking local")
+	screen.queue_free()
+	Save.reset()
+	await tree.process_frame
+
+
+## JOGAR EM GRUPO: botão no menu; a tela de entrada (nome, criar, código, entrar) e, numa sala
+## local (ENet, sem internet), o código, o host na lista e o COMEÇAR esperando os amigos.
+func _lobby(tree: SceneTree) -> void:
+	var menu := (load("res://scenes/ui/main_menu.tscn") as PackedScene).instantiate()
+	tree.root.add_child(menu)
+	await tree.process_frame
+	check(menu.find_children("*", "Button", true, false).any(func(b: Button) -> bool: return b.text == "JOGAR EM GRUPO"), "menu principal tem JOGAR EM GRUPO")
+	menu.queue_free()
+	var lobby := (load("res://scenes/ui/lobby.tscn") as PackedScene).instantiate()
+	tree.root.add_child(lobby)
+	await tree.process_frame
+	check(lobby.find_child("Create", true, false) != null and lobby.find_child("Code", true, false) != null and lobby.find_child("Join", true, false) != null, "sala: criar ou entrar com código")
+	var code_edit := lobby.find_child("Code", true, false) as LineEdit
+	code_edit.text = "abc"
+	(lobby.find_child("Join", true, false) as Button).pressed.emit()
+	check(not Net.is_online() and (lobby.find_child("Status", true, false) as Label).text.contains("5 letras"), "código curto não tenta entrar")
+	Net.host_local("ANA", "", 24690)
+	await tree.process_frame
+	await tree.process_frame
+	var code_label := lobby.find_child("RoomCode", true, false) as Label
+	var start := lobby.find_child("Start", true, false) as Button
+	check(Net.is_host() and code_label != null and code_label.text == "LOCAL", "sala aberta: o código aparece grande")
+	check(start != null and start.disabled and (lobby.find_child("Players", true, false) as Node).get_child_count() == Net.MAX_PLAYERS, "sozinho: COMEÇAR espera os amigos (host + 3 vagas)")
+	(lobby.find_child("Leave", true, false) as Button).pressed.emit()
+	await tree.process_frame
+	check(not Net.is_online() and lobby.find_child("Create", true, false) != null, "SAIR DA SALA volta para criar ou entrar")
+	lobby.queue_free()
+	await tree.process_frame
 
 
 ## GLOSSÁRIO: botão no menu; 4 abas; toda entrada aponta para algo que existe e todo inimigo,

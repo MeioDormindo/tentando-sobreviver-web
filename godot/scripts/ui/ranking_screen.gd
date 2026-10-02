@@ -1,6 +1,6 @@
 extends Control
-## Ranking por mapa: LOCAL (top 10 deste aparelho) e GLOBAL (online, temporada de 15 dias, o
-## mesmo do jogo web).
+## Ranking por mapa e modo: LOCAL (top 10 deste aparelho) e GLOBAL (online, temporada de 15
+## dias, o mesmo do jogo web); SOLO, DUPLA, TRIO e QUARTETO (partidas em grupo: o time).
 
 const MENU := "res://scenes/ui/main_menu.tscn"
 
@@ -9,6 +9,9 @@ var _table: VBoxContainer
 var _tabs: Dictionary = {}
 var _scope_tabs: Dictionary = {}
 var _scope := "local"
+## Jogadores do modo mostrado (1 = solo).
+var _players := 1
+var _mode_tabs: Dictionary = {}
 var _request := 0
 
 
@@ -26,6 +29,16 @@ func _ready() -> void:
 		_scope_tabs[scope] = MenuKit.button(scopes, scope.to_upper(), func() -> void:
 			_scope = scope
 			_show(_map_id), 20)
+	var modes := HBoxContainer.new()
+	modes.name = "Modes"
+	modes.alignment = BoxContainer.ALIGNMENT_CENTER
+	modes.add_theme_constant_override(&"separation", 24)
+	column.add_child(modes)
+	for i in Leaderboard.MODES.size():
+		var count := i + 1
+		_mode_tabs[count] = MenuKit.button(modes, Leaderboard.MODES[i], func() -> void:
+			_players = count
+			_show(_map_id), 18)
 	var tabs := HBoxContainer.new()
 	tabs.alignment = BoxContainer.ALIGNMENT_CENTER
 	tabs.add_theme_constant_override(&"separation", 30)
@@ -47,15 +60,18 @@ func _show(id: String) -> void:
 		(_tabs[tab_id] as Button).add_theme_color_override(&"font_color", MenuKit.GOLD if tab_id == id else MenuKit.DIM)
 	for scope: String in _scope_tabs:
 		(_scope_tabs[scope] as Button).add_theme_color_override(&"font_color", MenuKit.GOLD if scope == _scope else MenuKit.DIM)
+	for count: int in _mode_tabs:
+		(_mode_tabs[count] as Button).add_theme_color_override(&"font_color", MenuKit.GOLD if count == _players else MenuKit.DIM)
 	for child in _table.get_children():
 		child.queue_free()
-	_row(["#", "NOME", "ROUND", "PONTOS"], MenuKit.DIM)
+	_row(["#", "NOME" if _players == 1 else "TIME", "ROUND", "PONTOS"], MenuKit.DIM)
 	if _scope == "global":
 		_show_global(id)
 		return
-	var list := Save.ranking(id)
+	var list := Save.ranking(id) if _players == 1 else Save.ranking_coop(id, _players)
 	if list.is_empty():
-		MenuKit.label(_table, "Nenhuma partida ainda — jogue para entrar no ranking!" if Save.is_unlocked(id) else "Mapa bloqueado", 16, MenuKit.DIM, HORIZONTAL_ALIGNMENT_CENTER)
+		var empty := "Nenhuma partida ainda — jogue para entrar no ranking!" if _players == 1 else "Nenhuma partida em %s ainda — chame os amigos em JOGAR EM GRUPO!" % Leaderboard.MODES[_players - 1]
+		MenuKit.label(_table, empty if Save.is_unlocked(id) else "Mapa bloqueado", 16, MenuKit.DIM, HORIZONTAL_ALIGNMENT_CENTER)
 		return
 	_fill(list)
 
@@ -66,7 +82,7 @@ func _show_global(id: String) -> void:
 		return
 	var loading := MenuKit.label(_table, "Carregando...", 16, MenuKit.DIM, HORIZONTAL_ALIGNMENT_CENTER)
 	var request := _request
-	var list: Variant = await Leaderboard.fetch_top(Online, id)
+	var list: Variant = await Leaderboard.fetch_top(Online, id, _players)
 	if request != _request or not is_instance_valid(loading):
 		return
 	loading.queue_free()
@@ -80,7 +96,7 @@ func _show_global(id: String) -> void:
 	var days := Leaderboard.season_days_left(Online)
 	var mine := -1
 	for i in (list as Array).size():
-		if String(list[i].name).to_upper() == Save.player_name.to_upper():
+		if String(list[i].get("team", list[i].name) if _players > 1 else list[i].name).to_upper().contains(Save.player_name.to_upper()):
 			mine = i
 			break
 	MenuKit.label(_table, "TEMPORADA TERMINA EM %d %s%s" % [days, "DIA" if days == 1 else "DIAS", (" · VOCÊ: %dº" % (mine + 1)) if mine >= 0 else ""],
@@ -91,7 +107,8 @@ func _fill(list: Array) -> void:
 	var medals := [MenuKit.GOLD, Color(0.78, 0.78, 0.78), Color(0.78, 0.54, 0.31)]
 	for i in list.size():
 		var row: Dictionary = list[i]
-		_row(["%d" % (i + 1), row.name, "%d" % row.wave, "%d" % row.score], medals[i] if i < medals.size() else MenuKit.TEXT)
+		var who: String = String(row.get("team", "")) if _players > 1 and String(row.get("team", "")) != "" else String(row.get("name", ""))
+		_row(["%d" % (i + 1), who, "%d" % row.wave, "%d" % row.score], medals[i] if i < medals.size() else MenuKit.TEXT)
 
 
 func _row(cells: Array, color: Color) -> void:

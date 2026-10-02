@@ -77,6 +77,8 @@ func _summon(types: Array, count: int, at: Vector3) -> int:
 
 
 func _on_boss_defeated(_id: StringName, _name: String, _reward: int, at: Vector3) -> void:
+	if Net.is_client():
+		return
 	defeated += 1
 	# Como no jogo web: o boss deixa um Golden Drop e um Max Ammo no chão.
 	var power_ups := get_tree().get_first_node_in_group(&"power_ups") as PowerUpSystem

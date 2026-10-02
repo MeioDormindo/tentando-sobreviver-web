@@ -74,10 +74,16 @@ func points_of(who: Node) -> int:
 	return _wallet(_peer(who)).points
 
 
+## Total ganho por um jogador na partida (null = o local).
+func earned_of(who: Node) -> int:
+	return _wallet(_peer(who)).earned
+
+
 ## Soma pontos para `who` (null = o jogador local; com o Double Cash, se `apply_multiplier`).
 ## Devolve o valor efetivamente ganho.
 func add(amount: int, apply_multiplier: bool = true, who: Node = null) -> int:
-	if amount <= 0:
+	# Em rede, no colega: os pontos são do host (chegam como aviso de HUD).
+	if amount <= 0 or Net.is_client():
 		return 0
 	amount = roundi(amount * (multiplier * event_multiplier if apply_multiplier else 1.0))
 	var peer := _peer(who)
@@ -86,8 +92,7 @@ func add(amount: int, apply_multiplier: bool = true, who: Node = null) -> int:
 	wallet.guard.set_value(wallet.points)
 	wallet.earned += amount
 	gained.emit(peer, amount)
-	if peer == _local_peer():
-		Events.points_changed.emit(wallet.points, amount)
+	_tell(peer, wallet.points, amount)
 	return amount
 
 
@@ -104,15 +109,25 @@ func add_all(amount: int, apply_multiplier: bool = true) -> int:
 
 ## Debita de `who` (null = o jogador local) se houver pontos suficientes.
 func spend(amount: int, who: Node = null) -> bool:
+	if Net.is_client():
+		return false
 	var peer := _peer(who)
 	var wallet := _wallet(peer)
 	if amount > wallet.points:
 		return false
 	wallet.points -= amount
 	wallet.guard.set_value(wallet.points)
-	if peer == _local_peer():
-		Events.points_changed.emit(wallet.points, -amount)
+	_tell(peer, wallet.points, -amount)
 	return true
+
+
+## Avisa a HUD de quem é a carteira (na rede, a máquina dele).
+func _tell(peer: int, total: int, delta: int) -> void:
+	var owner := Players.by_peer(peer)
+	if owner and (owner.net or not owner.is_local):
+		owner.hud(&"points_changed", [total, delta])
+	elif peer == _local_peer():
+		Events.points_changed.emit(total, delta)
 
 
 ## Todas as carteiras batem com a cópia de verificação (anti-trapaça)?
@@ -149,5 +164,7 @@ func _on_zombie_killed(zombie: Node3D, info: DamageInfo) -> void:
 ## Compra recusada: o aviso ("pontos insuficientes") só aparece para quem tentou comprar.
 static func deny(who: Node) -> void:
 	var player := who as Player
-	if player == null or player.is_local:
+	if player:
+		player.hud(&"purchase_denied")
+	else:
 		Events.purchase_denied.emit()

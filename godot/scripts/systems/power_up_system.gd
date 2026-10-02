@@ -30,6 +30,9 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	# Um drop pode ter sido apagado por fora (fim da partida, testes).
 	_pickups.assign(_pickups.filter(func(item: Variant) -> bool: return is_instance_valid(item)))
+	# Em rede, no colega: quem pega e quando some é o host (o drop aqui é só o visual).
+	if Net.is_client():
+		return
 	for pickup: Node3D in _pickups.duplicate():
 		var age: float = pickup.get_meta(&"age") + delta
 		pickup.set_meta(&"age", age)
@@ -150,6 +153,8 @@ func spawn_drop(id: StringName, at: Vector3) -> Node3D:
 	tween.tween_property(orb, "position:y", 1.15, 0.7).set_trans(Tween.TRANS_SINE)
 	tween.tween_property(orb, "position:y", 0.9, 0.7).set_trans(Tween.TRANS_SINE)
 	_pickups.append(pickup)
+	if Net.world and Net.is_host():
+		Net.world.on_pickup(pickup, id, at)
 	return pickup
 
 
@@ -235,6 +240,8 @@ func _end(id: StringName) -> void:
 
 
 func _on_kill(zombie: Node3D, info: DamageInfo) -> void:
+	if Net.is_client():
+		return
 	if not info.kind in [DamageInfo.Kind.WEAPON, DamageInfo.Kind.MELEE] or _drops_this_round >= data.max_per_round:
 		return
 	var roll := randf()
@@ -247,20 +254,40 @@ func _on_kill(zombie: Node3D, info: DamageInfo) -> void:
 
 
 func _pick_from_table() -> StringName:
+	var table := _drop_table()
 	var total := 0.0
-	for id: StringName in data.drop_table:
-		total += float(data.drop_table[id])
+	for id: StringName in table:
+		total += float(table[id])
 	var pick := randf() * total
-	for id: StringName in data.drop_table:
-		pick -= float(data.drop_table[id])
+	for id: StringName in table:
+		pick -= float(table[id])
 		if pick < 0.0:
 			return id
-	return data.drop_table.keys()[0]
+	return table.keys()[0]
+
+
+## Tabela de sorteio. Em rede ainda sem o Fire Sale (as caixas extras não vão para os colegas).
+func _drop_table() -> Dictionary:
+	if not Net.is_online():
+		return data.drop_table
+	var table := data.drop_table.duplicate()
+	table.erase(&"fire_sale")
+	return table
 
 
 func _remove(pickup: Node3D) -> void:
 	_pickups.erase(pickup)
+	if Net.world and Net.is_host():
+		Net.world.on_pickup_removed(pickup)
 	pickup.queue_free()
+
+
+## Rede (colega): o host tirou este drop do chão.
+func remove_named(pickup_name: String) -> void:
+	for pickup in _pickups.duplicate():
+		if is_instance_valid(pickup) and String(pickup.name) == pickup_name:
+			_pickups.erase(pickup)
+			pickup.queue_free()
 
 
 ## Nuke: mata todos os zumbis vivos (não o boss); paga um valor fixo.

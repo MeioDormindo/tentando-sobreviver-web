@@ -195,7 +195,8 @@ func _ready() -> void:
 			player.announce_weapon()).call_deferred()
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	_update_team(delta)
 	for label in _auto_hide:
 		label.visible = label.text != ""
 	var screen := get_viewport().get_visible_rect().size
@@ -237,6 +238,7 @@ func _update_touch() -> void:
 
 func _build() -> void:
 	var root := Control.new()
+	_root = root
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(root)
@@ -705,9 +707,12 @@ func _on_game_over(summary: Dictionary) -> void:
 			cell.add_theme_color_override(&"font_color", DIM if i == 0 else TEXT)
 			grid.add_child(cell)
 	box.add_child(grid)
+	var team_game := int(summary.get("players", 1)) > 1
 	var record := Label.new()
 	record.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	record.text = "NOVO RECORDE!" if summary.new_record else "RECORDE: %d PONTOS · ROUND %d" % [summary.best_score, summary.best_wave]
+	if team_game:
+		record.text = "TIME: %s" % String(summary.get("team", ""))
 	record.add_theme_font_size_override(&"font_size", MenuKit.px(26 if summary.new_record else 15))
 	record.add_theme_color_override(&"font_color", GOLD if summary.new_record else DIM)
 	box.add_child(record)
@@ -720,18 +725,23 @@ func _on_game_over(summary: Dictionary) -> void:
 		taunt.add_theme_font_size_override(&"font_size", MenuKit.px(26))
 		taunt.add_theme_color_override(&"font_color", Color(1.0, 0.48, 0.36))
 		box.add_child(taunt)
+	elif team_game:
+		_add_team_result(box, summary)
 	elif summary.score > 0 and (summary.rank_eligible or Online.is_configured()):
 		_add_ranking_entry(box, summary)
 	var buttons := HBoxContainer.new()
 	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
 	buttons.add_theme_constant_override(&"separation", 24)
 	box.add_child(buttons)
-	var again := _menu_button(buttons, "JOGAR NOVAMENTE", func() -> void: Events.restart_requested.emit())
+	var again := _menu_button(buttons, "JOGAR NOVAMENTE" if not Net.is_online() else "VOLTAR À SALA", func() -> void: Events.restart_requested.emit())
+	# Em rede, quem leva todos de volta à sala é o host.
+	again.disabled = Net.is_client()
 	_menu_button(buttons, "RANKING", func() -> void:
 		Session.map_id = summary.map_id
 		get_tree().paused = false
 		get_tree().change_scene_to_file("res://scenes/ui/ranking.tscn"))
 	_menu_button(buttons, "MENU", func() -> void:
+		Net.leave()
 		get_tree().paused = false
 		get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn"))
 	again.grab_focus.call_deferred()
@@ -751,6 +761,32 @@ func _on_cheat_detected(taunt: String, subtitle: String) -> void:
 	tween.tween_interval(5.0)
 	tween.tween_property(message, "modulate:a", 0.0, 0.8)
 	tween.tween_callback(message.queue_free)
+
+
+## Partida em grupo: o time já entrou no ranking local do modo (sem pedir nome) e o host envia ao
+## global pelo time.
+func _add_team_result(box: VBoxContainer, summary: Dictionary) -> void:
+	var mode: String = Leaderboard.MODES[clampi(int(summary.players), 1, 4) - 1]
+	var position := int(summary.get("coop_rank", 0))
+	var result := Label.new()
+	result.name = "RankResult"
+	result.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	result.text = "%dº LUGAR NO RANKING %s DE %s!" % [position, mode, Save.catalog.display_name(summary.map_id).to_upper()] if position > 0 else ""
+	result.add_theme_color_override(&"font_color", GOLD)
+	box.add_child(result)
+	if not bool(summary.get("global_submit", false)):
+		return
+	var global := Label.new()
+	global.name = "GlobalResult"
+	global.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	global.text = "ENVIANDO O TIME AO RANKING GLOBAL..."
+	global.add_theme_color_override(&"font_color", DIM)
+	box.add_child(global)
+	var host_name := String(Net.players.get(1, {}).get("name", Save.player_name))
+	var error_text: String = await Leaderboard.submit(Online, summary.map_id, host_name, summary.score, summary.round, int(summary.get("team_kills", summary.kills)), int(summary.players), String(summary.team))
+	if is_instance_valid(global):
+		global.text = ("RANKING GLOBAL: " + error_text.to_upper()) if error_text != "" else "TIME ENVIADO AO RANKING GLOBAL (%s)!" % mode
+		global.add_theme_color_override(&"font_color", RED if error_text != "" else GOLD)
 
 
 ## Campo do nome (abre o teclado no celular) e botão para gravar no ranking local.
@@ -857,3 +893,53 @@ func _flash_hit(color: Color) -> void:
 	_hit_marker.add_theme_color_override(&"font_color", color)
 	_hit_marker.modulate.a = 1.0
 	create_tween().tween_property(_hit_marker, "modulate:a", 0.0, 0.18)
+
+
+# ───────────────────────── Cooperativo ─────────────────────────
+
+## Raiz dos controles da HUD.
+var _root: Control
+## Painel dos colegas (à esquerda, no meio): nome, vida e "CAÍDO 23s" / "FORA". Montado aos
+## poucos: os colegas podem ficar prontos depois da HUD.
+var _team_box: VBoxContainer
+## Player → [nome, barra, estado].
+var _team_rows: Dictionary = {}
+var _team_check := 0.0
+
+
+func _update_team(delta: float) -> void:
+	_team_check -= delta
+	if _team_check > 0.0:
+		return
+	_team_check = 0.2
+	if not Players.coop():
+		return
+	if _team_box == null:
+		_team_box = _corner_panel(_root, Control.PRESET_CENTER_LEFT)
+		_team_box.name = "Team"
+	var local := Players.local_player()
+	for someone in Players.all():
+		if someone == local:
+			continue
+		if not _team_rows.has(someone):
+			var name_label := _text(_team_box, someone.player_name if someone.player_name != "" else "COLEGA", 20, Color(0.55, 0.85, 1.0))
+			var bar: Array = PixelSkin.bar(RED, 160.0, 6.0)
+			_team_box.add_child(bar[0])
+			var state_label := _text(_team_box, "", 20, RED)
+			_team_rows[someone] = [name_label, bar[1], state_label, bar[0]]
+		var row: Array = _team_rows[someone]
+		(row[1] as ProgressBar).value = 100.0 * someone.health.current / maxf(1.0, someone.health.max_health)
+		var state := ""
+		if someone.bleeding:
+			state = "CAÍDO %ds" % ceili(maxf(0.0, someone.bleed_left))
+		elif not someone.is_alive():
+			state = "FORA"
+		(row[2] as Label).text = state
+	for gone: Variant in _team_rows.keys():
+		if not is_instance_valid(gone) or not (gone as Player).is_inside_tree():
+			for part: Variant in _team_rows[gone]:
+				if part is Label:
+					_auto_hide.erase(part)
+				if is_instance_valid(part) and part is Control and not part is ProgressBar:
+					(part as Control).queue_free()
+			_team_rows.erase(gone)

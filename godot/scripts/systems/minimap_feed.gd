@@ -48,9 +48,14 @@ func build_state() -> Dictionary:
 		var box := node as Node3D
 		if box.visible and not box.is_queued_for_deletion():
 			boxes.append(_flat(box.global_position))
+	var mates: Array = []
+	for mate in Players.all():
+		if mate != player and (mate.is_alive() or mate.bleeding):
+			mates.append([_flat(mate.global_position), mate.bleeding])
 	var aim := player.aim_point - player.global_position
 	return {
 		"player": _flat(player.global_position),
+		"mates": mates,
 		"facing": atan2(aim.z, aim.x) if aim.length_squared() > 0.01 else -PI / 2.0,
 		"zombies": zombies,
 		"boss": boss,

@@ -112,3 +112,30 @@ func _equip(index: int, animate: bool) -> void:
 	_switch_left = switch_time if animate else 0.0
 	current.busy = animate
 	weapon_changed.emit(current, other())
+
+
+## Rede (colega): refaz as armas como o host decidiu — [[WeaponData base, nível, elemento], ...]
+## e a que está em mãos.
+func rebuild(entries: Array, index: int, lab: WeaponLabData) -> void:
+	for weapon in weapons:
+		weapon.queue_free()
+	weapons.clear()
+	for entry: Array in entries:
+		var weapon := Weapon.new()
+		weapon.data = entry[0]
+		weapon.name = String(weapon.data.id)
+		for i in int(entry[1]):
+			var next := WeaponUpgrade.next_level(weapon.data, weapon.level, lab)
+			if next:
+				weapon.data = next
+				weapon.level += 1
+		weapon.element = entry[2]
+		add_child(weapon)
+		weapon.reset_ammo()
+		weapons.append(weapon)
+	if weapons.is_empty():
+		return
+	current_index = clampi(index, 0, weapons.size() - 1)
+	_switch_left = 0.0
+	current.busy = false
+	weapon_changed.emit(current, other())

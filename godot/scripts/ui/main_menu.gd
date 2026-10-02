@@ -9,6 +9,7 @@ const SETTINGS := "res://scenes/ui/settings.tscn"
 const ACCOUNT := "res://scenes/ui/account.tscn"
 const ACHIEVEMENTS := "res://scenes/ui/achievements.tscn"
 const GLOSSARY := "res://scenes/ui/glossary.tscn"
+const LOBBY := "res://scenes/ui/lobby.tscn"
 ## Código Konami (↑↑↓↓←→←→BA): libera o "modo cabeção", como no jogo web.
 const KONAMI := [KEY_UP, KEY_UP, KEY_DOWN, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_LEFT, KEY_RIGHT, KEY_B, KEY_A]
 
@@ -27,8 +28,13 @@ func _ready() -> void:
 	var best := Save.records(Save.catalog.default_map)
 	if int(best.bestScore) > 0:
 		MenuKit.label(column, "RECORDE: %d PONTOS · ROUND %d" % [best.bestScore, best.bestWave], 16, MenuKit.GOLD, HORIZONTAL_ALIGNMENT_CENTER)
+	# A partida em grupo caiu (o host saiu, sem conexão): diz o porquê uma vez.
+	if Net.last_error != "":
+		MenuKit.label(column, Net.last_error.to_upper(), 16, MenuKit.RED, HORIZONTAL_ALIGNMENT_CENTER)
+		Net.last_error = ""
 	MenuKit.spacer(column, 24)
 	var play := MenuKit.button(column, "JOGAR", func() -> void: MenuKit.go(self, MAP_SELECT))
+	MenuKit.button(column, "JOGAR EM GRUPO", func() -> void: MenuKit.go(self, LOBBY))
 	MenuKit.button(column, "RANKING", func() -> void: MenuKit.go(self, RANKING))
 	MenuKit.button(column, "ARMAS", func() -> void: MenuKit.go(self, ARMORY))
 	MenuKit.button(column, "CONQUISTAS", func() -> void: MenuKit.go(self, ACHIEVEMENTS))
