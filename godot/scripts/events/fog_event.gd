@@ -18,3 +18,11 @@ func end() -> void:
 	system.world.set_event_mood(id, false, config)
 	for someone in Players.victims(system.player):
 		(someone as Player).set_flashlight_factor(1.0)
+
+
+func client_start(_params: Dictionary) -> void:
+	start()
+
+
+func client_end() -> void:
+	end()

@@ -45,6 +45,13 @@ func is_warning() -> bool:
 
 
 func start() -> void:
+	_setup()
+	direction = 1 if randf() < 0.5 else -1
+	_begin()
+
+
+## Faixa dos trilhos e trecho (dos dados da estação: igual em todas as máquinas).
+func _setup() -> void:
 	var station := system.world.station()
 	_top = float(station.lane.y)
 	_bottom = _top + float(station.lane.h)
@@ -55,7 +62,10 @@ func start() -> void:
 	_elapsed = 0.0
 	_player_hit.clear()
 	run_over = 0
-	direction = 1 if randf() < 0.5 else -1
+
+
+## Faixa piscando e buzina (no host e, em rede, nos colegas com a mesma direção).
+func _begin() -> void:
 	_node = Node3D.new()
 	_node.name = "Train"
 	system.world_root().add_child(_node)
@@ -160,3 +170,29 @@ func _air_blast(min_x: float, max_x: float, delta: float) -> void:
 		var below := p.z > _bottom and p.z < _bottom + reach
 		if above or below:
 			player.global_position.z += (-1.0 if above else 1.0) * float(blast.get("speed", 2.2)) * delta
+
+
+func net_params() -> Dictionary:
+	return {"direction": direction}
+
+
+## Colega: o mesmo trem, na mesma direção e no mesmo tempo (o atropelo de verdade é do host; o
+## deslocamento de ar empurra o seu personagem aqui, que é quem manda na posição dele).
+var _client_running := false
+
+
+func client_start(params: Dictionary) -> void:
+	_setup()
+	direction = int(params.get("direction", 1))
+	_begin()
+	_client_running = true
+
+
+func client_update(delta: float) -> void:
+	if _client_running and not update(delta):
+		_client_running = false
+
+
+func client_end() -> void:
+	_client_running = false
+	end()

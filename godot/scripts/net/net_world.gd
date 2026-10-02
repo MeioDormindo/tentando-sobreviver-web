@@ -19,7 +19,7 @@ const RELAYED: Array[StringName] = [
 	&"power_up_collected", &"power_up_timers", &"boss_incoming", &"boss_state", &"boss_phase",
 	&"boss_defeated", &"score_changed", &"mystery_box_rolled", &"hound_round_changed",
 	&"world_event_started", &"world_event_state", &"reward_multiplier_changed", &"quest_state",
-	&"quest_completed", &"max_ammo", &"map_unlocked",
+	&"quest_completed", &"max_ammo", &"map_unlocked", &"teddy_found", &"statue_lit", &"train_run_over",
 ]
 
 var main: Node
@@ -76,6 +76,7 @@ func _physics_process(delta: float) -> void:
 	if _snapshot_in <= 0.0:
 		_snapshot_in = SNAPSHOT_EVERY
 		_send_snapshot()
+	_send_objective(delta)
 
 
 # ───────────────────────── Começo ─────────────────────────
@@ -110,12 +111,10 @@ func _go() -> void:
 				someone.net.send_initial_hud(points)
 
 
-## Host: rounds esperam todos carregarem; chefes e eventos ficam para depois (Etapa 2); o estado
-## do mapa vai para os colegas.
+## Host: rounds esperam todos carregarem; o estado do mapa vai para os colegas.
 func _setup_host() -> void:
 	var rounds := main.get_node_or_null("RoundManager") as RoundManager
 	if rounds:
-		rounds.boss_manager = null
 		if not Net.live:
 			rounds.process_mode = Node.PROCESS_MODE_DISABLED
 	var container := main.get_node_or_null("Zombies")
@@ -190,30 +189,55 @@ func _event(signal_name: StringName, args: Array) -> void:
 # ───────────────────────── Zumbis ─────────────────────────
 
 func _on_zombie_added(node: Node) -> void:
-	var zombie := node as ZombieBase
-	if zombie == null or zombie.puppet:
+	var body := node as CharacterBase
+	if body == null or bool(body.get(&"puppet")) or not (body is ZombieBase or body is Boss):
 		return
 	var id := _next_zombie
 	_next_zombie += 1
-	zombie.set_meta(&"net_id", id)
-	_zombies[id] = zombie
-	zombie.died.connect(func(_c: CharacterBase, info: DamageInfo) -> void:
+	body.set_meta(&"net_id", id)
+	_zombies[id] = body
+	body.died.connect(func(_c: CharacterBase, info: DamageInfo) -> void:
 		_zombies.erase(id)
 		if Net.live:
 			_z_die.rpc(id, info.is_headshot, int(info.kind), info.hit_position))
-	if Net.live:
-		_z_spawn.rpc(id, String(zombie.data.id), zombie.global_position if zombie.is_inside_tree() else zombie.position)
+	if not Net.live:
+		return
+	var at := body.global_position if body.is_inside_tree() else body.position
+	if body is Boss:
+		_b_spawn.rpc(id, String((body as Boss).data.id), at)
+	else:
+		_z_spawn.rpc(id, String((body as ZombieBase).data.id), at)
+
+
+## Posições compactadas: 11 bytes por zumbi (id; x, y, z em 1/64 m; velocidade em 1/8 m/s;
+## direção em 256 passos), cerca de um terço do tamanho em números de 4 bytes.
+const ZOMBIE_BYTES := 11
 
 
 func _send_snapshot() -> void:
-	var pack := PackedFloat32Array()
+	var pack := PackedByteArray()
+	pack.resize(_zombies.size() * ZOMBIE_BYTES)
+	var at_byte := 0
 	for id: int in _zombies:
-		var zombie := _zombies[id] as ZombieBase
-		if not is_instance_valid(zombie) or not zombie.is_inside_tree():
+		var node: Variant = _zombies[id]
+		if not is_instance_valid(node) or not (node as Node).is_inside_tree():
 			continue
+		if node is Boss:
+			var boss := node as Boss
+			_b_state.rpc(id, boss.global_position, Vector3(boss.velocity.x, 0.0, boss.velocity.z), boss.pivot.rotation.y, int(boss.mode), boss.net_action())
+			continue
+		var zombie := node as ZombieBase
 		var at := zombie.global_position
-		pack.append_array([float(id), at.x, at.y, at.z, zombie.velocity.x, zombie.velocity.z, zombie.pivot.rotation.y])
-	if not pack.is_empty():
+		pack.encode_u16(at_byte, id & 0xFFFF)
+		pack.encode_s16(at_byte + 2, clampi(roundi(at.x * 64.0), -32768, 32767))
+		pack.encode_s16(at_byte + 4, clampi(roundi(at.y * 64.0), -32768, 32767))
+		pack.encode_s16(at_byte + 6, clampi(roundi(at.z * 64.0), -32768, 32767))
+		pack.encode_s8(at_byte + 8, clampi(roundi(zombie.velocity.x * 8.0), -128, 127))
+		pack.encode_s8(at_byte + 9, clampi(roundi(zombie.velocity.z * 8.0), -128, 127))
+		pack.encode_u8(at_byte + 10, posmod(roundi(zombie.pivot.rotation.y / TAU * 256.0), 256))
+		at_byte += ZOMBIE_BYTES
+	if at_byte > 0:
+		pack.resize(at_byte)
 		_z_snapshot.rpc(pack)
 
 
@@ -227,9 +251,10 @@ func _on_zombie_attacked(node: Node3D) -> void:
 		_z_attack.rpc(int(node.get_meta(&"net_id")))
 
 
-func _puppet(id: int) -> ZombieBase:
-	var zombie := _zombies.get(id) as ZombieBase
-	return zombie if is_instance_valid(zombie) else null
+## Fantoche (zumbi ou chefe) pelo id do host.
+func _puppet(id: int) -> Node3D:
+	var node: Variant = _zombies.get(id)
+	return node if is_instance_valid(node) else null
 
 
 @rpc("authority", "reliable")
@@ -250,23 +275,34 @@ func _z_spawn(id: int, type: String, at: Vector3) -> void:
 
 
 @rpc("authority", "unreliable_ordered")
-func _z_snapshot(pack: PackedFloat32Array) -> void:
-	for i in range(0, pack.size() - 6, 7):
-		var zombie := _puppet(int(pack[i]))
-		if zombie:
-			zombie.net_state(Vector3(pack[i + 1], pack[i + 2], pack[i + 3]), Vector3(pack[i + 4], 0.0, pack[i + 5]), pack[i + 6])
+func _z_snapshot(pack: PackedByteArray) -> void:
+	for i in range(0, pack.size() - ZOMBIE_BYTES + 1, ZOMBIE_BYTES):
+		var zombie := _puppet_u16(pack.decode_u16(i))
+		if zombie == null:
+			continue
+		var at := Vector3(pack.decode_s16(i + 2), pack.decode_s16(i + 4), pack.decode_s16(i + 6)) / 64.0
+		var moving := Vector3(pack.decode_s8(i + 8), 0.0, pack.decode_s8(i + 9)) / 8.0
+		zombie.net_state(at, moving, pack.decode_u8(i + 10) / 256.0 * TAU)
+
+
+## Fantoche pelo id cortado em 16 bits (o snapshot só leva os 16 bits de baixo).
+func _puppet_u16(short_id: int) -> ZombieBase:
+	for id: int in _zombies:
+		if id & 0xFFFF == short_id:
+			return _puppet(id) as ZombieBase
+	return null
 
 
 @rpc("authority", "unreliable")
 func _z_hit(id: int, at: Vector3, headshot: bool, kind: int) -> void:
 	var zombie := _puppet(id)
-	if zombie:
-		zombie.net_hit(at, headshot, kind)
+	if zombie and zombie.has_method(&"net_hit"):
+		zombie.call(&"net_hit", at, headshot, kind)
 
 
 @rpc("authority", "unreliable")
 func _z_attack(id: int) -> void:
-	var zombie := _puppet(id)
+	var zombie := _puppet(id) as ZombieBase
 	if zombie:
 		zombie.net_attack()
 
@@ -275,8 +311,122 @@ func _z_attack(id: int) -> void:
 func _z_die(id: int, headshot: bool, kind: int, at: Vector3) -> void:
 	var zombie := _puppet(id)
 	_zombies.erase(id)
-	if zombie:
-		zombie.net_die(headshot, kind, at)
+	if zombie and zombie.has_method(&"net_die"):
+		zombie.call(&"net_die", headshot, kind, at)
+
+
+# ───────────────────────── Chefe ─────────────────────────
+
+@rpc("authority", "reliable")
+func _b_spawn(id: int, boss_id: String, at: Vector3) -> void:
+	var data := load("res://data/bosses/%s.tres" % boss_id) as BossData
+	var container := main.get_node_or_null("Zombies") as Node3D
+	if data == null or container == null:
+		return
+	var boss := data.scene.instantiate() as Boss
+	boss.setup(data, null, 1.0, Callable())
+	boss.make_puppet()
+	boss.name = "B%d" % id
+	boss.set_meta(&"net_id", id)
+	boss.position = container.to_local(at + Vector3.UP * 0.1)
+	container.add_child(boss)
+	_zombies[id] = boss
+
+
+@rpc("authority", "unreliable_ordered")
+func _b_state(id: int, at: Vector3, moving: Vector3, yaw: float, mode: int, action: int) -> void:
+	var boss := _puppet(id) as Boss
+	if boss:
+		boss.net_state(at, moving, yaw, mode, action)
+
+
+## Host: o chefe atacou (os parâmetros exatos vão para os colegas verem igual).
+func on_boss_fx(boss: Boss, kind: StringName, args: Array) -> void:
+	if Net.live and boss.has_meta(&"net_id"):
+		_b_fx.rpc(int(boss.get_meta(&"net_id")), kind, args)
+
+
+@rpc("authority", "reliable")
+func _b_fx(id: int, kind: StringName, args: Array) -> void:
+	var boss := _puppet(id) as Boss
+	if boss:
+		boss.net_fx(kind, args)
+
+
+# ───────────────────────── Eventos do mapa ─────────────────────────
+
+## Host: um evento começou, acabou ou teve um momento (com o que foi sorteado).
+func on_world_event(id: StringName, kind: StringName, payload: Dictionary) -> void:
+	if Net.live:
+		_world_event.rpc(id, kind, payload)
+
+
+@rpc("authority", "reliable")
+func _world_event(id: StringName, kind: StringName, payload: Dictionary) -> void:
+	var system := get_tree().get_first_node_in_group(&"world_events") as WorldEventSystem
+	if system:
+		system.net_apply(id, kind, payload)
+
+
+# ───────────────────────── Missão ─────────────────────────
+
+## Host: a missão avisou algo (avanço de etapa, cadeado, item...).
+func on_quest(quest: Node, kind: StringName, payload: Dictionary) -> void:
+	if Net.live and quest.is_inside_tree():
+		_quest.rpc(String(main.get_path_to(quest)), kind, payload)
+
+
+@rpc("authority", "reliable")
+func _quest(path: String, kind: StringName, payload: Dictionary) -> void:
+	var quest := main.get_node_or_null(path) as QuestSystem
+	if quest:
+		quest.net_apply(kind, payload)
+
+
+## Host: um ponto da missão foi usado.
+func on_quest_spot(spot: Node) -> void:
+	if Net.live and spot.is_inside_tree():
+		_quest_spot.rpc(String(main.get_path_to(spot)))
+
+
+@rpc("authority", "reliable")
+func _quest_spot(path: String) -> void:
+	var spot := main.get_node_or_null(path) as QuestSpot
+	if spot:
+		spot.finish()
+
+
+## Host: onde está o objetivo da missão (para o minimapa dos colegas), quando muda.
+var _objective_sent: Variant = null
+var _objective_in := 0.0
+var _objective_marker: Node3D
+
+
+func _send_objective(delta: float) -> void:
+	_objective_in -= delta
+	if _objective_in > 0.0:
+		return
+	_objective_in = 0.25
+	var node := get_tree().get_first_node_in_group(&"minimap_objective") as Node3D
+	var at: Variant = node.global_position if node else null
+	var same: bool = (at == null and _objective_sent == null) or (at is Vector3 and _objective_sent is Vector3 and (at as Vector3).distance_to(_objective_sent) < 0.3)
+	if not same:
+		_objective_sent = at
+		_objective.rpc(at)
+
+
+@rpc("authority", "reliable")
+func _objective(at: Variant) -> void:
+	if _objective_marker == null:
+		_objective_marker = Node3D.new()
+		_objective_marker.name = "NetObjective"
+		add_child(_objective_marker)
+	if at is Vector3:
+		_objective_marker.global_position = at
+		if not _objective_marker.is_in_group(&"minimap_objective"):
+			_objective_marker.add_to_group(&"minimap_objective")
+	elif _objective_marker.is_in_group(&"minimap_objective"):
+		_objective_marker.remove_from_group(&"minimap_objective")
 
 
 # ───────────────────────── Mapa ─────────────────────────
@@ -313,6 +463,44 @@ func _box(path: String, kind: StringName, info: Dictionary) -> void:
 	var box := main.get_node_or_null(path) as MysteryBox
 	if box:
 		box.net_apply(kind, info)
+
+
+## Host: Fire Sale — as caixas extras aparecem também nos colegas (o resto vai pelo on_box).
+func on_fire_sale(main_box: MysteryBox, boxes: Array) -> void:
+	if not Net.live:
+		return
+	var list: Array = []
+	for box: MysteryBox in boxes:
+		list.append([String(box.name), box.global_position if box.is_inside_tree() else box.position])
+	_fire_sale.rpc(String(main.get_path_to(main_box)), list)
+
+
+@rpc("authority", "reliable")
+func _fire_sale(main_path: String, list: Array) -> void:
+	var main_box := main.get_node_or_null(main_path) as MysteryBox
+	var power_ups := get_tree().get_first_node_in_group(&"power_ups") as PowerUpSystem
+	if main_box == null or power_ups == null:
+		return
+	for entry: Array in list:
+		if main_box.get_parent().get_node_or_null(String(entry[0])) == null:
+			power_ups.add_fire_sale_box(main_box, entry[1], String(entry[0]))
+
+
+## Métodos que o host pode mandar os colegas chamarem num nó do mapa (só o visual).
+const NODE_CALLS: Array[StringName] = [&"activate", &"net_taken"]
+
+
+## Host: chama o mesmo método no mesmo nó das outras máquinas (armadilha ligada...).
+func on_node_call(node: Node, method: StringName) -> void:
+	if Net.live and method in NODE_CALLS and node.is_inside_tree():
+		_node_call.rpc(String(main.get_path_to(node)), method)
+
+
+@rpc("authority", "reliable")
+func _node_call(path: String, method: StringName) -> void:
+	var node := main.get_node_or_null(path)
+	if node and method in NODE_CALLS and node.has_method(method):
+		node.call(method)
 
 
 ## Host: uma arma caiu no chão.

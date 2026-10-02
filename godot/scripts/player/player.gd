@@ -62,6 +62,8 @@ var _net_target := Vector3.ZERO
 var _net_velocity := Vector3.ZERO
 var _net_has_target := false
 var _loadout_sig := ""
+## Recarregando no host (animação do personagem visto pela rede).
+var net_reloading := false
 
 ## Relógio de jogo (s): para com a pausa e acompanha a velocidade do jogo.
 var _clock := 0.0
@@ -151,7 +153,9 @@ func _ready() -> void:
 	inventory.weapon_changed.connect(_on_weapon_changed)
 	melee.swung.connect(func() -> void:
 		_play_action(&"Knife", 0.36)
-		_fx(&"knife_swung"))
+		_fx(&"knife_swung")
+		if net:
+			net.on_knife())
 	perks.perks_changed.connect(_on_perks_changed)
 	var blessings := BlessingSystem.new()
 	blessings.player = self
@@ -433,22 +437,30 @@ var _last_shot_at := -INF
 
 
 ## Estado decidido pelo host: vida, armadura, cair/levantar/morrer, lentidão, pedra, velocidade.
-func mirror_vitals(v: Dictionary) -> void:
-	health.max_health = float(v.get("max", health.max_health))
-	var hp := float(v.get("hp", health.current))
-	var state := int(v.get("state", 0))
-	armor = float(v.get("armor", armor))
-	net_speed = float(v.get("speed", 1.0))
-	flashlight_on = bool(v.get("light", flashlight_on))
+## Ordem dos valores do estado (vitals): vida, máxima, armadura, estado (0 de pé, 1 caído, 2 fora),
+## sangramento, velocidade, lentidão e quanto falta, pedra, lanterna, recarregando.
+enum Vital { HP, MAX, ARMOR, STATE, BLEED, SPEED, SLOW, SLOW_LEFT, STONE_LEFT, LIGHT, RELOAD, COUNT }
+
+
+func mirror_vitals(v: PackedFloat32Array) -> void:
+	if v.size() < Vital.COUNT:
+		return
+	health.max_health = v[Vital.MAX]
+	var hp := v[Vital.HP]
+	var state := int(v[Vital.STATE])
+	armor = v[Vital.ARMOR]
+	net_speed = v[Vital.SPEED]
+	flashlight_on = v[Vital.LIGHT] > 0.5
+	net_reloading = v[Vital.RELOAD] > 0.5
 	var flashlight := pivot.get_node_or_null("Flashlight") as SpotLight3D
 	if flashlight:
 		flashlight.visible = flashlight_on
-	var slow_left := float(v.get("slow_left", 0.0))
+	var slow_left := v[Vital.SLOW_LEFT]
 	if slow_left > 0.0:
-		_slow_factor = float(v.get("slow", 1.0))
+		_slow_factor = v[Vital.SLOW]
 		_slow_until = _clock + slow_left
-	_stone_until = _clock + float(v.get("stone_left", 0.0))
-	bleed_left = float(v.get("bleed", bleed_left))
+	_stone_until = _clock + v[Vital.STONE_LEFT]
+	bleed_left = v[Vital.BLEED]
 	var was := 0 if is_standing() else (1 if bleeding else 2)
 	# As mesmas notícias do host (caiu, levantou, saiu) também aqui: som, painel do time.
 	if state != was:
@@ -478,19 +490,21 @@ func mirror_vitals(v: Dictionary) -> void:
 
 
 ## Host: o estado que vai para as outras máquinas.
-func vitals() -> Dictionary:
-	return {
-		"hp": health.current,
-		"max": health.max_health,
-		"armor": armor,
-		"state": 0 if is_standing() else (1 if bleeding else 2),
-		"bleed": bleed_left,
-		"speed": perks.speed_multiplier * speed_buff * blessing_speed,
-		"slow": _slow_factor,
-		"slow_left": maxf(0.0, _slow_until - _clock),
-		"stone_left": maxf(0.0, _stone_until - _clock),
-		"light": flashlight_on,
-	}
+func vitals() -> PackedFloat32Array:
+	var v := PackedFloat32Array()
+	v.resize(Vital.COUNT)
+	v[Vital.HP] = health.current
+	v[Vital.MAX] = health.max_health
+	v[Vital.ARMOR] = armor
+	v[Vital.STATE] = 0 if is_standing() else (1 if bleeding else 2)
+	v[Vital.BLEED] = snappedf(bleed_left, 0.5)
+	v[Vital.SPEED] = perks.speed_multiplier * speed_buff * blessing_speed
+	v[Vital.SLOW] = _slow_factor
+	v[Vital.SLOW_LEFT] = snappedf(maxf(0.0, _slow_until - _clock), 0.1)
+	v[Vital.STONE_LEFT] = snappedf(maxf(0.0, _stone_until - _clock), 0.1)
+	v[Vital.LIGHT] = 1.0 if flashlight_on else 0.0
+	v[Vital.RELOAD] = 1.0 if weapon != null and weapon.reloading else 0.0
+	return v
 
 
 ## Host: põe o colega num lugar (volta no round) — a posição é dele, então avisa a máquina dele.
@@ -761,7 +775,7 @@ func _process(delta: float) -> void:
 	_action_left -= delta
 	if _action_left > 0.0:
 		return
-	if weapon and weapon.reloading:
+	if (weapon and weapon.reloading) or (net_puppet and net_reloading):
 		model.play(&"Reload")
 		return
 	var speed := Vector2(velocity.x, velocity.z).length()

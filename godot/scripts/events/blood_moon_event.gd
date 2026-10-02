@@ -18,3 +18,11 @@ func end() -> void:
 	ZombieBase.event_speed = 1.0
 	Events.reward_multiplier_changed.emit(1.0)
 	system.world.set_event_mood(id, false, config)
+
+
+func client_start(_params: Dictionary) -> void:
+	system.world.set_event_mood(id, true, config)
+
+
+func client_end() -> void:
+	system.world.set_event_mood(id, false, config)

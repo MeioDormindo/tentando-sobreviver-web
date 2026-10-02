@@ -24,6 +24,13 @@ var _last_loadout := ""
 var _prompt_at := -INF
 var _last_prompt: Array = []
 var _clock := 0.0
+var _last_vitals := PackedFloat32Array()
+var _vitals_heartbeat := 0.0
+var _last_life := 0
+## Avisos de HUD que mudam a cada quadro (vida regenerando): o último valor espera a vez.
+const HUD_EVERY := {&"player_health_changed": 0.1}
+var _hud_at: Dictionary = {}
+var _hud_pending: Dictionary = {}
 
 
 func _physics_process(delta: float) -> void:
@@ -36,10 +43,29 @@ func _physics_process(delta: float) -> void:
 			_send_in = SEND_EVERY
 			_state.rpc(player.global_position, player.aim_point, Vector3(player.velocity.x, 0.0, player.velocity.z))
 	if Net.is_host():
+		# Cair, levantar e sair: na hora e garantido (o envio periódico pode perder uma mudança).
+		var life := 0 if player.is_standing() else (1 if player.bleeding else 2)
+		if life != _last_life:
+			_last_life = life
+			var now := player.vitals()
+			_last_vitals = now
+			_vitals_reliable.rpc(_stamped(now))
+		# Estado: só quando muda (e uma vez por segundo por garantia, o envio não é garantido).
 		_vitals_in -= delta
+		_vitals_heartbeat -= delta
 		if _vitals_in <= 0.0:
 			_vitals_in = VITALS_EVERY
-			_vitals.rpc(player.vitals())
+			var v := player.vitals()
+			if v != _last_vitals or _vitals_heartbeat <= 0.0:
+				_last_vitals = v
+				_vitals_heartbeat = 1.0
+				_vitals.rpc(_stamped(v))
+		for signal_name: StringName in _hud_pending.keys():
+			if _clock - float(_hud_at.get(signal_name, -INF)) >= float(HUD_EVERY[signal_name]):
+				var args: Array = _hud_pending[signal_name]
+				_hud_pending.erase(signal_name)
+				_hud_at[signal_name] = _clock
+				_hud.rpc_id(owner_peer, signal_name, args)
 		_loadout_in -= delta
 		if _loadout_in <= 0.0:
 			_loadout_in = LOADOUT_EVERY
@@ -93,6 +119,12 @@ func hud(signal_name: StringName, args: Array) -> void:
 			return
 		_last_prompt = args.duplicate()
 		_prompt_at = _clock
+	if HUD_EVERY.has(signal_name):
+		if _clock - float(_hud_at.get(signal_name, -INF)) < float(HUD_EVERY[signal_name]):
+			_hud_pending[signal_name] = args
+			return
+		_hud_at[signal_name] = _clock
+		_hud_pending.erase(signal_name)
 	_hud.rpc_id(owner_peer, signal_name, args)
 
 
@@ -120,11 +152,31 @@ func _sound(sound: String, volume: float, rate: float) -> void:
 		Audio.play(sound, "ui", volume, 0.0, rate)
 
 
+## O estado leva a hora do host no fim: o periódico (não garantido) e o garantido andam por canais
+## diferentes, e um estado velho não pode desfazer um novo.
+func _stamped(v: PackedFloat32Array) -> PackedFloat32Array:
+	var stamped := v.duplicate()
+	stamped.append(_clock)
+	return stamped
+
+
+var _vitals_time := -INF
+
+
 @rpc("any_peer", "unreliable_ordered")
-func _vitals(v: Dictionary) -> void:
+func _vitals(v: PackedFloat32Array) -> void:
 	if multiplayer.get_remote_sender_id() != 1 or Net.is_host():
 		return
+	var sent_at := v[v.size() - 1]
+	if sent_at < _vitals_time:
+		return
+	_vitals_time = sent_at
 	player.mirror_vitals(v)
+
+
+@rpc("any_peer", "reliable")
+func _vitals_reliable(v: PackedFloat32Array) -> void:
+	_vitals(v)
 
 
 @rpc("any_peer", "reliable")
@@ -183,3 +235,16 @@ func send_initial_hud(points: PointsManager) -> void:
 	hud(&"perks_changed", [ids])
 	if points:
 		hud(&"points_changed", [points.points_of(player), 0])
+
+
+## Host: o personagem deu uma facada (o dele ou o de um colega, a pedido): os outros veem.
+func on_knife() -> void:
+	if Net.is_host() and Net.live:
+		_knife.rpc()
+
+
+@rpc("any_peer", "unreliable")
+func _knife() -> void:
+	if multiplayer.get_remote_sender_id() != 1 or player.is_local:
+		return
+	player._play_action(&"Knife", 0.36)

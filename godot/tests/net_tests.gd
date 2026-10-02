@@ -170,6 +170,45 @@ func _match() -> void:
 	mate.help_revive(host, Player.REVIVE_TIME + 0.1)
 	check(mate.is_standing(), "o host revive o colega")
 	await _tree.create_timer(1.0).timeout
+	# Chefe: o colega vê o Conductor (fantoche), a barra de vida e a derrota.
+	var bosses := main.get_node("BossManager") as BossManager
+	bosses.start(&"conductor")
+	var spawned := await _wait(func() -> bool: return is_instance_valid(bosses.boss), 6.0)
+	check(spawned, "o host chama o chefe")
+	if spawned:
+		await _tree.create_timer(1.5).timeout
+		# Um ataque com os parâmetros do host (as esferas de alma ficam num grupo fácil de achar).
+		bosses.boss._fx(&"volley", [bosses.boss.global_position + Vector3.UP * 1.4, Vector3.FORWARD])
+		await _tree.create_timer(0.6).timeout
+		bosses.boss.health.invulnerable = false
+		bosses.boss.take_damage(DamageInfo.new(bosses.boss.health.current + 1.0, DamageInfo.Kind.WEAPON, host, false, bosses.boss.global_position))
+		check(not bosses.boss.is_alive(), "o host derrota o chefe")
+		await _tree.create_timer(1.0).timeout
+	# Eventos do mapa: o colega vê a caixa de suprimentos, o zumbi dourado e o trem (e a caixa some
+	# quando o host encerra).
+	var events := main.get_node("WorldEventSystem") as WorldEventSystem
+	var supply := events.trigger(&"supply_drop")
+	var golden := events.trigger(&"golden_zombie")
+	var train := events.call_train()
+	check(supply and golden, "o host começa eventos (suprimentos, dourado%s)" % (", trem" if train else ""))
+	# A caixa pousa em 2,2 s (só então entra no minimapa).
+	await _tree.create_timer(3.2).timeout
+	events.stop()
+	await _tree.create_timer(1.0).timeout
+	# Missão do Terminal: o colega vê as peças, o cadeado abrir e o fusível ser pego.
+	var quest := main.get_node("TrainQuest") as TrainQuest
+	var power := _tree.get_first_node_in_group(&"power_system") as PowerSystem
+	if power:
+		power.turn_on()
+	var parts := await _wait(func() -> bool: return quest.index >= 1, 3.0)
+	check(parts, "a missão avança no host (energia ligada)")
+	await _tree.create_timer(1.0).timeout
+	if parts and quest.lock:
+		(quest.lock.get_node("HealthComponent") as HealthComponent).apply_damage(DamageInfo.new(5.0, DamageInfo.Kind.WEAPON, host))
+	var fuse := main.get_node("World").find_child("SignalFuse", true, false) as QuestSpot
+	if fuse:
+		fuse.finish()
+	await _tree.create_timer(1.0).timeout
 	# O time inteiro cai: fim de jogo para os dois.
 	host.health.invulnerable = false
 	mate.take_damage(DamageInfo.new(999, DamageInfo.Kind.ENVIRONMENT, null, false, mate.global_position))
@@ -187,6 +226,14 @@ func _match() -> void:
 	check(int(peer.get("points_gained", 0)) > 0, "no colega: a HUD recebe os pontos dele (+%d)" % int(peer.get("points_gained", 0)))
 	check(bool(peer.get("door_opened", false)), "no colega: a porta que ele comprou abre")
 	check(bool(peer.get("was_down", false)) and bool(peer.get("revived", false)) and bool(peer.get("down_prompt", false)), "no colega: cai (com o aviso na HUD) e levanta (caiu=%s levantou=%s aviso=%s)" % [peer.get("was_down", false), peer.get("revived", false), peer.get("down_prompt", false)])
+	check(bool(peer.get("boss_puppet", false)) and bool(peer.get("boss_bar", false)) and bool(peer.get("boss_defeated", false)), "no colega: o chefe aparece (fantoche, com a barra) e cai quando o host derrota (%s, %s, %s)" % [peer.get("boss_puppet", false), peer.get("boss_bar", false), peer.get("boss_defeated", false)])
+	check(bool(peer.get("boss_fx", false)), "no colega: o ataque do chefe aparece com os parâmetros do host")
+	check(bool(peer.get("crate_seen", false)) and bool(peer.get("crate_gone", false)), "no colega: a caixa de suprimentos cai e some quando o evento acaba")
+	check(bool(peer.get("golden_seen", false)), "no colega: o zumbi dourado aparece dourado")
+	check(not train or bool(peer.get("train_seen", false)), "no colega: o trem passa")
+	check(bool(peer.get("quest_text", false)), "no colega: o objetivo da missão chega na HUD")
+	check(bool(peer.get("fuse_seen", false)) and bool(peer.get("padlock_seen", false)), "no colega: as peças da missão aparecem (fusível, cadeado)")
+	check(bool(peer.get("padlock_gone", false)) and bool(peer.get("fuse_used", false)), "no colega: o cadeado abre e o fusível é pego quando o host faz")
 	check(bool(peer.get("game_over", false)) and int(peer.get("summary_players", 0)) == 2 and int(peer.get("summary_kills", 0)) > 0, "no colega: fim de jogo com o resumo dele (%d abates)" % int(peer.get("summary_kills", 0)))
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(out))
 	Net.leave()

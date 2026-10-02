@@ -78,7 +78,7 @@ func _count() -> int:
 
 
 func _collected(what: String) -> void:
-	Events.toast.emit("%s (%d/3)" % [what, _count()])
+	_toast("%s (%d/3)" % [what, _count()])
 
 
 # ── 2. Peças do sinal ──
@@ -123,11 +123,8 @@ func _parts_update(delta: float) -> bool:
 			_carrier_last = carrier.global_position
 		elif carrier != null and _carrier_last is Vector3:
 			carrier = null
-			_crank_spot = _spot("PEGAR A MANIVELA DO SINAL", _carrier_last, func() -> void:
-				got.crank = true
-				_collected("MANIVELA COLETADA"))
-			_crank_spot.name = "SignalCrank"
-			_crank_spot.add_prop(Vector3(0.4, 0.06, 0.1), Color(0.6, 0.45, 0.2), 0.3, PixelShapes.standing("res://assets/sprites/icons/crank.png", 90.0))
+			_net(&"crank", {"at": _carrier_last})
+			_make_crank_spot(_carrier_last)
 		else:
 			_next_carrier -= delta
 			if _next_carrier <= 0.0:
@@ -136,6 +133,15 @@ func _parts_update(delta: float) -> bool:
 				if carrier:
 					_carrier_last = carrier.global_position
 	return _count() == 3
+
+
+## A manivela no chão onde o Blindado caiu (no host e, em rede, nos colegas).
+func _make_crank_spot(at: Vector3) -> void:
+	_crank_spot = _spot("PEGAR A MANIVELA DO SINAL", at, func() -> void:
+		got.crank = true
+		_collected("MANIVELA COLETADA"))
+	_crank_spot.name = "SignalCrank"
+	_crank_spot.add_prop(Vector3(0.4, 0.06, 0.1), Color(0.6, 0.45, 0.2), 0.3, PixelShapes.standing("res://assets/sprites/icons/crank.png", 90.0))
 
 
 # ── 3. Sinal da Plataforma ──
@@ -165,7 +171,7 @@ func _signal_enter() -> void:
 		_signal_light = EventFx.light(AMBER, 1.5, 6.0)
 		_signal_light.position.y = 2.4
 		_signal.add_child(_signal_light)
-		Events.toast.emit("O SINAL ESTÁ LIGADO — SEGURE ATÉ O TREM PASSAR!"))
+		_toast("O SINAL ESTÁ LIGADO — SEGURE ATÉ O TREM PASSAR!"))
 	spot.name = "SignalRepair"
 	spot.interaction_radius = 1.9
 
@@ -195,11 +201,12 @@ func _signal_exit() -> void:
 		_signal_light.light_color = Color(0.3, 1.0, 0.45)
 		_signal_light.light_energy = 1.2
 	_clear_spots()
-	# O trem passa pela estação consertada (se a Plataforma estiver aberta).
+	# O trem passa pela estação consertada (se a Plataforma estiver aberta). Em rede, só o host
+	# chama: nos colegas o trem chega como evento.
 	var events := get_tree().get_first_node_in_group(&"world_events") as WorldEventSystem
-	if events:
+	if events and not remote:
 		events.call_train()
-	Events.toast.emit("O TREM PASSOU! O Condutor saiu dos túneis...")
+	_toast("O TREM PASSOU! O Condutor saiu dos túneis...")
 
 
 # ── 5. Lanterna do Condutor ──
@@ -217,3 +224,40 @@ func _complete() -> void:
 	_grant_rewards(reward_weapon)
 	SpecialFire.flash(get_tree(), player.global_position + Vector3.UP, 8.0, AMBER)
 	Events.quest_completed.emit(&"train", "O ÚLTIMO TREM PASSOU", "Todos os perks + Lanterna do Condutor. A estação é sua...")
+
+
+# ───────────────────────── Rede ─────────────────────────
+
+func net_state() -> Dictionary:
+	return {"boss_down": boss_down, "boss_round": boss_round}
+
+
+func _apply_state(state: Dictionary) -> void:
+	if state.get("boss_down") is Vector3:
+		boss_down = state.boss_down
+	boss_round = int(state.get("boss_round", boss_round))
+
+
+func _net_custom(kind: StringName, payload: Dictionary) -> void:
+	if kind == &"crank" and _crank_spot == null:
+		_make_crank_spot(payload.get("at", Vector3.ZERO))
+
+
+## Colega: a luz do sinal pisca (vermelha com zumbis perto), como no host.
+var _remote_clock := 0.0
+
+
+func _remote_update(delta: float) -> void:
+	if not signal_running or _signal_light == null:
+		return
+	_remote_clock += delta
+	var at := _at(cfg.signal)
+	var threat := float(cfg.signal.get("threat_radius", 2.4))
+	var attacked := false
+	for node in get_tree().get_nodes_in_group(&"zombies"):
+		var zombie := node as CharacterBase
+		if zombie and zombie.is_alive() and Vector2(zombie.global_position.x - at.x, zombie.global_position.z - at.z).length() <= threat:
+			attacked = true
+			break
+	_signal_light.light_color = Color(1.0, 0.25, 0.2) if attacked else AMBER
+	_signal_light.light_energy = 0.5 + absf(sin(_remote_clock * 6.0)) * 1.4

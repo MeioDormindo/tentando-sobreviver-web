@@ -254,7 +254,7 @@ func _on_kill(zombie: Node3D, info: DamageInfo) -> void:
 
 
 func _pick_from_table() -> StringName:
-	var table := _drop_table()
+	var table := data.drop_table
 	var total := 0.0
 	for id: StringName in table:
 		total += float(table[id])
@@ -264,15 +264,6 @@ func _pick_from_table() -> StringName:
 		if pick < 0.0:
 			return id
 	return table.keys()[0]
-
-
-## Tabela de sorteio. Em rede ainda sem o Fire Sale (as caixas extras não vão para os colegas).
-func _drop_table() -> Dictionary:
-	if not Net.is_online():
-		return data.drop_table
-	var table := data.drop_table.duplicate()
-	table.erase(&"fire_sale")
-	return table
 
 
 func _remove(pickup: Node3D) -> void:
@@ -356,14 +347,23 @@ func _start_fire_sale() -> void:
 	for spot in main.spots:
 		if spot.distance_to(main.global_position) < 1.5 or not main.world.is_area_open(main.world.area_of(spot)):
 			continue
-		var extra := (load(main.scene_file_path) as PackedScene).instantiate() as MysteryBox if main.scene_file_path != "" else MysteryBox.new()
-		extra.setup(main.data, main.catalog, main.map_id, main.spots, main.world)
-		extra.temporary = true
-		extra.price = main.data.fire_sale_price
-		extra.position = main.get_parent().to_local(spot)
-		main.get_parent().add_child(extra)
-		_fire_sale_boxes.append(extra)
+		_fire_sale_boxes.append(add_fire_sale_box(main, spot, "FireSaleBox%d" % (_fire_sale_boxes.size() + 1)))
+	if Net.world and Net.is_host():
+		Net.world.on_fire_sale(main, _fire_sale_boxes)
 	Events.toast.emit("FIRE SALE! MYSTERY BOX A %d · +%d CAIXAS NO MAPA" % [main.data.fire_sale_price, _fire_sale_boxes.size()])
+
+
+## Caixa extra do Fire Sale num ponto (nome fixo: em rede, o mesmo caminho em todas as máquinas).
+func add_fire_sale_box(main: MysteryBox, spot: Vector3, box_name: String) -> MysteryBox:
+	var extra := (load(main.scene_file_path) as PackedScene).instantiate() as MysteryBox if main.scene_file_path != "" else MysteryBox.new()
+	extra.setup(main.data, main.catalog, main.map_id, main.spots, main.world)
+	extra.name = box_name
+	extra.temporary = true
+	extra.remote = Net.is_client()
+	extra.price = main.data.fire_sale_price
+	extra.position = main.get_parent().to_local(spot)
+	main.get_parent().add_child(extra)
+	return extra
 
 
 func _end_fire_sale() -> void:

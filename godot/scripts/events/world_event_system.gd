@@ -58,6 +58,11 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	# Partida em rede, num colega: só o visual dos eventos que o host manda.
+	if Net.is_client():
+		for event in _client_events.duplicate():
+			event.client_update(delta)
+		return
 	if not _anyone_standing():
 		return
 	if _pending_id != &"":
@@ -120,6 +125,7 @@ func trigger(id: StringName) -> bool:
 	_running_time[id] = 0.0
 	last_round[id] = _round
 	event.start()
+	_net(id, &"start", event.net_params())
 	_announce(id)
 	return true
 
@@ -145,6 +151,7 @@ func stop_event(event: WorldEvent) -> void:
 	running.erase(event)
 	_running_time.erase(event.id)
 	event.end()
+	_net(event.id, &"end", {})
 	_emit_state()
 
 
@@ -156,6 +163,7 @@ func call_train() -> bool:
 	_train = event
 	_train_passes += 1
 	event.start()
+	_net(&"train", &"start", event.net_params())
 	_announce(&"train")
 	return true
 
@@ -234,6 +242,8 @@ func world_root() -> Node:
 # ───────────────────────── Agenda ─────────────────────────
 
 func _on_round_started(number: int) -> void:
+	if Net.is_client():
+		return
 	_round = number
 	_active = true
 	_train_passes = 0
@@ -266,6 +276,8 @@ func _on_round_started(number: int) -> void:
 
 
 func _on_round_ended() -> void:
+	if Net.is_client():
+		return
 	_active = false
 	_pending_id = &""
 	_train_in = -1.0
@@ -308,6 +320,7 @@ func _schedule_train() -> void:
 func _update_train(delta: float) -> void:
 	if _train and not _train.update(delta):
 		_train.end()
+		_net(&"train", &"end", {})
 		_train = null
 		if _active and _train_passes == 1 and randf() < float(data.config(&"train").get("second_pass_chance", 0.0)):
 			_schedule_train()
@@ -360,3 +373,38 @@ func _emit_state() -> void:
 		event_name += " + " + extra
 	Events.world_event_state.emit({"id": primary.id, "name": event_name, "color": info.get("color", Color.WHITE),
 		"remaining": remaining, "total": primary.duration if not showing_train else -1.0})
+
+
+# ───────────────────────── Rede ─────────────────────────
+
+## Partida em rede, num colega: eventos em andamento só no visual.
+var _client_events: Array[WorldEvent] = []
+
+
+## Host: avisa os colegas (começo com o que foi sorteado, fim, ou um momento do evento).
+func _net(id: StringName, kind: StringName, payload: Dictionary) -> void:
+	if Net.world and Net.is_host():
+		Net.world.on_world_event(id, kind, payload)
+
+
+## Host: um momento do evento (uma pedra do desabamento) para os colegas verem no mesmo lugar.
+func net_fx(id: StringName, args: Array) -> void:
+	_net(id, &"fx", {"args": args})
+
+
+## Colega: o que o host avisou.
+func net_apply(id: StringName, kind: StringName, payload: Dictionary) -> void:
+	var event: WorldEvent = events.get(id)
+	if event == null:
+		return
+	match kind:
+		&"start":
+			if not _client_events.has(event):
+				_client_events.append(event)
+				event.client_start(payload)
+		&"end":
+			if _client_events.has(event):
+				_client_events.erase(event)
+				event.client_end()
+		&"fx":
+			event.client_fx(payload.get("args", []))

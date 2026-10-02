@@ -31,3 +31,28 @@ func update(_delta: float) -> bool:
 
 func end() -> void:
 	pass
+
+
+# ───────────────────────── Rede ─────────────────────────
+
+## Host: o que os colegas precisam para mostrar o evento igual (o que foi sorteado aqui).
+func net_params() -> Dictionary:
+	return {}
+
+
+## Colega: só o que se vê e ouve (o host faz o resto e avisa quando acaba).
+func client_start(_params: Dictionary) -> void:
+	pass
+
+
+func client_update(_delta: float) -> void:
+	pass
+
+
+func client_end() -> void:
+	pass
+
+
+## Colega: um momento do evento sorteado no host (uma pedra do desabamento).
+func client_fx(_args: Array) -> void:
+	pass

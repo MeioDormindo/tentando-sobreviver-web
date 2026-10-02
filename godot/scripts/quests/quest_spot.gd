@@ -95,6 +95,9 @@ func hold_interact(player: Node3D, delta: float) -> bool:
 func finish() -> void:
 	if used:
 		return
+	# Em rede: os colegas usam o mesmo ponto (o mesmo visual e o mesmo efeito na missão deles).
+	if Net.world and Net.is_host():
+		Net.world.on_quest_spot(self)
 	used = true
 	remove_from_group(&"interactable")
 	if on_done.is_valid():

@@ -79,6 +79,9 @@ func interact(player: Node3D) -> bool:
 func activate() -> void:
 	active_left = active_time
 	_ready_in = active_time + cooldown
+	# Em rede: os colegas veem a armadilha ligada (o choque de verdade é do host).
+	if Net.world and Net.is_host():
+		Net.world.on_node_call(self, &"activate")
 
 
 func _physics_process(delta: float) -> void:

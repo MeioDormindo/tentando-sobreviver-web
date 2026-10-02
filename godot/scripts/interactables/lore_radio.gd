@@ -72,6 +72,10 @@ func hold_interact(player: Node3D, delta: float) -> bool:
 	_progress.reset()
 	_busy = BUSY_TIME
 	Audio.play_at("radio_static", global_position, "world", 0.9, -1.0, 0.0)
-	Events.toast.emit(messages[_next % messages.size()])
+	# Só para quem ouviu (em rede, na máquina dele).
+	if player is Player:
+		(player as Player).hud(&"toast", [messages[_next % messages.size()]])
+	else:
+		Events.toast.emit(messages[_next % messages.size()])
 	_next += 1
 	return true

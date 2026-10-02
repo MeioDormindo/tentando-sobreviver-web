@@ -18,3 +18,11 @@ func start() -> void:
 func end() -> void:
 	system.world.set_event_mood(id, false, config)
 	system.round_manager.set_spawn_modifier(id, {})
+
+
+func client_start(_params: Dictionary) -> void:
+	system.world.set_event_mood(id, true, config)
+
+
+func client_end() -> void:
+	system.world.set_event_mood(id, false, config)

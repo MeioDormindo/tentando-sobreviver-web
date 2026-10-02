@@ -31,6 +31,11 @@ func run(p_tree: SceneTree) -> void:
 		if delta > 0:
 			_seen.points_gained = int(_seen.get("points_gained", 0)) + delta)
 	events.connect(&"round_started", func(n: int, _t: int) -> void: _seen.round_started = n)
+	events.connect(&"quest_state", func(state: Dictionary) -> void:
+		if String(state.get("objective", "")).contains("Peças"):
+			_seen.quest_text = true)
+	events.connect(&"boss_state", func(_n: String, _c: float, _m: float, _p: int) -> void: _seen.boss_bar = true)
+	events.connect(&"boss_defeated", func(_id: StringName, _n: String, _r: int, _at: Vector3) -> void: _seen.boss_defeated = true)
 	# O fantoche morre quando o host avisa (sai do grupo "zombies" ao morrer: conta pelo aviso).
 	events.connect(&"zombie_killed", func(zombie: Node3D, _info: DamageInfo) -> void:
 		if zombie is ZombieBase and (zombie as ZombieBase).puppet:
@@ -76,6 +81,29 @@ func _step(net: Node) -> void:
 	if me == null:
 		return
 	_seen.own_local = me.is_local and not me.net_puppet and me.peer_id == int(net.call(&"my_id"))
+	for node in tree.get_nodes_in_group(&"bosses"):
+		if node is Boss and (node as Boss).puppet:
+			_seen.boss_puppet = true
+	if not tree.get_nodes_in_group(&"boss_orbs").is_empty():
+		_seen.boss_fx = true
+	var crates := tree.get_nodes_in_group(&"minimap_supply")
+	if not crates.is_empty():
+		_seen.crate_seen = true
+	elif _seen.has("crate_seen"):
+		_seen.crate_gone = true
+	if not tree.get_nodes_in_group(&"minimap_golden").is_empty():
+		_seen.golden_seen = true
+	if main.find_child("Train", true, false) != null:
+		_seen.train_seen = true
+	var fuse := main.find_child("SignalFuse", true, false) as QuestSpot
+	if fuse:
+		_seen.fuse_seen = true
+		if fuse.used:
+			_seen.fuse_used = true
+	if main.find_child("Padlock", true, false) != null:
+		_seen.padlock_seen = true
+	elif _seen.has("padlock_seen"):
+		_seen.padlock_gone = true
 	# Zumbis fantoches: mira no mais perto e atira (o host acerta de verdade).
 	var target: ZombieBase = null
 	for node in tree.get_nodes_in_group(&"zombies"):

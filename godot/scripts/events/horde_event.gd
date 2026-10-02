@@ -19,3 +19,7 @@ func start() -> void:
 
 func end() -> void:
 	system.round_manager.set_spawn_modifier(id, {})
+
+
+func client_start(_params: Dictionary) -> void:
+	Events.screen_shake.emit(0.5, 0.12)

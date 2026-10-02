@@ -54,8 +54,21 @@ func interact(player: Node3D) -> bool:
 			power_ups.spawn_drop(&"golden", player.global_position - player.global_basis.z * 1.3)
 		Events.power_up_collected.emit(&"teddies", "SEGREDO DOS URSINHOS", GLOW,
 			"Você achou todos! Segredo salvo." if first else "Todos os ursinhos de novo!")
+	# Em rede: some também nos colegas.
+	if Net.world and Net.is_host():
+		Net.world.on_node_call(self, &"net_taken")
 	var tween := create_tween()
 	tween.tween_property(self, "scale", Vector3.ONE * 1.6, 0.3)
 	tween.parallel().tween_property(self, "rotation:y", rotation.y + 3.5, 0.3)
 	tween.tween_callback(queue_free)
 	return true
+
+
+## Rede (colega): o host pegou este ursinho — some do mesmo jeito (o aviso vem do host).
+func net_taken() -> void:
+	remove_from_group(&"interactable")
+	remove_from_group(&"teddies")
+	var tween := create_tween()
+	tween.tween_property(self, "scale", Vector3.ONE * 1.6, 0.3)
+	tween.parallel().tween_property(self, "rotation:y", rotation.y + 3.5, 0.3)
+	tween.tween_callback(queue_free)

@@ -14,6 +14,12 @@ const REPATH_INTERVAL := 0.3
 
 var target: CharacterBase
 var _retarget_left := 0.0
+## Partida em rede, num colega: só segue o host (posição, modo e ataques), sem IA nem dano.
+var puppet := false
+var _net_target := Vector3.ZERO
+var _net_velocity := Vector3.ZERO
+var _net_yaw := 0.0
+var _net_has_target := false
 var phase: int = 1
 var mode: Mode = Mode.ROAR
 ## Invoca zumbis em volta: (tipos, quantidade, ponto) → quantos surgiram.
@@ -160,6 +166,9 @@ func apply_knockback(_push: Vector3) -> void:
 func _physics_process(delta: float) -> void:
 	_clock += delta
 	if mode == Mode.DEAD:
+		return
+	if puppet:
+		_follow_net(delta)
 		return
 	apply_gravity(delta)
 	if _fury_tinted and not _fury_active():
@@ -326,7 +335,9 @@ func _try_attack(distance: float, to_target: Vector3) -> bool:
 		if data.extras.has("rubble_time"):
 			area_cfg = data.area.duplicate()
 			area_cfg["rubble_time"] = data.extras.rubble_time
-		BossAttacks.area(get_tree(), target.global_position, area_cfg, data.area_acid, target, bool(data.extras.get("fire_pools", false)))
+		var points := BossAttacks.area_points(target.global_position, area_cfg)
+		_fx(&"area", [points])
+		BossAttacks.area_at(get_tree(), points, area_cfg, data.area_acid, target, bool(data.extras.get("fire_pools", false)))
 		return true
 	if _can(data.scream, &"scream") and distance <= float(data.scream.radius):
 		_start_action(1.0, float(data.scream.cooldown_time), &"scream")
@@ -393,14 +404,21 @@ func _resolve_pending() -> void:
 	_pending_at = -1.0
 	match _pending_action:
 		&"vomit":
-			BossAttacks.vomit(get_tree(), global_position, -pivot.global_basis.z, data.vomit, bool(data.extras.get("fire_pools", false)))
+			var points := BossAttacks.vomit_points(global_position, -pivot.global_basis.z, data.vomit)
+			_fx(&"vomit", [points])
+			BossAttacks.vomit_at(get_tree(), points, data.vomit, bool(data.extras.get("fire_pools", false)))
 		&"volley":
-			BossAttacks.volley(get_tree(), global_position + Vector3.UP * 1.4, (target.global_position - global_position), data.volley, target, self)
+			var toward := target.global_position - global_position
+			_fx(&"volley", [global_position + Vector3.UP * 1.4, toward])
+			BossAttacks.volley(get_tree(), global_position + Vector3.UP * 1.4, toward, data.volley, target, self)
 		&"shockwave":
+			_fx(&"shockwave", [global_position])
 			BossAttacks.shockwave(get_tree(), global_position, data.shockwave, target)
 		&"blind":
+			_fx(&"blind", [global_position])
 			BossAttacks.blind(get_tree(), global_position, data.blind, target)
 		&"breath":
+			_fx(&"breath", [global_position, -pivot.global_basis.z])
 			BossAttacks.triple_breath(get_tree(), global_position, -pivot.global_basis.z, data.breath, target)
 		&"rupture":
 			_rupture()
@@ -529,9 +547,11 @@ func _on_health_died(info: DamageInfo) -> void:
 		if child is Hurtbox:
 			(child as Hurtbox).disable()
 	SpecialFire.flash(get_tree(), global_position, 4.0, Color(1.0, 0.85, 0.7))
-	Events.boss_defeated.emit(data.id, data.display_name, data.reward, global_position)
-	if data.extras.has("lore"):
-		Events.toast.emit(String(data.extras.lore))
+	# Fantoche (rede): o aviso do chefe derrotado já vem do host.
+	if not puppet:
+		Events.boss_defeated.emit(data.id, data.display_name, data.reward, global_position)
+		if data.extras.has("lore"):
+			Events.toast.emit(String(data.extras.lore))
 	var tween := create_tween()
 	if model and model.has_animation(&"Death"):
 		model.play_once(&"Death", 0.05, 0.6)
@@ -541,3 +561,111 @@ func _on_health_died(info: DamageInfo) -> void:
 	tween.tween_interval(8.0)
 	tween.tween_property(pivot, "position:y", -2.5, 2.0)
 	tween.tween_callback(queue_free)
+
+
+# ───────────────────────── Rede ─────────────────────────
+
+## Ordem dos modos na rede (o snapshot leva o índice).
+const NET_ACTIONS: Array[StringName] = [&"", &"shockwave", &"scream", &"summon", &"vomit", &"volley", &"breath", &"rupture", &"blind", &"area"]
+
+
+## Host: o ataque com os parâmetros exatos (pontos sorteados) para os colegas verem igual.
+func _fx(kind: StringName, args: Array) -> void:
+	if Net.world and Net.is_host():
+		Net.world.on_boss_fx(self, kind, args)
+
+
+## Vira fantoche (antes de entrar na árvore): sem IA, colisão nem dano.
+func make_puppet() -> void:
+	puppet = true
+	collision_layer = 0
+	collision_mask = 0
+
+
+## Estado mandado pelo host: posição, velocidade, direção, modo e a ação em andamento.
+func net_state(at: Vector3, moving: Vector3, yaw: float, new_mode: int, action: int) -> void:
+	if not _net_has_target:
+		global_position = at
+	_net_target = at
+	_net_velocity = moving
+	_net_yaw = yaw
+	_net_has_target = true
+	var action_id: StringName = NET_ACTIONS[action] if action >= 0 and action < NET_ACTIONS.size() else &""
+	if new_mode == mode and action_id == _action_id:
+		return
+	var old := mode
+	mode = new_mode as Mode
+	_action_id = action_id
+	health.invulnerable = true
+	match mode:
+		Mode.ROAR:
+			if old != Mode.ROAR:
+				Audio.play_at("boss_roar", global_position, "world", 1.0, 80.0)
+		Mode.ACTION:
+			if model:
+				model.play_once(ACTION_ANIMS.get(_action_id, &"Roar"), 0.1)
+			if ACTION_SOUNDS.has(_action_id):
+				Audio.play_at(ACTION_SOUNDS[_action_id], global_position, "world", 1.0, 60.0)
+		Mode.CHARGE_WINDUP:
+			_charge_dir = Vector3(-sin(yaw), 0.0, -cos(yaw))
+			Audio.play_at("boss_charge", global_position, "world", 1.0, 60.0)
+			_show_telegraph()
+	if mode != Mode.CHARGE_WINDUP:
+		_clear_telegraph()
+
+
+func _follow_net(delta: float) -> void:
+	if not _net_has_target:
+		return
+	_net_target += _net_velocity * delta
+	global_position = global_position.lerp(_net_target, clampf(12.0 * delta, 0.0, 1.0))
+	velocity = _net_velocity
+	pivot.rotation.y = lerp_angle(pivot.rotation.y, _net_yaw, clampf(14.0 * delta, 0.0, 1.0))
+
+
+## Índice da ação em andamento (snapshot).
+func net_action() -> int:
+	return maxi(0, NET_ACTIONS.find(_action_id))
+
+
+## Ataque visto no host: o mesmo visual aqui (o dano é do host; nos colegas ele não pega).
+func net_fx(kind: StringName, args: Array) -> void:
+	var tree := get_tree()
+	var fire := bool(data.extras.get("fire_pools", false))
+	match kind:
+		&"area":
+			var points: Array[Vector3] = []
+			points.assign(args[0])
+			var area_cfg := data.area
+			if data.extras.has("rubble_time"):
+				area_cfg = data.area.duplicate()
+				area_cfg["rubble_time"] = data.extras.rubble_time
+			BossAttacks.area_at(tree, points, area_cfg, data.area_acid, null, fire)
+		&"vomit":
+			var points: Array[Vector3] = []
+			points.assign(args[0])
+			BossAttacks.vomit_at(tree, points, data.vomit, fire)
+		&"volley":
+			BossAttacks.volley(tree, args[0], args[1], data.volley, null, self)
+		&"shockwave":
+			BossAttacks.shockwave(tree, args[0], data.shockwave, null)
+		&"blind":
+			BossAttacks.blind(tree, args[0], data.blind, null)
+		&"breath":
+			BossAttacks.triple_breath(tree, args[0], args[1], data.breath, null)
+
+
+## Acerto avisado pelo host: só o pisca.
+func net_hit(_at: Vector3, _headshot: bool, _kind: int) -> void:
+	if model and is_alive():
+		model.flash(Color(1.0, 0.92, 0.9))
+
+
+## Morte avisada pelo host: o mesmo fim do solo, direto (sem passar pelo dano, que trocaria de
+## fase e rugiria aqui), e sem repetir o aviso, que já veio do host.
+func net_die(headshot: bool, kind: int, at: Vector3) -> void:
+	if mode == Mode.DEAD:
+		return
+	health.current = 0.0
+	health.is_dead = true
+	_on_health_died(DamageInfo.new(0.0, kind as DamageInfo.Kind, null, headshot, at))

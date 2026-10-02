@@ -303,6 +303,7 @@ func _reset() -> void:
 
 ## Caixa extra do Fire Sale: some agora (ou quando o sorteio em andamento acabar).
 func dismiss() -> void:
+	_net(&"dismiss", {})
 	if state == State.IDLE:
 		queue_free()
 	else:
@@ -389,6 +390,10 @@ func net_apply(kind: StringName, info: Dictionary) -> void:
 			result = null
 			_label.text = ""
 			_label.modulate = Color.WHITE
+			if _dismiss_pending:
+				queue_free()
+		&"dismiss":
+			dismiss()
 		&"move":
 			uses = 0
 			_move_to(info.get("spot", global_position))

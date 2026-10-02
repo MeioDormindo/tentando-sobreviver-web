@@ -472,9 +472,17 @@ Decisões:
     nos colegas (nascimento, posição a 20/s, golpe, acerto e morte); avisos de todos (round,
     power-ups, score) e o estado do mapa (portas, tábuas, energia, Mystery Box, armas e
     power-ups no chão).
-  - **Regras desta etapa:** só o Terminal; rounds de chefe viram normais; eventos, missões e o
-    Fire Sale ficam de fora na rede; o menu de pausa não para o mundo; no fim, o host leva todos
-    de volta à sala (VOLTAR À SALA); quem sai some do mapa; o host sair leva todos ao menu.
+  - **Conteúdo do Terminal na rede (Etapa 2):** o chefe (fantoche nos colegas, com modo, barra e
+    ataques — o host manda os pontos sorteados para o círculo aparecer onde o dano acontece), os
+    eventos do mapa (cada um com a parte "só o visual" para os colegas: `client_start`,
+    `client_update`, `client_fx`, `client_end` no WorldEvent), a missão do Último Trem (no colega
+    ela fica em modo espelho: o host avisa o avanço e o uso de cada ponto; o objetivo vai para o
+    minimapa), armadilha, ursinhos, rádio e Fire Sale. Hospital e Templo ficam para a Etapa 3.
+  - **Regras:** o menu de pausa não para o mundo; no fim, o host leva todos de volta à sala
+    (VOLTAR À SALA); quem sai some do mapa; o host sair leva todos ao menu.
+  - **Banda medida** (4 jogadores, 35 zumbis vivos): o host manda ~10 KB/s (~80 kbit/s) para
+    cada colega e recebe ~8 KB/s no total. Zumbis em 11 bytes cada a 20/s; o estado de cada
+    jogador só quando muda (cair/levantar vão garantidos, na hora).
   - **Ranking por modo:** SOLO, DUPLA, TRIO e QUARTETO no ranking local (`rankingCoop` no save) e
     no global (`supabase/coop_ranking.sql`: colunas `players` e `team`). Na partida em grupo o
     time entra sozinho no ranking do modo (sem pedir nome); o host envia ao global pelo time.

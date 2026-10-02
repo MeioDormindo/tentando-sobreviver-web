@@ -53,11 +53,20 @@ static func shockwave(tree: SceneTree, at: Vector3, cfg: Dictionary, player: Cha
 
 ## Círculos marcados perto do jogador que, no fim do aviso, explodem (ou viram poça de ácido).
 static func area(tree: SceneTree, target_at: Vector3, cfg: Dictionary, acid: bool, player: CharacterBase, fire := false) -> void:
+	area_at(tree, area_points(target_at, cfg), cfg, acid, player, fire)
+
+
+## Onde caem os círculos (sorteado à parte: em rede o host manda os mesmos pontos aos colegas).
+static func area_points(target_at: Vector3, cfg: Dictionary) -> Array[Vector3]:
 	var spread := float(cfg.get("spread", 4.0))
-	var radius := float(cfg.get("radius", 2.0))
 	var points: Array[Vector3] = [target_at]
 	for i in range(1, int(cfg.get("count", 3))):
 		points.append(target_at + Vector3(randf_range(-spread, spread), 0.0, randf_range(-spread, spread)))
+	return points
+
+
+static func area_at(tree: SceneTree, points: Array[Vector3], cfg: Dictionary, acid: bool, player: CharacterBase, fire := false) -> void:
+	var radius := float(cfg.get("radius", 2.0))
 	var root := SpecialFire.world_root(tree)
 	# ID em vez do jogador direto: se a partida já tiver acabado quando o aviso terminar, capturar
 	# o Node ainda vivo no closure quebra o lambda ao chamar (erro do motor, "Lambda capture was
@@ -172,15 +181,25 @@ static func volley(tree: SceneTree, from: Vector3, toward: Vector3, cfg: Diction
 
 ## Vômito: poças de ácido em leque à frente do boss.
 static func vomit(tree: SceneTree, at: Vector3, facing: Vector3, cfg: Dictionary, fire := false) -> void:
+	vomit_at(tree, vomit_points(at, facing, cfg), cfg, fire)
+
+
+## Onde caem as poças (sorteado à parte, como os círculos).
+static func vomit_points(at: Vector3, facing: Vector3, cfg: Dictionary) -> Array[Vector3]:
 	var count := int(cfg.get("count", 5))
 	var reach := float(cfg.get("range", 8.0))
 	var arc := deg_to_rad(float(cfg.get("arc_deg", 50)))
 	var forward := Vector3(facing.x, 0.0, facing.z).normalized()
-	var root := SpecialFire.world_root(tree)
+	var points: Array[Vector3] = []
 	for i in count:
 		var t := (float(i) / maxf(1.0, count - 1.0)) - 0.5
-		var dir := forward.rotated(Vector3.UP, arc * t)
-		var point := at + dir * reach * randf_range(0.4, 1.0)
+		points.append(at + forward.rotated(Vector3.UP, arc * t) * reach * randf_range(0.4, 1.0))
+	return points
+
+
+static func vomit_at(tree: SceneTree, points: Array[Vector3], cfg: Dictionary, fire := false) -> void:
+	var root := SpecialFire.world_root(tree)
+	for point in points:
 		ZombieAbilities._spawn_pool_at(root, cfg.get("pool", {}), FIRE_COLOR if fire else ACID_COLOR, point)
 
 

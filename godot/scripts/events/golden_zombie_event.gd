@@ -48,8 +48,13 @@ func start() -> void:
 	zombie.position = system.spawn_manager.container.to_local(at + Vector3.UP * 0.1)
 	system.spawn_manager.container.add_child(zombie)
 	Events.zombies_summoned.emit(1)
-	# Todo em ouro (folha zombie_golden, com coroa), brilhando e soltando faíscas douradas;
-	# marca própria no minimapa.
+	decorate(zombie)
+	_last_position = at
+
+
+## Todo em ouro (folha zombie_golden, com coroa), brilhando e soltando faíscas douradas; marca
+## própria no minimapa. Em rede, também no fantoche dos colegas.
+static func decorate(zombie: ZombieBase) -> void:
 	zombie.add_to_group(&"minimap_golden")
 	if zombie.model:
 		zombie.model.set_sheet("zombie_golden")
@@ -66,7 +71,16 @@ func start() -> void:
 	var light := EventFx.light(GOLD, 2.0, 3.0)
 	light.position.y = 1.2
 	zombie.add_child(light)
-	_last_position = at
+
+
+func net_params() -> Dictionary:
+	return {"zombie": int(zombie.get_meta(&"net_id", 0)) if is_instance_valid(zombie) else 0}
+
+
+func client_start(params: Dictionary) -> void:
+	var puppet := Net.world.call(&"_puppet", int(params.get("zombie", 0))) as ZombieBase if Net.world else null
+	if puppet:
+		decorate(puppet)
 
 
 func update(delta: float) -> bool:

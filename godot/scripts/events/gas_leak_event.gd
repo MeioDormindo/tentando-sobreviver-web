@@ -30,6 +30,11 @@ func start() -> void:
 	var range_m: Array = config.get("distance", [5.3, 11.9])
 	var point: Variant = system.pick_floor_point(float(range_m[0]), float(range_m[1]))
 	center = point if point is Vector3 else system.focus().global_position + Vector3(float(range_m[0]), 0, 0)
+	_build()
+
+
+## A nuvem, a luz, o chiado e a válvula no centro (no host e, em rede, nos colegas).
+func _build() -> void:
 	_elapsed = 0.0
 	_tick = float(config.get("warning_time", 2.5))
 	_node = Node3D.new()
@@ -90,3 +95,22 @@ func end() -> void:
 		tween.tween_property(_cloud, "scale", Vector3.ONE * 0.05, 1.5)
 		tween.tween_callback(_node.queue_free)
 	_node = null
+
+
+func net_params() -> Dictionary:
+	return {"center": center}
+
+
+func client_start(params: Dictionary) -> void:
+	center = params.get("center", Vector3.ZERO)
+	_build()
+
+
+func client_update(delta: float) -> void:
+	_elapsed += delta
+	if is_instance_valid(_light):
+		_light.light_energy = 1.0 + 0.3 * sin(_elapsed * 3.0)
+
+
+func client_end() -> void:
+	end()

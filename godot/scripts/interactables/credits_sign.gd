@@ -14,6 +14,10 @@ func get_interaction_prompt(_player: Node3D) -> String:
 	return "[E] LER A PLACA"
 
 
-func interact(_player: Node3D) -> bool:
-	Events.toast.emit(WorldEventData.shared().credits)
+func interact(player: Node3D) -> bool:
+	# Só para quem leu (em rede, na máquina dele).
+	if player is Player:
+		(player as Player).hud(&"toast", [WorldEventData.shared().credits])
+	else:
+		Events.toast.emit(WorldEventData.shared().credits)
 	return true

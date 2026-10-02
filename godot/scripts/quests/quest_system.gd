@@ -22,9 +22,12 @@ var done: bool = false
 var _on_complete: Callable
 var _last_text := ""
 var _marker: Node3D
+## Partida em rede, num colega: a missão só mostra (pontos, peças, sinal); quem avança é o host.
+var remote := false
 
 
 func begin(p_title: String, p_steps: Array[QuestStep], on_complete: Callable) -> void:
+	remote = Net.is_client()
 	title = p_title
 	steps = p_steps
 	_on_complete = on_complete
@@ -38,6 +41,9 @@ func begin(p_title: String, p_steps: Array[QuestStep], on_complete: Callable) ->
 
 func _physics_process(delta: float) -> void:
 	if done or index < 0:
+		return
+	if remote:
+		_remote_update(delta)
 		return
 	var step := steps[index]
 	if step.update.call(delta):
@@ -58,12 +64,19 @@ func _advance() -> void:
 	if index >= steps.size():
 		done = true
 		_marker.remove_from_group(&"minimap_objective")
+		if remote:
+			return
+		_net(&"advance", {"index": index, "state": net_state()})
 		Events.quest_state.emit({})
 		if _on_complete.is_valid():
 			_on_complete.call()
 		return
+	if not remote:
+		_net(&"advance", {"index": index, "state": net_state()})
 	if steps[index].enter.is_valid():
 		steps[index].enter.call()
+	if remote:
+		return
 	_emit(true)
 	_update_marker()
 
@@ -151,11 +164,14 @@ func _make_lock(parent: Node3D, on_open: Callable) -> Node3D:
 	shape.shape = box
 	hurtbox.add_child(shape)
 	padlock.add_child(hurtbox)
+	# Em rede, no colega: o tiro aqui é só visual; o cadeado abre quando o host avisa.
+	health.invulnerable = remote
 	health.died.connect(func(_info: DamageInfo) -> void:
+		_net(&"lock", {"path": String(world.get_path_to(padlock))})
 		on_open.call()
 		Audio.play_at("armor_hit", padlock.global_position, "world", 1.0)
 		SpecialFire.flash(get_tree(), padlock.global_position, 1.0, Color(1.0, 0.85, 0.4))
-		Events.toast.emit("CADEADO ABERTO")
+		_toast("CADEADO ABERTO")
 		padlock.queue_free())
 	return padlock
 
@@ -175,6 +191,7 @@ func _spawn_carrier(item_art: String, toast: String, type: StringName = &"armore
 		item = EventFx.box(Vector3(0.25, 0.04, 0.16), EventFx.glow(Color(0.3, 0.6, 1.0), 1.0, 1.2))
 	item.position = Vector3(0.0, 2.0, 0.0)
 	carrier.add_child(item)
+	_net(&"carrier", {"zombie": int(carrier.get_meta(&"net_id", 0)), "art": item_art})
 	Events.toast.emit(toast)
 	return carrier
 
@@ -206,3 +223,64 @@ func _reward(who: Player, weapon_data: WeaponData, level: int) -> void:
 			if next == null:
 				break
 			weapon.upgrade_to(next)
+
+
+# ───────────────────────── Rede ─────────────────────────
+
+## Aviso da missão (no colega, os avisos já vêm do host).
+func _toast(text: String) -> void:
+	if not remote:
+		Events.toast.emit(text)
+
+
+## Host: avisa os colegas (avanço de etapa, cadeado aberto, item de um Blindado...).
+func _net(kind: StringName, payload: Dictionary) -> void:
+	if Net.world and Net.is_host():
+		Net.world.on_quest(self, kind, payload)
+
+
+## O que o colega precisa saber ao avançar de etapa (onde o chefe caiu...).
+func net_state() -> Dictionary:
+	return {}
+
+
+func _apply_state(_state: Dictionary) -> void:
+	pass
+
+
+## Colega: só o visual entre os avisos do host (a luz de um sinal...).
+func _remote_update(_delta: float) -> void:
+	pass
+
+
+## Colega: o que o host avisou.
+func net_apply(kind: StringName, payload: Dictionary) -> void:
+	match kind:
+		&"advance":
+			_apply_state(payload.get("state", {}))
+			var target := int(payload.get("index", index + 1))
+			while index < target and not done:
+				if index >= 0 and steps[index].exit.is_valid():
+					steps[index].exit.call()
+				_advance()
+		&"lock":
+			var padlock := world.get_node_or_null(String(payload.get("path", "")))
+			var health := padlock.get_node_or_null("HealthComponent") as HealthComponent if padlock else null
+			if health:
+				health.invulnerable = false
+				health.apply_damage(DamageInfo.new(health.current + 1.0, DamageInfo.Kind.WEAPON))
+		&"carrier":
+			var carrier := Net.world.call(&"_puppet", int(payload.get("zombie", 0))) as Node3D if Net.world else null
+			if carrier:
+				var item: Node3D = PixelShapes.standing(String(payload.get("art", "")), 56.0) if String(payload.get("art", "")) != "" else null
+				if item == null:
+					item = EventFx.box(Vector3(0.25, 0.04, 0.16), EventFx.glow(Color(0.3, 0.6, 1.0), 1.0, 1.2))
+				item.position = Vector3(0.0, 2.0, 0.0)
+				carrier.add_child(item)
+		_:
+			_net_custom(kind, payload)
+
+
+## Colega: aviso próprio de cada missão.
+func _net_custom(_kind: StringName, _payload: Dictionary) -> void:
+	pass

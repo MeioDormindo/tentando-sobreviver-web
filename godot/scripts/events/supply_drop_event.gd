@@ -35,6 +35,33 @@ func start() -> void:
 	crate.fall(FALL_HEIGHT, fall)
 
 
+func net_params() -> Dictionary:
+	return {"at": crate.global_position if crate and is_instance_valid(crate) else Vector3.ZERO}
+
+
+## Colega: a mesma caixa caindo no mesmo ponto (quem abre e o prêmio são do host).
+func client_start(params: Dictionary) -> void:
+	crate = SupplyCrate.new()
+	crate.name = "SupplyCrate"
+	crate.hold_time = float(config.get("open_hold_time", 3.0))
+	system.world_root().add_child(crate)
+	crate.global_position = params.get("at", Vector3.ZERO)
+	crate.fall(FALL_HEIGHT, float(config.get("fall_time", 2.2)))
+	duration = float(config.get("lifetime_time", 60.0)) + float(config.get("fall_time", 2.2))
+	_elapsed = 0.0
+
+
+func client_update(delta: float) -> void:
+	if crate and is_instance_valid(crate) and not crate.is_open:
+		_elapsed += delta
+		var left := duration - _elapsed
+		crate.blink(left > 8.0 or int(left * 5.0) % 2 == 0)
+
+
+func client_end() -> void:
+	end()
+
+
 func update(delta: float) -> bool:
 	if crate == null or not is_instance_valid(crate) or crate.is_open:
 		return false

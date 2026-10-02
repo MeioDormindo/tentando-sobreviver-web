@@ -22,3 +22,11 @@ func start() -> void:
 func end() -> void:
 	system.world.set_event_mood(id, false, config)
 	Audio.play("evt_power_up", "world", 0.9, 0.0)
+
+
+func client_start(_params: Dictionary) -> void:
+	system.world.set_event_mood(id, true, config)
+
+
+func client_end() -> void:
+	end()
