@@ -1398,8 +1398,8 @@ msgstr "— ms"
 msgid "%s mover · mouse mirar · clique atirar · %s recarregar · %s trocar arma · %s faca · %s usar · %s pausa"
 msgstr "%s 이동 · 마우스 조준 · 클릭 사격 · %s 재장전 · %s 무기 교체 · %s 칼 · %s 사용 · %s 일시정지"
 
-msgid "Analógico: mover · ATIRAR: mira sozinho no zumbi mais perto e atira · FACA: golpe corpo a corpo"
-msgstr "스틱: 이동 · 사격: 가장 가까운 좀비를 자동 조준해 사격 · 칼: 근접 공격"
+msgid "Analógico: mover · a mira acompanha sozinha o zumbi mais perto · ATIRAR: atira · FACA: golpe corpo a corpo"
+msgstr "스틱: 이동 · 조준이 가장 가까운 좀비를 자동으로 따라감 · 사격: 발사 · 칼: 근접 공격"
 
 msgid "TENTANDO\nSOBREVIVER"
 msgstr "TENTANDO\nSOBREVIVER"
@@ -1634,6 +1634,21 @@ msgstr "소리"
 
 msgid "CONTROLES DE TOQUE"
 msgstr "터치 조작"
+
+msgid "MIRA AUTOMÁTICA"
+msgstr "자동 조준"
+
+msgid "TIRO AUTOMÁTICO"
+msgstr "자동 사격"
+
+msgid "TAMANHO DOS BOTÕES"
+msgstr "버튼 크기"
+
+msgid "MODO CANHOTO"
+msgstr "왼손 모드"
+
+msgid "VIBRAÇÃO"
+msgstr "진동"
 
 msgid "AÇÃO"
 msgstr "동작"

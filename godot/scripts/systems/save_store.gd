@@ -375,6 +375,8 @@ func sanitize(raw: Variant) -> Dictionary:
 			d.settings[key] = float(s[key])
 	d.settings.playerName = String(d.settings.playerName).substr(0, catalog.player_name_max)
 	d.settings.volume = clampf(float(d.settings.volume), 0.0, 1.0)
+	if not String(d.settings.touchButtons) in ["small", "medium", "large"]:
+		d.settings.touchButtons = "medium"
 	var recs: Dictionary = r.get("records", {}) if r.get("records") is Dictionary else {}
 	for id: String in catalog.maps:
 		var m: Dictionary = recs.get(id, {}) if recs.get(id) is Dictionary else {}
@@ -447,7 +449,9 @@ func _defaults() -> Dictionary:
 			"fullscreen": false, "skinHospital": "patient", "skinTemple": "archaeologist", "blood": false, "crosshair": true,
 			"language": "auto", "windowMode": "", "resolution": "1280x720", "vsync": "on", "maxFps": 0.0, "uiScale": 1.0,
 			"brightness": 1.0, "shadows": true, "showFps": false, "musicVolume": 1.0, "sfxVolume": 1.0, "uiVolume": 1.0,
-			"voiceVolume": 1.0, "bindings": {}},
+			"voiceVolume": 1.0, "bindings": {},
+			# Celular: mira que acompanha o zumbi mais perto, tiro automático, botões e vibração.
+			"autoAim": true, "autoFire": false, "touchButtons": "medium", "touchLeftHanded": false, "vibration": true},
 		"records": recs,
 		"unlockedMaps": unlocked,
 		"ranking": rank,

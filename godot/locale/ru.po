@@ -1398,8 +1398,8 @@ msgstr "— ms"
 msgid "%s mover · mouse mirar · clique atirar · %s recarregar · %s trocar arma · %s faca · %s usar · %s pausa"
 msgstr "%s ходьба · мышь прицел · клик выстрел · %s перезарядка · %s сменить оружие · %s нож · %s использовать · %s пауза"
 
-msgid "Analógico: mover · ATIRAR: mira sozinho no zumbi mais perto e atira · FACA: golpe corpo a corpo"
-msgstr "Стик: ходьба · СТРЕЛЯТЬ: сам целится в ближайшего зомби и стреляет · НОЖ: удар в ближнем бою"
+msgid "Analógico: mover · a mira acompanha sozinha o zumbi mais perto · ATIRAR: atira · FACA: golpe corpo a corpo"
+msgstr "Стик: движение · прицел сам следит за ближайшим зомби · ОГОНЬ: стрелять · НОЖ: удар в ближнем бою"
 
 msgid "TENTANDO\nSOBREVIVER"
 msgstr "TENTANDO\nSOBREVIVER"
@@ -1634,6 +1634,21 @@ msgstr "ЗВУК"
 
 msgid "CONTROLES DE TOQUE"
 msgstr "СЕНСОРНОЕ УПРАВЛЕНИЕ"
+
+msgid "MIRA AUTOMÁTICA"
+msgstr "АВТОПРИЦЕЛ"
+
+msgid "TIRO AUTOMÁTICO"
+msgstr "АВТОСТРЕЛЬБА"
+
+msgid "TAMANHO DOS BOTÕES"
+msgstr "РАЗМЕР КНОПОК"
+
+msgid "MODO CANHOTO"
+msgstr "РЕЖИМ ДЛЯ ЛЕВШЕЙ"
+
+msgid "VIBRAÇÃO"
+msgstr "ВИБРАЦИЯ"
 
 msgid "AÇÃO"
 msgstr "ДЕЙСТВИЕ"

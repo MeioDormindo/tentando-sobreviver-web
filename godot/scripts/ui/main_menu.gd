@@ -18,8 +18,8 @@ var _konami_step := 0
 var _secret_label: Label
 const GAME := "res://scenes/main.tscn"
 const KEYBOARD_HINT := "%s mover · mouse mirar · clique atirar · %s recarregar · %s trocar arma · %s faca · %s usar · %s pausa"
-## Mesma dica do jogo web para o celular.
-const TOUCH_HINT := "Analógico: mover · ATIRAR: mira sozinho no zumbi mais perto e atira · FACA: golpe corpo a corpo"
+## Dica para o celular (mira automática; ver Player._update_aim_from_input).
+const TOUCH_HINT := "Analógico: mover · a mira acompanha sozinha o zumbi mais perto · ATIRAR: atira · FACA: golpe corpo a corpo"
 
 
 func _ready() -> void:

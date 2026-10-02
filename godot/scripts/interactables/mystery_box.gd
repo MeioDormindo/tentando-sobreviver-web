@@ -128,7 +128,7 @@ func _process(delta: float) -> void:
 			if _cycle <= 0.0:
 				_cycle = 0.08 + (data.roll_time - _timer) * 0.05  # desacelera
 				var any := catalog.weapons.pick_random() as WeaponData
-				_label.text = any.display_name.to_upper()
+				_label.text = Loc.t(any.display_name).to_upper()
 				_label.modulate = Color.WHITE
 			if _timer <= 0.0 and not remote:
 				_reveal()
@@ -247,7 +247,7 @@ func _reveal() -> void:
 	state = State.READY
 	_timer = data.take_time
 	result_element = roll_element(randf(), randi())
-	_label.text = result.display_name.to_upper() + (("  " + ElementCatalog.shared().label(result_element)) if result_element != &"" else "")
+	_label.text = Loc.t(result.display_name).to_upper() + (("  " + ElementCatalog.shared().label(result_element)) if result_element != &"" else "")
 	_label.modulate = RARITY_COLORS.get(result.rarity, Color.WHITE)
 	_show_icon(result)
 	_net(&"reveal", {"id": String(result.id), "element": String(result_element)})
@@ -382,7 +382,7 @@ func net_apply(kind: StringName, info: Dictionary) -> void:
 			Audio.play_at("box_reveal", global_position, "ui", 1.0)
 			state = State.READY
 			_timer = data.take_time
-			_label.text = result.display_name.to_upper() + (("  " + ElementCatalog.shared().label(result_element)) if result_element != &"" else "")
+			_label.text = Loc.t(result.display_name).to_upper() + (("  " + ElementCatalog.shared().label(result_element)) if result_element != &"" else "")
 			_label.modulate = RARITY_COLORS.get(result.rarity, Color.WHITE)
 			_show_icon(result)
 		&"reset":

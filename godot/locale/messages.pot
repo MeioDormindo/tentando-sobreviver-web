@@ -49,7 +49,7 @@ msgstr ""
 msgid "[SEGURE %s] CONSERTAR BARRICADA  ·  +%s por tábua"
 msgstr ""
 
-#: scripts/interactables/blessing_altar.gd:62 scripts/interactables/blessing_altar.gd:98 scripts/ui/hud.gd:151
+#: scripts/interactables/blessing_altar.gd:62 scripts/interactables/blessing_altar.gd:98 scripts/ui/hud.gd:154
 msgid "BÊNÇÃO DE %s"
 msgstr ""
 
@@ -77,7 +77,7 @@ msgstr ""
 msgid "[SEGURE %s] LIGAR A ENERGIA"
 msgstr ""
 
-#: scripts/interactables/breaker.gd:81 scripts/ui/hud.gd:147
+#: scripts/interactables/breaker.gd:81 scripts/ui/hud.gd:150
 msgid "ENERGIA LIGADA"
 msgstr ""
 
@@ -669,39 +669,39 @@ msgstr ""
 msgid "HADES: um espírito aliado se levanta para lutar"
 msgstr ""
 
-#: scripts/player/player.gd:549
+#: scripts/player/player.gd:567
 msgid "PETRIFICADO! Não olhe para a Górgona"
 msgstr ""
 
-#: scripts/player/player.gd:848
+#: scripts/player/player.gd:866
 msgid "QUICK REVIVE!"
 msgstr ""
 
-#: scripts/player/player.gd:1159
+#: scripts/player/player.gd:1283
 msgid "CAÍDO! Um colega pode te reviver"
 msgstr ""
 
-#: scripts/player/player.gd:1161
+#: scripts/player/player.gd:1285
 msgid "%s caiu!"
 msgstr ""
 
-#: scripts/player/player.gd:1169
+#: scripts/player/player.gd:1293
 msgid "CAÍDO · %ss para um colega te reviver"
 msgstr ""
 
-#: scripts/player/player.gd:1181
+#: scripts/player/player.gd:1305
 msgid "VOCÊ MORREU · volta no próximo round"
 msgstr ""
 
-#: scripts/player/player.gd:1201
+#: scripts/player/player.gd:1325
 msgid "%s levantou %s"
 msgstr ""
 
-#: scripts/player/player.gd:1242
+#: scripts/player/player.gd:1366
 msgid "[SEGURE %s] REVIVER %s"
 msgstr ""
 
-#: scripts/player/player.gd:1242
+#: scripts/player/player.gd:1366
 msgid "O COLEGA"
 msgstr ""
 
@@ -1009,7 +1009,7 @@ msgstr ""
 msgid "ANDAR PARA A DIREITA"
 msgstr ""
 
-#: scripts/systems/input_bindings.gd:123 scripts/ui/touch_controls.gd:25
+#: scripts/systems/input_bindings.gd:123 scripts/ui/touch_controls.gd:33
 msgid "ATIRAR"
 msgstr ""
 
@@ -1033,7 +1033,7 @@ msgstr ""
 msgid "ARMA 2"
 msgstr ""
 
-#: scripts/systems/input_bindings.gd:124 scripts/ui/touch_controls.gd:29
+#: scripts/systems/input_bindings.gd:124 scripts/ui/touch_controls.gd:37
 msgid "FACA"
 msgstr ""
 
@@ -1089,15 +1089,15 @@ msgstr ""
 msgid "RODA ↓"
 msgstr ""
 
-#: scripts/systems/loc.gd:98
+#: scripts/systems/loc.gd:110
 msgid "AUTOMÁTICO (%s)"
 msgstr ""
 
-#: scripts/systems/loc.gd:106 scripts/weapons/weapon_upgrade.gd:35 scripts/weapons/weapon_upgrade.gd:35
+#: scripts/systems/loc.gd:118 scripts/weapons/weapon_upgrade.gd:35 scripts/weapons/weapon_upgrade.gd:35
 msgid " Mk III"
 msgstr ""
 
-#: scripts/systems/loc.gd:106 scripts/weapons/weapon_upgrade.gd:21
+#: scripts/systems/loc.gd:118 scripts/weapons/weapon_upgrade.gd:21
 msgid " Mk II"
 msgstr ""
 
@@ -1125,7 +1125,7 @@ msgstr ""
 msgid "FIRE SALE! MYSTERY BOX A %s · +%s CAIXAS NO MAPA"
 msgstr ""
 
-#: scripts/systems/save_store.gd:207 scripts/systems/save_store.gd:444 scripts/ui/hud.gd:827
+#: scripts/systems/save_store.gd:207 scripts/systems/save_store.gd:446 scripts/ui/hud.gd:846
 msgid "SOBREVIVENTE"
 msgstr ""
 
@@ -1381,7 +1381,7 @@ msgstr ""
 msgid "EM USO"
 msgstr ""
 
-#: scripts/ui/character_screen.gd:46 scripts/ui/touch_controls.gd:26
+#: scripts/ui/character_screen.gd:46 scripts/ui/touch_controls.gd:34
 msgid "USAR"
 msgstr ""
 
@@ -1493,7 +1493,7 @@ msgstr ""
 msgid "DICA: %s"
 msgstr ""
 
-#: scripts/ui/hud.gd:97 scripts/ui/hud.gd:563
+#: scripts/ui/hud.gd:97 scripts/ui/hud.gd:579
 msgid "ZUMBIS RESTANTES  %d"
 msgstr ""
 
@@ -1501,231 +1501,231 @@ msgstr ""
 msgid "ROUND %d COMPLETO"
 msgstr ""
 
-#: scripts/ui/hud.gd:116
+#: scripts/ui/hud.gd:118
 msgid "ÁREA LIBERADA: %s"
 msgstr ""
 
-#: scripts/ui/hud.gd:134
+#: scripts/ui/hud.gd:137
 msgid "CONQUISTA DESBLOQUEADA: %s"
 msgstr ""
 
-#: scripts/ui/hud.gd:135 scripts/ui/hud.gd:705
+#: scripts/ui/hud.gd:138 scripts/ui/hud.gd:724
 msgid "SCORE %d"
 msgstr ""
 
-#: scripts/ui/hud.gd:136
+#: scripts/ui/hud.gd:139
 msgid "%s DESBLOQUEADO!"
 msgstr ""
 
-#: scripts/ui/hud.gd:137
+#: scripts/ui/hud.gd:140
 msgid "%s SE APROXIMA"
 msgstr ""
 
-#: scripts/ui/hud.gd:139
+#: scripts/ui/hud.gd:142
 msgid "FASE %d"
 msgstr ""
 
-#: scripts/ui/hud.gd:144
+#: scripts/ui/hud.gd:147
 msgid "%s DERROTADO  +%d"
 msgstr ""
 
-#: scripts/ui/hud.gd:146
+#: scripts/ui/hud.gd:149
 msgid "MAX AMMO"
 msgstr ""
 
-#: scripts/ui/hud.gd:179
+#: scripts/ui/hud.gd:182
 msgid "◆ %s  %d/%d"
 msgstr ""
 
-#: scripts/ui/hud.gd:208
+#: scripts/ui/hud.gd:212
 msgid "%d FPS"
 msgstr ""
 
-#: scripts/ui/hud.gd:268 scripts/ui/hud.gd:709 scripts/ui/ranking_screen.gd:67
+#: scripts/ui/hud.gd:281 scripts/ui/hud.gd:728 scripts/ui/ranking_screen.gd:67
 msgid "ROUND"
 msgstr ""
 
-#: scripts/ui/hud.gd:273
+#: scripts/ui/hud.gd:286
 msgid "SCORE 0"
 msgstr ""
 
-#: scripts/ui/hud.gd:283
+#: scripts/ui/hud.gd:296
 msgid "VIDA"
 msgstr ""
 
-#: scripts/ui/hud.gd:414
+#: scripts/ui/hud.gd:430
 msgid "GAME OVER"
 msgstr ""
 
-#: scripts/ui/hud.gd:562 scripts/ui/hud.gd:564
+#: scripts/ui/hud.gd:578 scripts/ui/hud.gd:580
 msgid "ROUND %d"
 msgstr ""
 
-#: scripts/ui/hud.gd:572
+#: scripts/ui/hud.gd:588
 msgid "%s  ·  FASE %d"
 msgstr ""
 
-#: scripts/ui/hud.gd:577
+#: scripts/ui/hud.gd:593
 msgid "RODADA DOS CÃES"
 msgstr ""
 
-#: scripts/ui/hud.gd:593
+#: scripts/ui/hud.gd:612
 msgid "VIDA  %d / %d"
 msgstr ""
 
-#: scripts/ui/hud.gd:659
+#: scripts/ui/hud.gd:678
 msgid "Fúria"
 msgstr ""
 
-#: scripts/ui/hud.gd:696
+#: scripts/ui/hud.gd:715
 msgid "RECARREGANDO"
 msgstr ""
 
-#: scripts/ui/hud.gd:709
+#: scripts/ui/hud.gd:728
 msgid "ZUMBIS ABATIDOS"
 msgstr ""
 
-#: scripts/ui/hud.gd:709
+#: scripts/ui/hud.gd:728
 msgid "HEADSHOTS"
 msgstr ""
 
-#: scripts/ui/hud.gd:710
+#: scripts/ui/hud.gd:729
 msgid "PONTOS GANHOS"
 msgstr ""
 
-#: scripts/ui/hud.gd:710
+#: scripts/ui/hud.gd:729
 msgid "TEMPO"
 msgstr ""
 
-#: scripts/ui/hud.gd:711
+#: scripts/ui/hud.gd:730
 msgid "BOSSES"
 msgstr ""
 
-#: scripts/ui/hud.gd:711
+#: scripts/ui/hud.gd:730
 msgid "DANO CAUSADO"
 msgstr ""
 
-#: scripts/ui/hud.gd:711
+#: scripts/ui/hud.gd:730
 msgid "DISPAROS / ACERTOS"
 msgstr ""
 
-#: scripts/ui/hud.gd:712
+#: scripts/ui/hud.gd:731
 msgid "PRECISÃO"
 msgstr ""
 
-#: scripts/ui/hud.gd:712
+#: scripts/ui/hud.gd:731
 msgid "ABATES NA FACA"
 msgstr ""
 
-#: scripts/ui/hud.gd:729
+#: scripts/ui/hud.gd:748
 msgid "NOVO RECORDE!"
 msgstr ""
 
-#: scripts/ui/hud.gd:729 scripts/ui/main_menu.gd:32
+#: scripts/ui/hud.gd:748 scripts/ui/main_menu.gd:32
 msgid "RECORDE: %d PONTOS · ROUND %d"
 msgstr ""
 
-#: scripts/ui/hud.gd:731
+#: scripts/ui/hud.gd:750
 msgid "TIME: %s"
 msgstr ""
 
-#: scripts/ui/hud.gd:736
+#: scripts/ui/hud.gd:755
 msgid "PARTIDA INVALIDADA — NÃO VALE SAVE NEM RANKING"
 msgstr ""
 
-#: scripts/ui/hud.gd:752
+#: scripts/ui/hud.gd:771
 msgid "JOGAR NOVAMENTE"
 msgstr ""
 
-#: scripts/ui/hud.gd:752 scripts/ui/pause_menu.gd:38
+#: scripts/ui/hud.gd:771 scripts/ui/pause_menu.gd:38
 msgid "VOLTAR À SALA"
 msgstr ""
 
-#: scripts/ui/hud.gd:755 scripts/ui/main_menu.gd:40 scripts/ui/ranking_screen.gd:23
+#: scripts/ui/hud.gd:774 scripts/ui/main_menu.gd:40 scripts/ui/ranking_screen.gd:23
 msgid "RANKING"
 msgstr ""
 
-#: scripts/ui/hud.gd:759 scripts/ui/pause_menu.gd:28 scripts/ui/pause_menu.gd:39
+#: scripts/ui/hud.gd:778 scripts/ui/pause_menu.gd:28 scripts/ui/pause_menu.gd:39
 msgid "MENU"
 msgstr ""
 
-#: scripts/ui/hud.gd:771
+#: scripts/ui/hud.gd:790
 msgid "PARTIDA INVALIDADA"
 msgstr ""
 
-#: scripts/ui/hud.gd:790
+#: scripts/ui/hud.gd:809
 msgid "%dº LUGAR NO RANKING %s DE %s!"
 msgstr ""
 
-#: scripts/ui/hud.gd:798
+#: scripts/ui/hud.gd:817
 msgid "ENVIANDO O TIME AO RANKING GLOBAL..."
 msgstr ""
 
-#: scripts/ui/hud.gd:804 scripts/ui/hud.gd:849
+#: scripts/ui/hud.gd:823 scripts/ui/hud.gd:868
 msgid "RANKING GLOBAL: %s"
 msgstr ""
 
-#: scripts/ui/hud.gd:804
+#: scripts/ui/hud.gd:823
 msgid "TIME ENVIADO AO RANKING GLOBAL (%s)!"
 msgstr ""
 
-#: scripts/ui/hud.gd:814
+#: scripts/ui/hud.gd:833
 msgid "ENTROU NO TOP! SEU NOME:"
 msgstr ""
 
-#: scripts/ui/hud.gd:814
+#: scripts/ui/hud.gd:833
 msgid "SEU NOME PARA O RANKING GLOBAL:"
 msgstr ""
 
-#: scripts/ui/hud.gd:835
+#: scripts/ui/hud.gd:854
 msgid "%dº LUGAR NO RANKING DE %s!"
 msgstr ""
 
-#: scripts/ui/hud.gd:843
+#: scripts/ui/hud.gd:862
 msgid "ENVIANDO AO RANKING GLOBAL..."
 msgstr ""
 
-#: scripts/ui/hud.gd:849
+#: scripts/ui/hud.gd:868
 msgid "ENVIADO AO RANKING GLOBAL DA TEMPORADA!"
 msgstr ""
 
-#: scripts/ui/hud.gd:852
+#: scripts/ui/hud.gd:871
 msgid "SALVAR"
 msgstr ""
 
-#: scripts/ui/hud.gd:875
+#: scripts/ui/hud.gd:894
 msgid "LANTERNA %s%s"
 msgstr ""
 
-#: scripts/ui/hud.gd:875
+#: scripts/ui/hud.gd:894
 msgid "LIGADA"
 msgstr ""
 
-#: scripts/ui/hud.gd:875
+#: scripts/ui/hud.gd:894
 msgid "DESLIGADA"
 msgstr ""
 
-#: scripts/ui/hud.gd:886
+#: scripts/ui/hud.gd:905
 msgid "ESTÁ ESCURO — [%s] LIGA A LANTERNA"
 msgstr ""
 
-#: scripts/ui/hud.gd:966
+#: scripts/ui/hud.gd:994
 msgid "CAÍDO %ds"
 msgstr ""
 
-#: scripts/ui/hud.gd:968 scripts/ui/hud.gd:970
+#: scripts/ui/hud.gd:996 scripts/ui/hud.gd:998
 msgid "FORA"
 msgstr ""
 
-#: scripts/ui/hud.gd:972 scripts/ui/lobby_screen.gd:325
+#: scripts/ui/hud.gd:1000 scripts/ui/lobby_screen.gd:325
 msgid "%d ms"
 msgstr ""
 
-#: scripts/ui/hud.gd:1008
+#: scripts/ui/hud.gd:1036
 msgid "COLEGA"
 msgstr ""
 
-#: scripts/ui/hud.gd:1092
+#: scripts/ui/hud.gd:1120
 msgid "%s %ds"
 msgstr ""
 
@@ -1862,7 +1862,7 @@ msgid "%s mover · mouse mirar · clique atirar · %s recarregar · %s trocar ar
 msgstr ""
 
 #: scripts/ui/main_menu.gd:22
-msgid "Analógico: mover · ATIRAR: mira sozinho no zumbi mais perto e atira · FACA: golpe corpo a corpo"
+msgid "Analógico: mover · a mira acompanha sozinha o zumbi mais perto · ATIRAR: atira · FACA: golpe corpo a corpo"
 msgstr ""
 
 #: scripts/ui/main_menu.gd:28
@@ -1945,7 +1945,7 @@ msgstr ""
 msgid "BLOQUEADO — derrote o boss do round %d no %s"
 msgstr ""
 
-#: scripts/ui/minimap.gd:113 scripts/ui/touch_controls.gd:30
+#: scripts/ui/minimap.gd:113 scripts/ui/touch_controls.gd:38
 msgid "MAPA"
 msgstr ""
 
@@ -2041,7 +2041,7 @@ msgstr ""
 msgid "PEQUENO"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:11 scripts/ui/settings_rows.gd:92
+#: scripts/ui/settings_rows.gd:11 scripts/ui/settings_rows.gd:92 scripts/ui/settings_rows.gd:160
 msgid "MÉDIO"
 msgstr ""
 
@@ -2057,7 +2057,7 @@ msgstr ""
 msgid "LIGADO"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:14 scripts/ui/settings_rows.gd:19 scripts/ui/settings_rows.gd:216
+#: scripts/ui/settings_rows.gd:14 scripts/ui/settings_rows.gd:19 scripts/ui/settings_rows.gd:235
 msgid "DESLIGADO"
 msgstr ""
 
@@ -2177,31 +2177,51 @@ msgstr ""
 msgid "CONTROLES DE TOQUE"
 msgstr ""
 
+#: scripts/ui/settings_rows.gd:158
+msgid "MIRA AUTOMÁTICA"
+msgstr ""
+
 #: scripts/ui/settings_rows.gd:159
-msgid "AÇÃO"
+msgid "TIRO AUTOMÁTICO"
 msgstr ""
 
 #: scripts/ui/settings_rows.gd:160
-msgid "TECLADO / MOUSE"
+msgid "TAMANHO DOS BOTÕES"
 msgstr ""
 
 #: scripts/ui/settings_rows.gd:161
+msgid "MODO CANHOTO"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:162
+msgid "VIBRAÇÃO"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:165
+msgid "AÇÃO"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:167
+msgid "TECLADO / MOUSE"
+msgstr ""
+
+#: scripts/ui/settings_rows.gd:168
 msgid "CONTROLE"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:175
+#: scripts/ui/settings_rows.gd:183
 msgid "Clique numa tecla para trocar. ESC cancela."
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:176
+#: scripts/ui/settings_rows.gd:184
 msgid "RESTAURAR PADRÕES"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:193
+#: scripts/ui/settings_rows.gd:212
 msgid "Aperte uma tecla para %s… (ESC cancela)"
 msgstr ""
 
-#: scripts/ui/settings_rows.gd:193
+#: scripts/ui/settings_rows.gd:212
 msgid "Aperte um botão do controle para %s… (ESC cancela)"
 msgstr ""
 
@@ -2257,11 +2277,11 @@ msgstr ""
 msgid "Desenvolvido por %s"
 msgstr ""
 
-#: scripts/ui/touch_controls.gd:27
+#: scripts/ui/touch_controls.gd:35
 msgid "RECARR."
 msgstr ""
 
-#: scripts/ui/touch_controls.gd:28
+#: scripts/ui/touch_controls.gd:36
 msgid "TROCAR"
 msgstr ""
 

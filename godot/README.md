@@ -257,9 +257,9 @@ de conceitos: ver `docs/analise-typescript.md`.
 
 | Controle | Teclado + mouse | Controle | Toque (celular) |
 |---|---|---|---|
-| Mover | WASD / setas | analógico esquerdo | analógico esquerdo (metade esquerda da tela) |
-| Mirar | mouse (sobre a cabeça do zumbi = headshot) | analógico direito | analógico direito (metade direita) |
-| Atirar | botão esquerdo | RT | segurar ATIRAR (mira assistida) |
+| Mover | WASD / setas | analógico esquerdo | analógico (qualquer lugar da tela fora dos botões) |
+| Mirar | mouse (sobre a cabeça do zumbi = headshot) | analógico direito | sozinha: acompanha o zumbi mais perto (mira automática) |
+| Atirar | botão esquerdo | RT | segurar ATIRAR (ou tiro automático) |
 | Recarregar | R | X | RECARR. |
 | Trocar arma | Q, 1 / 2, roda do mouse | Y | TROCAR |
 | Faca | V / botão direito | RB | FACA |
@@ -269,11 +269,22 @@ de conceitos: ver `docs/analise-typescript.md`.
 | Mapa grande | segurar Tab | Back | segurar MAPA |
 | Pausar | ESC / P | Start | II |
 
-**Controles de toque** (`scripts/ui/touch_controls.gd`, como os do jogo web): aparecem sozinhos no
-celular e no navegador do celular (Configurações → CONTROLES DE TOQUE: AUTO / LIGADO / DESLIGADO).
-Os analógicos são flutuantes (nascem onde o dedo encosta) e os botões só acionam as mesmas ações
-do teclado/controle. No modo toque o mouse emulado sai das ações (tocar no analógico não atira) e
-segurar ATIRAR gira a mira para o zumbi mais perto num cone de 22° até 9 m (mira assistida).
+**Controles de toque** (`scripts/ui/touch_controls.gd`): aparecem sozinhos no celular e no
+navegador do celular (Configurações → CONTROLES DE TOQUE: AUTO / LIGADO / DESLIGADO). O analógico
+é flutuante (nasce onde o dedo encosta) e os botões só acionam as mesmas ações do
+teclado/controle. No modo toque o mouse emulado sai das ações (tocar no analógico não atira). Para
+ficar fácil de jogar no celular (Configurações → CONTROLES):
+- **mira automática** (ligada por padrão): o personagem gira sozinho para o zumbi à vista mais
+  perto, em qualquer direção e até 10 m, mesmo andando para outro lado (dá para fugir atirando para
+  trás); o alvo fica travado até morrer, sair do alcance ou da vista, ou até chegar outro bem mais
+  perto. Cantoneiras em volta do alvo mostram em quem se está mirando (vermelhas atirando).
+  Desligada, volta a mira assistida (segurar ATIRAR gira só para um zumbi no cone de 22° à frente);
+- **tiro automático** (desligado por padrão): atira sozinho no alvo travado quando ele está no
+  alcance da arma e a mira já chegou nele;
+- as dicas mostram o botão ("[USAR] ABRIR PORTA") e o USAR pulsa quando há algo para usar perto;
+- **tamanho dos botões** (pequeno, médio, grande) e **modo canhoto** (botões à esquerda; a vida
+  vai para a direita, em cima da munição);
+- **vibração** ao levar dano, cair e levantar (ou ser levantado).
 
 Já mapeado para as próximas fases: pular (Espaço / B).
 

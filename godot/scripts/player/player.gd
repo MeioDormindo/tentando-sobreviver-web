@@ -18,8 +18,26 @@ extends CharacterBase
 const ASSIST_CONE_DEG := 22.0
 const ASSIST_RANGE := 9.0
 const ASSIST_TURN := 0.35
+## Mira automática do toque (configuração "autoAim"): trava no inimigo à vista mais perto, em
+## qualquer direção, até LOCK_RANGE (m); quem está à frente pesa um pouco menos na escolha.
+## O alvo fica até morrer, sair do alcance (com folga de LOCK_KEEP) ou da vista, ou até aparecer
+## outro a menos de LOCK_SWITCH da distância dele. A escolha roda a cada LOCK_INTERVAL (s).
+const LOCK_RANGE := 10.0
+const LOCK_KEEP := 1.15
+const LOCK_SWITCH := 0.6
+const LOCK_FRONT_WEIGHT := 0.35
+const LOCK_INTERVAL := 0.15
+## Raios de visão por escolha, no máximo (os candidatos vão em ordem, do melhor para o pior).
+const LOCK_MAX_RAYS := 8
+## Tiro automático (configuração "autoFire"): só com a mira a menos deste ângulo do alvo (graus).
+const AUTO_FIRE_ALIGN_DEG := 12.0
 ## Direção da mira no chão (mantida quando o analógico é solto, no toque).
 var _aim_dir := Vector3.FORWARD
+## Alvo travado da mira automática (toque) e o tempo até a próxima escolha.
+var assist_lock: Node3D
+var _lock_timer := 0.0
+## O tiro automático disparou neste quadro (a HUD pinta o marcador do alvo de vermelho).
+var auto_firing := false
 @export var acceleration: float = 45.0
 
 ## false = controlado por código (bot/teste).
@@ -875,7 +893,10 @@ func _read_input() -> void:
 	_update_aim_from_input()
 	if Input.is_action_just_pressed(&"fire") and weapon.magazine <= 0 and not weapon.reloading:
 		Events.dry_fire.emit()
-	if (weapon.data.automatic and Input.is_action_pressed(&"fire")) or Input.is_action_just_pressed(&"fire"):
+	# Tiro automático (toque): atira sozinho no alvo travado, na cadência da arma (o fire() só
+	# solta a bala quando ela está pronta, e o pente vazio recarrega sozinho).
+	auto_firing = _auto_fire_wanted()
+	if auto_firing or (weapon.data.automatic and Input.is_action_pressed(&"fire")) or Input.is_action_just_pressed(&"fire"):
 		fire()
 	elif Input.is_action_pressed(&"fire"):
 		weapon.hold_trigger()  # minigun gira o cano enquanto o gatilho está seguro
@@ -1001,18 +1022,24 @@ func _update_aim_from_input() -> void:
 		aim_point.y = muzzle_height
 		return
 	if InputBindings.touch_active:
-		# Toque: só mover e atirar, sem analógico de mira. Ao atirar, gira sozinho para o zumbi
-		# mais perto do cone (mira assistida); sem alvo, vira pra direção em que anda.
+		# Toque: só mover e atirar, sem analógico de mira. Mira automática (padrão): gira sozinho
+		# para o alvo travado, em qualquer direção e mesmo sem ATIRAR. Desligada: só ao atirar e
+		# no cone da frente (mira assistida). Sem alvo, vira pra direção em que anda.
 		var turn := 1.0 - pow(1.0 - ASSIST_TURN, get_physics_process_delta_time() * 60.0)
-		var target := assist_target() if Input.is_action_pressed(&"fire") else null
+		var target: Node3D = null
+		if Save.get_setting("autoAim") != false:
+			target = _update_lock()
+		else:
+			assist_lock = null
+			target = assist_target() if Input.is_action_pressed(&"fire") else null
 		if target:
 			var to_target := target.global_position - global_position
 			to_target.y = 0.0
-			_aim_dir = _aim_dir.slerp(to_target.normalized(), turn).normalized()
+			_turn_aim(to_target, turn)
 		else:
 			var move_dir := screen_to_world(Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down"))
 			if move_dir.length() > 0.1:
-				_aim_dir = _aim_dir.slerp(Vector3(move_dir.x, 0.0, move_dir.y).normalized(), turn).normalized()
+				_turn_aim(Vector3(move_dir.x, 0.0, move_dir.y), turn)
 		aim_point = global_position + _aim_dir * stick_aim_distance
 		aim_point.y = muzzle_height
 		return
@@ -1034,6 +1061,103 @@ func _update_aim_from_input() -> void:
 	var on_plane: Variant = Plane(Vector3.UP, muzzle_height).intersects_ray(from, direction)
 	if on_plane != null:
 		aim_point = on_plane
+
+
+## Gira a mira (no chão) uma fração `turn` do ângulo até `to`, em volta do eixo vertical. Com
+## slerp, um alvo exatamente atrás (180°) não tem eixo definido e a mira não girava.
+func _turn_aim(to: Vector3, turn: float) -> void:
+	to.y = 0.0
+	if to.length() < 0.01:
+		return
+	_aim_dir.y = 0.0
+	var angle := _aim_dir.signed_angle_to(to, Vector3.UP)
+	_aim_dir = _aim_dir.rotated(Vector3.UP, angle * turn).normalized()
+
+
+## Alvo da mira automática neste quadro: o travado, se ainda vale; a escolha (com os raios de
+## visão) só roda a cada LOCK_INTERVAL.
+func _update_lock() -> Node3D:
+	if not is_instance_valid(assist_lock):
+		assist_lock = null
+	elif not _lock_valid(assist_lock, LOCK_RANGE * LOCK_KEEP):
+		assist_lock = null
+		_lock_timer = 0.0  # perdeu o alvo: escolhe outro já
+	_lock_timer -= get_physics_process_delta_time()
+	if _lock_timer <= 0.0:
+		_lock_timer = LOCK_INTERVAL
+		assist_lock = pick_lock(assist_lock)
+	return assist_lock
+
+
+## Melhor alvo da mira automática: o inimigo vivo à vista mais perto (quem está à frente pesa um
+## pouco menos), até LOCK_RANGE. O atual continua, se ainda vale, a menos que outro esteja bem
+## mais perto (LOCK_SWITCH). O portal do Submundo também é alvo.
+func pick_lock(current: Node3D = null) -> Node3D:
+	var candidates: Array = []
+	for group: StringName in [&"zombies", &"underworld_portal"]:
+		for node in get_tree().get_nodes_in_group(group):
+			var enemy := node as Node3D
+			if not _lock_valid(enemy, LOCK_RANGE):
+				continue
+			var offset := enemy.global_position - global_position
+			offset.y = 0.0
+			var angle := absf(_aim_dir.signed_angle_to(offset, Vector3.UP)) if offset.length() > 0.01 else 0.0
+			candidates.append([offset.length() * (1.0 + LOCK_FRONT_WEIGHT * angle / PI), enemy])
+	candidates.sort_custom(func(a: Array, b: Array) -> bool: return a[0] < b[0])
+	var best: Node3D = null
+	for i in mini(candidates.size(), LOCK_MAX_RAYS):
+		if _in_sight(candidates[i][1]):
+			best = candidates[i][1]
+			break
+	if current != null and current != best and _lock_valid(current, LOCK_RANGE * LOCK_KEEP) and _in_sight(current):
+		if best == null or _flat_distance(best) > _flat_distance(current) * LOCK_SWITCH:
+			return current
+	return best
+
+
+## Ainda é alvo: existe, está na partida, vivo e até `max_distance` (no chão).
+func _lock_valid(target: Variant, max_distance: float) -> bool:
+	# Variant: o alvo pode ter sido liberado (um parâmetro tipado reclamaria antes da checagem).
+	if not is_instance_valid(target) or not target is Node3D:
+		return false
+	var enemy := target as Node3D
+	if not enemy.is_inside_tree():
+		return false
+	if not (enemy.is_in_group(&"zombies") or enemy.is_in_group(&"underworld_portal")):
+		return false
+	if enemy.has_method(&"is_alive") and not enemy.call(&"is_alive"):
+		return false
+	return _flat_distance(enemy) <= max_distance
+
+
+func _flat_distance(node: Node3D) -> float:
+	var offset := node.global_position - global_position
+	offset.y = 0.0
+	return offset.length()
+
+
+## Nenhuma parede entre o peito do jogador e o do alvo (tábuas e móveis não contam, como nos
+## tiros).
+func _in_sight(enemy: Node3D) -> bool:
+	var from := global_position + Vector3.UP * muzzle_height
+	var to := enemy.global_position + Vector3.UP * muzzle_height
+	var query := PhysicsRayQueryParameters3D.create(from, to, PhysicsLayers.WORLD)
+	query.exclude = [get_rid()]
+	return get_world_3d().direct_space_state.intersect_ray(query).is_empty()
+
+
+## Tiro automático (toque, configuração "autoFire" com a mira automática): atira sozinho quando o
+## alvo travado está no alcance da arma e a mira já chegou nele.
+func _auto_fire_wanted() -> bool:
+	if not InputBindings.touch_active or Save.get_setting("autoFire") != true or Save.get_setting("autoAim") == false:
+		return false
+	if not _lock_valid(assist_lock, minf(weapon.data.max_range, LOCK_RANGE * LOCK_KEEP)):
+		return false
+	if Input.is_action_pressed(&"interact"):
+		return false
+	var offset := assist_lock.global_position - global_position
+	offset.y = 0.0
+	return absf(rad_to_deg(_aim_dir.signed_angle_to(offset, Vector3.UP))) <= AUTO_FIRE_ALIGN_DEG
 
 
 ## Mira assistida: o inimigo vivo mais perto dentro do cone da mira e do alcance (ou null).

@@ -63,7 +63,7 @@ func setup(p_weapon: WeaponData, wall_normal: Vector3) -> void:
 	_label.pixel_size = 0.0045
 	_label.font_size = 26
 	_label.modulate = CHALK
-	_label.text = ("%s  %d" % [p_weapon.display_name.to_upper(), p_weapon.price]) if p_weapon else "MUNIÇÃO"
+	_label.text = ("%s  %d" % [Loc.t(p_weapon.display_name).to_upper(), p_weapon.price]) if p_weapon else Loc.t("MUNIÇÃO")
 	_label.position = face + wall_normal * 0.025 + Vector3.UP * 1.26
 	_label.rotation.y = turn
 	add_child(_label)

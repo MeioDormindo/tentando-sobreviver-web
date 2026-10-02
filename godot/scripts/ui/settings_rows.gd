@@ -154,6 +154,12 @@ static func audio(column: VBoxContainer, rebuild: Callable, size: int) -> Contro
 static func controls(column: VBoxContainer, rebuild: Callable, size: int) -> Control:
 	var touch := _cycle(column, rebuild, size, "CONTROLES DE TOQUE", "touchMode", TOUCH_MODES, func(v: Variant) -> String: return TOUCH_LABELS.get(v, "AUTO"))
 	touch.name = "TouchMode"
+	# Celular: a mira acompanha sozinha o zumbi mais perto; o tiro automático atira nele sozinho.
+	_toggle(column, rebuild, size, "MIRA AUTOMÁTICA", "autoAim")
+	_toggle(column, rebuild, size, "TIRO AUTOMÁTICO", "autoFire")
+	_cycle(column, rebuild, size, "TAMANHO DOS BOTÕES", "touchButtons", MINIMAP_SIZES, func(v: Variant) -> String: return MINIMAP_LABELS.get(v, "MÉDIO"))
+	_toggle(column, rebuild, size, "MODO CANHOTO", "touchLeftHanded")
+	_toggle(column, rebuild, size, "VIBRAÇÃO", "vibration")
 	var head := HBoxContainer.new()
 	column.add_child(head)
 	MenuKit.label(head, "AÇÃO", 14, MenuKit.DIM).size_flags_horizontal = Control.SIZE_EXPAND_FILL

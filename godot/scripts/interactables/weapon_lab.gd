@@ -76,7 +76,7 @@ func interact(player: Node3D) -> bool:
 		return false
 	weapon.upgrade_to(upgraded)
 	p.hud_sound("lab_upgrade", 0.9)
-	p.hud(&"toast", ["%s!" % upgraded.display_name.to_upper()])
+	p.hud(&"toast", [Loc.fmt("%s!", [Loc.up(upgraded.display_name)])])
 	return true
 
 

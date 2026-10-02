@@ -1398,8 +1398,8 @@ msgstr "— ms"
 msgid "%s mover · mouse mirar · clique atirar · %s recarregar · %s trocar arma · %s faca · %s usar · %s pausa"
 msgstr "%s move · mouse aim · click shoot · %s reload · %s switch weapon · %s knife · %s use · %s pause"
 
-msgid "Analógico: mover · ATIRAR: mira sozinho no zumbi mais perto e atira · FACA: golpe corpo a corpo"
-msgstr "Stick: move · SHOOT: auto-aims at the nearest zombie and fires · KNIFE: melee attack"
+msgid "Analógico: mover · a mira acompanha sozinha o zumbi mais perto · ATIRAR: atira · FACA: golpe corpo a corpo"
+msgstr "Stick: move · aim follows the nearest zombie on its own · SHOOT: fire · KNIFE: melee strike"
 
 msgid "TENTANDO\nSOBREVIVER"
 msgstr "TENTANDO\nSOBREVIVER"
@@ -1634,6 +1634,21 @@ msgstr "SOUND"
 
 msgid "CONTROLES DE TOQUE"
 msgstr "TOUCH CONTROLS"
+
+msgid "MIRA AUTOMÁTICA"
+msgstr "AUTO-AIM"
+
+msgid "TIRO AUTOMÁTICO"
+msgstr "AUTO-FIRE"
+
+msgid "TAMANHO DOS BOTÕES"
+msgstr "BUTTON SIZE"
+
+msgid "MODO CANHOTO"
+msgstr "LEFT-HANDED MODE"
+
+msgid "VIBRAÇÃO"
+msgstr "VIBRATION"
 
 msgid "AÇÃO"
 msgstr "ACTION"

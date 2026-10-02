@@ -683,3 +683,18 @@ func _test_i18n_and_settings() -> void:
 	var english := [Loc.t("JOGAR"), Loc.text(Loc.fmt("%s abriu %s", ["ANA", Loc.up("Bilheteria")])), Loc.t("Tornado Mk II")]
 	TranslationServer.set_locale(Loc.current)
 	check(english == ["PLAY", "ANA opened TICKET OFFICE", "Tornado Mk II"], "em inglês: menu, feed e arma melhorada (%s)" % [english])
+	# Celular: padrões (mira automática ligada, tiro automático desligado), tamanho saneado,
+	# vibração com intervalo mínimo e a permissão de vibrar no Android.
+	var fresh := Save.sanitize({"settings": {"touchButtons": "gigante"}})
+	check(fresh.settings.autoAim == true and fresh.settings.autoFire == false and fresh.settings.touchButtons == "medium"
+		and fresh.settings.touchLeftHanded == false and fresh.settings.vibration == true, "celular: mira automática ligada e tiro automático desligado por padrão")
+	check(not Haptics.allowed(&"hurt", 10.1, 10.0) and Haptics.allowed(&"hurt", 10.31, 10.0) and Haptics.allowed(&"down", 5.0, -INF),
+		"vibração: no máximo uma por golpe a cada 0,3 s")
+	check(not Haptics.enabled() or InputBindings.touch_active, "vibração só com os controles de toque")
+	var presets := ConfigFile.new()
+	var vibrate := false
+	if presets.load("res://export_presets.cfg") == OK:
+		for section in presets.get_sections():
+			if presets.get_value(section, "platform", "") == "Android":
+				vibrate = presets.get_value(section + ".options", "permissions/vibrate", false) == true
+	check(vibrate, "o APK pede a permissão de vibrar")

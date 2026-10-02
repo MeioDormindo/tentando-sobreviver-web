@@ -257,6 +257,10 @@ func _settings_tabs(tree: SceneTree) -> void:
 	(screen.find_child("Tab_controls", true, false) as Button).pressed.emit()
 	await tree.process_frame
 	await tree.process_frame
+	check(["autoAim", "autoFire", "touchButtons", "touchLeftHanded", "vibration"].all(func(n: String) -> bool: return screen.find_child(n, true, false) != null),
+		"aba CONTROLES: mira e tiro automáticos, tamanho dos botões, canhoto e vibração")
+	var auto_aim := screen.find_child("autoAim", true, false) as Button
+	check(auto_aim != null and auto_aim.text == "MIRA AUTOMÁTICA: LIGADO", "mira automática ligada por padrão (%s)" % [auto_aim.text if auto_aim else "?"])
 	var row := screen.find_child("Bind_reload", true, false)
 	var kb := row.find_child("kb", true, false) as Button if row else null
 	check(kb != null and kb.text == "R", "aba CONTROLES: recarregar no R")

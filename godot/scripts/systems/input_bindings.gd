@@ -263,4 +263,9 @@ const AXIS_NAMES := {JOY_AXIS_TRIGGER_LEFT: "LT", JOY_AXIS_TRIGGER_RIGHT: "RT"}
 
 ## A tecla de uma ação para as dicas na tela ("E", "ESPAÇO").
 func hint_label(action: StringName) -> String:
+	# No toque, o nome do botão da tela ("[USAR] ABRIR PORTA"); ações sem botão ficam com a tecla.
+	if touch_active:
+		var button := TouchControls.label_of(action)
+		if button != "":
+			return Loc.t(button)
 	return binding_label(binding_of(action, KEYBOARD))

@@ -125,7 +125,7 @@ func _add_signs() -> void:
 			continue
 		var label := Label3D.new()
 		label.outline_size = 0  # a fonte pixel já tem o contorno embutido
-		label.text = _world.area_display_name(beyond).to_upper()
+		label.text = Loc.t(_world.area_display_name(beyond)).to_upper()
 		label.font_size = 26
 		label.pixel_size = 0.018
 		label.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST

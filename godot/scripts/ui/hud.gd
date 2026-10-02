@@ -105,6 +105,8 @@ func _ready() -> void:
 	Events.weapon_changed.connect(func(_current: String, other: String) -> void: _other_weapon_label.text = ("[%s] " % InputBindings.hint_label(&"switch_weapon") + Loc.t(other).to_upper()) if other != "" else "")
 	Events.interaction_prompt.connect(func(text: String, icon: String, progress: float) -> void:
 		_prompt_label.text = Loc.text(text)
+		# Celular: o USAR pulsa quando a dica pede ele (a mensagem leva a ação "interact").
+		touch.set_highlight(&"interact", text.contains(Loc.KEY + "interact"))
 		_prompt_icon.visible = icon != "" and ResourceLoader.exists(icon)
 		if _prompt_icon.visible:
 			_prompt_icon.texture = load(icon)
@@ -118,6 +120,7 @@ func _ready() -> void:
 	Events.toast.connect(_show_toast)
 	Events.team_feed.connect(_on_team_feed)
 	Events.player_downed.connect(_on_player_downed)
+	Events.player_revived.connect(_on_player_revived)
 	Events.cheat_detected.connect(_on_cheat_detected)
 	Events.player_armor_changed.connect(func(current: float, maximum: float) -> void:
 		_armor_bar.get_parent().visible = current > 0.0
@@ -203,6 +206,7 @@ func _process(delta: float) -> void:
 	_update_team(delta)
 	_update_down_marks()
 	_update_crosshair()
+	_update_target_mark()
 	_fps_label.visible = Save.get_setting("showFps") == true
 	if _fps_label.visible:
 		_fps_label.text = "%d FPS" % Engine.get_frames_per_second()
@@ -210,12 +214,21 @@ func _process(delta: float) -> void:
 		label.visible = label.text != ""
 	var screen := get_viewport().get_visible_rect().size
 	_update_touch()
-	# Painel de munição no canto; com os controles de toque, sobe para cima dos botões.
+	# Painel de munição no canto; com os controles de toque, sobe para cima dos botões. No modo
+	# canhoto os botões ficam à esquerda (onde a missão aparece embaixo do minimapa): a vida vai
+	# para a direita, empilhada em cima da munição, e o feed para o centro (ver _update_team).
 	var ammo_panel := _ammo_box.get_parent() as Control
-	var ammo_bottom := touch.buttons_top() - 8.0 if touch.visible else screen.y - 12.0
-	ammo_panel.position.y = ammo_bottom - ammo_panel.size.y
-	# Ícones das armas empilhados acima do painel de munição (a altura dele muda).
-	var icons_top := ammo_panel.position.y - 8.0
+	var health_panel := _health_label.get_parent().get_parent() as Control
+	var left_handed := touch.visible and TouchControls.left_handed()
+	if left_handed:
+		ammo_panel.position.y = screen.y - 12.0 - ammo_panel.size.y
+		health_panel.position = Vector2(screen.x - 12.0 - health_panel.size.x, ammo_panel.position.y - 8.0 - health_panel.size.y)
+	else:
+		var ammo_bottom := touch.buttons_top() - 8.0 if touch.visible else screen.y - 12.0
+		ammo_panel.position.y = ammo_bottom - ammo_panel.size.y
+		health_panel.position = Vector2(12.0, screen.y - 12.0 - health_panel.size.y)
+	# Ícones das armas empilhados acima do painel de munição (ou da vida, no canhoto).
+	var icons_top := (health_panel.position.y if left_handed else ammo_panel.position.y) - 8.0
 	_weapon_icon.position = Vector2(screen.x - 12.0 - _weapon_icon.size.x, icons_top - _weapon_icon.size.y)
 	_other_weapon_icon.position = Vector2(screen.x - 12.0 - _other_weapon_icon.size.x, _weapon_icon.position.y - 8.0 - _other_weapon_icon.size.y)
 	_frame_icon(_weapon_icon_bg, _weapon_icon)
@@ -392,6 +405,9 @@ func _build() -> void:
 	_crosshair = Crosshair.new()
 	root.add_child(_crosshair)
 	_crosshair.visible = false
+	_target_mark = TargetMark.new()
+	root.add_child(_target_mark)
+	_target_mark.visible = false
 	# Contador de FPS (Configurações → VÍDEO → MOSTRAR FPS).
 	_fps_label = _label(root, "", 13, DIM, Control.PRESET_CENTER_TOP, HORIZONTAL_ALIGNMENT_CENTER, -16)
 	_fps_label.name = "Fps"
@@ -588,6 +604,9 @@ func _on_points_changed(total: int, delta: int) -> void:
 
 
 func _on_health_changed(current: float, maximum: float) -> void:
+	if _last_health >= 0.0 and current < _last_health - 0.5:
+		Haptics.pulse(&"hurt")
+	_last_health = current
 	_health_bar.max_value = maximum
 	_health_bar.value = current
 	_health_label.text = Loc.t("VIDA  %d / %d") % [roundi(current), roundi(maximum)]
@@ -930,6 +949,10 @@ var _feed: VBoxContainer
 const FEED_LINES := 4
 const FEED_TIME := 4.0
 var _crosshair: Crosshair
+## Celular: marcador do alvo travado pela mira automática.
+var _target_mark: TargetMark
+## Última vida vista (a vibração só quando ela cai).
+var _last_health := -1.0
 var _fps_label: Label
 const TEAM_WIDTH := 230.0
 
@@ -938,8 +961,13 @@ func _update_team(delta: float) -> void:
 	if _team_box and Players.coop():
 		_place_team_box()
 	if _feed:
-		var health_panel := _health_label.get_parent().get_parent() as Control
-		_feed.position = Vector2(MARGIN, health_panel.position.y - 8.0 - _feed.size.y)
+		if touch.visible and TouchControls.left_handed():
+			# Canhoto: no centro, acima das dicas (à esquerda ficam os botões e a missão).
+			var screen := get_viewport().get_visible_rect().size
+			_feed.position = Vector2((screen.x - _feed.size.x) * 0.5, _bottom_center.position.y - 8.0 - _feed.size.y)
+		else:
+			var health_panel := _health_label.get_parent().get_parent() as Control
+			_feed.position = Vector2(MARGIN, health_panel.position.y - 8.0 - _feed.size.y)
 	_team_check -= delta
 	if _team_check > 0.0:
 		return
@@ -1182,6 +1210,17 @@ func _on_team_feed(text: String) -> void:
 func _on_player_downed(who: Node3D) -> void:
 	if Players.coop() and who != Players.local_player():
 		Audio.play("boss_warning", "ui", 0.55, 0.0, 1.3)
+	elif who == Players.local_player():
+		Haptics.pulse(&"down")
+
+
+## Vibra ao ser levantado, ou ao levantar um colega (perto e segurando USAR).
+func _on_player_revived(who: Node3D) -> void:
+	var me := Players.local_player()
+	if me == null:
+		return
+	if who == me or (me.is_standing() and Input.is_action_pressed(&"interact") and me.global_position.distance_to(who.global_position) <= 3.0):
+		Haptics.pulse(&"revive")
 
 
 ## Mini mira do PC: na posição do mouse enquanto se mira com ele (não no toque, nem com o
@@ -1197,6 +1236,20 @@ func _update_crosshair() -> void:
 		return
 	_crosshair.position = get_viewport().get_mouse_position()
 	_crosshair.show_state(player.weapon.current_spread() if player.weapon else 0.0, player.aiming_at_enemy)
+
+
+## Celular: cantoneiras em volta do alvo da mira automática (vermelhas enquanto atira nele).
+func _update_target_mark() -> void:
+	var player := Players.local_player()
+	var camera := get_viewport().get_camera_3d()
+	var target: Node3D = player.assist_lock if player != null and is_instance_valid(player.assist_lock) else null
+	var wanted := InputBindings.touch_active and target != null and camera != null and player.is_standing() \
+		and not get_tree().paused and not _game_over_panel.visible and not camera.is_position_behind(target.global_position)
+	_target_mark.visible = wanted
+	if not wanted:
+		return
+	_target_mark.position = camera.unproject_position(target.global_position + Vector3.UP * 1.0).round()
+	_target_mark.show_target(target, player.auto_firing or Input.is_action_pressed(&"fire"))
 
 
 func _set_cursor_hidden(hidden: bool) -> void:

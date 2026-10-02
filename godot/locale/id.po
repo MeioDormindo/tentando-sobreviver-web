@@ -1398,8 +1398,8 @@ msgstr "— ms"
 msgid "%s mover · mouse mirar · clique atirar · %s recarregar · %s trocar arma · %s faca · %s usar · %s pausa"
 msgstr "%s gerak · mouse bidik · klik tembak · %s isi ulang · %s ganti senjata · %s pisau · %s pakai · %s jeda"
 
-msgid "Analógico: mover · ATIRAR: mira sozinho no zumbi mais perto e atira · FACA: golpe corpo a corpo"
-msgstr "Analog: gerak · TEMBAK: otomatis membidik zombi terdekat lalu menembak · PISAU: serangan jarak dekat"
+msgid "Analógico: mover · a mira acompanha sozinha o zumbi mais perto · ATIRAR: atira · FACA: golpe corpo a corpo"
+msgstr "Analog: gerak · bidikan otomatis mengikuti zombi terdekat · TEMBAK: menembak · PISAU: serangan jarak dekat"
 
 msgid "TENTANDO\nSOBREVIVER"
 msgstr "TENTANDO\nSOBREVIVER"
@@ -1634,6 +1634,21 @@ msgstr "SUARA"
 
 msgid "CONTROLES DE TOQUE"
 msgstr "KONTROL SENTUH"
+
+msgid "MIRA AUTOMÁTICA"
+msgstr "BIDIK OTOMATIS"
+
+msgid "TIRO AUTOMÁTICO"
+msgstr "TEMBAK OTOMATIS"
+
+msgid "TAMANHO DOS BOTÕES"
+msgstr "UKURAN TOMBOL"
+
+msgid "MODO CANHOTO"
+msgstr "MODE KIDAL"
+
+msgid "VIBRAÇÃO"
+msgstr "GETARAN"
 
 msgid "AÇÃO"
 msgstr "AKSI"

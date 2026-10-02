@@ -1398,8 +1398,8 @@ msgstr "— ms"
 msgid "%s mover · mouse mirar · clique atirar · %s recarregar · %s trocar arma · %s faca · %s usar · %s pausa"
 msgstr "%s ruch · mysz celowanie · klik strzał · %s przeładuj · %s zmień broń · %s nóż · %s użyj · %s pauza"
 
-msgid "Analógico: mover · ATIRAR: mira sozinho no zumbi mais perto e atira · FACA: golpe corpo a corpo"
-msgstr "Gałka: ruch · STRZAŁ: sam celuje w najbliższego zombie i strzela · NÓŻ: cios wręcz"
+msgid "Analógico: mover · a mira acompanha sozinha o zumbi mais perto · ATIRAR: atira · FACA: golpe corpo a corpo"
+msgstr "Gałka: ruch · celownik sam śledzi najbliższego zombie · STRZAŁ: strzelaj · NÓŻ: cios wręcz"
 
 msgid "TENTANDO\nSOBREVIVER"
 msgstr "TENTANDO\nSOBREVIVER"
@@ -1634,6 +1634,21 @@ msgstr "DŹWIĘK"
 
 msgid "CONTROLES DE TOQUE"
 msgstr "STEROWANIE DOTYKOWE"
+
+msgid "MIRA AUTOMÁTICA"
+msgstr "AUTOCELOWANIE"
+
+msgid "TIRO AUTOMÁTICO"
+msgstr "AUTOSTRZAŁ"
+
+msgid "TAMANHO DOS BOTÕES"
+msgstr "ROZMIAR PRZYCISKÓW"
+
+msgid "MODO CANHOTO"
+msgstr "TRYB DLA LEWORĘCZNYCH"
+
+msgid "VIBRAÇÃO"
+msgstr "WIBRACJE"
 
 msgid "AÇÃO"
 msgstr "AKCJA"

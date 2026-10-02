@@ -1398,8 +1398,8 @@ msgstr "— ms"
 msgid "%s mover · mouse mirar · clique atirar · %s recarregar · %s trocar arma · %s faca · %s usar · %s pausa"
 msgstr "%s 移動 · 滑鼠 瞄準 · 點選 射擊 · %s 換彈 · %s 切換武器 · %s 小刀 · %s 使用 · %s 暫停"
 
-msgid "Analógico: mover · ATIRAR: mira sozinho no zumbi mais perto e atira · FACA: golpe corpo a corpo"
-msgstr "搖桿：移動 · 射擊：自動瞄準最近的殭屍並開火 · 小刀：近戰攻擊"
+msgid "Analógico: mover · a mira acompanha sozinha o zumbi mais perto · ATIRAR: atira · FACA: golpe corpo a corpo"
+msgstr "搖桿：移動 · 準星自動跟隨最近的殭屍 · 射擊：開火 · 小刀：近戰攻擊"
 
 msgid "TENTANDO\nSOBREVIVER"
 msgstr "TENTANDO\nSOBREVIVER"
@@ -1634,6 +1634,21 @@ msgstr "聲音"
 
 msgid "CONTROLES DE TOQUE"
 msgstr "觸控操作"
+
+msgid "MIRA AUTOMÁTICA"
+msgstr "自動瞄準"
+
+msgid "TIRO AUTOMÁTICO"
+msgstr "自動射擊"
+
+msgid "TAMANHO DOS BOTÕES"
+msgstr "按鈕大小"
+
+msgid "MODO CANHOTO"
+msgstr "左手模式"
+
+msgid "VIBRAÇÃO"
+msgstr "震動"
 
 msgid "AÇÃO"
 msgstr "動作"

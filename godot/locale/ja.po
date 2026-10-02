@@ -1398,8 +1398,8 @@ msgstr "— ms"
 msgid "%s mover · mouse mirar · clique atirar · %s recarregar · %s trocar arma · %s faca · %s usar · %s pausa"
 msgstr "%s 移動 · マウス 照準 · クリック 射撃 · %s リロード · %s 武器切替 · %s ナイフ · %s 使用 · %s ポーズ"
 
-msgid "Analógico: mover · ATIRAR: mira sozinho no zumbi mais perto e atira · FACA: golpe corpo a corpo"
-msgstr "スティック：移動 · 射撃：一番近いゾンビを自動で狙って撃つ · ナイフ：近接攻撃"
+msgid "Analógico: mover · a mira acompanha sozinha o zumbi mais perto · ATIRAR: atira · FACA: golpe corpo a corpo"
+msgstr "スティック：移動 · 照準は一番近いゾンビを自動で追う · 射撃：撃つ · ナイフ：近接攻撃"
 
 msgid "TENTANDO\nSOBREVIVER"
 msgstr "TENTANDO\nSOBREVIVER"
@@ -1634,6 +1634,21 @@ msgstr "サウンド"
 
 msgid "CONTROLES DE TOQUE"
 msgstr "タッチ操作"
+
+msgid "MIRA AUTOMÁTICA"
+msgstr "オートエイム"
+
+msgid "TIRO AUTOMÁTICO"
+msgstr "オート射撃"
+
+msgid "TAMANHO DOS BOTÕES"
+msgstr "ボタンのサイズ"
+
+msgid "MODO CANHOTO"
+msgstr "左利きモード"
+
+msgid "VIBRAÇÃO"
+msgstr "振動"
 
 msgid "AÇÃO"
 msgstr "アクション"

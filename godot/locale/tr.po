@@ -1398,8 +1398,8 @@ msgstr "— ms"
 msgid "%s mover · mouse mirar · clique atirar · %s recarregar · %s trocar arma · %s faca · %s usar · %s pausa"
 msgstr "%s hareket · fare nişan · tık ateş · %s doldur · %s silah değiştir · %s bıçak · %s kullan · %s duraklat"
 
-msgid "Analógico: mover · ATIRAR: mira sozinho no zumbi mais perto e atira · FACA: golpe corpo a corpo"
-msgstr "Analog: hareket · ATEŞ: en yakın zombiye kendisi nişan alıp ateş eder · BIÇAK: yakın dövüş darbesi"
+msgid "Analógico: mover · a mira acompanha sozinha o zumbi mais perto · ATIRAR: atira · FACA: golpe corpo a corpo"
+msgstr "Analog: hareket · nişan en yakın zombiyi kendiliğinden izler · ATEŞ: ateş eder · BIÇAK: yakın dövüş darbesi"
 
 msgid "TENTANDO\nSOBREVIVER"
 msgstr "TENTANDO\nSOBREVIVER"
@@ -1634,6 +1634,21 @@ msgstr "SES"
 
 msgid "CONTROLES DE TOQUE"
 msgstr "DOKUNMATİK KONTROLLER"
+
+msgid "MIRA AUTOMÁTICA"
+msgstr "OTOMATİK NİŞAN"
+
+msgid "TIRO AUTOMÁTICO"
+msgstr "OTOMATİK ATEŞ"
+
+msgid "TAMANHO DOS BOTÕES"
+msgstr "TUŞ BOYUTU"
+
+msgid "MODO CANHOTO"
+msgstr "SOLAK MODU"
+
+msgid "VIBRAÇÃO"
+msgstr "TİTREŞİM"
 
 msgid "AÇÃO"
 msgstr "EYLEM"

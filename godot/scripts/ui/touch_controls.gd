@@ -2,10 +2,18 @@ class_name TouchControls
 extends Control
 ## Controles de toque (celular), simplificados: só mover e atirar.
 ## - analógico único (qualquer toque fora dos botões, tela toda) move;
-## - ATIRAR (segurar) atira com mira assistida — gira sozinho para o zumbi mais perto do cone
-##   (Player._update_aim_from_input); sem zumbi perto, o personagem vira pra onde anda;
-## - USAR (segurar conserta), RECARR., TROCAR, FACA, MAPA (segurar) e pausa.
+## - a mira acompanha sozinha o zumbi mais perto (mira automática; ver
+##   Player._update_aim_from_input) e ATIRAR (segurar) atira; sem zumbi perto, o personagem vira
+##   pra onde anda;
+## - USAR (segurar conserta; pulsa quando há algo para usar), RECARR., TROCAR, FACA, MAPA
+##   (segurar) e pausa.
+## Tamanho dos botões e modo canhoto vêm das Configurações (touchButtons, touchLeftHanded).
 ## Não conhece o jogador: só aciona as mesmas ações do teclado/controle (InputEventAction).
+
+## Tamanho dos botões (configuração) → escala do analógico e dos botões.
+const SIZES := {"small": 0.85, "medium": 1.0, "large": 1.2}
+## Botões do bloco do polegar (trocam de lado no modo canhoto; MAPA e pausa ficam).
+const THUMB := [&"fire", &"interact", &"reload", &"switch_weapon", &"melee"]
 
 ## Zona morta dos analógicos (fração do raio).
 const DEAD_ZONE := 0.12
@@ -37,6 +45,9 @@ var buttons := {}
 var radius := 60.0
 ## Estado já enviado de cada ação de eixo (para não repetir eventos iguais).
 var _sent := {}
+## Botões em destaque (anel pulsando), como o USAR quando há algo para usar perto.
+var _highlight := {}
+var _pulse := 0.0
 
 
 func _ready() -> void:
@@ -48,7 +59,47 @@ func _ready() -> void:
 	visibility_changed.connect(func() -> void:
 		if not is_visible_in_tree():
 			release_all())
+	Events.settings_changed.connect(_layout)
 	_layout()
+
+
+func _process(delta: float) -> void:
+	if not _highlight.is_empty() and is_visible_in_tree():
+		_pulse += delta
+		queue_redraw()
+
+
+## Rótulo do botão de uma ação ("" se ela não tem botão no toque). As dicas da tela usam isso no
+## lugar da tecla do PC ("[USAR] ABRIR PORTA").
+static func label_of(action: StringName) -> String:
+	for def in BUTTONS:
+		if def[0] == action:
+			return def[1]
+	return ""
+
+
+## Liga/desliga o anel pulsando em volta de um botão.
+func set_highlight(action: StringName, on: bool) -> void:
+	if on == _highlight.has(action):
+		return
+	if on:
+		_highlight[action] = true
+	else:
+		_highlight.erase(action)
+	queue_redraw()
+
+
+func is_highlighted(action: StringName) -> bool:
+	return _highlight.has(action)
+
+
+## Modo canhoto: os botões do polegar ficam à esquerda e o analógico descansa à direita.
+static func left_handed() -> bool:
+	return Save.get_setting("touchLeftHanded") == true
+
+
+static func size_scale() -> float:
+	return float(SIZES.get(String(Save.get_setting("touchButtons")), 1.0))
 
 
 func _exit_tree() -> void:
@@ -60,8 +111,9 @@ func _exit_tree() -> void:
 func _layout() -> void:
 	var w := size.x
 	var h := size.y
-	radius = clampf(minf(w, h) * 0.13, 44.0, 80.0)
-	var br := clampf(radius * 0.48, 24.0, 36.0)
+	var scale_factor := size_scale()
+	radius = clampf(minf(w, h) * 0.13, 44.0, 80.0) * scale_factor
+	var br := clampf(radius * 0.48, 24.0 * scale_factor, 36.0 * scale_factor)
 	var fire_r := br * 1.75
 	var f := Vector2(w - fire_r - 16.0, h - fire_r - 16.0)
 	var place := {
@@ -73,8 +125,12 @@ func _layout() -> void:
 		&"map": [Vector2(w - br * 0.9 - 8.0, h * TOP_RESERVED + br), br * 0.7],
 		&"pause": [Vector2(w * 0.5, br * 0.9 + 4.0), br * 0.7],
 	}
+	var mirror := left_handed()
 	for action: StringName in place:
-		buttons[action].pos = place[action][0]
+		var pos: Vector2 = place[action][0]
+		if mirror and action in THUMB:
+			pos.x = w - pos.x
+		buttons[action].pos = pos
 		buttons[action].r = place[action][1]
 	_reset(move, _move_home())
 	queue_redraw()
@@ -89,7 +145,8 @@ func buttons_top() -> float:
 
 
 func _move_home() -> Vector2:
-	return Vector2(radius * 1.7, size.y - radius * 1.7)
+	var x := radius * 1.7
+	return Vector2(size.x - x if left_handed() else x, size.y - radius * 1.7)
 
 
 func _input(event: InputEvent) -> void:
@@ -206,6 +263,11 @@ func _draw() -> void:
 		var is_fire: bool = def[0] == &"fire"
 		draw_circle(b.pos, b.r, Color(color, 0.6 if held else (0.35 if is_fire else 0.25)))
 		draw_arc(b.pos, b.r, 0.0, TAU, 40, Color(color, 0.95 if held else 0.6), 3.0 if is_fire else 2.0)
+		if _highlight.has(def[0]):
+			# Anel que pulsa para fora: há algo para usar perto.
+			var wave := fmod(_pulse * 1.6, 1.0)
+			draw_arc(b.pos, b.r + 3.0 + wave * b.r * 0.45, 0.0, TAU, 40, Color(color, 0.9 * (1.0 - wave)), 3.0)
+			draw_circle(b.pos, b.r, Color(color, 0.18 + 0.12 * sin(_pulse * TAU * 1.6)))
 		var font_size := MenuKit.px(roundi(b.r * (0.3 if is_fire else 0.42)))
 		var text := Loc.t(def[1])
 		var text_size := font.get_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size)
